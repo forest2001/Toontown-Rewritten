@@ -1,0 +1,71 @@
+ 69           0 LOAD_CONST               0 ('0.3')
+              3 STORE_NAME               0 (__version__)
+
+ 71           6 LOAD_CONST               1 ('HTTPServer')
+              9 LOAD_CONST               2 ('BaseHTTPRequestHandler')
+             12 BUILD_LIST               2
+             15 STORE_NAME               1 (__all__)
+
+ 73          18 LOAD_CONST               3 (None)
+             21 IMPORT_NAME              2 (sys)
+             24 STORE_NAME               2 (sys)
+
+ 74          27 LOAD_CONST               3 (None)
+             30 IMPORT_NAME              3 (time)
+             33 STORE_NAME               3 (time)
+
+ 75          36 LOAD_CONST               3 (None)
+             39 IMPORT_NAME              4 (socket)
+             42 STORE_NAME               4 (socket)
+
+ 76          45 LOAD_CONST               3 (None)
+             48 IMPORT_NAME              5 (mimetools)
+             51 STORE_NAME               5 (mimetools)
+
+ 77          54 LOAD_CONST               3 (None)
+             57 IMPORT_NAME              6 (SocketServer)
+             60 STORE_NAME               6 (SocketServer)
+
+ 80          63 LOAD_CONST               4 ('<head>\n<title>Error response</title>\n</head>\n<body>\n<h1>Error response</h1>\n<p>Error code %(code)d.\n<p>Message: %(message)s.\n<p>Error code explanation: %(code)s = %(explain)s.\n</body>\n')
+             66 STORE_NAME               7 (DEFAULT_ERROR_MESSAGE)
+
+ 93          69 LOAD_CONST               1 ('HTTPServer')
+             72 LOAD_NAME                6 (SocketServer)
+             75 LOAD_ATTR                8 (TCPServer)
+             78 BUILD_TUPLE              1
+             81 LOAD_CONST               5 (<code object HTTPServer at 005DEA60, file "BaseHTTPServer", line 93>)
+             84 MAKE_FUNCTION            0
+             87 CALL_FUNCTION            0
+             90 BUILD_CLASS         
+             91 STORE_NAME               9 (HTTPServer)
+
+105          94 LOAD_CONST               2 ('BaseHTTPRequestHandler')
+             97 LOAD_NAME                6 (SocketServer)
+            100 LOAD_ATTR               10 (StreamRequestHandler)
+            103 BUILD_TUPLE              1
+            106 LOAD_CONST               6 (<code object BaseHTTPRequestHandler at 005E5820, file "BaseHTTPServer", line 105>)
+            109 MAKE_FUNCTION            0
+            112 CALL_FUNCTION            0
+            115 BUILD_CLASS         
+            116 STORE_NAME              11 (BaseHTTPRequestHandler)
+
+550         119 LOAD_NAME               11 (BaseHTTPRequestHandler)
+            122 LOAD_NAME                9 (HTTPServer)
+            125 LOAD_CONST               7 ('HTTP/1.0')
+            128 LOAD_CONST               8 (<code object test at 005E58A0, file "BaseHTTPServer", line 550>)
+            131 MAKE_FUNCTION            3
+            134 STORE_NAME              12 (test)
+
+573         137 LOAD_NAME               13 (__name__)
+            140 LOAD_CONST               9 ('__main__')
+            143 COMPARE_OP               2 (==)
+            146 JUMP_IF_FALSE           11 (to 160)
+            149 POP_TOP             
+
+574         150 LOAD_NAME               12 (test)
+            153 CALL_FUNCTION            0
+            156 POP_TOP             
+            157 JUMP_FORWARD             1 (to 161)
+        >>  160 POP_TOP             
+        >>  161 LOAD_CONST               3 (None)
+            164 RETURN_VALUE        

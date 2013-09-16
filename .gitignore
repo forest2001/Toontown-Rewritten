@@ -1,0 +1,3 @@
+#If you really need these you can extract them from tt.exe yourself
+*.pyc
+*.fzn
