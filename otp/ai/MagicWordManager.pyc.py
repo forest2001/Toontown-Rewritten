@@ -566,165 +566,37 @@ class MagicWordManager(DistributedObject.DistributedObject):
          zoneId,
          base.cr.userSignature])
 
-    def b_setMagicWord--- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'cr'
-6	LOAD_ATTR         'wantMagicWords'
-9	JUMP_IF_FALSE     '327'
-
-12	LOAD_FAST         'avId'
-15	LOAD_CONST        None
-18	COMPARE_OP        '=='
-21	JUMP_IF_FALSE     '39'
-
-24	LOAD_GLOBAL       'base'
-27	LOAD_ATTR         'localAvatar'
-30	LOAD_ATTR         'doId'
-33	STORE_FAST        'avId'
-36	JUMP_FORWARD      '39'
-39_0	COME_FROM         '36'
-
-39	LOAD_FAST         'zoneId'
-42	LOAD_CONST        None
-45	COMPARE_OP        '=='
-48	JUMP_IF_FALSE     '113'
-
-51	SETUP_EXCEPT      '82'
-
-54	LOAD_FAST         'self'
-57	LOAD_ATTR         'cr'
-60	LOAD_ATTR         'playGame'
-63	LOAD_ATTR         'getPlace'
-66	CALL_FUNCTION_0   None
-69	LOAD_ATTR         'getZoneId'
-72	CALL_FUNCTION_0   None
-75	STORE_FAST        'zoneId'
-78	POP_BLOCK         None
-79	JUMP_FORWARD      '89'
-82_0	COME_FROM         '51'
-
-82	POP_TOP           None
-83	POP_TOP           None
-84	POP_TOP           None
-
-85	JUMP_FORWARD      '89'
-88	END_FINALLY       None
-89_0	COME_FROM         '79'
-89_1	COME_FROM         '88'
-
-89	LOAD_FAST         'zoneId'
-92	LOAD_CONST        None
-95	COMPARE_OP        '=='
-98	JUMP_IF_FALSE     '110'
-
-101	LOAD_CONST        0
-104	STORE_FAST        'zoneId'
-107	JUMP_ABSOLUTE     '113'
-110	JUMP_FORWARD      '113'
-113_0	COME_FROM         '110'
-
-113	LOAD_FAST         'self'
-116	LOAD_ATTR         'd_setMagicWord'
-119	LOAD_FAST         'magicWord'
-122	LOAD_FAST         'avId'
-125	LOAD_FAST         'zoneId'
-128	CALL_FUNCTION_3   None
-131	POP_TOP           None
-
-132	LOAD_FAST         'magicWord'
-135	LOAD_ATTR         'count'
-138	LOAD_CONST        '~crash'
-141	CALL_FUNCTION_1   None
-144	JUMP_IF_FALSE     '238'
-
-147	LOAD_FAST         'magicWord'
-150	LOAD_ATTR         'split'
-153	CALL_FUNCTION_0   None
-156	STORE_FAST        'args'
-
-159	LOAD_CONST        12
-162	STORE_FAST        'errorCode'
-
-165	LOAD_GLOBAL       'len'
-168	LOAD_FAST         'args'
-171	CALL_FUNCTION_1   None
-174	LOAD_CONST        1
-177	COMPARE_OP        '>'
-180	JUMP_IF_FALSE     '202'
-
-183	LOAD_GLOBAL       'int'
-186	LOAD_FAST         'args'
-189	LOAD_CONST        1
-192	BINARY_SUBSCR     None
-193	CALL_FUNCTION_1   None
-196	STORE_FAST        'errorCode'
-199	JUMP_FORWARD      '202'
-202_0	COME_FROM         '199'
-
-202	LOAD_FAST         'self'
-205	LOAD_ATTR         'notify'
-208	LOAD_ATTR         'info'
-211	LOAD_CONST        'Simulating client crash: exit error = %s'
-214	LOAD_FAST         'errorCode'
-217	BINARY_MODULO     None
-218	CALL_FUNCTION_1   None
-221	POP_TOP           None
-
-222	LOAD_GLOBAL       'base'
-225	LOAD_ATTR         'exitShow'
-228	LOAD_FAST         'errorCode'
-231	CALL_FUNCTION_1   None
-234	POP_TOP           None
-235	JUMP_FORWARD      '238'
-238_0	COME_FROM         '235'
-
-238	LOAD_FAST         'magicWord'
-241	LOAD_ATTR         'count'
-244	LOAD_CONST        '~exception'
-247	CALL_FUNCTION_1   None
-250	JUMP_IF_FALSE     '305'
-
-253	LOAD_FAST         'self'
-256	LOAD_ATTR         'notify'
-259	LOAD_ATTR         'error'
-262	LOAD_CONST        '~exception: simulating a client exception...'
-265	CALL_FUNCTION_1   None
-268	POP_TOP           None
-
-269	LOAD_CONST        ''
-272	STORE_FAST        's'
-
-275	SETUP_LOOP        '305'
-
-278	LOAD_FAST         's'
-281	LOAD_CONST        'INVALIDNAME'
-284	INPLACE_ADD       None
-285	STORE_FAST        's'
-
-288	LOAD_GLOBAL       'eval'
-291	LOAD_FAST         's'
-294	CALL_FUNCTION_1   None
-297	POP_TOP           None
-298	JUMP_BACK         '278'
-301	POP_BLOCK         None
-302_0	COME_FROM         '275'
-302	JUMP_FORWARD      '305'
-305_0	COME_FROM         '302'
-
-305	LOAD_FAST         'self'
-308	LOAD_ATTR         'setMagicWord'
-311	LOAD_FAST         'magicWord'
-314	LOAD_FAST         'avId'
-317	LOAD_FAST         'zoneId'
-320	CALL_FUNCTION_3   None
-323	POP_TOP           None
-324	JUMP_FORWARD      '327'
-327_0	COME_FROM         '324'
-327	LOAD_CONST        None
-330	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 301
+    def b_setMagicWord(self, magicWord, avId, zoneId):
+        if self.cr.wantMagicWords:
+            if avId == None:
+                avId = base.localAvatar.doId
+            
+            if zoneId == None:
+                try:
+                    zoneId = self.cr.playGae.getPlace().getZoneId()
+                except:
+                    pass
+                    
+                if zoneId == None:
+                    zoneId = 0
+            
+            self.d_setMagicWord(magicWord, avId, zoneId)
+            if magicWord.count("~crash"):
+                args = magicWord.split()
+                errorCode = 12
+                if len(args) > 1:
+                    errorCode = int(args)
+                self.notify.info("Simulating client crash: exit error = %s" % errorCode)
+                base.exitShow(errorCode)
+            
+            if magicWord.count("~exception"):
+                self.notify.error("~exception: simulating a client exception...")
+                s = ""
+                while True:
+                    s += "INVALIDNAME"
+                    eval(s)
+            
+            self.setMagicWord(magicWord, avId, zoneId)
 
     def setMagicWordResponse(self, response):
         self.notify.info(response)
@@ -893,162 +765,7 @@ Syntax error at or near `POP_BLOCK' token at offset 301
 
     def showShadowCollisions(self):
         try:
-            base.sha
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\MagicWordManager.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'cr'
-6	LOAD_ATTR         'wantMagicWords'
-9	JUMP_IF_FALSE     '327'
-
-12	LOAD_FAST         'avId'
-15	LOAD_CONST        None
-18	COMPARE_OP        '=='
-21	JUMP_IF_FALSE     '39'
-
-24	LOAD_GLOBAL       'base'
-27	LOAD_ATTR         'localAvatar'
-30	LOAD_ATTR         'doId'
-33	STORE_FAST        'avId'
-36	JUMP_FORWARD      '39'
-39_0	COME_FROM         '36'
-
-39	LOAD_FAST         'zoneId'
-42	LOAD_CONST        None
-45	COMPARE_OP        '=='
-48	JUMP_IF_FALSE     '113'
-
-51	SETUP_EXCEPT      '82'
-
-54	LOAD_FAST         'self'
-57	LOAD_ATTR         'cr'
-60	LOAD_ATTR         'playGame'
-63	LOAD_ATTR         'getPlace'
-66	CALL_FUNCTION_0   None
-69	LOAD_ATTR         'getZoneId'
-72	CALL_FUNCTION_0   None
-75	STORE_FAST        'zoneId'
-78	POP_BLOCK         None
-79	JUMP_FORWARD      '89'
-82_0	COME_FROM         '51'
-
-82	POP_TOP           None
-83	POP_TOP           None
-84	POP_TOP           None
-
-85	JUMP_FORWARD      '89'
-88	END_FINALLY       None
-89_0	COME_FROM         '79'
-89_1	COME_FROM         '88'
-
-89	LOAD_FAST         'zoneId'
-92	LOAD_CONST        None
-95	COMPARE_OP        '=='
-98	JUMP_IF_FALSE     '110'
-
-101	LOAD_CONST        0
-104	STORE_FAST        'zoneId'
-107	JUMP_ABSOLUTE     '113'
-110	JUMP_FORWARD      '113'
-113_0	COME_FROM         '110'
-
-113	LOAD_FAST         'self'
-116	LOAD_ATTR         'd_setMagicWord'
-119	LOAD_FAST         'magicWord'
-122	LOAD_FAST         'avId'
-125	LOAD_FAST         'zoneId'
-128	CALL_FUNCTION_3   None
-131	POP_TOP           None
-
-132	LOAD_FAST         'magicWord'
-135	LOAD_ATTR         'count'
-138	LOAD_CONST        '~crash'
-141	CALL_FUNCTION_1   None
-144	JUMP_IF_FALSE     '238'
-
-147	LOAD_FAST         'magicWord'
-150	LOAD_ATTR         'split'
-153	CALL_FUNCTION_0   None
-156	STORE_FAST        'args'
-
-159	LOAD_CONST        12
-162	STORE_FAST        'errorCode'
-
-165	LOAD_GLOBAL       'len'
-168	LOAD_FAST         'args'
-171	CALL_FUNCTION_1   None
-174	LOAD_CONST        1
-177	COMPARE_OP        '>'
-180	JUMP_IF_FALSE     '202'
-
-183	LOAD_GLOBAL       'int'
-186	LOAD_FAST         'args'
-189	LOAD_CONST        1
-192	BINARY_SUBSCR     None
-193	CALL_FUNCTION_1   None
-196	STORE_FAST        'errorCode'
-199	JUMP_FORWARD      '202'
-202_0	COME_FROM         '199'
-
-202	LOAD_FAST         'self'
-205	LOAD_ATTR         'notify'
-208	LOAD_ATTR         'info'
-211	LOAD_CONST        'Simulating client crash: exit error = %s'
-214	LOAD_FAST         'errorCode'
-217	BINARY_MODULO     None
-218	CALL_FUNCTION_1   None
-221	POP_TOP           None
-
-222	LOAD_GLOBAL       'base'
-225	LOAD_ATTR         'exitShow'
-228	LOAD_FAST         'errorCode'
-231	CALL_FUNCTION_1   None
-234	POP_TOP           None
-235	JUMP_FORWARD      '238'
-238_0	COME_FROM         '235'
-
-238	LOAD_FAST         'magicWord'
-241	LOAD_ATTR         'count'
-244	LOAD_CONST        '~exception'
-247	CALL_FUNCTION_1   None
-250	JUMP_IF_FALSE     '305'
-
-253	LOAD_FAST         'self'
-256	LOAD_ATTR         'notify'
-259	LOAD_ATTR         'error'
-262	LOAD_CONST        '~exception: simulating a client exception...'
-265	CALL_FUNCTION_1   None
-268	POP_TOP           None
-
-269	LOAD_CONST        ''
-272	STORE_FAST        's'
-
-275	SETUP_LOOP        '305'
-
-278	LOAD_FAST         's'
-281	LOAD_CONST        'INVALIDNAME'
-284	INPLACE_ADD       None
-285	STORE_FAST        's'
-
-288	LOAD_GLOBAL       'eval'
-291	LOAD_FAST         's'
-294	CALL_FUNCTION_1   None
-297	POP_TOP           None
-298	JUMP_BACK         '278'
-301	POP_BLOCK         None
-302_0	COME_FROM         '275'
-302	JUMP_FORWARD      '305'
-305_0	COME_FROM         '302'
-
-305	LOAD_FAST        dowTrav.showCollisions(render)
+            base.shadowTrav.showCollisions(render)
         except:
             self.setMagicWordResponse('CollisionVisualizer is not compiled in.')
 
@@ -1158,19 +875,4 @@ def magicWord(mw):
 
 
 import __builtin__
-__builtin__.magicWord = magicWord# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:15:06 Pacific Daylight Time
- 'self'
-308	LOAD_ATTR         'setMagicWord'
-311	LOAD_FAST         'magicWord'
-314	LOAD_FAST         'avId'
-317	LOAD_FAST         'zoneId'
-320	CALL_FUNCTION_3   None
-323	POP_TOP           None
-324	JUMP_FORWARD      '327'
-327_0	COME_FROM         '324'
-327	LOAD_CONST        None
-330	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 301
-
+__builtin__.magicWord = magicWord# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
