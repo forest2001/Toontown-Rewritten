@@ -3,8 +3,6 @@ from pandac.PandaModules import *
 from AIMsgTypes import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
-from direct.distributed import DistributedObjectAI
-from direct.distributed import DistributedObjectUD
 
 class AIRepository(ConnectionRepository):
 	
@@ -49,13 +47,11 @@ class AIRepository(ConnectionRepository):
 		self.ourChannel = self.allocateChannel()
 		self.channelAllocator = UniqueIdAllocator(minChannel, maxChannel)
 
-		self.districtId = 0#also used by UD
-		self.serverId = serverId#guessing this is SS server id. It's the channel targeted for obj generates
-		#dbobjects target their own channel when generating
+		self.districtId = 0
+		self.serverId = serverId
 
-		self.dbObjContext = 0#guess, used by DatabaseObject
+		self.dbObjContext = 0
 		self.dbObjMap = {}
-		return
 	
 #	'''def doId2do(doId):'''
 #		'''Returns a DistributedObject given it's ID'''
@@ -286,5 +282,5 @@ class AIRepository(ConnectionRepository):
 	
 	def getDo(self, doId):
 		return self.doId2do(doId)
-	
-	
+
+
