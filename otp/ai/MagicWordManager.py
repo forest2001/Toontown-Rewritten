@@ -563,7 +563,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
          zoneId,
          base.cr.userSignature])
 
-    def b_setMagicWord(self, magicWord, avId, zoneId):
+    def b_setMagicWord(self, magicWord, avId=None, zoneId=None):
         if self.cr.wantMagicWords:
             if avId == None:
                 avId = base.localAvatar.doId
@@ -582,14 +582,14 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 args = magicWord.split()
                 errorCode = 12
                 if len(args) > 1:
-                    errorCode = int(args)
+                    errorCode = int(args[1])
                 self.notify.info("Simulating client crash: exit error = %s" % errorCode)
                 base.exitShow(errorCode)
 
             if magicWord.count("~exception"):
                 self.notify.error("~exception: simulating a client exception...")
                 s = ""
-                while True:
+                while 1:
                     s += "INVALIDNAME"
                     eval(s)
 
