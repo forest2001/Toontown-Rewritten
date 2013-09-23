@@ -155,8 +155,8 @@ class ToontownLoadingBlocker(TTDialog.TTDialog):
             return False
 
         if hasPlayableToon(avList):
-            if base.launcher.getPhaseComplete(3.5):
-                return base.launcher.getPhaseComplete(4) or True
+            if not (base.launcher.getPhaseComplete(3.5) and base.launcher.getPhaseComplete(4)):
+                return True
         return False
 
     def __shrinkLoadingBar(self):
