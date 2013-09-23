@@ -22,54 +22,54 @@ class AIBase:
     def __init__(self):
         self.config = getConfigShowbase()
         __builtins__['__dev__'] = self.config.GetBool('want-dev', 0)
-        if not self.config.GetBool('log-stack-dump', not __dev__):
-            logStackDump = self.config.GetBool('ai-log-stack-dump', not __dev__)
-            uploadStackDump = self.config.GetBool('upload-stack-dump', 0)
-            if logStackDump or uploadStackDump:
-                ExceptionVarDump.install(logStackDump, uploadStackDump)
-            if self.config.GetBool('use-vfs', 1):
-                vfs = VirtualFileSystem.getGlobalPtr()
-            else:
-                vfs = None
-            self.wantTk = self.config.GetBool('want-tk', 0)
-            self.AISleep = self.config.GetFloat('ai-sleep', 0.04)
-            self.AIRunningNetYield = self.config.GetBool('ai-running-net-yield', 0)
-            self.AIForceSleep = self.config.GetBool('ai-force-sleep', 0)
-            self.eventMgr = eventMgr
-            self.messenger = messenger
-            self.bboard = bulletinBoard
-            self.taskMgr = taskMgr
-            Task.TaskManager.taskTimerVerbose = self.config.GetBool('task-timer-verbose', 0)
-            Task.TaskManager.extendedExceptions = self.config.GetBool('extended-exceptions', 0)
-            self.sfxManagerList = None
-            self.musicManager = None
-            self.jobMgr = jobMgr
-            self.hidden = NodePath('hidden')
-            self.graphicsEngine = GraphicsEngine()
-            globalClock = ClockObject.getGlobalClock()
-            self.trueClock = TrueClock.getGlobalPtr()
-            globalClock.setRealTime(self.trueClock.getShortTime())
-            globalClock.setAverageFrameRateInterval(30.0)
-            globalClock.tick()
-            taskMgr.globalClock = globalClock
-            __builtins__['ostream'] = Notify.out()
-            __builtins__['globalClock'] = globalClock
-            __builtins__['vfs'] = vfs
-            __builtins__['hidden'] = self.hidden
-            AIBase.notify.info('__dev__ == %s' % __dev__)
-            PythonUtil.recordFunctorCreationStacks()
-            __builtins__['wantTestObject'] = self.config.GetBool('want-test-object', 0)
-            self.wantStats = self.config.GetBool('want-pstats', 0)
-            Task.TaskManager.pStatsTasks = self.config.GetBool('pstats-tasks', 0)
-            taskMgr.resumeFunc = PStatClient.resumeAfterPause
-            defaultValue = 1
-            if __dev__:
-                defaultValue = 0
-            wantFakeTextures = self.config.GetBool('want-fake-textures-ai', defaultValue)
-            if wantFakeTextures:
-                loadPrcFileData('aibase', 'textures-header-only 1')
-            self.wantPets = self.config.GetBool('want-pets', 1)
-            if self.wantPets and game.name == 'toontown':
+        logStackDump = (self.config.GetBool('log-stack-dump', (not __dev__)) or self.config.GetBool('ai-log-stack-dump', (not __dev__)))
+        uploadStackDump = self.config.GetBool('upload-stack-dump', 0)
+        if logStackDump or uploadStackDump:
+            ExceptionVarDump.install(logStackDump, uploadStackDump)
+        if self.config.GetBool('use-vfs', 1):
+            vfs = VirtualFileSystem.getGlobalPtr()
+        else:
+            vfs = None
+        self.wantTk = self.config.GetBool('want-tk', 0)
+        self.AISleep = self.config.GetFloat('ai-sleep', 0.04)
+        self.AIRunningNetYield = self.config.GetBool('ai-running-net-yield', 0)
+        self.AIForceSleep = self.config.GetBool('ai-force-sleep', 0)
+        self.eventMgr = eventMgr
+        self.messenger = messenger
+        self.bboard = bulletinBoard
+        self.taskMgr = taskMgr
+        Task.TaskManager.taskTimerVerbose = self.config.GetBool('task-timer-verbose', 0)
+        Task.TaskManager.extendedExceptions = self.config.GetBool('extended-exceptions', 0)
+        self.sfxManagerList = None
+        self.musicManager = None
+        self.jobMgr = jobMgr
+        self.hidden = NodePath('hidden')
+        self.graphicsEngine = GraphicsEngine()
+        globalClock = ClockObject.getGlobalClock()
+        self.trueClock = TrueClock.getGlobalPtr()
+        globalClock.setRealTime(self.trueClock.getShortTime())
+        globalClock.setAverageFrameRateInterval(30.0)
+        globalClock.tick()
+        taskMgr.globalClock = globalClock
+        __builtins__['ostream'] = Notify.out()
+        __builtins__['globalClock'] = globalClock
+        __builtins__['vfs'] = vfs
+        __builtins__['hidden'] = self.hidden
+        AIBase.notify.info('__dev__ == %s' % __dev__)
+        PythonUtil.recordFunctorCreationStacks()
+        __builtins__['wantTestObject'] = self.config.GetBool('want-test-object', 0)
+        self.wantStats = self.config.GetBool('want-pstats', 0)
+        Task.TaskManager.pStatsTasks = self.config.GetBool('pstats-tasks', 0)
+        taskMgr.resumeFunc = PStatClient.resumeAfterPause
+        defaultValue = 1
+        if __dev__:
+            defaultValue = 0
+        wantFakeTextures = self.config.GetBool('want-fake-textures-ai', defaultValue)
+        if wantFakeTextures:
+            loadPrcFileData('aibase', 'textures-header-only 1')
+        self.wantPets = self.config.GetBool('want-pets', 1)
+        if self.wantPets:
+            if game.name == 'toontown':
                 from toontown.pets import PetConstants
                 self.petMoodTimescale = self.config.GetFloat('pet-mood-timescale', 1.0)
                 self.petMoodDriftPeriod = self.config.GetFloat('pet-mood-drift-period', PetConstants.MoodDriftPeriod)
