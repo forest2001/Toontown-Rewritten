@@ -570,7 +570,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
             if zoneId == None:
                 try:
-                    zoneId = self.cr.playGae.getPlace().getZoneId()
+                    zoneId = self.cr.playGame.getPlace().getZoneId()
                 except:
                     pass
 
