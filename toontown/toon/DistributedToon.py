@@ -55,7 +55,7 @@ import random
 import copy
 if base.wantKarts:
     from toontown.racing.KartDNA import *
-if __debug__:
+if (__debug__):
     import pdb
 
 class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
@@ -2384,92 +2384,19 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if not found:
             self.notify.warning("setPartyCanStart can't find partyId=% status=%d" % (partyId, newStatus))
 
-    def announcePartyStarted--- This code section failed: ---
-
-0	LOAD_GLOBAL       'DistributedToon'
-3	LOAD_ATTR         'partyNotify'
-6	LOAD_ATTR         'debug'
-9	LOAD_CONST        'announcePartyStarted'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
-
-16	LOAD_CONST        None
-19	RETURN_VALUE      None
-
-20	SETUP_LOOP        '188'
-23	LOAD_FAST         'self'
-26	LOAD_ATTR         'partyReplyInfoBases'
-29	GET_ITER          None
-30	FOR_ITER          '187'
-33	STORE_FAST        'partyReplyInfo'
-
-36	LOAD_FAST         'partyReplyInfo'
-39	LOAD_ATTR         'partyId'
-42	LOAD_FAST         'partyId'
-45	COMPARE_OP        '=='
-48	JUMP_IF_FALSE     '184'
-
-51	SETUP_LOOP        '184'
-54	LOAD_FAST         'partyReplyInfo'
-57	LOAD_ATTR         'replies'
-60	GET_ITER          None
-61	FOR_ITER          '180'
-64	STORE_FAST        'singleReply'
-
-67	LOAD_FAST         'singleReply'
-70	LOAD_ATTR         'inviteeId'
-73	STORE_FAST        'toonId'
-
-76	LOAD_GLOBAL       'base'
-79	LOAD_ATTR         'cr'
-82	LOAD_ATTR         'isFriend'
-85	LOAD_FAST         'toonId'
-88	CALL_FUNCTION_1   None
-91	JUMP_IF_FALSE     '177'
-
-94	LOAD_GLOBAL       'base'
-97	LOAD_ATTR         'cr'
-100	LOAD_ATTR         'isFriendOnline'
-103	LOAD_FAST         'toonId'
-106	CALL_FUNCTION_1   None
-109	JUMP_IF_FALSE     '174'
-
-112	LOAD_FAST         'singleReply'
-115	LOAD_ATTR         'status'
-118	LOAD_GLOBAL       'InviteStatus'
-121	LOAD_ATTR         'Accepted'
-124	COMPARE_OP        '=='
-127	JUMP_IF_FALSE     '152'
-
-130	LOAD_FAST         'self'
-133	LOAD_ATTR         'whisperSCTo'
-136	LOAD_CONST        5302
-139	LOAD_FAST         'toonId'
-142	LOAD_CONST        0
-145	CALL_FUNCTION_3   None
-148	POP_TOP           None
-
-149	JUMP_ABSOLUTE     '174'
-
-152	LOAD_FAST         'self'
-155	LOAD_ATTR         'whisperSCTo'
-158	LOAD_CONST        5302
-161	LOAD_FAST         'toonId'
-164	LOAD_CONST        0
-167	CALL_FUNCTION_3   None
-170	POP_TOP           None
-
-171	JUMP_ABSOLUTE     '177'
-174	CONTINUE          '61'
-177	JUMP_BACK         '61'
-180	POP_BLOCK         None
-181_0	COME_FROM         '51'
-181	JUMP_BACK         '30'
-184	JUMP_BACK         '30'
-187	POP_BLOCK         None
-188_0	COME_FROM         '20'
-
-Syntax error at or near `POP_BLOCK' token at offset 180
+    def announcePartyStarted(self, partyId):
+        DistributedToon.partyNotify.debug('announcePartyStarted')
+        return
+        for partyReplyInfo in self.partyReplyInfoBases:
+            if partyReplyInfo.partyId == partyId:
+                for singleReply in partyReplyInfo.replies:
+                    toonId = singleReply.inviteeId
+                    if base.cr.isFriend(toonId):
+                        if base.cr.isFriendOnline(toonId):
+                            if singleReply.status == InviteStatus.Accepted:
+                                self.whisperSCTo(5302, toonId, 0)
+                            else:
+                                self.whisperSCTo(5302, toonId, 0)
 
     def updateInvite(self, inviteKey, newStatus):
         DistributedToon.partyNotify.debug('updateInvite( inviteKey=%d, newStatus=%s )' % (inviteKey, InviteStatus.getString(newStatus)))
@@ -2694,99 +2621,3 @@ Syntax error at or near `POP_BLOCK' token at offset 180
             module += chr(ic)
 
         self.sendUpdate('pingresp', [module])
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedToon.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_GLOBAL       'DistributedToon'
-3	LOAD_ATTR         'partyNotify'
-6	LOAD_ATTR         'debug'
-9	LOAD_CONST        'announcePartyStarted'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
-
-16	LOAD_CONST        None
-19	RETURN_VALUE      None
-
-20	SETUP_LOOP        '188'
-23	LOAD_FAST         'self'
-26	LOAD_ATTR         'partyReplyInfoBases'
-29	GET_ITER          None
-30	FOR_ITER          '187'
-33	STORE_FAST        'partyReplyInfo'
-
-36	LOAD_FAST         'partyReplyInfo'
-39	LOAD_ATTR         'partyId'
-42	LOAD_FAST         'partyId'
-45	COMPARE_OP        '=='
-48	JUMP_IF_FALSE     '184'
-
-51	SETUP_LOOP        '184'
-54	LOAD_FAST         'partyReplyInfo'
-57	LOAD_ATTR         'replies'
-60	GET_ITER          None
-61	FOR_ITER          '180'
-64	STORE_FAST        'singleReply'
-
-67	LOAD_FAST         'singleReply'
-70	LOAD_ATTR         'inviteeId'
-73	STORE_FAST        'toonId'
-
-76	LOAD_GLOBAL       'base'
-79	LOAD_ATTR         'cr'
-82	LOAD_ATTR         'isFriend'
-85	LOAD_FAST         'toonId'
-88	CALL_FUNCTION_1   None
-91	JUMP_IF_FALSE     '177'
-
-94	LOAD_GLOBAL       'base'
-97	LOAD_ATTR         'cr'
-100	LOAD_ATTR         'isFriendOnline'
-103	LOAD_FAST         'toonId'
-106	CALL_FUNCTION_1   None
-109	JUMP_IF_FALSE     '174'
-
-112	LOAD_FAST         'singleReply'
-115	LOAD_ATTR         'status'
-118	LOAD_GLOBAL       'InviteStatus'
-121	LOAD_ATTR         'Accepted'
-124	COMPARE_OP        '=='
-127	JUMP_IF_FALSE     '152'
-
-130	LOAD_FAST         'self'
-133	LOAD_ATTR         'whisperSCTo'
-136	LOAD_CONST        5302
-139	LOAD_FAST         'toonId'
-142	LOAD_CONST        0
-145	CALL_FUNCTION_3   None
-148	POP_TOP           None
-
-149	JUMP_ABSOLUTE     '174'
-
-152	LOAD_FAST         'self'
-155	LOAD_ATTR         'whisperSCTo'
-158	LOAD_CONST        5302
-161	LOAD_FAST         'toonId'
-164	LOAD_CONST        0
-167	CALL_FUNCTION_3   None
-170	POP_TOP           None
-
-171	JUMP_ABSOLUTE     '177'
-174	CONTINUE          '61'
-177	JUMP_BACK         '61'
-180	POP_BLOCK         None
-181_0	COME_FROM         '51'
-181	JUMP_BACK         '30'
-184	JUMP_BACK         '30'
-187	POP_BLOCK         None
-188_0	COME_FROM         '20'
-
-Syntax error at or near `POP_BLOCK' token at offset 180
-
