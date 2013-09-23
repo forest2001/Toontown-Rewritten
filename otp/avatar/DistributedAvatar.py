@@ -124,11 +124,11 @@ class DistributedAvatar(DistributedActor, Avatar):
         return
 
     def setHp(self, hitPoints):
-        if hitPoints is not None and self.hp is not None and self.hp - hitPoints > 0:
-            justRanOutOfHp = hitPoints <= 0
-            self.hp = hitPoints
-            self.hpChange(quietly=1)
-            justRanOutOfHp and self.died()
+        justRanOutOfHp = (hitPoints is not None and self.hp is not None and self.hp - hitPoints > 0) and (hitPoints <= 0)
+        self.hp = hitPoints
+        self.hpChange(quietly=1)
+        if justRanOutOfHp:
+            self.died()
         return
 
     def hpChange(self, quietly = 0):
