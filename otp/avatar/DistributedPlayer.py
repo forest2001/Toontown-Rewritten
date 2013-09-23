@@ -87,9 +87,9 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
 
     def setLocation(self, parentId, zoneId):
         DistributedAvatar.DistributedAvatar.setLocation(self, parentId, zoneId)
-        if parentId in (0, None):
-            if not zoneId in (0, None):
-                self.cr._isValidPlayerLocation(parentId, zoneId) or self.cr.disableDoId(self.doId)
+        if not (parentId in (0, None) and zoneId in (0, None)):
+            if not self.cr._isValidPlayerLocation(parentId, zoneId):
+                self.cr.disableDoId(self.doId)
                 self.cr.deleteObject(self.doId)
         return None
 
