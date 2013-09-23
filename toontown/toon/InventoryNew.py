@@ -1022,14 +1022,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makePressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            if bonus:
-                shadowColor = self.ShadowBuffedColor
-            else:
-                shadowColor = self.ShadowColor
-            button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-            self._interactivePropTrackBonus == track and button.configure(image_color=self.PropBonusPressableImageColor)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        if self._interactivePropTrackBonus == track:
+            button.configure(image_color=self.PropBonusPressableImageColor)
             self.addToPropBonusIval(button)
         else:
             button.configure(image_color=self.PressableImageColor)
@@ -1037,9 +1037,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makeDisabledPressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            shadowColor = bonus and self.UnpressableShadowBuffedColor
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.UnpressableShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
         button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton, commandButtons=(DGG.LMB,))
@@ -1048,14 +1048,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makeNoncreditPressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            if bonus:
-                shadowColor = self.ShadowBuffedColor
-            else:
-                shadowColor = self.ShadowColor
-            button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-            self._interactivePropTrackBonus == track and button.configure(image_color=self.PropBonusNoncreditPressableImageColor)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        if self._interactivePropTrackBonus == track:
+            button.configure(image_color=self.PropBonusNoncreditPressableImageColor)
             self.addToPropBonusIval(button)
         else:
             button.configure(image_color=self.NoncreditPressableImageColor)
@@ -1063,9 +1063,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makeDeletePressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            shadowColor = bonus and self.ShadowBuffedColor
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
@@ -1074,9 +1074,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makeUnpressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            shadowColor = bonus and self.UnpressableShadowBuffedColor
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.UnpressableShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
         button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton, commandButtons=())
@@ -1085,9 +1085,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def makeBookUnpressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            shadowColor = bonus and self.ShadowBuffedColor
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
         button.configure(text_shadow=shadowColor, geom_color=self.BookUnpressableGeomColor, image_image=self.flatButton, commandButtons=())
@@ -1127,9 +1127,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         button['text'] = str(self.numItem(track, level))
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
-        if not organicBonus:
-            bonus = propBonus
-            textScale = bonus and 0.05
+        bonus = organicBonus or propBonus
+        if bonus:
+            textScale = 0.05
         else:
             textScale = 0.04
         button.configure(text_scale=textScale)
@@ -1204,7 +1204,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def loadPurchaseFrame(self):
         purchaseModels = loader.loadModel('phase_4/models/gui/purchase_gui')
         self.purchaseFrame = DirectFrame(relief=None, image=purchaseModels.find('**/PurchasePanel'), image_pos=(-0.21, 0, 0.08), parent=self)
-        self.purchaseFrame.setX(-0.06)
+        self.purchaseFrame.setX(-.06)
         self.purchaseFrame.hide()
         purchaseModels.removeNode()
         return
