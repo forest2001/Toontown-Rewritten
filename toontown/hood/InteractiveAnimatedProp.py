@@ -497,7 +497,7 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
                 baseAnimName = animName.split('/')[-1]
                 if localAvatar.zoneId == self.visId:
                     self.notify.info('playing %s' % baseAnimName)
-            except Exception as e:
+            except Exception, e:
                 self.notify.warning('Unknown error in printAnimIfClose, giving up:\n%s' % str(e))
 
     def clearCurIval(self):

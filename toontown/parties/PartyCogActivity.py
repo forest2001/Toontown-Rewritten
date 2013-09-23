@@ -223,7 +223,7 @@ class PartyCogActivity(DirectObject):
             if ival is not None and ival.isPlaying():
                 try:
                     ival.finish()
-                except Exception as theException:
+                except Exception, theException:
                     self.notify.warning('Ival could not finish:\n %s \nException %s ' % (str(ival), str(theException)))
 
         self.toonPieTracks = {}
@@ -231,7 +231,7 @@ class PartyCogActivity(DirectObject):
             if ival is not None and ival.isPlaying():
                 try:
                     ival.finish()
-                except Exception as theException:
+                except Exception, theException:
                     self.notify.warning('Ival could not finish:\n %s \nException %s ' % (str(ival), str(theException)))
 
         self.pieIvals = []

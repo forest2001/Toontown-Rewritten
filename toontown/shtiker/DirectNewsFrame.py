@@ -354,7 +354,7 @@ class DirectNewsFrame(DirectObject.DirectObject):
         cacheIndexFilename = Filename(self.newsDir, self.CacheIndexFilename)
         try:
             file = open(cacheIndexFilename.toOsSpecific(), 'w')
-        except IOError as e:
+        except IOError, e:
             self.notify.warning('error opening news cache file %s: %s' % (cacheIndexFilename, str(e)))
             return
 

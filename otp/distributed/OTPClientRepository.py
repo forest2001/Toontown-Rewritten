@@ -348,7 +348,7 @@ class OTPClientRepository(ClientRepositoryBase):
     def gotoFirstScreen(self):
         try:
             self.accountServerConstants = AccountServerConstants.AccountServerConstants(self)
-        except TTAccount.TTAccountException as e:
+        except TTAccount.TTAccountException, e:
             self.notify.debug(str(e))
             self.loginFSM.request('failedToGetServerConstants', [e])
             return
@@ -1709,7 +1709,7 @@ class OTPClientRepository(ClientRepositoryBase):
     def refreshAccountServerDate(self, forceRefresh = 0):
         try:
             self.accountServerDate.grabDate(force=forceRefresh)
-        except TTAccount.TTAccountException as e:
+        except TTAccount.TTAccountException, e:
             self.notify.debug(str(e))
             return 1
 

@@ -240,7 +240,7 @@ class LevelSpec:
                     backupFilename = self.privGetBackupFilename(filename)
                     self.privRemoveFile(backupFilename)
                     os.rename(filename, backupFilename)
-                except OSError as e:
+                except OSError, e:
                     LevelSpec.notify.warning('error during backup: %s' % str(e))
 
             LevelSpec.notify.info("writing to '%s'" % filename)

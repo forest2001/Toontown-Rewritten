@@ -439,7 +439,7 @@ def decodeCatalogItem(di, versionNumber, store):
             code = di.getUint8()
         itemClass = CatalogReverseType[typeIndex]
         item = itemClass(di, versionNumber, store=store)
-    except Exception as e:
+    except Exception, e:
         CatalogItem.notify.warning('Invalid catalog item in stream: %s, %s' % (sys.exc_info()[0], e))
         d = Datagram(di.getDatagram().getMessage()[startIndex:])
         d.dumpHex(Notify.out())
@@ -459,7 +459,7 @@ def getItem(blob, store = 0):
     try:
         versionNumber = di.getUint8()
         return decodeCatalogItem(di, versionNumber, store)
-    except Exception as e:
+    except Exception, e:
         CatalogItem.notify.warning('Invalid catalog item: %s, %s' % (sys.exc_info()[0], e))
         dg.dumpHex(Notify.out())
         import CatalogInvalidItem

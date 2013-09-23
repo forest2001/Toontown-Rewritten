@@ -31,7 +31,7 @@ class AccountServerDate:
             raise UnexpectedResponse, 'unexpected response, response=%s' % response
         try:
             epoch = int(response[1])
-        except ValueError as e:
+        except ValueError, e:
             self.notify.debug(str(e))
             raise UnexpectedResponse, 'unexpected response, response=%s' % response
 

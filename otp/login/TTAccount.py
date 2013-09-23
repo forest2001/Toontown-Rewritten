@@ -55,7 +55,7 @@ class TTAccount:
             if self.response.getInt('errorCode') in (5, 72):
                 return (0, None)
             return (0, errorMsg)
-        except TTAccountException as e:
+        except TTAccountException, e:
             return (0, str(e))
 
         return None
@@ -71,7 +71,7 @@ class TTAccount:
             if self.response.getInt('errorCode') in (5, 72):
                 return (0, None)
             return (0, errorMsg)
-        except TTAccountException as e:
+        except TTAccountException, e:
             return (0, str(e))
 
         return None
@@ -85,7 +85,7 @@ class TTAccount:
             if self.response.getInt('errorCode') in (5, 72):
                 return (0, None)
             return (0, errorMsg)
-        except TTAccountException as e:
+        except TTAccountException, e:
             return (0, str(e))
 
         return None
@@ -274,7 +274,7 @@ class TTAccount:
             if self.response.getInt('errorCode') in (5, 72):
                 return (0, None)
             return (0, errorMsg)
-        except TTAccountException as e:
+        except TTAccountException, e:
             return (0, str(e))
 
         return None

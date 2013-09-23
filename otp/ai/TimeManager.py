@@ -335,7 +335,7 @@ class TimeManager(DistributedObject.DistributedObject):
                      bugfix,
                      major,
                      minor)
-                except Exception as e:
+                except Exception, e:
                     self.notify.debug('getMacOsInfo %s' % str(e))
 
         self.notify.debug('getMacOsInfo returning %s' % str(result))

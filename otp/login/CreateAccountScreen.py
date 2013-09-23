@@ -158,7 +158,7 @@ class CreateAccountScreen(StateData.StateData, GuiScreen.GuiScreen):
             if referrer is not None:
                 data['referrer'] = referrer
             error = self.loginInterface.createAccount(self.userName, self.password, data)
-        except TTAccount.TTAccountException as e:
+        except TTAccount.TTAccountException, e:
             error = str(e)
             self.notify.info(error)
             self.dialog.setMessage(error + OTPLocalizer.CreateAccountScreenConnectionErrorSuffix)
