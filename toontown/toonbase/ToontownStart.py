@@ -1,6 +1,6 @@
 import __builtin__
 
-class game():
+class game:
     __module__ = __name__
     name = 'toontown'
     process = 'client'

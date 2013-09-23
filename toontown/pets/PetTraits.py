@@ -22,7 +22,7 @@ def gaussian(min, max, rng):
     return normalDistrib(min, max, rng.gauss)
 
 
-class TraitDistribution():
+class TraitDistribution:
     __module__ = __name__
     TraitQuality = Enum('VERY_BAD, BAD, AVERAGE, GOOD, VERY_GOOD')
     TraitTypes = Enum('INCREASING, DECREASING')
@@ -112,7 +112,7 @@ class TraitDistribution():
         return clampScalar(howExtreme, 0.0, 1.0)
 
 
-class PetTraits():
+class PetTraits:
     __module__ = __name__
 
     class StdIncDistrib(TraitDistribution):
@@ -160,7 +160,7 @@ class PetTraits():
      ('affectionThreshold', StdDecDistrib(), True))
     NumTraits = len(TraitDescs)
 
-    class Trait():
+    class Trait:
         __module__ = __name__
 
         def __init__(self, index, traitsObj, value = None):

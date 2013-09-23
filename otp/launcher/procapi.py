@@ -18,7 +18,7 @@ class PROCESSENTRY32(ctypes.Structure):
      ('szExeFile', c_char * MAX_PATH)]
 
 
-class ProcessEntryPY():
+class ProcessEntryPY:
     __module__ = __name__
 
     def __init__(self, name, pid):

@@ -12,7 +12,7 @@ def releasePetManager():
     base.petManager.decRefCount()
 
 
-class PetManager():
+class PetManager:
     __module__ = __name__
     CollTaskName = 'petFloorCollisions'
 

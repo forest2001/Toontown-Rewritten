@@ -8,7 +8,7 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.hood import HoodUtil
 from toontown.building import SuitBuildingGlobals
 
-class SuitPlannerBase():
+class SuitPlannerBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitPlannerBase')
     SuitHoodInfo = [[2100,

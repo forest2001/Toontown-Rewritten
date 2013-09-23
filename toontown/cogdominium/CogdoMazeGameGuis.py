@@ -213,7 +213,7 @@ class CogdoMazeBossGui(DirectFrame):
             ToontownIntervals.start(ToontownIntervals.getPulseLargerIval(self._openDoor, 'bosscodedoor'))
 
 
-class CogdoMazeHud():
+class CogdoMazeHud:
     __module__ = __name__
 
     def __init__(self):

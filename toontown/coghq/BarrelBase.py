@@ -1,6 +1,6 @@
 import random
 
-class BarrelBase():
+class BarrelBase:
     __module__ = __name__
 
     def getRng(self):

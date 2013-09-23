@@ -3,7 +3,7 @@ from toontown.toonbase import ToontownGlobals
 import copy
 from toontown.chat import ToonChatGarbler
 
-class FriendHandle():
+class FriendHandle:
     __module__ = __name__
 
     def __init__(self, doId, name, style, petId, isAPet = False):

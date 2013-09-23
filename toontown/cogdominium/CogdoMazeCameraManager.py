@@ -3,7 +3,7 @@ import CogdoMazeGameGlobals as Globals
 import math
 import random
 
-class CogdoMazeCameraManager():
+class CogdoMazeCameraManager:
     __module__ = __name__
     toonJumpSpeed = 30.0
     toonJumpDir = 1.0

@@ -1,7 +1,7 @@
 from otp.otpbase import OTPLocalizer
 import types
 
-class Emote():
+class Emote:
     __module__ = __name__
     EmoteClear = -1
     EmoteEnableStateChanged = 'EmoteEnableStateChanged'

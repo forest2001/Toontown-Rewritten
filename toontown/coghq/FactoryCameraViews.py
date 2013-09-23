@@ -3,7 +3,7 @@ from direct.showbase.PythonUtil import Functor
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
-class FactoryCameraViews():
+class FactoryCameraViews:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryCameraViews')
 

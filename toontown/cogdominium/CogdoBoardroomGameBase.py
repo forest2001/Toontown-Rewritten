@@ -1,7 +1,7 @@
 from toontown.cogdominium import CogdoBoardroomGameSpec
 from toontown.cogdominium import CogdoBoardroomGameConsts as Consts
 
-class CogdoBoardroomGameBase():
+class CogdoBoardroomGameBase:
     __module__ = __name__
 
     def getConsts(self):

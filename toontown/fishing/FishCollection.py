@@ -1,7 +1,7 @@
 import FishBase
 import FishGlobals
 
-class FishCollection():
+class FishCollection:
     __module__ = __name__
 
     def __init__(self):

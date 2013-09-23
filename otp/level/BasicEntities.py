@@ -2,7 +2,7 @@ import Entity
 import DistributedEntity
 from pandac.PandaModules import NodePath
 
-class NodePathEntityBase():
+class NodePathEntityBase:
     __module__ = __name__
 
     def initNodePathAttribs(self, doReparent = 1):

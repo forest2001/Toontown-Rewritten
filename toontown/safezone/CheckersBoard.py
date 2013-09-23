@@ -1,6 +1,6 @@
 
 
-class CheckersBoard():
+class CheckersBoard:
     __module__ = __name__
 
     def __init__(self):
@@ -300,7 +300,7 @@ class CheckersBoard():
         return self.squareList[squareNum].jumps
 
 
-class CheckersTile():
+class CheckersTile:
     __module__ = __name__
 
     def __init__(self, tileNum):

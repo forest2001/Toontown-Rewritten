@@ -1,7 +1,7 @@
 EndlessGame = config.GetBool('endless-catch-game', 0)
 GameDuration = 55.0
 
-class DropObject():
+class DropObject:
     __module__ = __name__
 
     def __init__(self, name, good, onscreenDurMult, modelPath):

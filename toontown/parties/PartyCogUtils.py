@@ -7,7 +7,7 @@ def getCogDistanceUnitsFromCenter(distance):
     return int(round(distance * (PartyGlobals.CogActivityArenaLength / 2.0)))
 
 
-class CameraManager():
+class CameraManager:
     __module__ = __name__
     nextID = 0
 
@@ -75,7 +75,7 @@ class CameraManager():
         return targetPos + vec * inverse_e ** (dt * self.rate)
 
 
-class StrafingControl():
+class StrafingControl:
     __module__ = __name__
 
     def __init__(self, player):

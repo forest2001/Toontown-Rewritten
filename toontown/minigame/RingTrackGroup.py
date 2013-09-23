@@ -1,6 +1,6 @@
 
 
-class RingTrackGroup():
+class RingTrackGroup:
     __module__ = __name__
 
     def __init__(self, tracks, period, trackTOffsets = None, reverseFlag = 0, tOffset = 0.0):

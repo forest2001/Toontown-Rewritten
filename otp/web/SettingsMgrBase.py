@@ -1,6 +1,6 @@
 from direct.directnotify.DirectNotifyGlobal import directNotify
 
-class SettingsMgrBase():
+class SettingsMgrBase:
     __module__ = __name__
     notify = directNotify.newCategory('SettingsMgrBase')
 

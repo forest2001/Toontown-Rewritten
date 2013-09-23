@@ -4,7 +4,7 @@ from pandac.PandaModules import NodePath, Point3, Vec4
 from CogdoFlyingObjects import CogdoFlyingPlatform
 import CogdoFlyingGameGlobals as Globals
 
-class CogdoFlyingLevelQuadrant():
+class CogdoFlyingLevelQuadrant:
     __module__ = __name__
     notify = directNotify.newCategory('CogdoFlyingLevelQuadrant')
 

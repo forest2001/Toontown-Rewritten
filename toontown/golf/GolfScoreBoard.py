@@ -9,7 +9,7 @@ from toontown.golf import GolfGlobals
 from pandac.PandaModules import LineSegs
 AUTO_HIDE_TIMEOUT = 3
 
-class GolfScoreBoard():
+class GolfScoreBoard:
     __module__ = __name__
     notify = directNotify.newCategory('GolfScoreBoard')
 

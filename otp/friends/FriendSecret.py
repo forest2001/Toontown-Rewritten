@@ -287,7 +287,7 @@ class FriendSecret(DirectFrame, StateData.StateData):
          'BR',
          'FR']:
 
-            class ShowHide():
+            class ShowHide:
                 __module__ = __name__
 
                 def show(self):

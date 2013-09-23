@@ -1,7 +1,7 @@
 from pandac.PandaModules import VBase3
 from direct.showbase.RandomNumGen import RandomNumGen
 
-class MazeBase():
+class MazeBase:
     __module__ = __name__
 
     def __init__(self, model, mazeData, cellWidth, parent = None):

@@ -21,7 +21,7 @@ def getStopLookedAtByOtherEvent(lookedAtAvId):
     return 'PetLookerAI-%s-stopLookedAtByOther' % lookedAtAvId
 
 
-class PetLookerAI():
+class PetLookerAI:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetLookerAI')
 

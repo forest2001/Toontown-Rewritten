@@ -6,7 +6,7 @@ from direct.showbase import AppRunnerGlobal
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 
-class PetNameGenerator():
+class PetNameGenerator:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetNameGenerator')
     boyFirsts = []

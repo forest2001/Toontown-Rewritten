@@ -1,6 +1,6 @@
 from direct.showbase import PythonUtil
 
-class KartShopGlobals():
+class KartShopGlobals:
     __module__ = __name__
     EVENTDICT = {'guiDone': 'guiDone',
      'returnKart': 'returnKart',
@@ -10,7 +10,7 @@ class KartShopGlobals():
     MAX_KART_ACC = 16
 
 
-class KartGlobals():
+class KartGlobals:
     __module__ = __name__
     ENTER_MOVIE = 1
     EXIT_MOVIE = 2

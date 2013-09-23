@@ -5,7 +5,7 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toontowngui import TTDialog
 
-class ElevatorNotifier():
+class ElevatorNotifier:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogNotifyDialog')
 

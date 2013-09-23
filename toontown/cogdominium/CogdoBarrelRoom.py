@@ -6,7 +6,7 @@ from toontown.toonbase import ToontownGlobals, ToontownTimer
 from toontown.cogdominium import CogdoBarrelRoomConsts, CogdoBarrelRoomRewardPanel
 from toontown.distributed import DelayDelete
 
-class CogdoBarrelRoom():
+class CogdoBarrelRoom:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogdoBarrelRoom')
 

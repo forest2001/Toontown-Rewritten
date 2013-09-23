@@ -4,7 +4,7 @@ HILL_BOMB = 1
 HILL_WHACKED = 2
 HILL_COGWHACKED = 3
 
-class MoleFieldBase():
+class MoleFieldBase:
     __module__ = __name__
     WHACKED = 1
     MoveUpTimeMax = 1

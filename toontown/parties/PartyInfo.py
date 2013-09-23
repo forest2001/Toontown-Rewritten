@@ -4,7 +4,7 @@ from toontown.parties.PartyGlobals import InviteTheme
 from toontown.parties.DecorBase import DecorBase
 from toontown.parties.ActivityBase import ActivityBase
 
-class PartyInfoBase():
+class PartyInfoBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyInfoBase')
 

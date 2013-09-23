@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 import TTAccount
 import HTTPUtil
 
-class RemoteValueSet():
+class RemoteValueSet:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RemoteValueSet')
 

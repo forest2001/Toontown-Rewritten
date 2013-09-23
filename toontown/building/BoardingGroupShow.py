@@ -9,7 +9,7 @@ TRACK_TYPE_TELEPORT = 1
 TRACK_TYPE_RUN = 2
 TRACK_TYPE_POOF = 3
 
-class BoardingGroupShow():
+class BoardingGroupShow:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupShow')
     thresholdRunDistance = 25.0

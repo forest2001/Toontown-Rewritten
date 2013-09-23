@@ -16,7 +16,7 @@ import sys
 import time
 import gc
 
-class AIBase():
+class AIBase:
     __module__ = __name__
     notify = directNotify.newCategory('AIBase')
 

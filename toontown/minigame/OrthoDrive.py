@@ -4,7 +4,7 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase.ToonBaseGlobal import *
 import ArrowKeys
 
-class OrthoDrive():
+class OrthoDrive:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('OrthoDrive')
     TASK_NAME = 'OrthoDriveTask'

@@ -1,6 +1,6 @@
 from BaseActivityFSM import BaseActivityFSM
 
-class IdleMixin():
+class IdleMixin:
     __module__ = __name__
 
     def enterIdle(self, *args):
@@ -23,7 +23,7 @@ class IdleMixin():
         self.activity.finishIdle()
 
 
-class ActiveMixin():
+class ActiveMixin:
     __module__ = __name__
 
     def enterActive(self, *args):
@@ -46,7 +46,7 @@ class ActiveMixin():
         self.activity.finishActive()
 
 
-class DisabledMixin():
+class DisabledMixin:
     __module__ = __name__
 
     def enterDisabled(self, *args):
@@ -69,7 +69,7 @@ class DisabledMixin():
         self.activity.finishDisabled()
 
 
-class RulesMixin():
+class RulesMixin:
     __module__ = __name__
 
     def enterRules(self, *args):
@@ -92,7 +92,7 @@ class RulesMixin():
         self.activity.finishRules()
 
 
-class WaitForEnoughMixin():
+class WaitForEnoughMixin:
     __module__ = __name__
 
     def enterWaitForEnough(self, *args):
@@ -115,7 +115,7 @@ class WaitForEnoughMixin():
         self.activity.finishWaitForEnough()
 
 
-class WaitToStartMixin():
+class WaitToStartMixin:
     __module__ = __name__
 
     def enterWaitToStart(self, *args):
@@ -138,7 +138,7 @@ class WaitToStartMixin():
         self.activity.finishWaitToStart()
 
 
-class WaitClientsReadyMixin():
+class WaitClientsReadyMixin:
     __module__ = __name__
 
     def enterWaitClientsReady(self, *args):
@@ -161,7 +161,7 @@ class WaitClientsReadyMixin():
         self.activity.finishWaitClientsReady()
 
 
-class WaitForServerMixin():
+class WaitForServerMixin:
     __module__ = __name__
 
     def enterWaitForServer(self, *args):
@@ -184,7 +184,7 @@ class WaitForServerMixin():
         self.activity.finishWaitForServer()
 
 
-class ConclusionMixin():
+class ConclusionMixin:
     __module__ = __name__
 
     def enterConclusion(self, *args):

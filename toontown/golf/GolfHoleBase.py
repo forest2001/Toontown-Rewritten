@@ -9,7 +9,7 @@ from toontown.golf import GolfGlobals
 import random
 import math
 
-class GolfHoleBase():
+class GolfHoleBase:
     __module__ = __name__
 
     def __init__(self, canRender = 0):

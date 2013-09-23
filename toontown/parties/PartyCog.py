@@ -15,7 +15,7 @@ from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
 import PartyGlobals
 
-class PartyCogManager():
+class PartyCogManager:
     __module__ = __name__
 
     def __init__(self):

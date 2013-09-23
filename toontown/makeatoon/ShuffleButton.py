@@ -7,7 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
 import random
 
-class ShuffleButton():
+class ShuffleButton:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ShuffleButton')
 

@@ -4,7 +4,7 @@ from direct.showbase.PythonUtil import lerp, average, clampScalar
 from toontown.toonbase import TTLocalizer
 import random, time, weakref
 
-class PetMood():
+class PetMood:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetMood')
     Neutral = 'neutral'

@@ -13,7 +13,7 @@ try:
 except:
     pass
 
-class DisplayOptions():
+class DisplayOptions:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DisplayOptions')
 

@@ -2,7 +2,7 @@ from pandac.PandaModules import StringStream
 from direct.distributed.PyDatagram import PyDatagram
 import random
 
-class ClsendTracker():
+class ClsendTracker:
     __module__ = __name__
     clsendNotify = directNotify.newCategory('clsend')
     NumTrackersLoggingOverflow = 0

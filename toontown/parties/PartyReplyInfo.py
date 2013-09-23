@@ -1,6 +1,6 @@
 
 
-class SingleReply():
+class SingleReply:
     __module__ = __name__
 
     def __init__(self, inviteeId, status):
@@ -8,7 +8,7 @@ class SingleReply():
         self.status = status
 
 
-class PartyReplyInfoBase():
+class PartyReplyInfoBase:
     __module__ = __name__
 
     def __init__(self, partyId, partyReplies):

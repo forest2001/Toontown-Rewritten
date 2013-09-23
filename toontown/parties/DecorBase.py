@@ -1,6 +1,6 @@
 
 
-class DecorBase():
+class DecorBase:
     __module__ = __name__
 
     def __init__(self, decorId, x, y, h):

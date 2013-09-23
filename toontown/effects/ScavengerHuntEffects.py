@@ -5,7 +5,7 @@ from toontown.toonbase import TTLocalizer
 from direct.gui.DirectFrame import DirectFrame
 from direct.gui.DirectLabel import DirectLabel
 
-class ScavengerHuntEffect():
+class ScavengerHuntEffect:
     __module__ = __name__
     images = None
 
@@ -110,7 +110,7 @@ class WinterCarolingEffect(ScavengerHuntEffect):
         ScavengerHuntEffect.destroy(self)
 
 
-class TrickOrTreatMilestoneEffect():
+class TrickOrTreatMilestoneEffect:
     __module__ = __name__
 
     def __init__(self):

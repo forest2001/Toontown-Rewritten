@@ -19,7 +19,7 @@ def send(zoneIds, petObserve):
 Phrases = Enum('HI, BYE, YES, NO, SOOTHE, PRAISE, CRITICISM, HAPPY,SAD, ANGRY, HURRY, QUESTION, FRIENDLY, LETS_PLAY,COME, FOLLOW_ME, STAY, NEED_LAFF, NEED_GAGS, NEED_JB,GO_AWAY, DO_TRICK,')
 Actions = Enum('FEED, SCRATCH,ATTENDED_START, ATTENDED_STOP,ATTENDING_START, ATTENDING_STOP,CHANGE_ZONE, LOGOUT,GARDEN')
 
-class PetObserve():
+class PetObserve:
     __module__ = __name__
 
     def isValid(self):

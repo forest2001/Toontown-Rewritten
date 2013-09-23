@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from math import *
 
-class Trajectory():
+class Trajectory:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Trajectory')
     gravity = 32.0

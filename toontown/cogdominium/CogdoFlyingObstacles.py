@@ -16,7 +16,7 @@ from direct.particles import ParticleEffect
 from direct.particles import Particles
 from direct.particles import ForceGroup
 
-class CogdoFlyingObtacleFactory():
+class CogdoFlyingObtacleFactory:
     __module__ = __name__
 
     def __init__(self):

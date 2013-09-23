@@ -1,6 +1,6 @@
 
 
-class PickANamePattern():
+class PickANamePattern:
     __module__ = __name__
 
     def __init__(self, nameStr, gender):

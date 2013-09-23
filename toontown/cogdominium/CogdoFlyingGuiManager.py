@@ -6,7 +6,7 @@ from CogdoGameMessageDisplay import CogdoGameMessageDisplay
 from CogdoMemoGui import CogdoMemoGui
 import CogdoFlyingGameGlobals as Globals
 
-class CogdoFlyingGuiManager():
+class CogdoFlyingGuiManager:
     __module__ = __name__
     ClearMessageDisplayEventName = 'ClearMessageDisplayEvent'
     EagleTargetingLocalPlayerEventName = 'EagleTargetingLocalPlayerEvent'

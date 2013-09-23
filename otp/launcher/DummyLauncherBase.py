@@ -6,7 +6,7 @@ from direct.showbase.EventManagerGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.task.Task import Task
 
-class DummyLauncherBase():
+class DummyLauncherBase:
     __module__ = __name__
 
     def __init__(self):

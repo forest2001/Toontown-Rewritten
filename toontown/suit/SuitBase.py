@@ -12,7 +12,7 @@ TIME_BUFFER_PER_WPT = 0.25
 TIME_DIVISOR = 100
 DISTRIBUTE_TASK_CREATION = 0
 
-class SuitBase():
+class SuitBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitBase')
 

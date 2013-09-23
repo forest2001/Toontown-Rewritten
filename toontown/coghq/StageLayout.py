@@ -613,7 +613,7 @@ def getNumFloors(layoutIndex):
     return len(stageLayouts[layoutIndex])
 
 
-class StageLayout():
+class StageLayout:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('StageLayout')
 

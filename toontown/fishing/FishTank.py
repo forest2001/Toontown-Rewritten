@@ -1,7 +1,7 @@
 import FishBase
 import FishGlobals
 
-class FishTank():
+class FishTank:
     __module__ = __name__
 
     def __init__(self):

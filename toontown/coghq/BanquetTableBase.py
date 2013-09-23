@@ -1,6 +1,6 @@
 
 
-class BanquetTableBase():
+class BanquetTableBase:
     __module__ = __name__
     HUNGRY = 1
     DEAD = 0

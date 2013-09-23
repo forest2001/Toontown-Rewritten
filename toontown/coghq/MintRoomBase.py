@@ -1,6 +1,6 @@
 from toontown.toonbase import ToontownGlobals
 
-class MintRoomBase():
+class MintRoomBase:
     __module__ = __name__
 
     def __init__(self):

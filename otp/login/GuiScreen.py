@@ -6,7 +6,7 @@ from direct.directnotify import DirectNotifyGlobal
 from otp.otpbase import OTPLocalizer
 from direct.task.Task import Task
 
-class GuiScreen():
+class GuiScreen:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GuiScreen')
     DGG.ENTERPRESS_ADVANCE = 0

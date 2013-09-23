@@ -2,7 +2,7 @@ import GardenGlobals
 from direct.directnotify import DirectNotifyGlobal
 import FlowerBase
 
-class FlowerCollection():
+class FlowerCollection:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerCollection')
 

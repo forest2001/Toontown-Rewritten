@@ -1,6 +1,6 @@
 import Entity
 
-class VisibilityBlocker():
+class VisibilityBlocker:
     __module__ = __name__
 
     def __init__(self):

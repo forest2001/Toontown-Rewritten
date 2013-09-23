@@ -4,7 +4,7 @@ from direct.task import Task
 from toontown.toonbase import TTLocalizer
 import PlayingCardGlobals
 
-class PlayingCardBase():
+class PlayingCardBase:
     __module__ = __name__
 
     def __init__(self, value):

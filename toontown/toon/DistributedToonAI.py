@@ -50,10 +50,10 @@ if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
 
-    class PetLookerAI():
+    class PetLookerAI:
         __module__ = __name__
 
-        class PetLookerAI():
+        class PetLookerAI:
             __module__ = __name__
 
 

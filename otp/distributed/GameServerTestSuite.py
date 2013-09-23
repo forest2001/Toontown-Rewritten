@@ -30,7 +30,7 @@ class GameServerTestSuite(DirectObject.DirectObject, TaskThreaded.TaskThreaded):
                 import pdb
                 pdb.set_trace()
 
-        class MsgHandlerTest():
+        class MsgHandlerTest:
             __module__ = __name__
 
             def installMsgHandler(self):
