@@ -487,80 +487,80 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
         return result
 
     def handleLoginToontownResponse(self, di):
-		self.notify.debug("handleLoginToontownResponse")
-		if base.logPrivateInfo:
-			dgram = di.getDatagram()
-			dgram.dumpHex(ostream)
-		now = time.time()
-		returnCode = di.getUint8()
-		respString = di.getString()
-		errorString = self.getExtendedErrorMsg(respString)
-		self.accountNumber = di.getUint32()
-		self.cr.DISLIdFromLogin = self.accountNumber
-		self.accountName = di.getString()
-		self.accountNameApproved = di.getUint8()
-		accountDetailRecord = AccountDetailRecord()
-		self.cr.accountDetailRecord = accountDetailRecord
-		self.openChatEnabled = di.getString() == "YES"
-		createFriendsWithChat = di.getString()
-		canChat = createFriendsWithChat == "YES" or createFriendsWithChat == "CODE"
-		self.cr.secretChatAllowed = canChat
-		if base.logPrivateInfo:
-			self.notify.info("CREATE_FRIENDS_WITH_CHAT from game server login: %s %s" % (createFriendsWithChat, canChat))
-		self.chatCodeCreationRule = di.getString()
-		self.cr.chatCodeCreationRule = self.chatCodeCreationRule
-		if base.logPrivateInfo:
-			self.notify.info("Chat code creation rule = %s" % self.chatCodeCrationRule)
-		self.cr.secretChatNeedsParentPassword = self.chatCodeCreationRule == "PARENT"
-		sec = di.getUint32()
-		usec = di.getUint32()
-		serverTime = sec + (usec/1000000.0)
-		self.cr.serverTimeUponLogin = serverTime
-		self.cr.clientTimeUponLogin = now
-		self.cr.globalClockRealTimeUponLogin = globalClocl.getRealTime()
-		if hasattr(self.cr, "toontownTimeManager"):
-			self.cr.toontownTimeManager.updateLoginTimes(serverTime, now, self.cr.globalClockRealTimeUponLogin)
-		serverDelta = serverTime - now
-		self.cr.setServerDelta(serverDelta)
-		self.notify.setServerDelta(serverDelta, 28800)
-		access = di.getString()
-		self.isPaid = access == "FULL"
-		self.cr.parentPasswordSet = self.isPaid
-		self.cr.setIsPaid(self.isPaid)
-		if self.isPaid:
-			launcher.setPaidUserLoggedIn()
-		if base.logPrivateInfo:
-			self.notify.info("Paid from game server login: %s" % self.isPaid)
-		WhiteListResponse = di.getString()
-		if WhiteListResponse == "YES":
-			self.cr.whiteListChatEnabled = 1
-		else:
-			self.cr.whiteListChatEnabled = 0
-		self.lastLoggedInStr = di.getString()
-		self.cr.lastLoggedIn = datetime.now()
-		if hasattr(srlf.cr, "toontownTimeManager"):
-			self.cr.toontownTimeManager.convertStrToToontownTime(self.lastLoggedInStr)
-		if di.getRemainingSize() > 0:
-			self.cr.accountDays = self.parseAccountDays(di.getInt32())
-		else:
-			self.cr.accountDays = 10000
-		self.toonAccountType = di.getString()
-		if self.toonAccountType == "WITH_PARENT_ACCOUNT":
-			self.cr.withParentAccount = True
-		elif self.toonAccountType == "NO_PARENT_ACCOUNT":
-			self.cr.withParentAccount = False
-		else:
-			self.notify.error("unknown toon account type %s" % self.toonAccountType)
-		if base.logPrivateInfo:
-			self.notify.info("toonAccountType=%s" % toonAccountType)
-		self.userName = di.getString()
-		self.cr.userName = self.userName
-		self.notify.info("Login response return code %s" % returnCode)
-		if returnCode == 0:
-			self.__handleLoginSuccess() #to 1186
-		elif returnCode == -13:
-			self.notify.info("Period Time Expired")
-			self.fsm.request("showLoginFailDialog", OTPLocalizer.LoginScreenPeriodTimeExpired)
-		else:
-			self.notify.info("Login failed: %s" % errorString)
-			messenger.send(self.doneEvent, ["mode" : "reject"])
+        self.notify.debug("handleLoginToontownResponse")
+        if base.logPrivateInfo:
+            dgram = di.getDatagram()
+            dgram.dumpHex(ostream)
+        now = time.time()
+        returnCode = di.getUint8()
+        respString = di.getString()
+        errorString = self.getExtendedErrorMsg(respString)
+        self.accountNumber = di.getUint32()
+        self.cr.DISLIdFromLogin = self.accountNumber
+        self.accountName = di.getString()
+        self.accountNameApproved = di.getUint8()
+        accountDetailRecord = AccountDetailRecord()
+        self.cr.accountDetailRecord = accountDetailRecord
+        self.openChatEnabled = di.getString() == "YES"
+        createFriendsWithChat = di.getString()
+        canChat = createFriendsWithChat == "YES" or createFriendsWithChat == "CODE"
+        self.cr.secretChatAllowed = canChat
+        if base.logPrivateInfo:
+            self.notify.info("CREATE_FRIENDS_WITH_CHAT from game server login: %s %s" % (createFriendsWithChat, canChat))
+        self.chatCodeCreationRule = di.getString()
+        self.cr.chatCodeCreationRule = self.chatCodeCreationRule
+        if base.logPrivateInfo:
+            self.notify.info("Chat code creation rule = %s" % self.chatCodeCrationRule)
+        self.cr.secretChatNeedsParentPassword = self.chatCodeCreationRule == "PARENT"
+        sec = di.getUint32()
+        usec = di.getUint32()
+        serverTime = sec + (usec/1000000.0)
+        self.cr.serverTimeUponLogin = serverTime
+        self.cr.clientTimeUponLogin = now
+        self.cr.globalClockRealTimeUponLogin = globalClocl.getRealTime()
+        if hasattr(self.cr, "toontownTimeManager"):
+            self.cr.toontownTimeManager.updateLoginTimes(serverTime, now, self.cr.globalClockRealTimeUponLogin)
+        serverDelta = serverTime - now
+        self.cr.setServerDelta(serverDelta)
+        self.notify.setServerDelta(serverDelta, 28800)
+        access = di.getString()
+        self.isPaid = access == "FULL"
+        self.cr.parentPasswordSet = self.isPaid
+        self.cr.setIsPaid(self.isPaid)
+        if self.isPaid:
+            launcher.setPaidUserLoggedIn()
+        if base.logPrivateInfo:
+            self.notify.info("Paid from game server login: %s" % self.isPaid)
+        WhiteListResponse = di.getString()
+        if WhiteListResponse == "YES":
+            self.cr.whiteListChatEnabled = 1
+        else:
+            self.cr.whiteListChatEnabled = 0
+        self.lastLoggedInStr = di.getString()
+        self.cr.lastLoggedIn = datetime.now()
+        if hasattr(srlf.cr, "toontownTimeManager"):
+            self.cr.toontownTimeManager.convertStrToToontownTime(self.lastLoggedInStr)
+        if di.getRemainingSize() > 0:
+            self.cr.accountDays = self.parseAccountDays(di.getInt32())
+        else:
+            self.cr.accountDays = 10000
+        self.toonAccountType = di.getString()
+        if self.toonAccountType == "WITH_PARENT_ACCOUNT":
+            self.cr.withParentAccount = True
+        elif self.toonAccountType == "NO_PARENT_ACCOUNT":
+            self.cr.withParentAccount = False
+        else:
+            self.notify.error("unknown toon account type %s" % self.toonAccountType)
+        if base.logPrivateInfo:
+            self.notify.info("toonAccountType=%s" % toonAccountType)
+        self.userName = di.getString()
+        self.cr.userName = self.userName
+        self.notify.info("Login response return code %s" % returnCode)
+        if returnCode == 0:
+            self.__handleLoginSuccess() #to 1186
+        elif returnCode == -13:
+            self.notify.info("Period Time Expired")
+            self.fsm.request("showLoginFailDialog", OTPLocalizer.LoginScreenPeriodTimeExpired)
+        else:
+            self.notify.info("Login failed: %s" % errorString)
+            messenger.send(self.doneEvent, ["mode" : "reject"])

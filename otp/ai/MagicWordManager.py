@@ -570,16 +570,16 @@ class MagicWordManager(DistributedObject.DistributedObject):
         if self.cr.wantMagicWords:
             if avId == None:
                 avId = base.localAvatar.doId
-            
+
             if zoneId == None:
                 try:
                     zoneId = self.cr.playGae.getPlace().getZoneId()
                 except:
                     pass
-                    
+
                 if zoneId == None:
                     zoneId = 0
-            
+
             self.d_setMagicWord(magicWord, avId, zoneId)
             if magicWord.count("~crash"):
                 args = magicWord.split()
@@ -588,14 +588,14 @@ class MagicWordManager(DistributedObject.DistributedObject):
                     errorCode = int(args)
                 self.notify.info("Simulating client crash: exit error = %s" % errorCode)
                 base.exitShow(errorCode)
-            
+
             if magicWord.count("~exception"):
                 self.notify.error("~exception: simulating a client exception...")
                 s = ""
                 while True:
                     s += "INVALIDNAME"
                     eval(s)
-            
+
             self.setMagicWord(magicWord, avId, zoneId)
 
     def setMagicWordResponse(self, response):
