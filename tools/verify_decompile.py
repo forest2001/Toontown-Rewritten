@@ -65,6 +65,30 @@ def compare_code(c1, c2):
         dis.disco(c2)
         f.close()
         sys.stdout = oldstdout
+    if filter_code(c1.co_consts) != filter_code(c1.co_consts):
+        print "filter_code(c1.co_consts) mismatch"
+        print "Expected: ", filter_code(c1.co_consts)
+        print "Got: ", filter_code(c1.co_consts)
+    if c1.co_flags != c2.co_flags:
+        print "co_flags mismatch"
+        print "Expected: ", c1.co_flags
+        print "Got: ", c2.co_flags
+    if c1.co_freevars != c2.co_freevars:
+        print "co_freevars mismatch"
+        print "Expected: ", c1.co_freevars
+        print "Got: ", c2.co_freevars
+    if c1.co_names != c2.co_names:
+        print "co_names mismatch"
+        print "Expected: ", c1.co_names
+        print "Got     : ", c2.co_names
+    if c1.co_nlocals != c2.co_nlocals:
+        print "co_nlocals mismatch"
+        print "Expected: ", c1.co_nlocals
+        print "Got: ", c2.co_nlocals
+    if c1.co_varnames != c2.co_varnames:
+        print "co_varnames mismatch"
+        print "Expected: ", c1.co_varnames
+        print "Got     : ", c2.co_varnames
     '''if c1.co_ != c2.co_:
         print "co_ mismatch"
         print "Expected: ", c1.co_

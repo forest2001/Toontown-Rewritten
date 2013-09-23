@@ -104,6 +104,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     
     def putCameraFloorRayOnAvatar(self):
         pass
+
+    def putCameraFloorRayOnCamera(self):
+        pass
     
     def attachCamera(self):
         pass
@@ -127,6 +130,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         pass
     
     def jumpLand(self):
+        pass
+    
+    if 1:
         pass
     
     def setupAnimationEvents(self):
@@ -171,12 +177,15 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def initCameraPositions(self):
         pass
     
-    def addCameraPosition(self):
+    def addCameraPosition(self, x=None):
         pass
     
     def resetCameraPosition(self):
         pass
-    
+
+    def removeCameraPosition(self):
+        pass
+
     def printCameraPositions(self):
         pass
     
@@ -194,11 +203,8 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     
     def setLookAtPoint(self):
         pass
-    
-    def getLookAtPoint(self):
-        pass
 
-    def setLookAtPoint(self):
+    def getLookAtPoint(self):
         pass
 
     def setIdealCameraPos(self):
@@ -270,7 +276,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def setCameraFov(self):
         pass
 
-    def gotoNode(self, x=1):
+    def gotoNode(self, x=3):
         pass
 
     def setCustomMessages(self):
@@ -339,6 +345,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def trackAnimToSpeed(self):
         pass
 
+    def hasTrackAnimToSpeed(self):
+        pass
+
     def startTrackAnimToSpeed(self):
         pass
 
@@ -366,26 +375,68 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def travCollisionsPusher(self, x=None):
         pass
 
-    def _LocalAvatar__friendOnline(self, a=0, b=0):
+    def __friendOnline(self, a=0, b=0):
         pass
 
-    def _LocalAvatar__friendOffline(self):
-        pass
+    def __friendOffline(self, doId):
+        friend = base.cr.identifyFriend(doId)
+1990           0 LOAD_GLOBAL              0 (base)
+              3 LOAD_ATTR                1 (cr)
+              6 LOAD_ATTR                2 (identifyFriend)
+              9 LOAD_FAST                1 (doId)
+             12 CALL_FUNCTION            1
+             15 STORE_FAST               2 (friend)
 
-    def _LocalAvatar__playerOnline(self):
-        pass
+1991          18 LOAD_FAST                2 (friend)
+             21 LOAD_CONST               0 (None)
+             24 COMPARE_OP               3 (!=)
+             27 JUMP_IF_FALSE           33 (to 63)
+             30 POP_TOP             
 
-    def _LocalAvatar__playerOffline(self):
-        pass
+1992          31 LOAD_FAST                0 (self)
+             34 LOAD_ATTR                7 (setSystemMessage)
+             37 LOAD_CONST               1 (0)
+             40 LOAD_GLOBAL              8 (OTPLocalizer)
+             43 LOAD_ATTR                9 (WhisperFriendLoggedOut)
+             46 LOAD_FAST                2 (friend)
+             49 LOAD_ATTR               10 (getName)
+             52 CALL_FUNCTION            0
+             55 BINARY_MODULO       
+             56 CALL_FUNCTION            2
+             59 POP_TOP             
+             60 JUMP_FORWARD             1 (to 64)
+        >>   63 POP_TOP             
+        >>   64 LOAD_CONST               0 (None)
+             67 RETURN_VALUE        
 
-    def clickedWhisper(self, x=None):
-        pass
+    def __playerOnline(self, playerId):
+        playerInfo = base.cr.playerFriendsManager.playerId2Info[playerId]
+        if playerInfo:
+            self.setSystemMessage(playerId, OTPLocalizer.WhisperPlayerOnline % (playerInfo.playerName, playerInfo.location))
 
-    def d_setParent(self):
-        pass
+    def __playerOffline(self, playerId):
+        playerInfo = base.cr.playerFriendsManager.playerId2Info[playerId]
+        if playerInfo:
+            self.setSystemMessage(playerId, OTPLocalizer.WhisperPlayerOffline % playerInfo.playerName)
 
-    def handlePlayerFriendWhisper(self):
-        pass
+    def clickedWhisper(self, doId, isPlayer=None):
+        if not isPlayer:
+            friend = base.cr.identifyFriend(doId)
+            if friend != None:
+                messenger.send('clickedNametag', [friend])
+                self.chatMgr.whisperTo(friend.getName(), doId)
+        else:
+            friend = base.cr.playerFriendsManager.getFriendInfo(doId)
+            if friend:
+                messenger.send('clickedNametagPlayer', [None, doId])
+                self.chatMgr.whisperTo(friend.getName(), None, doId)
+
+    def d_setParent(self, parentToken):
+        DistributedSmoothNode.DistributedSmoothNode.d_setParent(self, parentToken)
+
+    def handlePlayerFriendWhisper(self, playerId, charMessage):
+        print 'handlePlayerFriendWhisper'
+        self.displayWhisperPlayer(playerId, charMessage, WhisperPopup.WTNormal)
 
     def canChat(self):
-        pass
+        return 0
