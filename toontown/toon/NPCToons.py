@@ -168,7 +168,7 @@ def createNpcsInZone(air, zoneId):
 def createLocalNPC(npcId):
     import Toon
     if not NPCToonDict.has_key(npcId):
-        return
+        return None
     desc = NPCToonDict[npcId]
     canonicalZoneId, name, dnaType, gender, protected, type = desc
     npc = Toon.Toon()
