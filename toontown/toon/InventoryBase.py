@@ -101,8 +101,8 @@ class InventoryBase(DirectObject.DirectObject):
             if self.toon.experience.getExpLevel(track) >= level and self.toon.hasTrackAccess(track):
                 if self.numItem(track, level) <= max - amount:
                     if self.totalProps + amount <= self.toon.getMaxCarry() or level > LAST_REGULAR_GAG_LEVEL:
-                        if unpaid:
-                            Levels[track][level] > UnpaidMaxSkills[track] or self.inventory[track][level] += amount
+                        if not (unpaid and Levels[track][level] > UnpaidMaxSkills[track]):
+                            self.inventory[track][level] += amount
                             self.totalProps += amount
                             return self.inventory[track][level]
                         else:
@@ -265,8 +265,8 @@ class InventoryBase(DirectObject.DirectObject):
             if self.toon.hasTrackAccess(track):
                 for level in range(len(Levels[track])):
                     if level <= LAST_REGULAR_GAG_LEVEL or not filterUberGags:
-                        if not not filterPaidGags:
-                            unpaid and not gagIsPaidOnly(track, level) and self.addItem(track, level)
+                        if not filterPaidGags or not (unpaid and gagIsPaidOnly(track, level)):
+                            self.addItem(track, level)
 
         addedAnything = 1
         while addedAnything:
@@ -277,16 +277,16 @@ class InventoryBase(DirectObject.DirectObject):
                     level = len(Levels[track]) - 1
                     if level > LAST_REGULAR_GAG_LEVEL and filterUberGags:
                         level = LAST_REGULAR_GAG_LEVEL
-                    if not not filterPaidGags:
-                        if unpaid and not gagIsPaidOnly(track, level):
+                    if not filterPaidGags or not (unpaid and gagIsPaidOnly(track, level)):
+                        result = self.addItem(track, level)
+                    level -= 1
+                    while result <= 0 and level >= 0:
+                        if not filterPaidGags or not (unpaid and gagIsPaidOnly(track, level)):
                             result = self.addItem(track, level)
                         level -= 1
-                        while result <= 0 and level >= 0:
-                            if not not filterPaidGags:
-                                result = unpaid and not gagIsPaidOnly(track, level) and self.addItem(track, level)
-                            level -= 1
 
-                        addedAnything = result > 0 and 1
+                    if result > 0:
+                        addedAnything = 1
 
         self.calcTotalProps()
         return None
