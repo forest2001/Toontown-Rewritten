@@ -19,122 +19,334 @@ from otp.otpbase import OTPGlobals
 class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonAvatarPanel')
 
+
+
+
+
+
+
+
     def __init__(self, avatar, playerId = None):
         from toontown.friends import FriendsListPanel
+
+
         if base.cr.doId2do.get(avatar.getDoId()):
             avatar = base.cr.doId2do.get(avatar.getDoId())
         AvatarPanelBase.AvatarPanelBase.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
+
+
+
+
+
         self.notify.debug('Opening toon panel, avId=%d' % self.avId)
         self.playerId = playerId
+
+
         if not self.playerId:
             av = base.cr.doId2do.get(self.avId)
             if av:
                 self.playerId = avatar.DISLid
             else:
                 self.playerId = 0
+
         self.playerInfo = None
         if self.playerId:
             self.playerInfo = base.cr.playerFriendsManager.playerId2Info.get(playerId)
+
         self.laffMeter = None
         wantsLaffMeter = hasattr(avatar, 'hp')
+
         if not hasattr(avatar, 'style'):
+
+
             self.notify.warning("Avatar has no 'style'. Abort initialization.")
             AvatarPanelBase.AvatarPanelBase.cleanup(self)
             return
+
         base.localAvatar.obscureFriendsListButton(1)
+
         gui = loader.loadModel('phase_3.5/models/gui/avatar_panel_gui')
-        self.frame = DirectFrame(image=gui.find('**/avatar_panel'), relief=None, pos=(1.1, 100, 0.525))
+        self.frame = DirectFrame(
+                                 image=gui.find('**/avatar_panel'),
+                                 relief=None,
+                                 pos=(1.1, 100, 0.525))
+
+
         self.disabledImageColor = Vec4(1, 1, 1, 0.4)
         self.text0Color = Vec4(1, 1, 1, 1)
         self.text1Color = Vec4(0.5, 1, 0.5, 1)
         self.text2Color = Vec4(1, 1, 0.5, 1)
         self.text3Color = Vec4(0.6, 0.6, 0.6, 1)
+
+
+
         self.head = self.frame.attachNewNode('head')
         self.head.setPos(0.02, 0, 0.31)
         self.headModel = ToonHead.ToonHead()
         self.headModel.setupHead(avatar.style, forGui=1)
         self.headModel.fitAndCenterHead(0.175, forGui=1)
         self.headModel.reparentTo(self.head)
+
+
         self.headModel.startBlink()
         self.headModel.startLookAround()
-        self.healthText = DirectLabel(parent=self.frame, text='', pos=(0.06, 0, 0.2), text_pos=(0, 0), text_scale=0.05)
+
+        self.healthText = DirectLabel(
+            parent=self.frame,
+            text='',
+            pos=(0.06, 0, 0.2),
+            text_pos=(0, 0),
+            text_scale=0.05)
+
         self.healthText.hide()
-        self.nameLabel = DirectLabel(parent=self.frame, pos=(0.0125, 0, 0.4), relief=None, text=self.avName, text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.042, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        self.closeButton = DirectButton(parent=self.frame, image=(gui.find('**/CloseBtn_UP'),
-         gui.find('**/CloseBtn_DN'),
-         gui.find('**/CloseBtn_Rllvr'),
-         gui.find('**/CloseBtn_UP')), relief=None, pos=(0.157644, 0, -0.379167), command=self.__handleClose)
-        self.friendButton = DirectButton(parent=self.frame, image=(gui.find('**/Frnds_Btn_UP'),
-         gui.find('**/Frnds_Btn_DN'),
-         gui.find('**/Frnds_Btn_RLVR'),
-         gui.find('**/Frnds_Btn_UP')), image3_color=self.disabledImageColor, image_scale=0.9, relief=None, text=TTLocalizer.AvatarPanelFriends, text_scale=0.06, pos=(-0.103, 0, 0.133), text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_pos=(0.06, -0.02), text_align=TextNode.ALeft, command=self.__handleFriend)
+
+
+        self.nameLabel = DirectLabel(
+            parent=self.frame,
+            pos=(0.0125, 0, 0.4),
+            relief=None,
+            text=self.avName,
+            text_font=avatar.getFont(),
+            text_fg=Vec4(0, 0, 0, 1),
+            text_pos=(0, 0),
+            text_scale=0.042,
+            text_wordwrap=7.5,
+            text_shadow=(1, 1, 1, 1))
+
+
+        self.closeButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/CloseBtn_UP'),
+                gui.find('**/CloseBtn_DN'),
+                gui.find('**/CloseBtn_Rllvr'),
+                gui.find('**/CloseBtn_UP')),
+            relief=None,
+            pos=(0.157644, 0, -0.379167),
+            command=self.__handleClose)
+
+
+        self.friendButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/Frnds_Btn_UP'),
+                gui.find('**/Frnds_Btn_DN'),
+                gui.find('**/Frnds_Btn_RLVR'),
+                gui.find('**/Frnds_Btn_UP')),
+            image3_color=self.disabledImageColor,
+            image_scale=0.9,
+            relief=None,
+            text=TTLocalizer.AvatarPanelFriends,
+            text_scale=0.06,
+            pos=(-0.103, 0, 0.133),
+            text0_fg=self.text0Color,
+            text1_fg=self.text1Color,
+            text2_fg=self.text2Color,
+            text3_fg=self.text3Color,
+            text_pos=(0.06, -0.02),
+            text_align=TextNode.ALeft,
+            command=self.__handleFriend)
+
+
+
         if base.cr.playerFriendsManager.askTransientFriend(self.avId) and not base.cr.doId2do.has_key(self.avId):
             self.friendButton['state'] = DGG.DISABLED
+
+
         if base.cr.avatarFriendsManager.checkIgnored(self.avId):
             self.friendButton['state'] = DGG.DISABLED
-        self.goToButton = DirectButton(parent=self.frame, image=(gui.find('**/Go2_Btn_UP'),
-         gui.find('**/Go2_Btn_DN'),
-         gui.find('**/Go2_Btn_RLVR'),
-         gui.find('**/Go2_Btn_UP')), image3_color=self.disabledImageColor, image_scale=0.9, relief=None, pos=(-0.103, 0, 0.045), text=TTLocalizer.AvatarPanelGoTo, text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=0.06, text_pos=(0.06, -0.015), text_align=TextNode.ALeft, command=self.__handleGoto)
+
+        self.goToButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/Go2_Btn_UP'),
+                gui.find('**/Go2_Btn_DN'),
+                gui.find('**/Go2_Btn_RLVR'),
+                gui.find('**/Go2_Btn_UP')),
+            image3_color=self.disabledImageColor,
+            image_scale=0.9,
+            relief=None,
+            pos=(-0.103, 0, 0.045),
+            text=TTLocalizer.AvatarPanelGoTo,
+            text0_fg=self.text0Color,
+            text1_fg=self.text1Color,
+            text2_fg=self.text2Color,
+            text3_fg=self.text3Color,
+            text_scale=0.06,
+            text_pos=(0.06, -0.015),
+            text_align=TextNode.ALeft,
+            command=self.__handleGoto)
+
+
+
         if base.cr.avatarFriendsManager.checkIgnored(self.avId):
             self.goToButton['state'] = DGG.DISABLED
-        self.whisperButton = DirectButton(parent=self.frame, image=(gui.find('**/ChtBx_ChtBtn_UP'),
-         gui.find('**/ChtBx_ChtBtn_DN'),
-         gui.find('**/ChtBx_ChtBtn_RLVR'),
-         gui.find('**/ChtBx_ChtBtn_UP')), image3_color=self.disabledImageColor, image_scale=0.9, relief=None, pos=(-0.103, 0, -0.0375), text=TTLocalizer.AvatarPanelWhisper, text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=TTLocalizer.TAPwhisperButton, text_pos=(0.06, -0.0125), text_align=TextNode.ALeft, command=self.__handleWhisper)
+
+        self.whisperButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/ChtBx_ChtBtn_UP'),
+                gui.find('**/ChtBx_ChtBtn_DN'),
+                gui.find('**/ChtBx_ChtBtn_RLVR'),
+                gui.find('**/ChtBx_ChtBtn_UP')),
+            image3_color=self.disabledImageColor,
+            image_scale=0.9,
+            relief=None,
+            pos=(-0.103, 0, -0.0375),
+            text=TTLocalizer.AvatarPanelWhisper,
+            text0_fg=self.text0Color,
+            text1_fg=self.text1Color,
+            text2_fg=self.text2Color,
+            text3_fg=self.text3Color,
+            text_scale=TTLocalizer.TAPwhisperButton,
+            text_pos=(0.06, -0.0125),
+            text_align=TextNode.ALeft,
+            command=self.__handleWhisper)
+
+
+
         if base.cr.avatarFriendsManager.checkIgnored(self.avId):
             self.whisperButton['state'] = DGG.DISABLED
-        self.secretsButton = DirectButton(parent=self.frame, image=(gui.find('**/Amuse_Btn_UP'),
-         gui.find('**/Amuse_Btn_DN'),
-         gui.find('**/Amuse_Btn_RLVR'),
-         gui.find('**/Amuse_Btn_UP')), image3_color=self.disabledImageColor, image_scale=0.9, relief=None, pos=(-0.103, 0, -0.13), text=TTLocalizer.AvatarPanelSecrets, text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=TTLocalizer.TAPsecretsButton, text_pos=(0.055, -0.01), text_align=TextNode.ALeft, command=self.__handleSecrets)
+
+        self.secretsButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/Amuse_Btn_UP'),
+                gui.find('**/Amuse_Btn_DN'),
+                gui.find('**/Amuse_Btn_RLVR'),
+                gui.find('**/Amuse_Btn_UP')),
+            image3_color=self.disabledImageColor,
+            image_scale=0.9,
+            relief=None,
+            pos=(-0.103, 0, -0.13),
+            text=TTLocalizer.AvatarPanelSecrets,
+            text0_fg=self.text0Color,
+            text1_fg=self.text1Color,
+            text2_fg=self.text2Color,
+            text3_fg=self.text3Color,
+            text_scale=TTLocalizer.TAPsecretsButton,
+            text_pos=(0.055, -0.01),
+            text_align=TextNode.ALeft,
+            command=self.__handleSecrets)
+
+
+
         if base.cr.avatarFriendsManager.checkIgnored(self.avId):
             self.secretsButton['state'] = DGG.DISABLED
+
+
+
+
         from toontown.coghq import CogHQBossBattle
-        if isinstance(base.cr.playGame.getPlace(), CogHQBossBattle.CogHQBossBattle) and base.localAvatar.getGameAccess() != OTPGlobals.AccessFull:
+        if isinstance(base.cr.playGame.getPlace(), CogHQBossBattle.CogHQBossBattle) and \
+                base.localAvatar.getGameAccess() != OTPGlobals.AccessFull:
             self.secretsButton['state'] = DGG.DISABLED
+
+
         ignoreStr, ignoreCmd, ignoreScale = self.getIgnoreButtonInfo()
-        self.ignoreButton = DirectButton(parent=self.frame, image=(gui.find('**/Ignore_Btn_UP'),
-         gui.find('**/Ignore_Btn_DN'),
-         gui.find('**/Ignore_Btn_RLVR'),
-         gui.find('**/Ignore_Btn_UP')), image3_color=self.disabledImageColor, image_scale=0.9, relief=None, pos=(-0.103697, 0, -0.21), text=ignoreStr, text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=ignoreScale, text_pos=(0.06, -0.015), text_align=TextNode.ALeft, command=ignoreCmd)
-        if base.cr.productName not in ['JP',
-         'DE',
-         'BR',
-         'FR']:
-            self.reportButton = DirectButton(parent=self.frame, image=(gui.find('**/report_BtnUP'),
-             gui.find('**/report_BtnDN'),
-             gui.find('**/report_BtnRLVR'),
-             gui.find('**/report_BtnUP')), image3_color=self.disabledImageColor, image_scale=0.65, relief=None, pos=(-0.103, 0, -0.29738), text=TTLocalizer.AvatarPanelReport, text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=0.06, text_pos=(0.06, -0.015), text_align=TextNode.ALeft, command=self.handleReport)
+
+        self.ignoreButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/Ignore_Btn_UP'),
+                gui.find('**/Ignore_Btn_DN'),
+                gui.find('**/Ignore_Btn_RLVR'),
+                gui.find('**/Ignore_Btn_UP')),
+            image3_color=self.disabledImageColor,
+            image_scale=0.9,
+            relief=None,
+            pos=(-0.103697, 0, -0.21),
+            text=ignoreStr,
+            text0_fg=self.text0Color,
+            text1_fg=self.text1Color,
+            text2_fg=self.text2Color,
+            text3_fg=self.text3Color,
+            text_scale=ignoreScale,
+            text_pos=(0.06, -0.015),
+            text_align=TextNode.ALeft,
+            command=ignoreCmd)
+
+
+
+        if base.cr.productName not in ['JP', 'DE', 'BR', 'FR']:
+            self.reportButton = DirectButton(
+                parent=self.frame,
+                image=(
+                    gui.find('**/report_BtnUP'),
+                    gui.find('**/report_BtnDN'),
+                    gui.find('**/report_BtnRLVR'),
+                    gui.find('**/report_BtnUP')),
+                image3_color=self.disabledImageColor,
+                image_scale=0.65,
+                relief=None,
+                pos=(-0.103, 0, -0.29738),
+                text=TTLocalizer.AvatarPanelReport,
+                text0_fg=self.text0Color,
+                text1_fg=self.text1Color,
+                text2_fg=self.text2Color,
+                text3_fg=self.text3Color,
+                text_scale=0.06,
+                text_pos=(0.06, -0.015),
+                text_align=TextNode.ALeft,
+                command=self.handleReport)
+
+
         if not base.localAvatar.isTeleportAllowed():
+
+
             self.goToButton['state'] = DGG.DISABLED
-        self.detailButton = DirectButton(parent=self.frame, image=(gui.find('**/ChtBx_BackBtn_UP'),
-         gui.find('**/ChtBx_BackBtn_DN'),
-         gui.find('**/ChtBx_BackBtn_Rllvr'),
-         gui.find('**/ChtBx_BackBtn_UP')), relief=None, text=('',
-         TTLocalizer.AvatarPanelDetail,
-         TTLocalizer.AvatarPanelDetail,
-         ''), text_fg=self.text2Color, text_shadow=(0, 0, 0, 1), text_scale=0.055, text_pos=(-0.075, -0.01), text_align=TextNode.ARight, pos=(-0.133773, 0, -0.395), command=self.__handleDetails)
+
+        self.detailButton = DirectButton(
+            parent=self.frame,
+            image=(
+                gui.find('**/ChtBx_BackBtn_UP'),
+                gui.find('**/ChtBx_BackBtn_DN'),
+                gui.find('**/ChtBx_BackBtn_Rllvr'),
+                gui.find('**/ChtBx_BackBtn_UP')),
+            relief=None,
+            text=('', TTLocalizer.AvatarPanelDetail,
+                  TTLocalizer.AvatarPanelDetail, ''),
+            text_fg=self.text2Color,
+            text_shadow=(0, 0, 0, 1),
+            text_scale=0.055,
+            text_pos=(-0.075, -0.01),
+            text_align=TextNode.ARight,
+            pos=(-0.133773, 0, -0.395),
+            command=self.__handleDetails)
+
+
         self.__makeBoardingGui()
         self.__makePetGui(avatar)
+
         self.__checkGroupStatus()
+
         gui.removeNode()
+
+
+
+
+
+
+
         if wantsLaffMeter:
             self.__makeLaffMeter(avatar)
             self.__updateHp(avatar.hp, avatar.maxHp)
             self.healthText.show()
             self.laffMeter.show()
+
         menuX = -0.05
         menuScale = 0.064
+
         if self.avGenerateName:
             self.accept(self.avGenerateName, self.__handleGenerateAvatar)
         if self.avHpChangeName:
             self.accept(self.avHpChangeName, self.__updateHp)
         self.accept('updateLaffMeter', self.__updateLaffMeter)
+
         self.accept('updateGroupStatus', self.__checkGroupStatus)
+
         self.frame.show()
         messenger.send('avPanelDone')
-        return
 
     def disableAll(self):
         self.detailButton['state'] = DGG.DISABLED
@@ -366,8 +578,8 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
          TTLocalizer.AvatarPanelPet,
          ''), text_fg=self.text2Color, text_shadow=(0, 0, 0, 1), text_scale=0.325, text_pos=(-1.3, 0.05), text_align=TextNode.ACenter, command=self.__handleToPet)
         self.petButton.setScale(0.15)
-        if base.wantPets:
-            self.petButton['state'] = avatar.hasPet() or DGG.DISABLED
+        if not (base.wantPets and avatar.hasPet()):
+            self.petButton['state'] = DGG.DISABLED
             self.petButton.hide()
         petGui.removeNode()
         return
