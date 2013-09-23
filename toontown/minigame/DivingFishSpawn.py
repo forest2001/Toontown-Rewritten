@@ -7,7 +7,6 @@ import random
 import DivingGameGlobals
 
 class DivingFishSpawn(DirectObject):
-    __module__ = __name__
     RADIUS = 0.7
 
     def __init__(self, spawnId, direction, position, cHandler):

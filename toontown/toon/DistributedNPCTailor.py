@@ -10,7 +10,6 @@ import ToonDNA
 from toontown.estate import ClosetGlobals
 
 class DistributedNPCTailor(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

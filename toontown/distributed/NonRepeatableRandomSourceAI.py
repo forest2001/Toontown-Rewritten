@@ -5,7 +5,6 @@ from otp.distributed import OtpDoGlobals
 import random
 
 class NonRepeatableRandomSourceAI(DistributedObjectAI):
-    __module__ = __name__
     notify = directNotify.newCategory('NonRepeatableRandomSourceAI')
 
     def __init__(self, air):

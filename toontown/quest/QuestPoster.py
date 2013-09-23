@@ -23,7 +23,6 @@ TEXT_SCALE = TTLocalizer.QPtextScale
 TEXT_WORDWRAP = TTLocalizer.QPtextWordwrap
 
 class QuestPoster(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestPoster')
     colors = {'white': (1,
                1,

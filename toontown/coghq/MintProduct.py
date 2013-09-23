@@ -2,7 +2,6 @@ from toontown.toonbase.ToontownGlobals import *
 from otp.level import BasicEntities
 
 class MintProduct(BasicEntities.NodePathEntity):
-    __module__ = __name__
     Models = {CashbotMintIntA: 'phase_10/models/cashbotHQ/MoneyBag',
      CashbotMintIntB: 'phase_10/models/cashbotHQ/MoneyStackPallet',
      CashbotMintIntC: 'phase_10/models/cashbotHQ/GoldBarStack'}

@@ -33,7 +33,6 @@ from toontown.toonbase import ToontownTimer
 OneBossCog = None
 
 class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBoss')
     debugPositions = False
 

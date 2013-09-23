@@ -66,7 +66,6 @@ KartRacingMenuGuide = [(OTPLocalizer.KartRacingMenuSections[1], [3130,
    3061])]
 
 class TTSCKartRacingMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

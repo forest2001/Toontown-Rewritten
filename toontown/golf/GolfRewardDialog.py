@@ -9,7 +9,6 @@ from toontown.golf import GolfGlobals
 from toontown.shtiker.GolfPage import GolfTrophy
 
 class GolfRewardDialog:
-    __module__ = __name__
     notify = directNotify.newCategory('GolfRewardDialog')
 
     def __init__(self, avIdList, trophyList, rankingsList, holeBestList, courseBestList, cupList, localAvId, tieBreakWinner, aimTimesList, endMovieCallback = None):

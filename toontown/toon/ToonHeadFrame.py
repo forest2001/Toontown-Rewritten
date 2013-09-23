@@ -5,7 +5,6 @@ from toontown.distributed import DelayDelete
 from toontown.toonbase import ToontownGlobals
 
 class ToonHeadFrame(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, av, color = ToontownGlobals.GlobalDialogColor, g = DGG.getDefaultDialogGeom()):
         DirectFrame.__init__(self, relief=None, geom=g, geom_color=color, geom_scale=(1, 1, 0.5), pos=(0, 0, 0))

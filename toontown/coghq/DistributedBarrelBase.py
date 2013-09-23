@@ -6,7 +6,6 @@ from otp.level import BasicEntities
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedBarrelBase(BasicEntities.DistributedNodePathEntity, BarrelBase.BarrelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBarrelBase')
 
     def __init__(self, cr):

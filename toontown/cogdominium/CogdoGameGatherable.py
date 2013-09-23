@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 import CogdoUtil
 
 class CogdoGameGatherable(NodePath, DirectObject):
-    __module__ = __name__
     EnterEventName = 'CogdoGameGatherable_Enter'
 
     def __init__(self, serialNum, model, triggerRadius, triggerOffset = (0, 0, 0), animate = True, animDuration = 0.2, instanceModel = True, name = 'CogdoGameGatherable'):
@@ -99,7 +98,6 @@ class CogdoGameGatherable(NodePath, DirectObject):
 
 
 class CogdoMemo(CogdoGameGatherable):
-    __module__ = __name__
     EnterEventName = 'CogdoMemo_Enter'
 
     def __init__(self, serialNum, model = None, pitch = 0, triggerRadius = 1.0, spinRate = 60):

@@ -18,7 +18,6 @@ from otp.otpbase import OTPGlobals
 from direct.showbase import PythonUtil
 
 class DistributedChineseCheckers(DistributedNode.DistributedNode):
-    __module__ = __name__
 
     def __init__(self, cr):
         NodePath.__init__(self, 'DistributedChineseCheckers')

@@ -21,7 +21,6 @@ from activityFSMs import FireworksActivityFSM
 import PartyGlobals
 
 class DistributedPartyFireworksActivity(DistributedPartyActivity, FireworkShowMixin):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyFireworksActivity')
 
     def __init__(self, cr):

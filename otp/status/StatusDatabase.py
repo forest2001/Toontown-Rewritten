@@ -5,7 +5,6 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.otpbase import OTPLocalizer
 
 class StatusDatabase(DistributedObjectGlobal):
-    __module__ = __name__
     notify = directNotify.newCategory('StatusDatabase')
 
     def __init__(self, cr):

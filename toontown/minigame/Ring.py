@@ -4,7 +4,6 @@ from pandac.PandaModules import NodePath
 import RingTrack
 
 class Ring(NodePath):
-    __module__ = __name__
 
     def __init__(self, moveTrack, tOffset, posScale = 1.0):
         NodePath.__init__(self)

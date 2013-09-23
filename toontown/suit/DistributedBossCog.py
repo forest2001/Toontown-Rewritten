@@ -23,7 +23,6 @@ from direct.showbase import PythonUtil
 import random
 
 class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBossCog')
     allowClickedNameTag = True
 

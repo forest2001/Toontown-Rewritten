@@ -7,7 +7,6 @@ from toontown.hood import ZoneUtil
 from toontown.hood import HoodUtil
 
 class GenericAnimatedProp(AnimatedProp.AnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GenericAnimatedProp')
     AnimsUsingWav = []
 

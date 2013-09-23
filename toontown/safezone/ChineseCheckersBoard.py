@@ -1,7 +1,6 @@
 
 
 class ChineseCheckersBoard:
-    __module__ = __name__
 
     def __init__(self):
         self.squareList = []
@@ -780,7 +779,6 @@ class ChineseCheckersBoard:
 
 
 class CheckersSquare:
-    __module__ = __name__
 
     def __init__(self, tileNu):
         self.tileNum = tileNu

@@ -23,7 +23,6 @@ WIN_HEIGHT = 600
 GlobalWebcore = None
 
 class HtmlView(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('HtmlView')
     useHalfTexture = base.config.GetBool('news-half-texture', 0)
 

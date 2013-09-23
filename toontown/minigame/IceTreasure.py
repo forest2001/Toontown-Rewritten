@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import BattleParticles
 
 class IceTreasure(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('IceTreasure')
     RADIUS = 1.0
 

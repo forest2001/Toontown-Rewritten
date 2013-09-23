@@ -10,7 +10,6 @@ from direct.directnotify import DirectNotifyGlobal
 import random
 
 class GenderShop(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GenderShop')
 
     def __init__(self, makeAToon, doneEvent):

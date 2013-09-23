@@ -10,7 +10,6 @@ holidayId2menuInfo = {ToontownGlobals.ELECTION_PROMOTION: (OTPLocalizer.SCMenuEl
                                        10007])}
 
 class TTSCPromotionalMenu(SCMenu):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTSCPromotionalMenu')
 
     def __init__(self):

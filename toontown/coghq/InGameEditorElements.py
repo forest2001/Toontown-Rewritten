@@ -1,7 +1,6 @@
 from direct.showbase import DirectObject
 
 class InGameEditorElement(DirectObject.DirectObject):
-    __module__ = __name__
     elementId = 0
 
     def __init__(self, children = []):

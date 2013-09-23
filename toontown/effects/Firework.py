@@ -5,7 +5,6 @@ from toontown.effects.FireworkEffect import FireworkEffect
 import random
 
 class Firework(NodePath):
-    __module__ = __name__
 
     def __init__(self, typeId, velocity = Vec3(0, 0, 500), scale = 1.0, color1 = Vec4(1, 1, 1, 1), color2 = None, burstDelay = 1.25):
         NodePath.__init__(self, 'Firework')

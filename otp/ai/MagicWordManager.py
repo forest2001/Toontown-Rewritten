@@ -15,7 +15,6 @@ from direct.distributed.ClockDelta import *
 from direct.showutil.TexViewer import TexViewer
 
 class MagicWordManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MagicWordManager')
     neverDisable = 1
     GameAvatarClass = None

@@ -6,7 +6,6 @@ from toontown.battle.BattleProps import *
 from toontown.battle import MovieUtil
 
 class EffectManager(DirectObject):
-    __module__ = __name__
 
     def __init__(self):
         self.effectList = []

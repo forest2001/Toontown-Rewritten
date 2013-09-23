@@ -15,7 +15,6 @@ from toontown.hood import ZoneUtil
 from direct.fsm.FSM import FSM
 
 class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevator')
     defaultTransitions = {'Off': ['Opening', 'Closed', 'Off'],
      'Opening': ['WaitEmpty',

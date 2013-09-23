@@ -3,7 +3,6 @@ from toontown.toon import Toon
 from toontown.hood import Place
 
 class BattlePlace(Place.Place):
-    __module__ = __name__
 
     def __init__(self, loader, doneEvent):
         Place.Place.__init__(self, loader, doneEvent)

@@ -11,7 +11,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.minigame import MinigameGlobals
 
 class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PurchaseManagerAI')
 
     def __init__(self, air, playerArray, mpArray, previousMinigameId, trolleyZone, newbieIdList = [], votesArray = None, metagameRound = -1, desiredNextGame = None):

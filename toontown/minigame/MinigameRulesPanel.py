@@ -8,7 +8,6 @@ from toontown.toonbase import TTLocalizer
 import MinigameGlobals
 
 class MinigameRulesPanel(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, panelName, gameTitle, instructions, doneEvent, timeout = MinigameGlobals.rulesDuration):
         StateData.StateData.__init__(self, doneEvent)

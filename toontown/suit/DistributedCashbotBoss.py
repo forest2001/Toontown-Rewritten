@@ -25,7 +25,6 @@ OneBossCog = None
 TTL = TTLocalizer
 
 class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBoss')
     numFakeGoons = 3
 

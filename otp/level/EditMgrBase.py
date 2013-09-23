@@ -2,7 +2,6 @@ import Entity
 from direct.directnotify import DirectNotifyGlobal
 
 class EditMgrBase(Entity.Entity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EditMgr')
 
     def __init__(self, level, entId):

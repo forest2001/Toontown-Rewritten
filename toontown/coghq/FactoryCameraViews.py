@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class FactoryCameraViews:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryCameraViews')
 
     def __init__(self, factory):

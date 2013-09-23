@@ -2,7 +2,6 @@ from pandac.PandaModules import CollisionSphere, CollisionNode, BitMask32, Colli
 from toontown.minigame import ArrowKeys
 
 class CogdoFlyingInputManager:
-    __module__ = __name__
 
     def __init__(self):
         self.arrowKeys = ArrowKeys.ArrowKeys()

@@ -17,7 +17,6 @@ if __dev__:
     from otp.level import EditorGlobals
 
 class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFactory')
 
     def __init__(self, cr):

@@ -21,7 +21,6 @@ fireworkShowTypes = [ToontownGlobals.JULY4_FIREWORKS,
  ToontownGlobals.COMBO_FIREWORKS]
 
 class FireworkShow(NodePath):
-    __module__ = __name__
 
     def r():
         return random.randint(8, 12) / 10.0

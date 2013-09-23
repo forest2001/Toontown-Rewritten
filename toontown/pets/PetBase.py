@@ -3,7 +3,6 @@ from toontown.pets import PetMood
 import string
 
 class PetBase:
-    __module__ = __name__
 
     def getSetterName(self, valueName, prefix = 'set'):
         return '%s%s%s' % (prefix, string.upper(valueName[0]), valueName[1:])

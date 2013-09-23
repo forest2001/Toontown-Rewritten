@@ -15,7 +15,6 @@ from direct.interval.IntervalGlobal import Sequence, Parallel, Func, LerpColorSc
 from toontown.toonbase.ToontownGlobals import GlobalDialogColor
 
 class DistributedPairingGame(DistributedMinigame):
-    __module__ = __name__
     TOON_SPEED = 11
     MAX_FRAME_MOVE = 1
     MAX_FACE_UP_CARDS = 2

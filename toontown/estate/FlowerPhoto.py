@@ -6,7 +6,6 @@ import GardenGlobals
 from direct.actor import Actor
 
 class DirectRegion(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DirectRegion')
 
     def __init__(self, parent = aspect2d):
@@ -74,7 +73,6 @@ class DirectRegion(NodePath):
 
 
 class FlowerPhoto(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerPhoto')
 
     def __init__(self, species = None, variety = None, parent = aspect2d):

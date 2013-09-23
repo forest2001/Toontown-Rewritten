@@ -7,7 +7,6 @@ from toontown.effects import Fireworks
 import FireworksGui
 
 class FireworkItemPanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, itemName, itemNum, *extraArgs):
         self.gui = extraArgs[0][0]

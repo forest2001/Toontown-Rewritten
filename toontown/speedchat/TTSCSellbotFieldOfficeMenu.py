@@ -8,7 +8,6 @@ from toontown.cogdominium import CogdoInterior
 SellbotFieldOfficeMenu = [(OTPLocalizer.SellbotFieldOfficeMenuSections[0], range(30404, 30409)), (OTPLocalizer.SellbotFieldOfficeMenuSections[1], range(30409, 30419))]
 
 class TTSCSellbotFieldOfficeMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

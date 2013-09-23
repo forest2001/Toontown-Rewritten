@@ -620,7 +620,6 @@ CatchDropShadowHeight = 0.5
 CatchConclusionDuration = 3.0
 
 class DropObject:
-    __module__ = __name__
 
     def __init__(self, name, good, onscreenDurMult, modelPath):
         self.name = name

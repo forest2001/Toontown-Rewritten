@@ -7,7 +7,6 @@ from pandac.PandaModules import *
 import LaffMeter
 
 class DeathForceAcknowledge:
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         fadeModel = loader.loadModel('phase_3/models/misc/fade')

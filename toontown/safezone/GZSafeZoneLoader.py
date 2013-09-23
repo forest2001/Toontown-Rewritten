@@ -14,7 +14,6 @@ if __debug__:
     import pdb
 
 class GZSafeZoneLoader(SafeZoneLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)

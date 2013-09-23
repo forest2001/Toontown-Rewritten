@@ -2,7 +2,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.pets import PetMood, PetTraits, PetDetail
 
 class PetHandle:
-    __module__ = __name__
 
     def __init__(self, avatar):
         self.doId = avatar.doId

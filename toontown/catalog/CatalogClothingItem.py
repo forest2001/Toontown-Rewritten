@@ -302,7 +302,6 @@ LoyaltyClothingItems = (1600,
  1608)
 
 class CatalogClothingItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self, clothingType, colorIndex, loyaltyDays = 0):
         self.clothingType = clothingType

@@ -7,7 +7,6 @@ def decodeSCStaticTextMsg(textId):
 
 
 class TTSCWhiteListTerminal(SCTerminal):
-    __module__ = __name__
 
     def __init__(self, textId, parentMenu = None):
         SCTerminal.__init__(self)

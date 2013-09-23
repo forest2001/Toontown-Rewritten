@@ -5,7 +5,6 @@ from direct.interval.MetaInterval import Sequence
 from toontown.parties.PartyGlobals import DanceReverseLoopAnims, ToonDancingStates
 
 class PartyDanceActivityToonFSM(FSM):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyDanceActivityToonFSM')
 
     def __init__(self, avId, activity, h):

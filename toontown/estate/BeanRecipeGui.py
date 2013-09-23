@@ -6,7 +6,6 @@ from toontown.estate import PlantingGUI
 from toontown.toonbase import TTLocalizer
 
 class BeanRecipeGui(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantingGUI')
 
     def __init__(self, parent, recipe, **kw):

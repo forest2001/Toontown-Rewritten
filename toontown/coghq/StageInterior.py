@@ -15,7 +15,6 @@ from toontown.coghq import DistributedStage
 from toontown.building import Elevator
 
 class StageInterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('StageInterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

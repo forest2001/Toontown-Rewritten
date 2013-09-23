@@ -7,7 +7,6 @@ from pandac.PandaModules import *
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 
 class CogHQExterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHQExterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

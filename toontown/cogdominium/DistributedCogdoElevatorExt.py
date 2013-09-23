@@ -1,7 +1,6 @@
 from toontown.building.DistributedElevatorExt import DistributedElevatorExt
 
 class DistributedCogdoElevatorExt(DistributedElevatorExt):
-    __module__ = __name__
 
     def setupElevator(self):
         DistributedElevatorExt.setupElevator(self)

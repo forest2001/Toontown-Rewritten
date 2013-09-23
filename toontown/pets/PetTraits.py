@@ -23,7 +23,6 @@ def gaussian(min, max, rng):
 
 
 class TraitDistribution:
-    __module__ = __name__
     TraitQuality = Enum('VERY_BAD, BAD, AVERAGE, GOOD, VERY_GOOD')
     TraitTypes = Enum('INCREASING, DECREASING')
     Sz2MinMax = None
@@ -113,10 +112,8 @@ class TraitDistribution:
 
 
 class PetTraits:
-    __module__ = __name__
 
     class StdIncDistrib(TraitDistribution):
-        __module__ = __name__
         TraitType = TraitDistribution.TraitTypes.INCREASING
         Sz2MinMax = {ToontownGlobals.ToontownCentral: (0.2, 0.65),
          ToontownGlobals.DonaldsDock: (0.3, 0.7),
@@ -126,7 +123,6 @@ class PetTraits:
          ToontownGlobals.DonaldsDreamland: (0.7, 0.9)}
 
     class StdDecDistrib(TraitDistribution):
-        __module__ = __name__
         TraitType = TraitDistribution.TraitTypes.DECREASING
         Sz2MinMax = {ToontownGlobals.ToontownCentral: (0.35, 0.8),
          ToontownGlobals.DonaldsDock: (0.3, 0.7),
@@ -136,7 +132,6 @@ class PetTraits:
          ToontownGlobals.DonaldsDreamland: (0.1, 0.3)}
 
     class ForgetfulnessDistrib(TraitDistribution):
-        __module__ = __name__
         TraitType = TraitDistribution.TraitTypes.DECREASING
         Sz2MinMax = {ToontownGlobals.ToontownCentral: (0.0, 1.0),
          ToontownGlobals.DonaldsDock: (0.0, 0.9),
@@ -161,7 +156,6 @@ class PetTraits:
     NumTraits = len(TraitDescs)
 
     class Trait:
-        __module__ = __name__
 
         def __init__(self, index, traitsObj, value = None):
             self.name, distrib, self.hasWorth = PetTraits.TraitDescs[index]

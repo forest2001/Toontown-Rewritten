@@ -12,7 +12,6 @@ from toontown.toonbase import TTLocalizer
 from direct.showbase import PythonUtil
 
 class GolfKart(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, safeZone, parentFSM, doneEvent, golfCourse):
         StateData.StateData.__init__(self, doneEvent)

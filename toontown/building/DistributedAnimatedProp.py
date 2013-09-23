@@ -5,7 +5,6 @@ from direct.fsm import ClassicFSM, State
 from direct.distributed import DistributedObject
 
 class DistributedAnimatedProp(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

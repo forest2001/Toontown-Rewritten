@@ -7,7 +7,6 @@ from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 
 class DistributedBattleWaiters(DistributedBattleFinal.DistributedBattleFinal):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleWaiters')
 
     def __init__(self, cr):

@@ -3,7 +3,6 @@ from SCCustomTerminal import SCCustomTerminal
 from otp.otpbase.OTPLocalizer import CustomSCStrings
 
 class SCCustomMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

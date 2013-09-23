@@ -37,7 +37,6 @@ INITIAL_VELOCITY = 80.0
 WHISTLE_SPEED = INITIAL_VELOCITY * 0.35
 
 class DistributedPartyCannon(DistributedObject, Cannon):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyCannon')
     LOCAL_CANNON_MOVE_TASK = 'localCannonMoveTask'
 

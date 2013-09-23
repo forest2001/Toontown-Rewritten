@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import Parallel, Sequence, LerpFunc, Func, Wait
 
 class VoteResultsPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('VoteResultsPanel')
 
     def __init__(self, numPlayers, avIdList, votes, directions, namesList, disconnectedList, directionToGo, directionReason, directionTotals, *args, **kwargs):

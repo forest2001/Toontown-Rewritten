@@ -8,7 +8,6 @@ from direct.task.Task import Task
 import RaceGameGlobals
 
 class DistributedRaceGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

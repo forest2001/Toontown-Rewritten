@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import BattleProps
 
 class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleDiners')
 
     def __init__(self, cr):

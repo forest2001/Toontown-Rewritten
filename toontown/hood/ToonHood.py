@@ -13,7 +13,6 @@ from toontown.cogdominium import CogdoInterior
 from toontown.toon.Toon import teleportDebug
 
 class ToonHood(Hood.Hood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonHood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

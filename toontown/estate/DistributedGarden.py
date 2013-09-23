@@ -20,7 +20,6 @@ import Estate
 import HouseGlobals
 
 class DistributedGarden(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedGarden')
 
     def __init__(self, cr):

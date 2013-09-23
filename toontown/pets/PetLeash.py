@@ -2,7 +2,6 @@ from pandac.PandaModules import *
 from otp.movement import Impulse
 
 class PetLeash(Impulse.Impulse):
-    __module__ = __name__
 
     def __init__(self, origin, length):
         Impulse.Impulse.__init__(self)

@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
 
 class TrackPoster(DirectFrame):
-    __module__ = __name__
     normalTextColor = (0.3, 0.25, 0.2, 1)
 
     def __init__(self, trackId, callback):
@@ -40,7 +39,6 @@ class TrackPoster(DirectFrame):
 
 
 class TrackChoiceGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, tracks, timeout):
         DirectFrame.__init__(self, relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=Vec4(0.8, 0.6, 0.4, 1), geom_scale=(1.5, 1, 0.9), geom_hpr=(0, 0, -90), pos=(-0.85, 0, 0))

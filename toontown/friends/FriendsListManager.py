@@ -19,7 +19,6 @@ import FriendHandle
 from otp.otpbase import OTPGlobals
 
 class FriendsListManager:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FriendsListManager')
 
     def __init__(self):

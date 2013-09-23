@@ -1,7 +1,6 @@
 from otp.level.EntityTypes import *
 
 class FactoryLevelMgr(LevelMgr):
-    __module__ = __name__
     type = 'levelMgr'
     attribs = (('cogLevel',
       0,
@@ -11,18 +10,15 @@ class FactoryLevelMgr(LevelMgr):
 
 
 class BarrelBase(Nodepath):
-    __module__ = __name__
     abstract = 1
     attribs = (('rewardPerGrab', 5, 'int'), ('rewardPerGrabMax', 0, 'int'))
 
 
 class BeanBarrel(BarrelBase):
-    __module__ = __name__
     type = 'beanBarrel'
 
 
 class GagBarrel(BarrelBase):
-    __module__ = __name__
     type = 'gagBarrel'
     attribs = (('gagLevel',
       0,
@@ -47,12 +43,10 @@ class GagBarrel(BarrelBase):
 
 
 class HealBarrel(BarrelBase):
-    __module__ = __name__
     type = 'healBarrel'
 
 
 class Switch(Nodepath):
-    __module__ = __name__
     abstract = 1
     output = 'bool'
     attribs = (('isOnEvent',
@@ -62,19 +56,16 @@ class Switch(Nodepath):
 
 
 class Button(Switch):
-    __module__ = __name__
     type = 'button'
     attribs = (('scale', Vec3(3), 'scale'), ('color', Vec4(1, 1, 1, 1), 'color'))
 
 
 class Trigger(Switch):
-    __module__ = __name__
     type = 'trigger'
     attribs = (('scale', Vec3(10), 'scale'), ('triggerName', ''))
 
 
 class ConveyorBelt(Nodepath):
-    __module__ = __name__
     type = 'conveyorBelt'
     attribs = (('speed', 1.0, 'float'),
      ('length', 1.0, 'float'),
@@ -85,7 +76,6 @@ class ConveyorBelt(Nodepath):
 
 
 class Door(Nodepath):
-    __module__ = __name__
     type = 'door'
     output = 'bool'
     attribs = (('color', Vec4(1, 1, 1, 1), 'color'),
@@ -119,14 +109,12 @@ class Door(Nodepath):
 
 
 class Grid(Nodepath):
-    __module__ = __name__
     type = 'grid'
     blockAttribs = ('hpr',)
     attribs = (('cellSize', 3, 'float'), ('numCol', 3, 'int'), ('numRow', 3, 'int'))
 
 
 class Crushable(Entity):
-    __module__ = __name__
     abstract = 1
     attribs = (('pos', Point3(0, 0, 0), 'pos'),
      ('hpr', Vec3(0, 0, 0), 'hpr'),
@@ -141,7 +129,6 @@ class Crushable(Entity):
 
 
 class Crusher(Nodepath):
-    __module__ = __name__
     abstract = 1
     attribs = (('crushCellId',
       None,
@@ -150,7 +137,6 @@ class Crusher(Nodepath):
 
 
 class Crate(Crushable):
-    __module__ = __name__
     type = 'crate'
     blockAttribs = ('hpr',)
     attribs = (('modelType',
@@ -161,7 +147,6 @@ class Crate(Crushable):
 
 
 class Goon(Crushable):
-    __module__ = __name__
     type = 'goon'
     attribs = (('goonType',
       'pg',
@@ -191,13 +176,11 @@ class Goon(Crushable):
 
 
 class GridGoon(Goon):
-    __module__ = __name__
     type = 'gridGoon'
     attribs = ()
 
 
 class GoonClipPlane(Nodepath):
-    __module__ = __name__
     type = 'goonClipPlane'
     attribs = (('goonId',
       None,
@@ -206,7 +189,6 @@ class GoonClipPlane(Nodepath):
 
 
 class ActiveCell(Nodepath):
-    __module__ = __name__
     type = 'activeCell'
     attribs = (('row', 0, 'int'), ('col', 0, 'int'), ('gridId',
       None,
@@ -215,13 +197,11 @@ class ActiveCell(Nodepath):
 
 
 class CrusherCell(ActiveCell):
-    __module__ = __name__
     type = 'crusherCell'
     attribs = ()
 
 
 class DirectionalCell(ActiveCell):
-    __module__ = __name__
     type = 'directionalCell'
     attribs = (('dir',
       [0, 0],
@@ -237,7 +217,6 @@ class DirectionalCell(ActiveCell):
 
 
 class GolfGreenGame(Nodepath):
-    __module__ = __name__
     type = 'golfGreenGame'
     output = 'bool'
     attribs = (('pos', Point3(0, 0, 0), 'pos'),
@@ -253,7 +232,6 @@ class GolfGreenGame(Nodepath):
 
 
 class LaserField(Nodepath):
-    __module__ = __name__
     type = 'laserField'
     output = 'bool'
     attribs = (('laserFactor', 3, 'float'),
@@ -282,7 +260,6 @@ class LaserField(Nodepath):
 
 
 class SecurityCamera(Nodepath):
-    __module__ = __name__
     type = 'securityCamera'
     attribs = (('damPow', 3, 'int'),
      ('radius', 5, 'float'),
@@ -316,7 +293,6 @@ class SecurityCamera(Nodepath):
 
 
 class ElevatorMarker(Nodepath):
-    __module__ = __name__
     type = 'elevatorMarker'
     attribs = (('modelPath',
       0,
@@ -326,7 +302,6 @@ class ElevatorMarker(Nodepath):
 
 
 class Lift(Nodepath):
-    __module__ = __name__
     type = 'lift'
     attribs = (('duration', 1, 'float'),
      ('startPos', Point3(0, 0, 0), 'pos'),
@@ -355,7 +330,6 @@ class Lift(Nodepath):
 
 
 class Mover(Nodepath):
-    __module__ = __name__
     type = 'mover'
     attribs = (('modelPath',
       0,
@@ -391,7 +365,6 @@ class Mover(Nodepath):
 
 
 class Platform(Nodepath):
-    __module__ = __name__
     type = 'platform'
     attribs = (('modelPath', 'phase_9/models/cogHQ/platform1', 'bamfilename'),
      ('modelScale', Vec3(1, 1, 1), 'scale'),
@@ -418,7 +391,6 @@ class Platform(Nodepath):
 
 
 class SinkingPlatform(Nodepath):
-    __module__ = __name__
     type = 'sinkingPlatform'
     attribs = (('verticalRange', 1, 'float'),
      ('sinkDuration', 1, 'float'),
@@ -427,7 +399,6 @@ class SinkingPlatform(Nodepath):
 
 
 class Stomper(Crusher):
-    __module__ = __name__
     type = 'stomper'
     attribs = (('damage', 3, 'int'),
      ('style',
@@ -491,7 +462,6 @@ class Stomper(Crusher):
 
 
 class StomperPair(Nodepath):
-    __module__ = __name__
     type = 'stomperPair'
     attribs = (('headScale', Vec3(1, 1, 1), 'scale'),
      ('motion',
@@ -531,7 +501,6 @@ class StomperPair(Nodepath):
 
 
 class Gear(Nodepath):
-    __module__ = __name__
     type = 'gear'
     attribs = (('modelType',
       'factory',
@@ -551,19 +520,16 @@ class Gear(Nodepath):
 
 
 class BattleBlocker(Nodepath):
-    __module__ = __name__
     type = 'battleBlocker'
     attribs = (('radius', 10, 'float'), ('cellId', 0, 'int'))
 
 
 class PaintMixer(Platform):
-    __module__ = __name__
     type = 'paintMixer'
     attribs = (('modelPath', 'phase_9/models/cogHQ/PaintMixer', 'const'), ('floorName', 'PaintMixerFloorCollision', 'const'), ('shaftScale', 1, 'float'))
 
 
 class MintProduct(Nodepath):
-    __module__ = __name__
     type = 'mintProduct'
     attribs = (('mintId',
       12500,
@@ -575,7 +541,6 @@ class MintProduct(Nodepath):
 
 
 class MintProductPallet(Nodepath):
-    __module__ = __name__
     type = 'mintProductPallet'
     attribs = (('mintId',
       12500,
@@ -587,7 +552,6 @@ class MintProductPallet(Nodepath):
 
 
 class MintShelf(Nodepath):
-    __module__ = __name__
     type = 'mintShelf'
     attribs = (('mintId',
       12500,
@@ -599,7 +563,6 @@ class MintShelf(Nodepath):
 
 
 class PathMaster(Nodepath):
-    __module__ = __name__
     type = 'pathMaster'
     attribs = (('pathIndex', 0, 'int'),
      ('pathScale', 1.0, 'float'),
@@ -638,7 +601,6 @@ class PathMaster(Nodepath):
 
 
 class Rendering(Nodepath):
-    __module__ = __name__
     type = 'rendering'
     attribs = (('pos', Point3(0, 0, 0), 'pos'),
      ('hpr', Vec3(0, 0, 0), 'hpr'),
@@ -658,7 +620,6 @@ class Rendering(Nodepath):
 
 
 class MoleField(Nodepath):
-    __module__ = __name__
     type = 'moleField'
     attribs = (('numSquaresX', 5, 'int'),
      ('numSquaresY', 5, 'int'),
@@ -670,6 +631,5 @@ class MoleField(Nodepath):
 
 
 class Maze(Nodepath):
-    __module__ = __name__
     type = 'maze'
     attribs = (('numSections', 4, 'int'),)

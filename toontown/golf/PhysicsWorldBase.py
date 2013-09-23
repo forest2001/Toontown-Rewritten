@@ -25,7 +25,6 @@ def length(vec):
 
 
 class PhysicsWorldBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhysicsWorld')
 
     def __init__(self, canRender = 0):

@@ -5,7 +5,6 @@ INVALID_HANDLE_VALUE = -1
 cwk = ctypes.windll.kernel32
 
 class PROCESSENTRY32(ctypes.Structure):
-    __module__ = __name__
     _fields_ = [('dwSize', DWORD),
      ('cntUsage', DWORD),
      ('th32ProcessID', DWORD),
@@ -19,7 +18,6 @@ class PROCESSENTRY32(ctypes.Structure):
 
 
 class ProcessEntryPY:
-    __module__ = __name__
 
     def __init__(self, name, pid):
         self.name = name

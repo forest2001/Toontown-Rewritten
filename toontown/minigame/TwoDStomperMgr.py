@@ -5,7 +5,6 @@ from toontown.minigame import ToonBlitzGlobals
 from toontown.minigame import TwoDStomper
 
 class TwoDStomperMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDStomperMgr')
 
     def __init__(self, section, stomperList):

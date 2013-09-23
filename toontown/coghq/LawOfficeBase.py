@@ -3,7 +3,6 @@ from otp.level import LevelSpec
 from toontown.toonbase import ToontownGlobals
 
 class LawOfficeBase:
-    __module__ = __name__
 
     def __init__(self):
         pass

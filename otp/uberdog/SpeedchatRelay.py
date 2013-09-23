@@ -4,7 +4,6 @@ from otp.otpbase import OTPGlobals
 from otp.uberdog import SpeedchatRelayGlobals
 
 class SpeedchatRelay(DistributedObjectGlobal):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObjectGlobal.__init__(self, cr)

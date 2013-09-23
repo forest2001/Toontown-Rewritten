@@ -3,7 +3,6 @@ from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 
 class MazeTreasure(DirectObject):
-    __module__ = __name__
     RADIUS = 0.7
 
     def __init__(self, model, pos, serialNum, gameId):

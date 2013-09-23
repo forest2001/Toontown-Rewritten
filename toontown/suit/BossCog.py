@@ -23,7 +23,6 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
 AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'turn2Fb', 'Ff_neutral', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 class BossCog(Avatar.Avatar):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BossCog')
     healthColors = Suit.Suit.healthColors
     healthGlowColors = Suit.Suit.healthGlowColors
@@ -271,7 +270,6 @@ class BossCog(Avatar.Avatar):
         return self.__rollTreadsInterval(self.treadsRight, start=start, duration=duration, rate=rate)
 
     class DoorFSM(FSM.FSM):
-        __module__ = __name__
 
         def __init__(self, name, animate, callback, openedHpr, closedHpr, uniqueName):
             FSM.FSM.__init__(self, name)

@@ -10,7 +10,6 @@ from pandac.PandaModules import CollisionNode
 import FireworksGui
 
 class DistributedFireworksCannon(DistributedFireworkShow.DistributedFireworkShow):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedFireworksCannon')
 
     def __init__(self, cr):

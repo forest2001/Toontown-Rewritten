@@ -9,7 +9,6 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 
 class ClosetGUI(ClothesGUI.ClothesGUI):
-    __module__ = __name__
     notify = directNotify.newCategory('ClosetGUI')
 
     def __init__(self, isOwner, doneEvent, cancelEvent, swapEvent, deleteEvent, topList = None, botList = None):

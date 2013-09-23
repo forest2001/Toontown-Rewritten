@@ -10,7 +10,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class ZeroAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ZeroAnimatedProp')
 
     def __init__(self, node, propString, phaseInfo, holidayId):

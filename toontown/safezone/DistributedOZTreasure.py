@@ -1,7 +1,6 @@
 import DistributedSZTreasure
 
 class DistributedOZTreasure(DistributedSZTreasure.DistributedSZTreasure):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedSZTreasure.DistributedSZTreasure.__init__(self, cr)

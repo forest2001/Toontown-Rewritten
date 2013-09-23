@@ -24,7 +24,6 @@ def nonlocal(*args):
 
 
 class EntityCreator(EntityCreatorBase.EntityCreatorBase):
-    __module__ = __name__
 
     def __init__(self, level):
         EntityCreatorBase.EntityCreatorBase.__init__(self, level)

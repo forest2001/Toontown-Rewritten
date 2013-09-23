@@ -5,7 +5,6 @@ from direct.showbase import RandomNumGen
 from math import ceil, pow
 
 class BingoCardBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BingoCardBase')
 
     def __init__(self, cardSize = BingoGlobals.CARD_SIZE, rowSize = BingoGlobals.CARD_ROWS, colSize = BingoGlobals.CARD_COLS):

@@ -14,7 +14,6 @@ from toontown.racing import RaceHeadFrame
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
 class TwoDGameToonSD(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDGameToonSD')
     FallBackAnim = 'slip-backward'
     NeutralAnim = 'neutral'

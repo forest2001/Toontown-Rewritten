@@ -6,7 +6,6 @@ from toontown.minigame import ToonBlitzGlobals
 from math import sqrt
 
 class DistributedTwoDGameAI(DistributedMinigameAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTwoDGameAI')
 
     def __init__(self, air, minigameId):

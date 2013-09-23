@@ -24,7 +24,6 @@ FO_DICT = {'s': 'tt_m_ara_cbe_fieldOfficeMoverShaker',
  'c': 'tt_m_ara_cbe_fieldOfficeMoverShaker'}
 
 class DistributedBuilding(DistributedObject.DistributedObject):
-    __module__ = __name__
     SUIT_INIT_HEIGHT = 125
     TAKEOVER_SFX_PREFIX = 'phase_5/audio/sfx/'
 

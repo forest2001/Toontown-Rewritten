@@ -18,7 +18,6 @@ def getCountryClubRoomReadyPostName(doId):
 
 
 class DistributedCountryClubRoom(DistributedLevel.DistributedLevel, CountryClubRoomBase.CountryClubRoomBase, CountryClubRoom.CountryClubRoom):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountryClubRoom')
     EmulateEntrancePoint = False
 

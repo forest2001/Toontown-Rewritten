@@ -11,7 +11,6 @@ from direct.task.MiniTask import MiniTask, MiniTaskManager
 from direct.directnotify.DirectNotifyGlobal import *
 
 class LogAndOutput:
-    __module__ = __name__
 
     def __init__(self, orig, log):
         self.orig = orig
@@ -31,7 +30,6 @@ class LogAndOutput:
 
 
 class LauncherBase(DirectObject):
-    __module__ = __name__
     GameName = 'game'
     ArgCount = 6
     LauncherPhases = [1,

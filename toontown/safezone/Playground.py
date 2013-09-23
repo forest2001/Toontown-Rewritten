@@ -22,7 +22,6 @@ from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.quest import Quests
 
 class Playground(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Playground')
 
     def __init__(self, loader, parentFSM, doneEvent):

@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 
 class DistributedTrophyMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrophyMgr')
     neverDisable = 1
 

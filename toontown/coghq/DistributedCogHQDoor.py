@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 
 class DistributedCogHQDoor(DistributedDoor.DistributedDoor):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedDoor.DistributedDoor.__init__(self, cr)

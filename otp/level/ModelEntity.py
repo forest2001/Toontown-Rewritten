@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 import BasicEntities
 
 class ModelEntity(BasicEntities.NodePathEntity):
-    __module__ = __name__
     LoadFuncs = {'loadModelCopy': loader.loadModelCopy,
      'loadModel': loader.loadModel,
      'loadModelOnce': loader.loadModelOnce}

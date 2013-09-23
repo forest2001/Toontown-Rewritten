@@ -8,7 +8,6 @@ from toontown.minigame import PhotoGameBase
 import random
 
 class DistributedPhotoGameAI(DistributedMinigameAI, PhotoGameBase.PhotoGameBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhotoGameAI')
 
     def __init__(self, air, minigameId):

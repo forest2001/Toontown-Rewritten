@@ -11,7 +11,6 @@ from direct.task import Task
 import random
 
 class ToontownLoadingBlocker(TTDialog.TTDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownLoadingBlocker')
 
     def __init__(self, avList):

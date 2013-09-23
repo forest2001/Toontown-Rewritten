@@ -6,7 +6,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame import TravelGameGlobals
 
 class PurchaseManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PurchaseManager')
 
     def __init__(self, cr):

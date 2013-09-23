@@ -23,7 +23,6 @@ OVERMAX_SFX_MIN_DELAY = 0.067
 OVERMAX_SFX_START_T = 0.021
 
 class Purchase(PurchaseBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Purchase')
 
     def __init__(self, toon, pointsArray, playerMoney, ids, states, remain, doneEvent, metagameRound = -1, votesArray = None):
@@ -709,7 +708,6 @@ class Purchase(PurchaseBase):
 
 
 class PurchaseHeadFrame(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Purchase')
 
     def __init__(self, av, purchaseModels):

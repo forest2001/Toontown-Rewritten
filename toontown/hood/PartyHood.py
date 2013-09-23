@@ -14,7 +14,6 @@ from toontown.hood import Hood
 from toontown.hood import ZoneUtil
 
 class PartyHood(Hood.Hood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyHood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

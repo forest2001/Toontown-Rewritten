@@ -14,7 +14,6 @@ def getDustCloudIval(toon):
 
 
 class DistributedBlackCatMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBlackCatMgr')
     ActivateEvent = 'DistributedBlackCatMgr-activate'
 

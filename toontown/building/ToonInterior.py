@@ -15,7 +15,6 @@ from toontown.toon import NPCForceAcknowledge
 from toontown.toon import HealthForceAcknowledge
 
 class ToonInterior(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonInterior')
 
     def __init__(self, loader, parentFSMState, doneEvent):

@@ -12,7 +12,6 @@ from CogdoGameExit import CogdoGameExit
 from otp.otpbase import OTPGlobals
 
 class CogdoFlyingLevel(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoFlyingLevel')
 
     def __init__(self, parent, frameModel, startPlatformModel, endPlatformModel, quadLengthUnits, quadVisibilityAhead, quadVisibiltyBehind):
@@ -187,7 +186,6 @@ class CogdoFlyingLevel(DirectObject):
 
 
 class CogdoFlyingLevelFactory:
-    __module__ = __name__
 
     def __init__(self, parent, quadLengthUnits, quadVisibilityAhead, quadVisibiltyBehind, rng = None):
         self.parent = parent

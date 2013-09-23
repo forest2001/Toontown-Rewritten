@@ -4,7 +4,6 @@ from direct.gui.DirectGui import DGG, DirectFrame, DirectButton
 from toontown.shtiker import IssueFrame
 
 class IssueFrameV2(IssueFrame.IssueFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('IssueFrameV2')
     SectionIdents = ['hom',
      'new',

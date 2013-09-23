@@ -3,7 +3,6 @@ from direct.showbase.DirectObject import DirectObject
 from otp.otpbase import OTPGlobals
 
 class PositionExaminer(DirectObject, NodePath):
-    __module__ = __name__
 
     def __init__(self):
         try:

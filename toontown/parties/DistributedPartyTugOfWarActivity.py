@@ -24,7 +24,6 @@ import PartyUtils
 from DistributedPartyTeamActivity import DistributedPartyTeamActivity
 
 class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyTugOfWarActivity')
 
     def __init__(self, cr):

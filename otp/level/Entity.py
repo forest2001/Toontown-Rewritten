@@ -4,7 +4,6 @@ import string
 from direct.directnotify import DirectNotifyGlobal
 
 class Entity(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Entity')
 
     def __init__(self, level = None, entId = None):

@@ -19,7 +19,6 @@ def decodeTTSCToontaskMsg(taskId, toNpcId, toonProgress, msgIndex):
 
 
 class TTSCToontaskTerminal(SCTerminal):
-    __module__ = __name__
 
     def __init__(self, msg, taskId, toNpcId, toonProgress, msgIndex):
         SCTerminal.__init__(self)

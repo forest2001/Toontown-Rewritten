@@ -18,7 +18,6 @@ from toontown.quest import Quests
 from direct.task import Task
 
 class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPhone')
     movieDelay = 0.5
 

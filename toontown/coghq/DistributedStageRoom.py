@@ -18,7 +18,6 @@ def getStageRoomReadyPostName(doId):
 
 
 class DistributedStageRoom(DistributedLevel.DistributedLevel, StageRoomBase.StageRoomBase, StageRoom.StageRoom):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStageRoom')
     EmulateEntrancePoint = False
 

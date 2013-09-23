@@ -13,7 +13,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 
 class DistributedElevatorExt(DistributedElevator.DistributedElevator):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedElevator.DistributedElevator.__init__(self, cr)

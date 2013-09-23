@@ -8,7 +8,6 @@ import CogdoMazeData
 import CogdoUtil
 
 class CogdoMaze(MazeBase, DirectObject):
-    __module__ = __name__
 
     def __init__(self, model, data, cellWidth):
         MazeBase.__init__(self, model, data, cellWidth)
@@ -79,7 +78,6 @@ BARRIER_DATA_RIGHT = 1
 BARRIER_DATA_TOP = 1
 
 class CogdoMazeFactory:
-    __module__ = __name__
 
     def __init__(self, randomNumGen, width, height, frameWallThickness = Globals.FrameWallThickness, cogdoMazeData = CogdoMazeData):
         self._rng = RandomNumGen(randomNumGen)

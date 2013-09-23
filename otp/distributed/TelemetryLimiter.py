@@ -3,7 +3,6 @@ from otp.avatar.DistributedPlayer import DistributedPlayer
 from direct.task.Task import Task
 
 class TelemetryLimiter(DirectObject):
-    __module__ = __name__
     TaskName = 'TelemetryLimiterEnforce'
     LeakDetectEventName = 'telemetryLimiter'
 
@@ -45,14 +44,12 @@ class TelemetryLimiter(DirectObject):
 
 
 class TelemetryLimit:
-    __module__ = __name__
 
     def __call__(self, obj):
         pass
 
 
 class RotationLimitToH(TelemetryLimit):
-    __module__ = __name__
 
     def __init__(self, pConst = 0.0, rConst = 0.0):
         self._pConst = pConst
@@ -63,7 +60,6 @@ class RotationLimitToH(TelemetryLimit):
 
 
 class TLNull:
-    __module__ = __name__
 
     def __init__(self, *limits):
         pass
@@ -73,7 +69,6 @@ class TLNull:
 
 
 class TLGatherAllAvs(DirectObject):
-    __module__ = __name__
 
     def __init__(self, name, *limits):
         self._name = name

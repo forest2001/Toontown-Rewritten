@@ -4,7 +4,6 @@ from direct.showbase import AppRunnerGlobal
 import os
 
 class BattleSounds:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleSounds')
 
     def __init__(self):

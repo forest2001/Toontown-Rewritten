@@ -91,7 +91,6 @@ LODModelDict = {'mk': [1200, 800, 400],
  'jda': ['default']}
 
 class Char(Avatar.Avatar):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Char')
 
     def __init__(self):

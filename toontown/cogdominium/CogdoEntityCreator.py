@@ -5,7 +5,6 @@ from toontown.cogdominium import CogdoBoardroomGameConsts
 from toontown.cogdominium import CogdoCraneGameConsts
 
 class CogdoEntityCreator(EntityCreator.EntityCreator):
-    __module__ = __name__
 
     def __init__(self, level):
         EntityCreator.EntityCreator.__init__(self, level)

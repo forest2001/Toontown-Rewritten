@@ -17,7 +17,6 @@ JellybeanJamPhases = PythonUtil.Enum('TROLLEY, FISHING, PARTIES')
 PhaseSpecifPhrases = [30180, 30181, 30182]
 
 class TTSCJellybeanJamMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self, phase):
         SCMenu.__init__(self)

@@ -10,7 +10,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 
 class TwoDSectionMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDSectionMgr')
 
     def __init__(self, game, sectionsSelected):

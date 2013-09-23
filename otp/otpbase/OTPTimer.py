@@ -5,7 +5,6 @@ from direct.showbase.PythonUtil import bound
 from otp.otpbase import OTPGlobals
 
 class OTPTimer(DirectFrame):
-    __module__ = __name__
     ClockImage = None
     TimerId = 0
 

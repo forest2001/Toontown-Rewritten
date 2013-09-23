@@ -10,7 +10,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 
 class TTChatInputWhiteList(ChatInputWhiteListFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTChatInputWhiteList')
     TFToggleKey = base.config.GetString('true-friend-toggle-key', 'alt')
     TFToggleKeyUp = TFToggleKey + '-up'

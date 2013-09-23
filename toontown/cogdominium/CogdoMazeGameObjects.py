@@ -13,7 +13,6 @@ import math
 import random
 
 class CogdoMazeSplattable:
-    __module__ = __name__
 
     def __init__(self, object, name, collisionRadius):
         self.object = object
@@ -57,7 +56,6 @@ class CogdoMazeSplattable:
 
 
 class CogdoMazeDrop(NodePath, DirectObject):
-    __module__ = __name__
 
     def __init__(self, game, id, x, y):
         NodePath.__init__(self, 'dropNode%s' % id)
@@ -135,7 +133,6 @@ class CogdoMazeDrop(NodePath, DirectObject):
 
 
 class CogdoMazeExit(CogdoGameExit, DirectObject):
-    __module__ = __name__
     EnterEventName = 'CogdoMazeDoor_Enter'
 
     def __init__(self):
@@ -187,7 +184,6 @@ class CogdoMazeExit(CogdoGameExit, DirectObject):
 
 
 class CogdoMazeWaterCooler(NodePath, DirectObject):
-    __module__ = __name__
     UpdateTaskName = 'CogdoMazeWaterCooler_Update'
 
     def __init__(self, serialNum, model):

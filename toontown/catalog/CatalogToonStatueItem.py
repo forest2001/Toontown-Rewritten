@@ -6,7 +6,6 @@ from direct.interval.IntervalGlobal import *
 from toontown.estate import GardenGlobals
 
 class CatalogToonStatueItem(CatalogGardenItem.CatalogGardenItem):
-    __module__ = __name__
     pictureToonStatue = None
 
     def makeNewItem(self, itemIndex = 105, count = 1, tagCode = 1, endPoseIndex = 108):

@@ -5,7 +5,6 @@ HILL_WHACKED = 2
 HILL_COGWHACKED = 3
 
 class MoleFieldBase:
-    __module__ = __name__
     WHACKED = 1
     MoveUpTimeMax = 1
     MoveUpTimeMultiplier = 0.95

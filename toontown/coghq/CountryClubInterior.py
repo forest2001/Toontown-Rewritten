@@ -16,7 +16,6 @@ from toontown.building import Elevator
 import random
 
 class CountryClubInterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubInterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

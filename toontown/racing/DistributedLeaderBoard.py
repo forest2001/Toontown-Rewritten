@@ -10,7 +10,6 @@ import random
 import cPickle
 
 class DistributedLeaderBoard(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DisributedLeaderBoard')
 
     def __init__(self, cr):

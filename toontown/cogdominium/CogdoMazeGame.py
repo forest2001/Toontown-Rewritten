@@ -18,7 +18,6 @@ import math
 import random
 
 class CogdoMazeGame(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoMazeGame')
     UpdateTaskName = 'CogdoMazeGameUpdateTask'
     RemoveGagTaskName = 'CogdoMazeGameRemoveGag'

@@ -4,7 +4,6 @@ from toontown.minigame.DropScheduler import ThreePhaseDropScheduler
 from toontown.parties import PartyGlobals
 
 class DistributedPartyCatchActivityBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyCatchActivityBase')
     FallRateCap_Players = 20
 

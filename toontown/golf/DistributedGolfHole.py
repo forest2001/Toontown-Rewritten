@@ -22,7 +22,6 @@ from toontown.golf import GolfHoleBase
 from toontown.distributed import DelayDelete
 
 class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, GolfHoleBase.GolfHoleBase):
-    __module__ = __name__
     defaultTransitions = {'Off': ['Cleanup', 'ChooseTee', 'WatchTee'],
      'ChooseTee': ['Aim', 'Cleanup'],
      'WatchTee': ['WatchAim',

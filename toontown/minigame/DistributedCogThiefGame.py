@@ -21,7 +21,6 @@ from toontown.minigame import CogThiefWalk
 CTGG = CogThiefGameGlobals
 
 class DistributedCogThiefGame(DistributedMinigame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedCogThiefGame')
     ToonSpeed = CTGG.ToonSpeed
     StageHalfWidth = 200.0

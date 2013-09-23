@@ -5,7 +5,6 @@ import BRPlayground
 from toontown.battle import BattleParticles
 
 class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
-    __module__ = __name__
     SnowFadeLerpTime = 2.0
 
     def __init__(self, hood, parentFSM, doneEvent):

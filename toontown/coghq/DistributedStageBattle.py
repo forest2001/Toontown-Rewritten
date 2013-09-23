@@ -13,7 +13,6 @@ from direct.fsm import ClassicFSM, State
 from toontown.toonbase import ToontownGlobals
 
 class DistributedStageBattle(DistributedLevelBattle.DistributedLevelBattle):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStageBattle')
 
     def __init__(self, cr):

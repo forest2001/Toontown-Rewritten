@@ -7,7 +7,6 @@ import FlowerSpeciesPanel
 import GardenGlobals
 
 class FlowerBrowser(DirectScrolledList):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerBrowser')
 
     def __init__(self, parent = aspect2d, **kw):

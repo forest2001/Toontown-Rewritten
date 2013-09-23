@@ -1,7 +1,6 @@
 from OrthoWalk import *
 
 class TwoDWalk(OrthoWalk):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDWalk')
     BROADCAST_POS_TASK = 'TwoDWalkBroadcastPos'
 

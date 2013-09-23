@@ -4,7 +4,6 @@ import MMPlayground
 from toontown.toonbase import ToontownGlobals
 
 class MMSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         SafeZoneLoader.SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)

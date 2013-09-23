@@ -2,7 +2,6 @@ from direct.distributed import DistributedObject
 from toontown.effects.FireworkShowMixin import FireworkShowMixin
 
 class DistributedFireworkShow(DistributedObject.DistributedObject, FireworkShowMixin):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedFireworkShow')
 
     def __init__(self, cr):

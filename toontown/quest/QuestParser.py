@@ -110,7 +110,6 @@ def questDefined(scriptId):
 
 
 class NPCMoviePlayer(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, scriptId, toon, npc):
         DirectObject.DirectObject.__init__(self)

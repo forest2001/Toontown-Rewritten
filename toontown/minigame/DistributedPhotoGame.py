@@ -51,7 +51,6 @@ def toDegrees(angle):
 
 
 class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhotoGame')
     font = ToontownGlobals.getToonFont()
     LOCAL_PHOTO_MOVE_TASK = 'localPhotoMoveTask'

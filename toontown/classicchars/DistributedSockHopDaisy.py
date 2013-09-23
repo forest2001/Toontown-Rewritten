@@ -10,7 +10,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import TTHood
 
 class DistributedSockHopDaisy(DistributedDaisy.DistributedDaisy):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSockHopDaisy')
 
     def __init__(self, cr):

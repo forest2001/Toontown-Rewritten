@@ -8,7 +8,6 @@ from direct.distributed import DistributedObject
 from toontown.quest import QuestParser
 
 class DistributedNPCBlocker(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

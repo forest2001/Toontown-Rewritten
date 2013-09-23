@@ -11,7 +11,6 @@ import CogdoMazeGameGlobals as Globals
 import CogdoUtil
 
 class CogdoMazeGameIntro(CogdoGameMovie):
-    __module__ = __name__
 
     def __init__(self, maze, exit, rng):
         CogdoGameMovie.__init__(self)
@@ -178,7 +177,6 @@ class CogdoMazeGameIntro(CogdoGameMovie):
 
 
 class CogdoMazeGameFinish(CogdoGameMovie):
-    __module__ = __name__
 
     def __init__(self, localPlayer, exit):
         CogdoGameMovie.__init__(self)

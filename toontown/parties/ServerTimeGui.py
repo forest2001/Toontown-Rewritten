@@ -4,7 +4,6 @@ from direct.interval.IntervalGlobal import Func, Sequence, Wait
 from toontown.toonbase import ToontownGlobals
 
 class ServerTimeGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, parent, pos = (0, 0, 0), hourCallback = None):
         DirectFrame.__init__(self, parent=parent, pos=pos)

@@ -18,7 +18,6 @@ from toontown.building import ToonInterior
 from toontown.hood import QuietZoneState
 
 class SafeZoneLoader(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SafeZoneLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

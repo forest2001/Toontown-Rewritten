@@ -8,7 +8,6 @@ import TugOfWarGameGlobals
 import math
 
 class DistributedTugOfWarGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

@@ -8,7 +8,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.minigame import MinigameGlobals
 
 class CogdoGameRulesPanel(StateData.StateData):
-    __module__ = __name__
     hiddenNode = NodePath('hiddenNode')
 
     def __init__(self, panelName, gameTitle, instructions, doneEvent, timeout = MinigameGlobals.rulesDuration):

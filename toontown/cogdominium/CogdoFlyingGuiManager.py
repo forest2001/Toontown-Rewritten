@@ -7,7 +7,6 @@ from CogdoMemoGui import CogdoMemoGui
 import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingGuiManager:
-    __module__ = __name__
     ClearMessageDisplayEventName = 'ClearMessageDisplayEvent'
     EagleTargetingLocalPlayerEventName = 'EagleTargetingLocalPlayerEvent'
     EagleAttackingLocalPlayerEventName = 'EagleAttackingLocalPlayerEvent'

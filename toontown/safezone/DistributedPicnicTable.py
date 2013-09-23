@@ -19,7 +19,6 @@ from direct.showbase import PythonUtil
 from otp.otpbase import OTPGlobals
 
 class DistributedPicnicTable(DistributedNode.DistributedNode):
-    __module__ = __name__
 
     def __init__(self, cr):
         self.cr = cr

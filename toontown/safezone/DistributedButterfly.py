@@ -14,7 +14,6 @@ from direct.showbase import RandomNumGen
 import random
 
 class DistributedButterfly(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedButterfly')
     id = 0
     wingTypes = ('wings_1', 'wings_2', 'wings_3', 'wings_4', 'wings_5', 'wings_6')

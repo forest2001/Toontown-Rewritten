@@ -8,7 +8,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 
 class GameMenu(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, picnicFunction, menuType):
         self.picnicFunction = picnicFunction

@@ -21,7 +21,6 @@ EventsPage_Calendar = 2
 EventsPage_News = 3
 
 class EventsPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EventsPage')
     UseNewsTab = base.config.GetBool('want-news-tab', 0)
     DefaultNewsUrl = '/news/news_urls.txt'

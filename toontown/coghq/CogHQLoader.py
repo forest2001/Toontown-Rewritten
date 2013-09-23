@@ -10,7 +10,6 @@ from toontown.suit import Suit
 from pandac.PandaModules import *
 
 class CogHQLoader(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

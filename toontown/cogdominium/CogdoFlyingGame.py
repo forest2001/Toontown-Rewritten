@@ -17,7 +17,6 @@ from CogdoFlyingLevel import CogdoFlyingLevelFactory
 from CogdoFlyingGameMovies import CogdoFlyingGameIntro, CogdoFlyingGameFinish
 
 class CogdoFlyingGame(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoFlyingGame')
     UpdateTaskName = 'CogdoFlyingGameUpdate'
     FirstPressOfCtrlTaskName = 'FirstPressOfCtrlTask'

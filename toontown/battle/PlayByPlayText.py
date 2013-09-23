@@ -10,7 +10,6 @@ from direct.gui import OnscreenText
 import BattleBase
 
 class PlayByPlayText(OnscreenText.OnscreenText):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlayByPlayText')
 
     def __init__(self):

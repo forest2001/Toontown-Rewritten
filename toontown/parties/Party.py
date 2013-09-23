@@ -17,7 +17,6 @@ from toontown.parties import PartyPlanner
 from toontown.parties.DistributedParty import DistributedParty
 
 class Party(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Party')
 
     def __init__(self, loader, avId, zoneId, parentFSMState, doneEvent):

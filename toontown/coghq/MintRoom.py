@@ -6,7 +6,6 @@ from toontown.coghq import MintRoomSpecs
 import random
 
 class MintRoom(DirectObject.DirectObject):
-    __module__ = __name__
     FloorCollPrefix = 'mintFloorColl'
     CashbotMintDoorFrame = 'phase_10/models/cashbotHQ/DoorFrame'
 

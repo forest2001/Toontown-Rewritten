@@ -15,7 +15,6 @@ import math
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
 class TwoDEnemy(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDEnemy')
 
     def __init__(self, enemyMgr, index, suitAttribs):

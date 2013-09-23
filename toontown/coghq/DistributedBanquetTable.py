@@ -17,7 +17,6 @@ from toontown.coghq import DinerStatusIndicator
 from toontown.battle import MovieUtil
 
 class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, BanquetTableBase.BanquetTableBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBanquetTable')
     rotationsPerSeatIndex = [90,
      90,

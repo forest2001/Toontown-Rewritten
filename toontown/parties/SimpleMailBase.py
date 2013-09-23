@@ -1,7 +1,6 @@
 
 
 class SimpleMailBase:
-    __module__ = __name__
 
     def __init__(self, msgId, senderId, year, month, day, body):
         self.msgId = msgId

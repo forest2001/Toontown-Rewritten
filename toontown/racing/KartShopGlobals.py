@@ -1,7 +1,6 @@
 from direct.showbase import PythonUtil
 
 class KartShopGlobals:
-    __module__ = __name__
     EVENTDICT = {'guiDone': 'guiDone',
      'returnKart': 'returnKart',
      'buyKart': 'buyAKart',
@@ -11,7 +10,6 @@ class KartShopGlobals:
 
 
 class KartGlobals:
-    __module__ = __name__
     ENTER_MOVIE = 1
     EXIT_MOVIE = 2
     COUNTDOWN_TIME = 30

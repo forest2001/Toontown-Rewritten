@@ -2,7 +2,6 @@ from otp.otpbase.OTPTimer import OTPTimer
 from pandac.PandaModules import *
 
 class ToontownTimer(OTPTimer):
-    __module__ = __name__
 
     def __init__(self, useImage = True, highlightNearEnd = True):
         OTPTimer.__init__(self, useImage, highlightNearEnd)

@@ -4,7 +4,6 @@ import MovingPlatform
 from otp.level import BasicEntities
 
 class ConveyorBelt(BasicEntities.NodePathEntity):
-    __module__ = __name__
     UseClipPlanes = 1
 
     def __init__(self, level, entId):

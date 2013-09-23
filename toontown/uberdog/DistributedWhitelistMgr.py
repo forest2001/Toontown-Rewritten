@@ -6,7 +6,6 @@ from direct.distributed.DistributedObject import DistributedObject
 from toontown.toonbase import ToontownGlobals
 
 class DistributedWhitelistMgr(DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('WhitelistMgr')
     neverDisable = 1
 

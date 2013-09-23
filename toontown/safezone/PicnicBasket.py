@@ -12,7 +12,6 @@ from toontown.toonbase import TTLocalizer
 from direct.showbase import PythonUtil
 
 class PicnicBasket(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, safeZone, parentFSM, doneEvent, tableNumber, seatNumber):
         StateData.StateData.__init__(self, doneEvent)

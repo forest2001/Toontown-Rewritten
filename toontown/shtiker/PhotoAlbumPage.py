@@ -7,7 +7,6 @@ import os
 from toontown.toonbase import ToontownGlobals
 
 class PhotoAlbumPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

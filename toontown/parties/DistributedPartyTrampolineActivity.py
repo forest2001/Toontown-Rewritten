@@ -33,7 +33,6 @@ from toontown.parties.activityFSMs import TrampolineActivityFSM
 from toontown.parties import PartyUtils
 
 class DistributedPartyTrampolineActivity(DistributedPartyActivity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyTrampolineActivity')
 
     def __init__(self, cr, doJellyBeans = True, doTricks = False, texture = None):
@@ -640,7 +639,6 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
 
 
 class TrampolineAnimFSM(FSM):
-    __module__ = __name__
 
     def __init__(self, activity):
         FSM.__init__(self, self.__class__.__name__)

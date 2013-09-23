@@ -4,7 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import globalClockDelta
 
 class MinigamePhysicsWorldBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MinigamePhysicsWorldBase')
 
     def __init__(self, canRender = 0):

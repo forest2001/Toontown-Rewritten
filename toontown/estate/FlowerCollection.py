@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 import FlowerBase
 
 class FlowerCollection:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerCollection')
 
     def __init__(self):

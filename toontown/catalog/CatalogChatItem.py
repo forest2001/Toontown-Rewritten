@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 bannedPhrases = [11009]
 
 class CatalogChatItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self, customIndex):
         self.customIndex = customIndex

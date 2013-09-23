@@ -5,7 +5,6 @@ from pandac.PandaModules import *
 from toontown.toon import LaffMeter
 
 class MinigameAvatarScorePanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, avId, avName):
         self.avId = avId

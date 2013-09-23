@@ -5,7 +5,6 @@ from otp.avatar.Avatar import teleportNotify
 from otp.friends import FriendResponseCodes
 
 class PlayerFriendsManager(DistributedObjectGlobal):
-    __module__ = __name__
     notify = directNotify.newCategory('PlayerFriendsManager')
 
     def __init__(self, cr):

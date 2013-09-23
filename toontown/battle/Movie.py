@@ -35,7 +35,6 @@ camHpr = Vec3(89, -30, 0)
 randomBattleTimestamp = base.config.GetBool('random-battle-timestamp', 0)
 
 class Movie(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Movie')
 
     def __init__(self, battle):

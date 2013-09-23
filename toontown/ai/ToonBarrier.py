@@ -4,7 +4,6 @@ from direct.showbase import DirectObject
 import random
 
 class ToonBarrier(DirectObject.DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('ToonBarrier')
 
     def __init__(self, name, uniqueName, avIdList, timeout, clearedFunc = None, timeoutFunc = None, doneFunc = None):

@@ -6,7 +6,6 @@ from toontown.pets import PetConstants
 from toontown.toon import DistributedToonAI
 
 class PetGoal(FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetGoal')
     SerialNum = 0
 
@@ -83,7 +82,6 @@ class PetGoal(FSM.FSM):
 
 
 class InteractWithAvatar(PetGoal):
-    __module__ = __name__
     SerialNum = 0
 
     def __init__(self, avatar):
@@ -146,14 +144,12 @@ class InteractWithAvatar(PetGoal):
 
 
 class Wander(PetGoal):
-    __module__ = __name__
 
     def enterForeground(self):
         self.brain._wander()
 
 
 class ChaseAvatar(PetGoal):
-    __module__ = __name__
 
     def __init__(self, avatar):
         PetGoal.__init__(self)
@@ -188,7 +184,6 @@ class ChaseAvatar(PetGoal):
 
 
 class ChaseAvatarLeash(PetGoal):
-    __module__ = __name__
 
     def __init__(self, avId):
         PetGoal.__init__(self)
@@ -209,7 +204,6 @@ class ChaseAvatarLeash(PetGoal):
 
 
 class FleeFromAvatar(PetGoal):
-    __module__ = __name__
 
     def __init__(self, avatar):
         PetGoal.__init__(self)
@@ -234,7 +228,6 @@ class FleeFromAvatar(PetGoal):
 
 
 class DoTrick(InteractWithAvatar):
-    __module__ = __name__
 
     def __init__(self, avatar, trickId):
         InteractWithAvatar.__init__(self, avatar)

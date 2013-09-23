@@ -6,7 +6,6 @@ from direct.showbase.DirectObject import DirectObject
 from direct.showbase.ShadowPlacer import ShadowPlacer
 
 class CogdoFlyingShadowPlacer(ShadowPlacer):
-    __module__ = __name__
 
     def __init__(self, cTrav, shadowNodePath, wallCollideMask, floorCollideMask, name):
         ShadowPlacer.__init__(self, cTrav, shadowNodePath, wallCollideMask, floorCollideMask)

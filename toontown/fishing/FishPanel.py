@@ -8,7 +8,6 @@ import FishGlobals
 import FishPhoto
 
 class FishPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishPanel')
 
     def __init__(self, fish = None, parent = aspect2d, doneEvent = None, **kw):

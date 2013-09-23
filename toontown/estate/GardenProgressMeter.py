@@ -26,7 +26,6 @@ WATERINGCAN = 1
 GAMEWIN = 2
 
 class GardenProgressMeter(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, typePromotion = 'game', level = 0):
         if typePromotion == 'shovel':

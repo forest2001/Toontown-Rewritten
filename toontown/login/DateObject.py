@@ -1,7 +1,6 @@
 import time
 
 class DateObject:
-    __module__ = __name__
 
     def getYear(self):
         return time.localtime(time.time())[0]

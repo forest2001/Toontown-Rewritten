@@ -16,7 +16,6 @@ import DistributedFurnitureItem
 from toontown.toonbase import TTLocalizer
 
 class DistributedCloset(DistributedFurnitureItem.DistributedFurnitureItem):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedCloset')
 
     def __init__(self, cr):

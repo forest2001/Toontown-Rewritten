@@ -15,7 +15,6 @@ from toontown.catalog.CatalogFurnitureItem import FurnitureTypes
 from toontown.catalog.CatalogFurnitureItem import FTScale
 
 class DistributedBank(DistributedFurnitureItem.DistributedFurnitureItem):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedBank')
 
     def __init__(self, cr):

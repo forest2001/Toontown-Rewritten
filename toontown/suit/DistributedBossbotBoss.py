@@ -29,7 +29,6 @@ OneBossCog = None
 TTL = TTLocalizer
 
 class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBossbotBoss')
     BallLaunchOffset = Point3(10.5, 8.5, -5)
 

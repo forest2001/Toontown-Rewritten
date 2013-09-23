@@ -8,7 +8,6 @@ SFXPATHS = {SFX.poof: 'phase_4/audio/sfx/firework_distance_02.mp3',
  SFX.magic: 'phase_4/audio/sfx/SZ_DD_treasure.mp3'}
 
 class DustCloud(NodePath):
-    __module__ = __name__
     dustCloudCount = 0
     sounds = {}
     notify = DirectNotifyGlobal.directNotify.newCategory('DustCloud')

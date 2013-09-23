@@ -6,7 +6,6 @@ import CatchGameGlobals
 import MinigameGlobals
 
 class DistributedCatchGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

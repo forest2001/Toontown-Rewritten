@@ -11,7 +11,6 @@ from toontown.quest import QuestBookPoster
 from direct.directnotify import DirectNotifyGlobal
 
 class QuestPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestPage')
 
     def __init__(self):

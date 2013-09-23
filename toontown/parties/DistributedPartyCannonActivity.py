@@ -28,7 +28,6 @@ INITIAL_VELOCITY = 90.0
 WHISTLE_SPEED = INITIAL_VELOCITY * 0.35
 
 class DistributedPartyCannonActivity(DistributedPartyActivity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyCannonActivity')
     HIT_GROUND = 0
     HIT_TOWER = 1

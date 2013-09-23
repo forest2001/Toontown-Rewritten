@@ -10,7 +10,6 @@ from toontown.parties import PartyGlobals
 from toontown.parties import PartyUtils
 
 class PublicPartyGui(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('PublicPartyGui')
 
     def __init__(self, doneEvent):

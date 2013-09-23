@@ -4,7 +4,6 @@ import sys
 import os
 
 class WhiteList:
-    __module__ = __name__
 
     def __init__(self, wordlist):
         self.words = []

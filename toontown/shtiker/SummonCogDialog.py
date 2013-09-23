@@ -12,7 +12,6 @@ from toontown.toon import NPCToons
 TTL = TTLocalizer
 
 class SummonCogDialog(DirectFrame, StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SummonCogDialog')
     notify.setInfo(True)
 

@@ -6,7 +6,6 @@ from toontown.minigame import TwoDTreasure
 import random
 
 class TwoDTreasureMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDTreasureMgr')
 
     def __init__(self, section, treasureList, enemyList):

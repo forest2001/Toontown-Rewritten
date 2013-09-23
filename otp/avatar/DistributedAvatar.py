@@ -16,7 +16,6 @@ from Avatar import Avatar
 import AvatarDNA
 
 class DistributedAvatar(DistributedActor, Avatar):
-    __module__ = __name__
     HpTextGenerator = TextNode('HpTextGenerator')
     HpTextEnabled = 1
     ManagesNametagAmbientLightChanged = True

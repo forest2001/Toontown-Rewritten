@@ -2,7 +2,6 @@ from direct.directnotify import DirectNotifyGlobal
 import RingAction
 
 class RingTrack:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RingTrack')
 
     def __init__(self, actions, actionDurations = None, reverseFlag = 0):

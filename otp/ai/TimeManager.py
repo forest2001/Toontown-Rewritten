@@ -14,7 +14,6 @@ import sys
 import re
 
 class TimeManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TimeManager')
     neverDisable = 1
 

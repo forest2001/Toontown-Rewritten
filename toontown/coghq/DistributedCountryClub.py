@@ -15,7 +15,6 @@ from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
 
 class DistributedCountryClub(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountryClub')
     ReadyPost = 'CountryClubReady'
     WinEvent = 'CountryClubWinEvent'

@@ -12,7 +12,6 @@ import CogdoMazeGameGlobals as Globals
 import CogdoUtil
 
 class CogdoMazeMapGui(MazeMapGui):
-    __module__ = __name__
 
     def __init__(self, mazeCollTable):
         MazeMapGui.__init__(self, mazeCollTable, bgColor=Globals.MapGuiBgColor, fgColor=Globals.MapGuiFgColor)
@@ -111,7 +110,6 @@ class CogdoMazeMapGui(MazeMapGui):
 
 
 class CogdoMazeBossCodeFrame(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, id, code, modelToCopy):
         DirectFrame.__init__(self, relief=None, state=DGG.NORMAL, sortOrder=DGG.BACKGROUND_SORT_INDEX)
@@ -150,7 +148,6 @@ class CogdoMazeBossCodeFrame(DirectFrame):
 
 
 class CogdoMazeBossGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, code):
         DirectFrame.__init__(self, relief=None, state=DGG.NORMAL, sortOrder=DGG.BACKGROUND_SORT_INDEX)
@@ -214,7 +211,6 @@ class CogdoMazeBossGui(DirectFrame):
 
 
 class CogdoMazeHud:
-    __module__ = __name__
 
     def __init__(self):
         self._update = None

@@ -614,7 +614,6 @@ def getNumFloors(layoutIndex):
 
 
 class StageLayout:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('StageLayout')
 
     def __init__(self, stageId, floorNum, stageLayout = 0):

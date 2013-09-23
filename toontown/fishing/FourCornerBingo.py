@@ -3,7 +3,6 @@ from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
 
 class FourCornerBingo(BingoCardBase.BingoCardBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FourCornerBingo')
     corners = [0,
      BingoGlobals.CARD_ROWS - 1,

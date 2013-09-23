@@ -5,7 +5,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 
 class DistributedVPElevator(DistributedBossElevator.DistributedBossElevator):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVPElevator')
 
     def __init__(self, cr):

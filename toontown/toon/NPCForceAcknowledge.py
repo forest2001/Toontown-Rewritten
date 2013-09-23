@@ -5,7 +5,6 @@ from direct.gui import DirectLabel
 from toontown.quest import Quests
 
 class NPCForceAcknowledge:
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         self.doneEvent = doneEvent

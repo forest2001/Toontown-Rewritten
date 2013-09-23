@@ -30,7 +30,6 @@ burstSfxNames = ['phase_4/audio/sfx/firework_explosion_01.mp3',
  'phase_4/audio/sfx/firework_distance_03.mp3']
 
 class FireworkEffect(NodePath):
-    __module__ = __name__
 
     def __init__(self, burstEffectId, trailEffectId = FireworkTrailType.Default, velocity = Vec3(0, 0, 500), scale = 1.0, primaryColor = Vec4(1, 1, 1, 1), secondaryColor = None, burstDelay = 1.25):
         NodePath.__init__(self, 'FireworkEffect')

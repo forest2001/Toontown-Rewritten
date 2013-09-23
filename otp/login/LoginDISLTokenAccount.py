@@ -5,7 +5,6 @@ import LoginBase
 from direct.distributed.PyDatagram import PyDatagram
 
 class LoginDISLTokenAccount(LoginBase.LoginBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         LoginBase.LoginBase.__init__(self, cr)

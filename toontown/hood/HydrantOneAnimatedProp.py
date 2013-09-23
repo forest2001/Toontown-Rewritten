@@ -3,7 +3,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class HydrantOneAnimatedProp(ZeroAnimatedProp.ZeroAnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('HydrantOneAnimatedProp')
     PauseTimeMult = base.config.GetFloat('zero-pause-mult', 1.0)
     PhaseInfo = {0: ('tt_a_ara_ttc_hydrant_firstMoveArmUp1', 40 * PauseTimeMult),

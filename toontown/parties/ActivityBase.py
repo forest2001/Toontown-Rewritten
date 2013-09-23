@@ -1,7 +1,6 @@
 
 
 class ActivityBase:
-    __module__ = __name__
 
     def __init__(self, activityId, x, y, h):
         self.activityId = activityId

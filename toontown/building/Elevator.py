@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer
 from direct.showbase import PythonUtil
 
 class Elevator(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, elevatorState, doneEvent, distElevator):
         StateData.StateData.__init__(self, doneEvent)

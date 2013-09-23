@@ -72,7 +72,6 @@ def close():
 
 
 class ToontownDistrictStats(DistributedObject.DistributedObject):
-    __module__ = __name__
     neverDisable = 1
 
     def __init__(self, cr):

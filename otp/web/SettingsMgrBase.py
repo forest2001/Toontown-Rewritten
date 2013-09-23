@@ -1,7 +1,6 @@
 from direct.directnotify.DirectNotifyGlobal import directNotify
 
 class SettingsMgrBase:
-    __module__ = __name__
     notify = directNotify.newCategory('SettingsMgrBase')
 
     def announceGenerate(self):

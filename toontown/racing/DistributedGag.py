@@ -7,7 +7,6 @@ from toontown.racing.DistributedVehicle import DistributedVehicle
 from DroppedGag import *
 
 class DistributedGag(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

@@ -10,7 +10,6 @@ from toontown.toonbase import TTLocalizer
 import DistributedCCharBase
 
 class DistributedWesternPluto(DistributedPluto.DistributedPluto):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWesternPluto')
 
     def __init__(self, cr):

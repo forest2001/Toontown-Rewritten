@@ -12,7 +12,6 @@ from toontown.safezone import GolfKart
 from direct.task.Task import Task
 
 class OZPlayground(Playground.Playground):
-    __module__ = __name__
     waterLevel = -0.53
 
     def __init__(self, loader, parentFSM, doneEvent):

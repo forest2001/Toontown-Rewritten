@@ -12,7 +12,6 @@ from toontown.battle.BattleSounds import globalBattleSoundCache
 CTGG = CogThiefGameGlobals
 
 class CogThief(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('CogThief')
     DefaultSpeedWalkAnim = 4.0
     CollisionRadius = 1.25

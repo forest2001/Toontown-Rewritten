@@ -24,7 +24,6 @@ import math
 import copy
 
 class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBase.SuitBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitBase')
 
     def __init__(self, cr):

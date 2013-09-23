@@ -28,7 +28,6 @@ CATCHUP_SPEED_MULTIPLIER = 3
 ALLOW_BATTLE_DETECT = 1
 
 class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuit')
     ENABLE_EXPANDED_NAME = 0
 

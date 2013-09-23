@@ -9,7 +9,6 @@ import CogdoMazeGameGlobals as Globals
 from CogdoMemoGui import CogdoMemoGui
 
 class CogdoMazeGuiManager:
-    __module__ = __name__
 
     def __init__(self, maze, bossCode):
         self.maze = maze

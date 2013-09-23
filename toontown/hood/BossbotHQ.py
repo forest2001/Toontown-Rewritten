@@ -4,7 +4,6 @@ from toontown.coghq import BossbotCogHQLoader
 from toontown.hood import ZoneUtil
 
 class BossbotHQ(CogHood.CogHood):
-    __module__ = __name__
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         CogHood.CogHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)

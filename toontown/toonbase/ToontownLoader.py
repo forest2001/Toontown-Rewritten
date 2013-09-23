@@ -4,7 +4,6 @@ from direct.showbase import Loader
 from toontown.toontowngui import ToontownLoadingScreen
 
 class ToontownLoader(Loader.Loader):
-    __module__ = __name__
     TickPeriod = 0.2
 
     def __init__(self, base):

@@ -3,7 +3,6 @@ from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
 
 class DiagonalBingo(BingoCardBase.BingoCardBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DiagonalBingo')
 
     def __init__(self, cardSize = BingoGlobals.CARD_SIZE, rowSize = BingoGlobals.CARD_ROWS, colSize = BingoGlobals.CARD_COLS):

@@ -14,7 +14,6 @@ except:
     pass
 
 class DisplayOptions:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DisplayOptions')
 
     def __init__(self):

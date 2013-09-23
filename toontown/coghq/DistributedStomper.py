@@ -11,7 +11,6 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 
 class DistributedStomper(DistributedCrusherEntity.DistributedCrusherEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStomper')
     stomperSounds = ['phase_4/audio/sfx/CHQ_FACT_stomper_small.mp3', 'phase_9/audio/sfx/CHQ_FACT_stomper_med.mp3', 'phase_9/audio/sfx/CHQ_FACT_stomper_large.mp3']
     stomperModels = ['phase_9/models/cogHQ/square_stomper']

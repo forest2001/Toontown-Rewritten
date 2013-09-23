@@ -12,7 +12,6 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import TTLocalizer
 
 class DistributedElevatorInt(DistributedElevator.DistributedElevator):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedElevator.DistributedElevator.__init__(self, cr)

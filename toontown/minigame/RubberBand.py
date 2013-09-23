@@ -11,7 +11,6 @@ from math import *
 import random
 
 class RubberBand:
-    __module__ = __name__
     SomeCounter = 0
 
     def __init__(self, heldObject = None, heldOffset = None, taskPriority = 0):

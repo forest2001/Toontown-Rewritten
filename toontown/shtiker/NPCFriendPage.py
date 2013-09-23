@@ -5,7 +5,6 @@ from toontown.toon import NPCFriendPanel
 from toontown.toonbase import TTLocalizer
 
 class NPCFriendPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

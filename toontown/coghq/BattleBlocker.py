@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class BattleBlocker(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleBlocker')
 
     def __init__(self, cr):

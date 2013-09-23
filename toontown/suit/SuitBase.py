@@ -13,7 +13,6 @@ TIME_DIVISOR = 100
 DISTRIBUTE_TASK_CREATION = 0
 
 class SuitBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitBase')
 
     def __init__(self):

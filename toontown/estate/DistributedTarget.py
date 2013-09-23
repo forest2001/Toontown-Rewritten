@@ -9,7 +9,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 
 class DistributedTarget(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTarget')
 
     def __init__(self, cr):

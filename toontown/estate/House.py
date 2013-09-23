@@ -12,7 +12,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class House(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('House')
 
     def __init__(self, loader, avId, parentFSMState, doneEvent):

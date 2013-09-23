@@ -7,7 +7,6 @@ ARROW_KEYCODE_MAP = {'arrow_up': 'u',
 KEYCODE_TIMEOUT_SECONDS = 1.5
 
 class KeyCodes(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('KeyCodes')
     PATTERN_MATCH_EVENT = 'KeyCodes-PATTERN_MATCH'
     PATTERN_NO_MATCH_EVENT = 'KeyCodes-PATTERN_NO_MATCH'

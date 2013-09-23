@@ -16,7 +16,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedRingGame(DistributedMinigame):
-    __module__ = __name__
     UPDATE_ENVIRON_TASK = 'RingGameUpdateEnvironTask'
     UPDATE_LOCALTOON_TASK = 'RingGameUpdateLocalToonTask'
     UPDATE_RINGS_TASK = 'RingGameUpdateRingsTask'

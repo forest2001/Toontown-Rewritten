@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 IdesOfMarchMenu = [(OTPLocalizer.IdesOfMarchMenuSections[0], [30450, 30451, 30452])]
 
 class TTSCIdesOfMarchMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

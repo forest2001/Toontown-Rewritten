@@ -11,7 +11,6 @@ import CatchGameGlobals
 from direct.task.Task import Task
 
 class CatchGameToonSD(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatchGameToonSD')
     FallBackAnim = 'slip-backward'
     FallFwdAnim = 'slip-forward'

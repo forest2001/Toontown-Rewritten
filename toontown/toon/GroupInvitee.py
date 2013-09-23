@@ -10,7 +10,6 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase import TTLocalizer
 
 class GroupInvitee(ToonHeadDialog.ToonHeadDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GroupInvitee')
 
     def __init__(self):

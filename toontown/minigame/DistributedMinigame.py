@@ -21,7 +21,6 @@ from otp.avatar import Emote
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 
 class DistributedMinigame(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMinigame')
 
     def __init__(self, cr):

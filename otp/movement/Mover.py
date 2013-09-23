@@ -6,7 +6,6 @@ from direct.showbase import PythonUtil
 import __builtin__
 
 class Mover(CMover):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Mover')
     SerialNum = 0
     Profile = 0

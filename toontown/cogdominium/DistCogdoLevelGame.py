@@ -7,7 +7,6 @@ from toontown.cogdominium.CogdoLevelGameBase import CogdoLevelGameBase
 from toontown.cogdominium.CogdoEntityCreator import CogdoEntityCreator
 
 class DistCogdoLevelGame(CogdoLevelGameBase, DistCogdoGame, DistributedLevel):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoLevelGame')
 
     def __init__(self, cr):

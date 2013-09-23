@@ -17,7 +17,6 @@ from toontown.battle import BattleProps
 from toontown.toon import NPCToons
 
 class DistributedLawbotChair(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotChair')
     chairCushionSurface = Point3(0, -0.75, 2.25)
     landingPt = Point3(0, -1.5, 0)

@@ -4,7 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 import BasicEntities
 
 class CollisionSolidEntity(BasicEntities.NodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CollisionSolidEntity')
 
     def __init__(self, level, entId):

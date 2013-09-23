@@ -4,7 +4,6 @@ import math
 import random
 
 class CogdoMazeCameraManager:
-    __module__ = __name__
     toonJumpSpeed = 30.0
     toonJumpDir = 1.0
     toonMaxHeight = 1.8

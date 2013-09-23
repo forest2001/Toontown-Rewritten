@@ -8,7 +8,6 @@ import FlowerPhoto
 from toontown.estate import BeanRecipeGui
 
 class FlowerSpeciesPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerSpeciesPanel')
 
     def __init__(self, species = None, itemIndex = 0, *extraArgs):

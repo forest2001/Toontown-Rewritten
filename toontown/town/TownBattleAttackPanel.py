@@ -13,7 +13,6 @@ def hideAttackPanel(flag):
 
 
 class TownBattleAttackPanel(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattleAttackPanel')
 
     def __init__(self, doneEvent):

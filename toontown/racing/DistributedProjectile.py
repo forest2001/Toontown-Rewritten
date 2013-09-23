@@ -8,7 +8,6 @@ from direct.distributed.DistributedSmoothNode import DistributedSmoothNode
 from otp.avatar.ShadowCaster import ShadowCaster
 
 class DistributedProjectile(DistributedSmoothNode, ShadowCaster, NodePath):
-    __module__ = __name__
 
     def __init__(self, cr):
         ShadowCaster.__init__(self)

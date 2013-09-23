@@ -24,7 +24,6 @@ DELETE_POSITIONS = ((0.187, 0, -0.26),
  (0.28, 0, -0.207))
 
 class AvatarChoice(DirectButton):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('AvatarChoice')
     NEW_TRIALER_OPEN_POS = (1,)
     OLD_TRIALER_OPEN_POS = (1, 4)

@@ -25,7 +25,6 @@ from toontown.parties.DistributedPartyCannonActivity import DistributedPartyCann
 from toontown.parties.activityFSMs import CatchActivityFSM
 
 class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCatchActivityBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyCatchActivity')
     DropTaskName = 'dropSomething'
     DropObjectPlurals = {'apple': TTLocalizer.PartyCatchActivityApples,
@@ -37,7 +36,6 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
      'anvil': TTLocalizer.PartyCatchActivityAnvils}
 
     class Generation:
-        __module__ = __name__
 
         def __init__(self, generation, startTime, startNetworkTime, numPlayers):
             self.generation = generation

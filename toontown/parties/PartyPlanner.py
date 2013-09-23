@@ -26,7 +26,6 @@ from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 
 class PartyPlanner(DirectFrame, FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyPlanner')
 
     def __init__(self, doneEvent = None):

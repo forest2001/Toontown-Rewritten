@@ -3,7 +3,6 @@ from otp.launcher.DownloadWatcher import DownloadWatcher
 from toontown.toonbase import TTLocalizer
 
 class ToontownDownloadWatcher(DownloadWatcher):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownDownloadWatcher')
 
     def __init__(self, phaseNames):

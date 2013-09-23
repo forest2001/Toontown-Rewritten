@@ -7,7 +7,6 @@ from direct.interval.IntervalGlobal import *
 from toontown.toontowngui import TTDialog
 
 class CatalogRentalItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self, typeIndex, duration, cost):
         self.typeIndex = typeIndex

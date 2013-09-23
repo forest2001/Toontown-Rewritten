@@ -51,17 +51,14 @@ if simbase.wantPets:
 else:
 
     class PetLookerAI:
-        __module__ = __name__
 
         class PetLookerAI:
-            __module__ = __name__
 
 
 if simbase.wantKarts:
     from toontown.racing.KartDNA import *
 
 class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonAI')
     maxCallsPerNPC = 100
     partTypeIds = {ToontownGlobals.FT_FullSuit: (CogDisguiseGlobals.leftLegIndex,

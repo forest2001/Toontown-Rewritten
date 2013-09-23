@@ -2,7 +2,6 @@ from pandac.PandaModules import AudioSound
 from direct.interval.SoundInterval import SoundInterval
 
 class CogdoGameSfx:
-    __module__ = __name__
 
     def __init__(self, audioSound, audioMgr, source = None):
         self._audioSound = audioSound
@@ -35,7 +34,6 @@ class CogdoGameSfx:
 
 
 class CogdoGameAudioManager:
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoGameAudioManager')
 
     def __init__(self, musicFiles, sfxFiles, listener, cutoff = 75):

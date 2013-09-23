@@ -7,7 +7,6 @@ import TTDateObject
 import time
 
 class AccountServerDate:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('AccountServerDate')
 
     def __init__(self):

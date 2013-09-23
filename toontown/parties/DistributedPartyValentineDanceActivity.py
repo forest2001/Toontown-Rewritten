@@ -3,7 +3,6 @@ from toontown.parties.DistributedPartyDanceActivityBase import DistributedPartyD
 from toontown.toonbase import TTLocalizer
 
 class DistributedPartyValentineDanceActivity(DistributedPartyDanceActivityBase):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyValentineDanceActivity')
 
     def __init__(self, cr):

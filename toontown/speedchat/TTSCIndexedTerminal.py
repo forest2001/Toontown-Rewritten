@@ -7,7 +7,6 @@ def decodeTTSCIndexedMsg(msgIndex):
 
 
 class TTSCIndexedTerminal(SCTerminal):
-    __module__ = __name__
 
     def __init__(self, msg, msgIndex):
         SCTerminal.__init__(self)

@@ -7,7 +7,6 @@ import CogdoUtil
 import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingProgressGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, parent, level, pos2d = Globals.Gui.ProgressPos2D):
         DirectFrame.__init__(self, relief=None, state=DGG.NORMAL, sortOrder=DGG.BACKGROUND_SORT_INDEX)
@@ -67,7 +66,6 @@ class CogdoFlyingProgressGui(DirectFrame):
 
 
 class CogdoFlyingFuelGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, parent):
         DirectFrame.__init__(self, relief=None, state=DGG.NORMAL, sortOrder=DGG.BACKGROUND_SORT_INDEX)

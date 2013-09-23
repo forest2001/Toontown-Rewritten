@@ -1,7 +1,6 @@
 import Street
 
 class DDStreet(Street.Street):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Street.Street.__init__(self, loader, parentFSM, doneEvent)

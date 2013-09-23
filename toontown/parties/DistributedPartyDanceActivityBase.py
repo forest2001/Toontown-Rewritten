@@ -21,7 +21,6 @@ DANCE_FLOOR_COLLISION = 'danceFloor_collision'
 DanceViews = Enum(('Normal', 'Dancing', 'Isometric'))
 
 class DistributedPartyDanceActivityBase(DistributedPartyActivity):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyDanceActivity')
 
     def __init__(self, cr, actId, dancePatternToAnims, model = 'phase_13/models/parties/danceFloor'):

@@ -2,7 +2,6 @@ from direct.showbase.PythonUtil import Functor
 import LevelMgrBase
 
 class LevelMgr(LevelMgrBase.LevelMgrBase):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         LevelMgrBase.LevelMgrBase.__init__(self, level, entId)

@@ -7,7 +7,6 @@ from otp.otpbase import OTPGlobals
 import random
 
 class AIZoneData:
-    __module__ = __name__
     notify = directNotify.newCategory('AIZoneData')
 
     def __init__(self, air, parentId, zoneId):
@@ -28,7 +27,6 @@ class AIZoneData:
 
 
 class AIZoneDataObj:
-    __module__ = __name__
     notify = directNotify.newCategory('AIZoneDataObj')
     DefaultCTravName = 'default'
 
@@ -181,7 +179,6 @@ class AIZoneDataObj:
 
 
 class AIZoneDataStore:
-    __module__ = __name__
     notify = directNotify.newCategory('AIZoneDataStore')
 
     def __init__(self):

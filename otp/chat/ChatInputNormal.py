@@ -6,7 +6,6 @@ from pandac.PandaModules import *
 from otp.otpbase import OTPLocalizer
 
 class ChatInputNormal(DirectObject.DirectObject):
-    __module__ = __name__
     ExecNamespace = None
 
     def __init__(self, chatMgr):

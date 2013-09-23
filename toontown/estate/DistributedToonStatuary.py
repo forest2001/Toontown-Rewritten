@@ -33,7 +33,6 @@ def dnaCodeFromToonDNA(dna):
 
 
 class DistributedToonStatuary(DistributedStatuary.DistributedStatuary):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonStatuary')
 
     def __init__(self, cr):

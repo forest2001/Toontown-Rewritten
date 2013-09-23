@@ -2,7 +2,6 @@ from toontown.toonbase.ToontownGlobals import *
 from toontown.coghq import MintProduct
 
 class MintProductPallet(MintProduct.MintProduct):
-    __module__ = __name__
     Models = {CashbotMintIntA: 'phase_10/models/cashbotHQ/DoubleCoinStack.bam',
      CashbotMintIntB: 'phase_10/models/cogHQ/DoubleMoneyStack.bam',
      CashbotMintIntC: 'phase_10/models/cashbotHQ/DoubleGoldStack.bam'}

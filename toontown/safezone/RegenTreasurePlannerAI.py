@@ -6,7 +6,6 @@ import random
 import TreasurePlannerAI
 
 class RegenTreasurePlannerAI(TreasurePlannerAI.TreasurePlannerAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RegenTreasurePlannerAI')
 
     def __init__(self, zoneId, treasureConstructor, taskName, spawnInterval, maxTreasures, callback = None):

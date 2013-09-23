@@ -7,7 +7,6 @@ from TTAccount import TTAccountException
 from direct.distributed.PyDatagram import PyDatagram
 
 class LoginTTAccount(LoginBase.LoginBase, TTAccount.TTAccount):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LoginTTAcct')
 
     def __init__(self, cr):

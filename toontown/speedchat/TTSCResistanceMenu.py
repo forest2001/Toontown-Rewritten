@@ -5,7 +5,6 @@ from toontown.chat import ResistanceChat
 from TTSCResistanceTerminal import TTSCResistanceTerminal
 
 class TTSCResistanceMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

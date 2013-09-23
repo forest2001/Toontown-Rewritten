@@ -44,7 +44,6 @@ DeletePickerPanelColor = (1, 0.4, 0.4, 1)
 DisabledDeletePickerPanelColor = (0.7, 0.3, 0.3, 1)
 
 class FurnitureItemPanel(DirectButton):
-    __module__ = __name__
 
     def __init__(self, item, itemId, command = None, deleteMode = 0, withinFunc = None, helpCategory = None):
         self.item = item
@@ -157,7 +156,6 @@ class FurnitureItemPanel(DirectButton):
 
 
 class MovableObject(NodePath, DirectObject):
-    __module__ = __name__
 
     def __init__(self, dfitem, parent = render):
         NodePath.__init__(self)
@@ -308,7 +306,6 @@ class MovableObject(NodePath, DirectObject):
 
 
 class ObjectManager(NodePath, DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ObjectManager')
 
     def __init__(self):

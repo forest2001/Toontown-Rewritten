@@ -4,7 +4,6 @@ from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 
 class DistributedChatManager(DistributedObjectGlobal):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObjectGlobal.__init__(self, cr)

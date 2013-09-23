@@ -20,7 +20,6 @@ import types
 import Pmw
 
 class InGameEditor(AppShell):
-    __module__ = __name__
     appname = 'In-Game Editor'
     frameWidth = 900
     frameHeight = 475
@@ -847,7 +846,6 @@ class InGameEditor(AppShell):
 
 
 class LevelVisZonesEditor(Pmw.MegaToplevel):
-    __module__ = __name__
 
     def __init__(self, editor, entId, visible, modelZones = [], updateCommand = None, parent = None, **kw):
         DGG.INITOPT = Pmw_INITOPT
@@ -962,7 +960,6 @@ DEFAULT_MENU_ITEMS = ['Update Explorer',
  'Separator']
 
 class LevelExplorer(Pmw.MegaWidget, DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, parent = None, editor = None, **kw):
         optiondefs = (('menuItems', [], Pmw.INITOPT),)
@@ -1019,7 +1016,6 @@ class LevelExplorer(Pmw.MegaWidget, DirectObject.DirectObject):
 
 
 class LevelExplorerItem(TreeItem):
-    __module__ = __name__
 
     def __init__(self, levelElement, editor):
         self.levelElement = levelElement

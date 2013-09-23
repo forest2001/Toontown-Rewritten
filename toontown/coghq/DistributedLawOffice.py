@@ -17,7 +17,6 @@ if __dev__:
     from otp.level import EditorGlobals
 
 class DistributedLawOffice(DistributedObject, LawOfficeBase.LawOfficeBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawOffice')
 
     def __init__(self, cr):

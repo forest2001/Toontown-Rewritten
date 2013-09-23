@@ -10,7 +10,6 @@ from direct.task.Task import Task
 import DistributedCrushableEntity
 
 class DistributedCrate(DistributedCrushableEntity.DistributedCrushableEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCrate')
     UP_KEY = 'arrow_up'
     DOWN_KEY = 'arrow_down'

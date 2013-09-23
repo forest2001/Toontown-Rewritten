@@ -48,7 +48,6 @@ from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggreg
 from PotentialAvatar import PotentialAvatar
 
 class OTPClientRepository(ClientRepositoryBase):
-    __module__ = __name__
     notify = directNotify.newCategory('OTPClientRepository')
     avatarLimit = 6
     WishNameResult = Enum(['Failure',

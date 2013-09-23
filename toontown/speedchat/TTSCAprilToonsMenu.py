@@ -24,7 +24,6 @@ AprilToonsMenu = [(OTPLocalizer.AprilToonsMenuSections[1], [30100, 30102]),
  (OTPLocalizer.AprilToonsMenuSections[0], [30140, 30141])]
 
 class TTSCAprilToonsMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

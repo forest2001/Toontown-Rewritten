@@ -1,7 +1,6 @@
 
 
 class AvatarHandle:
-    __module__ = __name__
     dclassName = 'AvatarHandle'
 
     def getName(self):

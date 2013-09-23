@@ -16,7 +16,6 @@ from toontown.speedchat import TTSCDecoders
 import time
 
 class TTTalkAssistant(TalkAssistant):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTTalkAssistant')
 
     def __init__(self):

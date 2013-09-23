@@ -11,7 +11,6 @@ from CogdoUtil import CogdoGameMovie
 import CogdoUtil
 
 class CogdoFlyingGameIntro(CogdoGameMovie):
-    __module__ = __name__
 
     def __init__(self, level, rng):
         CogdoGameMovie.__init__(self)
@@ -117,7 +116,6 @@ class CogdoFlyingGameIntro(CogdoGameMovie):
 
 
 class CogdoFlyingGameFinish(CogdoGameMovie):
-    __module__ = __name__
 
     def __init__(self, level, players):
         CogdoGameMovie.__init__(self)

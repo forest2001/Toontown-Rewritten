@@ -31,7 +31,6 @@ from toontown.estate import FlowerSellGUI
 from toontown.toontowngui import TTDialog
 
 class DistributedEstate(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedEstate')
 
     def __init__(self, cr):

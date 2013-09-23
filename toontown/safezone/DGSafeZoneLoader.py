@@ -3,7 +3,6 @@ import SafeZoneLoader
 import DGPlayground
 
 class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         SafeZoneLoader.SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)

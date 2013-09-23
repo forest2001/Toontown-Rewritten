@@ -14,7 +14,6 @@ from toontown.parties.PublicPartyGui import PublicPartyGui
 from toontown.parties import PartyGlobals
 
 class DistributedPartyGate(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyGate')
 
     def __init__(self, cr):

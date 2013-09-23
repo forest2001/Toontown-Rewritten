@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 from direct.interval.IntervalGlobal import *
 
 class CatalogPetTrickItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
     petPicture = None
 

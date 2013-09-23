@@ -5,7 +5,6 @@ from toontown.hood import GenericAnimatedProp
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals, TTLocalizer
 
 class TrashcanInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TrashcanInteractiveProp')
     BattleCheerText = TTLocalizer.InteractivePropTrackBonusTerms[ToontownBattleGlobals.HEAL_TRACK]
     ZoneToIdles = {ToontownGlobals.ToontownCentral: (('tt_a_ara_ttc_trashcan_idleTake2',

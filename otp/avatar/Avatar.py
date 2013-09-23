@@ -21,7 +21,6 @@ def reconsiderAllUnderstandable():
 
 
 class Avatar(Actor, ShadowCaster):
-    __module__ = __name__
     notify = directNotify.newCategory('Avatar')
     ActiveAvatars = []
     ManagesNametagAmbientLightChanged = False

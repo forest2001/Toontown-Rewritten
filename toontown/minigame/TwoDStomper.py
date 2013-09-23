@@ -8,7 +8,6 @@ GOING_DOWN = 2
 STUCK_DOWN = 3
 
 class TwoDStomper(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDStomper')
 
     def __init__(self, stomperMgr, index, stomperAttribs, model):

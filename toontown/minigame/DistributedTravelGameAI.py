@@ -5,7 +5,6 @@ import TravelGameGlobals
 from toontown.toonbase import ToontownGlobals
 
 class DistributedTravelGameAI(DistributedMinigameAI):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedTravelGameAI')
 
     def __init__(self, air, minigameId):

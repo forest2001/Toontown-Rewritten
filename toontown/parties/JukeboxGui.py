@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.parties import PartyUtils
 
 class JukeboxGui(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('JukeboxGui')
     CLOSE_EVENT = 'JukeboxGui_CLOSE_EVENT'
     SONG_SELECT_EVENT = 'JukeboxGui_SONG_SELECT_EVENT'

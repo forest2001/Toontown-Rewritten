@@ -5,7 +5,6 @@ from direct.directnotify import DirectNotifyGlobal
 import DistributedBarrelBase
 
 class DistributedGagBarrel(DistributedBarrelBase.DistributedBarrelBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         self.gagLevelMax = 0

@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 from otp.otpgui import OTPDialog
 
 class SecretFriendsInfoPanel(getGlobalDialogClass()):
-    __module__ = __name__
 
     def __init__(self, doneEvent, hidePageNum = 0, pageChangeCallback = None):
         dialogClass = getGlobalDialogClass()

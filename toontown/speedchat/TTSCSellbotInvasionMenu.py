@@ -7,7 +7,6 @@ from otp.otpbase import OTPLocalizer
 SellbotInvasionMenu = [(OTPLocalizer.SellbotInvasionMenuSections[0], range(30400, 30404))]
 
 class TTSCSellbotInvasionMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

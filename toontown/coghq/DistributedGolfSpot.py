@@ -13,7 +13,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGolfSpot')
     positions = ((-45, 100, GolfGlobals.GOLF_BALL_RADIUS),
      (-15, 100, GolfGlobals.GOLF_BALL_RADIUS),

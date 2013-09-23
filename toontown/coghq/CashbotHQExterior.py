@@ -7,7 +7,6 @@ from toontown.coghq import CogHQExterior
 from toontown.safezone import Train
 
 class CashbotHQExterior(CogHQExterior.CogHQExterior):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CashbotHQExterior')
     TrackZ = -67
     TrainTracks = [{'start': Point3(-1000, -54.45, TrackZ),

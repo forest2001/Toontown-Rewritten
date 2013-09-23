@@ -25,7 +25,6 @@ CatalogPanelColors = {CatalogItemTypes.FURNITURE_ITEM: Vec4(0.733, 0.78, 0.933, 
  CatalogItemTypes.WINDOW_ITEM: Vec4(0.827, 0.91, 0.659, 1.0)}
 
 class CatalogScreen(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogScreen')
 
     def __init__(self, parent = aspect2d, **kw):

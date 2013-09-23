@@ -5,7 +5,6 @@ from otp.otpbase import OTPLocalizer
 from direct.interval.IntervalGlobal import *
 
 class CatalogBeanItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
 
     def makeNewItem(self, beanAmount, tagCode = 1):

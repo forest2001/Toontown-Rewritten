@@ -4,7 +4,6 @@ from toontown.toonbase import TTLocalizer
 import random
 
 class DownloadForceAcknowledge:
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         self.doneEvent = doneEvent

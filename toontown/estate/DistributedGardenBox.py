@@ -10,7 +10,6 @@ from pandac.PandaModules import NodePath
 from pandac.PandaModules import Vec3
 
 class DistributedGardenBox(DistributedLawnDecor.DistributedLawnDecor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGardenPlot')
 
     def __init__(self, cr):

@@ -11,7 +11,6 @@ from toontown.parties import PartyUtils
 from toontown.parties.PartyEditorGridSquare import PartyEditorGridSquare
 
 class PartyEditorGrid:
-    __module__ = __name__
     notify = directNotify.newCategory('PartyEditorGrid')
 
     def __init__(self, partyEditor):

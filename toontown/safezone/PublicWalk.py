@@ -4,7 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 import Walk
 
 class PublicWalk(Walk.Walk):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PublicWalk')
 
     def __init__(self, parentFSM, doneEvent):

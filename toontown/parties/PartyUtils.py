@@ -175,7 +175,6 @@ def calcVelocity(rotation, angle, initialVelocity = 1.0):
 
 
 class LineSegment:
-    __module__ = __name__
 
     def __init__(self, pt1, pt2):
         self.pt1 = pt1

@@ -13,7 +13,6 @@ ModelDict = {'pg': 'phase_9/models/char/Cog_Goonie',
  'sg': 'phase_9/models/char/Cog_Goonie'}
 
 class Goon(Avatar.Avatar):
-    __module__ = __name__
 
     def __init__(self, dnaName = None):
         try:

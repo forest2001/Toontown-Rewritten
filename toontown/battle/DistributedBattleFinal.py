@@ -14,7 +14,6 @@ from direct.fsm import State
 import random
 
 class DistributedBattleFinal(DistributedBattleBase.DistributedBattleBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleFinal')
 
     def __init__(self, cr):

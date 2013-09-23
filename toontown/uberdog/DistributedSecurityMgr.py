@@ -6,7 +6,6 @@ from direct.distributed.DistributedObject import DistributedObject
 from toontown.toonbase import ToontownGlobals
 
 class DistributedSecurityMgr(DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('SecurityMgr')
     neverDisable = 1
 

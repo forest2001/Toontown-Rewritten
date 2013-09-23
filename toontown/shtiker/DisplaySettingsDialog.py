@@ -10,7 +10,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.DisplayOptions import DisplayOptions
 
 class DisplaySettingsDialog(DirectFrame, StateData.StateData):
-    __module__ = __name__
     ApplyTimeoutSeconds = 15
     TimeoutCountdownTask = 'DisplaySettingsTimeoutCountdown'
     WindowedMode = 0

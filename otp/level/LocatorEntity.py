@@ -3,7 +3,6 @@ from pandac.PandaModules import NodePath
 from direct.directnotify import DirectNotifyGlobal
 
 class LocatorEntity(Entity.Entity, NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LocatorEntity')
 
     def __init__(self, level, entId):

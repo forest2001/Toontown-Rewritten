@@ -7,7 +7,6 @@ from direct.actor import Actor
 import random
 
 class DirectRegion(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DirectRegion')
 
     def __init__(self, parent = aspect2d):
@@ -75,7 +74,6 @@ class DirectRegion(NodePath):
 
 
 class SpecialsPhoto(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SpecialsPhoto')
 
     def __init__(self, type = None, parent = aspect2d):

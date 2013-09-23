@@ -13,7 +13,6 @@ from toontown.shtiker import IssueFrameV2
 from toontown.toonbase import TTLocalizer
 
 class DirectNewsFrame(DirectObject.DirectObject):
-    __module__ = __name__
     TaskName = 'HtmlViewUpdateTask'
     TaskChainName = 'RedownladTaskChain'
     RedownloadTaskName = 'RedownloadNewsTask'

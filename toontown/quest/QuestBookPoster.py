@@ -6,7 +6,6 @@ TEXT_SCALE = TTLocalizer.QPtextScale * 0.7
 TEXT_WORDWRAP = TTLocalizer.QPtextWordwrap * 0.8
 
 class QuestBookPoster(QuestPoster):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestPoster')
     colors = {'white': (1, 1, 1, 1),
      'blue': (0.45, 0.45, 0.8, 1),

@@ -11,7 +11,6 @@ from direct.particles import Particles
 from direct.particles import ForceGroup
 
 class CogdoFlyingGatherableFactory:
-    __module__ = __name__
 
     def __init__(self):
         self._serialNum = -1
@@ -89,7 +88,6 @@ class CogdoFlyingGatherableFactory:
 
 
 class CogdoFlyingGatherableBase:
-    __module__ = __name__
 
     def __init__(self, type):
         self.type = type
@@ -142,7 +140,6 @@ class CogdoFlyingGatherableBase:
 
 
 class CogdoFlyingGatherable(CogdoGameGatherable, CogdoFlyingGatherableBase):
-    __module__ = __name__
 
     def __init__(self, type, serialNum, modelToInstance, triggerRadius, animate = True):
         CogdoGameGatherable.__init__(self, serialNum, modelToInstance, triggerRadius, animate=animate)
@@ -170,7 +167,6 @@ class CogdoFlyingGatherable(CogdoGameGatherable, CogdoFlyingGatherableBase):
 
 
 class CogdoFlyingMemo(CogdoFlyingGatherableBase, CogdoMemo):
-    __module__ = __name__
 
     def __init__(self, serialNum, model):
         CogdoMemo.__init__(self, serialNum, triggerRadius=Globals.Gameplay.MemoCollisionRadius, spinRate=Globals.Gameplay.MemoSpinRate, model=model)
@@ -215,7 +211,6 @@ class CogdoFlyingMemo(CogdoFlyingGatherableBase, CogdoMemo):
 
 
 class CogdoFlyingPowerup(CogdoFlyingGatherable):
-    __module__ = __name__
 
     def __init__(self, serialNum, powerupType, model):
         self._pickedUpList = []
@@ -271,7 +266,6 @@ class CogdoFlyingPowerup(CogdoFlyingGatherable):
 
 
 class CogdoFlyingPropeller(CogdoFlyingGatherable):
-    __module__ = __name__
 
     def __init__(self, serialNum, model):
         CogdoFlyingGatherable.__init__(self, Globals.Level.GatherableTypes.Propeller, serialNum, model, Globals.Gameplay.PropellerCollisionRadius, animate=False)
@@ -341,7 +335,6 @@ class CogdoFlyingPropeller(CogdoFlyingGatherable):
 
 
 class CogdoFlyingLevelFog:
-    __module__ = __name__
 
     def __init__(self, level, color = Globals.Level.FogColor):
         self._level = level
@@ -373,7 +366,6 @@ class CogdoFlyingLevelFog:
 
 
 class CogdoFlyingPlatform:
-    __module__ = __name__
     CeilingCollName = 'col_ceiling'
     FloorCollName = 'col_floor'
 

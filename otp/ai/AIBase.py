@@ -17,7 +17,6 @@ import time
 import gc
 
 class AIBase:
-    __module__ = __name__
     notify = directNotify.newCategory('AIBase')
 
     def __init__(self):

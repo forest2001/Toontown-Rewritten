@@ -10,7 +10,6 @@ MazeRevealType = Enum(('SmoothCircle', 'HardCircle', 'Square'))
 MAZE_REVEAL_TYPE = MazeRevealType.SmoothCircle
 
 class MazeMapGui(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('MazeMapGui')
 
     def __init__(self, mazeCollTable, maskResolution = None, radiusRatio = None, bgColor = (0.8, 0.8, 0.8), fgColor = (0.5, 0.5, 0.5, 1.0)):

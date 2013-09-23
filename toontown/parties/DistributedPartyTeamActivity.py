@@ -6,7 +6,6 @@ from toontown.parties.activityFSMs import TeamActivityFSM
 from toontown.parties.TeamActivityGui import TeamActivityGui
 
 class DistributedPartyTeamActivity(DistributedPartyActivity):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyTeamActivity')
 
     def __init__(self, cr, activityId, startDelay = PartyGlobals.TeamActivityStartDelay, balanceTeams = False):

@@ -9,7 +9,6 @@ from toontown.fishing import FishPhoto
 from toontown.fishing import BingoGlobals
 
 class BingoCardCell(DirectButton, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BingoCardCell')
 
     def __init__(self, cellId, fish, model, color, parent, **kw):

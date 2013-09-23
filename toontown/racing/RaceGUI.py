@@ -25,12 +25,10 @@ from direct.gui.DirectGui import DirectFrame
 import random
 
 class RaceGUI:
-    __module__ = __name__
     GagPie = 0
     gagRoot = 'phase_3.5/maps/inventory_'
 
     class RacerInfo:
-        __module__ = __name__
 
         def __init__(self, face, mapSpot):
             self.curvetime = 0

@@ -3,7 +3,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class TrashcanOneAnimatedProp(ZeroAnimatedProp.ZeroAnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TrashcanOneAnimatedProp')
     PauseTimeMult = base.config.GetFloat('zero-pause-mult', 1.0)
     PhaseInfo = {0: ('tt_a_ara_dga_trashcan_firstMoveLidFlip1', 40 * PauseTimeMult),

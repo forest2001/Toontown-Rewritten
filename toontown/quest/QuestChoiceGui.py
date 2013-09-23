@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 
 class QuestChoiceGui(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestChoiceGui')
 
     def __init__(self):

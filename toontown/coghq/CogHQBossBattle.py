@@ -12,7 +12,6 @@ from toontown.suit import Suit
 import math
 
 class CogHQBossBattle(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHQBossBattle')
 
     def __init__(self, loader, parentFSM, doneEvent):

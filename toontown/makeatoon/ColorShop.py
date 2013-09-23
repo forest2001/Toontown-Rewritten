@@ -10,7 +10,6 @@ import random
 from direct.directnotify import DirectNotifyGlobal
 
 class ColorShop(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ColorShop')
 
     def __init__(self, doneEvent):

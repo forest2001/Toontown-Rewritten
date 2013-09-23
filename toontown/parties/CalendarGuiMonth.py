@@ -7,7 +7,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.parties.CalendarGuiDay import CalendarGuiDay
 
 class CalendarGuiMonth(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('CalendarGuiMonth')
 
     def __init__(self, parent, startingDateTime, scale = 1.0, pos = (0, 0, -0.1), dayClickCallback = None, onlyFutureDaysClickable = False, onlyFutureMonthsClickable = False):

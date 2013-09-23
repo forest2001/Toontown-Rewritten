@@ -26,7 +26,6 @@ BeanColors = (VBase4(1.0, 0.2, 0.2, 1.0),
  VBase4(0.6, 0.0, 0.6, 1.0))
 
 class DistributedPet(DistributedSmoothNode.DistributedSmoothNode, Pet.Pet, PetBase.PetBase, DelayDeletable):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPet')
     swallowSfx = None
     callSfx = None

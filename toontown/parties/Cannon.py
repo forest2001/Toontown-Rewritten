@@ -15,7 +15,6 @@ INITIAL_VELOCITY = 80.0
 CANNON_BARREL_TOONHEAD_Y = 6.0
 
 class Cannon:
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyCannon')
 
     def __init__(self, parent, pos = Point3(0, 0, 0)):

@@ -10,7 +10,6 @@ from toontown.parties.PartyGlobals import getMusicRepeatTimes, MUSIC_PATH, sanit
 from toontown.parties.JukeboxGui import JukeboxGui
 
 class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyJukeboxActivityBase')
 
     def __init__(self, cr, actId, phaseToMusicData):

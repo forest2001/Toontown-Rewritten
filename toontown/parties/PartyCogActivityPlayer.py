@@ -20,7 +20,6 @@ UPDATE_TASK_NAME = 'PartyCogActivityLocalPlayer_UpdateTask'
 THROW_PIE_LIMIT_TIME = 0.2
 
 class PartyCogActivityPlayer:
-    __module__ = __name__
     toon = None
     position = None
     team = None
@@ -145,7 +144,6 @@ class PartyCogActivityPlayer:
 
 
 class PartyCogActivityLocalPlayer(PartyCogActivityPlayer):
-    __module__ = __name__
 
     def __init__(self, activity, position, team, exitActivityCallback = None):
         PartyCogActivityPlayer.__init__(self, activity, base.localAvatar, position, team)

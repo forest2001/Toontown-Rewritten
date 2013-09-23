@@ -3,7 +3,6 @@ import PlayingCardGlobals
 from toontown.minigame.PlayingCard import PlayingCardBase
 
 class PlayingCardDeck:
-    __module__ = __name__
 
     def __init__(self):
         self.shuffle()

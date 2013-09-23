@@ -7,7 +7,6 @@ from toontown.toon import ToonDNA
 from toontown.parties import PartyGlobals
 
 class DistributedPartyManager(DistributedObject):
-    __module__ = __name__
     neverDisable = 1
     notify = directNotify.newCategory('DistributedPartyManager')
     PartyStatusChangedEvent = 'changePartyStatusResponseReceived'

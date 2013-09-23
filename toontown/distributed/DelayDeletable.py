@@ -1,7 +1,6 @@
 from direct.distributed.DistributedObject import ESGenerating, ESGenerated, ESNum2Str
 
 class DelayDeletable:
-    __module__ = __name__
     DelayDeleteSerialGen = SerialNumGen()
 
     def delayDelete(self):

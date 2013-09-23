@@ -14,7 +14,6 @@ from TTChatInputNormal import TTChatInputNormal
 from TTChatInputWhiteList import TTChatInputWhiteList
 
 class HackedDirectRadioButton(DirectCheckButton):
-    __module__ = __name__
 
     def __init__(self, parent = None, **kw):
         optiondefs = ()
@@ -29,7 +28,6 @@ class HackedDirectRadioButton(DirectCheckButton):
 
 
 class ToontownChatManager(ChatManager.ChatManager):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownChatManager')
 
     def __init__(self, cr, localAvatar):

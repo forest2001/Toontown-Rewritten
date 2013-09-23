@@ -7,7 +7,6 @@ import random
 import TagGameGlobals
 
 class DistributedTagGameAI(DistributedMinigameAI):
-    __module__ = __name__
     DURATION = TagGameGlobals.DURATION
 
     def __init__(self, air, minigameId):

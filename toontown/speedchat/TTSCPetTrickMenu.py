@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 from toontown.pets import PetTricks
 
 class TTSCPetTrickMenu(SCMenu):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTSCPetTrickMenu')
 
     def __init__(self):

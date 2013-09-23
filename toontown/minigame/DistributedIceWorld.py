@@ -8,7 +8,6 @@ MetersToFeet = 3.2808399
 FeetToMeters = 1.0 / MetersToFeet
 
 class DistributedIceWorld(DistributedMinigamePhysicsWorld.DistributedMinigamePhysicsWorld):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMinigamePhysicsWorld')
     floorCollideId = 1
     floorMask = BitMask32(floorCollideId)

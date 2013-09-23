@@ -12,7 +12,6 @@ from direct.showbase import PythonUtil
 import DistributedGoon
 
 class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCashbotBossObject.DistributedCashbotBossObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossGoon')
     walkGrabZ = -3.6
     stunGrabZ = -2.2

@@ -12,7 +12,6 @@ WinterMenu = [(OTPLocalizer.WinterMenuSections[0], {30200: 30220,
    30205: 30225}), (OTPLocalizer.WinterMenuSections[1], [30275, 30276, 30277])]
 
 class TTSCWinterMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self, carol):
         SCMenu.__init__(self)

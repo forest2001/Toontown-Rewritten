@@ -10,7 +10,6 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase import TTLocalizer
 
 class BoardingGroupInviterPanels:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupInviterPanels')
 
     def __init__(self):
@@ -79,7 +78,6 @@ class BoardingGroupInviterPanels:
 
 
 class BoardingGroupInviterPanelBase(ToonHeadDialog.ToonHeadDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupInviterPanelBase')
 
     def __init__(self, boardingParty, inviteeId, **kw):
@@ -126,7 +124,6 @@ class BoardingGroupInviterPanelBase(ToonHeadDialog.ToonHeadDialog):
 
 
 class BoardingGroupInvitingPanel(BoardingGroupInviterPanelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupInvitingPanel')
 
     def __init__(self, boardingParty, inviteeId, **kw):
@@ -156,7 +153,6 @@ class BoardingGroupInvitingPanel(BoardingGroupInviterPanelBase):
 
 
 class BoardingGroupInvitationRejectedPanel(BoardingGroupInviterPanelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupInvitationRejectedPanel')
 
     def __init__(self, boardingParty, inviteeId, **kw):

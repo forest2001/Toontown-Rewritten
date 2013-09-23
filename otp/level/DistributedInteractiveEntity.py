@@ -5,7 +5,6 @@ from direct.fsm import ClassicFSM
 import DistributedEntity
 
 class DistributedInteractiveEntity(DistributedEntity.DistributedEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedInteractiveEntity')
 
     def __init__(self, cr):

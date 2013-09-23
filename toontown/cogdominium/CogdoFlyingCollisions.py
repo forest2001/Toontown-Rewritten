@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 
 class CogdoFlyingCollisions(GravityWalker):
-    __module__ = __name__
     wantFloorSphere = 0
 
     def __init__(self):

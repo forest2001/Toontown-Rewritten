@@ -3,7 +3,6 @@ from direct.interval.IntervalGlobal import *
 from EffectController import EffectController
 
 class RayBurst(NodePath, EffectController):
-    __module__ = __name__
 
     def __init__(self):
         NodePath.__init__(self, 'RayBurst')

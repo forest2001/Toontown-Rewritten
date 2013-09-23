@@ -7,7 +7,6 @@ from toontown.fishing import FishGlobals
 from toontown.pets import PetUtil, PetDNA, PetConstants
 
 class DistributedNPCPetclerkAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)

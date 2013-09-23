@@ -20,7 +20,6 @@ Phrases = Enum('HI, BYE, YES, NO, SOOTHE, PRAISE, CRITICISM, HAPPY,SAD, ANGRY, H
 Actions = Enum('FEED, SCRATCH,ATTENDED_START, ATTENDED_STOP,ATTENDING_START, ATTENDING_STOP,CHANGE_ZONE, LOGOUT,GARDEN')
 
 class PetObserve:
-    __module__ = __name__
 
     def isValid(self):
         return 1
@@ -36,7 +35,6 @@ class PetObserve:
 
 
 class PetActionObserve(PetObserve):
-    __module__ = __name__
 
     def __init__(self, action, avId, data = None):
         self.action = action
@@ -60,7 +58,6 @@ class PetActionObserve(PetObserve):
 
 
 class PetPhraseObserve(PetObserve):
-    __module__ = __name__
 
     def __init__(self, petPhrase, avId):
         self.petPhrase = petPhrase
@@ -83,7 +80,6 @@ class PetPhraseObserve(PetObserve):
 
 
 class SCObserve(PetPhraseObserve):
-    __module__ = __name__
 
     def __init__(self, msgId, petPhrase, avId):
         self.msgId = msgId
@@ -94,7 +90,6 @@ class SCObserve(PetPhraseObserve):
 
 
 class TrickRequestObserve(PetPhraseObserve):
-    __module__ = __name__
 
     def __init__(self, trickId, avId):
         self.trickId = trickId

@@ -28,7 +28,6 @@ COLORS = (Vec4(0.917, 0.164, 0.164, 1),
 chooser_notify = DirectNotifyGlobal.directNotify.newCategory('AvatarChooser')
 
 class AvatarChooser(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, avatarList, parentFSM, doneEvent):
         StateData.StateData.__init__(self, doneEvent)

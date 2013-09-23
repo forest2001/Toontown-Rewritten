@@ -3,7 +3,6 @@ from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 
 class VineTreasure(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('VineTreasure')
     RADIUS = 1.7
 

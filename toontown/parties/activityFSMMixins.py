@@ -1,7 +1,6 @@
 from BaseActivityFSM import BaseActivityFSM
 
 class IdleMixin:
-    __module__ = __name__
 
     def enterIdle(self, *args):
         BaseActivityFSM.notify.info("enterIdle: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -24,7 +23,6 @@ class IdleMixin:
 
 
 class ActiveMixin:
-    __module__ = __name__
 
     def enterActive(self, *args):
         BaseActivityFSM.notify.info("enterActive: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -47,7 +45,6 @@ class ActiveMixin:
 
 
 class DisabledMixin:
-    __module__ = __name__
 
     def enterDisabled(self, *args):
         BaseActivityFSM.notify.info("enterDisabled: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -70,7 +67,6 @@ class DisabledMixin:
 
 
 class RulesMixin:
-    __module__ = __name__
 
     def enterRules(self, *args):
         BaseActivityFSM.notify.info("enterRules: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -93,7 +89,6 @@ class RulesMixin:
 
 
 class WaitForEnoughMixin:
-    __module__ = __name__
 
     def enterWaitForEnough(self, *args):
         BaseActivityFSM.notify.info("enterWaitForEnough: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -116,7 +111,6 @@ class WaitForEnoughMixin:
 
 
 class WaitToStartMixin:
-    __module__ = __name__
 
     def enterWaitToStart(self, *args):
         BaseActivityFSM.notify.info("enterWaitToStart: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -139,7 +133,6 @@ class WaitToStartMixin:
 
 
 class WaitClientsReadyMixin:
-    __module__ = __name__
 
     def enterWaitClientsReady(self, *args):
         BaseActivityFSM.notify.info("enterWaitClientsReady: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -162,7 +155,6 @@ class WaitClientsReadyMixin:
 
 
 class WaitForServerMixin:
-    __module__ = __name__
 
     def enterWaitForServer(self, *args):
         BaseActivityFSM.notify.info("enterWaitForServer: '%s' -> '%s'" % (self.oldState, self.newState))
@@ -185,7 +177,6 @@ class WaitForServerMixin:
 
 
 class ConclusionMixin:
-    __module__ = __name__
 
     def enterConclusion(self, *args):
         BaseActivityFSM.notify.info("enterConclusion: '%s' -> '%s'" % (self.oldState, self.newState))

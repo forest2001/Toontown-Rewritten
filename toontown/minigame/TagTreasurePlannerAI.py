@@ -4,7 +4,6 @@ from toontown.safezone import RegenTreasurePlannerAI
 import DistributedTagTreasureAI
 
 class TagTreasurePlannerAI(RegenTreasurePlannerAI.RegenTreasurePlannerAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TagTreasurePlannerAI')
 
     def __init__(self, zoneId, callback):

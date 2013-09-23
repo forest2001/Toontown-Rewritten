@@ -8,7 +8,6 @@ from toontown.battle import MovieUtil
 import math
 
 class TwoDBattleMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDBattleMgr')
 
     def __init__(self, game, toon):

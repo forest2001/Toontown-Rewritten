@@ -6,7 +6,6 @@ from pandac.PandaModules import *
 CatalogNotifyBaseXPos = 0.4
 
 class CatalogNotifyDialog:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogNotifyDialog')
 
     def __init__(self, message):

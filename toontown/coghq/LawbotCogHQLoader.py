@@ -13,7 +13,6 @@ import LawbotOfficeExterior
 aspectSF = 0.7227
 
 class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LawbotCogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

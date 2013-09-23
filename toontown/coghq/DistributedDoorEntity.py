@@ -14,7 +14,6 @@ from direct.fsm import State
 from otp.level import VisibilityBlocker
 
 class DistributedDoorEntityLock(DistributedDoorEntityBase.LockBase, FourState.FourState):
-    __module__ = __name__
     slideLeft = Vec3(-7.5, 0.0, 0.0)
     slideRight = Vec3(7.5, 0.0, 0.0)
 
@@ -91,7 +90,6 @@ class DistributedDoorEntityLock(DistributedDoorEntityBase.LockBase, FourState.Fo
 
 
 class DistributedDoorEntity(DistributedDoorEntityBase.DistributedDoorEntityBase, DistributedEntity.DistributedEntity, BasicEntities.NodePathAttribsProxy, FourState.FourState, VisibilityBlocker.VisibilityBlocker):
-    __module__ = __name__
 
     def __init__(self, cr):
         self.innerDoorsTrack = None

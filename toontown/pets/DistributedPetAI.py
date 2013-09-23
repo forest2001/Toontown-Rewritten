@@ -25,7 +25,6 @@ import copy
 from direct.showbase.PythonUtil import StackTrace
 
 class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI, PetBase.PetBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPetAI')
     movieTimeSwitch = {PetConstants.PET_MOVIE_FEED: PetConstants.FEED_TIME,
      PetConstants.PET_MOVIE_SCRATCH: PetConstants.SCRATCH_TIME,

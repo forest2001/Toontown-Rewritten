@@ -6,7 +6,6 @@ import VineGameGlobals
 from direct.interval.SoundInterval import SoundInterval
 
 class VineBat(NodePath.NodePath, DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('VineBat')
     notify.setDebug(True)
     RADIUS = 1.7

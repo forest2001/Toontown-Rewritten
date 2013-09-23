@@ -5,7 +5,6 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class MinigamePowerMeter(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, size, label = None):
         DirectFrame.__init__(self, relief=None, state=DGG.NORMAL, image_color=GlobalDialogColor, image_scale=(0.48, 1.0, 0.7), image_pos=(0.0, 0.1, 0.0), sortOrder=DGG.BACKGROUND_SORT_INDEX)

@@ -22,7 +22,6 @@ from direct.interval.IntervalGlobal import *
 visualizeZones = base.config.GetBool('visualize-zones', 0)
 
 class Street(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Street')
 
     def __init__(self, loader, parentFSM, doneEvent):

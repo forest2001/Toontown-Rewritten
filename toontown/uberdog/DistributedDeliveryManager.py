@@ -4,7 +4,6 @@ from toontown.catalog import CatalogItemList
 from toontown.catalog import CatalogItem
 
 class DistributedDeliveryManager(DistributedObject):
-    __module__ = __name__
     neverDisable = 1
 
     def sendHello(self, message):

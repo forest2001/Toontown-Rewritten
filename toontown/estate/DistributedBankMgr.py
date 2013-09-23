@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 
 class DistributedBankMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBankMgr')
     neverDisable = 1
 

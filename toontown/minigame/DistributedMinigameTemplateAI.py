@@ -3,7 +3,6 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 
 class DistributedMinigameTemplateAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

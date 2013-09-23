@@ -9,7 +9,6 @@ from toontown.estate import GardenGlobals
 from toontown.golf import GolfGlobals
 
 class QuestRewardCounter:
-    __module__ = __name__
     notify = directNotify.newCategory('QuestRewardCounter')
 
     def __init__(self):

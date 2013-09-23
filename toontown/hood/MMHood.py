@@ -5,7 +5,6 @@ from toontown.safezone import MMSafeZoneLoader
 from toontown.toonbase.ToontownGlobals import *
 
 class MMHood(ToonHood.ToonHood):
-    __module__ = __name__
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)

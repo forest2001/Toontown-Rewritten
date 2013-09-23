@@ -18,7 +18,6 @@ def getMintRoomReadyPostName(doId):
 
 
 class DistributedMintRoom(DistributedLevel.DistributedLevel, MintRoomBase.MintRoomBase, MintRoom.MintRoom):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMintRoom')
     EmulateEntrancePoint = False
 

@@ -1,7 +1,6 @@
 
 
 class PotentialShard:
-    __module__ = __name__
 
     def __init__(self, id):
         self.id = id

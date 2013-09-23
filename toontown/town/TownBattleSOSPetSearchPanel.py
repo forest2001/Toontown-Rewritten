@@ -5,7 +5,6 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class TownBattleSOSPetSearchPanel(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         StateData.StateData.__init__(self, doneEvent)

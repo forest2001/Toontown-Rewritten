@@ -6,7 +6,6 @@ import CogdoFlyingGameGlobals
 import CogdoFlyingGameGlobals as Globals
 
 class DistCogdoFlyingGame(DistCogdoGame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoFlyingGame')
 
     def __init__(self, cr):

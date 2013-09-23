@@ -13,7 +13,6 @@ from toontown.makeatoon.MakeAToonGlobals import *
 from toontown.makeatoon import ShuffleButton
 
 class TrunkGUI(StateData.StateData):
-    __module__ = __name__
     notify = directNotify.newCategory('TrunkGUI')
 
     def __init__(self, isOwner, doneEvent, cancelEvent, swapHatEvent, swapGlassesEvent, swapBackpackEvent, swapShoesEvent, deleteEvent, hatList = None, glassesList = None, backpackList = None, shoesList = None):

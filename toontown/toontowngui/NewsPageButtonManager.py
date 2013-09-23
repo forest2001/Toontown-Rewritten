@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.coghq import CogHQBossBattle
 
 class NewsPageButtonManager(FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('NewsPageButtonManager')
 
     def __init__(self):

@@ -5,4 +5,3 @@ def stubFunction(*args):
 
 
 class DistributedSwitchBase:
-    __module__ = __name__

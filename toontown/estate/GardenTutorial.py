@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 from pandac.PandaModules import *
 
 class GardenTutorial(DirectFrame, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GardenTutorial')
 
     def __init__(self, doneEvent = None, callback = None):

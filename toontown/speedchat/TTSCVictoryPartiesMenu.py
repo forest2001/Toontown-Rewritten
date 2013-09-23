@@ -18,7 +18,6 @@ VictoryPartiesMenu = [(OTPLocalizer.VictoryPartiesMenuSections[1], [30350,
    30361]), (OTPLocalizer.VictoryPartiesMenuSections[0], [])]
 
 class TTSCVictoryPartiesMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

@@ -14,7 +14,6 @@ from CogdoUtil import CogdoGameMovie
 import CogdoUtil
 
 class CogdoElevatorMovie(CogdoGameMovie):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoElevatorMovie')
     elevatorDuration = 5
 

@@ -18,7 +18,6 @@ import string
 from toontown.toonbase import TTLocalizer
 
 class DistributedPatternGame(DistributedMinigame):
-    __module__ = __name__
     phase4snd = 'phase_4/audio/sfx/'
     ButtonSoundNames = (phase4snd + 'm_match_trumpet.mp3',
      phase4snd + 'm_match_guitar.mp3',

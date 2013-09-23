@@ -3,7 +3,6 @@ from direct.interval.IntervalGlobal import Parallel, Sequence, Func, Wait
 from pandac.PandaModules import Vec4, loadDNAFile, CSDefault, TransformState, NodePath, TransparencyAttrib
 
 class HolidayDecorator:
-    __module__ = __name__
 
     def __init__(self):
         self.dnaStore = base.cr.playGame.dnaStore

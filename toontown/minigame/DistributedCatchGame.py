@@ -28,7 +28,6 @@ from DropPlacer import *
 from DropScheduler import *
 
 class DistributedCatchGame(DistributedMinigame):
-    __module__ = __name__
     DropTaskName = 'dropSomething'
     EndGameTaskName = 'endCatchGame'
     SuitWalkTaskName = 'catchGameSuitWalk'

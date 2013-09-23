@@ -26,7 +26,6 @@ import NameShop
 import random
 
 class MakeAToon(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MakeAToon')
 
     def __init__(self, parentFSM, avList, doneEvent, index, isPaid):

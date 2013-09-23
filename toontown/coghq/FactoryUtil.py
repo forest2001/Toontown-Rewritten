@@ -8,7 +8,6 @@ from toontown.suit import Suit
 from toontown.suit import SuitDNA
 
 class Ouch(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, keyEvent, callback):
         DirectObject.DirectObject.__init__(self)
@@ -19,7 +18,6 @@ class Ouch(DirectObject.DirectObject):
 
 
 class CyclePlacer(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, locations, keyEvent, startIndex = 0):
         DirectObject.DirectObject.__init__(self)
@@ -47,7 +45,6 @@ class CyclePlacer(DirectObject.DirectObject):
 
 
 class ToonLifter(DirectObject.DirectObject):
-    __module__ = __name__
     SerialNum = 0
 
     def __init__(self, keyDownEvent, speed = 2):

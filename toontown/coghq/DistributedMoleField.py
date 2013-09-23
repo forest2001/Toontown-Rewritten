@@ -15,7 +15,6 @@ from direct.interval.IntervalGlobal import *
 from toontown.battle import MovieUtil
 
 class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMoleField')
     ScheduleTaskName = 'moleFieldScheduler'
 

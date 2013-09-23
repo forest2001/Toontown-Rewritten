@@ -4,7 +4,6 @@ from direct.interval.IntervalGlobal import Sequence, Wait, Func, LerpColorScaleI
 from toontown.toonbase import ToontownGlobals
 
 class DistributedSZTreasure(DistributedTreasure.DistributedTreasure):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedTreasure.DistributedTreasure.__init__(self, cr)

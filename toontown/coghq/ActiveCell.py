@@ -3,7 +3,6 @@ from otp.level import BasicEntities
 from direct.directnotify import DirectNotifyGlobal
 
 class ActiveCell(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ActiveCell')
 
     def __init__(self, cr):

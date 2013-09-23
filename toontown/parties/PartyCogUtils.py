@@ -8,7 +8,6 @@ def getCogDistanceUnitsFromCenter(distance):
 
 
 class CameraManager:
-    __module__ = __name__
     nextID = 0
 
     def __init__(self, cameraNP):
@@ -76,7 +75,6 @@ class CameraManager:
 
 
 class StrafingControl:
-    __module__ = __name__
 
     def __init__(self, player):
         self.player = player

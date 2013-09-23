@@ -8,7 +8,6 @@ import os
 import string
 
 class EntityTypeRegistry:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EntityTypeRegistry')
 
     def __init__(self, entityTypeModule):

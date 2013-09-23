@@ -6,7 +6,6 @@ from toontown.battle.BattleProps import *
 from toontown.racing import Piejectile
 
 class PiejectileManager(DirectObject):
-    __module__ = __name__
     pieCounter = 0
 
     def __init__(self):

@@ -9,7 +9,6 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 
 class CatalogAccessoryItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self, accessoryType, loyaltyDays = 0):
         self.accessoryType = accessoryType

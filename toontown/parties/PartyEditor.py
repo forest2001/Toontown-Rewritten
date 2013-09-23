@@ -15,7 +15,6 @@ from toontown.parties.PartyEditorGrid import PartyEditorGrid
 from toontown.parties.PartyEditorListElement import PartyEditorListElement
 
 class PartyEditor(DirectObject, FSM):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyEditor')
 
     def __init__(self, partyPlanner, parent):

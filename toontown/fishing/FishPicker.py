@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 import FishPanel
 
 class FishPicker(DirectScrolledList):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishPicker')
 
     def __init__(self, parent = aspect2d, **kw):

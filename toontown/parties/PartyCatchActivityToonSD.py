@@ -11,7 +11,6 @@ from toontown.parties import PartyGlobals
 from direct.fsm import ClassicFSM, State
 
 class PartyCatchActivityToonSD(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyCatchActivityToonSD')
     FallBackAnim = 'slip-backward'
     FallFwdAnim = 'slip-forward'

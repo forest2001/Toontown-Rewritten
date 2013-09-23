@@ -2,7 +2,6 @@ from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 
 class BlinkingArrows:
-    __module__ = __name__
 
     def __init__(self, parent = aspect2d, otherNode = None):
         self.arrow1 = loader.loadModel('phase_3/models/props/arrow')

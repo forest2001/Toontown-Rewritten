@@ -6,7 +6,6 @@ from direct.distributed.ClockDelta import *
 import time
 
 class DistributedTimer(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTimer')
 
     def __init__(self, cr):

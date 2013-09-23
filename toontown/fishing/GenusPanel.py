@@ -8,7 +8,6 @@ import FishGlobals
 import FishPhoto
 
 class GenusPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GenusPanel')
 
     def __init__(self, genus = None, itemIndex = 0, *extraArgs):

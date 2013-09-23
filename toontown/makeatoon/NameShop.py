@@ -30,7 +30,6 @@ MAX_NAME_WIDTH = TTLocalizer.NSmaxNameWidth
 ServerDialogTimeout = 3.0
 
 class NameShop(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('NameShop')
 
     def __init__(self, makeAToon, doneEvent, avList, index, isPaid):

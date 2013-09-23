@@ -83,7 +83,6 @@ def invertTable(table):
 
 
 class DistributedTravelGame(DistributedMinigame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedTravelGame')
     idToNames = MinigameNameDict
     TrolleyMoveDuration = 3

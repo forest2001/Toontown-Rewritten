@@ -17,7 +17,6 @@ Track2Anim = {ToontownBattleGlobals.HEAL_TRACK: 'juggle',
  ToontownBattleGlobals.DROP_TRACK: 'pushbutton'}
 
 class TrackFrame(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, index):
         DirectFrame.__init__(self, relief=None)
@@ -88,7 +87,6 @@ class TrackFrame(DirectFrame):
 
 
 class TrackPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

@@ -10,7 +10,6 @@ from toontown.parties import DistributedPartyFireworksActivity
 from direct.directnotify import DirectNotifyGlobal
 
 class ShtikerBook(DirectFrame, StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ShtikerBook')
 
     def __init__(self, doneEvent):

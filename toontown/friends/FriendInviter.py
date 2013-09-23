@@ -42,7 +42,6 @@ def unloadFriendInviter():
 
 
 class FriendInviter(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FriendInviter')
 
     def __init__(self, avId, avName, avDisableName):

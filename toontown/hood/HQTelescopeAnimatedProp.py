@@ -3,7 +3,6 @@ from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
 
 class HQTelescopeAnimatedProp(AnimatedProp.AnimatedProp):
-    __module__ = __name__
 
     def __init__(self, node):
         AnimatedProp.AnimatedProp.__init__(self, node)

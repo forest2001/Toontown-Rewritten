@@ -3,7 +3,6 @@ import BRStreet
 from toontown.suit import Suit
 
 class BRTownLoader(TownLoader.TownLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         TownLoader.TownLoader.__init__(self, hood, parentFSM, doneEvent)

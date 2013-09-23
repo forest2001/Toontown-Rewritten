@@ -13,7 +13,6 @@ from toontown.toonbase import ToontownGlobals
 from direct.actor import Actor
 
 class Train(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('Train')
     nameId = 0
     Sfx_TrainPass = 'phase_10/audio/sfx/CBHQ_TRAIN_pass.mp3'

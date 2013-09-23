@@ -7,7 +7,6 @@ from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
 
 class MoleHill(NodePath):
-    __module__ = __name__
 
     def __init__(self, x, y, z, moleField, index):
         NodePath.__init__(self, 'MoleHill-%d' % index)

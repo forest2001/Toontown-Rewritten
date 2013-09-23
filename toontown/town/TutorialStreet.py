@@ -1,7 +1,6 @@
 import TTStreet
 
 class TutorialStreet(TTStreet.TTStreet):
-    __module__ = __name__
 
     def enter(self, requestStatus):
         TTStreet.TTStreet.enter(self, requestStatus, visibilityFlag=0, arrowsOn=0)

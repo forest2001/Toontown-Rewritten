@@ -15,7 +15,6 @@ from toontown.estate import HouseGlobals
 import ZoneUtil
 
 class EstateHood(Hood.Hood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EstateHood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

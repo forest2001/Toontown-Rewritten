@@ -14,7 +14,6 @@ from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
 
 class DistributedStage(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStage')
     ReadyPost = 'StageReady'
     WinEvent = 'StageWinEvent'

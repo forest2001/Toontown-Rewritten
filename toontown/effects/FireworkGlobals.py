@@ -64,7 +64,6 @@ postShowPauseDuration = 4.0
 preNormalMusicPauseDuration = 0.5
 
 class FireworkTrailType:
-    __module__ = __name__
     Default = 0
     Polygonal = 1
     Glow = 2
@@ -75,7 +74,6 @@ class FireworkTrailType:
 
 
 class FireworkBurstType:
-    __module__ = __name__
     Sparkles = 0
     PeonyShell = 1
     PeonyParticleShell = 2
@@ -91,7 +89,6 @@ class FireworkBurstType:
 
 
 class FireworkType:
-    __module__ = __name__
     BasicPeony = 0
     AdvancedPeony = 1
     DiademPeony = 2

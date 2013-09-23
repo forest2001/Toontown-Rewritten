@@ -5,7 +5,6 @@ from toontown.parties import PartyGlobals
 from toontown.parties import WinterPartyCatchActivityToonSD
 
 class DistributedPartyWinterCatchActivity(DistributedPartyCatchActivity):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedPartyCatchActivity.__init__(self, cr)

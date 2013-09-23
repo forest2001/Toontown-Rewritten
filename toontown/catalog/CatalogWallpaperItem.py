@@ -553,7 +553,6 @@ BorderTypes = {1000: ('phase_5.5/maps/bd_grey_border1.jpg', CTFlatColorDark),
  13000: ('phase_5.5/maps/StPatBorder1.jpg', CTWhite)}
 
 class CatalogWallpaperItem(CatalogSurfaceItem):
-    __module__ = __name__
 
     def makeNewItem(self, patternIndex, colorIndex = None, borderIndex = 0, borderColorIndex = 0):
         self.patternIndex = patternIndex

@@ -15,7 +15,6 @@ from libotp import CFSpeech, CFTimeout, CFThought
 ThoughtPrefix = '.'
 
 class TalkAssistant(DirectObject.DirectObject):
-    __module__ = __name__
     ExecNamespace = None
     notify = DirectNotifyGlobal.directNotify.newCategory('TalkAssistant')
     execChat = base.config.GetBool('exec-chat', 0)

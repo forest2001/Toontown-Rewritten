@@ -13,7 +13,6 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.building import Elevator
 
 class FactoryInterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryInterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

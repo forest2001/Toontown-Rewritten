@@ -5,7 +5,6 @@ from toontown.toon import LaffMeter
 from toontown.toonbase import TTLocalizer
 
 class TreasureScorePanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self):
         DirectFrame.__init__(self, relief=None, image_color=GlobalDialogColor, image_scale=(0.24, 1.0, 0.24), image_pos=(0.0, 0.1, 0.0))

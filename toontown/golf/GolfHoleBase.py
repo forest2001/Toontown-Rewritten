@@ -10,7 +10,6 @@ import random
 import math
 
 class GolfHoleBase:
-    __module__ = __name__
 
     def __init__(self, canRender = 0):
         self.canRender = canRender

@@ -4,7 +4,6 @@ from direct.task import Task
 from toontown.coghq import BarrelBase
 
 class DistributedBarrelBaseAI(DistributedEntityAI.DistributedEntityAI, BarrelBase.BarrelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBarrelBaseAI')
 
     def __init__(self, level, entId):

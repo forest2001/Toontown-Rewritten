@@ -7,7 +7,6 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class MapPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

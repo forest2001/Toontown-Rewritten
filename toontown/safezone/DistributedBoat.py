@@ -9,7 +9,6 @@ from direct.directutil import Mopath
 from toontown.toonbase import ToontownGlobals
 
 class DistributedBoat(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownTimer
 from toontown.toonbase import TTLocalizer as TTL
 
 class DistCogdoBoardroomGame(CogdoBoardroomGameBase, DistCogdoLevelGame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoBoardroomGame')
 
     def __init__(self, cr):

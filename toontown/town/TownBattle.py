@@ -21,7 +21,6 @@ from direct.gui.DirectGui import DGG
 from toontown.battle import FireCogPanel
 
 class TownBattle(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattle')
     evenPos = (0.75,
      0.25,

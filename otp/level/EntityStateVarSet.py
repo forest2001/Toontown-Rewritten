@@ -3,7 +3,6 @@ from direct.showbase.PythonUtil import getSetterName
 from otp.level.Entity import Entity
 
 class EntityStateVarSet(Entity):
-    __module__ = __name__
 
     def __init__(self, entType):
         self._entType = entType

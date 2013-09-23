@@ -14,7 +14,6 @@ from toontown.toon import DistributedToon
 from direct.distributed import DistributedObject
 
 class ToonStatueSelectionGUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonStatueSelectionGUI')
 
     def __init__(self, doneEvent, specialBoxActive = False):

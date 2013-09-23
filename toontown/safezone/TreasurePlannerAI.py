@@ -5,7 +5,6 @@ from direct.task import Task
 import random
 
 class TreasurePlannerAI(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TreasurePlannerAI')
 
     def __init__(self, zoneId, treasureConstructor, callback = None):

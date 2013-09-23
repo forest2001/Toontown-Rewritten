@@ -19,7 +19,6 @@ from PartyCogActivityPlayer import PartyCogActivityLocalPlayer
 from StretchingArrow import StretchingArrow
 
 class PartyCogActivity(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyCogActivity')
     cog = None
     arena = None

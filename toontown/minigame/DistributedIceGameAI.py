@@ -8,7 +8,6 @@ from toontown.minigame import IceGameGlobals
 from toontown.ai.ToonBarrier import ToonBarrier
 
 class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedIceGameAI')
 
     def __init__(self, air, minigameId):

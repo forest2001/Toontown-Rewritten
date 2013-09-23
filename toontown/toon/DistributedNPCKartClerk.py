@@ -8,7 +8,6 @@ from toontown.racing.KartShopGui import *
 from toontown.racing.KartShopGlobals import *
 
 class DistributedNPCKartClerk(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

@@ -8,7 +8,6 @@ import CogdoGameConsts
 MEMOICON_SCALE = 0.2
 
 class CogdoMemoGui(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, parent):
         DirectFrame.__init__(self, parent=parent, relief=None, state=DGG.NORMAL, sortOrder=DGG.BACKGROUND_SORT_INDEX)

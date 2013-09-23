@@ -9,7 +9,6 @@ from toontown.minigame import TwoDSpawnPointMgr
 from toontown.minigame import TwoDStomperMgr
 
 class TwoDSection(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDSection')
 
     def __init__(self, indexNum, sectionInfo, sectionNP, sectionMgr):

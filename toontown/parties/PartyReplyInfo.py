@@ -1,7 +1,6 @@
 
 
 class SingleReply:
-    __module__ = __name__
 
     def __init__(self, inviteeId, status):
         self.inviteeId = inviteeId
@@ -9,7 +8,6 @@ class SingleReply:
 
 
 class PartyReplyInfoBase:
-    __module__ = __name__
 
     def __init__(self, partyId, partyReplies):
         self.partyId = partyId

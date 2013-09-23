@@ -7,7 +7,6 @@ from toontown.minigame import ToonBlitzGlobals
 import math
 
 class TwoDCamera(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDCamera')
 
     def __init__(self, camera):

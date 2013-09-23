@@ -13,7 +13,6 @@ from pandac.PandaModules import NodePath
 import types
 
 class DistributedGardenPlot(DistributedLawnDecor.DistributedLawnDecor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGardenPlot')
 
     def __init__(self, cr):

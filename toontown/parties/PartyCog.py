@@ -16,7 +16,6 @@ from toontown.battle.BattleSounds import globalBattleSoundCache
 import PartyGlobals
 
 class PartyCogManager:
-    __module__ = __name__
 
     def __init__(self):
         self.cogs = []
@@ -36,7 +35,6 @@ class PartyCogManager:
 
 
 class PartyCog(FSM):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyCog')
     HpTextGenerator = TextNode('HpTextGenerator')
     hpText = None

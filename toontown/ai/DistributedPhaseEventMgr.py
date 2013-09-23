@@ -3,7 +3,6 @@ from direct.distributed import DistributedObject
 import datetime
 
 class DistributedPhaseEventMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhaseEventMgr')
 
     def __init__(self, cr):

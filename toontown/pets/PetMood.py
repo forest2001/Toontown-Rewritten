@@ -5,7 +5,6 @@ from toontown.toonbase import TTLocalizer
 import random, time, weakref
 
 class PetMood:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetMood')
     Neutral = 'neutral'
     Components = ('boredom', 'restlessness', 'playfulness', 'loneliness', 'sadness', 'affection', 'hunger', 'confusion', 'excitement', 'fatigue', 'anger', 'surprise')

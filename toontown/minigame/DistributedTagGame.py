@@ -17,7 +17,6 @@ import TagGameGlobals
 import Trajectory
 
 class DistributedTagGame(DistributedMinigame):
-    __module__ = __name__
     DURATION = TagGameGlobals.DURATION
     IT_SPEED_INCREASE = 1.3
     IT_ROT_INCREASE = 1.3

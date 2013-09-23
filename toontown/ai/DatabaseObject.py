@@ -7,7 +7,6 @@ from direct.distributed.PyDatagramIterator import PyDatagramIterator
 import types
 
 class DatabaseObject:
-    __module__ = __name__
     notify = directNotify.newCategory('DatabaseObject')
     notify.setInfo(0)
 

@@ -28,7 +28,6 @@ Component2IconDict = {'boredom': 'Bored',
  'affection': 'Love'}
 
 class Pet(Avatar.Avatar):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Pet')
     SerialNum = 0
     Interactions = PythonUtil.Enum('SCRATCH, BEG, EAT, NEUTRAL')

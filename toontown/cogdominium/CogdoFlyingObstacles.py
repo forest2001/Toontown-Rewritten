@@ -17,7 +17,6 @@ from direct.particles import Particles
 from direct.particles import ForceGroup
 
 class CogdoFlyingObtacleFactory:
-    __module__ = __name__
 
     def __init__(self):
         self._index = -1
@@ -89,7 +88,6 @@ class CogdoFlyingObtacleFactory:
 
 
 class CogdoFlyingObstacle(DirectObject):
-    __module__ = __name__
     EnterEventName = 'CogdoFlyingObstacle_Enter'
     ExitEventName = 'CogdoFlyingObstacle_Exit'
     MotionTypes = PythonUtil.Enum(('BackForth', 'Loop'))
@@ -196,7 +194,6 @@ class CogdoFlyingObstacle(DirectObject):
 from pandac.PandaModules import TransformState
 
 class CogdoFlyingWhirlwind(CogdoFlyingObstacle):
-    __module__ = __name__
 
     def __init__(self, index, model, motionPath = None):
         collSolid = CollisionTube(0, 0, 0, 0, 0, Globals.Gameplay.WhirlwindCollisionTubeHeight, Globals.Gameplay.WhirlwindCollisionTubeRadius)
@@ -232,7 +229,6 @@ class CogdoFlyingWhirlwind(CogdoFlyingObstacle):
 
 
 class CogdoFlyingMinion(CogdoFlyingObstacle):
-    __module__ = __name__
 
     def __init__(self, index, collSolid, motionPath = None):
         self.prop = None
@@ -289,7 +285,6 @@ class CogdoFlyingMinion(CogdoFlyingObstacle):
 
 
 class CogdoFlyingMinionFlying(CogdoFlyingMinion):
-    __module__ = __name__
 
     def __init__(self, index, motionPath = None):
         radius = Globals.Gameplay.FlyingMinionCollisionRadius
@@ -325,7 +320,6 @@ class CogdoFlyingMinionFlying(CogdoFlyingMinion):
 
 
 class CogdoFlyingMinionWalking(CogdoFlyingMinion):
-    __module__ = __name__
 
     def __init__(self, index, motionPath = None):
         radius = Globals.Gameplay.WalkingMinionCollisionRadius
@@ -343,7 +337,6 @@ class CogdoFlyingMinionWalking(CogdoFlyingMinion):
 
 
 class CogdoFlyingFan(CogdoFlyingObstacle):
-    __module__ = __name__
 
     def __init__(self, index, model, motionPath = None):
         collSolid = CollisionTube(0, 0, 0, 0, 0, Globals.Gameplay.FanCollisionTubeHeight, Globals.Gameplay.FanCollisionTubeRadius)

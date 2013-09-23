@@ -14,7 +14,6 @@ def smooth(old, new):
 
 
 class CogdoFlyingCameraManager:
-    __module__ = __name__
 
     def __init__(self, cam, parent, player, level):
         self._toon = player.toon

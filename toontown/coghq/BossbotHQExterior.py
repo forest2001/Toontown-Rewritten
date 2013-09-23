@@ -8,7 +8,6 @@ from pandac.PandaModules import *
 from toontown.coghq import CogHQExterior
 
 class BossbotHQExterior(CogHQExterior.CogHQExterior):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BossbotHQExterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

@@ -1,7 +1,6 @@
 import PurchaseManagerAI
 
 class NewbiePurchaseManagerAI(PurchaseManagerAI.PurchaseManagerAI):
-    __module__ = __name__
 
     def __init__(self, air, newbieId, playerArray, mpArray, previousMinigameId, trolleyZone):
         self.ownedNewbieId = newbieId

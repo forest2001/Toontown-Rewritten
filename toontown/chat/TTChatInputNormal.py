@@ -5,7 +5,6 @@ from otp.otpbase import OTPLocalizer
 from otp.otpbase import OTPGlobals
 
 class TTChatInputNormal(ChatInputNormal.ChatInputNormal):
-    __module__ = __name__
 
     def __init__(self, chatMgr):
         ChatInputNormal.ChatInputNormal.__init__(self, chatMgr)

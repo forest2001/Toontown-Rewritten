@@ -16,7 +16,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.pets import Pet, PetConstants, PetDetailPanel
 
 class PetAvatarPanel(AvatarPanel.AvatarPanel):
-    __module__ = __name__
     notify = directNotify.newCategory('PetAvatarPanel')
 
     def __init__(self, avatar):

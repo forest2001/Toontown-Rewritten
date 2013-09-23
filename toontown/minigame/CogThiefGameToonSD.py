@@ -9,7 +9,6 @@ from direct.fsm import State
 from direct.task.Task import Task
 
 class CogThiefGameToonSD(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogThiefGameToonSD')
     FallBackAnim = 'slip-backward'
     FallFwdAnim = 'slip-forward'

@@ -2,7 +2,6 @@ from EntityTypeDesc import EntityTypeDesc
 from toontown.coghq.SpecImports import *
 
 class Entity(EntityTypeDesc):
-    __module__ = __name__
     abstract = 1
     type = 'entity'
     attribs = (('type', None, 'const'),
@@ -12,14 +11,12 @@ class Entity(EntityTypeDesc):
 
 
 class LevelMgr(Entity):
-    __module__ = __name__
     type = 'levelMgr'
     permanent = 1
     attribs = (('name', 'LevelMgr', 'const'), ('parentEntId', 0, 'const'), ('modelFilename', '', 'const'))
 
 
 class EditMgr(Entity):
-    __module__ = __name__
     type = 'editMgr'
     permanent = 1
     blockAttribs = ('comment',)
@@ -32,7 +29,6 @@ class EditMgr(Entity):
 
 
 class AttribModifier(Entity):
-    __module__ = __name__
     type = 'attribModifier'
     attribs = (('recursive', 0, 'bool'),
      ('typeName', '', 'string'),
@@ -41,13 +37,11 @@ class AttribModifier(Entity):
 
 
 class Locator(Entity):
-    __module__ = __name__
     type = 'locator'
     attribs = (('searchPath', '', 'string'),)
 
 
 class Nodepath(Entity):
-    __module__ = __name__
     type = 'nodepath'
     attribs = (('parentEntId',
       0,
@@ -59,7 +53,6 @@ class Nodepath(Entity):
 
 
 class Zone(Nodepath):
-    __module__ = __name__
     type = 'zone'
     permanent = 1
     blockAttribs = ('pos', 'hpr')
@@ -67,7 +60,6 @@ class Zone(Nodepath):
 
 
 class EntrancePoint(Nodepath):
-    __module__ = __name__
     type = 'entrancePoint'
     attribs = (('entranceId', -1, 'int'), ('radius',
       15,
@@ -79,7 +71,6 @@ class EntrancePoint(Nodepath):
 
 
 class LogicGate(Entity):
-    __module__ = __name__
     type = 'logicGate'
     output = 'bool'
     attribs = (('input1Event',
@@ -104,7 +95,6 @@ class LogicGate(Entity):
 
 
 class CutScene(Entity):
-    __module__ = __name__
     type = 'cutScene'
     output = 'bool'
     attribs = (('pos', Point3(0, 0, 0), 'pos'),
@@ -125,7 +115,6 @@ class CutScene(Entity):
 
 
 class CollisionSolid(Nodepath):
-    __module__ = __name__
     type = 'collisionSolid'
     attribs = (('solidType',
       'sphere',
@@ -137,7 +126,6 @@ class CollisionSolid(Nodepath):
 
 
 class Model(Nodepath):
-    __module__ = __name__
     type = 'model'
     attribs = (('loadType',
       'loadModelCopy',
@@ -159,13 +147,11 @@ class Model(Nodepath):
 
 
 class Path(Nodepath):
-    __module__ = __name__
     type = 'path'
     attribs = (('pathIndex', 0, 'int'), ('pathScale', 1.0, 'float'))
 
 
 class VisibilityExtender(Entity):
-    __module__ = __name__
     type = 'visibilityExtender'
     attribs = (('event',
       None,
@@ -174,7 +160,6 @@ class VisibilityExtender(Entity):
 
 
 class AmbientSound(Nodepath):
-    __module__ = __name__
     type = 'ambientSound'
     attribs = (('soundPath', '', 'bamfilename'), ('volume',
       1,
@@ -184,10 +169,8 @@ class AmbientSound(Nodepath):
 
 
 class PropSpinner(Entity):
-    __module__ = __name__
     type = 'propSpinner'
 
 
 class EntityGroup(Entity):
-    __module__ = __name__
     type = 'entityGroup'

@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class TIPPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

@@ -8,7 +8,6 @@ if __debug__:
     import pdb
 
 class DistributedViewPad(DistributedKartPad):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedViewPad')
     id = 0
 

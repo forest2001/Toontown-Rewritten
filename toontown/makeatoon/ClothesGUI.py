@@ -13,7 +13,6 @@ CLOTHES_TAILOR = 1
 CLOTHES_CLOSET = 2
 
 class ClothesGUI(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ClothesGUI')
 
     def __init__(self, type, doneEvent, swapEvent = None):

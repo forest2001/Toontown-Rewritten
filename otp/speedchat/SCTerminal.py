@@ -9,7 +9,6 @@ SCTerminalLinkedEmoteEvent = 'SCTerminalLinkedEmoteEvent'
 SCWhisperModeChangeEvent = 'SCWhisperModeChange'
 
 class SCTerminal(SCElement):
-    __module__ = __name__
 
     def __init__(self, linkedEmote = None):
         SCElement.__init__(self)

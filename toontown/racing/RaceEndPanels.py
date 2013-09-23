@@ -9,7 +9,6 @@ from toontown.shtiker.KartPage import RacingTrophy
 from toontown.racing import RaceGlobals
 
 class RaceResultsPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RaceEndPanels')
 
     def __init__(self, numRacers, race, raceEndPanel, *args, **kwargs):
@@ -201,7 +200,6 @@ class RaceResultsPanel(DirectFrame):
 
 
 class RaceWinningsPanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, race, *args, **kwargs):
         opts = {'relief': None,
@@ -324,7 +322,6 @@ class RaceWinningsPanel(DirectFrame):
 
 
 class RaceEndPanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, numRacers, race, *args, **kwargs):
         opts = {'relief': None}

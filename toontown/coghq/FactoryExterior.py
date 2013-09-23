@@ -8,7 +8,6 @@ from toontown.building import Elevator
 from pandac.PandaModules import *
 
 class FactoryExterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryExterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

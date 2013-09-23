@@ -11,7 +11,6 @@ KEY_TO_INDEX = {'u': 0,
  'l': 3}
 
 class KeyCodesGui(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('KeyCodesGui')
     TIMEOUT_TASK = 'KeyCodeGui_TIMEOUT_TASK'
 

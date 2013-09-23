@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 import DistributedDale
 
 class DistributedJailbirdDale(DistributedDale.DistributedDale):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedJailbirdDale')
 
     def __init__(self, cr):

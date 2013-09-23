@@ -15,7 +15,6 @@ from toontown.estate import DistributedLawnDecor
 DIRT_AS_WATER_INDICATOR = True
 
 class DistributedGagTree(DistributedPlantBase.DistributedPlantBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGagTree')
 
     def __init__(self, cr):

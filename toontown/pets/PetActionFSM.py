@@ -8,7 +8,6 @@ from toontown.pets import PetTricks
 from toontown.toon import DistributedToonAI
 
 class PetActionFSM(FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetActionFSM')
 
     def __init__(self, pet):

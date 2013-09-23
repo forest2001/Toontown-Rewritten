@@ -5,7 +5,6 @@ from otp.speedchat import SpeedChatGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedGreenToonEffectMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGreenToonEffectMgr')
 
     def __init__(self, cr):

@@ -14,7 +14,6 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.coghq import DistributedMint
 
 class MintInterior(BattlePlace.BattlePlace):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MintInterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

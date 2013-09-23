@@ -4,7 +4,6 @@ import SuitPlannerBase
 from toontown.toonbase import ToontownGlobals
 
 class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBase.SuitPlannerBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

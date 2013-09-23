@@ -7,7 +7,6 @@ from toontown.toonbase.ToontownBattleGlobals import gagIsPaidOnly
 from toontown.toontowngui.TeaserPanel import TeaserPanel
 
 class PlantTreeGUI(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantTreeGUI')
 
     def __init__(self, doneEvent):

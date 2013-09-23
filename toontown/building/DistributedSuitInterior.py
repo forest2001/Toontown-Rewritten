@@ -12,7 +12,6 @@ from toontown.battle import BattleBase
 from toontown.hood import ZoneUtil
 
 class DistributedSuitInterior(DistributedObject.DistributedObject):
-    __module__ = __name__
     id = 0
 
     def __init__(self, cr):

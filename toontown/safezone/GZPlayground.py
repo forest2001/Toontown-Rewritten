@@ -10,7 +10,6 @@ from direct.fsm import State
 from toontown.safezone import GolfKart
 
 class GZPlayground(Playground.Playground):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)

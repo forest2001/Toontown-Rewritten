@@ -8,7 +8,6 @@ import SkyUtil
 from direct.directnotify import DirectNotifyGlobal
 
 class TTHood(ToonHood.ToonHood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTHood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

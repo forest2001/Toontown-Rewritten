@@ -17,7 +17,6 @@ from toontown.golf import GolfRewardDialog
 from toontown.toon import ToonHeadFrame
 
 class DistributedGolfCourse(DistributedObject.DistributedObject, FSM, DelayDeletable):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedGolfCourse')
     defaultTransitions = {'Off': ['Join'],
      'Join': ['WaitStartHole', 'Cleanup'],

@@ -3,7 +3,6 @@ from direct.distributed import DistributedObject
 from otp.speedchat import SpeedChatGlobals
 
 class DistributedScavengerHuntTarget(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedScavengerHuntTarget')
 
     def __init__(self, cr):

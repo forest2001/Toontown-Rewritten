@@ -6,7 +6,6 @@ from direct.fsm import State
 from toontown.toonbase import TTLocalizer
 
 class DistributedMinigameTemplate(DistributedMinigame):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedMinigame.__init__(self, cr)

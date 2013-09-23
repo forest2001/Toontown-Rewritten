@@ -3,7 +3,6 @@ from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 
 class FlowerBase:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerBase')
 
     def __init__(self, species, variety):

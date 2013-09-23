@@ -10,7 +10,6 @@ STWainscoting = 3
 NUM_ST_TYPES = 4
 
 class CatalogSurfaceItem(CatalogAtticItem.CatalogAtticItem):
-    __module__ = __name__
 
     def makeNewItem(self):
         CatalogAtticItem.CatalogAtticItem.makeNewItem(self)

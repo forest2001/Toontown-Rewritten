@@ -4,7 +4,6 @@ import DropScheduler
 from toontown.parties.PartyGlobals import CatchActivityDuration as PartyCatchDuration
 
 class DropPlacer:
-    __module__ = __name__
 
     def __init__(self, game, numPlayers, dropTypes, startTime = None):
         self.game = game
@@ -56,7 +55,6 @@ class DropPlacer:
 
 
 class RandomDropPlacer(DropPlacer):
-    __module__ = __name__
 
     def __init__(self, game, numPlayers, dropTypes, startTime = None):
         DropPlacer.__init__(self, game, numPlayers, dropTypes, startTime=startTime)
@@ -69,7 +67,6 @@ class RandomDropPlacer(DropPlacer):
 
 
 class RegionDropPlacer(DropPlacer):
-    __module__ = __name__
     DropRegionTables = [[[1,
        1,
        2,
@@ -927,7 +924,6 @@ class RegionDropPlacer(DropPlacer):
 
 
 class PartyRegionDropPlacer(RegionDropPlacer):
-    __module__ = __name__
 
     def __init__(self, game, numPlayers, generationId, dropTypes, startTime = None):
         self.generationId = generationId
@@ -941,7 +937,6 @@ class PartyRegionDropPlacer(RegionDropPlacer):
 
 
 class PathDropPlacer(DropPlacer):
-    __module__ = __name__
 
     def __init__(self, game, numPlayers, dropTypes, startTime = None):
         DropPlacer.__init__(self, game, numPlayers, dropTypes, startTime=startTime)

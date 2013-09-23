@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedDale(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedDale')
 
     def __init__(self, cr):

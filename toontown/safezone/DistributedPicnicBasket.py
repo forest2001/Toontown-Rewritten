@@ -18,7 +18,6 @@ from direct.showbase import RandomNumGen
 from toontown.battle.BattleSounds import *
 
 class DistributedPicnicBasket(DistributedObject.DistributedObject):
-    __module__ = __name__
     seatState = Enum('Empty, Full, Eating')
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPicnicBasket')
 

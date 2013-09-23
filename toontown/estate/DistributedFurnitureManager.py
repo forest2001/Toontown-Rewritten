@@ -4,7 +4,6 @@ from toontown.catalog import CatalogItemList
 from direct.directnotify.DirectNotifyGlobal import *
 
 class DistributedFurnitureManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedFurnitureManager')
 
     def __init__(self, cr):

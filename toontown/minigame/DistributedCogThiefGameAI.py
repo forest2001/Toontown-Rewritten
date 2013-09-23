@@ -10,7 +10,6 @@ from toontown.minigame import CogThiefGameGlobals
 CTGG = CogThiefGameGlobals
 
 class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedCogThiefGameAI')
     ExplodeWaitTime = 6.0 + CTGG.LyingDownDuration
 

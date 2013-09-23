@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
 
 class CatalogPoleItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
 
     def makeNewItem(self, rodId):

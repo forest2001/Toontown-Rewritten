@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.hood import ZoneUtil
 
 class HoodMgr(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('HoodMgr')
     ToontownCentralInitialDropPoints = ([-90.7,
       -60.0,

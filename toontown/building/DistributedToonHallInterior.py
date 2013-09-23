@@ -18,7 +18,6 @@ from toontown.toon import ToonDNA
 from toontown.toon import ToonHead
 
 class DistributedToonHallInterior(DistributedToonInterior):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedToonInterior.__init__(self, cr)

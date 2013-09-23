@@ -9,7 +9,6 @@ import CCharPaths
 from toontown.toonbase import ToontownGlobals
 
 class CharNeutralState(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CharNeutralState')
 
     def __init__(self, doneEvent, character):
@@ -41,7 +40,6 @@ class CharNeutralState(StateData.StateData):
 
 
 class CharWalkState(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CharWalkState')
 
     def __init__(self, doneEvent, character, diffPath = None):
@@ -140,7 +138,6 @@ class CharWalkState(StateData.StateData):
 
 
 class CharFollowChipState(CharWalkState):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CharFollowChipState')
     completeRevolutionDistance = 13
 

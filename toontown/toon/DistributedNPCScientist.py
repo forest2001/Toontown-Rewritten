@@ -3,7 +3,6 @@ from toontown.toonbase import TTLocalizer, ToontownGlobals
 import DistributedNPCToonBase
 
 class DistributedNPCScientist(DistributedNPCToonBase.DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.DistributedNPCToonBase.__init__(self, cr)

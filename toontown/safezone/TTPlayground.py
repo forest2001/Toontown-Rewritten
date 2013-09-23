@@ -7,7 +7,6 @@ from direct.task.Task import Task
 from toontown.hood import ZoneUtil
 
 class TTPlayground(Playground.Playground):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)

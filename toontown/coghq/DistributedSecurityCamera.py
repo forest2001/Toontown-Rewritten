@@ -38,7 +38,6 @@ def getCirclePoints(segCount, centerX, centerY, radius, wideX = 1.0, wideY = 1.0
 
 
 class DistributedSecurityCamera(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSecurityCamera')
     laserFieldModels = ['phase_9/models/cogHQ/square_stomper']
 

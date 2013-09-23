@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.coghq import DistributedMintRoom, MintLayout, MintRoom
 
 class DistributedMint(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMint')
     ReadyPost = 'MintReady'
     WinEvent = 'MintWinEvent'

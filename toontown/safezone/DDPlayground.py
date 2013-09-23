@@ -9,7 +9,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import Place
 
 class DDPlayground(Playground.Playground):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DDPlayground')
 
     def __init__(self, loader, parentFSM, doneEvent):

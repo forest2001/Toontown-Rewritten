@@ -8,7 +8,6 @@ import FishBase
 import FishPicker
 
 class FishSellGUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishGui')
 
     def __init__(self, doneEvent):

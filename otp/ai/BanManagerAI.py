@@ -4,7 +4,6 @@ from pandac.PandaModules import HTTPClient, Ramfile
 from direct.directnotify import DirectNotifyGlobal
 
 class BanManagerAI:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BanManagerAI')
     BanUrl = simbase.config.GetString('ban-base-url', 'http://vapps.disl.starwave.com:8005/dis-hold/action/event')
     App = simbase.config.GetString('ban-app-name', 'TTWorldAI')

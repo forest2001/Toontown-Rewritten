@@ -3,7 +3,6 @@ from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
 
 class GoonClipPlane(BasicEntities.NodePathEntity):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         BasicEntities.NodePathEntity.__init__(self, level, entId)

@@ -5,7 +5,6 @@ from direct.interval.IntervalGlobal import *
 from otp.avatar import ShadowCaster
 
 class DroppedGag(NodePath, ShadowCaster.ShadowCaster):
-    __module__ = __name__
 
     def __init__(self, name, geom):
         NodePath.__init__(self, name)

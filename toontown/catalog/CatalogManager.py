@@ -2,7 +2,6 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 
 class CatalogManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogManager')
     neverDisable = 1
 

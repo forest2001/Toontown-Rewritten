@@ -7,7 +7,6 @@ def decodeSCStaticTextMsg(textId):
 
 
 class SCStaticTextTerminal(SCTerminal):
-    __module__ = __name__
 
     def __init__(self, textId):
         SCTerminal.__init__(self)

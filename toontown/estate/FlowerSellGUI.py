@@ -8,7 +8,6 @@ import FlowerBase
 import FlowerPicker
 
 class FlowerSellGUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerGui')
 
     def __init__(self, doneEvent):

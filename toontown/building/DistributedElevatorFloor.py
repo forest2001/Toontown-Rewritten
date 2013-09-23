@@ -14,7 +14,6 @@ from direct.fsm.FSM import FSM
 from direct.task import Task
 
 class DistributedElevatorFloor(DistributedElevatorFSM.DistributedElevatorFSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevatorFloor')
     defaultTransitions = {'Off': ['Opening', 'Closed'],
      'Opening': ['WaitEmpty',

@@ -13,7 +13,6 @@ def releasePetManager():
 
 
 class PetManager:
-    __module__ = __name__
     CollTaskName = 'petFloorCollisions'
 
     def __init__(self):

@@ -29,7 +29,6 @@ from toontown.racing import EffectManager
 from toontown.racing import PiejectileManager
 
 class DistributedRace(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRace')
     ReadyPost = 'RaceReady'
     WinEvent = 'RaceWinEvent'

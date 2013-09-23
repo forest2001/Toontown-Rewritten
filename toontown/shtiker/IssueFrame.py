@@ -17,7 +17,6 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 600
 
 class IssueFrame(DirectFrame):
-    __module__ = __name__
     NewsBaseDir = config.GetString('news-base-dir', '/httpNews')
     FrameDimensions = (-1.30666637421,
      1.30666637421,

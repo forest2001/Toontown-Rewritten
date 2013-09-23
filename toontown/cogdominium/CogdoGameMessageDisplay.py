@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 import CogdoGameConsts
 
 class CogdoGameMessageDisplay:
-    __module__ = __name__
     UpdateMessageTaskName = 'MessageDisplay.updateMessage'
 
     def __init__(self, name, parent, pos = (0.0, 0.0, -0.5), scale = 0.09, color = (1.0, 1.0, 0, 1), sfx = None):

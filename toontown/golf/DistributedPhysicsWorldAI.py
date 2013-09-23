@@ -9,7 +9,6 @@ import math
 from toontown.golf import PhysicsWorldBase
 
 class DistributedPhysicsWorldAI(DistributedObjectAI.DistributedObjectAI, PhysicsWorldBase.PhysicsWorldBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhysicsWorldAI')
 
     def __init__(self, air):

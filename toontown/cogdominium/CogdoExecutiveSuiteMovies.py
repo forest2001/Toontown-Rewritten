@@ -14,7 +14,6 @@ from CogdoUtil import CogdoGameMovie
 import CogdoUtil
 
 class CogdoExecutiveSuiteIntro(CogdoGameMovie):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoExecutiveSuiteIntro')
     introDuration = 7
     cameraMoveDuration = 3

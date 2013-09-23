@@ -11,7 +11,6 @@ from toontown.parties import Party
 from toontown.parties.PartyGlobals import FireworksStartedEvent, FireworksFinishedEvent
 
 class PartyLoader(SafeZoneLoader.SafeZoneLoader):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyLoader')
 
     def __init__(self, hood, parentFSM, doneEvent):

@@ -56,7 +56,6 @@ PageOrder = ['sixToons',
  'useGags']
 
 class TeaserPanel(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TeaserPanel')
 
     def __init__(self, pageName, doneFunc = None):
@@ -159,7 +158,6 @@ class TeaserPanel(DirectObject):
 
 
 class FeatureBrowser(DirectScrolledList):
-    __module__ = __name__
 
     def __init__(self, parent = aspect2dp, **kw):
         self.parent = parent

@@ -15,7 +15,6 @@ from toontown.toontowngui import TTDialog
 BG = BingoGlobals
 
 class BingoCardGui(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BingoCardGui')
 
     def __init__(self, parent = aspect2d, **kw):

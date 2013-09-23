@@ -14,7 +14,6 @@ from pandac.PandaModules import DecalEffect
 aspectSF = 0.7227
 
 class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SellbotCogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

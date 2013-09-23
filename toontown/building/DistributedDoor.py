@@ -20,7 +20,6 @@ if __debug__:
     import pdb
 
 class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

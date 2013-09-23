@@ -16,7 +16,6 @@ from toontown.toontowngui import TeaserPanel
 from toontown.building import BoardingGroupShow
 
 class DistributedElevator(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevator')
     JumpOutOffsets = JumpOutOffsets
 

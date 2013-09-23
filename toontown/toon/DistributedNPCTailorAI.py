@@ -7,7 +7,6 @@ from toontown.ai import DatabaseObject
 from toontown.estate import ClosetGlobals
 
 class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
     freeClothes = simbase.config.GetBool('free-clothes', 0)
     housingEnabled = simbase.config.GetBool('want-housing', 1)
 

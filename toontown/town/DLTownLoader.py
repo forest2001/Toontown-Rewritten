@@ -3,7 +3,6 @@ import DLStreet
 from toontown.suit import Suit
 
 class DLTownLoader(TownLoader.TownLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         TownLoader.TownLoader.__init__(self, hood, parentFSM, doneEvent)

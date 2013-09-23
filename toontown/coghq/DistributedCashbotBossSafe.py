@@ -6,7 +6,6 @@ from otp.otpbase import OTPGlobals
 import DistributedCashbotBossObject
 
 class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbotBossObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossSafe')
     grabPos = (0, 0, -8.2)
     craneFrictionCoef = 0.2

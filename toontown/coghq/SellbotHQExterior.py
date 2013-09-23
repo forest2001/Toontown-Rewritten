@@ -2,7 +2,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import CogHQExterior
 
 class SellbotHQExterior(CogHQExterior.CogHQExterior):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SellbotHQExterior')
 
     def enter(self, requestStatus):

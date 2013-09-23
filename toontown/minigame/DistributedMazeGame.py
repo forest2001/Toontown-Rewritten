@@ -24,7 +24,6 @@ import MinigameAvatarScorePanel
 import MinigameGlobals
 
 class DistributedMazeGame(DistributedMinigame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedMazeGame')
     CAMERA_TASK = 'MazeGameCameraTask'
     UPDATE_SUITS_TASK = 'MazeGameUpdateSuitsTask'

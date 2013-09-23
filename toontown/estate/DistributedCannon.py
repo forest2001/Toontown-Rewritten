@@ -51,7 +51,6 @@ INITIAL_VELOCITY = 80.0
 WHISTLE_SPEED = INITIAL_VELOCITY * 0.35
 
 class DistributedCannon(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCannon')
     font = ToontownGlobals.getToonFont()
     LOCAL_CANNON_MOVE_TASK = 'localCannonMoveTask'

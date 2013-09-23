@@ -6,7 +6,6 @@ from direct.interval.IntervalGlobal import *
 LoyaltyEmoteItems = (20, 21, 22, 23, 24)
 
 class CatalogEmoteItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
     pictureToon = None
 

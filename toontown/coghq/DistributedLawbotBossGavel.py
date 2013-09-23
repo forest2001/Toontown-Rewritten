@@ -12,7 +12,6 @@ from otp.otpbase import OTPGlobals
 from direct.actor import Actor
 
 class DistributedLawbotBossGavel(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBossGavel')
 
     def __init__(self, cr):

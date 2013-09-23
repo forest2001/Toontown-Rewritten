@@ -21,7 +21,6 @@ from toontown.building import ToonInteriorColors
 from direct.showbase.MessengerGlobal import messenger
 
 class DistributedHouse(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedHouse')
 
     def __init__(self, cr):

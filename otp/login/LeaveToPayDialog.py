@@ -6,7 +6,6 @@ from pandac.PandaModules import *
 import os
 
 class LeaveToPayDialog:
-    __module__ = __name__
 
     def __init__(self, paidUser, destructorHook = None, doneFunc = None):
         self.destructorHook = destructorHook

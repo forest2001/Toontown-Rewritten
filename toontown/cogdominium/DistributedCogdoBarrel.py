@@ -5,7 +5,6 @@ from toontown.toonbase import ToontownGlobals, ToontownIntervals
 from toontown.cogdominium import CogdoBarrelRoomConsts
 
 class DistributedCogdoBarrel(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogdoBarrel')
 
     def __init__(self, cr):

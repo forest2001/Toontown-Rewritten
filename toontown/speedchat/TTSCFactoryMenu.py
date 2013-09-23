@@ -46,7 +46,6 @@ GLOBAL_MSGS = [1700,
  1704]
 
 class TTSCFactoryMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

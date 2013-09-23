@@ -6,7 +6,6 @@ from toontown.hood import Place
 from toontown.toonbase import ToontownGlobals
 
 class BRPlayground(Playground.Playground):
-    __module__ = __name__
     STILL = 1
     RUN = 2
     ROTATE = 3

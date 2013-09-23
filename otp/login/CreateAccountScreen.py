@@ -13,7 +13,6 @@ from otp.otpbase import OTPGlobals
 from direct.distributed.MsgTypes import *
 
 class CreateAccountScreen(StateData.StateData, GuiScreen.GuiScreen):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CreateAccountScreen')
     ActiveEntryColor = Vec4(1, 1, 1, 1)
     InactiveEntryColor = Vec4(0.8, 0.8, 0.8, 1)

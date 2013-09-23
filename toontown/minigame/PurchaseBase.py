@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toontowngui.TeaserPanel import TeaserPanel
 
 class PurchaseBase(StateData.StateData):
-    __module__ = __name__
     activateMode = 'purchase'
 
     def __init__(self, toon, doneEvent):

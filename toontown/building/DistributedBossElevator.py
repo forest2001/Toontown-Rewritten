@@ -14,7 +14,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 
 class DistributedBossElevator(DistributedElevatorExt.DistributedElevatorExt):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedElevatorExt.DistributedElevatorExt.__init__(self, cr)

@@ -32,7 +32,6 @@ if __debug__:
     import pdb
 
 class ToontownMagicWordManager(MagicWordManager.MagicWordManager):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownMagicWordManager')
     neverDisable = 1
     GameAvatarClass = DistributedToon.DistributedToon

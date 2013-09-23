@@ -14,7 +14,6 @@ from toontown.toontowngui import TTDialog
 import CogDisguiseGlobals
 
 class DistributedMintElevatorExt(DistributedElevatorExt.DistributedElevatorExt):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedElevatorExt.DistributedElevatorExt.__init__(self, cr)

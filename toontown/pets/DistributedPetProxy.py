@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 import string
 
 class DistributedPetProxy(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPetProxy')
 
     def __init__(self, cr):

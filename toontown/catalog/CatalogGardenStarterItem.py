@@ -8,7 +8,6 @@ from toontown.toontowngui import TTDialog
 from toontown.estate import GardenTutorial
 
 class CatalogGardenStarterItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self):
         CatalogItem.CatalogItem.makeNewItem(self)

@@ -15,7 +15,6 @@ GardenPage_Specials = 3
 TROPHIES_PER_ROW = 5
 
 class GardenPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GardenPage')
 
     def __init__(self):
@@ -353,7 +352,6 @@ class GardenPage(ShtikerPage.ShtikerPage):
 
 
 class GardenTrophy(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GardenTrophy')
 
     def __init__(self, level):

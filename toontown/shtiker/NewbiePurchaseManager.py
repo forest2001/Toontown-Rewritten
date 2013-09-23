@@ -3,7 +3,6 @@ from toontown.quest import QuestParser
 from toontown.toon import NPCToons
 
 class NewbiePurchaseManager(PurchaseManager.PurchaseManager):
-    __module__ = __name__
 
     def setOwnedNewbieId(self, ownedNewbieId):
         self.ownedNewbieId = ownedNewbieId

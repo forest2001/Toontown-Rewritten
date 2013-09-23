@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 import BasicEntities
 
 class EntrancePoint(BasicEntities.NodePathEntity):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         BasicEntities.NodePathEntity.__init__(self, level, entId)

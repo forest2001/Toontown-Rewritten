@@ -12,7 +12,6 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 notify = directNotify.newCategory('UserFunnel')
 
 class UserFunnel:
-    __module__ = __name__
 
     def __init__(self):
         self.hitboxAcct = 'DM53030620EW'
@@ -332,7 +331,6 @@ def getVRSFunnelURL():
 
 
 class HitBoxCookie:
-    __module__ = __name__
 
     def __init__(self):
         self.ieCookieDir = os.getenv('USERPROFILE') + '\\Cookies'

@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.coghq.FoodBeltBase import FoodBeltBase
 
 class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBeltBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFoodBelt')
     BeltSpeed = 5
     OnDuration = 300

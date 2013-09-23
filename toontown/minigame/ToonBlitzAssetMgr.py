@@ -6,7 +6,6 @@ from toontown.minigame import ToonBlitzGlobals, TwoDBlock
 from pandac.PandaModules import CardMaker
 
 class ToonBlitzAssetMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonBlitzAssets')
 
     def __init__(self, game):

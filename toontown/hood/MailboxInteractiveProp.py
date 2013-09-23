@@ -6,7 +6,6 @@ from toontown.hood import GenericAnimatedProp
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals, TTLocalizer
 
 class MailboxInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MailboxInteractiveProp')
     BattleCheerText = TTLocalizer.InteractivePropTrackBonusTerms[ToontownBattleGlobals.THROW_TRACK]
     ZoneToIdles = {ToontownGlobals.ToontownCentral: (('tt_a_ara_ttc_mailbox_idle0',

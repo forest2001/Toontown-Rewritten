@@ -10,7 +10,6 @@ Models = {ToontownGlobals.ToontownCentral: 'phase_4/models/props/icecream',
  ToontownGlobals.DonaldsDreamland: 'phase_8/models/props/zzz_treasure'}
 
 class DistributedCashbotBossTreasure(DistributedSZTreasure.DistributedSZTreasure):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedSZTreasure.DistributedSZTreasure.__init__(self, cr)

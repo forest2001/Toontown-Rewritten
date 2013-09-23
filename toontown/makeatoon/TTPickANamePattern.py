@@ -4,7 +4,6 @@ from toontown.makeatoon.NameGenerator import NameGenerator
 import types
 
 class TTPickANamePattern(PickANamePatternTwoPartLastName):
-    __module__ = __name__
     NameParts = None
     LastNamePrefixesCapped = None
 

@@ -5,7 +5,6 @@ import random
 from toontown.launcher import DownloadForceAcknowledge
 
 class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
-    __module__ = __name__
 
     def __init__(self, hood, parentFSM, doneEvent):
         SafeZoneLoader.SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)

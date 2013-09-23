@@ -22,7 +22,6 @@ def getStopLookedAtByOtherEvent(lookedAtAvId):
 
 
 class PetLookerAI:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetLookerAI')
 
     def __init__(self):

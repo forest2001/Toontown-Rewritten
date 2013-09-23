@@ -6,7 +6,6 @@ import GardenGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedPlantBase(DistributedLawnDecor.DistributedLawnDecor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPlantBase')
 
     def __init__(self, cr):

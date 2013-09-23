@@ -26,7 +26,6 @@ def recurseParent(intoNode, ParentName):
 
 
 class DistributedLawnDecor(DistributedNode.DistributedNode, NodePath, ShadowCaster.ShadowCaster):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawnDecor')
 
     def __init__(self, cr):

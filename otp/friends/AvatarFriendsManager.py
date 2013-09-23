@@ -5,7 +5,6 @@ from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 
 class AvatarFriendsManager(DistributedObjectGlobal):
-    __module__ = __name__
     notify = directNotify.newCategory('AvatarFriendsManager')
 
     def __init__(self, cr):

@@ -9,7 +9,6 @@ from direct.task import Task
 smileyDoId = 1
 
 class DistCogdoCraneObject(DistributedSmoothNode.DistributedSmoothNode, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistCogdoCraneObject')
     wantsWatchDrift = 1
 

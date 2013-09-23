@@ -6,7 +6,6 @@ from direct.distributed.PyDatagram import PyDatagram
 from TTAccount import TTAccountException
 
 class LoginTTSpecificDevAccount(LoginTTAccount.LoginTTAccount):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LoginTTSpecificDevAccount')
 
     def __init__(self, cr):

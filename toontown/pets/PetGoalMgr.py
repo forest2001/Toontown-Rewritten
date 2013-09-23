@@ -6,7 +6,6 @@ from toontown.pets import PetConstants
 import random
 
 class PetGoalMgr(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetGoalMgr')
 
     def __init__(self, pet):

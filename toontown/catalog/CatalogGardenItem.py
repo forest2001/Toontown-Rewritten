@@ -8,7 +8,6 @@ from direct.actor import Actor
 from pandac.PandaModules import NodePath
 
 class CatalogGardenItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
 
     def makeNewItem(self, itemIndex = 0, count = 3, tagCode = 1):

@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 import FlowerPanel
 
 class FlowerPicker(DirectScrolledList):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerPicker')
 
     def __init__(self, parent = aspect2d, **kw):

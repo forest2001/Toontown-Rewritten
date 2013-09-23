@@ -10,7 +10,6 @@ from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 
 class DistributedNPCPetclerk(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

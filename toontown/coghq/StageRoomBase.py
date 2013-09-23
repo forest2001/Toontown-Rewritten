@@ -1,7 +1,6 @@
 from toontown.toonbase import ToontownGlobals
 
 class StageRoomBase:
-    __module__ = __name__
 
     def __init__(self):
         pass

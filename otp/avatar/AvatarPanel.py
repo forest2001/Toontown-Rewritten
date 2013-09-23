@@ -5,7 +5,6 @@ import Avatar
 from direct.distributed import DistributedObject
 
 class AvatarPanel(DirectObject.DirectObject):
-    __module__ = __name__
     currentAvatarPanel = None
 
     def __init__(self, avatar, FriendsListPanel = None):

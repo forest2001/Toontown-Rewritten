@@ -2,7 +2,6 @@ from direct.showbase.DirectObject import DirectObject
 from direct.showbase import GarbageReport
 
 class GarbageLeakServerEventAggregator(DirectObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         self.cr = cr

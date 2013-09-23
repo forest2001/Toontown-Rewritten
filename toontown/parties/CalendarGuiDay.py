@@ -20,7 +20,6 @@ def myStrftime(myTime):
 
 
 class CalendarGuiDay(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('CalendarGuiDay')
     ScrollListTextSize = 0.03
 
@@ -528,7 +527,6 @@ class CalendarGuiDay(DirectFrame):
 
 
 class MiniInviteVisual(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, parent, partyInfo):
         DirectFrame.__init__(self, parent, pos=(0.1, 0, -0.018))

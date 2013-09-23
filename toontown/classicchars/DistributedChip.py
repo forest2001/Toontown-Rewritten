@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedChip(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedChip')
 
     def __init__(self, cr):

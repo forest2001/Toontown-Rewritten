@@ -13,7 +13,6 @@ from toontown.minigame import MinigameAvatarScorePanel
 from toontown.minigame import IceTreasure
 
 class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIceWorld.DistributedIceWorld):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedIceGame')
     MaxLocalForce = 100
     MaxPhysicsForce = 25000

@@ -15,7 +15,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
 class SuitInterior(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitInterior')
 
     def __init__(self, loader, parentFSM, doneEvent):

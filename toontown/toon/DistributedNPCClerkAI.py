@@ -4,7 +4,6 @@ from pandac.PandaModules import *
 from DistributedNPCToonBaseAI import *
 
 class DistributedNPCClerkAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)

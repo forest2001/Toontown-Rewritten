@@ -4,7 +4,6 @@ from toontown.toonbase import TTLocalizer
 import CogDisguiseGlobals
 
 class DistributedSellbotHQDoor(DistributedCogHQDoor.DistributedCogHQDoor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSellbotHQDoor')
 
     def __init__(self, cr):

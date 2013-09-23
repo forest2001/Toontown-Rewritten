@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import Vec3, Vec4, PlaneNode, Plane, Point3, TextNode, VBase4, NodePath
 
 class ScrolledFriendList(DirectScrolledList):
-    __module__ = __name__
 
     def __init__(self, parent, gui, clickCallback = None, makeItemsCheckBoxes = False):
         self.makeItemsCheckBoxes = makeItemsCheckBoxes

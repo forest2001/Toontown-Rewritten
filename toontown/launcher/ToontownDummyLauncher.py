@@ -3,7 +3,6 @@ from otp.launcher.DummyLauncherBase import DummyLauncherBase
 from toontown.launcher.ToontownLauncher import ToontownLauncher
 
 class ToontownDummyLauncher(DummyLauncherBase, ToontownLauncher):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownDummyLauncher')
 
     def __init__(self):

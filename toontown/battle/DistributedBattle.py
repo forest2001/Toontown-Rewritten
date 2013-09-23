@@ -15,7 +15,6 @@ from toontown.distributed import DelayDelete
 import random
 
 class DistributedBattle(DistributedBattleBase.DistributedBattleBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattle')
     camFOFov = ToontownBattleGlobals.BattleCamFaceOffFov
     camFOPos = ToontownBattleGlobals.BattleCamFaceOffPos

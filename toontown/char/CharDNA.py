@@ -26,7 +26,6 @@ charTypes = ['mk',
  'jda']
 
 class CharDNA(AvatarDNA.AvatarDNA):
-    __module__ = __name__
 
     def __init__(self, str = None, type = None, dna = None, r = None, b = None, g = None):
         if str != None:

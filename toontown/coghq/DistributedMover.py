@@ -15,7 +15,6 @@ import random
 from math import *
 
 class DistributedMover(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMover')
     laserFieldModels = ['phase_9/models/cogHQ/square_stomper']
 

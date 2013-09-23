@@ -11,7 +11,6 @@ import copy
 BATTLE_TRICK_HP_MULTIPLIER = 10.0
 
 class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPetProxyAI')
 
     def __init__(self, air):

@@ -3,7 +3,6 @@ import DistributedEntity
 from pandac.PandaModules import NodePath
 
 class NodePathEntityBase:
-    __module__ = __name__
 
     def initNodePathAttribs(self, doReparent = 1):
         self.callSetters('pos', 'x', 'y', 'z', 'hpr', 'h', 'p', 'r', 'scale', 'sx', 'sy', 'sz')
@@ -23,7 +22,6 @@ class NodePathEntityBase:
 
 
 class NodePathAttribs(NodePathEntityBase):
-    __module__ = __name__
 
     def initNodePathAttribs(self, doReparent = 1):
         NodePathEntityBase.initNodePathAttribs(self, doReparent)
@@ -36,7 +34,6 @@ class NodePathAttribs(NodePathEntityBase):
 
 
 class NodePathAndAttribs(NodePathEntityBase, NodePath):
-    __module__ = __name__
 
     def __init__(self):
         node = hidden.attachNewNode('EntityNodePath')
@@ -54,7 +51,6 @@ class NodePathAndAttribs(NodePathEntityBase, NodePath):
 
 
 class NodePathAttribsProxy(NodePathEntityBase):
-    __module__ = __name__
 
     def initNodePathAttribs(self, doReparent = 1):
         NodePathEntityBase.initNodePathAttribs(self, doReparent)
@@ -103,7 +99,6 @@ class NodePathAttribsProxy(NodePathEntityBase):
 
 
 class NodePathEntity(Entity.Entity, NodePath, NodePathAttribs):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         node = hidden.attachNewNode('NodePathEntity')
@@ -118,7 +113,6 @@ class NodePathEntity(Entity.Entity, NodePath, NodePathAttribs):
 
 
 class DistributedNodePathEntity(DistributedEntity.DistributedEntity, NodePath, NodePathAttribs):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedEntity.DistributedEntity.__init__(self, cr)

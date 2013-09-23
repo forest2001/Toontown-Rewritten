@@ -8,7 +8,6 @@ from toontown.racing.KartDNA import *
 from toontown.toonbase import TTLocalizer
 
 class Kart(NodePath, ShadowCaster.ShadowCaster):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Kart')
     index = 0
     baseScale = 2.0

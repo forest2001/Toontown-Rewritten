@@ -2,7 +2,6 @@ from pandac.PandaModules import *
 from DistributedNPCToon import *
 
 class DistributedNPCFlippyInToonHall(DistributedNPCToon):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToon.__init__(self, cr)

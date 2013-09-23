@@ -20,7 +20,6 @@ from toontown.toonbase import TTLocalizer
 import time
 
 class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPondBingoManager')
     cardTypeDict = {BingoGlobals.NORMAL_CARD: NormalBingo.NormalBingo,
      BingoGlobals.FOURCORNER_CARD: FourCornerBingo.FourCornerBingo,

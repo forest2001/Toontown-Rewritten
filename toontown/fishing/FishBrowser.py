@@ -7,7 +7,6 @@ import GenusPanel
 import FishGlobals
 
 class FishBrowser(DirectScrolledList):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishBrowser')
 
     def __init__(self, parent = aspect2d, **kw):

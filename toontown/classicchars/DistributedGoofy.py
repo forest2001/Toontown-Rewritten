@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedGoofy(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGoofy')
 
     def __init__(self, cr):

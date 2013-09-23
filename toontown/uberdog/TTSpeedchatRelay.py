@@ -5,7 +5,6 @@ from otp.uberdog.SpeedchatRelay import SpeedchatRelay
 from otp.uberdog import SpeedchatRelayGlobals
 
 class TTSpeedchatRelay(SpeedchatRelay):
-    __module__ = __name__
 
     def __init__(self, cr):
         SpeedchatRelay.__init__(self, cr)

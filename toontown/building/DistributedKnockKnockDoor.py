@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
 
 class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedAnimatedProp.DistributedAnimatedProp.__init__(self, cr)

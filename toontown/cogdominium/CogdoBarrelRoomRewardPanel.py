@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.cogdominium import CogdoBarrelRoomConsts
 
 class CogdoBarrelRoomRewardPanel(DirectFrame):
-    __module__ = __name__
 
     def __init__(self):
         DirectFrame.__init__(self, relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=TTLocalizer.RPdirectFrame, pos=(0, 0, 0.587))

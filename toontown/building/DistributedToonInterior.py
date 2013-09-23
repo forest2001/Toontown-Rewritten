@@ -21,7 +21,6 @@ SIGN_TOP = 1.5
 FrameScale = 1.4
 
 class DistributedToonInterior(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

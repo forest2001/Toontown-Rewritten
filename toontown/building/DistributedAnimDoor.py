@@ -7,7 +7,6 @@ if __debug__:
     import pdb
 
 class DistributedAnimDoor(DistributedDoor.DistributedDoor):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedDoor.DistributedDoor.__init__(self, cr)

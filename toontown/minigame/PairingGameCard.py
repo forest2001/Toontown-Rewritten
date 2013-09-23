@@ -4,7 +4,6 @@ from pandac.PandaModules import NodePath, Vec3
 from direct.interval.IntervalGlobal import LerpHprInterval, Parallel, SoundInterval
 
 class PairingGameCard(PlayingCardNodePath):
-    __module__ = __name__
     DoIntervalDefault = True
     FlipTime = 0.25
     UseDifferentCardColors = True

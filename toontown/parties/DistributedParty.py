@@ -15,7 +15,6 @@ from toontown.parties.Decoration import Decoration
 import PartyUtils
 
 class DistributedParty(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedParty')
     generatedEvent = 'distributedPartyGenerated'
 

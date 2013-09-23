@@ -7,7 +7,6 @@ from pandac.PandaModules import *
 import FactoryExterior
 
 class BossbotOfficeExterior(FactoryExterior.FactoryExterior):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LawbotOfficeExterior')
 
     def enterWalk(self, teleportIn = 0):

@@ -28,7 +28,6 @@ FlooringTypes = {1000: ('phase_5.5/maps/floor_wood_neutral.jpg', CTBasicWoodColo
  11010: ('phase_5.5/maps/StPatsFloor2.jpg', CTWhite, 225)}
 
 class CatalogFlooringItem(CatalogSurfaceItem):
-    __module__ = __name__
 
     def makeNewItem(self, patternIndex, colorIndex = None):
         self.patternIndex = patternIndex

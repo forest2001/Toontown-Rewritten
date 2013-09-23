@@ -7,7 +7,6 @@ import PatternGameGlobals
 import copy
 
 class DistributedPatternGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

@@ -3,7 +3,6 @@ from direct.distributed.PyDatagram import PyDatagram
 import random
 
 class ClsendTracker:
-    __module__ = __name__
     clsendNotify = directNotify.newCategory('clsend')
     NumTrackersLoggingOverflow = 0
     MaxTrackersLoggingOverflow = config.GetInt('max-clsend-loggers', 5)

@@ -3,12 +3,10 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 import random
 
 class NonRepeatableRandomSourceUD(DistributedObjectGlobalUD):
-    __module__ = __name__
     notify = directNotify.newCategory('NonRepeatableRandomSourceUD')
     RandomNumberCacheSize = 2000000
 
     class Request(ScratchPad):
-        __module__ = __name__
 
         def __init__(self, replyTo, replyToClass, context, num):
             ScratchPad.__init__(self, replyTo=replyTo, replyToClass=replyToClass, context=context, num=num, randoms=[])

@@ -9,7 +9,6 @@ from toontown.estate import Estate
 from pandac.PandaModules import Vec4, loadDNAFile, CSDefault, TransformState, NodePath, TransparencyAttrib
 
 class HalloweenHolidayDecorator(HolidayDecorator.HolidayDecorator):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('HalloweenHolidayDecorator')
 
     def __init__(self):

@@ -5,7 +5,6 @@ from toontown.battle.BattleProps import globalPropPool
 from toontown.battle import BattleParticles
 
 class Splash(NodePath):
-    __module__ = __name__
     splashCount = 0
 
     def __init__(self, parent = hidden, wantParticles = 1):

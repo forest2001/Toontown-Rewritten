@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon import ToonHead
 
 class VineHeadFrame(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, av = None, color = Vec4(1, 1, 1, 1), *args, **kwargs):
         self.panelGeom = DGG.getDefaultDialogGeom()

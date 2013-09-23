@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.building import DistributedBuilding
 
 class DistributedAnimBuilding(DistributedBuilding.DistributedBuilding):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedBuilding.DistributedBuilding.__init__(self, cr)

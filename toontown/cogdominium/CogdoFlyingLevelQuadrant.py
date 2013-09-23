@@ -5,7 +5,6 @@ from CogdoFlyingObjects import CogdoFlyingPlatform
 import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingLevelQuadrant:
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoFlyingLevelQuadrant')
 
     def __init__(self, serialNum, model, level, parent):

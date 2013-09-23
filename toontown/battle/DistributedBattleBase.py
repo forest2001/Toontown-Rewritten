@@ -22,7 +22,6 @@ from toontown.toon import TTEmote
 from otp.avatar import Emote
 
 class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBase')
     id = 0
     camPos = ToontownBattleGlobals.BattleCamDefaultPos

@@ -10,7 +10,6 @@ import HouseGlobals
 import Estate
 
 class EstateManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EstateManager')
     neverDisable = 1
 

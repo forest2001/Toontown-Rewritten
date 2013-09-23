@@ -11,7 +11,6 @@ from otp.level import LevelConstants
 from toontown.distributed.DelayDeletable import DelayDeletable
 
 class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFactorySuit')
 
     def __init__(self, cr):

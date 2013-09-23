@@ -34,7 +34,6 @@ def doorUnlock(self, track, subjectNodePath, duration):
 
 
 class CutScene(BasicEntities.NodePathEntity, DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CutScene')
     effects = {'nothing': nothing,
      'irisInOut': irisInOut,

@@ -331,7 +331,6 @@ ceoMenuStructure = [2300,
  2317]
 
 class TTChatInputSpeedChat(DirectObject.DirectObject):
-    __module__ = __name__
     DefaultSCColorScheme = SCColorScheme()
 
     def __init__(self, chatMgr):

@@ -13,7 +13,6 @@ FishPage_Trophy = 2
 TROPHIES_PER_ROW = 5
 
 class FishPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishPage')
 
     def __init__(self):
@@ -188,7 +187,6 @@ class FishPage(ShtikerPage.ShtikerPage):
 
 
 class FishingTrophy(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishingTrophy')
 
     def __init__(self, level):

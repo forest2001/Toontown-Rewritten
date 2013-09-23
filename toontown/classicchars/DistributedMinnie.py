@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import BRHood
 
 class DistributedMinnie(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMinnie')
 
     def __init__(self, cr):

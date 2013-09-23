@@ -138,7 +138,6 @@ testLayout = [ClubLayout3_0,
 countryClubLayouts = testLayout
 
 class CountryClubLayout:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubLayout')
 
     def __init__(self, countryClubId, floorNum, layoutIndex):

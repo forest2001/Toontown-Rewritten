@@ -6,7 +6,6 @@ from toontown.toonbase.ToontownGlobals import *
 import SkyUtil
 
 class DGHood(ToonHood.ToonHood):
-    __module__ = __name__
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)

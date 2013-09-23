@@ -5,7 +5,6 @@ from otp.otpbase import OTPLocalizer
 from otp.chat import ChatGarbler
 
 class ToonChatGarbler(ChatGarbler.ChatGarbler):
-    __module__ = __name__
     animalSounds = {'dog': TTLocalizer.ChatGarblerDog,
      'cat': TTLocalizer.ChatGarblerCat,
      'mouse': TTLocalizer.ChatGarblerMouse,

@@ -7,7 +7,6 @@ from direct.showbase.PythonUtil import boolEqual
 from otp.otpbase import OTPGlobals
 
 class SCElement(SCObject, NodePath):
-    __module__ = __name__
     font = OTPGlobals.getInterfaceFont()
     SerialNum = 0
 

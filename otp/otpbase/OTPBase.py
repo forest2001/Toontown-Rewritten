@@ -6,7 +6,6 @@ import math
 import re
 
 class OTPBase(ShowBase):
-    __module__ = __name__
 
     def __init__(self, windowType = None):
         self.wantEnviroDR = False

@@ -23,7 +23,6 @@ from CogdoFlyingLegalEagle import CogdoFlyingLegalEagle
 import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingLocalPlayer(CogdoFlyingPlayer):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoFlyingLocalPlayer')
     BroadcastPosTask = 'CogdoFlyingLocalPlayerBroadcastPos'
     PlayWaitingMusicEventName = 'PlayWaitingMusicEvent'

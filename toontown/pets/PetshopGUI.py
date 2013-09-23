@@ -33,11 +33,9 @@ text2Color = Vec4(1, 1, 0.5, 1)
 text3Color = Vec4(0.4, 0.4, 0.4, 1)
 
 class PetshopGUI(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGui')
 
     class GoHomeDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('GoHomeDlg')
 
         def __init__(self, doneEvent):
@@ -53,7 +51,6 @@ class PetshopGUI(DirectObject):
             return
 
     class NamePicker(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGUI.NamePicker')
 
         def __init__(self, doneEvent, petSeed, gender):
@@ -174,7 +171,6 @@ class PetshopGUI(DirectObject):
             self.nameList.scrollTo(self.curNames.index(self.curName))
 
     class MainMenuDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGUI.MainMenuDlg')
 
         def __init__(self, doneEvent):
@@ -211,7 +207,6 @@ class PetshopGUI(DirectObject):
             return
 
     class AdoptPetDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGUI.AdoptPetDlg')
 
         def __init__(self, doneEvent, petSeed, petNameIndex):
@@ -254,7 +249,6 @@ class PetshopGUI(DirectObject):
             self.moneyDisplay['text'] = str(base.localAvatar.getTotalMoney())
 
     class ReturnPetDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGUI.ReturnPetDlg')
 
         def __init__(self, doneEvent):
@@ -298,7 +292,6 @@ class PetshopGUI(DirectObject):
             return
 
     class ChoosePetDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('PetshopGUI.ChoosePetDlg')
 
         def __init__(self, doneEvent, petSeeds):

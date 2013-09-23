@@ -3,7 +3,6 @@ from direct.showbase import DirectObject
 from otp.otpbase import OTPLocalizer
 
 class SpeedChatGMHandler(DirectObject.DirectObject):
-    __module__ = __name__
     scStructure = None
     scList = {}
 

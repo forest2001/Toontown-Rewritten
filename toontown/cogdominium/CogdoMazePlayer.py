@@ -8,7 +8,6 @@ import CogdoUtil
 import random
 
 class CogdoMazePlayer(FSM, CogdoMazeSplattable):
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoMazePlayer')
     _key = None
     GagHitEventName = 'CogdoMazePlayer_GagHit'

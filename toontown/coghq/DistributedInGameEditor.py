@@ -13,7 +13,6 @@ from toontown.cogdominium import CogdoEntityCreator
 import string
 
 class InGameEditorEntityBase(InGameEditorElement):
-    __module__ = __name__
 
     def __init__(self):
         InGameEditorElement.__init__(self)
@@ -55,7 +54,6 @@ class InGameEditorEntityBase(InGameEditorElement):
 
 
 class InGameEditorEntity(Entity.Entity, InGameEditorEntityBase):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         Entity.Entity.__init__(self, level, entId)
@@ -69,7 +67,6 @@ class InGameEditorEntity(Entity.Entity, InGameEditorEntityBase):
 
 
 class InGameEditorEditMgr(EditMgr.EditMgr, InGameEditorEntityBase):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         EditMgr.EditMgr.__init__(self, level, entId)
@@ -80,7 +77,6 @@ class InGameEditorEditMgr(EditMgr.EditMgr, InGameEditorEntityBase):
 
 
 class AttribModifier(Entity.Entity, InGameEditorEntityBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('AttribModifier')
 
     def __init__(self, level, entId):
@@ -124,7 +120,6 @@ def getInGameEditorEntityCreatorClass(level):
     EntCreatorClass = entCreator.__class__
 
     class InGameEditorEntityCreator(EntCreatorClass):
-        __module__ = __name__
 
         def __init__(self, editor):
             EntCreatorClass.__init__(self, editor)
@@ -139,7 +134,6 @@ def getInGameEditorEntityCreatorClass(level):
 
 
 class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, InGameEditorElement):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedInGameEditor')
 
     def __init__(self, cr):

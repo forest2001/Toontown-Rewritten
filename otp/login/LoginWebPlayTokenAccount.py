@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 import LoginTTAccount
 
 class LoginWebPlayTokenAccount(LoginTTAccount.LoginTTAccount):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LoginWebPlayTokenAccount')
 
     def supportsRelogin(self):

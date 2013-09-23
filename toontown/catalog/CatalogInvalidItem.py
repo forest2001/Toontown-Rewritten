@@ -4,7 +4,6 @@ from direct.showbase import PythonUtil
 from toontown.toonbase import ToontownGlobals
 
 class CatalogInvalidItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def requestPurchase(self, phone, callback):
         self.notify.error('Attempt to purchase invalid item.')

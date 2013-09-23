@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 RESIST_INDEX = EmoteFuncDict['Resistance Salute']
 
 class DistributedResistanceEmoteMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedResistanceEmoteMgr')
 
     def __init__(self, cr):

@@ -15,7 +15,6 @@ from otp.launcher.LauncherBase import LauncherBase
 from toontown.toonbase import TTLocalizer
 
 class QuickLauncher(LauncherBase):
-    __module__ = __name__
     GameName = 'Toontown'
     ArgCount = 3
     LauncherPhases = [1,

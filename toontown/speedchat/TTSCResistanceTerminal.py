@@ -7,7 +7,6 @@ def decodeTTSCResistanceMsg(textId):
 
 
 class TTSCResistanceTerminal(SCTerminal):
-    __module__ = __name__
 
     def __init__(self, textId, charges):
         SCTerminal.__init__(self)

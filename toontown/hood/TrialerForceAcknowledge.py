@@ -5,7 +5,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TeaserPanel
 
 class TrialerForceAcknowledge:
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         self.doneEvent = doneEvent

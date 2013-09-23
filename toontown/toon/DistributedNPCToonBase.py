@@ -14,7 +14,6 @@ from direct.interval.IntervalGlobal import *
 import random
 
 class DistributedNPCToonBase(DistributedToon.DistributedToon):
-    __module__ = __name__
 
     def __init__(self, cr):
         try:

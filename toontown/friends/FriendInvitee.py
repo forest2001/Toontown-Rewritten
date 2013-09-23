@@ -9,7 +9,6 @@ from direct.gui.DirectGui import DGG
 from otp.otpbase import OTPGlobals
 
 class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FriendInvitee')
 
     def __init__(self, avId, avName, avDNA, context, **kw):

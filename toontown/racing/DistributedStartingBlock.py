@@ -26,7 +26,6 @@ if __debug__:
     import pdb
 
 class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStartingBlock')
     sphereRadius = 1.5
     id = 0
@@ -519,7 +518,6 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
 
 
 class DistributedViewingBlock(DistributedStartingBlock):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedViewingBlock')
     sphereRadius = 6
 

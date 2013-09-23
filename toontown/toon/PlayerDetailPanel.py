@@ -40,7 +40,6 @@ def unloadPlayerDetail():
 
 
 class PlayerDetailPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonAvatarDetailPanel')
 
     def __init__(self, avId, avName, playerId = None, parent = aspect2dp, **kw):

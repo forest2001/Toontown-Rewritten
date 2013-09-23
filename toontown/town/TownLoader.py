@@ -22,7 +22,6 @@ from toontown.hood import ZoneUtil
 from direct.interval.IntervalGlobal import *
 
 class TownLoader(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TownLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

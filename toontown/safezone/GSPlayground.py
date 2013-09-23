@@ -9,7 +9,6 @@ from toontown.racing import RaceGlobals
 from direct.fsm import State
 
 class GSPlayground(Playground.Playground):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)

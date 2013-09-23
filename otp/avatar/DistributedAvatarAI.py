@@ -6,7 +6,6 @@ from direct.distributed import DistributedNodeAI
 from direct.task import Task
 
 class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
-    __module__ = __name__
 
     def __init__(self, air):
         DistributedNodeAI.DistributedNodeAI.__init__(self, air)

@@ -24,7 +24,6 @@ READY_TIMEOUT = MinigameGlobals.MaxLoadTime + MinigameGlobals.rulesDuration + Mi
 EXIT_TIMEOUT = 20.0 + MinigameGlobals.latencyTolerance
 
 class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedMinigameAI')
 
     def __init__(self, air, minigameId):

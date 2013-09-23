@@ -6,7 +6,6 @@ from toontown.effects.Ripples import *
 import random
 
 class FishAnimatedProp(AnimatedProp.AnimatedProp):
-    __module__ = __name__
 
     def __init__(self, node):
         AnimatedProp.AnimatedProp.__init__(self, node)

@@ -4,7 +4,6 @@ from otp.movement import Impulse
 from otp.otpbase import OTPGlobals
 
 class PetCollider(Impulse.Impulse):
-    __module__ = __name__
     SerialNum = 0
 
     def __init__(self, petRadius, collTrav):

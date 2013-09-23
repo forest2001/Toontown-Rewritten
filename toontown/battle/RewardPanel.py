@@ -20,7 +20,6 @@ import Fanfare
 from otp.otpbase import OTPGlobals
 
 class RewardPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RewardPanel')
     SkipBattleMovieEvent = 'skip-battle-movie-event'
 

@@ -5,7 +5,6 @@ from toontown.minigame import ToonBlitzGlobals
 from toontown.toonbase import ToontownGlobals
 
 class TwoDSpawnPointMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDSpawnPointMgr')
 
     def __init__(self, section, spawnPointList):

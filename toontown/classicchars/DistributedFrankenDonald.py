@@ -12,7 +12,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import GSHood
 
 class DistributedFrankenDonald(DistributedDonald.DistributedDonald):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFrankenDonald')
 
     def __init__(self, cr):

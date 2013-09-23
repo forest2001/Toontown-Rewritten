@@ -10,7 +10,6 @@ import DistributedSwitch
 from toontown.toonbase import TTLocalizer
 
 class DistributedTrigger(DistributedSwitch.DistributedSwitch):
-    __module__ = __name__
 
     def setupSwitch(self):
         radius = 1.0

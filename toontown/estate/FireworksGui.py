@@ -9,7 +9,6 @@ from toontown.effects import Fireworks
 NUM_ITEMS_SHOWN = 4
 
 class FireworksGui(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworksGui')
 
     def __init__(self, doneEvent, shootEvent):

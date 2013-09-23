@@ -7,7 +7,6 @@ from pandac.PandaModules import Vec4, loadDNAFile, CSDefault, TransformState, No
 from toontown.hood import GSHood
 
 class CrashedLeaderBoardDecorator(HolidayDecorator.HolidayDecorator):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CrashedLeaderBoardDecorator')
 
     def __init__(self):

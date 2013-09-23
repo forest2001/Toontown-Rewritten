@@ -9,7 +9,6 @@ WainscotingTypes = {1000: ('phase_3.5/maps/wall_paper_b3.jpg', CTFlatColorDark, 
  1040: ('phase_3.5/maps/wall_paper_b3.jpg', CTUnderwaterColors, 200)}
 
 class CatalogWainscotingItem(CatalogSurfaceItem):
-    __module__ = __name__
 
     def makeNewItem(self, patternIndex, colorIndex):
         self.patternIndex = patternIndex

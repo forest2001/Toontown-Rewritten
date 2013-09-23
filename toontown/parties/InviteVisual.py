@@ -9,7 +9,6 @@ from toontown.parties import PartyUtils
 from toontown.toonbase.ToontownGlobals import VALENTINES_DAY
 
 class InviteVisual(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('InviteVisual')
 
     def __init__(self, parent):

@@ -25,7 +25,6 @@ def getAccountServer():
 TTAccountException = HTTPUtil.HTTPUtilException
 
 class TTAccount:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTAccount')
 
     def __init__(self, cr):

@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame import MinigamePhysicsWorldBase
 
 class DistributedMinigamePhysicsWorld(DistributedObject.DistributedObject, MinigamePhysicsWorldBase.MinigamePhysicsWorldBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMinigamePhysicsWorld')
 
     def __init__(self, cr):

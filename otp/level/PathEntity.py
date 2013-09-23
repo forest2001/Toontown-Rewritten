@@ -5,7 +5,6 @@ import BasicEntities
 from toontown.suit import GoonPathData
 
 class PathEntity(BasicEntities.NodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PathEntity')
 
     def __init__(self, level, entId):

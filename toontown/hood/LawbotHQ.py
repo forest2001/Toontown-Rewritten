@@ -3,7 +3,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.coghq import LawbotCogHQLoader
 
 class LawbotHQ(CogHood.CogHood):
-    __module__ = __name__
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         CogHood.CogHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)

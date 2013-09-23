@@ -20,7 +20,6 @@ import QuietZoneState
 from toontown.distributed import ToontownDistrictStats
 
 class Place(StateData.StateData, FriendsListManager.FriendsListManager):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Place')
 
     def __init__(self, loader, doneEvent):

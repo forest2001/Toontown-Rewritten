@@ -8,7 +8,6 @@ import CogdoUtil
 import CogdoGameConsts
 
 class CogdoGameExit(NodePath):
-    __module__ = __name__
 
     def __init__(self, openSfx = None, closeSfx = None):
         NodePath.__init__(self, 'CogdoGameExit')

@@ -5,7 +5,6 @@ from direct.showbase import AppRunnerGlobal
 import os
 
 class CarSmoke(NodePath):
-    __module__ = __name__
 
     def __init__(self, parent):
         NodePath.__init__(self)

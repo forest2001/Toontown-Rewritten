@@ -8,7 +8,6 @@ from toontown.toon import ToonAvatarPanel
 from toontown.toontowngui import TTDialog
 
 class GroupPanel(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GroupPanel')
 
     def __init__(self, boardingParty):

@@ -10,7 +10,6 @@ from toontown.suit import SuitPlannerBase
 import QuestMapGlobals
 
 class QuestMap(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, av, **kw):
         DirectFrame.__init__(self, relief=None, sortOrder=50)

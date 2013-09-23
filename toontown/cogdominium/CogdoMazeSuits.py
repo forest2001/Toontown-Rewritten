@@ -10,7 +10,6 @@ import CogdoMazeGameGlobals as Globals
 import random
 
 class CogdoMazeSuit(MazeSuit, FSM, CogdoMazeSplattable):
-    __module__ = __name__
     GagHitEventName = 'CogdoMazeSuit_GagHit'
     DeathEventName = 'CogdoMazeSuit_Death'
     ThinkEventName = 'CogdoMazeSuit_Think'
@@ -134,7 +133,6 @@ class CogdoMazeSuit(MazeSuit, FSM, CogdoMazeSplattable):
 
 
 class CogdoMazeSlowMinionSuit(CogdoMazeSuit):
-    __module__ = __name__
 
     def __init__(self, serialNum, maze, randomNumGen, difficulty, startTile = None):
         CogdoMazeSuit.__init__(self, serialNum, maze, randomNumGen, difficulty, startTile, Globals.SuitTypes.SlowMinion)
@@ -169,14 +167,12 @@ class CogdoMazeSlowMinionSuit(CogdoMazeSuit):
 
 
 class CogdoMazeFastMinionSuit(CogdoMazeSuit):
-    __module__ = __name__
 
     def __init__(self, serialNum, maze, randomNumGen, difficulty, startTile = None):
         CogdoMazeSuit.__init__(self, serialNum, maze, randomNumGen, difficulty, startTile, Globals.SuitTypes.FastMinion)
 
 
 class CogdoMazeBossSuit(CogdoMazeSuit):
-    __module__ = __name__
     BlinkTaskName = 'CogdoMazeBossBlinkTask'
     ShakeTaskName = 'CogdoMazeBossShakeTask'
     StartWalkTaskName = 'CogdoMazeBossStartWalkTask'

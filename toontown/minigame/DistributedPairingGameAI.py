@@ -9,7 +9,6 @@ from toontown.minigame import PairingGameGlobals
 from toontown.ai.ToonBarrier import ToonBarrier
 
 class DistributedPairingGameAI(DistributedMinigameAI):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPairingGameAI')
     OneCardInMultiplayer = True
     TurnDownTwoAtATime = True

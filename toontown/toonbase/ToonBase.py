@@ -17,7 +17,6 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
 
 class ToonBase(OTPBase.OTPBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):

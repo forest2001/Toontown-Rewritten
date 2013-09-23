@@ -10,7 +10,6 @@ from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 
 class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('InventoryNew')
     PressableTextColor = Vec4(1, 1, 1, 1)
     PressableGeomColor = Vec4(1, 1, 1, 1)

@@ -6,7 +6,6 @@ from toontown.coghq import StageRoomSpecs
 import random
 
 class StageRoom(DirectObject.DirectObject):
-    __module__ = __name__
     FloorCollPrefix = 'stageFloorColl'
     CashbotStageDoorFrame = 'phase_10/models/cashbotHQ/DoorFrame'
 

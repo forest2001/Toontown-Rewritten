@@ -14,7 +14,6 @@ from toontown.building import FADoorCodes
 from toontown.building import DoorTypes
 
 class DistributedHouseDoor(DistributedDoor.DistributedDoor):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedDoor.DistributedDoor.__init__(self, cr)

@@ -10,7 +10,6 @@ import cPickle
 from toontown.toonbase import TTLocalizer
 
 class DistributedHQInterior(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

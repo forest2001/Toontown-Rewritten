@@ -4,7 +4,6 @@ import math
 import random
 
 class GameSprite:
-    __module__ = __name__
     colorRed = Vec4(1, 0.2, 0.2, 1)
     colorBlue = Vec4(0.7, 0.8, 1, 1)
     colorGreen = Vec4(0, 1, 0, 1)

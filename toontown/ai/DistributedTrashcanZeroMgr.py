@@ -3,7 +3,6 @@ from direct.distributed import DistributedObject
 from toontown.ai import DistributedPhaseEventMgr
 
 class DistributedTrashcanZeroMgr(DistributedPhaseEventMgr.DistributedPhaseEventMgr):
-    __module__ = __name__
     neverDisable = 1
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrashcanZeroMgr')
 

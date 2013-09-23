@@ -18,7 +18,6 @@ MouldingTypes = {1000: ('phase_3.5/maps/molding_wood1.jpg', CTBasicWoodColorOnWh
  1120: ('phase_5.5/maps/tt_t_ara_int_border_valentine_heart2.jpg', CTWhite, 150)}
 
 class CatalogMouldingItem(CatalogSurfaceItem):
-    __module__ = __name__
 
     def makeNewItem(self, patternIndex, colorIndex):
         self.patternIndex = patternIndex

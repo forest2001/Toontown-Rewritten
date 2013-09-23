@@ -6,7 +6,6 @@ from direct.task import Task
 SPIN_RATE = 1.25
 
 class DistributedDGFlower(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)

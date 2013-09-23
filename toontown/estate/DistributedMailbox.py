@@ -15,7 +15,6 @@ FlagPitchEmpty = -70
 FlagPitchFull = 0
 
 class DistributedMailbox(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedMailbox')
 
     def __init__(self, cr):

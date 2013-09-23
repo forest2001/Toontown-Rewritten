@@ -2,7 +2,6 @@ from SCMenu import SCMenu
 from SCEmoteTerminal import SCEmoteTerminal
 
 class SCEmoteMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

@@ -6,7 +6,6 @@ from toontown.cogdominium import CogdoCraneGameConsts as GameConsts
 from toontown.suit.Suit import Suit
 
 class DistCogdoCraneCog(Suit, DistributedObject):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)

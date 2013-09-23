@@ -460,7 +460,6 @@ EmoteFunc = [[doWave, 0],
  [doLaugh, 0]]
 
 class TTEmote(Emote.Emote):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TTEmote')
     SLEEP_INDEX = 4
 

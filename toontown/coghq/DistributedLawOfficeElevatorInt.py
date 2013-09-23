@@ -12,7 +12,6 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import TTLocalizer
 
 class DistributedLawOfficeElevatorInt(DistributedElevatorFloor.DistributedElevatorFloor):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedElevatorFloor.DistributedElevatorFloor.__init__(self, cr)

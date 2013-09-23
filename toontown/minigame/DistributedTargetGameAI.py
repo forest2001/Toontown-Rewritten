@@ -19,7 +19,6 @@ def checkPlace(placeX, placeY, fillSize, placeList):
 
 
 class DistributedTargetGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

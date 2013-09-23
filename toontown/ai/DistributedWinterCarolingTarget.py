@@ -4,7 +4,6 @@ from toontown.speedchat.TTSCIndexedTerminal import TTSCIndexedMsgEvent
 import DistributedScavengerHuntTarget
 
 class DistributedWinterCarolingTarget(DistributedScavengerHuntTarget.DistributedScavengerHuntTarget):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWinterCarolingTarget')
 
     def __init__(self, cr):

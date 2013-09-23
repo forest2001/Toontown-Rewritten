@@ -7,7 +7,6 @@ from toontown.racing.KartShopGlobals import *
 from toontown.racing.KartDNA import *
 
 class DistributedNPCKartClerkAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)

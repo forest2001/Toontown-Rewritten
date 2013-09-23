@@ -10,7 +10,6 @@ from toontown.toonbase import TTLocalizer
 import DistributedCCharBase
 
 class DistributedWitchMinnie(DistributedMinnie.DistributedMinnie):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWitchMinnie')
 
     def __init__(self, cr):

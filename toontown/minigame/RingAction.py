@@ -2,7 +2,6 @@ from direct.directnotify import DirectNotifyGlobal
 import RingTrack
 
 class RingAction:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RingAction')
 
     def __init__(self):
@@ -13,7 +12,6 @@ class RingAction:
 
 
 class RingActionStaticPos(RingAction):
-    __module__ = __name__
 
     def __init__(self, pos):
         RingAction.__init__(self)
@@ -24,7 +22,6 @@ class RingActionStaticPos(RingAction):
 
 
 class RingActionFunction(RingAction):
-    __module__ = __name__
 
     def __init__(self, func, args):
         RingAction.__init__(self)
@@ -36,7 +33,6 @@ class RingActionFunction(RingAction):
 
 
 class RingActionRingTrack(RingAction):
-    __module__ = __name__
 
     def __init__(self, ringTrack):
         RingAction.__init__(self)

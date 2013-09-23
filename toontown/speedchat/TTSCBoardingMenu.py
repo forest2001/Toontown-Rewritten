@@ -32,7 +32,6 @@ ZoneIdsToMsgs = {10000: [GroupPhrases, [5100, 5101, 5102], [5200, 5201, 5202]],
           5215]]}
 
 class TTSCBoardingMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self, zoneId):
         SCMenu.__init__(self)

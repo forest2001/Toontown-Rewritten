@@ -11,7 +11,6 @@ from FireworkGlobals import skyTransitionDuration, preShowPauseDuration, postSho
 from toontown.effects.FireworkShow import FireworkShow
 
 class FireworkShowMixin:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworkShowMixin')
 
     def __init__(self, restorePlaygroundMusic = True, startDelay = 0.0):

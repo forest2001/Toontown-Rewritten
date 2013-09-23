@@ -4,7 +4,6 @@ import direct.gui.DirectGuiGlobals as DGG
 from toontown.parties import PartyUtils
 
 class CannonGui(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('CannonGui')
     FIRE_KEY = 'control'
     UP_KEY = 'arrow_up'

@@ -9,7 +9,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame import ToonBlitzGlobals
 
 class TwoDBlock(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDBlock')
 
     def __init__(self, model, index, blockAttribs):

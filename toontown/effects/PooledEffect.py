@@ -4,7 +4,6 @@ from direct.showbase.DirectObject import DirectObject
 import re
 
 class PooledEffect(DirectObject, NodePath):
-    __module__ = __name__
     pool = None
     poolLimit = 124
 

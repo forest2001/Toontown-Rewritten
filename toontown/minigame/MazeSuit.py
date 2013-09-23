@@ -10,7 +10,6 @@ from toontown.toonbase import ToontownGlobals
 import MazeGameGlobals
 
 class MazeSuit(DirectObject):
-    __module__ = __name__
     COLL_SPHERE_NAME = 'MazeSuitSphere'
     COLLISION_EVENT_NAME = 'MazeSuitCollision'
     MOVE_IVAL_NAME = 'moveMazeSuit'

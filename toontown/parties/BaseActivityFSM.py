@@ -2,7 +2,6 @@ from direct.fsm.FSM import FSM
 from direct.directnotify import DirectNotifyGlobal
 
 class BaseActivityFSM(FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BaseActivityFSM')
 
     def __init__(self, activity):

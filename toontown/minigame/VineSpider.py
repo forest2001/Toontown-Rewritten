@@ -5,7 +5,6 @@ from pandac.PandaModules import *
 import VineGameGlobals
 
 class VineSpider(NodePath.NodePath, DirectObject):
-    __module__ = __name__
     RADIUS = 1.7
 
     def __init__(self):

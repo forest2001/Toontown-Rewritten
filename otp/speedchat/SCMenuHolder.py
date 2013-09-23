@@ -6,7 +6,6 @@ from SCMenu import SCMenu
 import types
 
 class SCMenuHolder(SCElement):
-    __module__ = __name__
     N = 0.9
     DefaultFrameColor = (0,
      0,

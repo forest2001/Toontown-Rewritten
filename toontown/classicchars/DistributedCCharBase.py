@@ -17,7 +17,6 @@ import string
 import copy
 
 class DistributedCCharBase(DistributedChar.DistributedChar):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCCharBase')
 
     def __init__(self, cr, name, dnaName):

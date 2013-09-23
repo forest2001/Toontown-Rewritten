@@ -15,7 +15,6 @@ import random
 aspectSF = 0.7227
 
 class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BossbotCogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

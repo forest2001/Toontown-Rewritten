@@ -19,7 +19,6 @@ from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs, T
 import HouseGlobals
 
 class Estate(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Estate')
 
     def __init__(self, loader, avId, zoneId, parentFSMState, doneEvent):

@@ -708,7 +708,6 @@ BakedFloorLayouts = {12500: {0: (0,
               19)}}
 
 class MintLayout:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MintLayout')
 
     def __init__(self, mintId, floorNum):

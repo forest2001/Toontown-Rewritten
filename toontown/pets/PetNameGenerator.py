@@ -7,7 +7,6 @@ from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 
 class PetNameGenerator:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetNameGenerator')
     boyFirsts = []
     girlFirsts = []

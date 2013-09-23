@@ -13,7 +13,6 @@ POP_COLORS_NTT = (Vec4(0.0, 1.0, 0.0, 1.0), Vec4(1.0, 1.0, 0.0, 1.0), Vec4(1.0, 
 POP_COLORS = (Vec4(0.4, 0.4, 1.0, 1.0), Vec4(0.4, 1.0, 0.4, 1.0), Vec4(1.0, 0.4, 0.4, 1.0))
 
 class ShardPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ShardPage')
 
     def __init__(self):

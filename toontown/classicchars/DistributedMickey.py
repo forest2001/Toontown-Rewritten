@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import DGHood
 
 class DistributedMickey(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMickey')
 
     def __init__(self, cr):

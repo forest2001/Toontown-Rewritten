@@ -8,7 +8,6 @@ import CogdoMazeGameGlobals
 import CogdoMazeGameGlobals as Globals
 
 class DistCogdoMazeGame(DistCogdoGame, DistCogdoMazeGameBase):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoMazeGame')
 
     def __init__(self, cr):

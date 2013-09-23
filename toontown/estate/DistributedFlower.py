@@ -8,7 +8,6 @@ DIRT_AS_WATER_INDICATOR = True
 DIRT_MOUND_HEIGHT = 0.3
 
 class DistributedFlower(DistributedPlantBase.DistributedPlantBase, FlowerBase.FlowerBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFlower')
 
     def __init__(self, cr):

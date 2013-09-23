@@ -6,7 +6,6 @@ from toontown.estate import GardenGlobals
 from direct.actor import Actor
 
 class DistributedAnimatedStatuary(DistributedStatuary.DistributedStatuary):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedAnimatedStatuary')
 
     def __init__(self, cr):

@@ -11,7 +11,6 @@ from direct.fsm import ClassicFSM, State
 from otp.level import DistributedEntity
 
 class DistributedSwitch(DistributedSwitchBase.DistributedSwitchBase, BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
 
     def __init__(self, cr):
         BasicEntities.DistributedNodePathEntity.__init__(self, cr)

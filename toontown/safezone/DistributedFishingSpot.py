@@ -28,7 +28,6 @@ from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 
 class DistributedFishingSpot(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFishingSpot')
     vZeroMax = 25.0
     angleMax = 30.0

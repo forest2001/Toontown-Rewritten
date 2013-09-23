@@ -63,7 +63,6 @@ if __debug__:
     import pdb
 
 class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
-    __module__ = __name__
     neverDisable = 1
     piePowerSpeed = base.config.GetDouble('pie-power-speed', 0.2)
     piePowerExponent = base.config.GetDouble('pie-power-exponent', 0.75)

@@ -230,7 +230,6 @@ Variants = ('tart',
  'traintrack')
 
 class PropPool:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PropPool')
 
     def __init__(self):

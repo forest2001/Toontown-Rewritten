@@ -15,7 +15,6 @@ from toontown.toonbase import TTLocalizer
 import random
 
 class DistributedLaserField(BattleBlocker.BattleBlocker):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLaserField')
     laserFieldModels = ['phase_9/models/cogHQ/square_stomper']
 

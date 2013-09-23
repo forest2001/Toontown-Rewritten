@@ -8,7 +8,6 @@ import GardenGlobals
 import FlowerPhoto
 
 class FlowerPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerPanel')
 
     def __init__(self, flower = None, parent = aspect2d, doneEvent = None, **kw):

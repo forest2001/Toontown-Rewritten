@@ -3,7 +3,6 @@ from direct.gui.DirectGui import DirectFrame
 from pandac.PandaModules import Point3
 
 class StretchingArrow(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('StretchingArrow')
     arrowMoving = 0
     arrowBegin = 1

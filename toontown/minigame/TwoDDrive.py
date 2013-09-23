@@ -5,7 +5,6 @@ import ArrowKeys
 from direct.task.Task import Task
 
 class TwoDDrive:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDDrive')
     TASK_NAME = 'TwoDDriveTask'
     SET_ATREST_HEADING_TASK = 'setAtRestHeadingTask'

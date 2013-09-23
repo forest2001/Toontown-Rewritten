@@ -10,7 +10,6 @@ from otp.avatar import AvatarPanel
 from toontown.friends import FriendsListPanel
 
 class SuitAvatarPanel(AvatarPanel.AvatarPanel):
-    __module__ = __name__
     currentAvatarPanel = None
 
     def __init__(self, avatar):

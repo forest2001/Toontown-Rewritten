@@ -21,7 +21,6 @@ WindowViewTypes = {10: ('phase_5.5/models/estate/Garden1', 900, None),
  130: ('phase_5.5/models/estate/WesternMainStreetView', 900, None)}
 
 class CatalogWindowItem(CatalogAtticItem.CatalogAtticItem):
-    __module__ = __name__
 
     def makeNewItem(self, windowType, placement = None):
         self.windowType = windowType

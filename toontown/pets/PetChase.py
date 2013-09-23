@@ -4,7 +4,6 @@ from otp.movement import Impulse
 import math
 
 class PetChase(Impulse.Impulse):
-    __module__ = __name__
 
     def __init__(self, target = None, minDist = None, moveAngle = None):
         Impulse.Impulse.__init__(self)

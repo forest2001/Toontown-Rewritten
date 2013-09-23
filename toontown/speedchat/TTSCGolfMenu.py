@@ -28,7 +28,6 @@ GolfMenuGuide = [(OTPLocalizer.GolfMenuSections[1], [4100,
  (OTPLocalizer.GolfMenuSections[0], [4000, 4001, 4002])]
 
 class TTSCGolfMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

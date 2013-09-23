@@ -5,7 +5,6 @@ from direct.directnotify import DirectNotifyGlobal
 import DistributedBarrelBase
 
 class DistributedHealBarrel(DistributedBarrelBase.DistributedBarrelBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedBarrelBase.DistributedBarrelBase.__init__(self, cr)

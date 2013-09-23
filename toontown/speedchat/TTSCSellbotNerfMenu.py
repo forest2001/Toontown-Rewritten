@@ -29,7 +29,6 @@ SellbotNerfMenu = [(OTPLocalizer.SellbotNerfMenuSections[0], [30150,
    30175])]
 
 class TTSCSellbotNerfMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

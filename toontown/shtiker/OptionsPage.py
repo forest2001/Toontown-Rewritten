@@ -55,7 +55,6 @@ speedChatStyles = ((2000,
 PageMode = PythonUtil.Enum('Options, Codes')
 
 class OptionsPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('OptionsPage')
 
     def __init__(self):
@@ -118,7 +117,6 @@ class OptionsPage(ShtikerPage.ShtikerPage):
 
 
 class OptionsTabPage(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('OptionsTabPage')
     DisplaySettingsTaskName = 'save-display-settings'
     DisplaySettingsDelay = 60
@@ -471,7 +469,6 @@ class OptionsTabPage(DirectFrame):
 
 
 class CodesTabPage(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CodesTabPage')
 
     def __init__(self, parent = aspect2d):

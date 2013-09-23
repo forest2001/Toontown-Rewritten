@@ -22,7 +22,6 @@ decorationHolidays = [ToontownGlobals.WINTER_DECORATIONS,
 promotionalSpeedChatHolidays = [ToontownGlobals.ELECTION_PROMOTION]
 
 class NewsManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('NewsManager')
     neverDisable = 1
     YearlyHolidayType = 1

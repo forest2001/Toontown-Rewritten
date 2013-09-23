@@ -8,7 +8,6 @@ from pandac.PandaModules import Vec3
 from direct.task import Task
 
 class DistributedFishingPond(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFishingPond')
     pollInterval = 0.5
 

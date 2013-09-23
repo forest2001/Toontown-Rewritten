@@ -14,7 +14,6 @@ import math
 from toontown.effects import Bubbles
 
 class DistributedFishingTarget(DistributedNode.DistributedNode):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFishingTarget')
     radius = 2.5
 

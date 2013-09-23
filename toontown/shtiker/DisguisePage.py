@@ -15,7 +15,6 @@ NumParts = max(CogDisguiseGlobals.PartsPerSuit)
 PartNames = ('lUpleg', 'lLowleg', 'lShoe', 'rUpleg', 'rLowleg', 'rShoe', 'lShoulder', 'rShoulder', 'chest', 'waist', 'hip', 'lUparm', 'lLowarm', 'lHand', 'rUparm', 'rLowarm', 'rHand')
 
 class DisguisePage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     meterColor = Vec4(0.87, 0.87, 0.827, 1.0)
     meterActiveColor = Vec4(0.7, 0.3, 0.3, 1)
 

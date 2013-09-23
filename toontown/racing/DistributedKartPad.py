@@ -4,7 +4,6 @@ if __debug__:
     import pdb
 
 class DistributedKartPad(DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedKartPad')
 
     def __init__(self, cr):

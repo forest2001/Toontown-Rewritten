@@ -16,7 +16,6 @@ def __findToonReward(rewards, toon):
 
 
 class ToonVictorySkipper(DirectObject):
-    __module__ = __name__
 
     def __init__(self, numToons, noSkip):
         self._numToons = numToons

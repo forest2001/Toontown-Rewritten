@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 HalloweenMenu = [(OTPLocalizer.HalloweenMenuSections[0], [30250, 30251, 30252])]
 
 class TTSCHalloweenMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

@@ -5,7 +5,6 @@ from direct.interval.IntervalGlobal import *
 import DivingGameGlobals
 
 class DivingTreasure(DirectObject):
-    __module__ = __name__
 
     def __init__(self, i):
         self.treasureNode = render.attachNewNode('treasure')

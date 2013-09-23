@@ -6,7 +6,6 @@ from toontown.hood import ZoneUtil
 from toontown.coghq import CashbotCogHQLoader
 
 class CashbotHQ(CogHood.CogHood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CashbotHQ')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

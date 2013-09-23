@@ -2,7 +2,6 @@ import PhotoGameGlobals
 import random
 
 class PhotoGameBase:
-    __module__ = __name__
 
     def __init__(self):
         pass

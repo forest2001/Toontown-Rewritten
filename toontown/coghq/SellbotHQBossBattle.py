@@ -5,7 +5,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import CogHQBossBattle
 
 class SellbotHQBossBattle(CogHQBossBattle.CogHQBossBattle):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SellbotHQBossBattle')
 
     def __init__(self, loader, parentFSM, doneEvent):

@@ -8,7 +8,6 @@ from pandac.PandaModules import *
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 
 class CogHQLobby(Place.Place):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHQLobby')
 
     def __init__(self, hood, parentFSM, doneEvent):

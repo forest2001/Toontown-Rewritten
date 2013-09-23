@@ -11,7 +11,6 @@ from direct.showbase.PythonUtil import lerp
 FUDGE_FACTOR = 0.01
 
 class PetDetailPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetDetailPanel')
 
     def __init__(self, pet, closeCallback, parent = aspect2d, **kw):

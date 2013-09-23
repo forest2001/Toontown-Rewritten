@@ -7,7 +7,6 @@ from toontown.fishing import FishGlobals
 from direct.task import Task
 
 class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)

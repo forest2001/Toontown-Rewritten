@@ -4,7 +4,6 @@ import random
 from direct.task import Task
 
 class DGPlayground(Playground.Playground):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)

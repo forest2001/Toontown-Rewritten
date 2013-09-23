@@ -10,7 +10,6 @@ import VineGameGlobals
 import VineSpider
 
 class SwingVine(NodePath.NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('SwingVine')
     defaultNormal = Vec3(1, 0, 0)
     SwingAnimPeriod = 6.0

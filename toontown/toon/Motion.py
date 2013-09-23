@@ -7,7 +7,6 @@ import TTEmote
 from otp.avatar import Emote
 
 class Motion(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Motion')
 
     def __init__(self, toon):

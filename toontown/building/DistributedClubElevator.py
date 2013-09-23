@@ -16,7 +16,6 @@ from toontown.distributed import DelayDelete
 from direct.showbase import PythonUtil
 
 class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedClubElevator')
     JumpOutOffsets = ((3, 5, 0),
      (1.5, 4, 0),

@@ -5,7 +5,6 @@ from SCTerminal import SCWhisperModeChangeEvent
 from otp.otpbase import OTPLocalizer
 
 class SpeedChat(SCMenu):
-    __module__ = __name__
 
     def __init__(self, name = '', structure = None, backgroundModelName = None, guiModelName = None):
         SCMenu.BackgroundModelName = backgroundModelName

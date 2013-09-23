@@ -1,18 +1,15 @@
 from otp.level.EntityTypes import *
 
 class CogdoLevelMgr(LevelMgr):
-    __module__ = __name__
     type = 'levelMgr'
 
 
 class CogdoBoardroomGameSettings(Entity):
-    __module__ = __name__
     type = 'cogdoBoardroomGameSettings'
     attribs = (('TimerScale', 1.0, 'float'),)
 
 
 class CogdoCraneGameSettings(Entity):
-    __module__ = __name__
     type = 'cogdoCraneGameSettings'
     attribs = (('GameDuration', 180.0, 'float'),
      ('EmptyFrictionCoef', 0.1, 'float'),
@@ -23,7 +20,6 @@ class CogdoCraneGameSettings(Entity):
 
 
 class CogdoCraneCogSettings(Entity):
-    __module__ = __name__
     type = 'cogdoCraneCogSettings'
     attribs = (('CogSpawnPeriod', 10.0, 'float'),
      ('CogWalkSpeed', 2.0, 'float'),

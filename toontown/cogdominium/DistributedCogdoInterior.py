@@ -27,7 +27,6 @@ PAINTING_DICT = {'s': 'tt_m_ara_crg_paintingMoverShaker',
  'c': 'tt_m_ara_crg_paintingMoverShaker'}
 
 class DistributedCogdoInterior(DistributedObject.DistributedObject):
-    __module__ = __name__
     id = 0
     cageHeights = [11.36, 0.01]
 

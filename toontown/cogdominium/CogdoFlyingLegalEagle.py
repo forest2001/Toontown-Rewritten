@@ -16,7 +16,6 @@ import CogdoUtil
 import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingLegalEagle(DirectObject, FSM):
-    __module__ = __name__
     CollSphereName = 'CogdoFlyingLegalEagleSphere'
     CollisionEventName = 'CogdoFlyingLegalEagleCollision'
     InterestCollName = 'CogdoFlyingLegalEagleInterestCollision'

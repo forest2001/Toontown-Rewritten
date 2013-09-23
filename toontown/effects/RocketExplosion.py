@@ -6,7 +6,6 @@ from direct.showbase import AppRunnerGlobal
 import os
 
 class RocketExplosion(NodePath):
-    __module__ = __name__
 
     def __init__(self, parent, smokeParent):
         NodePath.__init__(self)

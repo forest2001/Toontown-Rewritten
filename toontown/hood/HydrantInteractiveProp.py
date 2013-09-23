@@ -6,7 +6,6 @@ from toontown.hood import GenericAnimatedProp
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals, TTLocalizer
 
 class HydrantInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('HydrantInteractiveProp')
     BattleCheerText = TTLocalizer.InteractivePropTrackBonusTerms[ToontownBattleGlobals.SQUIRT_TRACK]
     ZoneToIdles = {ToontownGlobals.ToontownCentral: (('tt_a_ara_ttc_hydrant_idle0',

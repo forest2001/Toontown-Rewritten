@@ -1,7 +1,6 @@
 
 
 class ServerEventBuffer:
-    __module__ = __name__
 
     def __init__(self, air, name, avId, period = None):
         self.air = air
@@ -32,7 +31,6 @@ class ServerEventBuffer:
 
 
 class ServerEventAccumulator(ServerEventBuffer):
-    __module__ = __name__
 
     def __init__(self, air, name, avId, period = None):
         ServerEventBuffer.__init__(self, air, name, avId, period)
@@ -51,7 +49,6 @@ class ServerEventAccumulator(ServerEventBuffer):
 
 
 class ServerEventMultiAccumulator(ServerEventBuffer):
-    __module__ = __name__
 
     def __init__(self, air, name, avId, period = None):
         ServerEventBuffer.__init__(self, air, name, avId, period)

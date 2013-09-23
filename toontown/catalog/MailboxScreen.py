@@ -14,7 +14,6 @@ import CatalogItem
 from direct.showbase.PythonUtil import StackTrace
 
 class MailboxScreen(DirectObject.DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('MailboxScreen')
 
     def __init__(self, mailbox, avatar, doneEvent = None):

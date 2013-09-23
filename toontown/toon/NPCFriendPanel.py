@@ -9,7 +9,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
 class NPCFriendPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('NPCFriendPanel')
 
     def __init__(self, parent = aspect2d, **kw):
@@ -69,7 +68,6 @@ class NPCFriendPanel(DirectFrame):
 
 
 class NPCFriendCard(DirectFrame):
-    __module__ = __name__
     normalTextColor = (0.3, 0.25, 0.2, 1)
     maxRarity = 5
     sosTracks = ToontownBattleGlobals.Tracks + ToontownBattleGlobals.NPCTracks

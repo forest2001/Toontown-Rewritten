@@ -11,7 +11,6 @@ from toontown.toonbase import ToontownGlobals
 N_A = 0
 
 class DistributedTrunk(DistributedCloset.DistributedCloset):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedTrunk')
 
     def __init__(self, cr):

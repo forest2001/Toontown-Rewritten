@@ -17,7 +17,6 @@ else:
         HaveNewsFrame = False
 
 class NewsPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('NewsPage')
 
     def __init__(self):

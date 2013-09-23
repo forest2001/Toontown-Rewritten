@@ -6,7 +6,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 
 class ToontownTimeManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownTimeManager')
     ClockFormat = '%I:%M:%S %p'
     formatStr = '%Y-%m-%d %H:%M:%S'

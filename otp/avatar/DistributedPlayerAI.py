@@ -6,7 +6,6 @@ from otp.distributed.ClsendTracker import ClsendTracker
 from otp.otpbase import OTPGlobals
 
 class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.PlayerBase, ClsendTracker):
-    __module__ = __name__
 
     def __init__(self, air):
         DistributedAvatarAI.DistributedAvatarAI.__init__(self, air)

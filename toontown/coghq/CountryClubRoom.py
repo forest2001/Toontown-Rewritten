@@ -7,7 +7,6 @@ from direct.directnotify import DirectNotifyGlobal
 import random
 
 class CountryClubRoom(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubRoom')
     FloorCollPrefix = 'mintFloorColl'
     CashbotMintDoorFrame = 'phase_10/models/cashbotHQ/DoorFrame'

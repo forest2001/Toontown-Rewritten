@@ -10,7 +10,6 @@ from toontown.toontowngui import TeaserPanel
 import ShuffleButton
 
 class BodyShop(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BodyShop')
 
     def __init__(self, doneEvent):

@@ -5,7 +5,6 @@ from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 
 class DownloadWatcher(DirectObject):
-    __module__ = __name__
 
     def __init__(self, phaseNames):
         self.phaseNames = phaseNames

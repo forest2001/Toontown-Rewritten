@@ -16,7 +16,6 @@ from TwoDDrive import *
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
 class DistributedTwoDGame(DistributedMinigame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTwoDGame')
     UpdateLocalToonTask = 'ToonBlitzUpdateLocalToonTask'
     EndGameTaskName = 'endTwoDGame'

@@ -3,7 +3,6 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 
 class DeleteManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DeleteManager')
     neverDisable = 1
 

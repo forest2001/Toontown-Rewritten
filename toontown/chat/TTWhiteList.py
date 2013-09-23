@@ -8,7 +8,6 @@ from otp.chat.WhiteList import WhiteList
 from toontown.toonbase import TTLocalizer
 
 class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
-    __module__ = __name__
     RedownloadTaskName = 'RedownloadWhitelistTask'
     WhitelistBaseDir = config.GetString('whitelist-base-dir', '')
     WhitelistStageDir = config.GetString('whitelist-stage-dir', 'whitelist')

@@ -3,7 +3,6 @@ import Entity
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedEntityAI(DistributedObjectAI.DistributedObjectAI, Entity.Entity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedEntityAI')
 
     def __init__(self, level, entId):

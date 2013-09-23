@@ -24,7 +24,6 @@ def loadJellyBean(parent, beanIndex):
 
 
 class GenericBoxScrollList(DirectScrolledList):
-    __module__ = __name__
 
     def __init__(self, parent, items, **kw):
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
@@ -59,7 +58,6 @@ class GenericBoxScrollList(DirectScrolledList):
 
 
 class BoxItem(NodePath):
-    __module__ = __name__
 
     def getHeight(self):
         return 0.05
@@ -74,7 +72,6 @@ else:
 JellyBeanPickerScaleInverse = (1.0 / JellyBeanPickerScale[0], 1.0 / JellyBeanPickerScale[1], 1.0 / JellyBeanPickerScale[2])
 
 class JellyBeanPicker(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantingGUI')
 
     def __init__(self, parent, callBack, boxPosition, **kw):
@@ -133,7 +130,6 @@ class JellyBeanPicker(DirectFrame):
 
 
 class SpiffyBeanBox(DirectButton):
-    __module__ = __name__
 
     def __init__(self, parent, index, **kw):
         self.boxIndex = index
@@ -159,7 +155,6 @@ class SpiffyBeanBox(DirectButton):
 
 
 class PlantingGUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantingGUI')
 
     def __init__(self, doneEvent, specialBoxActive = False):

@@ -4,7 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 notify = DirectNotifyGlobal.directNotify.newCategory('AvatarManager')
 
 class OtpAvatarManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = notify
     OnlineEvent = 'GlobalAvatarManagerOnline'
 

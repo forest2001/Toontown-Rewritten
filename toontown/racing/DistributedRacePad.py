@@ -11,7 +11,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.racing.KartShopGlobals import KartGlobals
 
 class DistributedRacePad(DistributedKartPad, FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRacePad')
     defaultTransitions = {'Off': ['WaitEmpty'],
      'WaitEmpty': ['WaitCountdown', 'Off'],

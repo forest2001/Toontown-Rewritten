@@ -1,7 +1,6 @@
 import random
 
 class BarrelBase:
-    __module__ = __name__
 
     def getRng(self):
         return random.Random(self.entId * self.level.doId)

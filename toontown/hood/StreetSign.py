@@ -8,7 +8,6 @@ from direct.showbase import AppRunnerGlobal
 from toontown.toonbase import TTLocalizer
 
 class StreetSign(DistributedObject.DistributedObject):
-    __module__ = __name__
     RedownloadTaskName = 'RedownloadStreetSign'
     StreetSignFileName = config.GetString('street-sign-filename', 'texture.jpg')
     StreetSignBaseDir = config.GetString('street-sign-base-dir', 'sign')

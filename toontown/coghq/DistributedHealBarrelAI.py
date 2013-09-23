@@ -3,7 +3,6 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 
 class DistributedHealBarrelAI(DistributedBarrelBaseAI.DistributedBarrelBaseAI):
-    __module__ = __name__
 
     def __init__(self, level, entId):
         x = y = z = h = 0

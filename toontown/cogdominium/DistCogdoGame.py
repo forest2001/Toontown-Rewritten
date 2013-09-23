@@ -14,7 +14,6 @@ from toontown.toonbase import TTLocalizer as TTL
 SCHELLGAMES_DEV = __debug__ and base.config.GetBool('schellgames-dev', False)
 
 class DistCogdoGame(DistCogdoGameBase, DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoGame')
 
     def __init__(self, cr):

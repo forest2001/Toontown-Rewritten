@@ -1,7 +1,6 @@
 
 
 class PickANamePattern:
-    __module__ = __name__
 
     def __init__(self, nameStr, gender):
         self._nameStr = nameStr
@@ -153,7 +152,6 @@ Syntax error at or near `POP_BLOCK' token at offset 35
 
 
 class PickANamePatternTwoPartLastName(PickANamePattern):
-    __module__ = __name__
 
     def getNameString(self, pattern, gender):
         name = PickANamePattern.getNameString(self, pattern, gender)

@@ -11,7 +11,6 @@ from direct.task import Task
 from toontown.toonbase import TTLocalizer
 
 class DistributedDonaldDock(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedDonaldDock')
 
     def __init__(self, cr):

@@ -5,7 +5,6 @@ import TTDialog
 from toontown.toon import ToonHead
 
 class ToonHeadDialog(TTDialog.TTDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonHeadDialog')
 
     def __init__(self, dna, **kw):

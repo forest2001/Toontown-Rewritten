@@ -10,7 +10,6 @@ import math
 from math import *
 
 class FogOverlay:
-    __module__ = __name__
     SomeCounter = 0
 
     def __init__(self, color = Point3(1.0, 1.0, 1.0)):

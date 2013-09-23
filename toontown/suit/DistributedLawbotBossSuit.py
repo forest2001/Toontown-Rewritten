@@ -8,7 +8,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import MovieUtil
 
 class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBossSuit')
     timeToShow = 1.0
     timeToRelease = 3.15

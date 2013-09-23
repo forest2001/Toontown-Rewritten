@@ -32,7 +32,6 @@ import time
 from toontown.toonbase import ToontownTimer
 
 class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGolfGreenGame')
 
     def __init__(self, cr):

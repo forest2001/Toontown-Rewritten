@@ -8,7 +8,6 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class TownBattleChooseAvatarPanel(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ChooseAvatarPanel')
 
     def __init__(self, doneEvent, toon):

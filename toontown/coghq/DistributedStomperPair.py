@@ -6,7 +6,6 @@ from direct.directnotify import DirectNotifyGlobal
 from otp.level import BasicEntities
 
 class DistributedStomperPair(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStomperPair')
 
     def __init__(self, cr):

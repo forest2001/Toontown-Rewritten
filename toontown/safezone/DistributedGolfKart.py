@@ -17,7 +17,6 @@ from toontown.toon import ToonDNA
 from toontown.hood import ZoneUtil
 
 class DistributedGolfKart(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGolfKart')
     SeatOffsets = ((0.5, -0.5, 0),
      (-0.5, -0.5, 0),

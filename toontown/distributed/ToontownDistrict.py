@@ -3,7 +3,6 @@ from direct.distributed import DistributedObject
 from otp.distributed import DistributedDistrict
 
 class ToontownDistrict(DistributedDistrict.DistributedDistrict):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownDistrict')
 
     def __init__(self, cr):

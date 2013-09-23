@@ -12,7 +12,6 @@ from toontown.pets import PetTricks, PetLookerAI
 import random, types
 
 class PetBrain(DirectObject.DirectObject, CPetBrain):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetBrain')
 
     def __init__(self, pet):

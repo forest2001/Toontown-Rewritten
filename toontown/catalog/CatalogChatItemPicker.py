@@ -9,7 +9,6 @@ from toontown.toontowngui import TTDialog
 NUM_ITEMS_SHOWN = 15
 
 class CatalogChatItemPicker(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, callback, newMsg):
         self.confirmDelete = None

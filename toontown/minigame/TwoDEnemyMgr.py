@@ -5,7 +5,6 @@ from toontown.minigame import ToonBlitzGlobals
 from toontown.minigame import TwoDEnemy
 
 class TwoDEnemyMgr(DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDEnemyMgr')
 
     def __init__(self, section, enemyList):

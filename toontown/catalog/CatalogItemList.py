@@ -5,7 +5,6 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 
 class CatalogItemList:
-    __module__ = __name__
 
     def __init__(self, source = None, store = 0):
         self.store = store

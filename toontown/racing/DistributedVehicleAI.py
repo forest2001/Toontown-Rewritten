@@ -9,7 +9,6 @@ if __debug__:
     import pdb
 
 class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVehicleAI')
 
     def __init__(self, air, avId):

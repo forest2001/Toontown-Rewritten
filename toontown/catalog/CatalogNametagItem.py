@@ -6,7 +6,6 @@ from direct.interval.IntervalGlobal import *
 from direct.gui.DirectGui import *
 
 class CatalogNametagItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
 
     def makeNewItem(self, nametagStyle):

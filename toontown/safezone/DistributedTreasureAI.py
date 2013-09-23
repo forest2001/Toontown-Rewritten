@@ -3,7 +3,6 @@ from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
 
 class DistributedTreasureAI(DistributedObjectAI.DistributedObjectAI):
-    __module__ = __name__
 
     def __init__(self, air, treasurePlanner, x, y, z):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)

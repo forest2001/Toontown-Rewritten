@@ -7,7 +7,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class JellybeanRewardGui(DirectFrame):
-    __module__ = __name__
     notify = directNotify.newCategory('JellybeanRewardGui')
     PreCountdownDelay = 1.0
     CountDownRate = 0.2

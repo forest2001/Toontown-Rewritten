@@ -10,7 +10,6 @@ import SinkingPlatformGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedSinkingPlatform(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSinkingPlatform')
 
     def __init__(self, cr):

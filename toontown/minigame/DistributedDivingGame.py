@@ -27,7 +27,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
 class DivingGameRotationLimiter(TelemetryLimiter):
-    __module__ = __name__
 
     def __init__(self, h, p):
         self._h = h
@@ -38,7 +37,6 @@ class DivingGameRotationLimiter(TelemetryLimiter):
 
 
 class DistributedDivingGame(DistributedMinigame):
-    __module__ = __name__
     COLLISION_WATCH_TASK = 'DivingGameCollisionWatchTask'
     TREASURE_BOUNDS_TASK = 'DivingGameTreasureBoundsTask'
     CRAB_TASK = 'DivingGameCrabTask'

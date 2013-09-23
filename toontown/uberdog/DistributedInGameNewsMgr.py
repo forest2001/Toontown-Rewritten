@@ -7,7 +7,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.uberdog import InGameNewsResponses
 
 class DistributedInGameNewsMgr(DistributedObject):
-    __module__ = __name__
     notify = directNotify.newCategory('InGameNewsMgr')
     neverDisable = 1
 

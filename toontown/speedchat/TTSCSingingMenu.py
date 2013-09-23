@@ -14,7 +14,6 @@ SingingMenuGuide = [(OTPLocalizer.SingingMenuSections[0], [{9000: 25},
    {9008: 33}])]
 
 class TTSCSingingMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

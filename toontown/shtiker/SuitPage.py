@@ -157,7 +157,6 @@ SHADOW_SCALE_POS = ((1.225,
   -0.03))
 
 class SuitPage(ShtikerPage.ShtikerPage):
-    __module__ = __name__
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)

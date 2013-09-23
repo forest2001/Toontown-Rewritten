@@ -11,7 +11,6 @@ SillyPhaseTwoMenu = [(OTPLocalizer.SillyHolidayMenuSections[1], [30310,
    30315]), (OTPLocalizer.SillyHolidayMenuSections[2], [30316, 30317]), (OTPLocalizer.SillyHolidayMenuSections[0], [30309])]
 
 class TTSCSillyPhaseTwoMenu(SCMenu):
-    __module__ = __name__
 
     def __init__(self):
         SCMenu.__init__(self)

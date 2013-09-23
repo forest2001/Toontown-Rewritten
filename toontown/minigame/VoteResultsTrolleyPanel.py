@@ -8,7 +8,6 @@ from direct.interval.IntervalGlobal import Parallel, Sequence, LerpFunc, Func, W
 from direct.showbase.PythonUtil import pdir
 
 class VoteResultsTrolleyPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('VoteResultsTrolleyPanel')
 
     def __init__(self, numPlayers, avIdList, votes, directions, namesList, disconnectedList, directionToGo, directionReason, directionTotals, *args, **kwargs):

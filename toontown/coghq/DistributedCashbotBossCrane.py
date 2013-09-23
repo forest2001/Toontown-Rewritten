@@ -13,7 +13,6 @@ from otp.otpbase import OTPGlobals
 import random
 
 class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossCrane')
     firstMagnetBit = 21
     craneMinY = 8

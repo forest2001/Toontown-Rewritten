@@ -4,7 +4,6 @@ from direct.interval.IntervalGlobal import *
 import FishGlobals
 
 class DirectRegion(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DirectRegion')
 
     def __init__(self, parent = aspect2d):
@@ -70,7 +69,6 @@ class DirectRegion(NodePath):
 
 
 class FishPhoto(NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FishPhoto')
 
     def __init__(self, fish = None, parent = aspect2d):

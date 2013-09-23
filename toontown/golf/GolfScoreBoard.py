@@ -10,7 +10,6 @@ from pandac.PandaModules import LineSegs
 AUTO_HIDE_TIMEOUT = 3
 
 class GolfScoreBoard:
-    __module__ = __name__
     notify = directNotify.newCategory('GolfScoreBoard')
 
     def __init__(self, golfCourse):

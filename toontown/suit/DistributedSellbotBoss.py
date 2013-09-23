@@ -31,7 +31,6 @@ from toontown.suit import SellbotBossGlobals
 OneBossCog = None
 
 class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSellbotBoss')
     cageHeights = [100,
      81,

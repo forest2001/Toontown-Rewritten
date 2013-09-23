@@ -8,7 +8,6 @@ types = ['',
  'Anvil']
 
 class RaceGag(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self, parent, slot, testPos):
         DirectObject.DirectObject.__init__(self)

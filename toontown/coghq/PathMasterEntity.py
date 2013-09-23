@@ -5,7 +5,6 @@ from toontown.suit import GoonPathData
 from otp.level import PathEntity
 
 class PathMasterEntity(PathEntity.PathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PathMasterEntity')
 
     def __init__(self, level, entId):

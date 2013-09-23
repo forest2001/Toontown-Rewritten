@@ -16,7 +16,6 @@ import LevelUtil
 import random
 
 class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLevel')
     WantVisibility = config.GetBool('level-visibility', 1)
     ColorZonesAllDOs = 0

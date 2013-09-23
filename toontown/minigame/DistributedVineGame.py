@@ -18,7 +18,6 @@ from toontown.minigame import VineHeadFrame
 from toontown.minigame import VineBat
 
 class DistributedVineGame(DistributedMinigame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVineGame')
     UpdateLocalToonTask = 'VineGameUpdateLocalToonTask'
     LocalPhysicsRadius = 1.5

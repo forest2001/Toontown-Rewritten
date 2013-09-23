@@ -4,7 +4,6 @@ import copy
 from toontown.chat import ToonChatGarbler
 
 class FriendHandle:
-    __module__ = __name__
 
     def __init__(self, doId, name, style, petId, isAPet = False):
         self.doId = doId

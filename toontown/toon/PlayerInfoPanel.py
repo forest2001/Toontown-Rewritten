@@ -20,7 +20,6 @@ GAME_LOGO_NAMES = {'Default': 'GameLogo_Unknown',
 GAME_LOGO_FILE = 'phase_3/models/misc/game_logo_card'
 
 class PlayerInfoPanel(AvatarPanelBase.AvatarPanelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PlayerInfoPanel')
 
     def __init__(self, playerId):

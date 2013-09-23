@@ -12,7 +12,6 @@ from toontown.toonbase import TTLocalizer
 import PartyGlobals
 
 class PartyCogTrackerGui:
-    __module__ = __name__
 
     def __init__(self):
         self.cogTracker = loader.loadModel('phase_13/models/parties/cogTrackerGUI')
@@ -76,7 +75,6 @@ class PartyCogTrackerGui:
 
 
 class PartyCogActivityGui(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyCogActivityGui')
 
     def __init__(self):

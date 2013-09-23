@@ -906,7 +906,6 @@ FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
          FLPainting)}
 
 class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
-    __module__ = __name__
 
     def makeNewItem(self, furnitureType, colorOption = None, posHpr = None):
         self.furnitureType = furnitureType

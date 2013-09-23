@@ -5,7 +5,6 @@ from PooledEffect import PooledEffect
 from EffectController import EffectController
 
 class SkullFlash(PooledEffect, EffectController):
-    __module__ = __name__
 
     def __init__(self):
         PooledEffect.__init__(self)

@@ -101,7 +101,6 @@ def unloadFriendsList():
 
 
 class FriendsListPanel(DirectFrame, StateData.StateData):
-    __module__ = __name__
 
     def __init__(self):
         self.leftmostPanel = FLPPets

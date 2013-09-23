@@ -13,7 +13,6 @@ if __debug__:
 PageMode = PythonUtil.Enum('Records, Trophy')
 
 class GolfPage(ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GolfPage')
 
     def __init__(self):
@@ -99,7 +98,6 @@ class GolfPage(ShtikerPage):
 
 
 class GolfingRecordsUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GolfingRecordsUI')
 
     def __init__(self, avatar, parent = aspect2d):
@@ -198,7 +196,6 @@ class GolfingRecordsUI(DirectFrame):
 
 
 class GolfTrophiesUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GolfTrophiesUI')
 
     def __init__(self, avatar, parent = aspect2d):
@@ -339,7 +336,6 @@ class GolfTrophiesUI(DirectFrame):
 
 
 class GolfTrophy(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GolfTrophy')
 
     def __init__(self, level, *args, **kwargs):

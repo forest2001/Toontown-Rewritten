@@ -10,7 +10,6 @@ import random
 import types
 
 class DistributedDivingGameAI(DistributedMinigameAI):
-    __module__ = __name__
     fishProportions = []
     for i in range(6):
         fishProportions.append([])

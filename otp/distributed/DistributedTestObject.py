@@ -1,7 +1,6 @@
 from direct.distributed import DistributedObject
 
 class DistributedTestObject(DistributedObject.DistributedObject):
-    __module__ = __name__
 
     def setRequiredField(self, r):
         self.requiredField = r

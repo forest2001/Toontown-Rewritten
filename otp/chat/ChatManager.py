@@ -38,7 +38,6 @@ def removeThoughtPrefix(message):
 
 
 class ChatManager(DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ChatManager')
     execChat = base.config.GetBool('exec-chat', 0)
 

@@ -7,7 +7,6 @@ BACKWARDS_KEY = 'arrow_down'
 THROW_PIE_KEYS = ['control', 'delete', 'insert']
 
 class PartyCogActivityInput(DirectObject):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyCogActivityInput')
     leftPressed = 0
     rightPressed = 0

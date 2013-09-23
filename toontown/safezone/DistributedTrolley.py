@@ -14,7 +14,6 @@ from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 
 class DistributedTrolley(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrolley')
 
     def __init__(self, cr):

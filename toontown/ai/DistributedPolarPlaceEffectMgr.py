@@ -5,7 +5,6 @@ from otp.speedchat import SpeedChatGlobals
 from toontown.toonbase import TTLocalizer
 
 class DistributedPolarPlaceEffectMgr(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPolarPlaceEffectMgr')
 
     def __init__(self, cr):

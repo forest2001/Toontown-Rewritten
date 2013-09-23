@@ -9,7 +9,6 @@ import anydbm
 import time
 
 class DataStore:
-    __module__ = __name__
     QueryTypes = []
     QueryTypes = dict(zip(QueryTypes, range(len(QueryTypes))))
 

@@ -13,7 +13,6 @@ from direct.showbase import PythonUtil
 from toontown.building import BoardingGroupShow
 
 class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogKart')
     JumpOutOffsets = ((6.5, -2, -0.025),
      (-6.5, -2, -0.025),

@@ -3,7 +3,6 @@ from toontown.cogdominium.CogdoMaze import CogdoMazeFactory
 import CogdoMazeGameGlobals as Globals
 
 class DistCogdoMazeGameBase:
-    __module__ = __name__
 
     def createRandomNumGen(self):
         return RandomNumGen(self.doId)

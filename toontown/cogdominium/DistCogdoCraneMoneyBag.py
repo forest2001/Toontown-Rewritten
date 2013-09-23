@@ -7,7 +7,6 @@ from toontown.cogdominium.DistCogdoCraneObject import DistCogdoCraneObject
 from toontown.cogdominium import CogdoCraneGameConsts as GameConsts
 
 class DistCogdoCraneMoneyBag(DistCogdoCraneObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistCogdoCraneMoneyBag')
     grabPos = (0, 0, GameConsts.Settings.MoneyBagGrabHeight.get())
     craneFrictionCoef = 0.2

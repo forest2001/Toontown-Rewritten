@@ -17,7 +17,6 @@ import GoonDeath
 import random
 
 class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goon.Goon, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGoon')
 
     def __init__(self, cr):

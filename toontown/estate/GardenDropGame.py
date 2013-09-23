@@ -24,7 +24,6 @@ from math import pi
 import GardenProgressMeter
 
 class GardenDropGame(DirectObject.DirectObject):
-    __module__ = __name__
 
     def __init__(self):
         self.acceptErrorDialog = None

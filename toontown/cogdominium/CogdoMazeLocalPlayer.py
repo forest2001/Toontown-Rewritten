@@ -12,7 +12,6 @@ from CogdoMazePlayer import CogdoMazePlayer
 from CogdoMazeCameraManager import CogdoMazeCameraManager
 
 class CogdoMazeLocalPlayer(CogdoMazePlayer):
-    __module__ = __name__
     notify = directNotify.newCategory('CogdoMazeLocalPlayer')
 
     def __init__(self, id, toon, game, guiMgr):

@@ -6,7 +6,6 @@ from direct.task import Task
 import CannonGameGlobals
 
 class DistributedCannonGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         DistributedMinigameAI.__init__(self, air, minigameId)

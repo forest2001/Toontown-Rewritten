@@ -6,7 +6,6 @@ from toontown.distributed.DelayDeletable import DelayDeletable
 import DistributedSuitBase
 
 class DistributedTutorialSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTutorialSuit')
 
     def __init__(self, cr):

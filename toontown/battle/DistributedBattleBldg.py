@@ -16,7 +16,6 @@ import random
 from toontown.toonbase import ToontownGlobals
 
 class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBldg')
     camFOFov = 30.0
     camFOPos = Point3(0, -10, 4)

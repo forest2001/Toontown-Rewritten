@@ -15,7 +15,6 @@ if __debug__:
 PageMode = PythonUtil.Enum('Customize, Records, Trophy')
 
 class KartPage(ShtikerPage):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('KartPage')
 
     def __init__(self):
@@ -115,7 +114,6 @@ class KartPage(ShtikerPage):
 
 
 class KartCustomizeUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('KartCustomizeUI')
 
     def __init__(self, avatar, parent = aspect2d):
@@ -179,7 +177,6 @@ class KartCustomizeUI(DirectFrame):
 
 
 class RacingRecordsUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RacingRecordsUI')
 
     def __init__(self, avatar, parent = aspect2d):
@@ -223,7 +220,6 @@ class RacingRecordsUI(DirectFrame):
 
 
 class RacingTrophiesUI(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RacingTrophiesUI')
 
     def __init__(self, avatar, parent = aspect2d):
@@ -304,11 +300,9 @@ class RacingTrophiesUI(DirectFrame):
 
 
 class ItemSelector(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ItemSelector')
 
     class ItemViewer(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('ItemViewer')
 
         def __init__(self, avatar, parent = aspect2d):
@@ -756,7 +750,6 @@ class ItemSelector(DirectFrame):
 
 
 class KartViewer(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('KartViewer')
 
     def __init__(self, dna, parent):
@@ -934,7 +927,6 @@ class KartViewer(DirectFrame):
 
 
 class RacingTrophy(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('RacingTrophy')
 
     def __init__(self, level, *args, **kwargs):

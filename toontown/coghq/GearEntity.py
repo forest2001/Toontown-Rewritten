@@ -4,7 +4,6 @@ import MovingPlatform
 from pandac.PandaModules import Vec3
 
 class GearEntity(BasicEntities.NodePathEntity):
-    __module__ = __name__
     ModelPaths = {'factory': 'phase_9/models/cogHQ/FactoryGearB',
      'mint': 'phase_10/models/cashbotHQ/MintGear'}
 

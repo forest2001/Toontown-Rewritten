@@ -6,7 +6,6 @@ from direct.directnotify import DirectNotifyGlobal
 import types
 
 class MovingPlatform(DirectObject.DirectObject, NodePath):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('MovingPlatform')
 
     def __init__(self):

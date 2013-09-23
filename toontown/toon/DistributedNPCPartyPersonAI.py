@@ -7,7 +7,6 @@ from direct.distributed import ClockDelta
 from toontown.parties import PartyGlobals
 
 class DistributedNPCPartyPersonAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)

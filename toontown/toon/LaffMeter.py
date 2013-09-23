@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownIntervals
 
 class LaffMeter(DirectFrame):
-    __module__ = __name__
     deathColor = Vec4(0.58039216, 0.80392157, 0.34117647, 1.0)
 
     def __init__(self, avdna, hp, maxHp):

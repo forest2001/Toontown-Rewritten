@@ -10,7 +10,6 @@ from pandac.PandaModules import NodePath
 from pandac.PandaModules import Point3
 
 class DistributedStatuary(DistributedLawnDecor.DistributedLawnDecor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStatuary')
 
     def __init__(self, cr):

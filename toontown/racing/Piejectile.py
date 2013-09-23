@@ -12,7 +12,6 @@ from toontown.racing.FlyingGag import FlyingGag
 from toontown.battle import MovieUtil
 
 class Piejectile(DirectObject, FlyingGag):
-    __module__ = __name__
     physicsCalculationsPerSecond = 60
     maxPhysicsDt = 1.0
     physicsDt = 1.0 / float(physicsCalculationsPerSecond)

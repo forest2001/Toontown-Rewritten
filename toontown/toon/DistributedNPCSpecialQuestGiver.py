@@ -9,7 +9,6 @@ from toontown.toontowngui import TeaserPanel
 ChoiceTimeout = 20
 
 class DistributedNPCSpecialQuestGiver(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

@@ -5,7 +5,6 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedTreasure(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTreasure')
 
     def __init__(self, cr):

@@ -1,7 +1,6 @@
 
 
 class DropScheduler:
-    __module__ = __name__
 
     def __init__(self, gameDuration, firstDropDelay, dropPeriod, maxDropDuration, fasterDropDelay, fasterDropPeriodMult, startTime = None):
         self.gameDuration = gameDuration
@@ -58,7 +57,6 @@ class DropScheduler:
 
 
 class ThreePhaseDropScheduler(DropScheduler):
-    __module__ = __name__
 
     def __init__(self, gameDuration, firstDropDelay, dropPeriod, maxDropDuration, slowerDropPeriodMult, normalDropDelay, fasterDropDelay, fasterDropPeriodMult, startTime = None):
         self._slowerDropPeriodMult = slowerDropPeriodMult

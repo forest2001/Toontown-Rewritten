@@ -7,7 +7,6 @@ from toontown.parties import PartyGlobals
 from toontown.parties.PartyUtils import getCenterPosFromGridSize
 
 class Decoration(NodePath):
-    __module__ = __name__
     notify = directNotify.newCategory('Decoration')
 
     def __init__(self, name, x, y, h):

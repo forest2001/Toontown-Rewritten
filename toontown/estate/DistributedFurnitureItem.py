@@ -11,7 +11,6 @@ from direct.task import Task
 import HouseGlobals
 
 class DistributedFurnitureItem(DistributedHouseItem.DistributedHouseItem, DistributedSmoothNode.DistributedSmoothNode):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedFurnitureItem')
 
     def __init__(self, cr):

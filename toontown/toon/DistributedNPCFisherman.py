@@ -8,7 +8,6 @@ from toontown.fishing import FishSellGUI
 from direct.task.Task import Task
 
 class DistributedNPCFisherman(DistributedNPCToonBase):
-    __module__ = __name__
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)

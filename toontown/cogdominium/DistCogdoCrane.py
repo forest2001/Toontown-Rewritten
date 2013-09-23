@@ -14,7 +14,6 @@ from toontown.cogdominium import CogdoCraneGameConsts as GameConsts
 import random
 
 class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistCogdoCrane')
     firstMagnetBit = 21
     craneMinY = 8

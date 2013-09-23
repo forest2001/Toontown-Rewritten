@@ -6,7 +6,6 @@ from otp.level import BasicEntities
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedGrid(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGrid')
 
     def __init__(self, cr):

@@ -6,7 +6,6 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 
 class Walk(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Walk')
 
     def __init__(self, doneEvent):

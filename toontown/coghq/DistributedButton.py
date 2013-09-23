@@ -10,7 +10,6 @@ import DistributedSwitch
 from toontown.toonbase import TTLocalizer
 
 class DistributedButton(DistributedSwitch.DistributedSwitch):
-    __module__ = __name__
     countdownSeconds = 3.0
 
     def __init__(self, cr):

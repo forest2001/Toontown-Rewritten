@@ -6,7 +6,6 @@ from direct.gui.DirectFrame import DirectFrame
 from direct.gui.DirectLabel import DirectLabel
 
 class ScavengerHuntEffect:
-    __module__ = __name__
     images = None
 
     def __init__(self, beanAmount):
@@ -72,7 +71,6 @@ class ScavengerHuntEffect:
 
 
 class TrickOrTreatTargetEffect(ScavengerHuntEffect):
-    __module__ = __name__
 
     def __init__(self, beanAmount):
         ScavengerHuntEffect.__init__(self, beanAmount)
@@ -91,7 +89,6 @@ class TrickOrTreatTargetEffect(ScavengerHuntEffect):
 
 
 class WinterCarolingEffect(ScavengerHuntEffect):
-    __module__ = __name__
 
     def __init__(self, beanAmount):
         ScavengerHuntEffect.__init__(self, beanAmount)
@@ -111,7 +108,6 @@ class WinterCarolingEffect(ScavengerHuntEffect):
 
 
 class TrickOrTreatMilestoneEffect:
-    __module__ = __name__
 
     def __init__(self):
         pass

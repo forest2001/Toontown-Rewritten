@@ -13,7 +13,6 @@ from CogdoFlyingObjects import CogdoFlyingGatherable
 from CogdoFlyingUtil import swapAvatarShadowPlacer
 
 class CogdoFlyingPlayer(FSM):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoFlyingPlayer')
 
     def __init__(self, toon):

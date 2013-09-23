@@ -4,7 +4,6 @@ from otp.speedchat import SpeedChatGlobals
 import DistributedScavengerHuntTarget
 
 class DistributedTrickOrTreatTarget(DistributedScavengerHuntTarget.DistributedScavengerHuntTarget):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrickOrTreatTarget')
 
     def __init__(self, cr):

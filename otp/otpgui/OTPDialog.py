@@ -11,7 +11,6 @@ YesNo = 4
 TwoChoiceCustom = 5
 
 class OTPDialog(DirectDialog):
-    __module__ = __name__
 
     def __init__(self, parent = None, style = NoButtons, **kw):
         if parent == None:
@@ -80,7 +79,6 @@ class OTPDialog(DirectDialog):
 
 
 class GlobalDialog(OTPDialog):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('GlobalDialog')
 
     def __init__(self, message = '', doneEvent = None, style = NoButtons, okButtonText = OTPLocalizer.DialogOK, cancelButtonText = OTPLocalizer.DialogCancel, **kw):

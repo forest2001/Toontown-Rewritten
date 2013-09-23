@@ -4,7 +4,6 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 
 class ToontownAccess:
-    __module__ = __name__
 
     def __init__(self):
         self.startupModules = []

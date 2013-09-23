@@ -63,7 +63,6 @@ from toontown.toontowngui import ToontownLoadingBlocker
 from toontown.hood import StreetSign
 
 class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
-    __module__ = __name__
     SupportTutorial = 1
     GameGlobalsId = OTP_DO_ID_TOONTOWN
     SetZoneDoneEvent = 'TCRSetZoneDone'

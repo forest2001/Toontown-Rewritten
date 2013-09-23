@@ -8,5 +8,4 @@ from pandac.PandaModules import *
 from toontown.coghq import CogHQExterior
 
 class LawbotHQExterior(CogHQExterior.CogHQExterior):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LawbotHQExterior')

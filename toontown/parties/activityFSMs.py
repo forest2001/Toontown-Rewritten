@@ -11,7 +11,6 @@ from activityFSMMixins import WaitClientsReadyMixin
 from activityFSMMixins import WaitForServerMixin
 
 class FireworksActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, DisabledMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworksActivityFSM')
 
     def __init__(self, activity):
@@ -23,7 +22,6 @@ class FireworksActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, DisabledMixi
 
 
 class CatchActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, ConclusionMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatchActivityFSM')
 
     def __init__(self, activity):
@@ -35,7 +33,6 @@ class CatchActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, ConclusionMixin)
 
 
 class TrampolineActivityFSM(BaseActivityFSM, IdleMixin, RulesMixin, ActiveMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TrampolineActivityFSM')
 
     def __init__(self, activity):
@@ -47,7 +44,6 @@ class TrampolineActivityFSM(BaseActivityFSM, IdleMixin, RulesMixin, ActiveMixin)
 
 
 class DanceActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, DisabledMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DanceActivityFSM')
 
     def __init__(self, activity):
@@ -58,7 +54,6 @@ class DanceActivityFSM(BaseActivityFSM, IdleMixin, ActiveMixin, DisabledMixin):
 
 
 class TeamActivityAIFSM(BaseActivityFSM, WaitForEnoughMixin, WaitToStartMixin, WaitClientsReadyMixin, ActiveMixin, ConclusionMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TeamActivityAIFSM')
 
     def __init__(self, activity):
@@ -72,7 +67,6 @@ class TeamActivityAIFSM(BaseActivityFSM, WaitForEnoughMixin, WaitToStartMixin, W
 
 
 class TeamActivityFSM(BaseActivityFSM, WaitForEnoughMixin, WaitToStartMixin, RulesMixin, WaitForServerMixin, ActiveMixin, ConclusionMixin):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TeamActivityFSM')
 
     def __init__(self, activity):

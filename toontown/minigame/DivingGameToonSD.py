@@ -9,7 +9,6 @@ from direct.fsm import State
 import CatchGameGlobals
 
 class DivingGameToonSD(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DivingGameToonSD')
     FallBackAnim = 'slip-backward'
     FallFwdAnim = 'slip-forward'

@@ -7,7 +7,6 @@ from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 
 class ChineseTutorial(DirectFrame, FSM.FSM):
-    __module__ = __name__
 
     def __init__(self, doneFunction, doneEvent = None, callback = None):
         FSM.FSM.__init__(self, 'ChineseTutorial')
@@ -124,7 +123,6 @@ class ChineseTutorial(DirectFrame, FSM.FSM):
 
 
 class CheckersTutorial(DirectFrame, FSM.FSM):
-    __module__ = __name__
 
     def __init__(self, doneFunction, doneEvent = None, callback = None):
         FSM.FSM.__init__(self, 'CheckersTutorial')

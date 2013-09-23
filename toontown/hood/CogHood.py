@@ -4,7 +4,6 @@ from direct.fsm import State
 import Hood
 
 class CogHood(Hood.Hood):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

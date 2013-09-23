@@ -17,7 +17,6 @@ from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPGlobals
 
 class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonAvatarPanel')
 
     def __init__(self, avatar, playerId = None):

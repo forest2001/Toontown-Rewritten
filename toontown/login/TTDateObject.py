@@ -1,7 +1,6 @@
 import DateObject
 
 class TTDateObject(DateObject.DateObject):
-    __module__ = __name__
 
     def __init__(self, accountServerDate):
         self.accountServerDate = accountServerDate

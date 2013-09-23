@@ -1,7 +1,6 @@
 
 
 class AttribDesc:
-    __module__ = __name__
 
     def __init__(self, name, default, datatype = 'string', params = {}):
         self.name = name

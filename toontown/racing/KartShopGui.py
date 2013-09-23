@@ -28,11 +28,9 @@ KS_TEXT_SIZE_BIG = TTLocalizer.KSGtextSizeBig
 KS_TEXT_SIZE_SMALL = TTLocalizer.KSGtextSizeSmall
 
 class KartShopGuiMgr(object, DirectObject.DirectObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr')
 
     class MainMenuDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.MainMenuDlg')
 
         def __init__(self, doneEvent):
@@ -63,7 +61,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
             DirectFrame.DirectFrame.show(self)
 
     class BuyKartDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.BuyKartDlg')
 
         def __init__(self, doneEvent):
@@ -163,7 +160,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 DirectFrame.destroy(self)
 
     class ReturnKartDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.ReturnKartDlg')
 
         def __init__(self, doneEvent):
@@ -196,7 +192,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
             DirectFrame.destroy(self)
 
     class BoughtKartDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.BoughtKartDlg')
 
         def __init__(self, doneEvent, kartID):
@@ -232,7 +227,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
             DirectFrame.destroy(self)
 
     class ConfirmBuyKartDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.ConfirmBuyKartDlg')
 
         def __init__(self, doneEvent, kartNum):
@@ -271,7 +265,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 DirectFrame.destroy(self)
 
     class BuyAccessoryDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.buyAccessoryDlg')
 
         def __init__(self, doneEvent):
@@ -455,7 +448,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 DirectFrame.destroy(self)
 
     class BoughtAccessoryDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.BoughtAccessoryDlg')
 
         def __init__(self, doneEvent, accID):
@@ -513,7 +505,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 DirectFrame.destroy(self)
 
     class ConfirmBuyAccessoryDlg(DirectFrame):
-        __module__ = __name__
         notify = DirectNotifyGlobal.directNotify.newCategory('KartShopGuiMgr.ConfirmBuyAccessoryDlg')
 
         def __init__(self, doneEvent, accID):
@@ -761,7 +752,6 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
         if __name__ == '__main__':
 
             class Main(DirectObject.DirectObject):
-                __module__ = __name__
 
                 def __init__(self):
                     self.acceptOnce('1', self.__popupKartShopGui)

@@ -4,7 +4,6 @@ from direct.showbase.PythonUtil import Functor
 from toontown.toonbase import ToontownGlobals
 
 class FactoryLevelMgr(LevelMgr.LevelMgr):
-    __module__ = __name__
     InterestingLocations = [(((-866, -272, -40), -101),
       ((-662, -242, 7.5), 0),
       ((-20, -180, 20), 0),

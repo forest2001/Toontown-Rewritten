@@ -5,7 +5,6 @@ from OrthoDrive import *
 from direct.directnotify import DirectNotifyGlobal
 
 class OrthoWalk:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('OrthoWalk')
     BROADCAST_POS_TASK = 'OrthoWalkBroadcastPos'
 

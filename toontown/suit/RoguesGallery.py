@@ -6,7 +6,6 @@ from toontown.toonbase import ToontownGlobals
 import random
 
 class RoguesGallery(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, rognamestr = None):
         StateData.StateData.__init__(self, 'roguesDone')

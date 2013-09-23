@@ -9,7 +9,6 @@ import LiftConstants
 import MovingPlatform
 
 class DistributedLift(BasicEntities.DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLift')
 
     def __init__(self, cr):

@@ -9,7 +9,6 @@ from direct.task import Task
 from otp.chat.ChatInputTyped import ChatInputTyped
 
 class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ChatInputWhiteList')
     ExecNamespace = None
 

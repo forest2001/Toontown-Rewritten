@@ -6,7 +6,6 @@ from toontown.toonbase import TTLocalizer
 from direct.task.Task import Task
 
 class BankGui(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BankGui')
 
     def __init__(self, doneEvent, allowWithdraw = 1):

@@ -34,11 +34,9 @@ def loadModel(baseName, game = 'shared', type = 'model', group = 'area'):
 
 
 class VariableContainer:
-    __module__ = __name__
 
 
 class DevVariableContainer:
-    __module__ = __name__
 
     def __init__(self, name):
         self.__dict__['_enabled'] = config.GetBool('%s-dev' % name, False)
@@ -52,7 +50,6 @@ def getRandomDialogueLine(lineList, rng):
 
 
 class CogdoGameMovie:
-    __module__ = __name__
 
     def __init__(self):
         self._ival = None

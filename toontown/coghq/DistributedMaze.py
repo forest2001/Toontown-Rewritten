@@ -14,7 +14,6 @@ from direct.task import Task
 from direct.gui.DirectGui import DGG, DirectFrame, DirectLabel
 
 class DistributedMaze(DistributedNodePathEntity):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMaze')
     ScheduleTaskName = 'mazeScheduler'
     RemoveBlocksDict = {2: ('HedgeBlock_0_1',),

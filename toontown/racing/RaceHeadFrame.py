@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon import ToonHead
 
 class RaceHeadFrame(DirectFrame):
-    __module__ = __name__
 
     def __init__(self, av = None, color = Vec4(1, 1, 1, 1), *args, **kwargs):
         self.panelGeom = loader.loadModel('phase_4/models/karting/racing_panel')

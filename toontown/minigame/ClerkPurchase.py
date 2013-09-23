@@ -8,7 +8,6 @@ DELAY_AFTER_COUNT_DOWN = 0.0
 DELAY_AFTER_CELEBRATE = 3.0
 
 class ClerkPurchase(PurchaseBase):
-    __module__ = __name__
     activateMode = 'storePurchase'
 
     def __init__(self, toon, remain, doneEvent):

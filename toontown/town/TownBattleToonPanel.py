@@ -10,7 +10,6 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class TownBattleToonPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattleToonPanel')
 
     def __init__(self, id):

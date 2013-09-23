@@ -13,7 +13,6 @@ from toontown.toonbase import TTLocalizer
 import string
 
 class DistributedStageSuit(DistributedFactorySuit.DistributedFactorySuit):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStageSuit')
 
     def setCogSpec(self, spec):

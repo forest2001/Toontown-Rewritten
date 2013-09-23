@@ -7,7 +7,6 @@ from direct.interval.IntervalGlobal import WaitInterval, ActorInterval, Function
 from direct.fsm import ClassicFSM, State
 
 class WinterPartyCatchActivityToonSD(PartyCatchActivityToonSD.PartyCatchActivityToonSD):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyCatchActivityToonSD')
 
     def __init__(self, avId, activity):

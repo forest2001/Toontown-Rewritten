@@ -11,7 +11,6 @@ import CashbotHQBossBattle
 from pandac.PandaModules import DecalEffect
 
 class CashbotCogHQLoader(CogHQLoader.CogHQLoader):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CashbotCogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):

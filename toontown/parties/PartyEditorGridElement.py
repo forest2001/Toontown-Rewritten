@@ -11,7 +11,6 @@ from toontown.parties.PartyInfo import PartyInfo
 from toontown.parties import PartyUtils
 
 class PartyEditorGridElement(DirectButton):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyEditorGridElement')
 
     def __init__(self, partyEditor, id, isDecoration, checkSoldOutAndPaidStatusAndAffordability, **kw):

@@ -9,7 +9,6 @@ if __debug__:
     import pdb
 
 class DistributedKartShopInterior(DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedKartShopInterior')
 
     def __init__(self, cr):

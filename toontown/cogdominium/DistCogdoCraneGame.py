@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer as TTL
 from toontown.toonbase import ToontownGlobals
 
 class DistCogdoCraneGame(CogdoCraneGameBase, DistCogdoLevelGame):
-    __module__ = __name__
     notify = directNotify.newCategory('DistCogdoCraneGame')
 
     def __init__(self, cr):

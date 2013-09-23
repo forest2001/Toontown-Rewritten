@@ -120,7 +120,6 @@ def checkPlace(placeX, placeY, fillSize, placeList):
 
 
 class DistributedTargetGame(DistributedMinigame):
-    __module__ = __name__
     UPDATE_ENVIRON_TASK = 'TargetGameUpdateEnvironTask'
     UPDATE_LOCALTOON_TASK = 'TargetGameUpdateLocalToonTask'
     UPDATE_SHADOWS_TASK = 'TargetGameUpdateShadowsTask'

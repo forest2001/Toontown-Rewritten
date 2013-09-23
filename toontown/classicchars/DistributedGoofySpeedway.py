@@ -9,7 +9,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import DLHood
 
 class DistributedGoofySpeedway(DistributedCCharBase.DistributedCCharBase):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGoofySpeedway')
 
     def __init__(self, cr):

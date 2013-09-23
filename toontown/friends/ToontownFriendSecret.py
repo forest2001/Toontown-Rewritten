@@ -24,7 +24,6 @@ def openFriendSecret(secretType):
 FriendSecret.openFriendSecret = openFriendSecret
 
 class ToontownFriendSecret(FriendSecret.FriendSecret):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownFriendSecret')
 
     def __init__(self, secretType):

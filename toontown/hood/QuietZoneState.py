@@ -10,7 +10,6 @@ from direct.fsm import State
 import ZoneUtil
 
 class QuietZoneState(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('QuietZoneState')
     Disable = False
     Queue = []

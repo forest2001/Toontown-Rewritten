@@ -7,7 +7,6 @@ import MazeGameGlobals
 import MazeData
 
 class DistributedMazeGameAI(DistributedMinigameAI):
-    __module__ = __name__
 
     def __init__(self, air, minigameId):
         try:

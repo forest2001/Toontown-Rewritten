@@ -21,7 +21,6 @@ def clearPythonIvals(ival):
 
 
 class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
-    __module__ = __name__
     ZoneToIdles = {}
     ZoneToIdleIntoFightAnims = {}
     ZoneToFightAnims = {}

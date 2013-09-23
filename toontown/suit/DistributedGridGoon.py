@@ -7,7 +7,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.coghq import MovingPlatform
 
 class DistributedGridGoon(DistributedGoon.DistributedGoon):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGoon')
 
     def __init__(self, cr, type = 'sg'):

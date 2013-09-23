@@ -1,7 +1,6 @@
 from otp.otpgui.OTPDialog import *
 
 class TTDialog(OTPDialog):
-    __module__ = __name__
 
     def __init__(self, parent = None, style = NoButtons, **kw):
         self.path = 'phase_3/models/gui/dialog_box_buttons_gui'
@@ -10,7 +9,6 @@ class TTDialog(OTPDialog):
 
 
 class TTGlobalDialog(GlobalDialog):
-    __module__ = __name__
 
     def __init__(self, message = '', doneEvent = None, style = NoButtons, okButtonText = OTPLocalizer.DialogOK, cancelButtonText = OTPLocalizer.DialogCancel, **kw):
         self.path = 'phase_3/models/gui/dialog_box_buttons_gui'

@@ -4,7 +4,6 @@ from direct.task import Task
 import math
 
 class SleepingHydrantAnimatedProp(AnimatedProp.AnimatedProp):
-    __module__ = __name__
 
     def __init__(self, node):
         AnimatedProp.AnimatedProp.__init__(self, node)

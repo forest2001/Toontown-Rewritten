@@ -9,7 +9,6 @@ IGNORE_SCALE = 0.06
 STOP_IGNORE_SCALE = 0.04
 
 class AvatarPanelBase(AvatarPanel.AvatarPanel):
-    __module__ = __name__
 
     def __init__(self, avatar, FriendsListPanel = None):
         self.dialog = None

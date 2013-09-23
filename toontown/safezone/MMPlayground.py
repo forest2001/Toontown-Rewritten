@@ -6,7 +6,6 @@ from direct.actor import Actor
 from toontown.toonbase import ToontownGlobals
 
 class MMPlayground(Playground.Playground):
-    __module__ = __name__
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)

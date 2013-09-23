@@ -9,7 +9,6 @@ from otp.speedchat import SpeedChatGlobals, SCSettings
 from otp.otpbase import OTPLocalizer
 
 class TownBattleSOSPetInfoPanel(StateData.StateData):
-    __module__ = __name__
 
     def __init__(self, doneEvent):
         StateData.StateData.__init__(self, doneEvent)

@@ -6,7 +6,6 @@ from direct.particles import ForceGroup
 import random
 
 class Bubbles(NodePath):
-    __module__ = __name__
 
     def __init__(self, parent, renderParent):
         NodePath.__init__(self)

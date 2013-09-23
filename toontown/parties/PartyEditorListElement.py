@@ -7,7 +7,6 @@ from toontown.parties.PartyEditorGridElement import PartyEditorGridElement
 from toontown.parties.PartyUtils import getPartyActivityIcon
 
 class PartyEditorListElement(DirectButton):
-    __module__ = __name__
     notify = directNotify.newCategory('PartyEditorListElement')
 
     def __init__(self, partyEditor, id, isDecoration = False, **kw):

@@ -19,7 +19,6 @@ CATALOG_PANEL_CHAT_WORDWRAP = 9
 CATALOG_PANEL_ACCESSORY_WORDWRAP = 11
 
 class CatalogItemPanel(DirectFrame):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogItemPanel')
 
     def __init__(self, parent = aspect2d, parentCatalogScreen = None, **kw):

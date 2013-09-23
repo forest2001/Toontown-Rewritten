@@ -3,7 +3,6 @@ from otp.avatar import AvatarDetail
 from toontown.pets import DistributedPet
 
 class PetDetail(AvatarDetail.AvatarDetail):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PetDetail')
 
     def getDClass(self):

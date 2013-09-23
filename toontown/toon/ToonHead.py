@@ -49,7 +49,6 @@ DogMuzzleDict = {'dls': '/models/char/dogMM_Shorts-headMuzzles-',
  'dll': '/models/char/dogLL_Shorts-headMuzzles-'}
 
 class ToonHead(Actor.Actor):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonHead')
     EyesOpen = loader.loadTexture('phase_3/maps/eyes.jpg', 'phase_3/maps/eyes_a.rgb')
     EyesOpen.setMinfilter(Texture.FTLinear)

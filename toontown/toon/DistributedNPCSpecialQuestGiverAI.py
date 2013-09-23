@@ -5,7 +5,6 @@ from DistributedNPCToonBaseAI import *
 from toontown.quest import Quests
 
 class DistributedNPCSpecialQuestGiverAI(DistributedNPCToonBaseAI):
-    __module__ = __name__
 
     def __init__(self, air, npcId, questCallback = None, hq = 0):
         DistributedNPCToonBaseAI.__init__(self, air, npcId, questCallback)

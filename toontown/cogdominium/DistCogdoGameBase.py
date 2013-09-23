@@ -1,7 +1,6 @@
 
 
 class DistCogdoGameBase:
-    __module__ = __name__
 
     def local2GameTime(self, timestamp):
         return timestamp - self._startTime

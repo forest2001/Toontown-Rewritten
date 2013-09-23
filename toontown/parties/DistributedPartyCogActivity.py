@@ -6,7 +6,6 @@ from DistributedPartyTeamActivity import DistributedPartyTeamActivity
 from PartyCogActivity import PartyCogActivity
 
 class DistributedPartyCogActivity(DistributedPartyTeamActivity):
-    __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyCogActivity')
     players = {}
     localPlayer = None

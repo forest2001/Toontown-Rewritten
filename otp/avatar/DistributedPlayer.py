@@ -20,7 +20,6 @@ if base.config.GetBool('want-chatfilter-hacks', 0):
     badwordpy.init(os.environ.get('OTP') + '\\src\\switchboard\\', '')
 
 class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBase, TelemetryLimited):
-    __module__ = __name__
     TeleportFailureTimeout = 60.0
     chatGarbler = ChatGarbler.ChatGarbler()
 

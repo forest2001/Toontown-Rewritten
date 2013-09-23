@@ -4,7 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import ZoneUtil
 
 class TutorialManager(DistributedObject.DistributedObject):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('TutorialManager')
     neverDisable = 1
 

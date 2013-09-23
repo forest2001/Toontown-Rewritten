@@ -14,7 +14,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.toon.Toon import teleportDebug
 
 class Hood(StateData.StateData):
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Hood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

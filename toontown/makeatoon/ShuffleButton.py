@@ -8,7 +8,6 @@ from direct.interval.IntervalGlobal import *
 import random
 
 class ShuffleButton:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('ShuffleButton')
 
     def __init__(self, parent, fetchEvent):
