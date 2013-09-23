@@ -1686,80 +1686,18 @@ class LauncherBase(DirectObject):
     def resetBytesPerSecond(self):
         self.bpsList = []
 
-    def recordBytesPerSecond--- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'httpChannel'
-6	LOAD_ATTR         'getBytesDownloaded'
-9	CALL_FUNCTION_0   None
-12	STORE_FAST        'bytesDownloaded'
-
-15	LOAD_FAST         'self'
-18	LOAD_ATTR         'httpChannel'
-21	LOAD_ATTR         'getBytesRequested'
-24	CALL_FUNCTION_0   None
-27	STORE_FAST        'bytesRequested'
-
-30	LOAD_FAST         'self'
-33	LOAD_ATTR         'getTime'
-36	CALL_FUNCTION_0   None
-39	STORE_FAST        't'
-
-42	LOAD_FAST         'self'
-45	LOAD_ATTR         'bpsList'
-48	LOAD_ATTR         'append'
-51	LOAD_FAST         't'
-54	LOAD_FAST         'bytesDownloaded'
-57	LOAD_FAST         'bytesRequested'
-60	BUILD_TUPLE_3     None
-63	CALL_FUNCTION_1   None
-66	POP_TOP           None
-
-67	SETUP_LOOP        '160'
-
-70	LOAD_GLOBAL       'len'
-73	LOAD_FAST         'self'
-76	LOAD_ATTR         'bpsList'
-79	CALL_FUNCTION_1   None
-82	LOAD_CONST        0
-85	COMPARE_OP        '=='
-88	JUMP_IF_FALSE     '95'
-
-91	BREAK_LOOP        None
-92	JUMP_FORWARD      '95'
-95_0	COME_FROM         '92'
-
-95	LOAD_FAST         'self'
-98	LOAD_ATTR         'bpsList'
-101	LOAD_CONST        0
-104	BINARY_SUBSCR     None
-105	UNPACK_SEQUENCE_3 None
-108	STORE_FAST        'ft'
-111	STORE_FAST        'fb'
-114	STORE_FAST        'fr'
-
-117	LOAD_FAST         'ft'
-120	LOAD_FAST         't'
-123	LOAD_FAST         'self'
-126	LOAD_ATTR         'BPS_WINDOW'
-129	BINARY_SUBTRACT   None
-130	COMPARE_OP        '<'
-133	JUMP_IF_FALSE     '155'
-
-136	LOAD_FAST         'self'
-139	LOAD_ATTR         'bpsList'
-142	LOAD_ATTR         'pop'
-145	LOAD_CONST        0
-148	CALL_FUNCTION_1   None
-151	POP_TOP           None
-152	JUMP_BACK         '70'
-
-155	BREAK_LOOP        None
-156	JUMP_BACK         '70'
-159	POP_BLOCK         None
-160_0	COME_FROM         '67'
-
-Syntax error at or near `POP_BLOCK' token at offset 159
+    def recordBytesPerSecond(self):
+        bytesDownloaded = self.httpChannel.getBytesDownloaed()
+        bytesRequested  = self.httpChannel.getBytesRequested()
+        t = self.getTime()
+        self.bpsList.append((t, bytesDownloaded, bytesRequested))
+        while True:
+            if len(self.bpsList()) == 0:
+                break
+            ft, fb, fr = self.bpsList[0]
+            if ft-t < self.BPS_WINDOW:
+                self.bpsList.pop()
+            break
 
     def getBytesPerSecond(self):
         if len(self.bpsList) < 2:
