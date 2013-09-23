@@ -110,7 +110,7 @@ def getProcessList--- This code section failed: ---
 187	RETURN_VALUE      None
 -1	RETURN_LAST       None
 
-Syntax error at or near `POP_BLOCK' token at offset 164# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+Syntax error at or near `POP_BLOCK' token at offset 164
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\launcher\procapi.pyc
 Traceback (most recent call last):

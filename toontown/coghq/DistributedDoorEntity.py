@@ -1667,7 +1667,7 @@ c(self.doorTop.unstash), Func(self.doorBottom.unstash), Parallel(SoundInterval(s
 
         def attribChanged(self, attrib, value):
             self.takedown()
-            self.setup()# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+            self.setup()
 1412	LOAD_ATTR         'find'
 1415	LOAD_CONST        '**/doorRight_innerCollision'
 1418	CALL_FUNCTION_1   None

@@ -702,7 +702,7 @@ for c in '!"#$%&()*+/:;<=>?@[\\]^_`{|}~':
     pass
 
 notify.setSeverity(severity)
-del severity# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+del severity
         'dc'
 318	BINARY_MODULO     None
 319	CALL_FUNCTION_1   None

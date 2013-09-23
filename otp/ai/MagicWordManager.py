@@ -873,4 +873,4 @@ def magicWord(mw):
 
 
 import __builtin__
-__builtin__.magicWord = magicWord# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
+__builtin__.magicWord = magicWord

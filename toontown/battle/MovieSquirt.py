@@ -1050,7 +1050,7 @@ squirtfn_array = (__doFlower,
  __doSeltzerBottle,
  __doFireHose,
  __doStormCloud,
- __doGeyser)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+ __doGeyser)
  None
 320	LOAD_CONST        0
 323	COMPARE_OP        '>'

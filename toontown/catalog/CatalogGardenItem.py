@@ -191,7 +191,7 @@ Syntax error at or near `JUMP_FORWARD' token at offset 38
         return not avatar.getGardenStarted()
 
     def isGift(self):
-        return 0# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return 0
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogGardenItem.pyc
 Traceback (most recent call last):

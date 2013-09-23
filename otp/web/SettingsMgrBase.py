@@ -78,7 +78,7 @@ Syntax error at or near `POP_BLOCK' token at offset 29
             return
 
         setting.setValue(val)
-        self._currentValueReprs[settingName] = valueStr# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        self._currentValueReprs[settingName] = valueStr
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\web\SettingsMgrBase.pyc
 Traceback (most recent call last):

@@ -369,7 +369,7 @@ Syntax error at or near `LOAD_GLOBAL' token at offset 92
             self.doneEvent = 'lawOfficeFloorDone'
             messenger.send(self.doneEvent)
         else:
-            self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+            self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\CountryClubInterior.pyc
 Traceback (most recent call last):

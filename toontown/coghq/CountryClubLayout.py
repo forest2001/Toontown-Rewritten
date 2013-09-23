@@ -579,7 +579,7 @@ ParserError: --- This code section failed: ---
          self.getNumBattles())
 
     def __repr__(self):
-        return str(self)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return str(self)
   'middleRoomsLeft'
 284	LOAD_GLOBAL       'len'
 287	LOAD_FAST         'battleRoomIds'

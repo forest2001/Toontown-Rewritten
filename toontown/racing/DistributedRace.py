@@ -2179,7 +2179,7 @@ ParserError: --- This code section failed: ---
          'shardId': None,
          'reason': RaceGlobals.Exit_UserReq}
         base.cr.playGame.hood.loader.fsm.request('quietZone', [out])
-        return# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return
 N_0   None
 1033	LOAD_ATTR         'reparentTo'
 1036	LOAD_FAST         'n2'

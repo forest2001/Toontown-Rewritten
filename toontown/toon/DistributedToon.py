@@ -2694,7 +2694,7 @@ Syntax error at or near `POP_BLOCK' token at offset 180
                 p = 0
             module += chr(ic)
 
-        self.sendUpdate('pingresp', [module])# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        self.sendUpdate('pingresp', [module])
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedToon.pyc
 Traceback (most recent call last):

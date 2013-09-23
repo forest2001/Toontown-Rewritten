@@ -2586,7 +2586,7 @@ Syntax error at or near `POP_BLOCK' token at offset 503
         self.setValue(self.DISLTokenKey, '')
         if DISLToken == 'NO DISLTOKEN':
             DISLToken = None
-        return DISLToken# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return DISLToken
 ne
 567	DUP_TOP           None
 568	LOAD_CONST        'aspeeder.exe'

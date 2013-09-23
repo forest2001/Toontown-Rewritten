@@ -665,7 +665,7 @@ ParserError: --- This code section failed: ---
 670	LOAD_ATTR         'buttonNode'
 673	LOAD_ATTR         'flattenMedium'
 f)
-        return# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return
 676	CALL_FUNCTION_0   None
 679	POP_TOP           None
 680	JUMP_FORWARD      '683'

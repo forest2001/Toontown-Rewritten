@@ -511,8 +511,8 @@ ParserError: --- This code section failed: ---
 1116	STORE_NAME        'stopSleepSwimTest'
 
 1119	LOAD_CONST        '<code_object sleepSwimTest>'
-1122# 2013.08.22 22:15:11 Pacific Daylight Time
-# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+1122
+
 	MAKE_FUNCTION_0   None
 1125	STORE_NAME        'sleepSwimTest'
 

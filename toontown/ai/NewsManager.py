@@ -1533,7 +1533,7 @@ Syntax error at or near `POP_BLOCK' token at offset 657
 
     def isHolidayRunning(self, holidayId):
         result = holidayId in self.holidayIdList
-        return result# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return result
 1	RETURN_LAST       None
 
 Syntax error at or near `POP_BLOCK' token at offset 657

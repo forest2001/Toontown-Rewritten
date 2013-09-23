@@ -1140,7 +1140,7 @@ ParserError: --- This code section failed: ---
         return
 
     def doNothing(self):
-        pass# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        pass
 AD_FAST         'self'
 330	LOAD_ATTR         'playerNum'
 333	LOAD_CONST        1

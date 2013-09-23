@@ -2267,7 +2267,7 @@ ParserError: --- This code section failed: ---
 
     def _handleClientCleanup(self):
         self.removePlayBackDelayDelete()
-        self.ignore('clientCleanup')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        self.ignore('clientCleanup')
    'DefaultCamP'
 684	CALL_FUNCTION_1   None
 687	POP_TOP           None

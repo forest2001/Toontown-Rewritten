@@ -975,7 +975,7 @@ Syntax error at or near `POP_BLOCK' token at offset 167
         if earnedAmount > 0:
             DistributedPartyActivity.showJellybeanReward(self, earnedAmount, jarAmount, message)
         else:
-            base.cr.playGame.getPlace().fsm.request('walk')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+            base.cr.playGame.getPlace().fsm.request('walk')
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCatchActivity.pyc
 Traceback (most recent call last):

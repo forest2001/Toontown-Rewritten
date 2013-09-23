@@ -1147,7 +1147,7 @@ ParserError: --- This code section failed: ---
          self.getNumBattles())
 
     def __repr__(self):
-        return str(self)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return str(self)
 '
 290	CALL_FUNCTION_1   None
 293	INPLACE_SUBTRACT  None

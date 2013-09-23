@@ -205,7 +205,7 @@ class PickANamePatternTwoPartLastName(PickANamePattern):
             if combinedIndex != -1:
                 pattern[-2] = combinedIndex2indices[combinedIndex][0]
                 pattern[-1] = combinedIndex2indices[combinedIndex][1]
-        return pattern# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return pattern
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\namepanel\PickANamePattern.pyc
 Traceback (most recent call last):

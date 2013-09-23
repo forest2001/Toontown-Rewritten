@@ -354,7 +354,7 @@ Syntax error at or near `LOAD_GLOBAL' token at offset 92
         FactoryInterior.notify.info('exitFLA')
         if hasattr(self, 'flaDialog'):
             self.flaDialog.cleanup()
-            del self.flaDialog# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+            del self.flaDialog
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\FactoryInterior.pyc
 Traceback (most recent call last):

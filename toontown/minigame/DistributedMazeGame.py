@@ -2246,7 +2246,7 @@ ParserError: --- This code section failed: ---
             del iCamParent
             base.localAvatar.stopLookAround()
 
-        return Sequence(Wait(waitDur), lerpTrack, Func(cleanup))# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        return Sequence(Wait(waitDur), lerpTrack, Func(cleanup))
 AD_GLOBAL       'Parallel'
 1425	LOAD_FAST         'flyTrack'
 1428	LOAD_FAST         'cameraTrack'

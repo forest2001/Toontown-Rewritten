@@ -1,4 +1,4 @@
-# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\Quests.pyc
 Traceback (most recent call last):

@@ -679,7 +679,7 @@ ParserError: --- This code section failed: ---
     return [toonTrack,
      soundTrack,
      buttonTrack,
-     suitResponseTrack]# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+     suitResponseTrack]
 
 309	LOAD_ATTR         'debug'
 312	LOAD_CONST        'groupHitDict = %s'
