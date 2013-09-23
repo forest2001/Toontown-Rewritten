@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:07 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDStomper
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -161,6 +159,3 @@ class TwoDStomper(DirectObject):
                 self.stashCollisionsIval = Sequence(Func(stashCollisions), Wait(2.5), Func(unstashCollisions))
                 self.stashCollisionsIval.start()
                 self.game.localToonSquished()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDStomper.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:07 Pacific Daylight Time

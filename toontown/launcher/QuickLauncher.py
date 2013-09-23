@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:01 Pacific Daylight Time
-# Embedded file name: toontown.launcher.QuickLauncher
 import sys
 import os
 import time
@@ -465,7 +463,6 @@ Syntax error at or near `LOAD_FAST' token at offset 132
         self.newTaskManager()
         eventMgr.restart()
         from toontown.toonbase import ToontownStart# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:21:02 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\launcher\QuickLauncher.pyc
 Traceback (most recent call last):

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:02 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogFlooringItem
 from CatalogSurfaceItem import *
 FTTextureName = 0
 FTColor = 1
@@ -173,6 +171,3 @@ def getFlooringRange(fromIndex, toIndex, *otherRanges):
                     list.append(CatalogFlooringItem(patternIndex, 0))
 
     return list
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogFlooringItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:03 Pacific Daylight Time

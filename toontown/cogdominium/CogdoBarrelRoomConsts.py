@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:32 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoBarrelRoomConsts
 from pandac.PandaModules import *
 CollectionTime = 30
 BarrelRoomIntroTimeout = 15.0
@@ -97,6 +95,3 @@ StateHidden, StateAvailable, StateUsed, StateCrushed = range(4)
 
 def numBarrels():
     return len(BarrelProps)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoBarrelRoomConsts.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:32 Pacific Daylight Time

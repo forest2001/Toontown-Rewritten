@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:35 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.ToontownStart
 import __builtin__
 
 class game():
@@ -115,6 +113,3 @@ if autoRun and launcher.isDummy() and (not Thread.isTrueThreads() or __name__ ==
         from direct.showbase import PythonUtil
         print PythonUtil.describeException()
         raise
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\ToontownStart.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:35 Pacific Daylight Time

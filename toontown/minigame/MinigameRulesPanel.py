@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:53 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MinigameRulesPanel
 from direct.task import Task
 from direct.fsm import StateData
 from toontown.toonbase.ToontownGlobals import *
@@ -55,6 +53,3 @@ class MinigameRulesPanel(StateData.StateData):
 
     def playCallback(self):
         messenger.send(self.doneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MinigameRulesPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:53 Pacific Daylight Time

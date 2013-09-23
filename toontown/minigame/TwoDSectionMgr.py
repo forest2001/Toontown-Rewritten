@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:06 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDSectionMgr
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -135,6 +133,3 @@ class TwoDSectionMgr(DirectObject):
         relativePoint = Point3(self.sections[self.activeSection].spawnPointMgr.getSpawnPoint())
         relativePoint.setX(relativePoint.getX() + self.sectionNPList[self.activeSection].getX())
         return relativePoint
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDSectionMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:06 Pacific Daylight Time

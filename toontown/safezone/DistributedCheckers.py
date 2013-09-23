@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:25 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedCheckers
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
@@ -1143,7 +1141,6 @@ ParserError: --- This code section failed: ---
 
     def doNothing(self):
         pass# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:24:27 Pacific Daylight Time
 AD_FAST         'self'
 330	LOAD_ATTR         'playerNum'
 333	LOAD_CONST        1

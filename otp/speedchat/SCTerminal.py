@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:49 Pacific Daylight Time
-# Embedded file name: otp.speedchat.SCTerminal
 from SCElement import SCElement
 from SCObject import SCObject
 from SCMenu import SCMenu
@@ -169,6 +167,3 @@ class SCTerminal(SCElement):
             return self.text + ' (%s)' % self.getCharges()
         else:
             return self.text
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\speedchat\SCTerminal.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:50 Pacific Daylight Time

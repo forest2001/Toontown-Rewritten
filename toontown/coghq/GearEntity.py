@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:03 Pacific Daylight Time
-# Embedded file name: toontown.coghq.GearEntity
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
 import MovingPlatform
@@ -122,6 +120,3 @@ class GearEntity(BasicEntities.NodePathEntity):
             BasicEntities.NodePathEntity.setSz(self, *args)
             if self.entInitialized:
                 self.initGear()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\GearEntity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:03 Pacific Daylight Time

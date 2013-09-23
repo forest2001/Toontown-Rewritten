@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:53 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedToonAI
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
@@ -4574,6 +4572,3 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedToonAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:59 Pacific Daylight Time

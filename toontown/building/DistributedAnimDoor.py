@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:43 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedAnimDoor
 from pandac.PandaModules import NodePath, VBase3
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Parallel, Sequence, Wait, HprInterval, LerpHprInterval, SoundInterval
@@ -144,6 +142,3 @@ class DistributedAnimDoor(DistributedDoor.DistributedDoor):
             self.doorExitTrack = Sequence(LerpHprInterval(nodePath=leftDoor, duration=1.0, hpr=VBase3(0, 0, 0), startHpr=VBase3(h, 0, 0), blendType='easeInOut'), SoundInterval(self.closeSfx, node=leftDoor), name=trackName)
             self.doorExitTrack.start(ts)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedAnimDoor.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:43 Pacific Daylight Time

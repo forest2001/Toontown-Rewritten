@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:51 Pacific Daylight Time
-# Embedded file name: toontown.hood.DGHood
 from pandac.PandaModules import *
 import ToonHood
 from toontown.town import DGTownLoader
@@ -65,6 +63,3 @@ class DGHood(ToonHood.ToonHood):
         self.sky.setHpr(0.0, 0.0, 0.0)
         ce = CompassEffect.make(NodePath(), CompassEffect.PRot | CompassEffect.PZ)
         self.sky.node().setEffect(ce)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\DGHood.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:51 Pacific Daylight Time

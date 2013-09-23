@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:05 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDEnemyMgr
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -51,6 +49,3 @@ class TwoDEnemyMgr(DirectObject):
     def exitPause(self):
         for enemy in self.enemies:
             enemy.exitPause()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDEnemyMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:05 Pacific Daylight Time

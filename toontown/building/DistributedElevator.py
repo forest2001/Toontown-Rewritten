@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:49 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedElevator
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -573,6 +571,3 @@ class DistributedElevator(DistributedObject.DistributedObject):
         self.boardingGroupShow = BoardingGroupShow.BoardingGroupShow(toon)
         track, trackType = self.boardingGroupShow.getBoardingTrack(self.getElevatorModel(), self.getOffsetPosWrtToonParent(toon, seatIndex), self.getOffsetPosWrtRender(seatIndex), wantToonRotation)
         return (track, trackType)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedElevator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:50 Pacific Daylight Time

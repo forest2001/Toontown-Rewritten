@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:05 Pacific Daylight Time
-# Embedded file name: toontown.coghq.BossbotOfficeExterior
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
 from direct.fsm import State
@@ -16,6 +14,3 @@ class BossbotOfficeExterior(FactoryExterior.FactoryExterior):
         FactoryExterior.FactoryExterior.enterWalk(self, teleportIn)
         self.ignore('teleportQuery')
         base.localAvatar.setTeleportAvailable(0)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\BossbotOfficeExterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:05 Pacific Daylight Time

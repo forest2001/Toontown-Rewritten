@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:51 Pacific Daylight Time
-# Embedded file name: otp.uberdog.RejectCode
 
 
 class RejectCode():
@@ -79,6 +77,3 @@ class RejectCode():
     NOT_YOUR_FRIENDS_LIST = 60009
     ALREADY_FRIENDS_WITH_SELF = 60010
     MAY_NOT_OPEN_INVITE = 60011
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\uberdog\RejectCode.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:51 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:11 Pacific Daylight Time
-# Embedded file name: toontown.makeatoon.TTPickANamePattern
 from direct.showbase.PythonUtil import listToItem2index
 from otp.namepanel.PickANamePattern import PickANamePatternTwoPartLastName
 from toontown.makeatoon.NameGenerator import NameGenerator
@@ -23,6 +21,3 @@ class TTPickANamePattern(PickANamePatternTwoPartLastName):
             ng = NameGenerator()
             TTPickANamePattern.LastNamePrefixesCapped = ng.getLastNamePrefixesCapped()[:]
         return TTPickANamePattern.LastNamePrefixesCapped
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\makeatoon\TTPickANamePattern.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:11 Pacific Daylight Time

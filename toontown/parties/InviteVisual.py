@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:28 Pacific Daylight Time
-# Embedded file name: toontown.parties.InviteVisual
 from datetime import datetime
 import calendar
 from direct.gui.DirectGui import DirectFrame, DirectLabel
@@ -113,6 +111,3 @@ class InviteVisual(DirectFrame):
     def close(self):
         self.destroy()
         del self
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\InviteVisual.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:28 Pacific Daylight Time

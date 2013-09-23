@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:33 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedPhotoGame
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -1662,6 +1660,3 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         if hasattr(self, 'soundTable'):
             self.soundTable[name].setVolume(volume)
             self.soundTable[name].play()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedPhotoGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:36 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:28 Pacific Daylight Time
-# Embedded file name: toontown.parties.JellybeanRewardGui
 from pandac.PandaModules import TextNode
 from direct.gui.DirectGui import DirectFrame
 from direct.gui.DirectGui import DirectButton
@@ -92,6 +90,3 @@ class JellybeanRewardGui(DirectFrame):
         self.messageLabel.destroy()
         self.closeButton.destroy()
         DirectFrame.destroy(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\JellybeanRewardGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:29 Pacific Daylight Time

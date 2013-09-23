@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:35 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingGameGuis
 from direct.interval.IntervalGlobal import LerpFunctionInterval
 from direct.gui.DirectGui import DirectLabel, DirectFrame, DGG
 from direct.showbase.PythonUtil import bound as clamp
@@ -204,6 +202,3 @@ class CogdoFlyingFuelGui(DirectFrame):
         self.gui = None
         DirectFrame.destroy(self)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingGameGuis.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:35 Pacific Daylight Time

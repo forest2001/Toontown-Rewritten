@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:22 Pacific Daylight Time
-# Embedded file name: toontown.rpc.AwardManagerConsts
 GiveAwardErrors = Enum('Success, WrongGender, NotGiftable, FullMailbox, FullAwardMailbox, AlreadyInMailbox, AlreadyInGiftQueue, AlreadyInOrderedQueue, AlreadyInCloset, AlreadyBeingWorn, AlreadyInAwardMailbox, AlreadyInThirtyMinuteQueue, AlreadyInMyPhrases, AlreadyKnowDoodleTraining, AlreadyRented, GenericAlreadyHaveError, UnknownError, UnknownToon, NonToon,')
 GiveAwardErrorStrings = {GiveAwardErrors.Success: 'success',
  GiveAwardErrors.WrongGender: 'wrong gender',
@@ -20,6 +18,3 @@ GiveAwardErrorStrings = {GiveAwardErrors.Success: 'success',
  GiveAwardErrors.UnknownError: 'unknown error',
  GiveAwardErrors.UnknownToon: 'toon not in database',
  GiveAwardErrors.NonToon: 'this is not a toon'}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\rpc\AwardManagerConsts.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:22 Pacific Daylight Time

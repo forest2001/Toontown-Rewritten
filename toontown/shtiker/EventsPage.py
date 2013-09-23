@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:48 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.EventsPage
 import urllib
 from pandac.PandaModules import Vec4, Vec3, TextNode, PNMImage, StringStream, Texture, HTTPClient, DocumentSpec, Ramfile, Point3
 from direct.task.Task import Task
@@ -1063,6 +1061,3 @@ class EventsPage(ShtikerPage.ShtikerPage):
         else:
             result = self.NewsUrl
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\EventsPage.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:51 Pacific Daylight Time

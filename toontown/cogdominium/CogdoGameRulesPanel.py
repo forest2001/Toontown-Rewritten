@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:44 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoGameRulesPanel
 from direct.task import Task
 from direct.fsm import StateData
 from toontown.toonbase.ToontownGlobals import *
@@ -68,6 +66,3 @@ class CogdoGameRulesPanel(StateData.StateData):
 
     def playCallback(self):
         messenger.send(self.doneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoGameRulesPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:45 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:57 Pacific Daylight Time
-# Embedded file name: toontown.minigame.RingAction
 from direct.directnotify import DirectNotifyGlobal
 import RingTrack
 
@@ -46,6 +44,3 @@ class RingActionRingTrack(RingAction):
 
     def eval(self, t):
         return self.__track.eval(t)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\RingAction.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:58 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:55 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetObserve
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import list2dict, Enum
 from toontown.pets import PetTricks
@@ -208,6 +206,3 @@ def getSCObserve(msgId, speakerDoId):
         trickId = PetTricks.ScId2trickId[msgId]
         return TrickRequestObserve(trickId, speakerDoId)
     return SCObserve(msgId, phrase, speakerDoId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetObserve.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:55 Pacific Daylight Time

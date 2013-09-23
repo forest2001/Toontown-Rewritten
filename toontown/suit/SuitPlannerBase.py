@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:35 Pacific Daylight Time
-# Embedded file name: toontown.suit.SuitPlannerBase
 from pandac.PandaModules import *
 import random
 import string
@@ -602,6 +600,3 @@ class SuitPlannerBase():
 
     def getDnaStore(self):
         return self.dnaStore
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\SuitPlannerBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:36 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:42 Pacific Daylight Time
-# Embedded file name: otp.namepanel.PickANamePattern
 
 
 class PickANamePattern():
@@ -208,7 +206,6 @@ class PickANamePatternTwoPartLastName(PickANamePattern):
                 pattern[-2] = combinedIndex2indices[combinedIndex][0]
                 pattern[-1] = combinedIndex2indices[combinedIndex][1]
         return pattern# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:15:42 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\namepanel\PickANamePattern.pyc
 Traceback (most recent call last):

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:40 Pacific Daylight Time
-# Embedded file name: otp.login.SecretFriendsInfoPanel
 from pandac.PandaModules import *
 from otp.otpbase.OTPGlobals import *
 from direct.gui.DirectGui import *
@@ -19,6 +17,3 @@ class SecretFriendsInfoPanel(getGlobalDialogClass()):
         self['image_scale'] = (2, 1, 1.3)
         closeButton = self.getChild(0)
         closeButton.setZ(-0.56)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\SecretFriendsInfoPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:40 Pacific Daylight Time

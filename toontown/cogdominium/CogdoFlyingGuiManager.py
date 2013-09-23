@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:36 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingGuiManager
 from pandac.PandaModules import NodePath
 from toontown.toonbase import ToontownIntervals
 from toontown.toonbase.ToontownTimer import ToontownTimer
@@ -168,6 +166,3 @@ class CogdoFlyingGuiManager():
         self.root.removeNode()
         self.root = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingGuiManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:36 Pacific Daylight Time

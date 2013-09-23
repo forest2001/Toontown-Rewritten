@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:12 Pacific Daylight Time
-# Embedded file name: toontown.speedchat.TTSpeedChatTypes
 from TTSCToontaskMenu import TTSCToontaskMenu
 from TTSCFactoryMenu import TTSCFactoryMenu
 from TTSCCogMenu import TTSCCogMenu
@@ -27,6 +25,3 @@ from TTSCWinterMenu import TTSCWinterMenu
 from TTSCSellbotInvasionMenu import TTSCSellbotInvasionMenu
 from TTSCSellbotFieldOfficeMenu import TTSCSellbotFieldOfficeMenu
 from TTSCIdesOfMarchMenu import TTSCIdesOfMarchMenu
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\speedchat\TTSpeedChatTypes.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:12 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:52 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MinigamePhysicsWorldBase
 from pandac.PandaModules import Quat
 from pandac.PandaModules import OdeWorld, OdeSimpleSpace, OdeJointGroup, OdeUtil
 from direct.directnotify import DirectNotifyGlobal
@@ -167,6 +165,3 @@ class MinigamePhysicsWorldBase():
             c1 = c0
             c0 = chold
         return (c0, c1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MinigamePhysicsWorldBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:53 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:23 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyJukeboxActivityBase
 from direct.actor.Actor import Actor
 from direct.task.Task import Task
 from pandac.PandaModules import *
@@ -235,6 +233,3 @@ class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
             return True
         else:
             return False
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyJukeboxActivityBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:23 Pacific Daylight Time

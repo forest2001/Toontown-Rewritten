@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:19 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieFire
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
@@ -682,7 +680,6 @@ ParserError: --- This code section failed: ---
      soundTrack,
      buttonTrack,
      suitResponseTrack]# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:16:20 Pacific Daylight Time
 
 309	LOAD_ATTR         'debug'
 312	LOAD_CONST        'groupHitDict = %s'

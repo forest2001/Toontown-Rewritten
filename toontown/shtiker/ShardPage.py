@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:03 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.ShardPage
 from pandac.PandaModules import *
 import ShtikerPage
 from direct.task.Task import Task
@@ -307,6 +305,3 @@ class ShardPage(ShtikerPage.ShtikerPage):
                     place = base.cr.playGame.hood.place
 
             place.requestTeleport(canonicalHoodId, canonicalHoodId, shardId, -1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\ShardPage.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:04 Pacific Daylight Time

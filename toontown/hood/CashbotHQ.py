@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:50 Pacific Daylight Time
-# Embedded file name: toontown.hood.CashbotHQ
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 import CogHood
@@ -45,6 +43,3 @@ class CashbotHQ(CogHood.CogHood):
             self.doSpawnTitleText(text)
         else:
             CogHood.CogHood.spawnTitleText(self, zoneId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\CashbotHQ.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:50 Pacific Daylight Time

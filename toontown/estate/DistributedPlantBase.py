@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:12 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedPlantBase
 import DistributedLawnDecor
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -224,6 +222,3 @@ class DistributedPlantBase(DistributedLawnDecor.DistributedLawnDecor):
     def finishInteraction(self):
         DistributedLawnDecor.DistributedLawnDecor.finishInteraction(self)
         base.localAvatar.handleEndPlantInteraction(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedPlantBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:13 Pacific Daylight Time

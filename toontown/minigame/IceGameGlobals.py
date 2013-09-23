@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:57 Pacific Daylight Time
-# Embedded file name: toontown.minigame.IceGameGlobals
 import math
 from pandac.PandaModules import Point3
 from toontown.toonbase import ToontownGlobals
@@ -59,6 +57,3 @@ ObstacleShapes = {ToontownGlobals.ToontownCentral: True,
  ToontownGlobals.MinniesMelodyland: True,
  ToontownGlobals.TheBrrrgh: False,
  ToontownGlobals.DonaldsDreamland: False}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\IceGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:57 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:32 Pacific Daylight Time
-# Embedded file name: toontown.suit.Goon
 from pandac.PandaModules import *
 from direct.actor import Actor
 from otp.avatar import Avatar
@@ -152,6 +150,3 @@ class Goon(Avatar.Avatar):
             self.hat.setColorScale(colorList[1])
         else:
             self.hat.clearColorScale()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\Goon.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:32 Pacific Daylight Time

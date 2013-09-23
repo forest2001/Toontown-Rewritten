@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:30 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedCogKart
 import math
 from pandac.PandaModules import CollisionSphere, CollisionNode, Vec3, Point3, deg2Rad
 from direct.interval.IntervalGlobal import Sequence, Func, Parallel, ActorInterval, Wait, Parallel, LerpHprInterval, ProjectileInterval, LerpPosInterval
@@ -376,6 +374,3 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
             return TTLocalizer.ElevatorBossBotCourse1
         elif self.countryClubId == ToontownGlobals.BossbotCountryClubIntC:
             return TTLocalizer.ElevatorBossBotCourse2
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedCogKart.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:31 Pacific Daylight Time

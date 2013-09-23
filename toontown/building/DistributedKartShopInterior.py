@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:53 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedKartShopInterior
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObject import DistributedObject
 from pandac.PandaModules import *
@@ -38,6 +36,3 @@ class DistributedKartShopInterior(DistributedObject):
         self.interior = loader.loadModel('phase_6/models/karting/KartShop_Interior')
         self.interior.reparentTo(render)
         self.interior.flattenMedium()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedKartShopInterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:53 Pacific Daylight Time

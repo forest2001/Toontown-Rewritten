@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:44 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedTravelGame
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import GlobalDialogColor
@@ -1012,6 +1010,3 @@ class DistributedTravelGame(DistributedMinigame):
 
         for i in range(self.numBackWheels):
             self.backWheels[i].setTransform(self.backWheelInit[i])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedTravelGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:46 Pacific Daylight Time

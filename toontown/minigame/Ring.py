@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:57 Pacific Daylight Time
-# Embedded file name: toontown.minigame.Ring
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import NodePath
@@ -28,6 +26,3 @@ class Ring(NodePath):
     def setT(self, t):
         pos = self.__moveTrack.eval((t + self.__tOffset) % 1.0)
         self.setPos(pos[0] * self.__posScale, 0, pos[1] * self.__posScale)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\Ring.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:57 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:07 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDStomperMgr
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -57,6 +55,3 @@ class TwoDStomperMgr(DirectObject):
     def exitPause(self):
         for stomper in self.stompers:
             stomper.exitPause()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDStomperMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:07 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:01 Pacific Daylight Time
-# Embedded file name: toontown.hood.ZoneUtil
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 zoneUtilNotify = DirectNotifyGlobal.directNotify.newCategory('ZoneUtil')
@@ -239,6 +237,3 @@ def getWakeInfo(hoodId = None, zoneId = None):
         pass
 
     return (showWake, wakeWaterHeight)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\ZoneUtil.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:01 Pacific Daylight Time

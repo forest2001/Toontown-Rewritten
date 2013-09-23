@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:58 Pacific Daylight Time
-# Embedded file name: toontown.building.ToonInteriorColors
 from toontown.toonbase.ToontownGlobals import *
 wainscottingBase = [Vec4(0.8, 0.5, 0.3, 1.0), Vec4(0.699, 0.586, 0.473, 1.0), Vec4(0.473, 0.699, 0.488, 1.0)]
 wallpaperBase = [Vec4(1.0, 1.0, 0.7, 1.0),
@@ -42,6 +40,3 @@ colors = {DonaldsDock: {'TI_wainscotting': wainscottingBase,
             'TI_door': doorBase + [Vec4(0.8, 0.5, 0.3, 1.0)],
             'TI_floor': floorBase},
  MyEstate: baseScheme}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\ToonInteriorColors.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:59 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:32 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoCraneGameConsts
 from direct.fsm.StatePush import StateVar
 from otp.level.EntityStateVarSet import EntityStateVarSet
 from toontown.cogdominium.CogdoEntityTypes import CogdoCraneGameSettings, CogdoCraneCogSettings
@@ -59,6 +57,3 @@ MoneyBagPosHprs = [[77.2 - 84,
   0]]
 for i in xrange(len(MoneyBagPosHprs)):
     MoneyBagPosHprs[i][2] += 6
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoCraneGameConsts.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:32 Pacific Daylight Time

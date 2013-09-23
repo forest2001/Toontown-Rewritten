@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:51 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.FishPage
 from toontown.toonbase import ToontownGlobals
 import ShtikerPage
 from direct.directnotify import DirectNotifyGlobal
@@ -302,6 +300,3 @@ class FishingTrophy(DirectFrame):
 
     def show(self):
         ShtikerPage.show(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\FishPage.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:52 Pacific Daylight Time

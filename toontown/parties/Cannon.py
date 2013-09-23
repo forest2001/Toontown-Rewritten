@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:12 Pacific Daylight Time
-# Embedded file name: toontown.parties.Cannon
 import math
 from pandac.PandaModules import *
 from direct.interval.MetaInterval import Sequence, Parallel
@@ -249,6 +247,3 @@ class Cannon():
         rotation = toRadians(hpr[0])
         angle = toRadians(hpr[1])
         return calcVelocity(rotation, angle, initialVelocity=INITIAL_VELOCITY)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\Cannon.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:13 Pacific Daylight Time

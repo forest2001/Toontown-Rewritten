@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:01 Pacific Daylight Time
-# Embedded file name: toontown.ai.DistributedWinterCarolingTarget
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from toontown.speedchat.TTSCIndexedTerminal import TTSCIndexedMsgEvent
@@ -30,6 +28,3 @@ class DistributedWinterCarolingTarget(DistributedScavengerHuntTarget.Distributed
             self.triggered = True
             self.attemptScavengerHunt()
             taskMgr.doMethodLater(self.triggerDelay, reset, 'ScavengerHunt-phrase-reset', extraArgs=[])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\DistributedWinterCarolingTarget.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:01 Pacific Daylight Time

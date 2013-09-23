@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:39 Pacific Daylight Time
-# Embedded file name: otp.login.RemoteValueSet
 from direct.directnotify import DirectNotifyGlobal
 import TTAccount
 import HTTPUtil
@@ -72,6 +70,3 @@ class RemoteValueSet():
 
     def __onUnexpectedResponse(self, errStr):
         raise HTTPUtil.UnexpectedResponse(errStr)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\RemoteValueSet.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:40 Pacific Daylight Time

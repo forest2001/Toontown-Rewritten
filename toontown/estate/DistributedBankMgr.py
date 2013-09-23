@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:00 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedBankMgr
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
@@ -31,6 +29,3 @@ class DistributedBankMgr(DistributedObject.DistributedObject):
 
     def d_transferMoney(self, amount):
         self.sendUpdate('transferMoney', [amount])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedBankMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:00 Pacific Daylight Time

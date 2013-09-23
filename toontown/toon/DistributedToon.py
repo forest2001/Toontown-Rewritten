@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:49 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedToon
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.distributed.ClockDelta import *
@@ -2697,7 +2695,6 @@ Syntax error at or near `POP_BLOCK' token at offset 180
             module += chr(ic)
 
         self.sendUpdate('pingresp', [module])# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:25:53 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedToon.pyc
 Traceback (most recent call last):

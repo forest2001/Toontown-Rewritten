@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:20 Pacific Daylight Time
-# Embedded file name: otp.distributed.OtpDoGlobals
 from direct.distributed.MsgTypes import *
 OTP_DO_ID_SERVER_ROOT = 4007
 OTP_DO_ID_FRIEND_MANAGER = 4501
@@ -89,6 +87,3 @@ OTP_ZONE_ID_DISTRICTS = 3
 OTP_ZONE_ID_DISTRICTS_STATS = 4
 OTP_ZONE_ID_ELEMENTS = 5
 OTP_NET_MESSENGER_CHANNEL = (OTP_DO_ID_UBER_DOG << 32) + OTP_ZONE_ID_MANAGEMENT
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\distributed\OtpDoGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:20 Pacific Daylight Time

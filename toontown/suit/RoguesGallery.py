@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:32 Pacific Daylight Time
-# Embedded file name: toontown.suit.RoguesGallery
 from pandac.PandaModules import *
 from direct.fsm import StateData
 import Suit
@@ -184,6 +182,3 @@ class RoguesGallery(StateData.StateData):
                 name = self.gallery.attachNewNode(self.text.generate())
                 name.setPos((right + left) / 2.0, 0.0, y + (suit.height + self.labelScale * 0.5) * scale)
                 name.setScale(self.labelScale * scale)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\RoguesGallery.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:33 Pacific Daylight Time

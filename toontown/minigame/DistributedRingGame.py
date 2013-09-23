@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:38 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedRingGame
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -913,6 +911,3 @@ class DistributedRingGame(DistributedMinigame):
             mask <<= 1
 
         self.__processRingGroupResults(results)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedRingGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:39 Pacific Daylight Time

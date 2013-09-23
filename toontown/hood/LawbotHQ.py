@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:55 Pacific Daylight Time
-# Embedded file name: toontown.hood.LawbotHQ
 import CogHood
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import LawbotCogHQLoader
@@ -35,6 +33,3 @@ class LawbotHQ(CogHood.CogHood):
         localAvatar.setCameraFov(ToontownGlobals.DefaultCameraFov)
         base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
         CogHood.CogHood.exit(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\LawbotHQ.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:55 Pacific Daylight Time

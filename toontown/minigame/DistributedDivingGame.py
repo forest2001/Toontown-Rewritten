@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:21 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedDivingGame
 from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -978,6 +976,3 @@ class DistributedDivingGame(DistributedMinigame):
 
     def exitCleanup(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedDivingGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:22 Pacific Daylight Time

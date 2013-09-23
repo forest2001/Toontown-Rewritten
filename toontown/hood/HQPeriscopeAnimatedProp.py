@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:53 Pacific Daylight Time
-# Embedded file name: toontown.hood.HQPeriscopeAnimatedProp
 import AnimatedProp
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
@@ -31,6 +29,3 @@ class HQPeriscopeAnimatedProp(AnimatedProp.AnimatedProp):
     def exit(self):
         AnimatedProp.AnimatedProp.exit(self)
         self.track.finish()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\HQPeriscopeAnimatedProp.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:53 Pacific Daylight Time

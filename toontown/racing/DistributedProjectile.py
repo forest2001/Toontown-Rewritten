@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:07 Pacific Daylight Time
-# Embedded file name: toontown.racing.DistributedProjectile
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -42,6 +40,3 @@ class DistributedProjectile(DistributedSmoothNode, ShadowCaster, NodePath):
 
     def delete(self):
         DistributedSmoothNode.delete(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\DistributedProjectile.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:07 Pacific Daylight Time

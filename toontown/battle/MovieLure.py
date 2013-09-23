@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:21 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieLure
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
 from BattleProps import *
@@ -618,6 +616,3 @@ def __createSlideshowMultiTrack(lure, npcs = []):
     tracks.append(getSoundTrack('TL_presentation.mp3', delay=2.3, node=toon))
     tracks.append(getSoundTrack('AA_drop_trigger_box.mp3', delay=slideshowDelay, node=toon))
     return tracks
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieLure.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:23 Pacific Daylight Time

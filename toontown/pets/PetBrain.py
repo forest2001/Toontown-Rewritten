@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:50 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetBrain
 from pandac.PandaModules import *
 from direct.showbase.PythonUtil import weightedChoice, randFloat, Functor
 from direct.showbase.PythonUtil import list2dict
@@ -562,6 +560,3 @@ class PetBrain(DirectObject.DirectObject, CPetBrain):
     def _handleEstateOwnerLeave(self):
         self.pet.teleportOut()
         taskMgr.doMethodLater(PetConstants.TELEPORT_OUT_DURATION, self.pet.requestDelete, self.getTeleportTaskName())
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetBrain.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:51 Pacific Daylight Time

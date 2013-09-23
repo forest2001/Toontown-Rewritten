@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:16 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogToonStatueItem
 import CatalogGardenItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -64,6 +62,3 @@ class CatalogToonStatueItem(CatalogGardenItem.CatalogGardenItem):
             if item.pictureToonStatue:
                 item.pictureToonStatue.deleteToon()
             self.statueList.remove(item)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogToonStatueItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:17 Pacific Daylight Time

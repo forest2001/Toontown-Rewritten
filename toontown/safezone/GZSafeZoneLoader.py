@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:41 Pacific Daylight Time
-# Embedded file name: toontown.safezone.GZSafeZoneLoader
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui import DirectGui
 from direct.fsm import ClassicFSM, State
@@ -110,6 +108,3 @@ class GZSafeZoneLoader(SafeZoneLoader):
          'shardId': None}
         self.fsm.request('quietZone', [req])
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\GZSafeZoneLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:41 Pacific Daylight Time

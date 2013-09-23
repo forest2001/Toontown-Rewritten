@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:24 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DGSafeZoneLoader
 from pandac.PandaModules import *
 import SafeZoneLoader
 import DGPlayground
@@ -34,6 +32,3 @@ class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def exit(self):
         SafeZoneLoader.SafeZoneLoader.exit(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DGSafeZoneLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:24 Pacific Daylight Time

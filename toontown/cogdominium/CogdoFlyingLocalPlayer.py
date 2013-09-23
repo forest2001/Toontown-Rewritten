@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:38 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingLocalPlayer
 import math
 import random
 from pandac.PandaModules import Vec3
@@ -1101,6 +1099,3 @@ class CogdoFlyingLocalPlayer(CogdoFlyingPlayer):
             self._guiMgr.update()
             self._refuelSfx.play()
             self._refuelSpinSfx.play(volume=0.15)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingLocalPlayer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:40 Pacific Daylight Time

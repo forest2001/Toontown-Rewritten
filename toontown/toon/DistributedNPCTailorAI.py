@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:47 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCTailorAI
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from DistributedNPCToonBaseAI import *
@@ -179,6 +177,3 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         else:
             self.notify.warning('not busy with avId: %s, busy: %s ' % (avId, self.busy))
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCTailorAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:48 Pacific Daylight Time

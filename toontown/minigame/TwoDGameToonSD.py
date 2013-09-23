@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:05 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDGameToonSD
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -297,6 +295,3 @@ class TwoDGameToonSD(StateData.StateData):
     def hideScoreTextTask(self, task):
         self.hideScoreText()
         return Task.done
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDGameToonSD.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:06 Pacific Daylight Time

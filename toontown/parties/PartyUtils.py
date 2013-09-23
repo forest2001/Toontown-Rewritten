@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:42 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyUtils
 import math
 import time
 import datetime
@@ -208,6 +206,3 @@ class LineSegment():
         elif compare == 'ray-segment':
             return 0 <= u1 and 0 <= u2 and u2 <= 1
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyUtils.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:42 Pacific Daylight Time

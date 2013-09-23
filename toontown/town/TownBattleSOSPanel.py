@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:50 Pacific Daylight Time
-# Embedded file name: toontown.town.TownBattleSOSPanel
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.gui.DirectGui import *
@@ -223,6 +221,3 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
     def __friendsListChanged(self):
         self.__updateScrollList()
         self.__updateTitleText()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\TownBattleSOSPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:51 Pacific Daylight Time

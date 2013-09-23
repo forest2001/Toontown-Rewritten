@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:11 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedPhone
 from toontown.toonbase import ToontownGlobals
 import PhoneGlobals
 from toontown.catalog import CatalogScreen
@@ -380,6 +378,3 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
         ringIval = Parallel(Func(base.playSfx, self.ringSfx), shakeSeq, Func(phone.setR, 0))
         self.playInterval(ringIval, 0.0, None)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedPhone.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:12 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:09 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogItem
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -467,6 +465,3 @@ def getItem(blob, store = 0):
         dg.dumpHex(Notify.out())
         import CatalogInvalidItem
         return CatalogInvalidItem.CatalogInvalidItem()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:10 Pacific Daylight Time

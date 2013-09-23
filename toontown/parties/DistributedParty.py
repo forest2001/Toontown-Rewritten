@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:14 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedParty
 import random
 import time
 import datetime
@@ -585,6 +583,3 @@ class DistributedParty(DistributedObject.DistributedObject):
     def hideTitleText(self):
         if self.titleText:
             self.titleText.hide()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedParty.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:15 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:16 Pacific Daylight Time
-# Embedded file name: toontown.toon.TailorClothesGUI
 from toontown.makeatoon import ClothesGUI
 import ToonDNA
 
@@ -22,6 +20,3 @@ class TailorClothesGUI(ClothesGUI.ClothesGUI):
             self.bottomChoice = -1
         self.setupButtons()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\TailorClothesGUI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:16 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:20 Pacific Daylight Time
-# Embedded file name: toontown.char.DistributedChar
 from otp.avatar import DistributedAvatar
 import Char
 
@@ -33,6 +31,3 @@ class DistributedChar(DistributedAvatar.DistributedAvatar, Char.Char):
 
     def setHp(self, hp):
         self.hp = hp
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\char\DistributedChar.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:20 Pacific Daylight Time

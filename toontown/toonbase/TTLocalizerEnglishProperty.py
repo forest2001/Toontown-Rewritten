@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:44 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.TTLocalizerEnglishProperty
 PBPTonscreenText = 0.2
 RPdirectFrame = (1.75, 1, 0.75)
 RPtrackLabels = 0.05
@@ -306,6 +304,3 @@ TPhaveFun = 0.1
 TPjoinUs = 0.1
 TBSOSPSPenter = 0.1
 TexitButton = 0.8
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\TTLocalizerEnglishProperty.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:44 Pacific Daylight Time

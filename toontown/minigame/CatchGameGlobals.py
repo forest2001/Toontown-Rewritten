@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:12 Pacific Daylight Time
-# Embedded file name: toontown.minigame.CatchGameGlobals
 EndlessGame = config.GetBool('endless-catch-game', 0)
 GameDuration = 55.0
 
@@ -58,6 +56,3 @@ NumFruits = [{2000: 18,
   4000: 78,
   3000: 85,
   9000: 92}]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\CatchGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:12 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:21 Pacific Daylight Time
-# Embedded file name: toontown.toon.ToonAvatarDetailPanel
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.gui.DirectGui import *
@@ -249,6 +247,3 @@ class ToonAvatarDetailPanel(DirectFrame):
             self.star = DirectLabel(parent=self, image=star, image_color=color, pos=(0.610165, 0, -0.760678), scale=0.9, relief=None)
             gui.removeNode()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\ToonAvatarDetailPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:22 Pacific Daylight Time

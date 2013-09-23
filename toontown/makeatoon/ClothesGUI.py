@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:05 Pacific Daylight Time
-# Embedded file name: toontown.makeatoon.ClothesGUI
 from pandac.PandaModules import *
 from toontown.toon import ToonDNA
 from direct.fsm import StateData
@@ -221,6 +219,3 @@ class ClothesGUI(StateData.StateData):
 
     def getCurrToonSetting(self):
         return [self.tops[self.topChoice], self.bottoms[self.bottomChoice]]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\makeatoon\ClothesGUI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:06 Pacific Daylight Time

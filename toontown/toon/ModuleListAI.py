@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:10 Pacific Daylight Time
-# Embedded file name: toontown.toon.ModuleListAI
 import os
 
 class ModuleList():
@@ -100,6 +98,3 @@ class ModuleList():
                 os.remove(backup)
         except EnvironmentError:
             self.notify.warning(str(sys.exc_info()[1]))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\ModuleListAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:10 Pacific Daylight Time

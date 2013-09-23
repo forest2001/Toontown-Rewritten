@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:32 Pacific Daylight Time
-# Embedded file name: toontown.suit.GoonPathData
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 taskZoneId2pathId = {ToontownGlobals.SellbotFactoryInt: 'sellbotFactory',
@@ -215,6 +213,3 @@ Paths = {'sellbotFactory': {0: [Vec3(10.0, 0.0, 0.0),
                         Vec3(-5.77, -10.0, 0.0),
                         Vec3(5.77, -10.0, 0.0)],
                     3: [Vec3(-10, 0, 0), Vec3(10, 0, 0)]}}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\GoonPathData.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:32 Pacific Daylight Time

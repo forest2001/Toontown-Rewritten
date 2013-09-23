@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:02 Pacific Daylight Time
-# Embedded file name: toontown.login.AvatarChoice
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from direct.showbase import DirectObject
@@ -284,6 +282,3 @@ class AvatarChoice(DirectButton):
 
     def __handleTrialer(self):
         TeaserPanel.TeaserPanel(pageName='sixToons')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\login\AvatarChoice.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:03 Pacific Daylight Time

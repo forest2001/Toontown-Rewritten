@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:20 Pacific Daylight Time
-# Embedded file name: toontown.chat.ResistanceChat
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -190,6 +188,3 @@ def doEffect(textId, speakingToon, nearbyToons):
 
     i = Parallel(ParticleInterval(effect, speakingToon, worldRelative=0, duration=3, cleanup=True), Sequence(Wait(0.2), recolorToons), autoFinish=1)
     i.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\chat\ResistanceChat.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:21 Pacific Daylight Time

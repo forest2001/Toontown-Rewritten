@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:47 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedLevelBattle
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
@@ -230,6 +228,3 @@ class DistributedLevelBattle(DistributedBattle.DistributedBattle):
         NametagGlobals.setMasterArrowsOn(1)
         for toon in self.toons:
             toon.startSmooth()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedLevelBattle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:47 Pacific Daylight Time

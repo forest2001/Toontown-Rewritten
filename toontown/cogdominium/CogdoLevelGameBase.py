@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:45 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoLevelGameBase
 from direct.fsm.StatePush import FunctionCall
 from otp.level.EntityStateVarSet import EntityStateVarSet
 from otp.level.LevelSpec import LevelSpec
@@ -39,6 +37,3 @@ class CogdoLevelGameBase():
             from otp.level import EntityTypeRegistry
             typeReg = EntityTypeRegistry.EntityTypeRegistry(CogdoEntityTypes)
             return typeReg
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoLevelGameBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:45 Pacific Daylight Time

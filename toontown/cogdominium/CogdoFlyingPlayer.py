@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:42 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingPlayer
 from pandac.PandaModules import DepthOffsetAttrib, NodePath, Vec3, Vec4, TextNode
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm.FSM import FSM
@@ -366,6 +364,3 @@ class CogdoFlyingPlayer(FSM):
             self.toon.setActiveShadow(1)
         else:
             self.notify.warning("There's no toon in offstage, this is bad!")
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingPlayer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:43 Pacific Daylight Time

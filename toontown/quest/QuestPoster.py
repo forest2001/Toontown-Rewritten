@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:03 Pacific Daylight Time
-# Embedded file name: toontown.quest.QuestPoster
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 import Quests
@@ -990,6 +988,3 @@ class QuestPoster(DirectFrame):
                 textScale = POSTER_WIDTH / lineWidth
                 label['text_scale'] = min(TEXT_SCALE, textScale)
                 label['text_wordwrap'] = max(TEXT_WORDWRAP, lineWidth + 0.05)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\QuestPoster.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:05 Pacific Daylight Time

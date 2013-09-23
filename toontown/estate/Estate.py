@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:15 Pacific Daylight Time
-# Embedded file name: toontown.estate.Estate
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -398,6 +396,3 @@ class Estate(Place.Place):
             self.fog.setColor(Vec4(0.8, 0.8, 0.8, 1.0))
             self.fog.setLinearRange(0.0, 700.0)
             render.setFog(self.fog)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\Estate.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:16 Pacific Daylight Time

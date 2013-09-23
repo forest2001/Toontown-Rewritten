@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:50 Pacific Daylight Time
-# Embedded file name: toontown.hood.BRHood
 from pandac.PandaModules import *
 import ToonHood
 from toontown.town import BRTownLoader
@@ -36,6 +34,3 @@ class BRHood(ToonHood.ToonHood):
 
     def exit(self):
         ToonHood.ToonHood.exit(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\BRHood.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:50 Pacific Daylight Time

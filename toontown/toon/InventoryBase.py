@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:01 Pacific Daylight Time
-# Embedded file name: toontown.toon.InventoryBase
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -334,6 +332,3 @@ class InventoryBase(DirectObject.DirectObject):
 
     def _garbageInfo(self):
         return self._createStack
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\InventoryBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:02 Pacific Daylight Time

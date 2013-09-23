@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:22 Pacific Daylight Time
-# Embedded file name: toontown.racing.RaceHeadFrame
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
@@ -35,6 +33,3 @@ class RaceHeadFrame(DirectFrame):
         self.head.removeNode()
         del self.head
         DirectFrame.destroy(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\RaceHeadFrame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:22 Pacific Daylight Time

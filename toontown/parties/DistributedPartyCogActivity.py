@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:21 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyCogActivity
 from direct.distributed.ClockDelta import globalClockDelta
 from pandac.PandaModules import Point3
 from toontown.toonbase import TTLocalizer
@@ -200,6 +198,3 @@ class DistributedPartyCogActivity(DistributedPartyTeamActivity):
         self.view.hideResults()
         DistributedPartyTeamActivity.finishConclusion(self)
         self.view.hideArenaDoorTimers()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCogActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:21 Pacific Daylight Time

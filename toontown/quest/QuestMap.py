@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:59 Pacific Daylight Time
-# Embedded file name: toontown.quest.QuestMap
 import math
 from pandac.PandaModules import CardMaker, TextNode
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
@@ -292,6 +290,3 @@ class QuestMap(DirectFrame):
         self.ignore(ToontownGlobals.MapHotkeyOn)
         self.ignore(ToontownGlobals.MapHotkeyOff)
         self.obscureButton()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\QuestMap.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:59 Pacific Daylight Time

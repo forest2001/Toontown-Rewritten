@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:58 Pacific Daylight Time
-# Embedded file name: toontown.building.SuitInterior
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -216,6 +214,3 @@ class SuitInterior(Place.Place):
 
     def exitElevatorOut(self):
         return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\SuitInterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:58 Pacific Daylight Time

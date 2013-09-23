@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:32 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoBarrelRoomRewardPanel
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from toontown.toonbase import ToontownGlobals, TTLocalizer
@@ -37,6 +35,3 @@ class CogdoBarrelRoomRewardPanel(DirectFrame):
                     self.rewardLines[p]['frame'].setProp('relief', DGG.RIDGE)
                     self.rewardLines[p]['frame'].setProp('borderWidth', (0.01, 0.01))
                     self.rewardLines[p]['frame'].setProp('frameColor', (1, 1, 1, 0.5))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoBarrelRoomRewardPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:32 Pacific Daylight Time

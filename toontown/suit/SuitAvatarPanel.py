@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:35 Pacific Daylight Time
-# Embedded file name: toontown.suit.SuitAvatarPanel
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -72,6 +70,3 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         self.cleanup()
         AvatarPanel.currentAvatarPanel = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\SuitAvatarPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:35 Pacific Daylight Time

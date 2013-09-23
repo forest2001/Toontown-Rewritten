@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:08 Pacific Daylight Time
-# Embedded file name: toontown.minigame.VineSpider
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -68,6 +66,3 @@ class VineSpider(NodePath.NodePath, DirectObject):
     def showGrab(self):
         self.reparentTo(hidden)
         self.collNode.setIntoCollideMask(BitMask32(0))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\VineSpider.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:09 Pacific Daylight Time

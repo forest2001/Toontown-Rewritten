@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:54 Pacific Daylight Time
-# Embedded file name: toontown.minigame.PhotoGameGlobals
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
@@ -276,6 +274,3 @@ AREA_DATA[ToontownGlobals.DonaldsDreamland]['ANIMATIONS'] = ([('wave', 2.0), (No
   (None, 1.0),
   (None, 1.0)], [('shrug', 2.0), ('angry', 2.0), (None, 1.0)])
 AREA_DATA[ToontownGlobals.DonaldsDreamland]['MOVEMODES'] = ([('walk', 1.0), ('catch-run', 0.4)], [('run', 0.4), ('running-jump', 0.4)], [('walk', 1.0), ('sad-walk', 2.5)])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\PhotoGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:55 Pacific Daylight Time

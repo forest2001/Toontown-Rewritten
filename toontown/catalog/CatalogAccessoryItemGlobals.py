@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:59 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogAccessoryItemGlobals
 ATArticle = 0
 ATString = 1
 ATBasePrice = 2
@@ -739,6 +737,3 @@ AccessoryTypes = {101: (AHat,
        APriceCool,
        7)}
 LoyaltyAccessoryItems = []
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogAccessoryItemGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:00 Pacific Daylight Time

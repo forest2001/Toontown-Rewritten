@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:09 Pacific Daylight Time
-# Embedded file name: toontown.racing.DistributedRacePad
 from direct.directnotify import DirectNotifyGlobal
 from direct.task.Task import Task
 from direct.distributed.ClockDelta import *
@@ -278,6 +276,3 @@ class DistributedRacePad(DistributedKartPad, FSM):
         self.tunnelSign = None
         self.trackNameNode = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\DistributedRacePad.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:09 Pacific Daylight Time

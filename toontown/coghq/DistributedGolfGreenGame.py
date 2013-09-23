@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:36 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedGolfGreenGame
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
@@ -1474,6 +1472,3 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
         for key in keyList:
             if self.__toonTracks.has_key(key):
                 self.clearToonTrack(key)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedGolfGreenGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:39 Pacific Daylight Time

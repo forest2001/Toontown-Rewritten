@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:52 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetDetailPanel
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.gui.DirectGui import *
@@ -79,6 +77,3 @@ class PetDetailPanel(DirectFrame):
                         bar['text'] = (str(int(hp)) + ' ' + TTLocalizer.Laff,)
 
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetDetailPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:52 Pacific Daylight Time

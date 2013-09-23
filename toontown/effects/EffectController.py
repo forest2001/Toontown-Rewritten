@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:32 Pacific Daylight Time
-# Embedded file name: toontown.effects.EffectController
 from pandac.PandaModules import *
 
 class EffectController():
@@ -108,6 +106,3 @@ class EffectController():
     def disableEffect(self):
         if self.f:
             self.f.disable()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\EffectController.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:32 Pacific Daylight Time

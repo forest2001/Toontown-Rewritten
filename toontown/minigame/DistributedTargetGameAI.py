@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:43 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedTargetGameAI
 from DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
@@ -232,6 +230,3 @@ class DistributedTargetGameAI(DistributedMinigameAI):
 
     def hasScoreMult(self):
         return 0
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedTargetGameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:44 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:43 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCPartyPerson
 from DistributedNPCToonBase import DistributedNPCToonBase
 from direct.distributed.DistributedObject import DistributedObject
 from toontown.toon import NPCToons
@@ -204,6 +202,3 @@ class DistributedNPCPartyPerson(DistributedNPCToonBase):
         place = base.cr.playGame.getPlace()
         if place:
             place.fsm.request('walk')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCPartyPerson.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:44 Pacific Daylight Time

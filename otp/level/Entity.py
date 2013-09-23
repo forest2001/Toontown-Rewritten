@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:30 Pacific Daylight Time
-# Embedded file name: otp.level.Entity
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.PythonUtil import lineInfo
 import string
@@ -102,6 +100,3 @@ class Entity(DirectObject):
 
         def attribChanged(self, attrib, value):
             pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\Entity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:31 Pacific Daylight Time

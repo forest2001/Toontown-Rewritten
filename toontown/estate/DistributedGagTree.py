@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:07 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedGagTree
 from toontown.estate import DistributedPlantBase
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -429,6 +427,3 @@ class DistributedGagTree(DistributedPlantBase.DistributedPlantBase):
         if inventory.numItem(self.gagTrack, self.gagLevel) >= inventory.getMax(self.gagTrack, self.gagLevel):
             retval = False
         return retval
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedGagTree.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:07 Pacific Daylight Time

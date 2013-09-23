@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:28 Pacific Daylight Time
-# Embedded file name: otp.level.DistributedEntity
 from direct.distributed import DistributedObject
 import Entity
 from direct.directnotify import DirectNotifyGlobal
@@ -51,6 +49,3 @@ class DistributedEntity(DistributedObject.DistributedObject, Entity.Entity):
     def delete(self):
         DistributedEntity.notify.debug('delete')
         DistributedObject.DistributedObject.delete(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\DistributedEntity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:29 Pacific Daylight Time

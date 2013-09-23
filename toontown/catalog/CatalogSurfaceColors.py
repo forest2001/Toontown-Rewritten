@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:16 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogSurfaceColors
 CT_WHITE = (1.0, 1.0, 1.0, 1.0)
 CT_RED = (1.0, 0.5, 0.5, 1.0)
 CT_BROWN = (0.641, 0.355, 0.27, 1.0)
@@ -75,6 +73,3 @@ CTBasicWoodColorOnWhite = [CT_DARK_WALNUT,
  CT_CHERRY,
  CT_BEECH]
 CTWhite = [CT_WHITE]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogSurfaceColors.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:16 Pacific Daylight Time

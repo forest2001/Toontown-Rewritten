@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:23 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyTeamActivity
 from direct.distributed.ClockDelta import globalClockDelta
 from toontown.toonbase import TTLocalizer
 from toontown.parties import PartyGlobals
@@ -379,6 +377,3 @@ class DistributedPartyTeamActivity(DistributedPartyActivity):
         self.notify.debug('finishConclusion')
         if self.isLocalToonPlaying:
             self.hideStatus()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyTeamActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:24 Pacific Daylight Time

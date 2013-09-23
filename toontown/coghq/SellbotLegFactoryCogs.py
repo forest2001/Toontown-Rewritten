@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:20 Pacific Daylight Time
-# Embedded file name: toontown.coghq.SellbotLegFactoryCogs
 from SpecImports import *
 LobbyParent = 10014
 BoilerParent = 10030
@@ -601,6 +599,3 @@ ReserveCogData = [{'type': 'cc',
   'behavior': 'stand',
   'path': None,
   'skeleton': 0}]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\SellbotLegFactoryCogs.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:21 Pacific Daylight Time

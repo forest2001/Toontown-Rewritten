@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:54 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeSuits
 from pandac.PandaModules import Point3, VBase4
 from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import Sequence, Parallel, ActorInterval, Func, Wait, ParticleInterval, Track, LerpColorScaleInterval, LerpScaleInterval, LerpHprInterval
@@ -268,6 +266,3 @@ class CogdoMazeBossSuit(CogdoMazeSuit):
         blink = Sequence(LerpColorScaleInterval(self.suit, Globals.BlinkSpeed, VBase4(1.0, 1.0, 1.0, 1.0)), LerpColorScaleInterval(self.suit, Globals.BlinkSpeed, Globals.BlinkColor))
         blink.start()
         return Task.again
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeSuits.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:55 Pacific Daylight Time

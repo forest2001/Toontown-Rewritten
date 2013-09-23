@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:51 Pacific Daylight Time
-# Embedded file name: otp.uberdog.OtpAvatarManager
 from cPickle import loads, dumps
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
@@ -87,6 +85,3 @@ class OtpAvatarManager(DistributedObject.DistributedObject):
          subId,
          access,
          founder])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\uberdog\OtpAvatarManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:51 Pacific Daylight Time

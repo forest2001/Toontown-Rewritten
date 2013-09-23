@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:07 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDTreasure
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -116,6 +114,3 @@ class TwoDTreasure(DirectObject):
         flashFadeOut = LerpFunc(self.flash.setAlphaScale, fromData=1, toData=0, duration=0.5)
         self.appearEffect = Sequence(Wait(2.4), Func(self.showTreasure), Parallel(modelFadeIn, flashFadeOut, Func(base.playSfx, self.game.assetMgr.sparkleSound)))
         self.appearEffect.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDTreasure.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:07 Pacific Daylight Time

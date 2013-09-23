@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:16 Pacific Daylight Time
-# Embedded file name: toontown.estate.EstateManager
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed import DistributedObject
@@ -83,6 +81,3 @@ class EstateManager(DistributedObject.DistributedObject):
     def stopAprilFools(self):
         if isinstance(base.cr.playGame.getPlace(), Estate.Estate):
             base.cr.playGame.getPlace().stopAprilFoolsControls()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\EstateManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:16 Pacific Daylight Time

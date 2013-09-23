@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:28 Pacific Daylight Time
-# Embedded file name: toontown.distributed.ToontownClientRepository
 import types
 import time
 from pandac.PandaModules import *
@@ -1143,6 +1141,3 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             datagram.addUint32(avId)
 
         base.cr.send(datagram)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\ToontownClientRepository.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:30 Pacific Daylight Time

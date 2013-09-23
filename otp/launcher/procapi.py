@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:27 Pacific Daylight Time
-# Embedded file name: otp.launcher.procapi
 import ctypes
 from ctypes.wintypes import *
 TH32CS_SNAPPROCESS = 2
@@ -113,7 +111,6 @@ def getProcessList--- This code section failed: ---
 -1	RETURN_LAST       None
 
 Syntax error at or near `POP_BLOCK' token at offset 164# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:15:28 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\launcher\procapi.pyc
 Traceback (most recent call last):

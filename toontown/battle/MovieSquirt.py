@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:25 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieSquirt
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
 from BattleProps import *
@@ -1053,7 +1051,6 @@ squirtfn_array = (__doFlower,
  __doFireHose,
  __doStormCloud,
  __doGeyser)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:16:27 Pacific Daylight Time
  None
 320	LOAD_CONST        0
 323	COMPARE_OP        '>'

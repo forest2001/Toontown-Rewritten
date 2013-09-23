@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:56 Pacific Daylight Time
-# Embedded file name: toontown.hood.PetShopFishAnimatedProp
 import AnimatedProp
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
@@ -29,6 +27,3 @@ class PetShopFishAnimatedProp(AnimatedProp.AnimatedProp):
     def exit(self):
         AnimatedProp.AnimatedProp.exit(self)
         self.fish.stop()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\PetShopFishAnimatedProp.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:56 Pacific Daylight Time

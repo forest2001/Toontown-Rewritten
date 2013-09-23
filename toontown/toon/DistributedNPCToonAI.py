@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:48 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCToonAI
 from otp.ai.AIBaseGlobal import *
 from direct.task.Task import Task
 from pandac.PandaModules import *
@@ -246,6 +244,3 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedNPCToonAI.setMovieDone busy with %s' % self.busy)
             self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCToonAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:49 Pacific Daylight Time

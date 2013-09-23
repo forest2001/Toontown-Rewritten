@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:51 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MazeSuit
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.MetaInterval import Parallel
 from direct.interval.LerpInterval import LerpPosInterval, LerpHprInterval
@@ -261,6 +259,3 @@ class MazeSuit(DirectObject):
                     unwalkables.extend(suitList[si].occupiedTiles)
 
                 suit.think(curTic, curT, unwalkables)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MazeSuit.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:52 Pacific Daylight Time

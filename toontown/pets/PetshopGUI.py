@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:55 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetshopGUI
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
@@ -534,6 +532,3 @@ class PetshopGUI(DirectObject):
                 self.destroyDialog()
                 messenger.send(self.eventDict['petReturned'])
                 messenger.send(self.eventDict['guiDone'])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetshopGUI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:57 Pacific Daylight Time

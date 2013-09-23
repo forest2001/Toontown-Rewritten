@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:45 Pacific Daylight Time
-# Embedded file name: otp.otpbase.OTPRender
 from pandac.PandaModules import *
 MainCameraBitmask = BitMask32.bit(0)
 ReflectionCameraBitmask = BitMask32.bit(1)
@@ -48,6 +46,3 @@ def setAdditiveEffect(node_path, tag = None, bin_name = None, lighting_on = Fals
         if bin_name:
             node_path.setBin(bin_name, 0)
     return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpbase\OTPRender.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:45 Pacific Daylight Time

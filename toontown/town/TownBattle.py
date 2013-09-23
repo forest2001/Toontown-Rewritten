@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:49 Pacific Daylight Time
-# Embedded file name: toontown.town.TownBattle
 from toontown.toonbase.ToontownBattleGlobals import *
 import types
 from direct.fsm import StateData
@@ -648,6 +646,3 @@ class TownBattle(StateData.StateData):
     def __isGroupHeal(self, levelNum):
         retval = BattleBase.attackAffectsGroup(HEAL_TRACK, levelNum)
         return retval
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\TownBattle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:50 Pacific Daylight Time

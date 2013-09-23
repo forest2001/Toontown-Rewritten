@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:54 Pacific Daylight Time
-# Embedded file name: toontown.minigame.OrthoWalk
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
@@ -77,6 +75,3 @@ class OrthoWalk():
     def sendCurrentPosition(self):
         self.timeSinceLastPosBroadcast -= self.broadcastPeriod
         self.lt.cnode.broadcastPosHprXyh()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\OrthoWalk.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:54 Pacific Daylight Time

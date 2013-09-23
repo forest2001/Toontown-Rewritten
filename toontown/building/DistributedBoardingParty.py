@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:43 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedBoardingParty
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
@@ -575,6 +573,3 @@ class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPart
     def forceCleanupInviterPanels(self):
         if self.inviterPanels:
             self.inviterPanels.forceCleanup()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedBoardingParty.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:44 Pacific Daylight Time

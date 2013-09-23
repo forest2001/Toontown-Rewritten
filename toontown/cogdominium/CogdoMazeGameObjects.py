@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:52 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeGameObjects
 from pandac.PandaModules import CollisionSphere, CollisionTube, CollisionNode
 from pandac.PandaModules import NodePath, BitMask32
 from pandac.PandaModules import Point3, Point4, WaitInterval, Vec3, Vec4
@@ -258,6 +256,3 @@ class CogdoMazeWaterCooler(NodePath, DirectObject):
         dt = globalClock.getDt()
         self.update(dt)
         return Task.cont
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeGameObjects.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:53 Pacific Daylight Time

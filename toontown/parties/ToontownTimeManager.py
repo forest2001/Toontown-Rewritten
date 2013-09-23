@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:44 Pacific Daylight Time
-# Embedded file name: toontown.parties.ToontownTimeManager
 import time
 from datetime import datetime, timedelta
 import pytz
@@ -102,6 +100,3 @@ class ToontownTimeManager(DistributedObject.DistributedObject):
 
         result = curDateTime
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\ToontownTimeManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:44 Pacific Daylight Time

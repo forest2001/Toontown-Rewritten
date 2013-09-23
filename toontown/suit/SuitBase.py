@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:35 Pacific Daylight Time
-# Embedded file name: toontown.suit.SuitBase
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 import math
@@ -84,6 +82,3 @@ class SuitBase():
 
     def makeLegList(self):
         self.legList = SuitLegList(self.path, self.sp.dnaStore, self.sp.suitWalkSpeed, SuitTimings.fromSky, SuitTimings.toSky, SuitTimings.fromSuitBuilding, SuitTimings.toSuitBuilding, SuitTimings.toToonBuilding)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\SuitBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:35 Pacific Daylight Time

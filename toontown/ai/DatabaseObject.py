@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:59 Pacific Daylight Time
-# Embedded file name: toontown.ai.DatabaseObject
 from pandac.PandaModules import *
 from ToontownAIMsgTypes import *
 from direct.directnotify.DirectNotifyGlobal import *
@@ -214,6 +212,3 @@ class DatabaseObject():
         dg.addUint32(self.doId)
         dg.addUint32(3735928559L)
         self.air.send(dg)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\DatabaseObject.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:59 Pacific Daylight Time

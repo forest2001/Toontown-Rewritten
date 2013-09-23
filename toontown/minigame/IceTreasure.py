@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:57 Pacific Daylight Time
-# Embedded file name: toontown.minigame.IceTreasure
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode, BitMask32
 from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval, Parallel, Func, SoundInterval
 from direct.directnotify import DirectNotifyGlobal
@@ -69,6 +67,3 @@ class IceTreasure(DirectObject):
         if self.penalty:
             self.track = Parallel(SoundInterval(self.penaltyGrabSound), Sequence(Func(self.kaboom.showThrough), LerpScaleInterval(self.kaboom, duration=0.5, scale=Point3(10, 10, 10), blendType='easeOut'), Func(self.kaboom.hide)))
             self.track.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\IceTreasure.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:57 Pacific Daylight Time

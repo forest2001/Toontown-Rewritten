@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:42 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCKartClerk
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -134,6 +132,3 @@ class DistributedNPCKartClerk(DistributedNPCToonBase):
         self.accept(KartShopGlobals.EVENTDICT['buyKart'], self.__handleBuyKart)
         self.acceptOnce(KartShopGlobals.EVENTDICT['guiDone'], self.__handleGuiDone)
         self.kartShopGui = KartShopGuiMgr(KartShopGlobals.EVENTDICT)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCKartClerk.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:43 Pacific Daylight Time

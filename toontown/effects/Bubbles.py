@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:31 Pacific Daylight Time
-# Embedded file name: toontown.effects.Bubbles
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
@@ -63,6 +61,3 @@ class Bubbles(NodePath):
         self.renderParent.removeNode()
         del self.effect
         del self.renderParent
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\Bubbles.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:31 Pacific Daylight Time

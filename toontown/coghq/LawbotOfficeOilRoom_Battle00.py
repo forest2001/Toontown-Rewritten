@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:15 Pacific Daylight Time
-# Embedded file name: toontown.coghq.LawbotOfficeOilRoom_Battle00
 from toontown.coghq.SpecImports import *
 import random
 GlobalEntities = {1000: {'type': 'levelMgr',
@@ -63,6 +61,3 @@ Scenario0 = {}
 levelSpec = {'globalEntities': GlobalEntities,
  'scenarios': [Scenario0],
  'titleString': 'MemTag: LawbotOfficeOilRoom_Battle00 %s' % random.random()}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\LawbotOfficeOilRoom_Battle00.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:15 Pacific Daylight Time

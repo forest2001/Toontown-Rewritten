@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:36 Pacific Daylight Time
-# Embedded file name: otp.login.HTTPUtil
 from pandac.PandaModules import *
 
 class HTTPUtilException(Exception):
@@ -39,6 +37,3 @@ def getHTTPResponse(url, http, body = ''):
             response[i] = response[i][:-1]
 
     return response
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\HTTPUtil.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:36 Pacific Daylight Time

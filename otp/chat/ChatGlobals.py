@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:11 Pacific Daylight Time
-# Embedded file name: otp.chat.ChatGlobals
 import string
 NORMAL_CHAT = 1
 WHISPER_CHAT = 2
@@ -53,6 +51,3 @@ def removeThoughtPrefix(message):
         return message[len(ThoughtPrefix):]
     else:
         return message
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\ChatGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:11 Pacific Daylight Time

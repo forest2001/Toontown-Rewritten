@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:18 Pacific Daylight Time
-# Embedded file name: toontown.racing.PiejectileManager
 from pandac.PandaModules import *
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
@@ -29,6 +27,3 @@ class PiejectileManager(DirectObject):
         piejectile.delete()
         piejectile = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\PiejectileManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:18 Pacific Daylight Time

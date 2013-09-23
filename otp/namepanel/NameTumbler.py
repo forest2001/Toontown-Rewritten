@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:41 Pacific Daylight Time
-# Embedded file name: otp.namepanel.NameTumbler
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
 import random
@@ -144,6 +142,3 @@ class NameTumbler(DirectFrame):
         self.nameIndex = self.displayList.index(randomName)
         self.updateCheckBoxes()
         self.updateLists()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\namepanel\NameTumbler.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:42 Pacific Daylight Time

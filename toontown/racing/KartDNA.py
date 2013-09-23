@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:15 Pacific Daylight Time
-# Embedded file name: toontown.racing.KartDNA
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import PythonUtil
 from toontown.toonbase import TTLocalizer
@@ -621,6 +619,3 @@ def getAccName(accID):
         return AccessoryDict[accID][AccInfo.name]
     except:
         return TTLocalizer.KartShtikerDefault
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\KartDNA.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:15 Pacific Daylight Time

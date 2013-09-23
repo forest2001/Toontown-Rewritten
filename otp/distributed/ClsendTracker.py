@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:16 Pacific Daylight Time
-# Embedded file name: otp.distributed.ClsendTracker
 from pandac.PandaModules import StringStream
 from direct.distributed.PyDatagram import PyDatagram
 import random
@@ -59,6 +57,3 @@ class ClsendTracker():
         for msg in self._clsendMsgs:
             self._logClsend(*msg)
             self._clsendCounter += 1
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\distributed\ClsendTracker.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:16 Pacific Daylight Time

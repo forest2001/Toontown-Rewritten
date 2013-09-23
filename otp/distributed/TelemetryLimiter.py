@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:20 Pacific Daylight Time
-# Embedded file name: otp.distributed.TelemetryLimiter
 from direct.showbase.DirectObject import DirectObject
 from otp.avatar.DistributedPlayer import DistributedPlayer
 from direct.task.Task import Task
@@ -118,6 +116,3 @@ class TLGatherAllAvs(DirectObject):
         del self._avs
         del self._limits
         del self._avId2limits
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\distributed\TelemetryLimiter.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:21 Pacific Daylight Time

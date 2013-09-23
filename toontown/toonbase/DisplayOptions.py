@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:31 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.DisplayOptions
 import copy
 import string
 import os
@@ -238,6 +236,3 @@ class DisplayOptions():
             pass
 
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\DisplayOptions.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:32 Pacific Daylight Time

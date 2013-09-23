@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:44 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedLawbotCannon
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
@@ -886,6 +884,3 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         self.cannon.show()
         kartTrack = Parallel(Sequence(ActorInterval(avatar, 'feedPet'), Func(avatar.loop, 'neutral')), Sequence(Func(self.cannon.reparentTo, avatar.rightHand), Wait(2.1), Func(self.cannon.wrtReparentTo, render), Func(self.cannon.setShear, 0, 0, 0), Parallel(LerpHprInterval(self.cannon, hpr=self.nodePath.getHpr(render), duration=1.2), ProjectileInterval(self.cannon, endPos=self.nodePath.getPos(render), duration=1.2, gravityMult=0.45)), Wait(0.2), Sequence(LerpScaleInterval(self.cannon, scale=Point3(1.1, 1.1, 0.1), duration=0.2), LerpScaleInterval(self.cannon, scale=Point3(0.9, 0.9, 0.1), duration=0.1), LerpScaleInterval(self.cannon, scale=Point3(1.0, 1.0, 0.1), duration=0.1), LerpScaleInterval(self.cannon, scale=Point3(1.0, 1.0, 1.1), duration=0.2), LerpScaleInterval(self.cannon, scale=Point3(1.0, 1.0, 0.9), duration=0.1), LerpScaleInterval(self.cannon, scale=Point3(1.0, 1.0, 1.0), duration=0.1), Func(self.cannon.wrtReparentTo, self.nodePath))))
         return kartTrack
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedLawbotCannon.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:45 Pacific Daylight Time

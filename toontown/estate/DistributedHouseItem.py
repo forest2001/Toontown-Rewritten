@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:10 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedHouseItem
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -29,6 +27,3 @@ class DistributedHouseItem(DistributedObject.DistributedObject):
 
     def delete(self):
         DistributedObject.DistributedObject.delete(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedHouseItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:10 Pacific Daylight Time

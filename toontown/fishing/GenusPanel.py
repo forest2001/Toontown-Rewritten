@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:36 Pacific Daylight Time
-# Embedded file name: toontown.fishing.GenusPanel
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
@@ -92,6 +90,3 @@ class GenusPanel(DirectFrame):
                 self.speciesLabels[species]['text'] = TTLocalizer.FishSpeciesNames[self.genus][species]
 
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\GenusPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:36 Pacific Daylight Time

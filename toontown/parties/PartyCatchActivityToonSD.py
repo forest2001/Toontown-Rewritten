@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:30 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyCatchActivityToonSD
 from pandac.PandaModules import Vec3
 from direct.interval.IntervalGlobal import Sequence, Parallel, Wait, Func
 from direct.interval.IntervalGlobal import LerpScaleInterval
@@ -235,6 +233,3 @@ class PartyCatchActivityToonSD(StateData.StateData):
             self.toon.setAnimState(newState, playRate)
         else:
             self.notify.debug('setAnimState(): Toon unexpectedExit flag is set.')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyCatchActivityToonSD.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:31 Pacific Daylight Time

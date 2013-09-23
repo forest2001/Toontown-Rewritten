@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:25 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedIceGameAI
 from pandac.PandaModules import Point3
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.fsm import ClassicFSM, State
@@ -355,6 +353,3 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
             if self.scoreDict[avId] < 0:
                 self.scoreDict[avId] = 1
             self.scoresAsList.append(self.scoreDict[avId])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedIceGameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:26 Pacific Daylight Time

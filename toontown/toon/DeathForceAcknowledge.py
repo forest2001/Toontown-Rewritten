@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:40 Pacific Daylight Time
-# Embedded file name: toontown.toon.DeathForceAcknowledge
 from pandac.PandaModules import *
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
@@ -48,6 +46,3 @@ class DeathForceAcknowledge():
             self.dialog.cleanup()
             self.dialog = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DeathForceAcknowledge.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:41 Pacific Daylight Time

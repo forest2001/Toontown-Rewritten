@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:13 Pacific Daylight Time
-# Embedded file name: otp.chat.ChatManager
 import string
 import sys
 from direct.showbase import DirectObject
@@ -518,6 +516,3 @@ class ChatManager(DirectObject.DirectObject):
 
     def __privacyPolicyDone(self):
         self.fsm.request('activateChat')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\ChatManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:14 Pacific Daylight Time

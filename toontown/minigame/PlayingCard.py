@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:55 Pacific Daylight Time
-# Embedded file name: toontown.minigame.PlayingCard
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.task import Task
@@ -117,6 +115,3 @@ class PlayingCardButton(PlayingCardBase, DirectButton):
     def destroy(self):
         taskMgr.remove(self.taskName('dragTask'))
         DirectButton.destroy(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\PlayingCard.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:55 Pacific Daylight Time

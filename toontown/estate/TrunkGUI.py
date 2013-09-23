@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:29 Pacific Daylight Time
-# Embedded file name: toontown.estate.TrunkGUI
 from direct.showbase.PythonUtil import Functor
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -541,6 +539,3 @@ class TrunkGUI(StateData.StateData):
 
     def taskName(self, idString):
         return idString + '-TrunkGUI'
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\TrunkGUI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:30 Pacific Daylight Time

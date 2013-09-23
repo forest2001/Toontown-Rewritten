@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:55 Pacific Daylight Time
-# Embedded file name: toontown.effects.PolyTrail
 from pandac.PandaModules import *
 from direct.motiontrail.MotionTrail import *
 import random
@@ -166,6 +164,3 @@ class PolyTrail(NodePath):
     def setBlendModeOff(self):
         if self.motion_trail:
             self.motion_trail.geom_node_path.node().setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MNone))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\PolyTrail.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:55 Pacific Daylight Time

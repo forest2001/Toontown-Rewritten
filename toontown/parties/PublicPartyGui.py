@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:42 Pacific Daylight Time
-# Embedded file name: toontown.parties.PublicPartyGui
 from pandac.PandaModules import Vec3, Vec4, Point3, TextNode, VBase4
 from direct.gui.DirectGui import DGG, DirectFrame, DirectButton, DirectLabel, DirectScrolledList, DirectCheckButton
 from direct.gui import DirectGuiGlobals
@@ -252,6 +250,3 @@ class PublicPartyGui(DirectFrame):
     def unstash(self):
         base.setCellsAvailable(base.bottomCells, 0)
         DirectFrame.unstash(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PublicPartyGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:43 Pacific Daylight Time

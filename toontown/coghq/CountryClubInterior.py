@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:22 Pacific Daylight Time
-# Embedded file name: toontown.coghq.CountryClubInterior
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattlePlace
 from direct.fsm import ClassicFSM, State
@@ -372,7 +370,6 @@ Syntax error at or near `LOAD_GLOBAL' token at offset 92
             messenger.send(self.doneEvent)
         else:
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:18:23 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\CountryClubInterior.pyc
 Traceback (most recent call last):

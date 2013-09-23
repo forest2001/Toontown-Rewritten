@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:32 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedCrate
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
@@ -301,6 +299,3 @@ class DistributedCrate(DistributedCrushableEntity.DistributedCrushableEntity):
         self.crushTrack = Sequence(LerpScaleInterval(self, tSquash, VBase3(1.2, 1.2, 0.25), blendType='easeInOut'), LerpColorScaleInterval(self, 2.0, VBase4(1, 1, 1, 0), blendType='easeInOut'), Wait(2.0), LerpScaleInterval(self, 0.1, VBase3(1, 1, 1), blendType='easeInOut'), LerpColorScaleInterval(self, 0.1, VBase4(1, 1, 1, 0), blendType='easeInOut'))
         self.crushTrack.start()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedCrate.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:33 Pacific Daylight Time

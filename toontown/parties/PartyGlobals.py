@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:37 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyGlobals
 from pandac.PandaModules import BitMask32
 from pandac.PandaModules import Point3, VBase4
 from direct.showbase import PythonUtil
@@ -883,6 +881,3 @@ def getCostOfParty(partyInfo):
         newCost += DecorationInformationDict[decorBase.decorId]['cost']
 
     return newCost
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:38 Pacific Daylight Time

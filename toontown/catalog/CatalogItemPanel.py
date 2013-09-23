@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:11 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogItemPanel
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
@@ -532,6 +530,3 @@ class CatalogItemPanel(DirectFrame):
             self.ival = item.changeIval(volume=0)
             self.ival.loop()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogItemPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:12 Pacific Daylight Time

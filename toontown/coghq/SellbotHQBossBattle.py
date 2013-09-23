@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:20 Pacific Daylight Time
-# Embedded file name: toontown.coghq.SellbotHQBossBattle
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.suit import DistributedSellbotBoss
@@ -39,6 +37,3 @@ class SellbotHQBossBattle(CogHQBossBattle.CogHQBossBattle):
         sky = self.loader.hood.sky
         sky.setH(0)
         sky.setZ(0)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\SellbotHQBossBattle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:20 Pacific Daylight Time

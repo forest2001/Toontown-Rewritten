@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:35 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyCogUtils
 import math
 from pandac.PandaModules import NodePath, Point3
 import PartyGlobals
@@ -134,6 +132,3 @@ class StrafingControl():
         self.player.tempNP.reparentTo(self.player.locator)
         self.player.tempNP.setPos(self.player.locator, self.player.toon.getPos() + self.defaultOffset)
         self.player.cameraManager.setTargetPos(self.player.tempNP.getPos(render))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyCogUtils.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:35 Pacific Daylight Time

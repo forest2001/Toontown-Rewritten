@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:28 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedDGFlower
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -61,6 +59,3 @@ class DistributedDGFlower(DistributedObject.DistributedObject):
     def setHeight(self, newHeight):
         pos = self.bigFlower.getPos()
         self.bigFlower.lerpPos(pos[0], pos[1], newHeight, 0.5, task=self.taskName('DG-flowerRaise'))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedDGFlower.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:28 Pacific Daylight Time

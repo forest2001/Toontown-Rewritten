@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:23 Pacific Daylight Time
-# Embedded file name: toontown.toon.ToonDNA
 import random
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
@@ -2839,6 +2837,3 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.updateToonProperties(head=cache[0], armColor=cache[1], legColor=cache[2], headColor=cache[3])
             if oldStyle:
                 oldStyle.cache = ()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\ToonDNA.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:27 Pacific Daylight Time

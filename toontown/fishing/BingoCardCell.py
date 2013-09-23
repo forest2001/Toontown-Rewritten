@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:30 Pacific Daylight Time
-# Embedded file name: toontown.fishing.BingoCardCell
 from direct.fsm import FSM
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -105,6 +103,3 @@ class BingoCardCell(DirectButton, FSM.FSM):
             return request
         else:
             self.notify.debug('filterOn: Invalid State Transition from Off to %s' % request)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\BingoCardCell.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:30 Pacific Daylight Time

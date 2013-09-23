@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:40 Pacific Daylight Time
-# Embedded file name: toontown.friends.ToontownFriendSecret
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
@@ -59,6 +57,3 @@ class ToontownFriendSecret(FriendSecret.FriendSecret):
             self.cancel.show()
         else:
             self._FriendSecret__getSecret()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\friends\ToontownFriendSecret.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:40 Pacific Daylight Time

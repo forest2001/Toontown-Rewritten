@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:36 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieTrap
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
 from BattleProps import *
@@ -582,6 +580,3 @@ def __createPlacedGroupTrapTrack(trap, prop, propName, centerSuit, propPos = Non
     buttonSound = globalBattleSoundCache.getSound('AA_drop_trigger_box.mp3')
     soundTrack = Sequence(Wait(2.3), Parallel(SoundInterval(buttonSound, duration=0.67, node=toon), SoundInterval(propSound, node=toon)))
     return Parallel(trapTracks, toonTrack, soundTrack)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieTrap.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:37 Pacific Daylight Time

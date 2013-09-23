@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:55 Pacific Daylight Time
-# Embedded file name: toontown.effects.PooledEffect
 from pandac.PandaModules import *
 from direct.showbase import Pool
 from direct.showbase.DirectObject import DirectObject
@@ -41,6 +39,3 @@ class PooledEffect(DirectObject, NodePath):
             self.pool.remove(item)
         self.ignore('clientLogout')
         self.removeNode()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\PooledEffect.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:55 Pacific Daylight Time

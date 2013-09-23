@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:06 Pacific Daylight Time
-# Embedded file name: toontown.makeatoon.ColorShop
 from pandac.PandaModules import *
 from toontown.toon import ToonDNA
 from direct.fsm import StateData
@@ -231,6 +229,3 @@ class ColorShop(StateData.StateData):
 
     def getCurrToonSetting(self):
         return [self.dna.headColor, self.dna.armColor, self.dna.legColor]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\makeatoon\ColorShop.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:06 Pacific Daylight Time

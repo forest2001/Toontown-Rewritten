@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:40 Pacific Daylight Time
-# Embedded file name: toontown.safezone.GSPlayground
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 import Playground
@@ -117,6 +115,3 @@ class GSPlayground(Playground.Playground):
         from toontown.classicchars import CCharPaths
         from toontown.toonbase import TTLocalizer
         self.showPathPoints(CCharPaths.getPaths(TTLocalizer.Goofy, 1))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\GSPlayground.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:40 Pacific Daylight Time

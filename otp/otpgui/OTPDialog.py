@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:46 Pacific Daylight Time
-# Embedded file name: otp.otpgui.OTPDialog
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 import string
@@ -115,6 +113,3 @@ class GlobalDialog(OTPDialog):
         elif value == DGG.DIALOG_CANCEL:
             self.doneStatus = 'cancel'
             messenger.send(self.__doneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpgui\OTPDialog.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:46 Pacific Daylight Time

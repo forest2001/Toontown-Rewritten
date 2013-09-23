@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:17 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogWallpaperItem
 from CatalogSurfaceItem import *
 WTTextureName = 0
 WTColor = 1
@@ -751,6 +749,3 @@ def getWallpaperRange(fromIndex, toIndex, *otherRanges):
                             list.append(CatalogWallpaperItem(patternIndex, n, borderKey, borderColorIndex))
 
     return list
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogWallpaperItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:18 Pacific Daylight Time

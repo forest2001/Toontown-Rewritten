@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:03 Pacific Daylight Time
-# Embedded file name: toontown.coghq.BossbotCogHQLoader
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
 import CogHQLoader
@@ -136,6 +134,3 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.placeClass = None
         del self.countryClubId
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\BossbotCogHQLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:03 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:32 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedPatternGameAI
 from DistributedMinigameAI import *
 from toontown.ai.ToonBarrier import *
 from direct.fsm import ClassicFSM, State
@@ -196,6 +194,3 @@ class DistributedPatternGameAI(DistributedMinigameAI):
 
     def exitCleanup(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedPatternGameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:33 Pacific Daylight Time

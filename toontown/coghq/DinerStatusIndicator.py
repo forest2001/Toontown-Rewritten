@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:24 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DinerStatusIndicator
 from pandac.PandaModules import NodePath, BillboardEffect, Vec3, Point3, TextureStage, TransparencyAttrib, DecalEffect, VBase4
 from direct.fsm import FSM
 from direct.gui.DirectGui import DirectFrame, DGG
@@ -114,6 +112,3 @@ class DinerStatusIndicator(NodePath.NodePath, FSM.FSM):
 
         retIval = Parallel(ivalDarkness, flashingTrack)
         return retIval
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DinerStatusIndicator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:24 Pacific Daylight Time

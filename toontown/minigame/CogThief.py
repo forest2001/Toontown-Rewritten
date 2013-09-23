@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:12 Pacific Daylight Time
-# Embedded file name: toontown.minigame.CogThief
 import math
 from pandac.PandaModules import CollisionSphere, CollisionNode, Point3, CollisionTube, Vec3, rad2Deg
 from direct.showbase.DirectObject import DirectObject
@@ -475,6 +473,3 @@ class CogThief(DirectObject):
         self.splat.setZ(3)
         self.kaboomTrack = Parallel(SoundInterval(self.pieHitSound, volume=1.0), Sequence(Func(self.splat.showThrough), LerpScaleInterval(self.splat, duration=0.5, scale=1.75, startScale=Point3(0.1, 0.1, 0.1), blendType='easeOut'), Func(self.splat.hide)))
         self.kaboomTrack.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\CogThief.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:13 Pacific Daylight Time

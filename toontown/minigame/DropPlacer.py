@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:55 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DropPlacer
 from direct.showbase.RandomNumGen import RandomNumGen
 import CatchGameGlobals
 import DropScheduler
@@ -1085,6 +1083,3 @@ class PathDropPlacer(DropPlacer):
         drop = [self.getT(), self.getNextDropTypeName(), [col, row]]
         self.stepT()
         return drop
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DropPlacer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:57 Pacific Daylight Time

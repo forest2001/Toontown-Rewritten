@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:30 Pacific Daylight Time
-# Embedded file name: otp.level.EditorGlobals
 from direct.showbase.PythonUtil import uniqueElements
 EditTargetPostName = 'inGameEditTarget'
 EntIdRange = 10000
@@ -40,6 +38,3 @@ def getEditUsername():
 def getEntIdAllocRange():
     baseId = username2entIdBase[editUsername]
     return [baseId, baseId + EntIdRange]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\EditorGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:30 Pacific Daylight Time

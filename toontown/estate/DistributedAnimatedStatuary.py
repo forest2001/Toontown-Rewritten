@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:00 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedAnimatedStatuary
 from pandac.PandaModules import NodePath
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -46,6 +44,3 @@ class DistributedAnimatedStatuary(DistributedStatuary.DistributedStatuary):
             pass
         else:
             DistributedStatuary.DistributedStatuary.setupShadow()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedAnimatedStatuary.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:00 Pacific Daylight Time

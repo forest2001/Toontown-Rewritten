@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:59 Pacific Daylight Time
-# Embedded file name: toontown.minigame.SwingVine
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
@@ -658,6 +656,3 @@ class SwingVine(NodePath.NodePath):
             return
         for avId in self.attachedToons.keys():
             self.setupSwingAnim(avId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\SwingVine.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:00 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:46 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedLawOfficeElevatorExt
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from toontown.building.ElevatorConstants import *
@@ -108,6 +106,3 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
             return TTLocalizer.ElevatorLawBotCourse2
         elif self.intZoneId == ToontownGlobals.LawbotStageIntD:
             return TTLocalizer.ElevatorLawBotCourse3
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedLawOfficeElevatorExt.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:46 Pacific Daylight Time

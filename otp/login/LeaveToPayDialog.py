@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:37 Pacific Daylight Time
-# Embedded file name: otp.login.LeaveToPayDialog
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLauncherGlobals
 from otp.otpbase import OTPLocalizer
@@ -96,6 +94,3 @@ class LeaveToPayDialog():
         if self.doneFunc:
             self.doneFunc()
         self.destroy()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\LeaveToPayDialog.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:37 Pacific Daylight Time

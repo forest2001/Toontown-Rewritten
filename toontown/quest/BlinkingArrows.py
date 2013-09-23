@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:58 Pacific Daylight Time
-# Embedded file name: toontown.quest.BlinkingArrows
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 
@@ -63,6 +61,3 @@ class BlinkingArrows():
         if self.otherNode:
             self.otherNode.hide()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\BlinkingArrows.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:58 Pacific Daylight Time

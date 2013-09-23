@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:18 Pacific Daylight Time
-# Embedded file name: toontown.coghq.MoleHill
 from pandac.PandaModules import NodePath, Point3, CollisionSphere, CollisionNode, Vec4
 from direct.interval.IntervalGlobal import Sequence, LerpPosInterval, Parallel, LerpScaleInterval, Track, ParticleInterval, Wait, Func
 from toontown.toonbase import ToontownGlobals
@@ -153,6 +151,3 @@ class MoleHill(NodePath):
         self.switchDown()
         self.mole.setPos(0, 0, -2.5)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\MoleHill.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:18 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:53 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeLocalPlayer
 from pandac.PandaModules import Point3, CollisionNode, CollisionSphere, CollisionHandlerEvent
 from direct.interval.IntervalGlobal import Func, Sequence, Wait
 from direct.showbase.PythonUtil import bound as clamp
@@ -270,6 +268,3 @@ class CogdoMazeLocalPlayer(CogdoMazePlayer):
          self.toon.hp,
          self.toon.maxHp,
          len(self.game.players)))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeLocalPlayer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:54 Pacific Daylight Time

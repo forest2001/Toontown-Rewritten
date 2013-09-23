@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:04 Pacific Daylight Time
-# Embedded file name: otp.ai.Barrier
 from otp.ai.AIBase import *
 from direct.task import Task
 from direct.showbase import DirectObject
@@ -84,6 +82,3 @@ class Barrier(DirectObject.DirectObject):
         self.avIdList.remove(avId)
         if avId in self.pendingAvatars:
             self.clear(avId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\Barrier.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:04 Pacific Daylight Time

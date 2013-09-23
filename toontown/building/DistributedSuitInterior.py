@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:53 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedSuitInterior
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from ElevatorConstants import *
@@ -386,6 +384,3 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
 
     def exitReward(self):
         return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedSuitInterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:54 Pacific Daylight Time

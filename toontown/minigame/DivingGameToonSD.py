@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:55 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DivingGameToonSD
 from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -100,6 +98,3 @@ class DivingGameToonSD(StateData.StateData):
     def setAnimState(self, newState, playRate):
         if not self.unexpectedExit:
             self.toon.setAnimState(newState, playRate)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DivingGameToonSD.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:55 Pacific Daylight Time

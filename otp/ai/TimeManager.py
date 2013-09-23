@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:06 Pacific Daylight Time
-# Embedded file name: otp.ai.TimeManager
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import *
 from direct.distributed.ClockDelta import *
@@ -351,6 +349,3 @@ class TimeManager(DistributedObject.DistributedObject):
         av = self.cr.getDo(avId)
         if av:
             av._zombieCheckResult(context, present)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\TimeManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:07 Pacific Daylight Time

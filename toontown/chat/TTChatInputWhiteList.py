@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:24 Pacific Daylight Time
-# Embedded file name: toontown.chat.TTChatInputWhiteList
 from otp.chat.ChatInputWhiteListFrame import ChatInputWhiteListFrame
 from toontown.chat.TTWhiteList import TTWhiteList
 from direct.showbase import DirectObject
@@ -213,6 +211,3 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
             newtext = ' '.join(newwords)
             self.chatEntry.set(newtext)
         self.chatEntry.guiItem.setAcceptEnabled(self.okayToSubmit)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\chat\TTChatInputWhiteList.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:25 Pacific Daylight Time

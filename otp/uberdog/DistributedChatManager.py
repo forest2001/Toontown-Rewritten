@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:51 Pacific Daylight Time
-# Embedded file name: otp.uberdog.DistributedChatManager
 from direct.distributed.DistributedObject import DistributedObject
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from pandac.PandaModules import *
@@ -85,6 +83,3 @@ class DistributedChatManager(DistributedObjectGlobal):
 
     def guildChatFrom(self, fromId, message):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\uberdog\DistributedChatManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:51 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:18 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieDrop
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
 from BattleProps import *
@@ -435,6 +433,3 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         else:
             suitTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
     return suitTrack
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieDrop.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:19 Pacific Daylight Time

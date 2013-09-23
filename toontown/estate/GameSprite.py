@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:19 Pacific Daylight Time
-# Embedded file name: toontown.estate.GameSprite
 import math
 
 class GameSprite():
@@ -88,6 +86,3 @@ class GameSprite():
         if self.isActive:
             self.setX(self.prevX)
             self.setZ(self.prevZ)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\GameSprite.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:19 Pacific Daylight Time

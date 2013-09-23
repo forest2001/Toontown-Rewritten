@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:05 Pacific Daylight Time
-# Embedded file name: toontown.ai.ToontownMagicWordManager
 from direct.interval.IntervalGlobal import *
 from direct.distributed import PyDatagram
 from direct.distributed.MsgTypes import MsgName2Id
@@ -841,6 +839,3 @@ class ToontownMagicWordManager(MagicWordManager.MagicWordManager):
         if response is not None:
             self.setMagicWordResponse(response)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\ToontownMagicWordManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:07 Pacific Daylight Time

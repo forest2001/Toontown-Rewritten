@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:51 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedElevatorFSM
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -486,6 +484,3 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
 
     def getDestName(self):
         return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedElevatorFSM.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:52 Pacific Daylight Time

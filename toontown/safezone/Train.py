@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:45 Pacific Daylight Time
-# Embedded file name: toontown.safezone.Train
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import *
@@ -163,6 +161,3 @@ class Train(DirectObject):
 
     def __handleCollisionSphereEnter(self, collEntry = None):
         base.localAvatar.b_squish(10)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\Train.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:45 Pacific Daylight Time

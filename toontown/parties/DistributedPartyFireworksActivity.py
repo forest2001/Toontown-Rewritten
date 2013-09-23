@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:22 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyFireworksActivity
 from pandac.PandaModules import Vec3
 from pandac.PandaModules import OmniBoundingVolume
 from pandac.PandaModules import AlphaTestAttrib
@@ -154,6 +152,3 @@ class DistributedPartyFireworksActivity(DistributedPartyActivity, FireworkShowMi
 
     def handleToonDisabled(self, toonId):
         self.notify.warning('handleToonDisabled no implementation yet')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyFireworksActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:22 Pacific Daylight Time

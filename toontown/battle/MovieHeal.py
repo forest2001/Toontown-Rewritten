@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:20 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieHeal
 from direct.interval.IntervalGlobal import *
 from BattleProps import *
 from BattleSounds import *
@@ -484,6 +482,3 @@ def stopLook(toonsInBattle):
 def toonsLook(toons, someNode, offset):
     for someToon in toons:
         someToon.startStareAt(someNode, offset)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieHeal.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:21 Pacific Daylight Time

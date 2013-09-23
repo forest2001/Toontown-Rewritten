@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:02 Pacific Daylight Time
-# Embedded file name: toontown.ai.HolidayDecorator
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import Parallel, Sequence, Func, Wait
 from pandac.PandaModules import Vec4, loadDNAFile, CSDefault, TransformState, NodePath, TransparencyAttrib
@@ -69,6 +67,3 @@ class HolidayDecorator():
             p.append(s)
 
         return p
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\HolidayDecorator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:02 Pacific Daylight Time

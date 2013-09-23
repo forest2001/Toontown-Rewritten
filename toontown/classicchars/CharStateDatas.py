@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:27 Pacific Daylight Time
-# Embedded file name: toontown.classicchars.CharStateDatas
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -228,6 +226,3 @@ class CharFollowChipState(CharWalkState):
         newHeading = rad2Deg(curTheta)
         newHeading %= 360
         self.character.setH(newHeading)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\classicchars\CharStateDatas.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:27 Pacific Daylight Time

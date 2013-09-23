@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:26 Pacific Daylight Time
-# Embedded file name: toontown.distributed.DistributedTimer
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -33,6 +31,3 @@ class DistributedTimer(DistributedObject.DistributedObject):
     def getTime(self):
         elapsedTime = globalClockDelta.localElapsedTime(self.startTime, bits=32)
         return elapsedTime
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\DistributedTimer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:26 Pacific Daylight Time

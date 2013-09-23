@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:27 Pacific Daylight Time
-# Embedded file name: toontown.estate.PlantingGUI
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
@@ -415,6 +413,3 @@ class PlantingGUI(DirectFrame):
         newBox = SpiffyBeanBox(index=index, parent=self, pos=(xPos, 0, zPos), geom=DGG.getDefaultDialogGeom(), geom_scale=(0.1, 1.0, 0.1), geom_color=geomColor, relief=None, state=state, command=command, extraArgs=[index])
         self.boxList.append(newBox)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\PlantingGUI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:28 Pacific Daylight Time

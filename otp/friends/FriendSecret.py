@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:21 Pacific Daylight Time
-# Embedded file name: otp.friends.FriendSecret
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
@@ -559,6 +557,3 @@ class FriendSecret(DirectFrame, StateData.StateData):
         self.enterSecretText.hide()
         self.enterSecret.hide()
         base.localAvatar.chatMgr.fsm.request('mainMenu')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\friends\FriendSecret.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:23 Pacific Daylight Time

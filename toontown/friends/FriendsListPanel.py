@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:39 Pacific Daylight Time
-# Embedded file name: toontown.friends.FriendsListPanel
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -680,6 +678,3 @@ class FriendsListPanel(DirectFrame, StateData.StateData):
     def __ignoreListChanged(self):
         if self.panelType == FLPEnemies:
             self.__updateScrollList()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\friends\FriendsListPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:40 Pacific Daylight Time

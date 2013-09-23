@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:12 Pacific Daylight Time
-# Embedded file name: otp.chat.ChatInputTyped
 from direct.showbase import DirectObject
 from otp.otpbase import OTPGlobals
 import sys
@@ -183,6 +181,3 @@ class ChatInputTyped(DirectObject.DirectObject):
         self.chatEntry.set(self.history[self.historyIndex])
         self.historyIndex -= 1
         self.historyIndex %= len(self.history)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\ChatInputTyped.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:12 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:20 Pacific Daylight Time
-# Embedded file name: toontown.racing.RaceGlobals
 TrackSignDuration = 15
 RaceCountdown = 3
 MaxRacers = 4
@@ -552,6 +550,3 @@ Exit_UserReq = 0
 Exit_Barrier = 1
 Exit_Slow = 2
 Exit_BarrierNoRefund = 3
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\RaceGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:20 Pacific Daylight Time

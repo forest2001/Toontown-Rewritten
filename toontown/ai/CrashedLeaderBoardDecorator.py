@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:59 Pacific Daylight Time
-# Embedded file name: toontown.ai.CrashedLeaderBoardDecorator
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -47,6 +45,3 @@ class CrashedLeaderBoardDecorator(HolidayDecorator.HolidayDecorator):
         self.swapIval = self.getSwapVisibleIval()
         if self.swapIval:
             self.swapIval.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\CrashedLeaderBoardDecorator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:59 Pacific Daylight Time

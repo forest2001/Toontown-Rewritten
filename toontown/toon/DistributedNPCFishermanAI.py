@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:42 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCFishermanAI
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from DistributedNPCToonBaseAI import *
@@ -96,6 +94,3 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
         taskMgr.remove(self.uniqueName('clearMovie'))
         self.sendClearMovie(None)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCFishermanAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:42 Pacific Daylight Time

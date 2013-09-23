@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:14 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedCannonGame
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -994,6 +992,3 @@ class DistributedCannonGame(DistributedMinigame):
         lerpNode.lerpHpr(endRotation, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
         camera.lerpPos(endPos, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
         return Task.done
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedCannonGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:15 Pacific Daylight Time

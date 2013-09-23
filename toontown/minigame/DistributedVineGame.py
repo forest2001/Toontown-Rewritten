@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:51 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedVineGame
 from pandac.PandaModules import Point3, ForceNode, LinearVectorForce, CollisionHandlerEvent, CollisionNode, CollisionSphere, Camera, PerspectiveLens, Vec4, Point2, ActorNode, Vec3, BitMask32
 from direct.interval.IntervalGlobal import Sequence, Parallel, Func, Wait, LerpPosInterval, ActorInterval, LerpScaleInterval, ProjectileInterval, SoundInterval
 from direct.directnotify import DirectNotifyGlobal
@@ -1540,6 +1538,3 @@ class DistributedVineGame(DistributedMinigame):
             del endingTrack
 
         self.endingTracks = {}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedVineGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:54 Pacific Daylight Time

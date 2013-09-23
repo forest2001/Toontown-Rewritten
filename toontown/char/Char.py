@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:19 Pacific Daylight Time
-# Embedded file name: toontown.char.Char
 from otp.avatar import Avatar
 from pandac.PandaModules import *
 from direct.task import Task
@@ -625,6 +623,3 @@ class Char(Avatar.Avatar):
 
     def uniqueName(self, idString):
         return idString + '-' + str(self.this)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\char\Char.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:20 Pacific Daylight Time

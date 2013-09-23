@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:22 Pacific Daylight Time
-# Embedded file name: toontown.safezone.ButterflyGlobals
 from pandac.PandaModules import *
 import random
 OFF = 0
@@ -262,6 +260,3 @@ def recycleIndex(index, playground, area, doId):
     if unusedI.count(index) == 0:
         unusedI.append(index)
     return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\ButterflyGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:23 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:41 Pacific Daylight Time
-# Embedded file name: toontown.safezone.MMSafeZoneLoader
 from pandac.PandaModules import *
 import SafeZoneLoader
 import MMPlayground
@@ -29,6 +27,3 @@ class MMSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     def unload(self):
         SafeZoneLoader.SafeZoneLoader.unload(self)
         del self.piano
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\MMSafeZoneLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:41 Pacific Daylight Time

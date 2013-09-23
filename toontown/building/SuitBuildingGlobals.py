@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:57 Pacific Daylight Time
-# Embedded file name: toontown.building.SuitBuildingGlobals
 from ElevatorConstants import *
 SuitBuildingInfo = (((1, 1),
   (1, 3),
@@ -148,6 +146,3 @@ TO_TOON_BLDG_TIME = 8
 VICTORY_SEQUENCE_TIME = VICTORY_RUN_TIME + TO_TOON_BLDG_TIME
 CLEAR_OUT_TOON_BLDG_TIME = 4
 TO_SUIT_BLDG_TIME = 8
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\SuitBuildingGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:58 Pacific Daylight Time

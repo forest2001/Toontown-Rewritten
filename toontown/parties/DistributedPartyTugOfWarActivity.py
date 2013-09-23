@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:25 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyTugOfWarActivity
 import math
 from pandac.PandaModules import CollisionTube
 from pandac.PandaModules import CollisionNode
@@ -698,6 +696,3 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
         DistributedPartyTeamActivity.setAdvantage(self, advantage)
         if self.isLocalToonPlaying:
             self.setIdealRate(PartyGlobals.TugOfWarTargetRateList[0][1])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyTugOfWarActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:27 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:24 Pacific Daylight Time
-# Embedded file name: otp.launcher.LauncherBase
 import sys
 import os
 import time
@@ -2589,7 +2587,6 @@ Syntax error at or near `POP_BLOCK' token at offset 503
         if DISLToken == 'NO DISLTOKEN':
             DISLToken = None
         return DISLToken# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:15:27 Pacific Daylight Time
 ne
 567	DUP_TOP           None
 568	LOAD_CONST        'aspeeder.exe'

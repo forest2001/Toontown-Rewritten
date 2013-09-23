@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:00 Pacific Daylight Time
-# Embedded file name: toontown.toon.GroupPanel
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -370,6 +368,3 @@ class GroupPanel(DirectObject.DirectObject):
              TTLocalizer.BoardingGo,
              '')
             self.goButton['command'] = self.__handleGoButton
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\GroupPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:01 Pacific Daylight Time

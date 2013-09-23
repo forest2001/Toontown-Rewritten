@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:45 Pacific Daylight Time
-# Embedded file name: otp.otpbase.OTPTimer
 from pandac.PandaModules import Vec4
 from direct.gui.DirectGui import DirectFrame, DGG
 from direct.task import Task
@@ -114,6 +112,3 @@ class OTPTimer(DirectFrame):
     def cleanup(self):
         self.destroy()
         self.notify.warning('Call destroy, not cleanup')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpbase\OTPTimer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:46 Pacific Daylight Time

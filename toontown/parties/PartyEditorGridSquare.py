@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:37 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyEditorGridSquare
 from pandac.PandaModules import Vec3, Vec4, Point3, TextNode, VBase4
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectScrolledList, DirectCheckButton
 from direct.gui import DirectGuiGlobals
@@ -27,6 +25,3 @@ class PartyEditorGridSquare(DirectObject):
 
     def destroy(self):
         del self.gridElement
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyEditorGridSquare.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:37 Pacific Daylight Time

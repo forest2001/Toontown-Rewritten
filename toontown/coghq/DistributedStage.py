@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:52 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedStage
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -306,6 +304,3 @@ class DistributedStage(DistributedObject.DistributedObject):
         if base.localAvatar.doId != avId:
             name = base.cr.doId2do[avId].getName()
             self.showInfoText(TTLocalizer.stageToonEnterElevator % name)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedStage.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:53 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:04 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogGenerator
 from direct.directnotify import DirectNotifyGlobal
 import CatalogItem
 import CatalogItemList
@@ -1787,6 +1785,3 @@ class CatalogGenerator():
         if maybeWeekCode != None:
             sched[item][1].append(maybeWeekCode)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogGenerator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:09 Pacific Daylight Time

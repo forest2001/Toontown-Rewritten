@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:59 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.NewbiePurchaseManager
 import PurchaseManager
 from toontown.quest import QuestParser
 from toontown.toon import NPCToons
@@ -56,6 +54,3 @@ class NewbiePurchaseManager(PurchaseManager.PurchaseManager):
         self.movie.setVar('playAgainButton', self.purchase.playAgain)
         self.movie.setVar('purchaseBg', self.purchase.bg)
         self.movie.play()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\NewbiePurchaseManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:59 Pacific Daylight Time

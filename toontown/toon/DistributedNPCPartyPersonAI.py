@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:44 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCPartyPersonAI
 from DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
 from toontown.toonbase import TTLocalizer
 from direct.task import Task
@@ -104,6 +102,3 @@ class DistributedNPCPartyPersonAI(DistributedNPCToonBaseAI):
         taskMgr.remove(self.uniqueName('clearMovie'))
         self.sendClearMovie(None)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCPartyPersonAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:44 Pacific Daylight Time

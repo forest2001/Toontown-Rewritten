@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:55 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.IssueFrame
 import os
 from pandac.PandaModules import VirtualFileSystem, Filename, DSearchPath
 from pandac.PandaModules import Texture, CardMaker, PNMImage, TextureStage
@@ -392,6 +390,3 @@ class IssueFrame(DirectFrame):
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: INGAMENEWS: Change Week')
         messenger.send('newsChangeWeek', [newIssueWeek])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\IssueFrame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:56 Pacific Daylight Time

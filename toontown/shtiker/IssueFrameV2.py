@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:56 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.IssueFrameV2
 from pandac.PandaModules import Filename
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import DGG, DirectFrame, DirectButton
@@ -160,6 +158,3 @@ class IssueFrameV2(IssueFrame.IssueFrame):
              image), image_scale=imageScales[section], command=self.gotoPage, extraArgs=(section, 0), enableEdit=1, pos=rolloverPositions[section])
 
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\IssueFrameV2.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:56 Pacific Daylight Time

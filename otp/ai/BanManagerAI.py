@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:04 Pacific Daylight Time
-# Embedded file name: otp.ai.BanManagerAI
 import urllib
 import os
 from pandac.PandaModules import HTTPClient, Ramfile
@@ -75,6 +73,3 @@ class BanManagerAI():
         self.notify.info('done processing ban request %s, ramFile=%s' % (banReq, result))
         self.cleanupBanReq(banReq)
         return task.done
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\BanManagerAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:04 Pacific Daylight Time

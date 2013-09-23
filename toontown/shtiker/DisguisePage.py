@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:47 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.DisguisePage
 import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -197,6 +195,3 @@ class DisguisePage(ShtikerPage.ShtikerPage):
         self.updatePartsDisplay(index, numParts, numPartsRequired)
         self.updateMeritBar(index)
         self.cogPartRatio['text'] = '%d/%d' % (CogDisguiseGlobals.getTotalParts(numParts), numPartsRequired)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\DisguisePage.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:47 Pacific Daylight Time

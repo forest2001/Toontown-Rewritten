@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:59 Pacific Daylight Time
-# Embedded file name: toontown.quest.QuestMapGlobals
 from pandac.PandaModules import Point3
 CogInfoPosTable = {'toontown_central_2100_english': Point3(-0.3, 0, -0.2),
  'toontown_central_2200_english': Point3(0.2, 0, -0.2),
@@ -70,6 +68,3 @@ CornerPosTable = {'daisys_garden_5200_english': [Point3(781.219727, 476.963623, 
  'toontown_central_2300_english': [Point3(870.224243, 536.165771, 0), Point3(-89.175751, -423.234344, 0)],
  'toontown_central_2100_english': [Point3(161.735336, -59.985107, 0), Point3(-512.664612, -734.385193, 0)],
  'the_burrrgh_3200_english': [Point3(429.647949, 561.224304, 0), Point3(-31.951935, 99.624283, 0)]}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\QuestMapGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:00 Pacific Daylight Time

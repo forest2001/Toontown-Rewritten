@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:12 Pacific Daylight Time
-# Embedded file name: toontown.minigame.CatchGameToonSD
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -190,6 +188,3 @@ class CatchGameToonSD(StateData.StateData):
     def setAnimState(self, newState, playRate):
         if not self.unexpectedExit:
             self.toon.setAnimState(newState, playRate)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\CatchGameToonSD.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:12 Pacific Daylight Time

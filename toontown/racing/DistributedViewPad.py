@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:13 Pacific Daylight Time
-# Embedded file name: toontown.racing.DistributedViewPad
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.task import Task
@@ -29,6 +27,3 @@ class DistributedViewPad(DistributedKartPad):
         block.cameraPos = Point3(0, 23, 7)
         block.cameraHpr = Point3(180, -10, 0)
         DistributedKartPad.addStartingBlock(self, block)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\DistributedViewPad.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:13 Pacific Daylight Time

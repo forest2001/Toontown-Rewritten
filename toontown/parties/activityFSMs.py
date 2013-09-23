@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:10 Pacific Daylight Time
-# Embedded file name: toontown.parties.activityFSMs
 from direct.directnotify import DirectNotifyGlobal
 from BaseActivityFSM import BaseActivityFSM
 from activityFSMMixins import IdleMixin
@@ -85,6 +83,3 @@ class TeamActivityFSM(BaseActivityFSM, WaitForEnoughMixin, WaitToStartMixin, Rul
          'WaitForServer': ['Active', 'WaitForEnough'],
          'Active': ['Conclusion', 'WaitForEnough'],
          'Conclusion': ['WaitForEnough']}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\activityFSMs.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:10 Pacific Daylight Time

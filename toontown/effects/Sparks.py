@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:57 Pacific Daylight Time
-# Embedded file name: toontown.effects.Sparks
 from pandac.PandaModules import *
 from direct.particles import ParticleEffect
 from direct.directnotify import DirectNotifyGlobal
@@ -56,6 +54,3 @@ class Sparks(NodePath):
         self.renderParent.removeNode()
         del self.effect
         del self.renderParent
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\Sparks.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:57 Pacific Daylight Time

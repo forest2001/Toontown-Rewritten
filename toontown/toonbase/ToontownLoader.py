@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:35 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.ToontownLoader
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.showbase import Loader
@@ -103,6 +101,3 @@ class ToontownLoader(Loader.Loader):
         ret = loadDNAFile(dnaStore, dnaFile, CSDefault, 0)
         self.tick()
         return ret
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\ToontownLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:35 Pacific Daylight Time

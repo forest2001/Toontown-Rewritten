@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:57 Pacific Daylight Time
-# Embedded file name: toontown.minigame.RaceGameGlobals
 from toontown.toonbase import TTLocalizer
 ValidChoices = [0,
  1,
@@ -38,6 +36,3 @@ ChanceRewards = (((1, 0), TTLocalizer.RaceGameForwardOneSpace, 0),
  ((0, 0), TTLocalizer.RaceGameJellybeans10, 10),
  ((0, 0), -1, 0),
  ((NumberToWin, 0), TTLocalizer.RaceGameInstantWinner, 0))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\RaceGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:57 Pacific Daylight Time

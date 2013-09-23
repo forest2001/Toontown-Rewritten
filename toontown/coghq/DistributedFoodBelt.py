@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:35 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedFoodBelt
 from pandac.PandaModules import NodePath, Point3, CollisionTube, CollisionNode
 from direct.fsm import FSM
 from direct.distributed import DistributedObject
@@ -353,6 +351,3 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
 
         if self.boss:
             self.boss.localToonTouchedBeltToonup(beltIndex, toonupIndex, toonupNum)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedFoodBelt.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:36 Pacific Daylight Time

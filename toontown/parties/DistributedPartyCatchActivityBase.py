@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:20 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyCatchActivityBase
 import math
 from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame.DropScheduler import ThreePhaseDropScheduler
@@ -61,6 +59,3 @@ class DistributedPartyCatchActivityBase():
         self.numFruits = int(self.totalDrops * typeProbs['fruit'])
         self.numAnvils = int(self.totalDrops - self.numFruits)
         self.generationDuration = scheduler.getDuration()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCatchActivityBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:21 Pacific Daylight Time

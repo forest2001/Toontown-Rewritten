@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:26 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedBarrelBase
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
@@ -102,6 +100,3 @@ class DistributedBarrelBase(BasicEntities.DistributedNodePathEntity, BarrelBase.
     def resetBarrel(self):
         self.barrel.setScale(self.barrelScale)
         self.accept(self.uniqueName('entertreasureSphere'), self.handleEnterSphere)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedBarrelBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:27 Pacific Daylight Time

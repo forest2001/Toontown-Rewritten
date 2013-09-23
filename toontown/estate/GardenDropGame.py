@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:20 Pacific Daylight Time
-# Embedded file name: toontown.estate.GardenDropGame
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -531,6 +529,3 @@ class GardenDropGame(DirectObject.DirectObject):
                 if angle > pi * 1.5 or angle < pi * 0.5:
                     newAngle = pi * 0.0
                 hit.addForce(forceM * force, newAngle)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\GardenDropGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:21 Pacific Daylight Time

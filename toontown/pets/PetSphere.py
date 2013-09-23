@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:57 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetSphere
 from pandac.PandaModules import *
 from direct.showbase.PythonUtil import reduceAngle
 from otp.movement import Impulse
@@ -48,6 +46,3 @@ class PetSphere(Impulse.Impulse):
 
     def _handleCollision(self, collEntry):
         messenger.send(self.mover.getCollisionEventName(), [collEntry])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetSphere.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:57 Pacific Daylight Time

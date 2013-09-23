@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:59 Pacific Daylight Time
-# Embedded file name: toontown.hood.TrashcanInteractiveProp
 from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import InteractiveAnimatedProp
@@ -185,6 +183,3 @@ class TrashcanInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
 
     def __init__(self, node):
         InteractiveAnimatedProp.InteractiveAnimatedProp.__init__(self, node, ToontownGlobals.TRASHCANS_BUFF_BATTLES)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\TrashcanInteractiveProp.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:59 Pacific Daylight Time

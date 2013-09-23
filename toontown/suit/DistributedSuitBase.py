@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:30 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedSuitBase
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -452,6 +450,3 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             level = '???'
 
         return '%s\n%s\nLevel %s' % (self.getName(), self.doId, level)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedSuitBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:31 Pacific Daylight Time

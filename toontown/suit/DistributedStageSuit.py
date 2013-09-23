@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:29 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedStageSuit
 from toontown.suit import DistributedFactorySuit
 from toontown.suit.Suit import *
 from direct.directnotify import DirectNotifyGlobal
@@ -33,6 +31,3 @@ class DistributedStageSuit(DistributedFactorySuit.DistributedFactorySuit):
             self.reparentTo(hidden)
         else:
             self.doReparent()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedStageSuit.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:29 Pacific Daylight Time

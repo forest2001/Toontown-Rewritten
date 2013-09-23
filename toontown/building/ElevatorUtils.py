@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:57 Pacific Daylight Time
-# Embedded file name: toontown.building.ElevatorUtils
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from ElevatorConstants import *
@@ -111,6 +109,3 @@ def getRideElevatorInterval(type = ELEVATOR_NORMAL):
     else:
         ival = Sequence(Wait(0.5), LerpPosInterval(camera, 0.5, Point3(0, 14, 3.8), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 0.5, Point3(0, 14, 4), startPos=Point3(0, 14, 3.8)), Wait(1.0), LerpPosInterval(camera, 0.5, Point3(0, 14, 4.2), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 1.0, Point3(0, 14, 4), startPos=Point3(0, 14, 4.2)))
     return ival
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\ElevatorUtils.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:57 Pacific Daylight Time

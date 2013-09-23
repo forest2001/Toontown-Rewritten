@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:41 Pacific Daylight Time
-# Embedded file name: otp.namepanel.NameCheck
 import string
 from otp.otpbase import OTPLocalizer
 from direct.directnotify import DirectNotifyGlobal
@@ -705,7 +703,6 @@ for c in '!"#$%&()*+/:;<=>?@[\\]^_`{|}~':
 
 notify.setSeverity(severity)
 del severity# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:15:41 Pacific Daylight Time
         'dc'
 318	BINARY_MODULO     None
 319	CALL_FUNCTION_1   None

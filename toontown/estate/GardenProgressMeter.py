@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:22 Pacific Daylight Time
-# Embedded file name: toontown.estate.GardenProgressMeter
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -95,6 +93,3 @@ class GardenProgressMeter(DirectObject.DirectObject):
             self.hide()
             self.unload()
             messenger.send(self.doneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\GardenProgressMeter.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:22 Pacific Daylight Time

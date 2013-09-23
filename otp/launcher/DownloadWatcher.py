@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:24 Pacific Daylight Time
-# Embedded file name: otp.launcher.DownloadWatcher
 from direct.task import Task
 from otp.otpbase import OTPLocalizer
 from direct.gui.DirectGui import *
@@ -29,6 +27,3 @@ class DownloadWatcher(DirectObject):
         self.text.destroy()
         self.bar.destroy()
         self.ignoreAll()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\launcher\DownloadWatcher.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:24 Pacific Daylight Time

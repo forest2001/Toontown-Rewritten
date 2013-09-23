@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:37 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieUtil
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
 from BattleProps import *
@@ -603,6 +601,3 @@ def calcAvgSuitPos(throw):
 
     avgSuitPos /= numTargets
     return avgSuitPos
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieUtil.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:38 Pacific Daylight Time

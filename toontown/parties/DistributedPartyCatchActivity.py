@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:19 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyCatchActivity
 from pandac.PandaModules import Vec3, Point3, Point4, TextNode, NodePath
 from pandac.PandaModules import CollisionHandlerEvent, CollisionNode, CollisionSphere
 from direct.distributed.ClockDelta import globalClockDelta
@@ -978,7 +976,6 @@ Syntax error at or near `POP_BLOCK' token at offset 167
             DistributedPartyActivity.showJellybeanReward(self, earnedAmount, jarAmount, message)
         else:
             base.cr.playGame.getPlace().fsm.request('walk')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:23:20 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCatchActivity.pyc
 Traceback (most recent call last):

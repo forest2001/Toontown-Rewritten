@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:20 Pacific Daylight Time
-# Embedded file name: toontown.coghq.SellbotCogHQLoader
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
 import CogHQLoader
@@ -170,6 +168,3 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
     def getBossPlaceClass(self):
         return SellbotHQBossBattle.SellbotHQBossBattle
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\SellbotCogHQLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:20 Pacific Daylight Time

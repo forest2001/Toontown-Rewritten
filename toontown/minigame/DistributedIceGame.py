@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:23 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedIceGame
 import math
 from pandac.PandaModules import Vec3, deg2Rad, Point3, NodePath, VBase4, CollisionHandlerEvent, CollisionNode, CollisionSphere
 from direct.fsm import ClassicFSM, State
@@ -1139,7 +1137,6 @@ Syntax error at or near `POP_BLOCK' token at offset 215
             toon.setPosHpr(0, 0, 0, 0, 0, 0)
             toon.setY(1.0)
             toon.setZ(-3)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:21:25 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedIceGame.pyc
 Traceback (most recent call last):

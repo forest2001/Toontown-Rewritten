@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:52 Pacific Daylight Time
-# Embedded file name: toontown.town.TownLoader
 from pandac.PandaModules import *
 from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
@@ -374,6 +372,3 @@ class TownLoader(StateData.StateData):
         if zoneId in self.zoneIdToInteractivePropDict:
             result = self.zoneIdToInteractivePropDict[zoneId]
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\TownLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:53 Pacific Daylight Time

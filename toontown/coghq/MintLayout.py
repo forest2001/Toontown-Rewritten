@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:16 Pacific Daylight Time
-# Embedded file name: toontown.coghq.MintLayout
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import invertDictLossless
 from toontown.coghq import MintRoomSpecs
@@ -1150,7 +1148,6 @@ ParserError: --- This code section failed: ---
 
     def __repr__(self):
         return str(self)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:19:17 Pacific Daylight Time
 '
 290	CALL_FUNCTION_1   None
 293	INPLACE_SUBTRACT  None

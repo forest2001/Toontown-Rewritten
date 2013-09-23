@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:55 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetNameGenerator
 import random
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -87,6 +85,3 @@ class PetNameGenerator():
         retString += random.choice(firstList)
         random.setstate(S)
         return retString
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetNameGenerator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:55 Pacific Daylight Time

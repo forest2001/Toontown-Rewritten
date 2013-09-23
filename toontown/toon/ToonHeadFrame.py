@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:29 Pacific Daylight Time
-# Embedded file name: toontown.toon.ToonHeadFrame
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 import ToonHead
@@ -61,6 +59,3 @@ class ToonHeadFrame(DirectFrame):
             self.avKeep.destroy()
             self.avKeep = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\ToonHeadFrame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:29 Pacific Daylight Time

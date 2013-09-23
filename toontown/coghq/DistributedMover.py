@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:51 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedMover
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from StomperGlobals import *
@@ -127,6 +125,3 @@ class DistributedMover(BasicEntities.DistributedNodePathEntity):
                 self.moverIval.append(Wait(self.pos0Wait))
             self.moverIval.start()
             self.moverIval.setT(timeLag)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedMover.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:51 Pacific Daylight Time

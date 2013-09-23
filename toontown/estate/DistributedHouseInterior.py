@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:09 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedHouseInterior
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
@@ -203,6 +201,3 @@ class DistributedHouseInterior(DistributedObject.DistributedObject):
          wainscotingItem], store=CatalogItem.Customization)
         if self.interior:
             self.__colorWalls()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedHouseInterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:10 Pacific Daylight Time

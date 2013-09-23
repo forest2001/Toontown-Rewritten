@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:51 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeGameGuis
 from direct.gui.DirectLabel import DirectLabel
 from direct.gui.DirectGui import DirectFrame, DGG
 from direct.task.Task import Task
@@ -270,6 +268,3 @@ class CogdoMazeHud():
             self._questArrow.setPos(self._questArrowParent, self._questArrowOffset)
             self._questArrow.lookAt(self._questArrowNodeToPoint)
         return Task.cont
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeGameGuis.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:52 Pacific Daylight Time

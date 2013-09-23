@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:32 Pacific Daylight Time
-# Embedded file name: toontown.fishing.DistributedFishingPond
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -127,6 +125,3 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
     def setSpotGui(self):
         for spot in self.visitedSpots.values():
             spot.setCastGui()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\DistributedFishingPond.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:32 Pacific Daylight Time

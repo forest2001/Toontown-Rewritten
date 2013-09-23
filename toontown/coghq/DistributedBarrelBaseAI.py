@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:27 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedBarrelBaseAI
 from direct.directnotify import DirectNotifyGlobal
 from otp.level import DistributedEntityAI
 from direct.task import Task
@@ -31,6 +29,3 @@ class DistributedBarrelBaseAI(DistributedEntityAI.DistributedEntityAI, BarrelBas
 
     def d_setGrab(self, avId):
         self.sendUpdate('setGrab', [avId])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedBarrelBaseAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:27 Pacific Daylight Time

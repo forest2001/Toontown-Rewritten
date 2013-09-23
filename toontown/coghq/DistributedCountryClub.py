@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:31 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedCountryClub
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -331,6 +329,3 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
     def hideTitleText(self):
         if self.titleText or 1:
             self.titleText.hide()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedCountryClub.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:32 Pacific Daylight Time

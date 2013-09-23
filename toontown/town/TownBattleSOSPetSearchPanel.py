@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:51 Pacific Daylight Time
-# Embedded file name: toontown.town.TownBattleSOSPetSearchPanel
 from pandac.PandaModules import *
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
@@ -39,6 +37,3 @@ class TownBattleSOSPetSearchPanel(StateData.StateData):
     def __handleBack(self):
         doneStatus = {'mode': 'Back'}
         messenger.send(self.doneEvent, [doneStatus])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\TownBattleSOSPetSearchPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:52 Pacific Daylight Time

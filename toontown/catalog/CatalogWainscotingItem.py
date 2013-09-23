@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:17 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogWainscotingItem
 from CatalogSurfaceItem import *
 WSTTextureName = 0
 WSTColor = 1
@@ -144,6 +142,3 @@ def getWainscotingRange(fromIndex, toIndex, *otherRanges):
                     list.append(CatalogWainscotingItem(patternIndex, 0))
 
     return list
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogWainscotingItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:17 Pacific Daylight Time

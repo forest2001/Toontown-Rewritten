@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:55 Pacific Daylight Time
-# Embedded file name: toontown.minigame.PlayingCardGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from pandac.PandaModules import Vec4
@@ -85,6 +83,3 @@ def getBack(style):
     if _cardImagesInitialized == 0:
         initCardImages()
     return CardImages[style]['back']
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\PlayingCardGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:55 Pacific Daylight Time

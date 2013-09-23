@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:28 Pacific Daylight Time
-# Embedded file name: toontown.classicchars.DistributedDaisy
 from direct.showbase.ShowBaseGlobal import *
 import DistributedCCharBase
 from direct.directnotify import DirectNotifyGlobal
@@ -94,6 +92,3 @@ class DistributedDaisy(DistributedCCharBase.DistributedCCharBase):
             holidayIds = base.cr.newsManager.getHolidayIdList()
             if ToontownGlobals.APRIL_FOOLS_COSTUMES in holidayIds and isinstance(self.cr.playGame.hood, TTHood.TTHood):
                 self.diffPath = TTLocalizer.Mickey
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\classicchars\DistributedDaisy.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:28 Pacific Daylight Time

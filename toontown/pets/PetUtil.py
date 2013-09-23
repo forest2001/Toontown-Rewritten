@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:58 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetUtil
 from toontown.pets import PetDNA, PetTraits, PetConstants
 from toontown.pets import PetNameGenerator
 from direct.showbase import PythonUtil
@@ -29,6 +27,3 @@ def getPetCostFromSeed(seed, safezoneId):
     cost = rarity * (maxCost - minCost) + minCost
     cost = int(cost)
     return cost
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetUtil.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:58 Pacific Daylight Time

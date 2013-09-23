@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:15 Pacific Daylight Time
-# Embedded file name: toontown.racing.KartShopGui
 if __name__ == '__main__':
     from direct.directbase import DirectStart
 from pandac.PandaModules import *
@@ -792,6 +790,3 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
 
             m = Main()
             run()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\KartShopGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:17 Pacific Daylight Time

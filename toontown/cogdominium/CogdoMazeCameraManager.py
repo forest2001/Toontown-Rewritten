@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:46 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeCameraManager
 from direct.showbase.PythonUtil import bound as clamp
 import CogdoMazeGameGlobals as Globals
 import math
@@ -136,6 +134,3 @@ class CogdoMazeCameraManager():
         self.camera.setZ(self.savedCamZ + dz)
         dx = dz
         self.camera.setZ(self.savedCamX + dx)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeCameraManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:46 Pacific Daylight Time

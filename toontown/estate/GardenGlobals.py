@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:21 Pacific Daylight Time
-# Embedded file name: toontown.estate.GardenGlobals
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 import random
@@ -1498,6 +1496,3 @@ TrophyDict = {0: (TTLocalizer.GardenTrophyNameDict[0],),
  1: (TTLocalizer.GardenTrophyNameDict[1],),
  2: (TTLocalizer.GardenTrophyNameDict[2],),
  3: (TTLocalizer.GardenTrophyNameDict[3],)}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\GardenGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:22 Pacific Daylight Time

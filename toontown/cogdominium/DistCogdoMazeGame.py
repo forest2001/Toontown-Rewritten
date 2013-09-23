@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:59 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.DistCogdoMazeGame
 from direct.distributed.ClockDelta import globalClockDelta
 from toontown.toonbase import TTLocalizer
 from DistCogdoGame import DistCogdoGame
@@ -233,6 +231,3 @@ class DistCogdoMazeGame(DistCogdoGame, DistCogdoMazeGameBase):
     def setToonDisconnect(self, toonId):
         DistCogdoGame.setToonDisconnect(self, toonId)
         self.game.handleToonDisconnected(toonId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\DistCogdoMazeGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:00 Pacific Daylight Time

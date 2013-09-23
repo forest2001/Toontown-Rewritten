@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:30 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedCashbotBossTreasure
 from toontown.safezone import DistributedSZTreasure
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import *
@@ -42,6 +40,3 @@ class DistributedCashbotBossTreasure(DistributedSZTreasure.DistributedSZTreasure
         self.treasureFlyTrack = Sequence(Func(self.collNodePath.stash), Parallel(ProjectileInterval(self.treasure, startPos=Point3(0, 0, 0), endPos=Point3(0, 0, 0), duration=lerpTime, gravityMult=2.0), LerpPosInterval(self.nodePath, lerpTime, Point3(x, y, z), startPos=startPos)), Func(self.collNodePath.unstash))
         self.treasureFlyTrack.start()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedCashbotBossTreasure.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:30 Pacific Daylight Time

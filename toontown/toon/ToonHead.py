@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:27 Pacific Daylight Time
-# Embedded file name: toontown.toon.ToonHead
 from direct.actor import Actor
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
@@ -1323,6 +1321,3 @@ class ToonHead(Actor.Actor):
             if self.savedCheesyEffect == 10 or self.savedCheesyEffect == 11 or self.savedCheesyEffect == 12 or self.savedCheesyEffect == 13 or self.savedCheesyEffect == 14:
                 return True
         return False
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\ToonHead.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:29 Pacific Daylight Time

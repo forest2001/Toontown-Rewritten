@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:31 Pacific Daylight Time
-# Embedded file name: otp.level.EntityCreator
 import CutScene
 import EntityCreatorBase
 import BasicEntities
@@ -50,6 +48,3 @@ class EntityCreator(EntityCreatorBase.EntityCreatorBase):
 
     def doCreateEntity(self, ctor, entId):
         return ctor(self.level, entId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\EntityCreator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:31 Pacific Daylight Time

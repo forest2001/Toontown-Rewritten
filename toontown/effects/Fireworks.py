@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:34 Pacific Daylight Time
-# Embedded file name: toontown.effects.Fireworks
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
 from direct.particles import Particles
@@ -235,6 +233,3 @@ style2shootFunc = {CIRCLE: shootFireworkCircle,
  ROCKET: shootFireworkRocket,
  RING: shootFireworkRing,
  POP: shootPop}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\Fireworks.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:34 Pacific Daylight Time

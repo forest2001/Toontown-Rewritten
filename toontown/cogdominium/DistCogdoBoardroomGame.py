@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:55 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.DistCogdoBoardroomGame
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from toontown.cogdominium.DistCogdoLevelGame import DistCogdoLevelGame
 from toontown.cogdominium.CogdoBoardroomGameBase import CogdoBoardroomGameBase
@@ -54,6 +52,3 @@ class DistCogdoBoardroomGame(CogdoBoardroomGameBase, DistCogdoLevelGame):
         def _handleTimerScaleChanged(self, timerScale):
             if hasattr(self, 'timer'):
                 self.timer.setScale(timerScale)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\DistCogdoBoardroomGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:56 Pacific Daylight Time

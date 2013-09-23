@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:48 Pacific Daylight Time
-# Embedded file name: toontown.town.Street
 from pandac.PandaModules import *
 from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
@@ -395,6 +393,3 @@ class Street(BattlePlace.BattlePlace):
                     sign.setColorScale(0.525, 0.525, 0.525, 1)
 
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\Street.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:49 Pacific Daylight Time

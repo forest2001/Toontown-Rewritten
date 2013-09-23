@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:46 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCTailor
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
@@ -257,6 +255,3 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                         self.av.loop('neutral', 0)
                     self.av.generateToonClothes()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCTailor.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:47 Pacific Daylight Time

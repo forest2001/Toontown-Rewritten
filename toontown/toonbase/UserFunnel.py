@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:44 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.UserFunnel
 import os, sys, socket, random
 from urllib import quote_plus
 from pandac.PandaModules import HTTPClient
@@ -709,6 +707,3 @@ def checkParamFile():
             return
         else:
             return newURL + 'patcher.ver'
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\UserFunnel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:45 Pacific Daylight Time

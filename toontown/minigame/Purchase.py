@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:55 Pacific Daylight Time
-# Embedded file name: toontown.minigame.Purchase
 from PurchaseBase import *
 from direct.task.Task import Task
 from toontown.toon import ToonHead
@@ -790,6 +788,3 @@ class PurchaseHeadFrame(DirectFrame):
             self.avKeep.destroy()
             del self.avKeep
         self.ignore('clientCleanup')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\Purchase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:57 Pacific Daylight Time

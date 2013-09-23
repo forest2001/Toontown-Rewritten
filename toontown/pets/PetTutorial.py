@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:58 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetTutorial
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.fsm import FSM
@@ -81,6 +79,3 @@ class PetTutorial(DirectFrame, FSM.FSM):
     def __handleQuit(self):
         base.localAvatar.b_setPetTutorialDone(True)
         messenger.send(self.doneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetTutorial.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:58 Pacific Daylight Time

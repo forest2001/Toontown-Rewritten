@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:31 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyCog
 import math
 from direct.actor.Actor import Actor
 from direct.interval.ActorInterval import ActorInterval
@@ -345,6 +343,3 @@ class PartyCog(FSM):
         self.actor.getJoints(jointName='head')[0].getNetTransform(self.temp_transform)
         self.head_locator.setMat(self.temp_transform)
         return self.head_locator.getZ(self.root)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyCog.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:32 Pacific Daylight Time

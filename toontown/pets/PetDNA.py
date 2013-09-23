@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:52 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetDNA
 from toontown.toon import ToonDNA
 from pandac.PandaModules import VBase4
 from toontown.toonbase import TTLocalizer, ToontownGlobals
@@ -274,6 +272,3 @@ def getGenderString(dna = None, gender = -1):
     else:
         return TTLocalizer.GenderShopGirlButtonText
     return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetDNA.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:53 Pacific Daylight Time

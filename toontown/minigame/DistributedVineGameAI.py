@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:54 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedVineGameAI
 from DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -321,6 +319,3 @@ class DistributedVineGameAI(DistributedMinigameAI):
                 if self.scoreDict.has_key(avId):
                     self.scoreDict[avId] += partialBeans
                     self.sendUpdate('setScore', [avId, self.scoreDict[avId]])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedVineGameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:55 Pacific Daylight Time

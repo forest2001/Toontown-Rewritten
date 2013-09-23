@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:15 Pacific Daylight Time
-# Embedded file name: toontown.racing.KartShopGlobals
 from direct.showbase import PythonUtil
 
 class KartShopGlobals():
@@ -30,6 +28,3 @@ class KartGlobals():
         return padId % KartGlobals.PAD_GROUP_NUM
 
     getPadLocation = staticmethod(getPadLocation)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\KartShopGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:15 Pacific Daylight Time

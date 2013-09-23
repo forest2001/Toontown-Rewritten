@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:17 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieCamera
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
@@ -979,6 +977,3 @@ def avatarCloseUpFireShot(avatar, duration):
 
 def avatarCloseUpThreeQuarterLeftFireShot(avatar, duration):
     return heldRelativeShot(avatar, -8.2, 8.45, avatar.getHeight() * 0.66, -131.5, 3.6, 0, duration, 'avatarCloseUpThreeQuarterLeftShot')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieCamera.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:18 Pacific Daylight Time

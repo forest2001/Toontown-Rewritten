@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:30 Pacific Daylight Time
-# Embedded file name: toontown.classicchars.DistributedSockHopDaisy
 from direct.showbase.ShowBaseGlobal import *
 import DistributedCCharBase
 import DistributedDaisy
@@ -25,6 +23,3 @@ class DistributedSockHopDaisy(DistributedDaisy.DistributedDaisy):
             self.fsm.enterInitialState()
             self.nametag.setName(TTLocalizer.Daisy)
             self.handleHolidays()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\classicchars\DistributedSockHopDaisy.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:31 Pacific Daylight Time

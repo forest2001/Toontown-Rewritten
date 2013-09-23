@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:30 Pacific Daylight Time
-# Embedded file name: toontown.fishing.BingoCardGui
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -443,6 +441,3 @@ class BingoCardGui(DirectFrame):
             if not base.localAvatar.bFishBingoMarkTutorialDone:
                 self.showTutorial(BG.TutorialMark)
                 base.localAvatar.b_setFishBingoMarkTutorialDone(True)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\BingoCardGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:31 Pacific Daylight Time

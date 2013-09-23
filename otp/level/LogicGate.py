@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:34 Pacific Daylight Time
-# Embedded file name: otp.level.LogicGate
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 import Entity
@@ -92,6 +90,3 @@ class LogicGate(Entity.Entity, DirectObject.DirectObject):
 
     def getName(self):
         return 'switch-%s' % (self.entId,)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\LogicGate.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:34 Pacific Daylight Time

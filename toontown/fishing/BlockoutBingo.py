@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:32 Pacific Daylight Time
-# Embedded file name: toontown.fishing.BlockoutBingo
 from direct.directnotify import DirectNotifyGlobal
 from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
@@ -26,6 +24,3 @@ class BlockoutBingo(BingoCardBase.BingoCardBase):
         if self.checkForWin():
             return BingoGlobals.WIN
         return BingoGlobals.NO_UPDATE
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\BlockoutBingo.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:32 Pacific Daylight Time

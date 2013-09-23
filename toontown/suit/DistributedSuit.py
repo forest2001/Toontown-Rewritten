@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:29 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedSuit
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -643,6 +641,3 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
         for soundSequence in removeList:
             self.soundSequenceList.remove(soundSequence)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedSuit.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:30 Pacific Daylight Time

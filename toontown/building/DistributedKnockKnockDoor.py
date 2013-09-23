@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:53 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedKnockKnockDoor
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -146,6 +144,3 @@ class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp)
 
         self.avatarTracks = []
         self.avatarId = 0
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedKnockKnockDoor.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:53 Pacific Daylight Time

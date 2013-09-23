@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:13 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedStatuary
 import DistributedLawnDecor
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.ShowBase import *
@@ -136,6 +134,3 @@ class DistributedStatuary(DistributedLawnDecor.DistributedLawnDecor):
             self.resultDialog = None
         self.finishInteraction()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedStatuary.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:13 Pacific Daylight Time

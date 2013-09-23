@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:21 Pacific Daylight Time
-# Embedded file name: toontown.chat.ToontownChatManager
 import sys
 from direct.showbase import DirectObject
 from direct.showbase.PythonUtil import traceFunctionCall
@@ -603,6 +601,3 @@ class ToontownChatManager(ChatManager.ChatManager):
 
     def deactivateChat(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\chat\ToontownChatManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:23 Pacific Daylight Time

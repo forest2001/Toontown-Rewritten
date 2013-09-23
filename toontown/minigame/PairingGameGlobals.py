@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:54 Pacific Daylight Time
-# Embedded file name: toontown.minigame.PairingGameGlobals
 import PlayingCardDeck
 EasiestGameDuration = 120
 HardestGameDuration = 90
@@ -39,6 +37,3 @@ def calcLowFlipModifier(matches, flips):
         difference = maxFlipsForBonus - flips
         retval = float(difference) / divisor
     return retval
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\PairingGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:54 Pacific Daylight Time

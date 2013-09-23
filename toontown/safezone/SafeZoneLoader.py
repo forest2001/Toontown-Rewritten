@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:44 Pacific Daylight Time
-# Embedded file name: toontown.safezone.SafeZoneLoader
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.distributed.ToontownMsgTypes import *
@@ -256,6 +254,3 @@ class SafeZoneLoader(StateData.StateData):
 
     def exitGolfcourse(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\SafeZoneLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:44 Pacific Daylight Time

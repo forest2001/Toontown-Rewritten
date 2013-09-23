@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:20 Pacific Daylight Time
-# Embedded file name: toontown.racing.RaceGag
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.showbase import DirectObject
@@ -77,6 +75,3 @@ class RaceGag(DirectObject.DirectObject):
             self.pickupSound.play()
             self.parent.pickupGag(self.slot, self.type)
             self.disableGag()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\RaceGag.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:20 Pacific Daylight Time

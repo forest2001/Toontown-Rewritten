@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:00 Pacific Daylight Time
-# Embedded file name: toontown.ai.DistributedPhaseEventMgr
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 import datetime
@@ -33,6 +31,3 @@ class DistributedPhaseEventMgr(DistributedObject.DistributedObject):
     def setDates(self, holidayDates):
         for holidayDate in holidayDates:
             self.holidayDates.append(datetime.datetime(holidayDate[0], holidayDate[1], holidayDate[2], holidayDate[3], holidayDate[4], holidayDate[5]))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\ai\DistributedPhaseEventMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:00 Pacific Daylight Time

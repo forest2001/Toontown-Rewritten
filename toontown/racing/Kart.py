@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:14 Pacific Daylight Time
-# Embedded file name: toontown.racing.Kart
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
@@ -538,6 +536,3 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
     def generateEngineStopTrack(self, duration = 0):
         track = Parallel(LerpFunctionInterval(self.kartLoopSfx.setVolume, fromData=0.4, toData=0, duration=duration))
         return track
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\Kart.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:15 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:26 Pacific Daylight Time
-# Embedded file name: toontown.estate.HouseGlobals
 NUM_HOUSE_TYPES = 6
 HOUSE_DEFAULT = 0
 HOUSE_CRAFTSMAN = 1
@@ -112,6 +110,3 @@ HALF_DAY_PERIOD = 1050
 HALF_NIGHT_PERIOD = 300
 FIREWORKS_MOVIE_CLEAR = 0
 FIREWORKS_MOVIE_GUI = 1
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\HouseGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:26 Pacific Daylight Time

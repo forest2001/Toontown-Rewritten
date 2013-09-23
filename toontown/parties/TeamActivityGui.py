@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:43 Pacific Daylight Time
-# Embedded file name: toontown.parties.TeamActivityGui
 from pandac.PandaModules import TextNode
 from direct.gui.DirectButton import DirectButton
 from direct.gui.OnscreenText import OnscreenText
@@ -138,6 +136,3 @@ class TeamActivityGui():
 
     def _handleTimerExpired(self):
         self.activity.handleGameTimerExpired()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\TeamActivityGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:44 Pacific Daylight Time

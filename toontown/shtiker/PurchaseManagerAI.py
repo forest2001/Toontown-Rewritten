@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:02 Pacific Daylight Time
-# Embedded file name: toontown.shtiker.PurchaseManagerAI
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
@@ -368,6 +366,3 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
 
     def getVotesArray(self):
         return self.votesArray
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\shtiker\PurchaseManagerAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:03 Pacific Daylight Time

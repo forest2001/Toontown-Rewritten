@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:33 Pacific Daylight Time
-# Embedded file name: toontown.fishing.FishBase
 import FishGlobals
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
@@ -75,6 +73,3 @@ class FishBase():
 
     def __str__(self):
         return '%s, weight: %s value: %s' % (self.getSpeciesName(), self.weight, self.getValue())
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\FishBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:33 Pacific Daylight Time

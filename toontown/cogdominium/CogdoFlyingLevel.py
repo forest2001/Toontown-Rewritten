@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:37 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingLevel
 from pandac.PandaModules import NodePath, Plane, Vec3, Point3
 from pandac.PandaModules import CollisionPlane, CollisionNode
 from direct.showbase.RandomNumGen import RandomNumGen
@@ -245,6 +243,3 @@ class CogdoFlyingLevelFactory():
         if self._level is None:
             self.loadAndBuildLevel()
         return CogdoFlyingLevelFog(self._level)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingLevel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:38 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:28 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedMinigameAI
 from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
 from toontown.ai.ToonBarrier import *
@@ -449,6 +447,3 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
 
     def getMetagameRound(self):
         return self.metagameRound
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedMinigameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:29 Pacific Daylight Time

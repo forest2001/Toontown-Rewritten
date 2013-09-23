@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:43 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingShadowPlacer
 from direct.controls.ControlManager import CollisionHandlerRayStart
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
@@ -69,6 +67,3 @@ class CogdoFlyingShadowPlacer(ShadowPlacer):
         tempCTrav = CollisionTraverser('oneTimeCollide')
         tempCTrav.addCollider(self.cRayNodePath, self.queue)
         tempCTrav.traverse(render)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingShadowPlacer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:43 Pacific Daylight Time

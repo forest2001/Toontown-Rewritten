@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:16 Pacific Daylight Time
-# Embedded file name: toontown.toon.Toon
 from otp.avatar import Avatar
 from otp.avatar.Avatar import teleportNotify
 import ToonDNA
@@ -3040,6 +3038,3 @@ class Toon(Avatar.Avatar, ToonHead):
 
 loadModels()
 compileGlobalAnimList()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\Toon.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:21 Pacific Daylight Time

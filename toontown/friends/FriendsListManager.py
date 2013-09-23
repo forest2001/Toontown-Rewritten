@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:38 Pacific Daylight Time
-# Embedded file name: toontown.friends.FriendsListManager
 from pandac.PandaModules import *
 import FriendsListPanel
 import FriendInviter
@@ -188,6 +186,3 @@ class FriendsListManager():
                 dna = friendToon.getStyle()
                 FriendNotifier.FriendNotifier(avId, friendToon.getName(), dna, None)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\friends\FriendsListManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:39 Pacific Daylight Time

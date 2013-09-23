@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:43 Pacific Daylight Time
-# Embedded file name: otp.otpbase.OTPLocalizerEnglish
 import string
 from otp.otpbase.OTPLocalizerEnglishProperty import *
 lTheBrrrgh = 'The Brrrgh'
@@ -2893,6 +2891,3 @@ def timeElapsedString(timeDelta):
         return '1 minute ago'
     else:
         return '%s minutes ago' % (timeDelta.seconds / 60)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpbase\OTPLocalizerEnglish.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:45 Pacific Daylight Time

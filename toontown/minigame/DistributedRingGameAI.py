@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:39 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedRingGameAI
 from DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
@@ -147,6 +145,3 @@ class DistributedRingGameAI(DistributedMinigameAI):
                 if not RingGameGlobals.ENDLESS_GAME:
                     self.gameOver()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedRingGameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:40 Pacific Daylight Time

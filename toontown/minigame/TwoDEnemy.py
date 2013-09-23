@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:04 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDEnemy
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -278,6 +276,3 @@ class TwoDEnemy(DirectObject):
         removeParticles = Parallel(Func(removeParticle, smallGears), Func(removeParticle, singleGear), Func(removeParticle, smallGearExplosion), Func(removeParticle, bigGearExplosion))
         self.deathTrack = Sequence(Parallel(suitTrack, gears2MTrack, gears1Track, soundTrack), removeParticles, Func(self.destroy))
         self.deathTrack.start()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDEnemy.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:05 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:57 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.DistCogdoCraneGame
 from pandac import PandaModules as PM
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.task.Task import Task
@@ -212,6 +210,3 @@ class DistCogdoCraneGame(CogdoCraneGameBase, DistCogdoLevelGame):
         def _handleMoneyBagGrabHeightChanged(self, height):
             for moneyBag in self.moneyBags.itervalues():
                 moneyBag._handleMoneyBagGrabHeightChanged(height)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\DistCogdoCraneGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:58 Pacific Daylight Time

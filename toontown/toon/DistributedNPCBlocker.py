@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:41 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCBlocker
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
@@ -71,6 +69,3 @@ class DistributedNPCBlocker(DistributedNPCToonBase):
 
     def finishMovie(self, av, isLocalToon, elapsedTime):
         self.resetBlocker()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCBlocker.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:41 Pacific Daylight Time

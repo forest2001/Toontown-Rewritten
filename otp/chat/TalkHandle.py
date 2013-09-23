@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:15 Pacific Daylight Time
-# Embedded file name: otp.chat.TalkHandle
 from otp.avatar.AvatarHandle import AvatarHandle
 
 class TalkHandle(AvatarHandle):
@@ -42,6 +40,3 @@ class TalkHandle(AvatarHandle):
         newText, scrubbed = localAvatar.scrubTalk(chat, mods)
         base.talkAssistant.receiveWhisperTalk(fromAV, avatarName, fromAC, None, self.avatarId, self.getName(), newText, scrubbed)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\TalkHandle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:15 Pacific Daylight Time

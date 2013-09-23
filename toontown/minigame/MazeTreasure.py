@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:52 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MazeTreasure
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -39,6 +37,3 @@ class MazeTreasure(DirectObject):
     def showGrab(self):
         self.nodePath.reparentTo(hidden)
         self.collNode.setIntoCollideMask(BitMask32(0))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MazeTreasure.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:52 Pacific Daylight Time

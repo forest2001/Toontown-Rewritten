@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:43 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedBBElevator
 import DistributedElevator
 import DistributedBossElevator
 from ElevatorConstants import *
@@ -30,6 +28,3 @@ class DistributedBBElevator(DistributedBossElevator.DistributedBossElevator):
 
     def getDestName(self):
         return TTLocalizer.ElevatorBossBotBoss
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedBBElevator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:43 Pacific Daylight Time

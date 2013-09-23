@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:33 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedDoorEntity
 from pandac.PandaModules import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -1670,7 +1668,6 @@ c(self.doorTop.unstash), Func(self.doorBottom.unstash), Parallel(SoundInterval(s
         def attribChanged(self, attrib, value):
             self.takedown()
             self.setup()# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:18:34 Pacific Daylight Time
 1412	LOAD_ATTR         'find'
 1415	LOAD_CONST        '**/doorRight_innerCollision'
 1418	CALL_FUNCTION_1   None

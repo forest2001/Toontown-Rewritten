@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:54 Pacific Daylight Time
-# Embedded file name: toontown.tutorial.TutorialManager
 from pandac.PandaModules import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
@@ -54,6 +52,3 @@ class TutorialManager(DistributedObject.DistributedObject):
 
     def d_toonArrived(self):
         self.sendUpdate('toonArrived', [])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\tutorial\TutorialManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:54 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:12 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogItemTypes
 import CatalogFurnitureItem
 import CatalogChatItem
 import CatalogClothingItem
@@ -85,6 +83,3 @@ SingleCodeRedemption = (BEAN_ITEM,)
 CatalogItemTypeMask = 31
 CatalogItemSaleFlag = 128
 CatalogItemGiftTag = 64
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogItemTypes.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:12 Pacific Daylight Time

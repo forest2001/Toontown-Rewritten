@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:53 Pacific Daylight Time
-# Embedded file name: toontown.hood.HydrantInteractiveProp
 from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Sequence, Func
@@ -237,6 +235,3 @@ class HydrantInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
             result.append(animAndSound)
             result.append(Func(self.hideWater))
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\HydrantInteractiveProp.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:53 Pacific Daylight Time

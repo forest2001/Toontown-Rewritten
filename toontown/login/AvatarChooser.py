@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:03 Pacific Daylight Time
-# Embedded file name: toontown.login.AvatarChooser
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 import AvatarChoice
@@ -282,6 +280,3 @@ class AvatarChooser(StateData.StateData):
 
     def __handleLogoutWithoutConfirm(self):
         base.cr.loginFSM.request('login')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\login\AvatarChooser.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:04 Pacific Daylight Time

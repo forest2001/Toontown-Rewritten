@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:32 Pacific Daylight Time
-# Embedded file name: toontown.suit.GoonGlobals
 from pandac.PandaModules import Vec4
 PG_COLORS = [Vec4(0.95, 0.0, 0.0, 1.0), Vec4(0.75, 0.35, 0.1, 1.0)]
 SG_COLORS = [Vec4(0.0, 0.0, 0.95, 1.0), Vec4(0.35, 0.0, 0.75, 1.0)]
@@ -14,6 +12,3 @@ T_TURN = 3.0
 ANIM_WALK_RATE = 2.8
 ANIM_TURN_RATE = 20
 DEFAULT_WALK_RATE = 4
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\GoonGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:32 Pacific Daylight Time

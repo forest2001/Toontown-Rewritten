@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:13 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedToonStatuary
 from toontown.estate import DistributedStatuary
 from toontown.estate import DistributedLawnDecor
 from direct.directnotify import DirectNotifyGlobal
@@ -225,6 +223,3 @@ class DistributedToonStatuary(DistributedStatuary.DistributedStatuary):
             self.toon.pose('bored', 96)
         elif specialsIndex == 108:
             self.toon.pose('think', 59)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedToonStatuary.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:14 Pacific Daylight Time

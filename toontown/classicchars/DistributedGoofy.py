@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:29 Pacific Daylight Time
-# Embedded file name: toontown.classicchars.DistributedGoofy
 from pandac.PandaModules import *
 import DistributedCCharBase
 from direct.directnotify import DirectNotifyGlobal
@@ -80,6 +78,3 @@ class DistributedGoofy(DistributedCCharBase.DistributedCCharBase):
 
     def walkSpeed(self):
         return ToontownGlobals.GoofySpeed
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\classicchars\DistributedGoofy.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:29 Pacific Daylight Time

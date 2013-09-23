@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:15 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyActivity
 from pandac.PandaModules import CollisionSphere, CollisionNode, CollisionTube
 from pandac.PandaModules import TextNode, NodePath, Vec3, Point3
 from direct.distributed.ClockDelta import globalClockDelta
@@ -528,6 +526,3 @@ class DistributedPartyActivity(DistributedObject.DistributedObject):
 
     def enableEmotes(self):
         Emote.globalEmote.releaseAll(base.localAvatar)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:16 Pacific Daylight Time

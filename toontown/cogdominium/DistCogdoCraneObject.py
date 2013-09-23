@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:58 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.DistCogdoCraneObject
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -323,6 +321,3 @@ class DistCogdoCraneObject(DistributedSmoothNode.DistributedSmoothNode, FSM.FSM)
 
     def exitFree(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\DistCogdoCraneObject.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:58 Pacific Daylight Time

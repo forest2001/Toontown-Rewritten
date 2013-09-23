@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:13 Pacific Daylight Time
-# Embedded file name: toontown.racing.DistributedVehicleAI
 from otp.ai.AIBase import *
 from toontown.toonbase.ToontownGlobals import *
 from toontown.racing.KartDNA import *
@@ -138,6 +136,3 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
 
     def getOwner(self):
         return self.ownerId
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\racing\DistributedVehicleAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:13 Pacific Daylight Time

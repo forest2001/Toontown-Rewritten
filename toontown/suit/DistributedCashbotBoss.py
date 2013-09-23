@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:18 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedCashbotBoss
 from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -763,6 +761,3 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def exitFrolic(self):
         self.door3.setZ(0)
         self.door2.setZ(0)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedCashbotBoss.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:20 Pacific Daylight Time

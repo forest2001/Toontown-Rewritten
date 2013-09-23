@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:54 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedStomperPair
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 import math
@@ -45,6 +43,3 @@ class DistributedStomperPair(BasicEntities.DistributedNodePathEntity):
         xRange = 3.0
         if tPos[1] < yRange and tPos[1] > -yRange and tPos[0] < xRange and tPos[0] > -xRange:
             self.level.b_setOuch(3)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedStomperPair.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:54 Pacific Daylight Time

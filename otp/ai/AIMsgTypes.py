@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:03 Pacific Daylight Time
-# Embedded file name: otp.ai.AIMsgTypes
 from otp.distributed.OtpDoGlobals import *
 from direct.showbase.PythonUtil import invertDictLossless
 OTP_SERVER_ROOT_DO_ID = 4007
@@ -83,6 +81,3 @@ for name, value in AIMsgName2Id.items():
 del name
 del value
 DBSERVER_ID = 4003
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\AIMsgTypes.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:03 Pacific Daylight Time

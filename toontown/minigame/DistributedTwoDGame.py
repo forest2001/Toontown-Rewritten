@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:49 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedTwoDGame
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -547,6 +545,3 @@ class DistributedTwoDGame(DistributedMinigame):
 
     def debugEndPause(self):
         self.sectionMgr.exitPause()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedTwoDGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:50 Pacific Daylight Time

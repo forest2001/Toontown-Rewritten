@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:39 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedGolfSpot
 import math
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode, CollisionHandlerEvent, TextNode, VBase4, SmoothMover, NodePath, BitMask32
 from direct.fsm import FSM
@@ -758,6 +756,3 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
     def gotBossZapped(self):
         self.showExiting()
         self.d_requestFree(True)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedGolfSpot.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:40 Pacific Daylight Time

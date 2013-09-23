@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:26 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedIceWorld
 from pandac.PandaModules import Vec4, BitMask32, Quat, Point3, NodePath
 from pandac.PandaModules import OdePlaneGeom, OdeBody, OdeSphereGeom, OdeMass, OdeUtil, OdeBoxGeom
 from direct.directnotify import DirectNotifyGlobal
@@ -181,6 +179,3 @@ class DistributedIceWorld(DistributedMinigamePhysicsWorld.DistributedMinigamePhy
         geom.setPosition(tireModel.getPos())
         tireModel.setZ(0)
         return tireModel
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedIceWorld.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:26 Pacific Daylight Time

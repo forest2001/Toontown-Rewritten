@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:35 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingGameGlobals
 from direct.showbase import PythonUtil
 from pandac.PandaModules import VBase4, Vec3, Point3
 from CogdoUtil import VariableContainer, DevVariableContainer
@@ -256,6 +254,3 @@ Level.StreamerName = '*streamerPlaceholder'
 Level.MinionWalkingPathName = '*minion_walking_path*'
 Level.MinionFlyingPathName = '*minion_flying_path*'
 Level.LegalEagleNestName = '*eagleNest_loc*'
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:35 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:02 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TravelGameGlobals
 DefaultStartingVotes = 5
 FinalMetagameRoundIndex = 5
 BaseBeans = 10
@@ -184,6 +182,3 @@ BoardLayouts = (BoardLayout0,
  BoardLayout1,
  BoardLayout2,
  BoardLayout3)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TravelGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:03 Pacific Daylight Time

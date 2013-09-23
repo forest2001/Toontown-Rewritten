@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:12 Pacific Daylight Time
-# Embedded file name: toontown.battle.DistributedBattleBldg
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
@@ -219,6 +217,3 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
 
     def exitResume(self):
         return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\DistributedBattleBldg.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:13 Pacific Daylight Time

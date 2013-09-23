@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:43 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoGameAudioManager
 from pandac.PandaModules import AudioSound
 from direct.interval.SoundInterval import SoundInterval
 
@@ -132,6 +130,3 @@ class CogdoGameAudioManager():
     def stopAll(self):
         self.stopMusic()
         self.stopAllSfx()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoGameAudioManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:43 Pacific Daylight Time

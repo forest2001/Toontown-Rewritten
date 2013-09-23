@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:32 Pacific Daylight Time
-# Embedded file name: toontown.fishing.DistributedFishingTarget
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -78,6 +76,3 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
 
     def getRadius(self):
         return self.radius
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\DistributedFishingTarget.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:32 Pacific Daylight Time

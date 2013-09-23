@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:13 Pacific Daylight Time
-# Embedded file name: toontown.battle.DistributedBattleDiners
 import random
 from pandac.PandaModules import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track, LerpPosInterval, ProjectileInterval, SoundInterval, ActorInterval
@@ -124,6 +122,3 @@ class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
         propTrack = Parallel(SoundInterval(suit.propInSound, duration=flyingDur, node=suit), Sequence(ActorInterval(suit.prop, 'propeller', constrainedLoop=1, duration=flyingDur + 1, startTime=0.0, endTime=spinTime), ActorInterval(suit.prop, 'propeller', duration=landingDur, startTime=openTime), Func(suit.detachPropeller)))
         result = Parallel(moveIval, propTrack)
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\DistributedBattleDiners.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:13 Pacific Daylight Time

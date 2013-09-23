@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:23 Pacific Daylight Time
-# Embedded file name: toontown.coghq.CountryClubLayout
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import invertDictLossless
 from toontown.coghq import CountryClubRoomSpecs
@@ -582,7 +580,6 @@ ParserError: --- This code section failed: ---
 
     def __repr__(self):
         return str(self)# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:18:23 Pacific Daylight Time
   'middleRoomsLeft'
 284	LOAD_GLOBAL       'len'
 287	LOAD_FAST         'battleRoomIds'

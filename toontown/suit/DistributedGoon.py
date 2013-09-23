@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:21 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedGoon
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleProps import *
@@ -496,6 +494,3 @@ class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goo
         self.setAttackRadius(attackRadius)
         self.setStrength(strength)
         self.setGoonScale(scale)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedGoon.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:22 Pacific Daylight Time

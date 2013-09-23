@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:53 Pacific Daylight Time
-# Embedded file name: toontown.minigame.OrthoDrive
 from direct.interval.IntervalGlobal import *
 from direct.task.Task import Task
 from otp.otpbase import OTPGlobals
@@ -139,6 +137,3 @@ class OrthoDrive():
                 orientToon(curHeading)
         self.lastXVel = xVel
         self.lastYVel = yVel
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\OrthoDrive.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:54 Pacific Daylight Time

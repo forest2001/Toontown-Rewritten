@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:29 Pacific Daylight Time
-# Embedded file name: toontown.parties.JukeboxGui
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel
@@ -169,6 +167,3 @@ class JukeboxGui(DirectObject):
         if self._moveToTopButton.getParent() == item:
             self._moveToTopButton.reparentTo(hidden)
         self._queueList.refresh()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\JukeboxGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:29 Pacific Daylight Time

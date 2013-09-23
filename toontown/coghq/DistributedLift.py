@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:47 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedLift
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -210,6 +208,3 @@ class DistributedLift(BasicEntities.DistributedNodePathEntity):
             BasicEntities.DistributedNodePathEntity.attribChanged(self, *args)
             self.destroyPlatform()
             self.initPlatform()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedLift.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:48 Pacific Daylight Time

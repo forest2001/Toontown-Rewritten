@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:53 Pacific Daylight Time
-# Embedded file name: toontown.town.TTTownLoader
 import TownLoader
 import TTStreet
 from toontown.suit import Suit
@@ -23,6 +21,3 @@ class TTTownLoader(TownLoader.TownLoader):
     def unload(self):
         Suit.unloadSuits(1)
         TownLoader.TownLoader.unload(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\TTTownLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:53 Pacific Daylight Time

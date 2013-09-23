@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:15 Pacific Daylight Time
-# Embedded file name: otp.chat.WhiteList
 from bisect import bisect_left
 import string
 import sys
@@ -52,6 +50,3 @@ class WhiteList():
             j += 1
 
         return self.words[i:j]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\WhiteList.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:15 Pacific Daylight Time

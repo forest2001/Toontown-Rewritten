@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:57 Pacific Daylight Time
-# Embedded file name: toontown.building.FADoorCodes
 from toontown.toonbase import TTLocalizer
 UNLOCKED = 0
 TALK_TO_TOM = 1
@@ -29,6 +27,3 @@ reasonDict = {UNLOCKED: TTLocalizer.FADoorCodes_UNLOCKED,
  CB_DISGUISE_INCOMPLETE: TTLocalizer.FADoorCodes_CB_DISGUISE_INCOMPLETE,
  LB_DISGUISE_INCOMPLETE: TTLocalizer.FADoorCodes_LB_DISGUISE_INCOMPLETE,
  BB_DISGUISE_INCOMPLETE: TTLocalizer.FADoorCodes_BB_DISGUISE_INCOMPLETE}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\FADoorCodes.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:57 Pacific Daylight Time

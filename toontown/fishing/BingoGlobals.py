@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:31 Pacific Daylight Time
-# Embedded file name: toontown.fishing.BingoGlobals
 from toontown.toonbase import TTLocalizer
 NORMAL_CARD = 0
 FOURCORNER_CARD = 1
@@ -118,6 +116,3 @@ TutorialIntro = 1
 TutorialMark = 2
 TutorialCard = 3
 TutorialBingo = 4
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\BingoGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:32 Pacific Daylight Time

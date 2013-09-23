@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:30 Pacific Daylight Time
-# Embedded file name: toontown.toon.TTEmote
 import Toon, ToonDNA
 from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPLocalizer
@@ -621,6 +619,3 @@ class TTEmote(Emote.Emote):
 
 
 Emote.globalEmote = TTEmote()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\TTEmote.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:31 Pacific Daylight Time

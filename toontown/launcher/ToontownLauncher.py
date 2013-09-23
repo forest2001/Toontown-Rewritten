@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:02 Pacific Daylight Time
-# Embedded file name: toontown.launcher.ToontownLauncher
 --- This code section failed: ---
 
 0	LOAD_CONST        None
@@ -166,4 +164,3 @@
 Syntax error at or near `COME_FROM' token at offset 286_0
 
 # decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:21:02 Pacific Daylight Time

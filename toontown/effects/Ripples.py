@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:55 Pacific Daylight Time
-# Embedded file name: toontown.effects.Ripples
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleProps import globalPropPool
@@ -46,6 +44,3 @@ class Ripples(NodePath):
         del self.seqNode
         self.removeNode()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\Ripples.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:56 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:21 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyDanceActivityBase
 import random
 from pandac.PandaModules import *
 from direct.interval.FunctionInterval import Wait, Func
@@ -370,6 +368,3 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
             self.cameraParallel.start()
         self.currentCameraMode = mode
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyDanceActivityBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:22 Pacific Daylight Time

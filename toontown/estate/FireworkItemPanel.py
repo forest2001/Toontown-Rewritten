@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:17 Pacific Daylight Time
-# Embedded file name: toontown.estate.FireworkItemPanel
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
@@ -49,6 +47,3 @@ class FireworkItemPanel(DirectFrame):
 
     def __resetSky(self):
         base.cr.playGame.hood.loader.sky.setColorScale(self.oldSkyScale)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\FireworkItemPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:17 Pacific Daylight Time

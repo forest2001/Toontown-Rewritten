@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:26 Pacific Daylight Time
-# Embedded file name: toontown.distributed.DelayDelete
 
 
 class DelayDelete():
@@ -43,6 +41,3 @@ def cleanupDelayDeletes(interval):
 
         else:
             delayDeletes.destroy()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\DelayDelete.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:26 Pacific Daylight Time

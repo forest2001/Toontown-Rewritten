@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:50 Pacific Daylight Time
-# Embedded file name: otp.status.StatusDatabase
 import datetime
 import time
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
@@ -54,6 +52,3 @@ class StatusDatabase(DistributedObjectGlobal):
         now = datetime.datetime.utcnow()
         td = abs(now - datetime.datetime.fromtimestamp(timestamp))
         return OTPLocalizer.timeElapsedString(td)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\status\StatusDatabase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:50 Pacific Daylight Time

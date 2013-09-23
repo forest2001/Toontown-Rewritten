@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:14 Pacific Daylight Time
-# Embedded file name: toontown.battle.DistributedBattleWaiters
 import random
 from pandac.PandaModules import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track
@@ -95,6 +93,3 @@ class DistributedBattleWaiters(DistributedBattleFinal.DistributedBattleFinal):
         DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)
         if self.hasLocalToon():
             camera.reparentTo(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\DistributedBattleWaiters.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:14 Pacific Daylight Time

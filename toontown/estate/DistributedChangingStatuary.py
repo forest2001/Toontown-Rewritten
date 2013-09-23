@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:03 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedChangingStatuary
 from pandac.PandaModules import NodePath
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -61,6 +59,3 @@ class DistributedChangingStatuary(DistributedStatuary.DistributedStatuary):
         if self.model:
             self.model.removeNode()
             self.loadModel()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedChangingStatuary.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:03 Pacific Daylight Time

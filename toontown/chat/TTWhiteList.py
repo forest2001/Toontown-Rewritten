@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:25 Pacific Daylight Time
-# Embedded file name: toontown.chat.TTWhiteList
 import os
 import datetime
 from pandac.PandaModules import *
@@ -166,6 +164,3 @@ class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
 
     def handleNewWhitelist(self):
         self.redownloadWhitelist()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\chat\TTWhiteList.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:25 Pacific Daylight Time

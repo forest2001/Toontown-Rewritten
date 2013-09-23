@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:24 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieSOS
 from direct.interval.IntervalGlobal import *
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
@@ -42,6 +40,3 @@ def doSOSs(calls):
     camDuration = mtrack.getDuration()
     camTrack = MovieCamera.chooseSOSShot(toon, camDuration)
     return (mtrack, camTrack)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieSOS.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:24 Pacific Daylight Time

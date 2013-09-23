@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:54 Pacific Daylight Time
-# Embedded file name: toontown.minigame.PairingGameCard
 from PlayingCard import PlayingCardNodePath
 import PlayingCardGlobals
 from pandac.PandaModules import NodePath, Vec3
@@ -95,6 +93,3 @@ class PairingGameCard(PlayingCardNodePath):
             self.flipIval.start()
         else:
             self.setR(180)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\PairingGameCard.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:54 Pacific Daylight Time

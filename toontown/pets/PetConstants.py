@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:52 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetConstants
 from pandac.PandaModules import *
 from direct.showbase.PythonUtil import Enum, invertDictLossless
 import math
@@ -61,6 +59,3 @@ ZoneToCostRange = {ToontownGlobals.ToontownCentral: (100, 500),
  ToontownGlobals.MinniesMelodyland: (1500, 3000),
  ToontownGlobals.TheBrrrgh: (2500, 4000),
  ToontownGlobals.DonaldsDreamland: (3000, 5000)}
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetConstants.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:52 Pacific Daylight Time

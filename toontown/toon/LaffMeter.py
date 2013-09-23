@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:05 Pacific Daylight Time
-# Embedded file name: toontown.toon.LaffMeter
 from pandac.PandaModules import Vec4
 from direct.gui.DirectGui import DirectFrame, DirectLabel
 from toontown.toonbase import ToontownGlobals
@@ -191,6 +189,3 @@ class LaffMeter(DirectFrame):
         if self.av:
             self.ignore(self.av.uniqueName('hpChange'))
         self.av = av
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\LaffMeter.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:05 Pacific Daylight Time

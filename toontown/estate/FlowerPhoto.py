@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:18 Pacific Daylight Time
-# Embedded file name: toontown.estate.FlowerPhoto
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -204,6 +202,3 @@ class FlowerPhoto(NodePath):
 
     def changeVariety(self, variety):
         self.variety = variety
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\FlowerPhoto.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:18 Pacific Daylight Time

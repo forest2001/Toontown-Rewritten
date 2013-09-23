@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:27 Pacific Daylight Time
-# Embedded file name: toontown.distributed.NonRepeatableRandomSourceUD
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
 import random
@@ -57,6 +55,3 @@ class NonRepeatableRandomSourceUD(DistributedObjectGlobalUD):
             if request.num == len(request.randoms):
                 self._requests.pop(0)
                 self.air.dispatchUpdateToDoId(request.replyToClass, 'getRandomSamplesReply', request.replyTo, [request.context, request.randoms])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\NonRepeatableRandomSourceUD.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:27 Pacific Daylight Time

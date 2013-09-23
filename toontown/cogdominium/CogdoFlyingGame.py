@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:34 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingGame
 from direct.showbase.DirectObject import DirectObject
 from direct.task.Task import Task
 from direct.showbase.RandomNumGen import RandomNumGen
@@ -471,6 +469,3 @@ class CogdoFlyingGame(DirectObject):
 
         self.guiMgr.update()
         return Task.cont
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:35 Pacific Daylight Time

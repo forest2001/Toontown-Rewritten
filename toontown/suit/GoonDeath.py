@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:32 Pacific Daylight Time
-# Embedded file name: toontown.suit.GoonDeath
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from direct.particles import ParticleEffect
@@ -23,6 +21,3 @@ def createGoonExplosion(parent, explosionPoint, scale):
     bigGearExplosion = BattleParticles.createParticleEffect('WideGearExplosion', numParticles=30)
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.mp3')
     return Parallel(explosion, SoundInterval(deathSound), ParticleInterval(smallGearExplosion, deathNode, worldRelative=0, duration=4.3, cleanup=True), ParticleInterval(bigGearExplosion, deathNode, worldRelative=0, duration=1.0, cleanup=True), name='gears2MTrack')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\GoonDeath.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:32 Pacific Daylight Time

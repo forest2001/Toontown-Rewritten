@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:26 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedLawbotBossSuit
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm import ClassicFSM, State
@@ -343,6 +341,3 @@ class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
     def exitStunned(self):
         self.prosecuteEvidence.hide()
         self.attackEvidence.hide()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedLawbotBossSuit.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:26 Pacific Daylight Time

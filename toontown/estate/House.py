@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:22 Pacific Daylight Time
-# Embedded file name: toontown.estate.House
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -182,6 +180,3 @@ class House(Place.Place):
 
     def exitBanking(self):
         Place.Place.exitBanking(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\House.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:23 Pacific Daylight Time

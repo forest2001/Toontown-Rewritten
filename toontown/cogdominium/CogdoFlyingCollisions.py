@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:34 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoFlyingCollisions
 from direct.controls.GravityWalker import GravityWalker
 from pandac.PandaModules import CollisionSphere, CollisionNode, BitMask32, CollisionHandlerEvent, CollisionRay, CollisionHandlerGravity, CollisionHandlerFluidPusher, CollisionHandlerPusher
 from toontown.toonbase import ToontownGlobals
@@ -133,6 +131,3 @@ class CogdoFlyingCollisions(GravityWalker):
 
     def handleAvatarControls(self, task):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoFlyingCollisions.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:34 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:50 Pacific Daylight Time
-# Embedded file name: otp.speedchat.SpeedChat
 from direct.showbase.PythonUtil import boolEqual
 from SpeedChatTypes import *
 from SCSettings import SCSettings
@@ -67,6 +65,3 @@ class SpeedChat(SCMenu):
         self.notify.debug('finalizing entire SpeedChat tree')
         self._detectTransformChange()
         SCMenu.finalizeAll(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\speedchat\SpeedChat.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:50 Pacific Daylight Time

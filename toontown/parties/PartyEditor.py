@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:35 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyEditor
 import time
 from sets import Set
 from pandac.PandaModules import Vec3, Vec4, Point3, TextNode, VBase4
@@ -231,6 +229,3 @@ class PartyEditor(DirectObject, FSM):
 
     def exitCleanup(self):
         PartyEditor.notify.debug('Exit Cleanup')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyEditor.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:36 Pacific Daylight Time

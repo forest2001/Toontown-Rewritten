@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:26 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedMazeGame
 from direct.interval.IntervalGlobal import LerpPosInterval, LerpHprInterval, LerpPosHprInterval
 from direct.interval.IntervalGlobal import SoundInterval, LerpScaleInterval, LerpFunctionInterval
 from direct.interval.IntervalGlobal import Wait, Func
@@ -2249,7 +2247,6 @@ ParserError: --- This code section failed: ---
             base.localAvatar.stopLookAround()
 
         return Sequence(Wait(waitDur), lerpTrack, Func(cleanup))# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:21:27 Pacific Daylight Time
 AD_GLOBAL       'Parallel'
 1425	LOAD_FAST         'flyTrack'
 1428	LOAD_FAST         'cameraTrack'

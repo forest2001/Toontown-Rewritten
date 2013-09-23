@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:37 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedTreasureAI
 from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
@@ -37,6 +35,3 @@ class DistributedTreasureAI(DistributedObjectAI.DistributedObjectAI):
 
     def d_setPosition(self, x, y, z):
         self.sendUpdate('setPosition', [x, y, z])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedTreasureAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:37 Pacific Daylight Time

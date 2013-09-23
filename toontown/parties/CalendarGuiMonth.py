@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:12 Pacific Daylight Time
-# Embedded file name: toontown.parties.CalendarGuiMonth
 import calendar
 from datetime import timedelta, datetime
 from pandac.PandaModules import Vec4, TextNode
@@ -231,6 +229,3 @@ class CalendarGuiMonth(DirectFrame):
         newFilter = self.filterList.getSelectedIndex()
         for guiDay in self.guiDays:
             guiDay.changeFilter(newFilter)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\CalendarGuiMonth.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:12 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:55 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMemoGui
 from direct.gui.DirectGui import DGG, DirectFrame, DirectLabel
 from pandac.PandaModules import TextNode
 from toontown.toonbase import ToontownGlobals
@@ -41,6 +39,3 @@ class CogdoMemoGui(DirectFrame):
         self._countLabel.setText()
         ToontownIntervals.cleanup('memocount_pulse')
         ToontownIntervals.start(ToontownIntervals.getPulseLargerIval(self._memoIcon, 'memocount_pulse', scale=MEMOICON_SCALE))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMemoGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:55 Pacific Daylight Time

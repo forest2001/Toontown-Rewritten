@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:16 Pacific Daylight Time
-# Embedded file name: toontown.coghq.MintInterior
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattlePlace
 from direct.fsm import ClassicFSM, State
@@ -326,7 +324,6 @@ Syntax error at or near `LOAD_GLOBAL' token at offset 92
         if hasattr(self, 'flaDialog'):
             self.flaDialog.cleanup()
             del self.flaDialog# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:19:16 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\MintInterior.pyc
 Traceback (most recent call last):

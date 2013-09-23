@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:46 Pacific Daylight Time
-# Embedded file name: toontown.toontowngui.ToonHeadDialog
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -43,6 +41,3 @@ class ToonHeadDialog(TTDialog.TTDialog):
         self.headModel.stopBlink()
         self.headModel.stopLookAroundNow()
         self.headModel.delete()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toontowngui\ToonHeadDialog.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:46 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:58 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.DistCogdoFlyingGame
 from direct.distributed.ClockDelta import globalClockDelta
 from toontown.toonbase import TTLocalizer
 from CogdoFlyingGame import CogdoFlyingGame
@@ -156,6 +154,3 @@ class DistCogdoFlyingGame(DistCogdoGame):
         self.game.endFinish()
         self.game.offstage()
         DistCogdoGame.exitFinish(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\DistCogdoFlyingGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:59 Pacific Daylight Time

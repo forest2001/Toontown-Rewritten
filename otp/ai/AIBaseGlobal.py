@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:03 Pacific Daylight Time
-# Embedded file name: otp.ai.AIBaseGlobal
 from AIBase import *
 __builtins__['simbase'] = AIBase()
 __builtins__['ostream'] = Notify.out()
@@ -26,6 +24,3 @@ if not __debug__ and __dev__:
     notify = directNotify.newCategory('ShowBaseGlobal')
     notify.error("You must set 'want-dev' to false in non-debug mode.")
 taskMgr.finalInit()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\ai\AIBaseGlobal.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:03 Pacific Daylight Time

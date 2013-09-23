@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:05 Pacific Daylight Time
-# Embedded file name: otp.ai.MagicWordManager
 from pandac.PandaModules import *
 from direct.showbase import GarbageReport, ContainerReport, MessengerLeakDetector
 from direct.distributed import DistributedObject

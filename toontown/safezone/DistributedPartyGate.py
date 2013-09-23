@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:34 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedPartyGate
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode, BitMask32, Vec3, NodePath, TextNode, Vec4
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
@@ -206,6 +204,3 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
     def handleSleep(self):
         if hasattr(self, 'messageGui') and self.messageGui:
             self.__handleMessageDone()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedPartyGate.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:34 Pacific Daylight Time

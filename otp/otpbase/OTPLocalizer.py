@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:43 Pacific Daylight Time
-# Embedded file name: otp.otpbase.OTPLocalizer
 from pandac.libpandaexpressModules import *
 import string
 import types
@@ -45,6 +43,3 @@ if checkLanguage:
     for key in foreignModule.__dict__.keys():
         if not englishModule.__dict__.has_key(key):
             print 'WARNING: Foreign module: %s extra key: %s' % (_languageModule, key)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpbase\OTPLocalizer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:43 Pacific Daylight Time

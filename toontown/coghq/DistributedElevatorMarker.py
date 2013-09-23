@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:34 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedElevatorMarker
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from StomperGlobals import *
@@ -58,6 +56,3 @@ class DistributedElevatorMarker(BasicEntities.DistributedNodePathEntity):
             del self.model
             self.model = None
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedElevatorMarker.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:34 Pacific Daylight Time

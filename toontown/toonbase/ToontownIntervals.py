@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:35 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.ToontownIntervals
 from direct.interval.MetaInterval import Sequence
 from direct.interval.FunctionInterval import Wait, Func
 PULSE_GUI_DURATION = 0.2
@@ -37,6 +35,3 @@ def getPresentGuiIval(np, name, waitDuration = 0.5, moveDuration = 1.0, parent =
     endPos = np.getPos()
     np.setPos(parent, startPos[0], startPos[1], startPos[2])
     return Sequence(Func(np.show), getPulseLargerIval(np, '', scale=np.getScale()), Wait(waitDuration), np.posInterval(moveDuration, endPos, blendType='easeInOut'), name=name, autoFinish=1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\ToontownIntervals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:35 Pacific Daylight Time

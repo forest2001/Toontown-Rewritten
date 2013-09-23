@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:24 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DDPlayground
 from pandac.PandaModules import *
 import Playground
 from direct.task.Task import Task
@@ -138,6 +136,3 @@ class DDPlayground(Playground.Playground):
     def exitOnBoat(self):
         base.localAvatar.b_setParent(ToontownGlobals.SPRender)
         self.loader.waterSound.stop()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DDPlayground.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:24 Pacific Daylight Time

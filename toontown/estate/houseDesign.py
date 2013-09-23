@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:23 Pacific Daylight Time
-# Embedded file name: toontown.estate.houseDesign
 from direct.directtools.DirectSelection import *
 from direct.directtools.DirectUtil import ROUND_TO
 from direct.directtools.DirectGeometry import LineNodePath
@@ -1658,6 +1656,3 @@ class ObjectManager(NodePath, DirectObject):
         taskMgr.remove('showHelpTextDoLater')
         self.helpText['text'] = ''
         self.helpText.hide()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\houseDesign.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:26 Pacific Daylight Time

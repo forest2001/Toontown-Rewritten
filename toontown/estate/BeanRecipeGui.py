@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:59 Pacific Daylight Time
-# Embedded file name: toontown.estate.BeanRecipeGui
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
@@ -61,6 +59,3 @@ class BeanRecipeGui(DirectFrame):
         newBox.setColorScale(0.5, 0.5, 0.5, 1)
         self.jellyBeanBoxList.append(newBox)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\BeanRecipeGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:59 Pacific Daylight Time

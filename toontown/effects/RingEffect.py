@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:55 Pacific Daylight Time
-# Embedded file name: toontown.effects.RingEffect
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect, Particles, ForceGroup
@@ -110,6 +108,3 @@ class RingEffect(PooledEffect, EffectController):
     def destroy(self):
         EffectController.destroy(self)
         PooledEffect.destroy(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\RingEffect.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:55 Pacific Daylight Time

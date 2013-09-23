@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:51 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeGameGlobals
 from direct.showbase import PythonUtil
 from pandac.PandaModules import VBase4
 GameActions = PythonUtil.Enum(('EnterDoor',
@@ -235,6 +233,3 @@ BossCodeFrameLabelHighlightColor = (0,
  0.5,
  0,
  1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:51 Pacific Daylight Time

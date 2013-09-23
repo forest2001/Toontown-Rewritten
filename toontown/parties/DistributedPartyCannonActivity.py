@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:17 Pacific Daylight Time
-# Embedded file name: toontown.parties.DistributedPartyCannonActivity
 import math
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
@@ -956,6 +954,3 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         self.notify.debug('DistributedPartyCannonActivity handleToonExited( toonId=%s ) ' % toonId)
         if self.cr.doId2do.has_key(toonId):
             self.notify.warning('handleToonExited is not defined')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCannonActivity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:19 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:13 Pacific Daylight Time
-# Embedded file name: toontown.minigame.CogThiefGameGlobals
 from pandac.PandaModules import VBase3, BitMask32
 GameTime = 60
 NumBarrels = 4
@@ -131,6 +129,3 @@ def calculateCogSpeed(numPlayers, safezone):
         if safezone in CogSpeedTable[numPlayers - 1]:
             result = CogSpeedTable[numPlayers - 1][safezone]
     return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\CogThiefGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:13 Pacific Daylight Time

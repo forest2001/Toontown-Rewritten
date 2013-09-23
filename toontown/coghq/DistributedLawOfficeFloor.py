@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:47 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedLawOfficeFloor
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.distributed.ClockDelta import *
@@ -194,6 +192,3 @@ class DistributedLawOfficeFloor(DistributedLevel.DistributedLevel, LawOfficeBase
         if initialZoneEnt is not None:
             self.enterZone(initialZoneEnt.entId)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedLawOfficeFloor.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:47 Pacific Daylight Time

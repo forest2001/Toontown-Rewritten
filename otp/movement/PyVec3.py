@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:41 Pacific Daylight Time
-# Embedded file name: otp.movement.PyVec3
 from pandac.PandaModules import *
 import types
 import math
@@ -176,6 +174,3 @@ class PyVec3():
 
     def __repr__(self):
         return 'PyVec3(%s,%s,%s)' % (self.x, self.y, self.z)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\movement\PyVec3.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:41 Pacific Daylight Time

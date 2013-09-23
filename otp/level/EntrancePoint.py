@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:32 Pacific Daylight Time
-# Embedded file name: otp.level.EntrancePoint
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import BasicEntities
@@ -41,6 +39,3 @@ class EntrancePoint(BasicEntities.NodePathEntity):
             BasicEntities.NodePathEntity.attribChanged(self, *args)
             self.destroyEntrancePoint()
             self.initEntrancePoint()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\EntrancePoint.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:32 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:06 Pacific Daylight Time
-# Embedded file name: toontown.coghq.LawbotHQBossBattle
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.suit import DistributedLawbotBoss
@@ -25,6 +23,3 @@ class LawbotHQBossBattle(CogHQBossBattle.CogHQBossBattle):
 
     def exit(self):
         CogHQBossBattle.CogHQBossBattle.exit(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\LawbotHQBossBattle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:07 Pacific Daylight Time

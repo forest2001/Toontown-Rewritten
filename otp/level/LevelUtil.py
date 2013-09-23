@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:34 Pacific Daylight Time
-# Embedded file name: otp.level.LevelUtil
 import string
 import LevelConstants
 
@@ -40,6 +38,3 @@ def getZoneNum2Node(levelModel, logFunc = lambda str: str):
     zoneNum2node = findNumberedNodes('zone', levelModel)
     zoneNum2node[LevelConstants.UberZoneEntId] = levelModel
     return zoneNum2node
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\LevelUtil.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:34 Pacific Daylight Time

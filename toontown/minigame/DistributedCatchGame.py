@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:16 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedCatchGame
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from DistributedMinigame import *
@@ -957,6 +955,3 @@ class DistributedCatchGame(DistributedMinigame):
         self.rightToon = rightToon
         introMovie = Sequence(Parallel(cameraIval, toonIval), Func(cleanupTree))
         return introMovie
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedCatchGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:18 Pacific Daylight Time

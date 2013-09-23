@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:12 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogNametagItem
 import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -105,6 +103,3 @@ class CatalogNametagItem(CatalogItem.CatalogItem):
         itemType = 1
         numSticky = 4
         return (itemType, numSticky)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogNametagItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:13 Pacific Daylight Time

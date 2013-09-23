@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:57 Pacific Daylight Time
-# Embedded file name: toontown.effects.SkullFlash
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import *
 from direct.interval.IntervalGlobal import *
@@ -39,6 +37,3 @@ class SkullFlash(PooledEffect, EffectController):
     def destroy(self):
         EffectController.destroy(self)
         PooledEffect.destroy(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\SkullFlash.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:57 Pacific Daylight Time

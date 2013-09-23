@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:27 Pacific Daylight Time
-# Embedded file name: toontown.distributed.NonRepeatableRandomSourceAI
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.task import Task
@@ -50,6 +48,3 @@ class NonRepeatableRandomSourceAI(DistributedObjectAI):
     def getRandomSamplesReply(self, context, samples):
         callback, = self._requests.pop(context)
         callback(samples)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\NonRepeatableRandomSourceAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:27 Pacific Daylight Time

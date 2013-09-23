@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:09 Pacific Daylight Time
-# Embedded file name: toontown.makeatoon.NameShop
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.task.TaskManagerGlobal import *
@@ -1114,6 +1112,3 @@ class NameShop(StateData.StateData):
             self.notify.debug('createAvatar %s-%s-%s' % (self.avId, dislId, gameSource))
         else:
             self.notify.warning('logAvatarCreation got self.avId =%s' % self.avId)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\makeatoon\NameShop.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:11 Pacific Daylight Time

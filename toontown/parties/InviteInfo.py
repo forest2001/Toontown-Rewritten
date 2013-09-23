@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:28 Pacific Daylight Time
-# Embedded file name: toontown.parties.InviteInfo
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.parties.PartyGlobals import InviteStatus
@@ -58,6 +56,3 @@ class InviteInfo(InviteInfoBase):
 
     def output(self, store = -1):
         return 'InviteInfo %s' % str(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\InviteInfo.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:28 Pacific Daylight Time

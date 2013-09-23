@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:34 Pacific Daylight Time
-# Embedded file name: toontown.effects.FireworkShow
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.effects.FireworkGlobals import *
@@ -1205,6 +1203,3 @@ class FireworkShow(NodePath):
 
         self.fireworks = []
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\FireworkShow.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:35 Pacific Daylight Time

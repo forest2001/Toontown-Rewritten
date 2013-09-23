@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:31 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedSuitPlanner
 from pandac.PandaModules import *
 from direct.distributed import DistributedObject
 import SuitPlannerBase
@@ -127,6 +125,3 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         np.setScale(1.0)
         np.setBillboardPointEye(2)
         np.node().setAttrib(TransparencyAttrib.make(TransparencyAttrib.MDual), 2)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedSuitPlanner.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:31 Pacific Daylight Time

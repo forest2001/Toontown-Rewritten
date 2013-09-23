@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:34 Pacific Daylight Time
-# Embedded file name: toontown.parties.PartyCogActivityInput
 from direct.showbase.DirectObject import DirectObject
 from pandac.PandaModules import ModifierButtons
 ROTATE_LEFT_KEY = 'arrow_left'
@@ -159,6 +157,3 @@ class PartyCogActivityInput(DirectObject):
 
     def __exitControlActive(self, input):
         return max(0, input - 1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\PartyCogActivityInput.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:34 Pacific Daylight Time

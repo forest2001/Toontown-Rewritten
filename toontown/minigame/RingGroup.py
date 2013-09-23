@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:58 Pacific Daylight Time
-# Embedded file name: toontown.minigame.RingGroup
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import NodePath
@@ -49,6 +47,3 @@ class RingGroup(NodePath):
             normT = 1.0 - normT
         for ring in self.__rings:
             ring.setT(normT)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\RingGroup.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:58 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:42 Pacific Daylight Time
-# Embedded file name: toontown.building.DistributedAnimBuilding
 from pandac.PandaModules import DecalEffect, DepthWriteAttrib
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import DistributedBuilding
@@ -51,6 +49,3 @@ class DistributedAnimBuilding(DistributedBuilding.DistributedBuilding):
     def animToToon(self, timeStamp):
         DistributedBuilding.DistributedBuilding.animToToon(self, timeStamp)
         self.fixEffects()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\DistributedAnimBuilding.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:43 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:12 Pacific Daylight Time
-# Embedded file name: toontown.minigame.CannonGameGlobals
 TowerYRange = 200
 GameTime = 90
 MAX_SCORE = 23
@@ -16,6 +14,3 @@ def calcScore(t):
     range = MAX_SCORE - MIN_SCORE
     score = MAX_SCORE - range * (float(t) / GameTime)
     return int(score + 0.5)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\CannonGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:12 Pacific Daylight Time

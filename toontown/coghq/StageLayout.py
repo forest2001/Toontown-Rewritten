@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:25 Pacific Daylight Time
-# Embedded file name: toontown.coghq.StageLayout
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import invertDictLossless
 from toontown.coghq import StageRoomSpecs
@@ -703,6 +701,3 @@ class StageLayout():
 
     def __repr__(self):
         return str(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\StageLayout.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:25 Pacific Daylight Time

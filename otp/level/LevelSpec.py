@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:33 Pacific Daylight Time
-# Embedded file name: otp.level.LevelSpec
 from pandac import PandaModules as PM
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import list2dict, uniqueElements
@@ -423,6 +421,3 @@ class LevelSpec():
 
         def __repr__(self):
             return 'LevelSpec(%s, scenario=%s)' % (repeatableRepr(self.specDict), repeatableRepr(self.scenario))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\LevelSpec.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:33 Pacific Daylight Time

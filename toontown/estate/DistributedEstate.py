@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:04 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedEstate
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -411,6 +409,3 @@ class DistributedEstate(DistributedObject.DistributedObject):
 
     def gameTableOver(self, arg = None):
         base.localAvatar.setSystemMessage(0, TTLocalizer.GameTableRentalEnd)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedEstate.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:05 Pacific Daylight Time

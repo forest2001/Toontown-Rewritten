@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:43 Pacific Daylight Time
-# Embedded file name: toontown.safezone.Playground
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -564,6 +562,3 @@ class Playground(Place.Place):
 
     def exitTFAReject(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\Playground.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:44 Pacific Daylight Time

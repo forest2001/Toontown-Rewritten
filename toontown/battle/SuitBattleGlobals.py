@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:40 Pacific Daylight Time
-# Embedded file name: toontown.battle.SuitBattleGlobals
 from BattleBase import *
 import random
 from direct.directnotify import DirectNotifyGlobal
@@ -3062,6 +3060,3 @@ def getAttackTaunt(attackName, index = None):
 
 
 SuitAttackTaunts = TTLocalizer.SuitAttackTaunts
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\SuitBattleGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:42 Pacific Daylight Time

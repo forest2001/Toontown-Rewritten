@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:41 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCClerkAI
 from otp.ai.AIBaseGlobal import *
 from direct.task.Task import Task
 from pandac.PandaModules import *
@@ -110,6 +108,3 @@ class DistributedNPCClerkAI(DistributedNPCToonBaseAI):
         self.notify.warning('avatar:' + str(avId) + ' has exited unexpectedly')
         self.sendTimeoutMovie(None)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCClerkAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:42 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:08 Pacific Daylight Time
-# Embedded file name: toontown.minigame.VineBat
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -108,6 +106,3 @@ class VineBat(NodePath.NodePath, DirectObject):
                 if not self.warnedForThisLap:
                     self.screechSfx.play()
                     self.warnedForThisLap = True
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\VineBat.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:08 Pacific Daylight Time

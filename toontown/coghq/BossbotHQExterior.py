@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:05 Pacific Daylight Time
-# Embedded file name: toontown.coghq.BossbotHQExterior
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattlePlace
 from direct.fsm import ClassicFSM, State
@@ -59,6 +57,3 @@ class BossbotHQExterior(CogHQExterior.CogHQExterior):
             messenger.send(self.doneEvent)
         else:
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\BossbotHQExterior.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:05 Pacific Daylight Time

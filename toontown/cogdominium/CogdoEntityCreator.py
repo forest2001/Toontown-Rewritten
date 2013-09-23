@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:33 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoEntityCreator
 from otp.level import EntityCreator
 from toontown.cogdominium import CogdoCraneGameConsts
 from toontown.cogdominium.CogdoLevelMgr import CogdoLevelMgr
@@ -21,6 +19,3 @@ class CogdoEntityCreator(EntityCreator.EntityCreator):
     def _createCogdoSettings(self, ent, level, entId):
         ent.initializeEntity(level, entId)
         return ent
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoEntityCreator.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:33 Pacific Daylight Time

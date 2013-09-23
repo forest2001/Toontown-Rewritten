@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:54 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetMood
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 from direct.showbase.PythonUtil import lerp, average, clampScalar
@@ -215,6 +213,3 @@ class PetMood():
             s += '\n %s: %s' % (comp, self.__dict__[comp])
 
         return s
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetMood.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:55 Pacific Daylight Time

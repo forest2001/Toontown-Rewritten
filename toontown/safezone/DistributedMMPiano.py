@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:33 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedMMPiano
 from pandac.PandaModules import *
 from direct.task.Task import Task
 from direct.distributed.ClockDelta import *
@@ -118,6 +116,3 @@ class DistributedMMPiano(DistributedObject.DistributedObject):
         self.lastChangeDirection = now
         self.sendUpdate('requestChangeDirection', [])
         base.playSfx(self.changeDirectionSound)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedMMPiano.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:34 Pacific Daylight Time

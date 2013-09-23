@@ -1,7 +1,4 @@
-# 2013.08.22 22:24:05 Pacific Daylight Time
-# Embedded file name: toontown.quest.Quests
 # decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:24:06 Pacific Daylight Time
 
 # Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\Quests.pyc
 Traceback (most recent call last):

@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:50 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MazeMapGui
 from direct.showbase.PythonUtil import Enum
 from direct.gui.DirectGui import DirectFrame, DGG
 from pandac.PandaModules import Vec2, VBase4D
@@ -246,6 +244,3 @@ class MazeMapGui(DirectFrame):
         for x in range(self._maskResolution):
             for y in range(self._maskResolution):
                 self._maskImage.setXelA(x, y, 0, 0, 0, 1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MazeMapGui.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:51 Pacific Daylight Time

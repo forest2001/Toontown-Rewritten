@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:46 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCSpecialQuestGiver
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from toontown.quest import QuestParser
@@ -248,6 +246,3 @@ class DistributedNPCSpecialQuestGiver(DistributedNPCToonBase):
             self.trackChoiceGui = None
         self.sendUpdate('chooseTrack', [trackId])
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCSpecialQuestGiver.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:46 Pacific Daylight Time

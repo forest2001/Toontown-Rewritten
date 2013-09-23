@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:00 Pacific Daylight Time
-# Embedded file name: toontown.catalog.CatalogAtticItem
 import CatalogItem
 from toontown.toonbase import TTLocalizer
 from direct.showbase import PythonUtil
@@ -66,6 +64,3 @@ class CatalogAtticItem(CatalogItem.CatalogItem):
         elif retcode == ToontownGlobals.P_NoRoomForItem:
             return TTLocalizer.CatalogAcceptHouseFull
         return CatalogItem.CatalogItem.getAcceptItemErrorText(self, retcode)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogAtticItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:00 Pacific Daylight Time

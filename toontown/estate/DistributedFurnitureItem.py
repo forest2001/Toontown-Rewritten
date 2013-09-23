@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:06 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedFurnitureItem
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -139,6 +137,3 @@ class DistributedFurnitureItem(DistributedHouseItem.DistributedHouseItem, Distri
                 return 1
 
         return 0
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedFurnitureItem.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:06 Pacific Daylight Time

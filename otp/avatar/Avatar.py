@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:07 Pacific Daylight Time
-# Embedded file name: otp.avatar.Avatar
 from pandac.PandaModules import *
 from libotp import Nametag, NametagGroup
 from libotp import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
@@ -588,6 +586,3 @@ class Avatar(Actor, ShadowCaster):
 
     def loop(self, animName, restart = 1, partName = None, fromFrame = None, toFrame = None):
         return Actor.loop(self, animName, restart, partName, fromFrame, toFrame)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\avatar\Avatar.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:08 Pacific Daylight Time

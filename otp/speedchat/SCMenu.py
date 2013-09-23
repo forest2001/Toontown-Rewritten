@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:48 Pacific Daylight Time
-# Embedded file name: otp.speedchat.SCMenu
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.task import Task
@@ -455,6 +453,3 @@ class SCMenu(SCObject, NodePath):
 
     def __str__(self):
         return '%s: menu%s' % (self.__class__.__name__, self.SerialNum)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\speedchat\SCMenu.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:49 Pacific Daylight Time

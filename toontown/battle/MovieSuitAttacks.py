@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:27 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieSuitAttacks
 from toontown.toonbase.ToontownGlobals import *
 from SuitBattleGlobals import *
 from direct.interval.IntervalGlobal import *
@@ -3545,6 +3543,3 @@ def doPeckingOrder(attack):
     damageAnims.append(['cringe', 0.01, 0.43])
     toonTrack = getToonTrack(attack, damageDelay=4.2, splicedDamageAnims=damageAnims, dodgeDelay=2.8, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
     return Parallel(suitTrack, toonTrack, birdTracks)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieSuitAttacks.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:35 Pacific Daylight Time

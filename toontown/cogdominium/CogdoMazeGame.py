@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:50 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeGame
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.PythonUtil import Functor
@@ -581,6 +579,3 @@ class CogdoMazeGame(DirectObject):
         elif toonId in self.toonId2Player.keys():
             player = self.toonId2Player[toonId]
             self._removePlayer(player)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:51 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:40 Pacific Daylight Time
-# Embedded file name: otp.login.TTAccount
 from pandac.PandaModules import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
@@ -281,6 +279,3 @@ class TTAccount():
             return (0, str(e))
 
         return None
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\TTAccount.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:40 Pacific Daylight Time

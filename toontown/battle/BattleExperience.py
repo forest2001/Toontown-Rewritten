@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:07 Pacific Daylight Time
-# Embedded file name: toontown.battle.BattleExperience
 from toontown.toonbase import ToontownBattleGlobals
 
 def genRewardDicts(entries):
@@ -22,6 +20,3 @@ def genRewardDicts(entries):
             toonRewardDicts.append(dict)
 
     return toonRewardDicts
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\BattleExperience.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:07 Pacific Daylight Time

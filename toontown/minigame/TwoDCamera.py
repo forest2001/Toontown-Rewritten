@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:04 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TwoDCamera
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.task.Task import Task
@@ -61,6 +59,3 @@ class TwoDCamera(DistributedObject.DistributedObject):
             self.camera.setX(render, finalCamX)
             self.ivalControllingCamera = False
             self.clearChangeFacingInterval()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TwoDCamera.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:04 Pacific Daylight Time

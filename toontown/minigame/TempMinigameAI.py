@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:01 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TempMinigameAI
 from toontown.toonbase import ToontownGlobals
 ALLOW_TEMP_MINIGAMES = simbase.config.GetBool('allow-temp-minigames', False)
 TEMP_MG_ID_COUNTER = ToontownGlobals.TravelGameId - 1
@@ -26,6 +24,3 @@ def _registerTempMinigame(name, Class, id, minPlayers = 1, maxPlayers = 4):
 
 if ALLOW_TEMP_MINIGAMES:
     pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TempMinigameAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:01 Pacific Daylight Time

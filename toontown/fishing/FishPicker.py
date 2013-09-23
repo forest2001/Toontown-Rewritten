@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:35 Pacific Daylight Time
-# Embedded file name: toontown.fishing.FishPicker
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
@@ -121,6 +119,3 @@ class FishPicker(DirectScrolledList):
     def showFishPanel(self, fish):
         self.fishPanel.update(fish)
         self.fishPanel.show()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\fishing\FishPicker.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:35 Pacific Daylight Time

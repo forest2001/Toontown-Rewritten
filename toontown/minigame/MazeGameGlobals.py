@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:50 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MazeGameGlobals
 from direct.showbase import RandomNumGen
 
 def getMazeName(gameDoId, numPlayers, mazeNames):
@@ -32,6 +30,3 @@ SUIT_START_POSITIONS = ((0.25, 0.25),
  (0.0, 0.66),
  (1.0, 0.33),
  (1.0, 0.66))
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MazeGameGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:50 Pacific Daylight Time

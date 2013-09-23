@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:39 Pacific Daylight Time
-# Embedded file name: toontown.safezone.GameTutorials
 from direct.gui.DirectGui import *
 from direct.fsm import FSM
 from direct.directnotify import DirectNotifyGlobal
@@ -261,6 +259,3 @@ class CheckersTutorial(DirectFrame, FSM.FSM):
         if task != None:
             task.done
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\GameTutorials.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:39 Pacific Daylight Time

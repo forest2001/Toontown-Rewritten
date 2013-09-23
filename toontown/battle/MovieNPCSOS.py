@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:23 Pacific Daylight Time
-# Embedded file name: toontown.battle.MovieNPCSOS
 from direct.interval.IntervalGlobal import *
 from BattleProps import *
 from BattleSounds import *
@@ -269,6 +267,3 @@ def doNPCTeleports(attacks):
     arrivals.append(turns)
     unturns.append(departures)
     return (arrivals, unturns, npcs)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieNPCSOS.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:23 Pacific Daylight Time

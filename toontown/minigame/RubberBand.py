@@ -1,5 +1,3 @@
-# 2013.08.22 22:22:59 Pacific Daylight Time
-# Embedded file name: toontown.minigame.RubberBand
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -144,6 +142,3 @@ class RubberBand():
         bandGeom.addPrimitive(bandTris)
         self.bandGN.addGeom(bandGeom)
         return task.cont
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\RubberBand.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:59 Pacific Daylight Time

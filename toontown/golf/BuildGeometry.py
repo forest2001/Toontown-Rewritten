@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:40 Pacific Daylight Time
-# Embedded file name: toontown.golf.BuildGeometry
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -309,6 +307,3 @@ def addArrowGeom(rootNode, sizeX, sizeY, color = Vec4(1.0, 1.0, 1.0, 1.0), layer
     NodePathGeom = rootNode.attachNewNode(GN)
     geo = addArrow(GN, sizeX, sizeY, color, layer)
     return (NodePathGeom, GN, geo)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\golf\BuildGeometry.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:41 Pacific Daylight Time

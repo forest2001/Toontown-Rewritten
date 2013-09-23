@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:52 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazeGameMovies
 from pandac.PandaModules import NodePath, Point3, PlaneNode
 from direct.showbase.ShowBase import Plane
 from direct.showbase.RandomNumGen import RandomNumGen
@@ -197,6 +195,3 @@ class CogdoMazeGameFinish(CogdoGameMovie):
 
     def unload(self):
         CogdoGameMovie.unload(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazeGameMovies.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:52 Pacific Daylight Time

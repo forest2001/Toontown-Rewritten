@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:17 Pacific Daylight Time
-# Embedded file name: toontown.estate.FlowerBasket
 import GardenGlobals
 from direct.directnotify import DirectNotifyGlobal
 import FlowerBase
@@ -74,6 +72,3 @@ class FlowerBasket():
         value = self.getTotalValue()
         txt += '\nTotal value: %s' % value
         return txt
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\FlowerBasket.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:17 Pacific Daylight Time

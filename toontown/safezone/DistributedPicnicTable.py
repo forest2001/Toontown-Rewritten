@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:35 Pacific Daylight Time
-# Embedded file name: toontown.safezone.DistributedPicnicTable
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
@@ -597,6 +595,3 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
 
     def doNothing(self):
         pass
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedPicnicTable.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:37 Pacific Daylight Time

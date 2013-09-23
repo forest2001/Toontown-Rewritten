@@ -1,5 +1,3 @@
-# 2013.08.22 22:16:42 Pacific Daylight Time
-# Embedded file name: toontown.building.BoardingGroupShow
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -221,6 +219,3 @@ class BoardingGroupShow():
                 goButtonPreShow.append(Wait(3))
         goButtonPreShow.append(Func(self.cleanup))
         return goButtonPreShow
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\building\BoardingGroupShow.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:16:42 Pacific Daylight Time

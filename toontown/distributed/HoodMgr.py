@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:26 Pacific Daylight Time
-# Embedded file name: toontown.distributed.HoodMgr
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
@@ -933,6 +931,3 @@ class HoodMgr(DirectObject.DirectObject):
 
     def makeLinkTunnelName(self, hoodId, currentZone):
         return '**/toph_' + self.getNameFromId(hoodId) + '_' + str(currentZone)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\distributed\HoodMgr.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:27 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:36 Pacific Daylight Time
-# Embedded file name: toontown.effects.FireworkShows
 from FireworkGlobals import *
 from toontown.toonbase import ToontownGlobals
 from toontown.parties import PartyGlobals
@@ -13881,6 +13879,3 @@ def getShowDuration(eventId, index):
     duration += postShowPauseDuration
     duration += preNormalMusicPauseDuration
     return duration
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\FireworkShows.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:53 Pacific Daylight Time

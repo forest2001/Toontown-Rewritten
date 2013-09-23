@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:53 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedStomper
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from StomperGlobals import *
@@ -356,6 +354,3 @@ class DistributedStomper(DistributedCrusherEntity.DistributedCrusherEntity):
             self.unloadModel()
             self.loadModel()
             self.startStomper(0)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedStomper.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:54 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:20 Pacific Daylight Time
-# Embedded file name: toontown.coghq.CogDisguiseGlobals
 from toontown.suit import SuitDNA
 import types
 from toontown.toonbase import TTLocalizer
@@ -521,6 +519,3 @@ def dept2deptIndex(dept):
     if type(dept) == types.StringType:
         dept = SuitDNA.suitDepts.index(dept)
     return dept
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\CogDisguiseGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:21 Pacific Daylight Time

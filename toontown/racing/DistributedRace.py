@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:07 Pacific Daylight Time
-# Embedded file name: toontown.racing.DistributedRace
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -2182,7 +2180,6 @@ ParserError: --- This code section failed: ---
          'reason': RaceGlobals.Exit_UserReq}
         base.cr.playGame.hood.loader.fsm.request('quietZone', [out])
         return# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:24:09 Pacific Daylight Time
 N_0   None
 1033	LOAD_ATTR         'reparentTo'
 1036	LOAD_FAST         'n2'

@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:55 Pacific Daylight Time
-# Embedded file name: toontown.coghq.FactoryEntityTypes
 from otp.level.EntityTypes import *
 
 class FactoryLevelMgr(LevelMgr):
@@ -675,6 +673,3 @@ class Maze(Nodepath):
     __module__ = __name__
     type = 'maze'
     attribs = (('numSections', 4, 'int'),)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\FactoryEntityTypes.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:56 Pacific Daylight Time

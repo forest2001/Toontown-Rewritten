@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:45 Pacific Daylight Time
-# Embedded file name: toontown.pets.DistributedPetAI
 from pandac.PandaModules import *
 from direct.showbase.PythonUtil import weightedChoice, randFloat, lerp
 from direct.showbase.PythonUtil import contains, list2dict, clampScalar
@@ -1094,6 +1092,3 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLooke
             self.brain.goalMgr.addGoal(self.leashGoal)
             response = 'leash ON'
         return response
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\DistributedPetAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:47 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:08 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedGardenPlot
 import DistributedLawnDecor
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.ShowBase import *
@@ -357,6 +355,3 @@ class DistributedGardenPlot(DistributedLawnDecor.DistributedLawnDecor):
             self.stick2Ground()
         else:
             DistributedLawnDecor.DistributedLawnDecor.makeMovieNode(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedGardenPlot.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:08 Pacific Daylight Time

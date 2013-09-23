@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:45 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCScientistAI
 import DistributedNPCToonBaseAI
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 from direct.fsm import ClassicFSM, State
@@ -205,6 +203,3 @@ class DistributedNPCScientistAI(DistributedNPCToonBaseAI.DistributedNPCToonBaseA
         if hasattr(self, 'scientistFSM'):
             del self.scientistFSM
         DistributedNPCToonBaseAI.DistributedNPCToonBaseAI.delete(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCScientistAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:45 Pacific Daylight Time

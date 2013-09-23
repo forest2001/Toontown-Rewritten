@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:59 Pacific Daylight Time
-# Embedded file name: toontown.hood.StreetSign
 import os
 import shutil
 import datetime
@@ -67,6 +65,3 @@ class StreetSign(DistributedObject.DistributedObject):
             return task.done
         self.notify.info('Down downloading street sign')
         return task.done
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\hood\StreetSign.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:59 Pacific Daylight Time

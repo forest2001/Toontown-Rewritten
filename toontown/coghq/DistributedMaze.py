@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:48 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedMaze
 from otp.level.BasicEntities import DistributedNodePathEntity
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -236,6 +234,3 @@ class DistributedMaze(DistributedNodePathEntity):
             self.level.countryClub.showInfoText(self.toonFinishedText % (toon.getName(), TTLocalizer.hedgeMazePlaces[place]))
         if lastToon:
             self.setGameOver()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedMaze.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:48 Pacific Daylight Time

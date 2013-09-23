@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:00 Pacific Daylight Time
-# Embedded file name: toontown.quest.QuestParser
 import sys
 import os
 import tokenize
@@ -1082,6 +1080,3 @@ found = vfs.resolveFilename(scriptFile, searchPath)
 if not found:
     notify.error('Could not find QuestScripts.txt file')
 readFile(scriptFile)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\quest\QuestParser.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:03 Pacific Daylight Time

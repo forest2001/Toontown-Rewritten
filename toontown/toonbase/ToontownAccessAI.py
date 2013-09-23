@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:33 Pacific Daylight Time
-# Embedded file name: toontown.toonbase.ToontownAccessAI
 from otp.otpbase import OTPGlobals
 from otp.ai import BanManagerAI
 from toontown.toonbase import ToontownGlobals
@@ -58,6 +56,3 @@ def canWearSuit(avatarId, zoneId):
         return True
     else:
         return False
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toonbase\ToontownAccessAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:33 Pacific Daylight Time

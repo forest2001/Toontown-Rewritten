@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:58 Pacific Daylight Time
-# Embedded file name: toontown.minigame.MazeData
 CELL_WIDTH = 2
 mazeNames = [['phase_4/models/minigames/maze_1player'],
  ['phase_4/models/minigames/maze_2player'],
@@ -8167,6 +8165,3 @@ data['treasurePosList'] = [(-46, -36, 0.1),
  (42, 36, 0.1),
  (44, 36, 0.1),
  (46, 36, 0.1)]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\MazeData.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:22:49 Pacific Daylight Time

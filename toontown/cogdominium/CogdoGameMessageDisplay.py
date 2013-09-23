@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:44 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoGameMessageDisplay
 from direct.interval.FunctionInterval import Func
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.MetaInterval import Sequence
@@ -77,6 +75,3 @@ class CogdoGameMessageDisplay():
     def showMessageTemporarily(self, message = '', duration = 3.0, color = None):
         self.updateMessage(message, color)
         taskMgr.doMethodLater(duration, self.updateMessage, CogdoGameMessageDisplay.UpdateMessageTaskName, extraArgs=[])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoGameMessageDisplay.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:44 Pacific Daylight Time

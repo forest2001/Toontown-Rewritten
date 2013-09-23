@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:39 Pacific Daylight Time
-# Embedded file name: otp.login.MultiPageTextFrame
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from otp.otpbase import OTPLocalizer
@@ -81,6 +79,3 @@ class MultiPageTextFrame(DirectFrame):
     def ignoreAgreementKeypresses(self):
         self.ignore('page_down-up')
         self.ignore('page_up-up')
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\login\MultiPageTextFrame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:39 Pacific Daylight Time

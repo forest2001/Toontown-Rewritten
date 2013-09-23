@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:00 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TagTreasurePlannerAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase.ToontownGlobals import *
 from toontown.safezone import RegenTreasurePlannerAI
@@ -33,6 +31,3 @@ class TagTreasurePlannerAI(RegenTreasurePlannerAI.RegenTreasurePlannerAI):
          (-24, 40, 0.1),
          (-20, -40, 0.1)]
         return self.spawnPoints
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TagTreasurePlannerAI.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:00 Pacific Daylight Time

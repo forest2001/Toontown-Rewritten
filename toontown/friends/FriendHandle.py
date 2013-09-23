@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:37 Pacific Daylight Time
-# Embedded file name: toontown.friends.FriendHandle
 from otp.avatar.Avatar import teleportNotify
 from toontown.toonbase import ToontownGlobals
 import copy
@@ -125,6 +123,3 @@ class FriendHandle():
     def setCommonAndWhitelistChatFlags(self, commonChatFlags, whitelistChatFlags):
         self.commonChatFlags = commonChatFlags
         self.whitelistChatFlags = whitelistChatFlags
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\friends\FriendHandle.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:37 Pacific Daylight Time

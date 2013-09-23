@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:40 Pacific Daylight Time
-# Embedded file name: toontown.toon.BoardingGroupInviterPanels
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.showbase import DirectObject
@@ -170,6 +168,3 @@ class BoardingGroupInvitationRejectedPanel(BoardingGroupInviterPanelBase):
         self.inviterText = TTLocalizer.BoardingInvitationRejected % self.avatarName
         self.panelStyle = TTDialog.Acknowledge
         self.buttonTextList = [OTPLocalizer.GuildInviterOK]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\BoardingGroupInviterPanels.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:40 Pacific Daylight Time

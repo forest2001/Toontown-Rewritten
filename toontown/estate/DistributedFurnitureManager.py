@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:06 Pacific Daylight Time
-# Embedded file name: toontown.estate.DistributedFurnitureManager
 from direct.distributed import DistributedObject
 from toontown.catalog import CatalogItem
 from toontown.catalog import CatalogItemList
@@ -174,6 +172,3 @@ class DistributedFurnitureManager(DistributedObject.DistributedObject):
 
     def recoverDeletedItemResponse(self, retcode, context):
         self.doCallbackContext(context, [retcode])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\estate\DistributedFurnitureManager.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:20:07 Pacific Daylight Time

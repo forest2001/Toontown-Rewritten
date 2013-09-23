@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:28 Pacific Daylight Time
-# Embedded file name: otp.level.CollisionSolidEntity
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 from direct.directnotify import DirectNotifyGlobal
@@ -46,6 +44,3 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
         def attribChanged(self, attrib, value):
             print 'attribChanged'
             self.initSolid()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\level\CollisionSolidEntity.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:28 Pacific Daylight Time

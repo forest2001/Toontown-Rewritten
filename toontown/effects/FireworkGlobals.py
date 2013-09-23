@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:33 Pacific Daylight Time
-# Embedded file name: toontown.effects.FireworkGlobals
 FW_T = 0
 FW_STYLE = 1
 FW_COLOR1 = 2
@@ -109,6 +107,3 @@ class FireworkType():
     PirateSkull = 12
     AmericanFlag = 13
     IceCream = 14
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\effects\FireworkGlobals.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:34 Pacific Daylight Time

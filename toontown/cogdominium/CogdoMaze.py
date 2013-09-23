@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:45 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMaze
 from pandac.PandaModules import NodePath, VBase4
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.RandomNumGen import RandomNumGen
@@ -314,6 +312,3 @@ class CogdoMazeFactory():
         quadrant.getChildren().reparentTo(root)
         root.setH(angle)
         return root
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMaze.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:46 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:12 Pacific Daylight Time
-# Embedded file name: otp.chat.ChatInputWhiteListFrame
 from direct.fsm import FSM
 from otp.otpbase import OTPGlobals
 import sys
@@ -343,6 +341,3 @@ class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
             newtext = ' '.join(newwords)
             self.chatEntry.set(newtext)
         self.chatEntry.guiItem.setAcceptEnabled(self.okayToSubmit)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\chat\ChatInputWhiteListFrame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:13 Pacific Daylight Time

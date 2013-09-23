@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:54 Pacific Daylight Time
-# Embedded file name: toontown.cogdominium.CogdoMazePlayer
 from pandac.PandaModules import Point3, NodePath
 from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import ProjectileInterval, Track, ActorInterval
@@ -191,6 +189,3 @@ class CogdoMazePlayer(FSM, CogdoMazeSplattable):
 
             ival.append(Func(done))
         return ival
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\cogdominium\CogdoMazePlayer.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:54 Pacific Daylight Time

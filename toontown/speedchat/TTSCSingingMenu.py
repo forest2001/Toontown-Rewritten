@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:11 Pacific Daylight Time
-# Embedded file name: toontown.speedchat.TTSCSingingMenu
 from direct.showbase import PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
@@ -53,6 +51,3 @@ class TTSCSingingMenu(SCMenu):
                     self.append(terminal)
 
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\speedchat\TTSCSingingMenu.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:11 Pacific Daylight Time

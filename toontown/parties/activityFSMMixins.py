@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:10 Pacific Daylight Time
-# Embedded file name: toontown.parties.activityFSMMixins
 from BaseActivityFSM import BaseActivityFSM
 
 class IdleMixin():
@@ -207,6 +205,3 @@ class ConclusionMixin():
     def exitConclusion(self):
         BaseActivityFSM.notify.debug("exitConclusion: '%s' -> '%s'" % (self.oldState, self.newState))
         self.activity.finishConclusion()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\activityFSMMixins.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:10 Pacific Daylight Time

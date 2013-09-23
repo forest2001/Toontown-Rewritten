@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:13 Pacific Daylight Time
-# Embedded file name: toontown.suit.DistributedBossbotBoss
 import math
 import random
 from pandac.PandaModules import NametagGroup, CFSpeech, VBase3, CollisionPlane, CollisionNode, CollisionSphere, CollisionTube, NodePath, Plane, Vec3, Vec2, Point3, BitMask32, CollisionHandlerEvent, TextureStage, VBase4, BoundingSphere
@@ -1426,6 +1424,3 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             attackBelts.append(seq)
         self.notify.debug('attackBelts duration= %.2f' % attackBelts.getDuration())
         self.doAnimate(attackBelts, now=1, raised=1)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\suit\DistributedBossbotBoss.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:16 Pacific Daylight Time

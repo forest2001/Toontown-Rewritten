@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:47 Pacific Daylight Time
-# Embedded file name: toontown.town.DGStreet
 import Street
 
 class DGStreet(Street.Street):
@@ -13,6 +11,3 @@ class DGStreet(Street.Street):
 
     def unload(self):
         Street.Street.unload(self)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\town\DGStreet.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:47 Pacific Daylight Time

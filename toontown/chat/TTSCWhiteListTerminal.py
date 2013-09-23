@@ -1,5 +1,3 @@
-# 2013.08.22 22:17:25 Pacific Daylight Time
-# Embedded file name: toontown.chat.TTSCWhiteListTerminal
 from otp.speedchat.SCTerminal import SCTerminal
 from otp.otpbase.OTPLocalizer import SpeedChatStaticText
 SCStaticTextMsgEvent = 'SCStaticTextMsg'
@@ -26,6 +24,3 @@ class TTSCWhiteListTerminal(SCTerminal):
             base.localAvatar.chatMgr.fsm.request('whiteListPlayerChat', [self.parentClass.whisperAvatarId])
         else:
             base.localAvatar.chatMgr.fsm.request('whiteListAvatarChat', [self.parentClass.whisperAvatarId])
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\chat\TTSCWhiteListTerminal.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:17:25 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:42 Pacific Daylight Time
-# Embedded file name: otp.otpbase.OTPBase
 from direct.showbase.ShowBase import ShowBase
 from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath
 import OTPRender
@@ -230,6 +228,3 @@ class OTPBase(ShowBase):
             self.wantEnviroDR = not self.win.getGsg().isHardware() or config.GetBool('want-background-region', 1)
             self.backgroundDrawable = self.win
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\otpbase\OTPBase.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:15:43 Pacific Daylight Time

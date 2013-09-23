@@ -1,5 +1,3 @@
-# 2013.08.22 22:21:18 Pacific Daylight Time
-# Embedded file name: toontown.minigame.DistributedCogThiefGame
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode, CollisionHandlerEvent, NodePath, TextNode
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.interval.IntervalGlobal import Wait, LerpFunctionInterval, LerpHprInterval, Sequence, Parallel, Func, SoundInterval, ActorInterval, ProjectileInterval, Track, LerpScaleInterval, WaitInterval, LerpPosHprInterval
@@ -908,6 +906,3 @@ class DistributedCogThiefGame(DistributedMinigame):
         base.camera.setPosHpr(0, -13.66, 13.59, 0, -51.6, 0)
         result = Sequence(Wait(2), LerpPosHprInterval(base.camera, 13, Point3(self.cameraTopView[0], self.cameraTopView[1], self.cameraTopView[2]), Point3(self.cameraTopView[3], self.cameraTopView[4], self.cameraTopView[5]), blendType='easeIn'))
         return result
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedCogThiefGame.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:21:20 Pacific Daylight Time

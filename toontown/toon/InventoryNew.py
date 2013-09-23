@@ -1,5 +1,3 @@
-# 2013.08.22 22:26:02 Pacific Daylight Time
-# Embedded file name: toontown.toon.InventoryNew
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -1250,6 +1248,3 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(1, 1, 1, 1), Point4(0.1, 0.1, 0.1, 1.0), blendType='easeOut')
         newSeq = Sequence(goDark, goBright, Wait(0.2))
         self.propBonusIval.append(newSeq)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\InventoryNew.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:26:05 Pacific Daylight Time

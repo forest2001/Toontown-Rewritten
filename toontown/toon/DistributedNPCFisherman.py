@@ -1,5 +1,3 @@
-# 2013.08.22 22:25:42 Pacific Daylight Time
-# Embedded file name: toontown.toon.DistributedNPCFisherman
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
@@ -152,6 +150,3 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         self.setChatAbsolute('', CFSpeech)
         self.acceptOnce(self.fishGuiDoneEvent, self.__handleSaleDone)
         self.fishGui = FishSellGUI.FishSellGUI(self.fishGuiDoneEvent)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\toon\DistributedNPCFisherman.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:25:42 Pacific Daylight Time

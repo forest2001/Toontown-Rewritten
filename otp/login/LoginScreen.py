@@ -1,5 +1,3 @@
-# 2013.08.22 22:15:37 Pacific Daylight Time
-# Embedded file name: otp.login.LoginScreen
 import os
 import time
 from datetime import datetime

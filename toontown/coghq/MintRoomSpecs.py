@@ -1,5 +1,3 @@
-# 2013.08.22 22:19:18 Pacific Daylight Time
-# Embedded file name: toontown.coghq.MintRoomSpecs
 from direct.showbase.PythonUtil import invertDict
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import NullCogs
@@ -101,6 +99,3 @@ del name2id
 middleRoomId2numBattles = {}
 for roomId in CashbotMintMiddleRoomIDs:
     middleRoomId2numBattles[roomId] = roomId2numBattles[roomId]
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\MintRoomSpecs.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:19:18 Pacific Daylight Time

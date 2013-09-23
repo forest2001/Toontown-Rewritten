@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:03 Pacific Daylight Time
-# Embedded file name: toontown.minigame.TreasureScorePanel
 from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.gui.DirectGui import *
@@ -29,6 +27,3 @@ class TreasureScorePanel(DirectFrame):
     def makeTransparent(self, alpha):
         self.setTransparency(1)
         self.setColorScale(1, 1, 1, alpha)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\TreasureScorePanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:03 Pacific Daylight Time

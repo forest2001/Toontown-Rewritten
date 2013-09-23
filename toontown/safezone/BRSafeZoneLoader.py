@@ -1,5 +1,3 @@
-# 2013.08.22 22:24:22 Pacific Daylight Time
-# Embedded file name: toontown.safezone.BRSafeZoneLoader
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 import SafeZoneLoader
@@ -77,6 +75,3 @@ class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         ivals = [LerpFunctionInterval(self.snowRender.setAlphaScale, fromData=currentScale, toData=0.0, duration=self.SnowFadeLerpTime)]
         self.snowFade = Track(ivals, 'snow-fade')
         self.snowFade.play()
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\BRSafeZoneLoader.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:24:22 Pacific Daylight Time

@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:52 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedSinkingPlatform
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -133,6 +131,3 @@ class DistributedSinkingPlatform(BasicEntities.DistributedNodePathEntity):
         self.moveIval.append(LerpPosInterval(moveNode, duration, endPos, startPos=moveNode.getPos(), blendType='easeInOut', name='%s-move' % self.platform.name, fluid=1))
         self.moveIval.start()
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedSinkingPlatform.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:52 Pacific Daylight Time

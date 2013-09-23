@@ -1,5 +1,3 @@
-# 2013.08.22 22:18:24 Pacific Daylight Time
-# Embedded file name: toontown.coghq.DistributedBanquetTable
 import math
 import random
 from pandac.PandaModules import NodePath, Point3, VBase4, TextNode, Vec3, deg2Rad, CollisionSegment, CollisionHandlerQueue, CollisionNode, BitMask32, SmoothMover
@@ -1145,6 +1143,3 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
             self.moveSound = sfx
             if self.moveSound:
                 base.playSfx(self.moveSound, looping=1, volume=0.5)
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\DistributedBanquetTable.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:18:26 Pacific Daylight Time

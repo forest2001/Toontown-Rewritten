@@ -1,5 +1,3 @@
-# 2013.08.22 22:23:49 Pacific Daylight Time
-# Embedded file name: toontown.pets.PetAvatarPanel
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.gui.DirectGui import *
@@ -302,6 +300,3 @@ class PetAvatarPanel(AvatarPanel.AvatarPanel):
         if self.petDetailPanel != None:
             self.petDetailPanel.update(avatar)
         return
-# okay decompyling C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\pets\PetAvatarPanel.pyc 
-# decompiled 1 files: 1 okay, 0 failed, 0 verify failed
-# 2013.08.22 22:23:50 Pacific Daylight Time

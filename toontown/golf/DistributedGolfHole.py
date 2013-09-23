@@ -1,5 +1,3 @@
-# 2013.08.22 22:20:42 Pacific Daylight Time
-# Embedded file name: toontown.golf.DistributedGolfHole
 import math
 import random
 import time
@@ -2270,7 +2268,6 @@ ParserError: --- This code section failed: ---
     def _handleClientCleanup(self):
         self.removePlayBackDelayDelete()
         self.ignore('clientCleanup')# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
-# 2013.08.22 22:20:45 Pacific Daylight Time
    'DefaultCamP'
 684	CALL_FUNCTION_1   None
 687	POP_TOP           None
