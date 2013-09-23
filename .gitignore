@@ -3,3 +3,4 @@
 *.fzn
 *.dll
 pandac/
+*.dis

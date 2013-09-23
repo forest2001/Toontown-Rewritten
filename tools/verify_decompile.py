@@ -3,6 +3,7 @@
 import imp
 import sys
 import marshal
+import dis
 from types import *
 
 def filter_code(to_filter):
@@ -40,6 +41,34 @@ def find_code(to_search):
         yield to_search
 
 def compare_code(c1, c2):
+    if c1.co_name != c2.co_name:
+        print "co_name mismatch"
+        print "Expected: ", c1.co_name
+        print "Got: ", c2.co_name
+    if c1.co_argcount != c2.co_argcount:
+        print "co_argcount mismatch"
+        print "Expected: ", c1.co_argcount
+        print "Got: ", c2.co_argcount
+    if c1.co_cellvars != c2.co_cellvars:
+        print "co_cellvars mismatch"
+        print "Expected: ", c1.co_cellvars
+        print "Got: ", c2.co_cellvars
+    if c1.co_code != c2.co_code:
+        print "co_code mismatch, dumping dis1.dis and dis2.dis"
+        oldstdout = sys.stdout
+        f = open("dis1.dis", "w")
+        sys.stdout = f
+        dis.disco(c1)
+        f.close()
+        f = open("dis2.dis", "w")
+        sys.stdout = f
+        dis.disco(c2)
+        f.close()
+        sys.stdout = oldstdout
+    '''if c1.co_ != c2.co_:
+        print "co_ mismatch"
+        print "Expected: ", c1.co_
+        print "Got: ", c2.co_'''
     return (c1.co_name == c2.co_name and
             c1.co_argcount == c2.co_argcount and
             c1.co_cellvars == c2.co_cellvars and

@@ -32,93 +32,22 @@ class PickANamePattern:
         invNamePart = invertDict(nameParts[patternIndex])
         return invNamePart[partIndex]
 
-    def _genWordListSplitPermutations--- This code section failed: ---
+    def _genWordListSplitPermutations(self, words):
+        if not len(words):
 
-0	LOAD_GLOBAL       'len'
-3	LOAD_FAST         'words'
-6	CALL_FUNCTION_1   None
-9	JUMP_IF_TRUE      '19'
+            return
+        if len(words) == 1:
 
-12	LOAD_CONST        None
-15	RETURN_VALUE      None
-16	JUMP_FORWARD      '19'
-19_0	COME_FROM         '16'
+            yield words
+            return
 
-19	LOAD_GLOBAL       'len'
-22	LOAD_FAST         'words'
-25	CALL_FUNCTION_1   None
-28	LOAD_CONST        1
-31	COMPARE_OP        '=='
-34	JUMP_IF_FALSE     '48'
+        for permutation in self._genWordListSplitPermutations(words[1:]):
+            yield [words[0]]+permutation
+            yield [(words[0] + ' ')+permutation[0]]+permutation[1:]
 
-37	LOAD_FAST         'words'
-40	YIELD_VALUE       None
-
-41	LOAD_CONST        None
-44	RETURN_VALUE      None
-45	JUMP_FORWARD      '48'
-48_0	COME_FROM         '45'
-
-48	SETUP_LOOP        '124'
-51	LOAD_FAST         'self'
-54	LOAD_ATTR         '_genWordListSplitPermutations'
-57	LOAD_FAST         'words'
-60	LOAD_CONST        1
-63	SLICE+1           None
-64	CALL_FUNCTION_1   None
-67	GET_ITER          None
-68	FOR_ITER          '123'
-71	STORE_FAST        'permutation'
-
-74	LOAD_FAST         'words'
-77	LOAD_CONST        0
-80	BINARY_SUBSCR     None
-81	BUILD_LIST_1      None
-84	LOAD_FAST         'permutation'
-87	BINARY_ADD        None
-88	YIELD_VALUE       None
-
-89	LOAD_FAST         'words'
-92	LOAD_CONST        0
-95	BINARY_SUBSCR     None
-96	LOAD_CONST        ' '
-99	BINARY_ADD        None
-100	LOAD_FAST         'permutation'
-103	LOAD_CONST        0
-106	BINARY_SUBSCR     None
-107	BINARY_ADD        None
-108	BUILD_LIST_1      None
-111	LOAD_FAST         'permutation'
-114	LOAD_CONST        1
-117	SLICE+1           None
-118	BINARY_ADD        None
-119	YIELD_VALUE       None
-120	JUMP_BACK         '68'
-123	POP_BLOCK         None
-124_0	COME_FROM         '48'
-
-Syntax error at or near `RETURN_VALUE' token at offset 44
-
-    def _genNameSplitPermutations--- This code section failed: ---
-
-0	SETUP_LOOP        '36'
-3	LOAD_FAST         'self'
-6	LOAD_ATTR         '_genWordListSplitPermutations'
-9	LOAD_FAST         'name'
-12	LOAD_ATTR         'split'
-15	CALL_FUNCTION_0   None
-18	CALL_FUNCTION_1   None
-21	GET_ITER          None
-22	FOR_ITER          '35'
-25	STORE_FAST        'splitName'
-
-28	LOAD_FAST         'splitName'
-31	YIELD_VALUE       None
-32	JUMP_BACK         '22'
-35	POP_BLOCK         None
-36_0	COME_FROM         '0'
-
-Syntax error at or near `POP_BLOCK' token at offset 35
+    def _genNameSplitPermutations(self, name):
+        for splitName in self._genWordListSplitPermutations(name.split()):
+            yield splitName
 
     def _compute(self, nameStr, gender):
         return self._computeWithNameParts(nameStr, self._getNameParts(gender))
@@ -204,33 +133,3 @@ class PickANamePatternTwoPartLastName(PickANamePattern):
                 pattern[-2] = combinedIndex2indices[combinedIndex][0]
                 pattern[-1] = combinedIndex2indices[combinedIndex][1]
         return pattern
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\namepanel\PickANamePattern.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	SETUP_LOOP        '36'
-3	LOAD_FAST         'self'
-6	LOAD_ATTR         '_genWordListSplitPermutations'
-9	LOAD_FAST         'name'
-12	LOAD_ATTR         'split'
-15	CALL_FUNCTION_0   None
-18	CALL_FUNCTION_1   None
-21	GET_ITER          None
-22	FOR_ITER          '35'
-25	STORE_FAST        'splitName'
-
-28	LOAD_FAST         'splitName'
-31	YIELD_VALUE       None
-32	JUMP_BACK         '22'
-35	POP_BLOCK         None
-36_0	COME_FROM         '0'
-
-Syntax error at or near `POP_BLOCK' token at offset 35
-
