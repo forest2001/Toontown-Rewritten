@@ -30,7 +30,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
 
     def load(self):
         if self.isLoaded == 1:
-            return
+            return None
         self.isLoaded = 1
         bgd = loader.loadModel('phase_3.5/models/gui/frame')
         gui = loader.loadModel('phase_3.5/models/gui/frame4names')
@@ -100,7 +100,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
 
     def enter(self, canLure = 1, canTrap = 1):
         if self.isEntered == 1:
-            return
+            return None
         self.isEntered = 1
         if self.isLoaded == 0:
             self.load()
@@ -203,9 +203,9 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
         self.NPCFriendPanel.update(self.NPCFriends, fCallable=1)
 
     def __updateTitleText(self):
-        if len(self.friends) == 0:
-            isEmpty = len(self.NPCFriends) == 0
-            self.title['text'] = isEmpty and TTLocalizer.TownBattleSOSNoFriends
+        isEmpty = (len(self.friends) == 0 and len(self.NPCFriends) == 0)
+        if isEmpty:
+            self.title['text'] = TTLocalizer.TownBattleSOSNoFriends
         else:
             self.title['text'] = TTLocalizer.TownBattleSOSWhichFriend
 
