@@ -81,15 +81,15 @@ class ShadowCaster:
         return
 
     def setActiveShadow(self, isActive = 1):
-        if isActive:
-            isActive = self.wantsActive
-            if not globalDropShadowFlag:
-                self.storedActiveState = isActive
-            if self.shadowPlacer != None:
+        isActive = isActive and self.wantsActive
+        if not globalDropShadowFlag:
+            self.storedActiveState = isActive
+        if self.shadowPlacer != None:
+            isActive = isActive and globalDropShadowFlag
+            if self.activeShadow != isActive:
+                self.activeShadow = isActive
                 if isActive:
-                    isActive = globalDropShadowFlag
-                    self.activeShadow = self.activeShadow != isActive and isActive
-                    isActive and self.shadowPlacer.on()
+                    self.shadowPlacer.on()
                 else:
                     self.shadowPlacer.off()
         return
