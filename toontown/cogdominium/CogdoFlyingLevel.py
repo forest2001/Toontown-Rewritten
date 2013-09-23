@@ -186,7 +186,7 @@ class CogdoFlyingLevel(DirectObject):
         return self.convertYToQuadNum(y + self._halfQuadLengthUnits)
 
 
-class CogdoFlyingLevelFactory():
+class CogdoFlyingLevelFactory:
     __module__ = __name__
 
     def __init__(self, parent, quadLengthUnits, quadVisibilityAhead, quadVisibiltyBehind, rng = None):

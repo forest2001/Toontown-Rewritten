@@ -7,7 +7,7 @@ from direct.showbase.PythonUtil import mostDerivedLast
 import os
 import string
 
-class EntityTypeRegistry():
+class EntityTypeRegistry:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EntityTypeRegistry')
 

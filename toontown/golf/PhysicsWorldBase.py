@@ -24,7 +24,7 @@ def length(vec):
     return sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2)
 
 
-class PhysicsWorldBase():
+class PhysicsWorldBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhysicsWorld')
 

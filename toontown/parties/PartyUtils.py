@@ -174,7 +174,7 @@ def calcVelocity(rotation, angle, initialVelocity = 1.0):
     return Vec3(xVel, yVel, zVel)
 
 
-class LineSegment():
+class LineSegment:
     __module__ = __name__
 
     def __init__(self, pt1, pt2):

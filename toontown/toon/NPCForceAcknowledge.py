@@ -4,7 +4,7 @@ from toontown.toonbase import TTLocalizer
 from direct.gui import DirectLabel
 from toontown.quest import Quests
 
-class NPCForceAcknowledge():
+class NPCForceAcknowledge:
     __module__ = __name__
 
     def __init__(self, doneEvent):

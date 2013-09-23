@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 import AttribDesc
 from direct.showbase.PythonUtil import mostDerivedLast
 
-class EntityTypeDesc():
+class EntityTypeDesc:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EntityTypeDesc')
     output = None

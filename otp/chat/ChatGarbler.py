@@ -2,7 +2,7 @@ import string
 import random
 from otp.otpbase import OTPLocalizer
 
-class ChatGarbler():
+class ChatGarbler:
     __module__ = __name__
 
     def garble(self, avatar, message):

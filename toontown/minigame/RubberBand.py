@@ -10,7 +10,7 @@ import math
 from math import *
 import random
 
-class RubberBand():
+class RubberBand:
     __module__ = __name__
     SomeCounter = 0
 

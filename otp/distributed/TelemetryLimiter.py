@@ -44,7 +44,7 @@ class TelemetryLimiter(DirectObject):
         return Task.cont
 
 
-class TelemetryLimit():
+class TelemetryLimit:
     __module__ = __name__
 
     def __call__(self, obj):
@@ -62,7 +62,7 @@ class RotationLimitToH(TelemetryLimit):
         obj.setHpr(obj.getH(), self._pConst, self._rConst)
 
 
-class TLNull():
+class TLNull:
     __module__ = __name__
 
     def __init__(self, *limits):

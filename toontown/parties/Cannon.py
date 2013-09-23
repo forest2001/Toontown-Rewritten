@@ -14,7 +14,7 @@ CANNON_ROTATION_MAX = 70
 INITIAL_VELOCITY = 80.0
 CANNON_BARREL_TOONHEAD_Y = 6.0
 
-class Cannon():
+class Cannon:
     __module__ = __name__
     notify = directNotify.newCategory('DistributedPartyCannon')
 

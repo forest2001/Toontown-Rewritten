@@ -18,7 +18,7 @@ from toontown.toon import Toon
 import FriendHandle
 from otp.otpbase import OTPGlobals
 
-class FriendsListManager():
+class FriendsListManager:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('FriendsListManager')
 

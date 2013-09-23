@@ -1,6 +1,6 @@
 
 
-class ChineseCheckersBoard():
+class ChineseCheckersBoard:
     __module__ = __name__
 
     def __init__(self):
@@ -779,7 +779,7 @@ class ChineseCheckersBoard():
             self.squareList[x].setState(squares[x])
 
 
-class CheckersSquare():
+class CheckersSquare:
     __module__ = __name__
 
     def __init__(self, tileNu):

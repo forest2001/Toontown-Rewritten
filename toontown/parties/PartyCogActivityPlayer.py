@@ -19,7 +19,7 @@ from PartyCogUtils import StrafingControl
 UPDATE_TASK_NAME = 'PartyCogActivityLocalPlayer_UpdateTask'
 THROW_PIE_LIMIT_TIME = 0.2
 
-class PartyCogActivityPlayer():
+class PartyCogActivityPlayer:
     __module__ = __name__
     toon = None
     position = None

@@ -12,7 +12,7 @@ import CogdoUtil
 import math
 import random
 
-class CogdoMazeSplattable():
+class CogdoMazeSplattable:
     __module__ = __name__
 
     def __init__(self, object, name, collisionRadius):

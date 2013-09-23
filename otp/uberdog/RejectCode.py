@@ -1,6 +1,6 @@
 
 
-class RejectCode():
+class RejectCode:
     __module__ = __name__
     TIMEOUT = 65535
     NO_GUILD = 10000

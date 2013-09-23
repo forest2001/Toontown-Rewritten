@@ -4,7 +4,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 import random
 
-class ToontownLoadingScreen():
+class ToontownLoadingScreen:
     __module__ = __name__
 
     def __init__(self):

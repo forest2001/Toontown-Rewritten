@@ -8,7 +8,7 @@ import os
 from direct.showbase import AppRunnerGlobal
 from direct.directnotify import DirectNotifyGlobal
 
-class NameGenerator():
+class NameGenerator:
     __module__ = __name__
     text = TextNode('text')
     text.setFont(ToontownGlobals.getInterfaceFont())

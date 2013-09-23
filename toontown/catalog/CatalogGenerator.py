@@ -75,7 +75,7 @@ def getAllChatItemsSold():
     return result
 
 
-class Sale():
+class Sale:
     __module__ = __name__
 
     def __init__(self, *args):
@@ -1482,7 +1482,7 @@ WeeklySchedule = ((100,
   (3, 2050),
   nextAvailablePole))
 
-class CatalogGenerator():
+class CatalogGenerator:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogGenerator')
 

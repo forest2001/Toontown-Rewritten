@@ -5,7 +5,7 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 CatalogNotifyBaseXPos = 0.4
 
-class CatalogNotifyDialog():
+class CatalogNotifyDialog:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogNotifyDialog')
 

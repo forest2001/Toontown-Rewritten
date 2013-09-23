@@ -1,6 +1,6 @@
 import os
 
-class ModuleList():
+class ModuleList:
     __module__ = __name__
     serverDataFolder = simbase.config.GetString('server-data-folder', '')
 

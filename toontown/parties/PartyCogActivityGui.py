@@ -11,7 +11,7 @@ from toontown.toonbase import ToontownIntervals
 from toontown.toonbase import TTLocalizer
 import PartyGlobals
 
-class PartyCogTrackerGui():
+class PartyCogTrackerGui:
     __module__ = __name__
 
     def __init__(self):

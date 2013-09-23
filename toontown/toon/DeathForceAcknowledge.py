@@ -6,7 +6,7 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 import LaffMeter
 
-class DeathForceAcknowledge():
+class DeathForceAcknowledge:
     __module__ = __name__
 
     def __init__(self, doneEvent):

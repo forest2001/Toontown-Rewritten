@@ -4,7 +4,7 @@ def stubFunction(*args):
     pass
 
 
-class LockBase():
+class LockBase:
     __module__ = __name__
     stateNames = ['off',
      'locking',
@@ -18,7 +18,7 @@ class LockBase():
      None]
 
 
-class DistributedDoorEntityBase():
+class DistributedDoorEntityBase:
     __module__ = __name__
     stateNames = ['off',
      'opening',

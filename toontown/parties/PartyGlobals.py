@@ -619,7 +619,7 @@ CatchLeverOffset = Point3(-3.0, -2.0, 0.0)
 CatchDropShadowHeight = 0.5
 CatchConclusionDuration = 3.0
 
-class DropObject():
+class DropObject:
     __module__ = __name__
 
     def __init__(self, name, good, onscreenDurMult, modelPath):

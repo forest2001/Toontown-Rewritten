@@ -1,6 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 
-class EntityCreatorBase():
+class EntityCreatorBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('EntityCreator')
 

@@ -3,7 +3,7 @@ import CatchGameGlobals
 import DropScheduler
 from toontown.parties.PartyGlobals import CatchActivityDuration as PartyCatchDuration
 
-class DropPlacer():
+class DropPlacer:
     __module__ = __name__
 
     def __init__(self, game, numPlayers, dropTypes, startTime = None):

@@ -5,7 +5,7 @@ from pandac.PandaModules import TextNode
 from toontown.toonbase import ToontownGlobals
 import CogdoGameConsts
 
-class CogdoGameMessageDisplay():
+class CogdoGameMessageDisplay:
     __module__ = __name__
     UpdateMessageTaskName = 'MessageDisplay.updateMessage'
 

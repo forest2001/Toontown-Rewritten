@@ -33,11 +33,11 @@ def loadModel(baseName, game = 'shared', type = 'model', group = 'area'):
     return loader.loadModel(getModelPath(baseName, game, type, group))
 
 
-class VariableContainer():
+class VariableContainer:
     __module__ = __name__
 
 
-class DevVariableContainer():
+class DevVariableContainer:
     __module__ = __name__
 
     def __init__(self, name):
@@ -51,7 +51,7 @@ def getRandomDialogueLine(lineList, rng):
     return lineList[rng.randint(0, len(lineList) - 1)]
 
 
-class CogdoGameMovie():
+class CogdoGameMovie:
     __module__ = __name__
 
     def __init__(self):

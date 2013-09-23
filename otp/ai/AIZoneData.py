@@ -6,7 +6,7 @@ from direct.showbase import LeakDetectors
 from otp.otpbase import OTPGlobals
 import random
 
-class AIZoneData():
+class AIZoneData:
     __module__ = __name__
     notify = directNotify.newCategory('AIZoneData')
 
@@ -27,7 +27,7 @@ class AIZoneData():
         return getattr(self._data, attr)
 
 
-class AIZoneDataObj():
+class AIZoneDataObj:
     __module__ = __name__
     notify = directNotify.newCategory('AIZoneDataObj')
     DefaultCTravName = 'default'
@@ -180,7 +180,7 @@ class AIZoneDataObj():
         return self._collTravs[cTravName].getRespectPrevTransform()
 
 
-class AIZoneDataStore():
+class AIZoneDataStore:
     __module__ = __name__
     notify = directNotify.newCategory('AIZoneDataStore')
 

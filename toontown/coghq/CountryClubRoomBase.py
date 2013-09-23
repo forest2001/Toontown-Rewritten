@@ -1,6 +1,6 @@
 from toontown.toonbase import ToontownGlobals
 
-class CountryClubRoomBase():
+class CountryClubRoomBase:
     __module__ = __name__
 
     def __init__(self):

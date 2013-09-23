@@ -10,7 +10,7 @@ from toontown.parties.PartyInfo import PartyInfo
 from toontown.parties import PartyUtils
 from toontown.parties.PartyEditorGridSquare import PartyEditorGridSquare
 
-class PartyEditorGrid():
+class PartyEditorGrid:
     __module__ = __name__
     notify = directNotify.newCategory('PartyEditorGrid')
 

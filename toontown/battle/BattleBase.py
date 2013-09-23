@@ -170,7 +170,7 @@ ELEVATOR_T = 4.0
 BATTLE_SMALL_VALUE = 1e-07
 MAX_EXPECTED_DISTANCE_FROM_BATTLE = 50.0
 
-class BattleBase():
+class BattleBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleBase')
     suitPoints = (((Point3(0, 5, 0), 179),),

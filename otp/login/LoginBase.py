@@ -1,6 +1,6 @@
 
 
-class LoginBase():
+class LoginBase:
     __module__ = __name__
     freeTimeExpires = -1
 

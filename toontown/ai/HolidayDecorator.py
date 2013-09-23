@@ -2,7 +2,7 @@ from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import Parallel, Sequence, Func, Wait
 from pandac.PandaModules import Vec4, loadDNAFile, CSDefault, TransformState, NodePath, TransparencyAttrib
 
-class HolidayDecorator():
+class HolidayDecorator:
     __module__ = __name__
 
     def __init__(self):

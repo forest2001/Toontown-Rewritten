@@ -3,7 +3,7 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 import random
 
-class DownloadForceAcknowledge():
+class DownloadForceAcknowledge:
     __module__ = __name__
 
     def __init__(self, doneEvent):

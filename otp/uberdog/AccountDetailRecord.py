@@ -1,6 +1,6 @@
 from otp.otpbase import OTPGlobals
 
-class SubDetailRecord():
+class SubDetailRecord:
     __module__ = __name__
 
     def __init__(self):
@@ -29,7 +29,7 @@ class SubDetailRecord():
         return s
 
 
-class AccountDetailRecord():
+class AccountDetailRecord:
     __module__ = __name__
 
     def __init__(self):

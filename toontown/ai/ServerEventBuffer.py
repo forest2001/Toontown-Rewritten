@@ -1,6 +1,6 @@
 
 
-class ServerEventBuffer():
+class ServerEventBuffer:
     __module__ = __name__
 
     def __init__(self, air, name, avId, period = None):

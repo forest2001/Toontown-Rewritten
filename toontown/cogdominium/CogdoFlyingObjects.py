@@ -10,7 +10,7 @@ from direct.particles import ParticleEffect
 from direct.particles import Particles
 from direct.particles import ForceGroup
 
-class CogdoFlyingGatherableFactory():
+class CogdoFlyingGatherableFactory:
     __module__ = __name__
 
     def __init__(self):
@@ -88,7 +88,7 @@ class CogdoFlyingGatherableFactory():
             del self.f
 
 
-class CogdoFlyingGatherableBase():
+class CogdoFlyingGatherableBase:
     __module__ = __name__
 
     def __init__(self, type):
@@ -340,7 +340,7 @@ class CogdoFlyingPropeller(CogdoFlyingGatherable):
             return False
 
 
-class CogdoFlyingLevelFog():
+class CogdoFlyingLevelFog:
     __module__ = __name__
 
     def __init__(self, level, color = Globals.Level.FogColor):
@@ -372,7 +372,7 @@ class CogdoFlyingLevelFog():
             render.clearFog()
 
 
-class CogdoFlyingPlatform():
+class CogdoFlyingPlatform:
     __module__ = __name__
     CeilingCollName = 'col_ceiling'
     FloorCollName = 'col_floor'

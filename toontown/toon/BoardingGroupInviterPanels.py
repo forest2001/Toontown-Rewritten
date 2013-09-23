@@ -9,7 +9,7 @@ from direct.gui.DirectGui import DGG
 from otp.otpbase import OTPGlobals
 from toontown.toonbase import TTLocalizer
 
-class BoardingGroupInviterPanels():
+class BoardingGroupInviterPanels:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BoardingGroupInviterPanels')
 

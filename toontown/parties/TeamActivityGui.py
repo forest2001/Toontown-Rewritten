@@ -7,7 +7,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.parties import PartyUtils
 from toontown.parties import PartyGlobals
 
-class TeamActivityGui():
+class TeamActivityGui:
     __module__ = __name__
     COUNTDOWN_TASK_NAME = 'updateCountdownTask'
     timer = None

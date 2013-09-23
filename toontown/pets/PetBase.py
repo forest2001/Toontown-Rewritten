@@ -2,7 +2,7 @@ from toontown.pets.PetConstants import AnimMoods
 from toontown.pets import PetMood
 import string
 
-class PetBase():
+class PetBase:
     __module__ = __name__
 
     def getSetterName(self, valueName, prefix = 'set'):

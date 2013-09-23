@@ -8,7 +8,7 @@ from direct.distributed.ClockDelta import *
 from toontown.golf import GolfGlobals
 from toontown.shtiker.GolfPage import GolfTrophy
 
-class GolfRewardDialog():
+class GolfRewardDialog:
     __module__ = __name__
     notify = directNotify.newCategory('GolfRewardDialog')
 

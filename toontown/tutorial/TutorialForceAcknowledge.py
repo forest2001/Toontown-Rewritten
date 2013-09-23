@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 
-class TutorialForceAcknowledge():
+class TutorialForceAcknowledge:
     __module__ = __name__
 
     def __init__(self, doneEvent):

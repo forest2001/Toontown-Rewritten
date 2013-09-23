@@ -8,7 +8,7 @@ from CogdoGameMessageDisplay import CogdoGameMessageDisplay
 import CogdoMazeGameGlobals as Globals
 from CogdoMemoGui import CogdoMemoGui
 
-class CogdoMazeGuiManager():
+class CogdoMazeGuiManager:
     __module__ = __name__
 
     def __init__(self, maze, bossCode):

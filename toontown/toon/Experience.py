@@ -5,7 +5,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.otpbase import OTPGlobals
 
-class Experience():
+class Experience:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Experience')
 

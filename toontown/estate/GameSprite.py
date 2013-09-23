@@ -1,6 +1,6 @@
 import math
 
-class GameSprite():
+class GameSprite:
     __module__ = __name__
     colorRed = (1, 0, 0, 1)
     colorBlue = (0, 0, 1, 1)

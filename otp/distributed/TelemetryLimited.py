@@ -1,6 +1,6 @@
 
 
-class TelemetryLimited():
+class TelemetryLimited:
     __module__ = __name__
     Sng = SerialNumGen()
 

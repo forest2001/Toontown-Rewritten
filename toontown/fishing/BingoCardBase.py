@@ -4,7 +4,7 @@ from toontown.fishing import BingoGlobals
 from direct.showbase import RandomNumGen
 from math import ceil, pow
 
-class BingoCardBase():
+class BingoCardBase:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('BingoCardBase')
 

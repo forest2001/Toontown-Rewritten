@@ -13,7 +13,7 @@ BOARDCODE_PENDING_INVITE = -7
 BOARDCODE_IN_ELEVATOR = -8
 INVITE_ACCEPT_FAIL_GROUP_FULL = -1
 
-class BoardingPartyBase():
+class BoardingPartyBase:
     __module__ = __name__
 
     def __init__(self):

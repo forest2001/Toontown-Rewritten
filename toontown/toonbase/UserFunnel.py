@@ -11,7 +11,7 @@ from direct.task.Task import Task
 from direct.directnotify.DirectNotifyGlobal import directNotify
 notify = directNotify.newCategory('UserFunnel')
 
-class UserFunnel():
+class UserFunnel:
     __module__ = __name__
 
     def __init__(self):
@@ -331,7 +331,7 @@ def getVRSFunnelURL():
     a.getFunnelURL()
 
 
-class HitBoxCookie():
+class HitBoxCookie:
     __module__ = __name__
 
     def __init__(self):

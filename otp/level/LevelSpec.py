@@ -7,7 +7,7 @@ import types
 if __dev__:
     import os
 
-class LevelSpec():
+class LevelSpec:
     __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelSpec')
     SystemEntIds = (LevelConstants.UberZoneEntId, LevelConstants.LevelMgrEntId, LevelConstants.EditMgrEntId)

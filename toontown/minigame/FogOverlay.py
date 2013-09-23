@@ -9,7 +9,7 @@ from toontown.toonbase import ToontownGlobals
 import math
 from math import *
 
-class FogOverlay():
+class FogOverlay:
     __module__ = __name__
     SomeCounter = 0
 

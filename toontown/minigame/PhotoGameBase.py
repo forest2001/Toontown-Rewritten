@@ -1,7 +1,7 @@
 import PhotoGameGlobals
 import random
 
-class PhotoGameBase():
+class PhotoGameBase:
     __module__ = __name__
 
     def __init__(self):

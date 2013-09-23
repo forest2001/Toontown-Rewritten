@@ -1,6 +1,6 @@
 
 
-class AvatarHandle():
+class AvatarHandle:
     __module__ = __name__
     dclassName = 'AvatarHandle'
 

@@ -13,7 +13,7 @@ def smooth(old, new):
     return old * 0.7 + new * 0.3
 
 
-class CogdoFlyingCameraManager():
+class CogdoFlyingCameraManager:
     __module__ = __name__
 
     def __init__(self, cam, parent, player, level):

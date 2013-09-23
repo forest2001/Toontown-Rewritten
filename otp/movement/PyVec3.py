@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 import types
 import math
 
-class PyVec3():
+class PyVec3:
     __module__ = __name__
     Epsilon = 0.0001
     ScalarTypes = (types.FloatType, types.IntType, types.LongType)

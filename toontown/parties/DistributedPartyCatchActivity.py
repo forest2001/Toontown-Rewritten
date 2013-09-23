@@ -36,7 +36,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
      'pineapple': TTLocalizer.PartyCatchActivityPineapples,
      'anvil': TTLocalizer.PartyCatchActivityAnvils}
 
-    class Generation():
+    class Generation:
         __module__ = __name__
 
         def __init__(self, generation, startTime, startNetworkTime, numPlayers):
