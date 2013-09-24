@@ -22,16 +22,58 @@ class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
             DistributedSuitBase.DistributedSuitBase.__init__(self, cr)
             self.activeIntervals = {}
             self.boss = None
-            self.fsm = ClassicFSM.ClassicFSM('DistributedLawbotBossSuit', [State.State('Off', self.enterOff, self.exitOff, ['Walk', 'Battle', 'neutral']),
-             State.State('Walk', self.enterWalk, self.exitWalk, ['WaitForBattle', 'Battle']),
-             State.State('Battle', self.enterBattle, self.exitBattle, []),
-             State.State('neutral', self.enterNeutral, self.exitNeutral, ['PreThrowProsecute', 'PreThrowAttack', 'Stunned']),
-             State.State('PreThrowProsecute', self.enterPreThrowProsecute, self.exitPreThrowProsecute, ['PostThrowProsecute', 'neutral', 'Stunned']),
-             State.State('PostThrowProsecute', self.enterPostThrowProsecute, self.exitPostThrowProsecute, ['neutral', 'Stunned']),
-             State.State('PreThrowAttack', self.enterPreThrowAttack, self.exitPreThrowAttack, ['PostThrowAttack', 'neutral', 'Stunned']),
-             State.State('PostThrowAttack', self.enterPostThrowAttack, self.exitPostThrowAttack, ['neutral', 'Stunned']),
-             State.State('Stunned', self.enterStunned, self.exitStunned, ['neutral']),
-             State.State('WaitForBattle', self.enterWaitForBattle, self.exitWaitForBattle, ['Battle'])], 'Off', 'Off')
+            self.fsm = ClassicFSM.ClassicFSM('DistributedLawbotBossSuit', [
+                State.State('Off',
+                            self.enterOff,
+                            self.exitOff, [
+                                'Walk',
+                                'Battle',
+                                'neutral']),
+                State.State('Walk',
+                            self.enterWalk,
+                            self.exitWalk, [
+                                'WaitForBattle',
+                                'Battle']),
+                State.State('Battle',
+                            self.enterBattle,
+                            self.exitBattle, []),
+                State.State('neutral',
+                            self.enterNeutral,
+                            self.exitNeutral, [
+                                'PreThrowProsecute',
+                                'PreThrowAttack',
+                                'Stunned']),
+                State.State('PreThrowProsecute',
+                            self.enterPreThrowProsecute,
+                            self.exitPreThrowProsecute,
+                            ['PostThrowProsecute',
+                             'neutral',
+                             'Stunned']),
+                State.State('PostThrowProsecute',
+                            self.enterPostThrowProsecute,
+                            self.exitPostThrowProsecute, [
+                                'neutral',
+                                'Stunned']),
+                State.State('PreThrowAttack',
+                            self.enterPreThrowAttack,
+                            self.exitPreThrowAttack, [
+                                'PostThrowAttack',
+                                'neutral',
+                                'Stunned']),
+                State.State('PostThrowAttack',
+                            self.enterPostThrowAttack,
+                            self.exitPostThrowAttack, [
+                                'neutral',
+                                'Stunned']),
+                State.State('Stunned',
+                            self.enterStunned,
+                            self.exitStunned, [
+                                'neutral']),
+                State.State('WaitForBattle',
+                            self.enterWaitForBattle,
+                            self.exitWaitForBattle, [
+                                'Battle'])],
+                'Off', 'Off')
             self.fsm.enterInitialState()
 
         return
