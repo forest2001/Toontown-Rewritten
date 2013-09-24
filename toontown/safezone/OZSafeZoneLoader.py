@@ -16,7 +16,7 @@ from otp.otpbase import OTPGlobals
 import copy
 from toontown.effects import Bubbles
 import random
-if __debug__:
+if (__debug__):
     import pdb
 
 class OZSafeZoneLoader(SafeZoneLoader):
