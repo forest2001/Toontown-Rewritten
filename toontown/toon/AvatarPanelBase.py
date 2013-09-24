@@ -25,12 +25,33 @@ class AvatarPanelBase(AvatarPanel.AvatarPanel):
     def handleIgnore(self):
         isAvatarFriend = base.cr.isFriend(self.avatar.doId)
         isPlayerFriend = base.cr.playerFriendsManager.isAvatarOwnerPlayerFriend(self.avatar.doId)
-        if not isAvatarFriend:
-            isFriend = isPlayerFriend
-            self.dialog = isFriend and TTDialog.TTGlobalDialog(style=TTDialog.CancelOnly, text=TTLocalizer.IgnorePanelAddFriendAvatar % self.avName, text_wordwrap=18.5, text_scale=0.06, cancelButtonText=TTLocalizer.lCancel, doneEvent='IgnoreBlocked', command=self.freeLocalAvatar)
+        isFriend = isAvatarFriend or isPlayerFriend
+        if isFriend:
+            self.dialog = TTDialog.TTGlobalDialog(
+                style=TTDialog.CancelOnly,
+                text=TTLocalizer.IgnorePanelAddFriendAvatar % self.avName,
+                text_wordwrap=18.5,
+                text_scale=0.06,
+                cancelButtonText=TTLocalizer.lCancel,
+                doneEvent='IgnoreBlocked',
+                command=self.freeLocalAvatar)
         else:
-            self.dialog = TTDialog.TTGlobalDialog(style=TTDialog.TwoChoice, text=TTLocalizer.IgnorePanelAddIgnore % self.avName, text_wordwrap=18.5, text_scale=TTLocalizer.APBdialog, okButtonText=TTLocalizer.AvatarPanelIgnore, cancelButtonText=TTLocalizer.lCancel, doneEvent='IgnoreConfirm', command=self.handleIgnoreConfirm)
-        DirectLabel(parent=self.dialog, relief=None, pos=(0, TTLocalizer.APBdirectLabelPosY, 0.125), text=TTLocalizer.IgnorePanelTitle, textMayChange=0, text_scale=0.08)
+            self.dialog = TTDialog.TTGlobalDialog(
+                style=TTDialog.TwoChoice,
+                text=TTLocalizer.IgnorePanelAddIgnore % self.avName,
+                text_wordwrap=18.5,
+                text_scale=TTLocalizer.APBdialog,
+                okButtonText=TTLocalizer.AvatarPanelIgnore,
+                cancelButtonText=TTLocalizer.lCancel,
+                doneEvent='IgnoreConfirm',
+                command=self.handleIgnoreConfirm)
+        DirectLabel(
+            parent=self.dialog,
+            relief=None,
+            pos=(0, TTLocalizer.APBdirectLabelPosY, 0.125),
+            text=TTLocalizer.IgnorePanelTitle,
+            textMayChange=0,
+            text_scale=0.08)
         self.dialog.show()
         self.__acceptStoppedStateMsg()
         self.requestStopped()
