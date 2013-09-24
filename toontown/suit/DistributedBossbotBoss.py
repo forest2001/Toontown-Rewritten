@@ -325,7 +325,40 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         def getCamRTPos(rNode = rNode):
             return rNode.getPos(render)
 
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(90, 0, 0)), LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech), Wait(3.0), Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)), LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech), Wait(1.0), LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(self.banquetDoor.setH, 0), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+        track = Sequence(
+            Func(camera.reparentTo, render),
+            Func(camera.setPos, rToon, 0, 22, 6),
+            Func(camera.setHpr, 0, 0, 0),
+            Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech),
+            Wait(3.0),
+            self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True),
+            Func(rToon.clearChat),
+            Func(self.setPosHpr, bossPos, Point3(0, 0, 0)),
+            Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(90, 0, 0)),
+                     LerpPosInterval(camera, 2, getCamBossPos)),
+            Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech),
+            Wait(3.0),
+            Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech),
+            Wait(3.0),
+            Parallel(
+                LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)),
+                LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))),
+            Func(self.setPos, bossEndPos),
+            Func(self.clearChat),
+            Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech),
+            Wait(3.0),
+            Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech),
+            Wait(1.0),
+            LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)),
+            Sequence(
+                Func(rToon.suit.loop, 'walk'),
+                rToon.hprInterval(1, VBase3(90, 0, 0)),
+                rToon.posInterval(2.5, rToonEndPos),
+                Func(rToon.suit.loop, 'neutral')),
+            self.createWalkInInterval(),
+            Func(self.banquetDoor.setH, 0),
+            Func(rToon.clearChat),
+            Func(self.__hideResistanceToon))
         return track
 
     def createWalkInInterval(self):
@@ -523,7 +556,25 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def makePrepareBattleThreeMovie(self):
         loseSuitCamAngle = (0, 19, 6, -180, -5, 0)
-        track = Sequence(Func(camera.reparentTo, self), Func(camera.setPos, Point3(0, -45, 5)), Func(camera.setHpr, Point3(0, 14, 0)), Func(self.setChatAbsolute, TTL.BossbotPhase3Speech1, CFSpeech), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotPhase3Speech2, CFSpeech), Wait(3.0), Func(camera.setPosHpr, base.localAvatar, *loseSuitCamAngle), Wait(1.0), self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle), self.toonNormalEyes(self.involvedToons), Wait(2), Func(camera.reparentTo, self), Func(camera.setPos, Point3(0, -45, 5)), Func(camera.setHpr, Point3(0, 14, 0)), Func(self.setChatAbsolute, TTL.BossbotPhase3Speech3, CFSpeech), Wait(3.0), Func(self.clearChat))
+        track = Sequence(
+            Func(camera.reparentTo, self),
+            Func(camera.setPos, Point3(0, -45, 5)),
+            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(self.setChatAbsolute, TTL.BossbotPhase3Speech1, CFSpeech),
+            Wait(3.0),
+            Func(self.setChatAbsolute, TTL.BossbotPhase3Speech2, CFSpeech),
+            Wait(3.0),
+            Func(camera.setPosHpr, base.localAvatar, *loseSuitCamAngle),
+            Wait(1.0),
+            self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle),
+            self.toonNormalEyes(self.involvedToons),
+            Wait(2),
+            Func(camera.reparentTo, self),
+            Func(camera.setPos, Point3(0, -45, 5)),
+            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(self.setChatAbsolute, TTL.BossbotPhase3Speech3, CFSpeech),
+            Wait(3.0),
+            Func(self.clearChat))
         return track
 
     def enterBattleThree(self):
@@ -573,7 +624,30 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def makePrepareBattleFourMovie(self):
         rToon = self.resistanceToon
         offsetZ = rToon.suit.getHeight() / 2.0
-        track = Sequence(Func(self.__showResistanceToon, True), Func(rToon.setPos, Point3(0, -5, 0)), Func(rToon.setHpr, Point3(0, 0, 0)), Func(camera.reparentTo, rToon), Func(camera.setPos, Point3(0, 13, 3 + offsetZ)), Func(camera.setHpr, Point3(-180, 0, 0)), Func(self.banquetDoor.setH, 90), Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech1, CFSpeech), Wait(4.0), Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech2, CFSpeech), Wait(4.0), Func(self.__hideResistanceToon), Func(camera.reparentTo, self), Func(camera.setPos, Point3(0, -45, 5)), Func(camera.setHpr, Point3(0, 14, 0)), Func(self.setChatAbsolute, TTL.BossbotPhase4Speech1, CFSpeech), Func(self.banquetDoor.setH, 0), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotPhase4Speech2, CFSpeech), Func(self.bossClub.setScale, 0.01), Func(self.bossClub.reparentTo, self.rightHandJoint), LerpScaleInterval(self.bossClub, 3, Point3(1, 1, 1)), Func(self.clearChat))
+        track = Sequence(
+            Func(self.__showResistanceToon, True),
+            Func(rToon.setPos, Point3(0, -5, 0)),
+            Func(rToon.setHpr, Point3(0, 0, 0)),
+            Func(camera.reparentTo, rToon),
+            Func(camera.setPos, Point3(0, 13, 3 + offsetZ)),
+            Func(camera.setHpr, Point3(-180, 0, 0)),
+            Func(self.banquetDoor.setH, 90),
+            Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech1, CFSpeech),
+            Wait(4.0),
+            Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech2, CFSpeech),
+            Wait(4.0),
+            Func(self.__hideResistanceToon),
+            Func(camera.reparentTo, self),
+            Func(camera.setPos, Point3(0, -45, 5)),
+            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(self.setChatAbsolute, TTL.BossbotPhase4Speech1, CFSpeech),
+            Func(self.banquetDoor.setH, 0),
+            Wait(3.0),
+            Func(self.setChatAbsolute, TTL.BossbotPhase4Speech2, CFSpeech),
+            Func(self.bossClub.setScale, 0.01),
+            Func(self.bossClub.reparentTo, self.rightHandJoint),
+            LerpScaleInterval(self.bossClub, 3, Point3(1, 1, 1)),
+            Func(self.clearChat))
         return track
 
     def __onToBattleFour(self, elapsedTime = 0):
@@ -659,7 +733,28 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         dustCloud.createTrack(12)
         newHpr = self.getHpr()
         newHpr.setX(newHpr.getX() + 180)
-        bossTrack = Sequence(Func(self.show), Func(camera.reparentTo, self), Func(camera.setPos, Point3(0, -35, 25)), Func(camera.setHpr, Point3(0, -20, 0)), Func(self.setChatAbsolute, TTL.BossbotRewardSpeech1, CFSpeech), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotRewardSpeech2, CFSpeech), Wait(2.0), Func(self.clearChat), Parallel(Sequence(Wait(0.5), Func(self.demotedCeo.setPos, self.getPos()), Func(self.demotedCeo.setHpr, newHpr), Func(self.hide), Wait(0.5), Func(self.demotedCeo.reparentTo, self.geom), Func(self.demotedCeo.unstash)), Sequence(dustCloud.track)), Wait(2.0), Func(dustCloud.destroy))
+        bossTrack = Sequence(
+            Func(self.show),
+            Func(camera.reparentTo, self),
+            Func(camera.setPos, Point3(0, -35, 25)),
+            Func(camera.setHpr, Point3(0, -20, 0)),
+            Func(self.setChatAbsolute, TTL.BossbotRewardSpeech1, CFSpeech),
+            Wait(3.0),
+            Func(self.setChatAbsolute, TTL.BossbotRewardSpeech2, CFSpeech),
+            Wait(2.0),
+            Func(self.clearChat),
+            Parallel(
+                Sequence(
+                    Wait(0.5),
+                    Func(self.demotedCeo.setPos, self.getPos()),
+                    Func(self.demotedCeo.setHpr, newHpr),
+                    Func(self.hide),
+                    Wait(0.5),
+                    Func(self.demotedCeo.reparentTo, self.geom),
+                    Func(self.demotedCeo.unstash)),
+                Sequence(dustCloud.track)),
+            Wait(2.0),
+            Func(dustCloud.destroy))
         return bossTrack
 
     def enterReward(self):
