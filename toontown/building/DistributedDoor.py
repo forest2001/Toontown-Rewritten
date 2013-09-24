@@ -16,7 +16,7 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 from toontown.distributed.DelayDeletable import DelayDeletable
-if __debug__:
+if (__debug__):
     import pdb
 
 class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):

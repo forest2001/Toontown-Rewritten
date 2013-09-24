@@ -9,7 +9,7 @@ from toontown.safezone.GSPlayground import GSPlayground
 from toontown.effects.CarSmoke import CarSmoke
 from toontown.toonbase import ToontownGlobals
 import random
-if __debug__:
+if (__debug__):
     import pdb
 
 class GSSafeZoneLoader(SafeZoneLoader):

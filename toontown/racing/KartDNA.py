@@ -4,7 +4,7 @@ from toontown.toonbase import TTLocalizer
 from pandac.PandaModules import *
 from KartShopGlobals import *
 import types
-if __debug__:
+if (__debug__):
     import pdb
 import copy
 KartDNA = PythonUtil.Enum('bodyType, bodyColor, accColor,                             ebType, spType, fwwType,                             bwwType, rimsType, decalType')

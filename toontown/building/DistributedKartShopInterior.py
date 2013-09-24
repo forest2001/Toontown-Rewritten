@@ -5,7 +5,7 @@ from toontown.building import ToonInteriorColors
 from toontown.hood import ZoneUtil
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import *
-if __debug__:
+if (__debug__):
     import pdb
 
 class DistributedKartShopInterior(DistributedObject):

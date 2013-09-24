@@ -3,7 +3,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Parallel, Sequence, Wait, HprInterval, LerpHprInterval, SoundInterval
 from toontown.building import DistributedDoor
 from toontown.building import DoorTypes
-if __debug__:
+if (__debug__):
     import pdb
 
 class DistributedAnimDoor(DistributedDoor.DistributedDoor):

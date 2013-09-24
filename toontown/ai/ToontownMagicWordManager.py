@@ -28,7 +28,7 @@ from toontown.rpc import AwardManagerConsts
 if base.wantKarts:
     from toontown.racing.KartDNA import *
     from toontown.racing.KartShopGui import *
-if __debug__:
+if (__debug__):
     import pdb
 
 class ToontownMagicWordManager(MagicWordManager.MagicWordManager):
