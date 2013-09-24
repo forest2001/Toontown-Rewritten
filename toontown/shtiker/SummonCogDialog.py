@@ -36,7 +36,7 @@ class SummonCogDialog(DirectFrame, StateData.StateData):
 
     def load(self):
         if self.isLoaded == 1:
-            return
+            return None
         self.isLoaded = 1
         gui = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
@@ -59,7 +59,7 @@ class SummonCogDialog(DirectFrame, StateData.StateData):
 
     def enter(self):
         if self.isEntered == 1:
-            return
+            return None
         self.isEntered = 1
         if self.isLoaded == 0:
             self.load()
