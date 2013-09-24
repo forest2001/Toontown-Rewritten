@@ -22,7 +22,7 @@ from toontown.racing.KartShopGlobals import KartGlobals
 from toontown.racing import RaceGlobals
 from toontown.toontowngui.TTDialog import TTGlobalDialog
 from toontown.toontowngui.TeaserPanel import TeaserPanel
-if __debug__:
+if (__debug__):
     import pdb
 
 class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
@@ -56,7 +56,7 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
         self.kart = None
         self.holeActor = None
         self.exitRequested = False
-        if __debug__:
+        if (__debug__):
             self.testLOD = False
         self.id = DistributedStartingBlock.id
         DistributedStartingBlock.id += 1
@@ -109,7 +109,7 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.nodePath.reparentTo(render)
         self.accept(self.uniqueName('enterStartingBlockSphere'), self.__handleEnterSphere)
-        if __debug__:
+        if (__debug__):
             if self.testLOD:
                 self.__generateKartAppearTrack()
 
@@ -360,7 +360,29 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
             self.kart.reparentTo(self.kartNode)
             return Parallel()
         self.kart.setScale(0.1)
-        kartTrack = Parallel(Sequence(ActorInterval(self.av, 'feedPet'), Func(self.av.loop, 'neutral')), Sequence(Func(self.kart.setActiveShadow, False), Func(self.kart.reparentTo, self.av.rightHand), Wait(2.1), Func(self.kart.wrtReparentTo, render), Func(self.kart.setShear, 0, 0, 0), Parallel(LerpHprInterval(self.kart, hpr=self.kartNode.getHpr(render), duration=1.2), ProjectileInterval(self.kart, endPos=self.kartNode.getPos(render), duration=1.2, gravityMult=0.45)), Wait(0.2), Func(self.kart.setActiveShadow, True), Sequence(LerpScaleInterval(self.kart, scale=Point3(1.1, 1.1, 0.1), duration=0.2), LerpScaleInterval(self.kart, scale=Point3(0.9, 0.9, 0.1), duration=0.1), LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 0.1), duration=0.1), LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 1.1), duration=0.2), LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 0.9), duration=0.1), LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 1.0), duration=0.1), Func(self.kart.wrtReparentTo, self.kartNode))))
+        kartTrack = Parallel(
+            Sequence(
+                ActorInterval(self.av, 'feedPet'),
+                Func(self.av.loop, 'neutral')),
+            Sequence(
+                Func(self.kart.setActiveShadow, False),
+                Func(self.kart.reparentTo, self.av.rightHand),
+                Wait(2.1),
+                Func(self.kart.wrtReparentTo, render),
+                Func(self.kart.setShear, 0, 0, 0),
+                Parallel(
+                    LerpHprInterval(self.kart,  hpr=self.kartNode.getHpr(render), duration=1.2),
+                    ProjectileInterval(self.kart, endPos=self.kartNode.getPos(render), duration=1.2, gravityMult=0.45)),
+                Wait(0.2),
+                Func(self.kart.setActiveShadow, True),
+                Sequence(
+                    LerpScaleInterval(self.kart, scale=Point3(1.1, 1.1, 0.1), duration=0.2),
+                    LerpScaleInterval(self.kart, scale=Point3(0.9, 0.9, 0.1), duration=0.1),
+                    LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 0.1), duration=0.1),
+                    LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 1.1), duration=0.2),
+                    LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 0.9), duration=0.1),
+                    LerpScaleInterval(self.kart, scale=Point3(1.0, 1.0, 1.0), duration=0.1),
+                    Func(self.kart.wrtReparentTo, self.kartNode))))
         return kartTrack
 
     def generateToonJumpTrack(self):
@@ -376,7 +398,12 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
                 hpr = node.getHpr(av.getParent())
                 return hpr
 
-            toonJumpTrack = Parallel(ActorInterval(av, 'jump'), Sequence(Wait(0.43), Parallel(LerpHprInterval(av, hpr=getJumpHpr, duration=0.9), ProjectileInterval(av, endPos=getJumpDest, duration=0.9))))
+            toonJumpTrack = Parallel(
+                ActorInterval(av, 'jump'),
+                Sequence(Wait(0.43),
+                         Parallel(
+                             LerpHprInterval(av, hpr=getJumpHpr, duration=0.9),
+                             ProjectileInterval(av, endPos=getJumpDest, duration=0.9))))
             return toonJumpTrack
 
         def getToonSitTrack(av):
@@ -385,7 +412,14 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
 
         toonJumpTrack = getToonJumpTrack(self.av, self.kart)
         toonSitTrack = getToonSitTrack(self.av)
-        jumpTrack = Sequence(Parallel(toonJumpTrack, Sequence(Wait(1), toonSitTrack)), Func(self.av.setPosHpr, 0, 0.45, -0.25, 0, 0, 0), Func(self.av.reparentTo, self.kart.toonSeat))
+        jumpTrack = Sequence(
+            Parallel(
+                toonJumpTrack,
+                Sequence(
+                    Wait(1),
+                    toonSitTrack)),
+                Func(self.av.setPosHpr, 0, 0.45, -.25, 0, 0, 0),
+                Func(self.av.reparentTo, self.kart.toonSeat))
         return jumpTrack
 
     def generateToonReverseJumpTrack(self):
@@ -421,7 +455,16 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
     def generateKartDisappearTrack(self):
 
         def getHoleTrack(hole, holeParent):
-            holeTrack = Sequence(Wait(0.2), Func(hole.setBin, 'shadow', 0), Func(hole.setDepthTest, 0), Func(hole.setDepthWrite, 0), Func(hole.reparentTo, holeParent), Func(hole.setPos, holeParent, Point3(0, 0.0, -0.6)), ActorInterval(hole, 'hole', startTime=3.4, endTime=3.1), Wait(0.4), ActorInterval(hole, 'hole', startTime=3.1, endTime=3.4))
+            holeTrack = Sequence(
+                Wait(0.2),
+                Func(hole.setBin, 'shadow', 0),
+                Func(hole.setDepthTest, 0),
+                Func(hole.setDepthWrite, 0),
+                Func(hole.reparentTo, holeParent),
+                Func(hole.setPos, holeParent, Point3(0, 0.0, -.6)),
+                ActorInterval(hole, 'hole', startTime=3.4, endTime=3.1),
+                Wait(0.4),
+                ActorInterval(hole, 'hole', startTime=3.1, endTime=3.4))
             return holeTrack
 
         def getKartShrinkTrack(kart):
@@ -549,7 +592,7 @@ class DistributedViewingBlock(DistributedStartingBlock):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.nodePath.reparentTo(render)
         self.accept(self.uniqueName('enterStartingBlockSphere'), self.__handleEnterSphere)
-        if __debug__:
+        if (__debug__):
             if self.testLOD:
                 self.__generateKartAppearTrack()
 
@@ -602,7 +645,7 @@ class DistributedViewingBlock(DistributedStartingBlock):
             return
         self.timer = ToontownTimer()
         self.timer.setScale(0.3)
-        self.timer.setPos(1.16, 0, -0.73)
+        self.timer.setPos(1.16, 0, -.73)
         self.timer.hide()
         DistributedStartingBlock.makeGui(self)
         return
