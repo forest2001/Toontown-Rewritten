@@ -302,9 +302,66 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         attackToons = TTLocalizer.BossCogAttackToons
         interruptBoss = TTLocalizer.CagedToonInterruptBoss
         rescueQuery = TTLocalizer.CagedToonRescueQuery
-        bossAnimTrack = Sequence(ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1), ActorInterval(self, 'ltTurn2Wave', duration=2), ActorInterval(self, 'wave', duration=4, loop=1), ActorInterval(self, 'ltTurn2Wave', startTime=2, endTime=0), ActorInterval(self, 'Ff_speech', duration=7, loop=1))
+        bossAnimTrack = Sequence(
+            ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
+            ActorInterval(self, 'ltTurn2Wave', duration=2),
+            ActorInterval(self, 'wave', duration=4, loop=1),
+            ActorInterval(self, 'ltTurn2Wave', startTime=2, endTime=0),
+            ActorInterval(self, 'Ff_speech', duration=7, loop=1))
         track.append(bossAnimTrack)
-        dialogTrack = Track((0, Parallel(camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'), IndirectInterval(toonTrack, 0, 18))), (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech)), (9, IndirectInterval(dooberTrack, 0, 9)), (10, Sequence(Func(self.clearChat), Func(camera.setPosHpr, -23.1, 15.7, 17.2, -160, -2.4, 0))), (12, Func(self.setChatAbsolute, doobersAway, CFSpeech)), (16, Parallel(Func(self.clearChat), Func(camera.setPosHpr, -25, -99, 10, -14, 10, 0), IndirectInterval(dooberTrack, 14), IndirectInterval(toonTrack, 30))), (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech)), (22, Func(self.setChatAbsolute, promoteToons, CFSpeech)), (22.2, Sequence(Func(self.cagedToon.nametag3d.setScale, 2), Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech), ActorInterval(self.cagedToon, 'wave'), Func(self.cagedToon.loop, 'neutral'))), (25, Sequence(Func(self.clearChat), Func(self.cagedToon.clearChat), Func(camera.setPosHpr, -12, -15, 27, -151, -15, 0), ActorInterval(self, 'Ff_lookRt'))), (27, Sequence(Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech), Func(camera.setPosHpr, -12, 48, 94, -26, 20, 0), ActorInterval(self.cagedToon, 'wave'), Func(self.cagedToon.loop, 'neutral'))), (31, Sequence(Func(camera.setPosHpr, -20, -35, 10, -88, 25, 0), Func(self.setChatAbsolute, discoverToons, CFSpeech), Func(self.cagedToon.nametag3d.setScale, 1), Func(self.cagedToon.clearChat), ActorInterval(self, 'turn2Fb'))), (34, Sequence(Func(self.clearChat), self.loseCogSuits(self.toonsA, self.battleANode, (0, 18, 5, -180, 0, 0)), self.loseCogSuits(self.toonsB, self.battleBNode, (0, 18, 5, -180, 0, 0)))), (37, Sequence(self.toonNormalEyes(self.involvedToons), Func(camera.setPosHpr, -23.4, -145.6, 44.0, -10.0, -12.5, 0), Func(self.loop, 'Fb_neutral'), Func(self.rampA.request, 'retract'), Func(self.rampB.request, 'retract'), Parallel(self.backupToonsToBattlePosition(self.toonsA, self.battleANode), self.backupToonsToBattlePosition(self.toonsB, self.battleBNode), Sequence(Wait(2), Func(self.setChatAbsolute, attackToons, CFSpeech))))))
+        dialogTrack = Track(
+            (0, Parallel(
+                camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
+                IndirectInterval(toonTrack, 0, 18))),
+            (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech)),
+            (9, IndirectInterval(dooberTrack, 0, 9)),
+            (10, Sequence(
+                Func(self.clearChat),
+                Func(camera.setPosHpr, -23.1, 15.7, 17.2, -160, -2.4, 0))),
+            (12, Func(self.setChatAbsolute, doobersAway, CFSpeech)),
+            (16, Parallel(
+                Func(self.clearChat),
+                Func(camera.setPosHpr, -25, -99, 10, -14, 10, 0),
+                IndirectInterval(dooberTrack, 14),
+                IndirectInterval(toonTrack, 30))),
+            (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech)),
+            (22, Func(self.setChatAbsolute, promoteToons, CFSpeech)),
+            (22.2, Sequence(
+                Func(self.cagedToon.nametag3d.setScale, 2),
+                Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech),
+                ActorInterval(self.cagedToon, 'wave'),
+                Func(self.cagedToon.loop, 'neutral'))),
+            (25, Sequence(
+                Func(self.clearChat),
+                Func(self.cagedToon.clearChat),
+                Func(camera.setPosHpr, -12, -15, 27, -151, -15, 0),
+                ActorInterval(self, 'Ff_lookRt'))),
+            (27, Sequence(
+                Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech),
+                Func(camera.setPosHpr, -12, 48, 94, -26, 20, 0),
+                ActorInterval(self.cagedToon, 'wave'),
+                Func(self.cagedToon.loop, 'neutral'))),
+            (31, Sequence(
+                Func(camera.setPosHpr, -20, -35, 10, -88, 25, 0),
+                Func(self.setChatAbsolute, discoverToons, CFSpeech),
+                Func(self.cagedToon.nametag3d.setScale, 1),
+                Func(self.cagedToon.clearChat),
+                ActorInterval(self, 'turn2Fb'))),
+            (34, Sequence(
+                Func(self.clearChat),
+                self.loseCogSuits(self.toonsA, self.battleANode, (0, 18, 5, -180, 0, 0)),
+                self.loseCogSuits(self.toonsB, self.battleBNode, (0, 18, 5, -180, 0, 0)))),
+            (37, Sequence(
+                self.toonNormalEyes(self.involvedToons),
+                Func(camera.setPosHpr, -23.4, -145.6, 44.0, -10.0, -12.5, 0),
+                Func(self.loop, 'Fb_neutral'),
+                Func(self.rampA.request, 'retract'),
+                Func(self.rampB.request, 'retract'),
+                Parallel(self.backupToonsToBattlePosition(self.toonsA, self.battleANode),
+                         self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
+                         Sequence(
+                             Wait(2),
+                             Func(self.setChatAbsolute, attackToons, CFSpeech))))))
         track.append(dialogTrack)
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 
@@ -335,10 +392,10 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def cagedToonMovieFunction(self, instruct, cageIndex):
         self.notify.debug('cagedToonMovieFunction()')
-        if hasattr(self, 'cagedToon'):
-            if hasattr(self.cagedToon, 'nametag'):
-                return hasattr(self.cagedToon, 'nametag3d') or None
-            instruct == 1 and self.cagedToon.nametag3d.setScale(2)
+        if not (hasattr(self, 'cagedToon') and hasattr(self.cagedToon, 'nametag') and hasattr(self.cagedToon, 'nametag3d')):
+            return
+        if instruct == 1:
+            self.cagedToon.nametag3d.setScale(2)
         elif instruct == 2:
             self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonDrop[cageIndex], CFSpeech)
         elif instruct == 3:
@@ -403,7 +460,27 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         speech = TTLocalizer.CagedToonThankYou
         speech = self.__talkAboutPromotion(speech)
         name = self.uniqueName('CageOpen')
-        seq = Sequence(Func(self.cage.setPos, self.cagePos[4]), Func(self.cageDoor.setHpr, VBase3(0, 0, 0)), Func(self.cagedToon.setPos, Point3(0, -2, 0)), Parallel(self.cage.posInterval(0.5, self.cagePos[5], blendType='easeOut'), SoundInterval(self.cageLowerSfx, duration=0.5)), Parallel(self.cageDoor.hprInterval(0.5, VBase3(0, 90, 0), blendType='easeOut'), Sequence(SoundInterval(self.cageDoorSfx), duration=0)), Wait(0.2), Func(self.cagedToon.loop, 'walk'), self.cagedToon.posInterval(0.8, Point3(0, -6, 0)), Func(self.cagedToon.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech), ActorInterval(self.cagedToon, 'jump'), Func(self.cagedToon.loop, 'neutral'), Func(self.cagedToon.headsUp, localAvatar), Func(self.cagedToon.setLocalPageChat, speech, 0), Func(camera.reparentTo, localAvatar), Func(camera.setPos, 0, -9, 9), Func(camera.lookAt, self.cagedToon, Point3(0, 0, 2)), name=name)
+        seq = Sequence(
+            Func(self.cage.setPos, self.cagePos[4]),
+            Func(self.cageDoor.setHpr, VBase3(0, 0, 0)),
+            Func(self.cagedToon.setPos, Point3(0, -2, 0)),
+            Parallel(
+                self.cage.posInterval(0.5, self.cagePos[5], blendType='easeOut'),
+                SoundInterval(self.cageLowerSfx, duration=0.5)),
+            Parallel(
+                self.cageDoor.hprInterval(0.5, VBase3(0, 90, 0), blendType='easeOut'),
+                Sequence(SoundInterval(self.cageDoorSfx), duration=0)),
+            Wait(0.2),
+            Func(self.cagedToon.loop, 'walk'),
+            self.cagedToon.posInterval(0.8, Point3(0, -6, 0)),
+            Func(self.cagedToon.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech),
+            ActorInterval(self.cagedToon, 'jump'),
+            Func(self.cagedToon.loop, 'neutral'),
+            Func(self.cagedToon.headsUp, localAvatar),
+            Func(self.cagedToon.setLocalPageChat, speech, 0),
+            Func(camera.reparentTo, localAvatar),
+            Func(camera.setPos, 0, -9, 9),
+            Func(camera.lookAt, self.cagedToon, Point3(0, 0, 2)), name=name)
         return seq
 
     def __showOnscreenMessage(self, text):
@@ -508,11 +585,33 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         children = ramp.getChildren()
         animate = ramp.attachNewNode(name)
         children.reparentTo(animate)
-        fsm = ClassicFSM.ClassicFSM(name, [State.State('extend', Functor(self.enterRampExtend, animate), Functor(self.exitRampExtend, animate), ['extended', 'retract', 'retracted']),
-         State.State('extended', Functor(self.enterRampExtended, animate), Functor(self.exitRampExtended, animate), ['retract', 'retracted']),
-         State.State('retract', Functor(self.enterRampRetract, animate), Functor(self.exitRampRetract, animate), ['extend', 'extended', 'retracted']),
-         State.State('retracted', Functor(self.enterRampRetracted, animate), Functor(self.exitRampRetracted, animate), ['extend', 'extended']),
-         State.State('off', Functor(self.enterRampOff, animate), Functor(self.exitRampOff, animate))], 'off', 'off', onUndefTransition=ClassicFSM.ClassicFSM.DISALLOW)
+        fsm = ClassicFSM.ClassicFSM(name, [
+            State.State('extend',
+                        Functor(self.enterRampExtend, animate),
+                        Functor(self.exitRampExtend, animate), [
+                            'extended',
+                            'retract',
+                            'retracted']),
+         State.State('extended',
+                     Functor(self.enterRampExtended, animate),
+                     Functor(self.exitRampExtended, animate), [
+                         'retract',
+                         'retracted']),
+         State.State('retract',
+                     Functor(self.enterRampRetract, animate),
+                     Functor(self.exitRampRetract, animate), [
+                         'extend',
+                         'extended',
+                         'retracted']),
+         State.State('retracted',
+                     Functor(self.enterRampRetracted, animate),
+                     Functor(self.exitRampRetracted, animate), [
+                         'extend',
+                         'extended']),
+         State.State('off',
+                     Functor(self.enterRampOff, animate),
+                     Functor(self.exitRampOff, animate))],
+         'off', 'off', onUndefTransition=ClassicFSM.ClassicFSM.DISALLOW)
         fsm.enterInitialState()
         return fsm
 
