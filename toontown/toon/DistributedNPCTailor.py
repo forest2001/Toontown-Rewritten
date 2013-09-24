@@ -224,12 +224,47 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
             okButtonImage = (buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr'))
             cancelButtonImage = (buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr'))
-            self.popupInfo = DirectFrame(parent=hidden, relief=None, state='normal', text=TTLocalizer.STOREOWNER_CONFIRM_LOSS, text_wordwrap=10, textMayChange=0, frameSize=(-1, 1, -1, 1), text_pos=(0, -0.05), geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -0.18), text_scale=0.08)
-            DirectButton(self.popupInfo, image=okButtonImage, relief=None, text=TTLocalizer.STOREOWNER_OK, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(-0.08, 0.0, -0.31), command=self.__handleConfirmLossOK, extraArgs=[finished, which])
-            DirectButton(self.popupInfo, image=cancelButtonImage, relief=None, text=TTLocalizer.STOREOWNER_CANCEL, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.08, 0.0, -0.31), command=self.__handleConfirmLossCancel)
+            self.popupInfo = DirectFrame(
+                parent=hidden,
+                relief=None,
+                state='normal',
+                text=TTLocalizer.STOREOWNER_CONFIRM_LOSS,
+                text_wordwrap=10,
+                textMayChange=0,
+                frameSize=(-1, 1, -1, 1),
+                text_pos=(0, -0.05),
+                geom=DGG.getDefaultDialogGeom(),
+                geom_color=ToontownGlobals.GlobalDialogColor,
+                geom_scale=(0.88, 1, 0.55),
+                geom_pos=(0, 0, -.18),
+                text_scale=0.08)
+
+            DirectButton(
+                self.popupInfo,
+                image=okButtonImage,
+                relief=None,
+                text=TTLocalizer.STOREOWNER_OK,
+                text_scale=0.05,
+                text_pos=(0.0, -0.1),
+                textMayChange=0,
+                pos=(-0.08, 0.0, -0.31),
+                command=self.__handleConfirmLossOK,
+                extraArgs=[finished, which])
+
+            DirectButton(
+                self.popupInfo,
+                image=cancelButtonImage,
+                relief=None,
+                text=TTLocalizer.STOREOWNER_CANCEL,
+                text_scale=0.05,
+                text_pos=(0.0, -0.1),
+                textMayChange=0,
+                pos=(0.08, 0.0, -0.31),
+                command=self.__handleConfirmLossCancel)
+
             buttons.removeNode()
+
         self.popupInfo.reparentTo(aspect2d)
-        return
 
     def __handleConfirmLossOK(self, finished, which):
         self.d_setDNA(self.av.getStyle().makeNetString(), finished, which)
