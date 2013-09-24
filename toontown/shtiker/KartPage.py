@@ -10,7 +10,7 @@ from toontown.racing import RaceGlobals
 from toontown.shtiker.ShtikerPage import ShtikerPage
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from FishPage import FishingTrophy
-if __debug__:
+if (__debug__):
     import pdb
 PageMode = PythonUtil.Enum('Customize, Records, Trophy')
 
@@ -140,13 +140,13 @@ class KartCustomizeUI(DirectFrame):
          'rotate_right_down',
          'rotate_right_roll',
          'rotate_right_down',
-         (0.275, -0.08)], ['rotate_left_up',
+         (0.275, -.08)], ['rotate_left_up',
          'rotate_left_down',
          'rotate_left_roll',
          'rotate_left_down',
-         (-0.27, -0.08)], (0, -0.08))
-        self.kartViewer.uiRotateLeft.setZ(-0.25)
-        self.kartViewer.uiRotateRight.setZ(-0.25)
+         (-.27, -.08)], (0, -.08))
+        self.kartViewer.uiRotateLeft.setZ(-.25)
+        self.kartViewer.uiRotateRight.setZ(-.25)
         self.itemSelector.itemViewers['main'].leftArrowButton.setZ(self.kartViewer.getZ() + 0.25)
         self.itemSelector.itemViewers['main'].rightArrowButton.setZ(self.kartViewer.getZ() + 0.25)
         self.kartViewer.setBounds(-0.38, 0.38, -0.25, 0.325)
@@ -570,7 +570,7 @@ class ItemSelector(DirectFrame):
                 uiRootNode = loader.loadModel('phase_6/models/gui/ShtikerBookUI')
                 self.confirmDlg = DirectFrame(parent=aspect2d, relief=None, geom=uiRootNode.find('**/uiAccessoryNotice'), geom_scale=1.0, text=TTLocalizer.KartPageConfirmDelete, text_scale=0.07, text_pos=(0, 0.022))
                 self.confirmDlg.hide()
-                self.confirmDlg.setPos(aspect2d, 0, -0.195, -0.195)
+                self.confirmDlg.setPos(aspect2d, 0, -.195, -.195)
                 self.cancelButton = DirectButton(parent=self.confirmDlg, relief=None, image=(uiRootNode.find('**/CancelButtonUp'), uiRootNode.find('**/CancelButtonDown'), uiRootNode.find('**/CancelButtonRollover')), geom=uiRootNode.find('**/CancelIcon'), scale=1.0, pressEffect=False, command=self.confirmDlg.hide)
                 self.confirmButton = DirectButton(parent=self.confirmDlg, relief=None, image=(uiRootNode.find('**/CheckButtonUp'), uiRootNode.find('**/CheckButtonDown'), uiRootNode.find('**/CheckButtonRollover')), geom=uiRootNode.find('**/CheckIcon'), scale=1.0, pressEffect=False, command=self.__handleItemDelete)
             self.confirmDlg.show()
@@ -999,7 +999,7 @@ class RacingTrophy(DirectFrame):
                 self.__bronze()
             elif level % 10 % 3 == 1:
                 self.column.setScale(1.3229, 1.26468, 1.61878)
-                self.top.setPos(0, 0, -0.5)
+                self.top.setPos(0, 0, -.5)
                 self.__silver()
             elif level % 10 % 3 == 2:
                 self.column.setScale(1.3229, 1.26468, 2.11878)
