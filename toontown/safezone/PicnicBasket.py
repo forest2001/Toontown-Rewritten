@@ -17,19 +17,54 @@ class PicnicBasket(StateData.StateData):
         StateData.StateData.__init__(self, doneEvent)
         self.tableNumber = tableNumber
         self.seatNumber = seatNumber
-        self.fsm = ClassicFSM.ClassicFSM('PicnicBasket', [State.State('start', self.enterStart, self.exitStart, ['requestBoard', 'trolleyHFA', 'trolleyTFA']),
-         State.State('trolleyHFA', self.enterTrolleyHFA, self.exitTrolleyHFA, ['final']),
-         State.State('trolleyTFA', self.enterTrolleyTFA, self.exitTrolleyTFA, ['final']),
-         State.State('requestBoard', self.enterRequestBoard, self.exitRequestBoard, ['boarding']),
-         State.State('boarding', self.enterBoarding, self.exitBoarding, ['boarded']),
-         State.State('boarded', self.enterBoarded, self.exitBoarded, ['requestExit',
-          'trolleyLeaving',
-          'final',
-          'exiting']),
-         State.State('requestExit', self.enterRequestExit, self.exitRequestExit, ['exiting', 'trolleyLeaving']),
-         State.State('trolleyLeaving', self.enterTrolleyLeaving, self.exitTrolleyLeaving, ['final']),
-         State.State('exiting', self.enterExiting, self.exitExiting, ['final']),
-         State.State('final', self.enterFinal, self.exitFinal, ['start'])], 'start', 'final')
+        self.fsm = ClassicFSM.ClassicFSM('PicnicBasket', [
+            State.State('start',
+                        self.enterStart,
+                        self.exitStart, [
+                            'requestBoard',
+                            'trolleyHFA',
+                            'trolleyTFA']),
+            State.State('trolleyHFA',
+                        self.enterTrolleyHFA,
+                        self.exitTrolleyHFA, [
+                            'final']),
+            State.State('trolleyTFA',
+                        self.enterTrolleyTFA,
+                        self.exitTrolleyTFA, [
+                            'final']),
+            State.State('requestBoard',
+                        self.enterRequestBoard,
+                        self.exitRequestBoard, [
+                            'boarding']),
+            State.State('boarding',
+                        self.enterBoarding,
+                        self.exitBoarding, [
+                            'boarded']),
+            State.State('boarded',
+                        self.enterBoarded,
+                        self.exitBoarded, [
+                            'requestExit',
+                            'trolleyLeaving',
+                            'final',
+                            'exiting']),
+            State.State('requestExit',
+                        self.enterRequestExit,
+                        self.exitRequestExit, [
+                            'exiting',
+                            'trolleyLeaving']),
+            State.State('trolleyLeaving',
+                        self.enterTrolleyLeaving,
+                        self.exitTrolleyLeaving, [
+                            'final']),
+            State.State('exiting',
+                        self.enterExiting,
+                        self.exitExiting, [
+                            'final']),
+            State.State('final',
+                        self.enterFinal,
+                        self.exitFinal, [
+                            'start'])],
+            'start', 'final')
         self.parentFSM = parentFSM
         return None
 
