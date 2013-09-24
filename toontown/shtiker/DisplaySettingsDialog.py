@@ -34,7 +34,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
     def load(self):
         if self.isLoaded == 1:
-            return
+            return None
         self.isLoaded = 1
         self.anyChanged = 0
         self.apiChanged = 0
@@ -98,7 +98,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
     def enter(self, changeDisplaySettings, changeDisplayAPI):
         if self.isEntered == 1:
-            return
+            return None
         self.isEntered = 1
         if self.isLoaded == 0:
             self.load()
