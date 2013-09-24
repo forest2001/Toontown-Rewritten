@@ -388,49 +388,50 @@ def compileGlobalAnimList():
 
 
 def loadDialog():
-    global CatDialogueArray
-    global PigDialogueArray
-    global BearDialogueArray
-    global DuckDialogueArray
-    global RabbitDialogueArray
-    global MouseDialogueArray
-    global DogDialogueArray
-    global HorseDialogueArray
-    global MonkeyDialogueArray
     loadPath = 'phase_3.5/audio/dial/'
+
     DogDialogueFiles = ('AV_dog_short', 'AV_dog_med', 'AV_dog_long', 'AV_dog_question', 'AV_dog_exclaim', 'AV_dog_howl')
+    global DogDialogueArray
     for file in DogDialogueFiles:
         DogDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     catDialogueFiles = ('AV_cat_short', 'AV_cat_med', 'AV_cat_long', 'AV_cat_question', 'AV_cat_exclaim', 'AV_cat_howl')
+    global CatDialogueArray
     for file in catDialogueFiles:
         CatDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     horseDialogueFiles = ('AV_horse_short', 'AV_horse_med', 'AV_horse_long', 'AV_horse_question', 'AV_horse_exclaim', 'AV_horse_howl')
+    global HorseDialogueArray
     for file in horseDialogueFiles:
         HorseDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     rabbitDialogueFiles = ('AV_rabbit_short', 'AV_rabbit_med', 'AV_rabbit_long', 'AV_rabbit_question', 'AV_rabbit_exclaim', 'AV_rabbit_howl')
+    global RabbitDialogueArray
     for file in rabbitDialogueFiles:
         RabbitDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     mouseDialogueFiles = ('AV_mouse_short', 'AV_mouse_med', 'AV_mouse_long', 'AV_mouse_question', 'AV_mouse_exclaim', 'AV_mouse_howl')
+    global MouseDialogueArray
     for file in mouseDialogueFiles:
         MouseDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     duckDialogueFiles = ('AV_duck_short', 'AV_duck_med', 'AV_duck_long', 'AV_duck_question', 'AV_duck_exclaim', 'AV_duck_howl')
+    global DuckDialogueArray
     for file in duckDialogueFiles:
         DuckDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     monkeyDialogueFiles = ('AV_monkey_short', 'AV_monkey_med', 'AV_monkey_long', 'AV_monkey_question', 'AV_monkey_exclaim', 'AV_monkey_howl')
+    global MonkeyDialogueArray
     for file in monkeyDialogueFiles:
         MonkeyDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     bearDialogueFiles = ('AV_bear_short', 'AV_bear_med', 'AV_bear_long', 'AV_bear_question', 'AV_bear_exclaim', 'AV_bear_howl')
+    global BearDialogueArray
     for file in bearDialogueFiles:
         BearDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
     pigDialogueFiles = ('AV_pig_short', 'AV_pig_med', 'AV_pig_long', 'AV_pig_question', 'AV_pig_exclaim', 'AV_pig_howl')
+    global PigDialogueArray
     for file in pigDialogueFiles:
         PigDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
 
@@ -463,7 +464,7 @@ class Toon(Avatar.Avatar, ToonHead):
     def __init__(self):
         try:
             self.Toon_initialized
-            return None
+            return
         except:
             self.Toon_initialized = 1
 
@@ -552,7 +553,6 @@ class Toon(Avatar.Avatar, ToonHead):
          State('ScientistPlay', self.enterScientistPlay, self.enterScientistPlay)], 'off', 'off')
         animStateList = self.animFSM.getStates()
         self.animFSM.enterInitialState()
-        return None
 
     def stopAnimations(self):
         if hasattr(self, 'animFSM'):
