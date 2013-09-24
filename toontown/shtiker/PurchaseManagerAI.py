@@ -270,7 +270,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
     def shutDown(self):
         if self.isShutdown:
             self.notify.warning('Got shutDown twice')
-            return None
+            return
         self.isShutdown = 1
         from toontown.minigame import MinigameCreatorAI
         playAgainNum = self.getNumPlayAgain()
