@@ -59,7 +59,7 @@ if WantNewsPage:
     from toontown.shtiker import NewsPage
 AdjustmentForNewsButton = -0.275
 ClaraBaseXPos = 1.45
-if __debug__:
+if (__debug__):
     import pdb
 
 class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
@@ -169,7 +169,159 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.questMap = None
             self.prevToonIdx = 0
 
-        return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def wantLegacyLifter(self):
         return True
@@ -510,7 +662,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 torsoPieces = toon.getPieces(('torso', ('arms', 'neck')))
                 legPieces = toon.getPieces(('legs', ('legs', 'feet')))
                 headPieces = toon.getPieces(('head', '*head*'))
-                if (filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors, torsoPieces) or filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors, legPieces) or filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors, headPieces)) and toon.cheesyEffect == ToontownGlobals.CENormal:
+                if (filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors,
+                           torsoPieces) or
+                filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors,
+                       legPieces) or
+                filter(lambda x: x.hasColor() and x.getColor() not in ToonDNA.allowedColors,
+                       headPieces)) and toon.cheesyEffect == ToontownGlobals.CENormal:
                     torsoColors = str(map(lambda x: not x.hasColor() and 'clear' or x.getColor() in ToonDNA.allowedColors and 'ok' or x.getColor(), torsoPieces))
                     legColors = str(map(lambda x: not x.hasColor() and 'clear' or x.getColor() in ToonDNA.allowedColors and 'ok' or x.getColor(), legPieces))
                     headColors = str(map(lambda x: not x.hasColor() and 'clear' or x.getColor() in ToonDNA.allowedColors and 'ok' or x.getColor(), headPieces))
@@ -690,21 +847,16 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def __handlePurchase(self):
         self.purchaseButton.hide()
-        if (base.cr.isWebPlayToken() or __dev__) and base.cr.isPaid() and base.cr.productName in ['DisneyOnline-UK',
-         'DisneyOnline-AP',
-         'JP',
-         'DE',
-         'BR',
-         'FR']:
-            if launcher:
-                paidNoParentPassword = launcher.getParentPasswordSet()
-            else:
-                if launcher:
-                    paidNoParentPassword = not launcher.getParentPasswordSet()
+        if (base.cr.isWebPlayToken() or __dev__):
+            if base.cr.isPaid():
+                if base.cr.productName in ['DisneyOnline-UK', 'DisneyOnline-AP', 'JP', 'DE', 'BR', 'FR']:
+                    paidNoParentPassword = launcher and launcher.getParentPasswordSet()
                 else:
-                    paidNoParentPassword = 0
-                self.leaveToPayDialog = LeaveToPayDialog.LeaveToPayDialog(paidNoParentPassword, self.purchaseButton.show)
-                self.leaveToPayDialog.show()
+                    paidNoParentPassword = launcher and not launcher.getParentPasswordSet()
+            else:
+                paidNoParentPassword = 0
+            self.leaveToPayDialog = LeaveToPayDialog.LeaveToPayDialog(paidNoParentPassword, self.purchaseButton.show)
+            self.leaveToPayDialog.show()
         else:
             self.notify.error('You should not get here without a PlayToken')
 
@@ -1451,12 +1603,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.hideClarabelleGui()
         clarabelleHidden = 1
         self.ignore(ToontownGlobals.FriendsListHotkey)
-        self.friendsListButtonActive and self.friendsListButtonObscured <= 0 and self.bFriendsList.show()
-        self.accept(ToontownGlobals.FriendsListHotkey, self.sendFriendsListEvent)
-        if self.clarabelleButtonObscured <= 0 and self.isTeleportAllowed():
-            if self.catalogNotify == ToontownGlobals.NewItems or self.mailboxNotify == ToontownGlobals.NewItems or self.simpleMailNotify == ToontownGlobals.NewItems or self.inviteMailNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems:
-                if not not launcher:
-                    showClarabelle = launcher.getPhaseComplete(5.5)
+        if self.friendsListButtonActive and self.friendsListButtonObscured <= 0:
+            self.bFriendsList.show()
+            self.accept(ToontownGlobals.FriendsListHotkey, self.sendFriendsListEvent)
+            if self.clarabelleButtonObscured <= 0 and self.isTeleportAllowed():
+                if self.catalogNotify == ToontownGlobals.NewItems or self.mailboxNotify == ToontownGlobals.NewItems or self.simpleMailNotify == ToontownGlobals.NewItems or self.inviteMailNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems:
+                    showClarabelle = not launcher or launcher.getPhaseComplete(5.5)
                     for quest in self.quests:
                         if quest[0] in Quests.PreClarabelleQuestIds and self.mailboxNotify != ToontownGlobals.NewItems and self.awardNotify != ToontownGlobals.NewItems:
                             showClarabelle = 0
@@ -1464,26 +1616,26 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                     if base.cr.playGame.getPlace().getState() == 'stickerBook':
                         showClarabelle = 0
                     if showClarabelle:
-                        if not self.mailboxNotify == ToontownGlobals.NewItems:
-                            newItemsInMailbox = self.awardNotify == ToontownGlobals.NewItems
-                            self.showClarabelleGui(newItemsInMailbox)
-                            clarabelleHidden = 0
-            if clarabelleHidden:
-                if self.__catalogNotifyDialog:
-                    self.__catalogNotifyDialog.cleanup()
-                    self.__catalogNotifyDialog = None
-            else:
-                self.newCatalogNotify()
-            if self.moveFurnitureButtonObscured <= 0:
-                if self.furnitureManager != None and self.furnitureDirector == self.doId:
-                    self.loadFurnitureGui()
-                    self.__furnitureGui.setPos(-1.16, 0, -0.03)
-                    self.__furnitureGui.setScale(0.06)
-                elif self.cr.furnitureManager != None:
-                    self.showFurnitureGui()
-                    taskMgr.remove('lerpFurnitureButton')
-                    self.__furnitureGui.lerpPosHprScale(pos=Point3(-1.19, 0.0, 0.33), hpr=Vec3(0.0, 0.0, 0.0), scale=Vec3(0.04, 0.04, 0.04), time=1.0, blendType='easeInOut', task='lerpFurnitureButton')
-            hasattr(self, 'inEstate') and self.inEstate and self.loadGardeningGui()
+                        newItemsInMailbox = self.mailboxNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems
+                        self.showClarabelleGui(newItemsInMailbox)
+                        clarabelleHidden = 0
+        if clarabelleHidden:
+            if self.__catalogNotifyDialog:
+                self.__catalogNotifyDialog.cleanup()
+                self.__catalogNotifyDialog = None
+        else:
+            self.newCatalogNotify()
+        if self.moveFurnitureButtonObscured <= 0:
+            if self.furnitureManager != None and self.furnitureDirector == self.doId:
+                self.loadFurnitureGui()
+                self.__furnitureGui.setPos(-1.16, 0, -0.03)
+                self.__furnitureGui.setScale(0.06)
+            elif self.cr.furnitureManager != None:
+                self.showFurnitureGui()
+                taskMgr.remove('lerpFurnitureButton')
+                self.__furnitureGui.lerpPosHprScale(pos=Point3(-1.19, 0.0, 0.33), hpr=Vec3(0.0, 0.0, 0.0), scale=Vec3(0.04, 0.04, 0.04), time=1.0, blendType='easeInOut', task='lerpFurnitureButton')
+        if hasattr(self, 'inEstate') and self.inEstate:
+            self.loadGardeningGui()
             self.hideGardeningGui()
         else:
             self.hideGardeningGui()
@@ -1497,63 +1649,63 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def newCatalogNotify(self):
         if not self.gotCatalogNotify:
             return
-        if not not launcher:
-            hasPhase = launcher.getPhaseComplete(5.5)
-            if not hasPhase:
-                return
-            if not self.friendsListButtonActive or self.friendsListButtonObscured > 0:
-                return
-            self.gotCatalogNotify = 0
-            currentWeek = self.catalogScheduleCurrentWeek - 1
-            if currentWeek < 57:
-                seriesNumber = currentWeek / ToontownGlobals.CatalogNumWeeksPerSeries + 1
-                weekNumber = currentWeek % ToontownGlobals.CatalogNumWeeksPerSeries + 1
-            elif currentWeek < 65:
-                seriesNumber = 6
-                weekNumber = currentWeek - 56
+        hasPhase = not launcher or launcher.getPhaseComplete(5.5)
+        if not hasPhase:
+            return
+        if not self.friendsListButtonActive or self.friendsListButtonObscured > 0:
+            return
+        self.gotCatalogNotify = 0
+        currentWeek = self.catalogScheduleCurrentWeek - 1
+        if currentWeek < 57:
+            seriesNumber = currentWeek / ToontownGlobals.CatalogNumWeeksPerSeries + 1
+            weekNumber = currentWeek % ToontownGlobals.CatalogNumWeeksPerSeries + 1
+        elif currentWeek < 65:
+            seriesNumber = 6
+            weekNumber = currentWeek - 56
+        else:
+            seriesNumber = currentWeek / ToontownGlobals.CatalogNumWeeksPerSeries + 2
+            weekNumber = currentWeek % ToontownGlobals.CatalogNumWeeksPerSeries + 1
+        message = None
+        if self.mailboxNotify == ToontownGlobals.NoItems:
+            if self.catalogNotify == ToontownGlobals.NewItems:
+                if self.catalogScheduleCurrentWeek == 1:
+                    message = (TTLocalizer.CatalogNotifyFirstCatalog, TTLocalizer.CatalogNotifyInstructions)
+                else:
+                    message = (TTLocalizer.CatalogNotifyNewCatalog % weekNumber,)
+        elif self.mailboxNotify == ToontownGlobals.NewItems:
+            if self.catalogNotify == ToontownGlobals.NewItems:
+                message = (TTLocalizer.CatalogNotifyNewCatalogNewDelivery % weekNumber,)
             else:
-                seriesNumber = currentWeek / ToontownGlobals.CatalogNumWeeksPerSeries + 2
-                weekNumber = currentWeek % ToontownGlobals.CatalogNumWeeksPerSeries + 1
-            message = None
-            if self.mailboxNotify == ToontownGlobals.NoItems:
-                if self.catalogNotify == ToontownGlobals.NewItems:
-                    if self.catalogScheduleCurrentWeek == 1:
-                        message = (TTLocalizer.CatalogNotifyFirstCatalog, TTLocalizer.CatalogNotifyInstructions)
-                    else:
-                        message = (TTLocalizer.CatalogNotifyNewCatalog % weekNumber,)
-            elif self.mailboxNotify == ToontownGlobals.NewItems:
-                if self.catalogNotify == ToontownGlobals.NewItems:
-                    message = (TTLocalizer.CatalogNotifyNewCatalogNewDelivery % weekNumber,)
-                else:
-                    message = (TTLocalizer.CatalogNotifyNewDelivery,)
-            elif self.mailboxNotify == ToontownGlobals.OldItems:
-                if self.catalogNotify == ToontownGlobals.NewItems:
-                    message = (TTLocalizer.CatalogNotifyNewCatalogOldDelivery % weekNumber,)
-                else:
-                    message = (TTLocalizer.CatalogNotifyOldDelivery,)
-            if self.awardNotify == ToontownGlobals.NoItems:
-                pass
-            elif self.awardNotify == ToontownGlobals.NewItems:
-                oldStr = ''
-                if message:
-                    oldStr = message[0] + ' '
-                oldStr += TTLocalizer.AwardNotifyNewItems
-                message = (oldStr,)
-            elif self.awardNotify == ToontownGlobals.OldItems:
-                oldStr = ''
-                if message:
-                    oldStr = message[0] + ' '
-                oldStr += TTLocalizer.AwardNotifyOldItems
-                message = (oldStr,)
-            if self.simpleMailNotify == ToontownGlobals.NewItems or self.inviteMailNotify == ToontownGlobals.NewItems:
-                oldStr = ''
-                if message:
-                    oldStr = message[0] + ' '
-                oldStr += TTLocalizer.MailNotifyNewItems
-                message = (oldStr,)
-            if message == None:
-                return
-            self.__catalogNotifyDialog and self.__catalogNotifyDialog.cleanup()
+                message = (TTLocalizer.CatalogNotifyNewDelivery,)
+        elif self.mailboxNotify == ToontownGlobals.OldItems:
+            if self.catalogNotify == ToontownGlobals.NewItems:
+                message = (TTLocalizer.CatalogNotifyNewCatalogOldDelivery % weekNumber,)
+            else:
+                message = (TTLocalizer.CatalogNotifyOldDelivery,)
+        if self.awardNotify == ToontownGlobals.NoItems:
+            pass
+        elif self.awardNotify == ToontownGlobals.NewItems:
+            oldStr = ''
+            if message:
+                oldStr = message[0] + ' '
+            oldStr += TTLocalizer.AwardNotifyNewItems
+            message = (oldStr,)
+        elif self.awardNotify == ToontownGlobals.OldItems:
+            oldStr = ''
+            if message:
+                oldStr = message[0] + ' '
+            oldStr += TTLocalizer.AwardNotifyOldItems
+            message = (oldStr,)
+        if self.simpleMailNotify == ToontownGlobals.NewItems or self.inviteMailNotify == ToontownGlobals.NewItems:
+            oldStr = ''
+            if message:
+                oldStr = message[0] + ' '
+            oldStr += TTLocalizer.MailNotifyNewItems
+            message = (oldStr,)
+        if message == None:
+            return
+        if self.__catalogNotifyDialog:
+            self.__catalogNotifyDialog.cleanup()
         self.__catalogNotifyDialog = CatalogNotifyDialog.CatalogNotifyDialog(message)
         base.playSfx(self.soundPhoneRing)
         return
