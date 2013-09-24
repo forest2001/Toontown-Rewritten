@@ -10,7 +10,7 @@ from toontown.safezone.GZPlayground import GZPlayground
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 import random
-if __debug__:
+if (__debug__):
     import pdb
 
 class GZSafeZoneLoader(SafeZoneLoader):
