@@ -7,22 +7,57 @@ class DistributedNPCScientistAI(DistributedNPCToonBaseAI.DistributedNPCToonBaseA
 
     def __init__(self, air, npcId, questCallback = None, hq = 0):
         DistributedNPCToonBaseAI.DistributedNPCToonBaseAI.__init__(self, air, npcId, questCallback)
-        self.scientistFSM = ClassicFSM.ClassicFSM('Scientist', [State.State('Neutral', self.enterNeutral, self.exitNeutral, ['Phase0',
-          'Phase1',
-          'Phase2',
-          'Phase2_5',
-          'Phase3',
-          'Phase4',
-          'Phase5',
-          'Off']),
-         State.State('Phase0', self.enterPhase0, self.exitPhase0, ['Phase1', 'Neutral']),
-         State.State('Phase1', self.enterPhase1, self.exitPhase1, ['Phase2', 'Neutral']),
-         State.State('Phase2', self.enterPhase2, self.exitPhase2, ['Phase2_5', 'Neutral']),
-         State.State('Phase2_5', self.enterPhase2_5, self.exitPhase2_5, ['Phase3', 'Neutral']),
-         State.State('Phase3', self.enterPhase3, self.exitPhase3, ['Phase4', 'Neutral']),
-         State.State('Phase4', self.enterPhase4, self.exitPhase4, ['Phase5', 'Neutral']),
-         State.State('Phase5', self.enterPhase5, self.exitPhase5, ['Neutral']),
-         State.State('Off', self.enterOff, self.exitOff, [])], 'Neutral', 'Off')
+        self.scientistFSM = ClassicFSM.ClassicFSM('Scientist', [
+            State.State('Neutral',
+                        self.enterNeutral,
+                        self.exitNeutral, [
+                            'Phase0',
+                            'Phase1',
+                            'Phase2',
+                            'Phase2_5',
+                            'Phase3',
+                            'Phase4',
+                            'Phase5',
+                            'Off']),
+            State.State('Phase0',
+                        self.enterPhase0,
+                        self.exitPhase0, [
+                            'Phase1',
+                            'Neutral']),
+         State.State('Phase1',
+                     self.enterPhase1,
+                     self.exitPhase1, [
+                         'Phase2',
+                         'Neutral']),
+         State.State('Phase2',
+                     self.enterPhase2,
+                     self.exitPhase2, [
+                         'Phase2_5',
+                         'Neutral']),
+         State.State('Phase2_5',
+                     self.enterPhase2_5,
+                     self.exitPhase2_5, [
+                         'Phase3',
+                         'Neutral']),
+         State.State('Phase3',
+                     self.enterPhase3,
+                     self.exitPhase3, [
+                         'Phase4',
+                         'Neutral']),
+         State.State('Phase4',
+                     self.enterPhase4,
+                     self.exitPhase4, [
+                         'Phase5',
+                         'Neutral']),
+         State.State('Phase5',
+                     self.enterPhase5,
+                     self.exitPhase5, [
+                         'Neutral']),
+         State.State('Off',
+                     self.enterOff,
+                     self.exitOff, [])],
+         'Neutral', 'Off')
+         
         if self.npcId == 2018 or self.npcId == 2019:
             self.startAnimState = 'ScientistJealous'
         elif self.npcId == 2020:
