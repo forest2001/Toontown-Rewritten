@@ -152,15 +152,15 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
     def __handleToonCollision(self, collEntry):
         if collEntry:
             if collEntry.getFromNodePath().getParent().getKey() != localAvatar.getKey():
-                return None
+                return
         if hasattr(self, 'factory') and hasattr(self.factory, 'lastToonZone'):
             factoryZone = self.factory.lastToonZone
             unitsBelow = self.getPos(render)[2] - base.localAvatar.getPos(render)[2]
             if factoryZone == 24 and unitsBelow > 10.0:
                 self.notify.warning('Ignoring toon collision in %d from %f below.' % (factoryZone, unitsBelow))
-                return None
+                return
         if not base.localAvatar.wantBattles:
-            return None
+            return
         toonId = base.localAvatar.getDoId()
         self.notify.debug('Distributed suit %d: requesting a Battle with toon: %d' % (self.doId, toonId))
         self.d_requestBattle(self.getPos(), self.getHpr())
