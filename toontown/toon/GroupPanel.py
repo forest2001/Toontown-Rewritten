@@ -191,7 +191,31 @@ class GroupPanel(DirectObject.DirectObject):
         else:
             zPos = -0.463843
         bottomImage = self.guiBg.find('**/tt_t_gui_brd_memberListBtm_leader')
-        self.destScrollList = DirectScrolledList(parent=self.frame, relief=None, image=bottomImage, image_scale=(0.5, 1, 0.5), incButton_image=incrementImageList, incButton_pos=(0.217302, 0, 0.07), incButton_image3_color=Vec4(1.0, 1.0, 0.6, 0.5), incButton_scale=(-0.5, 1, 0.5), incButton_relief=None, incButtonCallback=self.__informDestChange, decButton_image=incrementImageList, decButton_pos=(-0.217302, 0, 0.07), decButton_scale=(0.5, 1, 0.5), decButton_image3_color=Vec4(1.0, 1.0, 0.6, 0.5), decButton_relief=None, decButtonCallback=self.__informDestChange, itemFrame_pos=(0, 0, 0.06), itemFrame_borderWidth=(0.1, 0.1), numItemsVisible=1, itemFrame_scale=TTLocalizer.GPdestScrollList, forceHeight=0.07, items=[], pos=(0, 0, zPos), scrollSpeed=0.1)
+        self.destScrollList = DirectScrolledList(
+            parent=self.frame,
+            relief=None,
+            image=bottomImage,
+            image_scale=(0.5, 1, 0.5),
+            incButton_image=incrementImageList,
+            incButton_pos=(0.217302, 0, 0.07),
+            incButton_image3_color=Vec4(1.0, 1.0, 0.6, 0.5),
+            incButton_scale=(-0.5, 1, 0.5),
+            incButton_relief=None,
+            incButtonCallback=self.__informDestChange,
+            decButton_image=incrementImageList,
+            decButton_pos=(-0.217302, 0, 0.07),
+            decButton_scale=(0.5, 1, 0.5),
+            decButton_image3_color=Vec4(1.0, 1.0, 0.6, 0.5),
+            decButton_relief=None,
+            decButtonCallback=self.__informDestChange,
+            itemFrame_pos=(0, 0, 0.06),
+            itemFrame_borderWidth=(0.1, 0.1),
+            numItemsVisible=1,
+            itemFrame_scale=TTLocalizer.GPdestScrollList,
+            forceHeight=0.07,
+            items=[],
+            pos=(0, 0, zPos),
+            scrollSpeed=0.1)
         arrowGui.removeNode()
         self.__addDestNames()
         self.__makeGoButton()
