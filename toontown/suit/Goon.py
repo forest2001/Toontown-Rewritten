@@ -121,7 +121,7 @@ class Goon(Avatar.Avatar):
         beam = self.radar.attachNewNode('beam')
         transformNode = model.find('**/transform')
         transformNode.getChildren().reparentTo(beam)
-        self.radar.setPos(0, -0.5, 0.4)
+        self.radar.setPos(0, -.5, 0.4)
         self.radar.setTransparency(1)
         self.radar.setDepthWrite(0)
         self.halfFov = self.hFov / 2.0
