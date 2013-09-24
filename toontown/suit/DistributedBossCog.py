@@ -474,22 +474,22 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
                     return
 
             self.cqueue.clearEntries()
-        if self.e1:
-            if self.e2:
-                if not self.e3:
-                    self.notify.debug('Some points missed in __liftBoss')
-                    return
-                p1 = self.e1.getSurfacePoint(self)
-                p2 = self.e2.getSurfacePoint(self)
-                p3 = self.e3.getSurfacePoint(self)
-                p2a = (p1 + p3) / 2
-                if p2a[2] > p2[2]:
-                    center = p2a
-                else:
-                    center = p2
-                self.setZ(self, center[2])
-                mat = (p1[2] > p2[2] + 0.01 or p3[2] > p2[2] + 0.01) and Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-                abs(p3[2] - center[2]) < abs(p1[2] - center[2]) and lookAt(mat, Vec3(p1 - center), CSDefault)
+        if not (self.e1 and self.e2 and self.e3):
+            self.notify.debug('Some points missed in __liftBoss')
+            return
+        p1 = self.e1.getSurfacePoint(self)
+        p2 = self.e2.getSurfacePoint(self)
+        p3 = self.e3.getSurfacePoint(self)
+        p2a = (p1 + p3) / 2
+        if p2a[2] > p2[2]:
+            center = p2a
+        else:
+            center = p2
+        self.setZ(self, center[2])
+        if p1[2] > p2[2] + 0.01 or p3[2] > p2[2] + 0.01:
+            mat = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+            if abs(p3[2] - center[2]) < abs(p1[2] - center[2]):
+                lookAt(mat, Vec3(p1 - center), CSDefault)
             else:
                 lookAt(mat, Vec3(center - p3), CSDefault)
             self.rotateNode.setMat(mat)
@@ -1029,36 +1029,36 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def __clickedNameTag(self, avatar):
         self.notify.debug('__clickedNameTag')
-        if not self.state == 'BattleThree':
-            if not self.state == 'BattleFour':
-                return
-            if not self.allowClickedNameTag:
-                return
-            if self.cr:
-                place = self.cr.playGame.getPlace()
-                place and hasattr(place, 'fsm') and FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
+            return
+        if not self.allowClickedNameTag:
+            return
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
 
     def __handleFriendAvatar(self, avId, avName, avDisableName):
         self.notify.debug('__handleFriendAvatar')
-        if not self.state == 'BattleThree':
-            if not self.state == 'BattleFour':
-                return
-            if not self.allowClickedNameTag:
-                return
-            if self.cr:
-                place = self.cr.playGame.getPlace()
-                place and hasattr(place, 'fsm') and FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
+            return
+        if not self.allowClickedNameTag:
+            return
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
 
     def __handleAvatarDetails(self, avId, avName, playerId = None):
         self.notify.debug('__handleAvatarDetails')
-        if not self.state == 'BattleThree':
-            if not self.state == 'BattleFour':
-                return
-            if not self.allowClickedNameTag:
-                return
-            if self.cr:
-                place = self.cr.playGame.getPlace()
-                place and hasattr(place, 'fsm') and FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
+        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
+            return
+        if not self.allowClickedNameTag:
+            return
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def enterBattleFour(self):
         self.cleanupIntervals()
