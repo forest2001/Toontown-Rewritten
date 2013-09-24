@@ -8,7 +8,7 @@ from toontown.shtiker.ShtikerPage import ShtikerPage
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from FishPage import FishingTrophy
 from toontown.golf import GolfGlobals
-if __debug__:
+if (__debug__):
     import pdb
 PageMode = PythonUtil.Enum('Records, Trophy')
 
@@ -401,7 +401,7 @@ class GolfTrophy(DirectFrame):
                 self.__bronze()
             elif level % 3 == 1:
                 self.column.setScale(1.3229, 1.26468, 1.61878)
-                self.top.setPos(0, 0, -0.5)
+                self.top.setPos(0, 0, -.5)
                 self.__silver()
             elif level % 3 == 2:
                 self.column.setScale(1.3229, 1.26468, 2.11878)
