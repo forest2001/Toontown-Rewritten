@@ -49,11 +49,9 @@ import ModuleListAI
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
-
     class PetLookerAI:
-
         class PetLookerAI:
-
+            pass
 
 if simbase.wantKarts:
     from toontown.racing.KartDNA import *
@@ -1836,123 +1834,42 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          3]:
             if numTracks != 2:
                 self.notify.warning('bad num tracks in tier: %s, %s' % (self.rewardTier, self.trackArray))
-                self.b_setTrackAccess([0,
-                 0,
-                 0,
-                 0,
-                 1,
-                 1,
-                 0])
+                self.b_setTrackAccess([0, 0, 0, 0, 1, 1, 0])
                 fixed = 1
         elif self.rewardTier in [4, 5, 6]:
             if numTracks != 3:
                 self.notify.warning('bad num tracks in tier: %s, %s' % (self.rewardTier, self.trackArray))
                 if self.trackArray[ToontownBattleGlobals.SOUND_TRACK] and not self.trackArray[ToontownBattleGlobals.HEAL_TRACK]:
-                    self.b_setTrackAccess([0,
-                     0,
-                     0,
-                     1,
-                     1,
-                     1,
-                     0])
+                    self.b_setTrackAccess([0, 0, 0, 1, 1, 1, 0])
                 elif self.trackArray[ToontownBattleGlobals.HEAL_TRACK] and not self.trackArray[ToontownBattleGlobals.SOUND_TRACK]:
-                    self.b_setTrackAccess([1,
-                     0,
-                     0,
-                     0,
-                     1,
-                     1,
-                     0])
+                    self.b_setTrackAccess([1, 0, 0, 0, 1, 1, 0])
                 elif soundExp >= healExp:
-                    self.b_setTrackAccess([0,
-                     0,
-                     0,
-                     1,
-                     1,
-                     1,
-                     0])
+                    self.b_setTrackAccess([0, 0, 0, 1, 1, 1, 0])
                 else:
-                    self.b_setTrackAccess([1,
-                     0,
-                     0,
-                     0,
-                     1,
-                     1,
-                     0])
+                    self.b_setTrackAccess([1, 0, 0, 0, 1, 1, 0])
                 fixed = 1
-        elif self.rewardTier in [7,
-         8,
-         9,
-         10]:
+        elif self.rewardTier in [7, 8, 9, 10]:
             if numTracks != 4:
                 self.notify.warning('bad num tracks in tier: %s, %s' % (self.rewardTier, self.trackArray))
                 if self.trackArray[ToontownBattleGlobals.SOUND_TRACK] and not self.trackArray[ToontownBattleGlobals.HEAL_TRACK]:
                     if dropExp >= lureExp:
-                        self.b_setTrackAccess([0,
-                         0,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1])
+                        self.b_setTrackAccess([0, 0, 0, 1, 1, 1, 1])
                     else:
-                        self.b_setTrackAccess([0,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([0, 0, 1, 1, 1, 1, 0])
                 elif self.trackArray[ToontownBattleGlobals.HEAL_TRACK] and not self.trackArray[ToontownBattleGlobals.SOUND_TRACK]:
                     if dropExp >= lureExp:
-                        self.b_setTrackAccess([1,
-                         0,
-                         0,
-                         0,
-                         1,
-                         1,
-                         1])
+                        self.b_setTrackAccess([1, 0, 0, 0, 1, 1, 1])
                     else:
-                        self.b_setTrackAccess([1,
-                         0,
-                         1,
-                         0,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([1, 0, 1, 0, 1, 1, 0])
                 elif soundExp >= healExp:
                     if dropExp >= lureExp:
-                        self.b_setTrackAccess([0,
-                         0,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1])
+                        self.b_setTrackAccess([0, 0, 0, 1, 1, 1, 1])
                     else:
-                        self.b_setTrackAccess([0,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([0, 0, 1, 1, 1, 1, 0])
                 elif dropExp >= lureExp:
-                    self.b_setTrackAccess([1,
-                     0,
-                     0,
-                     0,
-                     1,
-                     1,
-                     1])
+                    self.b_setTrackAccess([1, 0, 0, 0, 1, 1, 1])
                 else:
-                    self.b_setTrackAccess([1,
-                     0,
-                     1,
-                     0,
-                     1,
-                     1,
-                     0])
+                    self.b_setTrackAccess([1, 0, 1, 0, 1, 1, 0])
                 fixed = 1
         elif self.rewardTier in [11, 12, 13]:
             if numTracks != 5:
@@ -1960,71 +1877,23 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if self.trackArray[ToontownBattleGlobals.SOUND_TRACK] and not self.trackArray[ToontownBattleGlobals.HEAL_TRACK]:
                     if self.trackArray[ToontownBattleGlobals.DROP_TRACK] and not self.trackArray[ToontownBattleGlobals.LURE_TRACK]:
                         if healExp >= trapExp:
-                            self.b_setTrackAccess([1,
-                             0,
-                             0,
-                             1,
-                             1,
-                             1,
-                             1])
+                            self.b_setTrackAccess([1, 0, 0, 1, 1, 1, 1])
                         else:
-                            self.b_setTrackAccess([0,
-                             1,
-                             0,
-                             1,
-                             1,
-                             1,
-                             1])
+                            self.b_setTrackAccess([0, 1, 0, 1, 1, 1, 1])
                     elif healExp >= trapExp:
-                        self.b_setTrackAccess([1,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([1, 0, 1, 1, 1, 1, 0])
                     else:
-                        self.b_setTrackAccess([0,
-                         1,
-                         1,
-                         1,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([0, 1, 1, 1, 1, 1, 0])
                 elif self.trackArray[ToontownBattleGlobals.HEAL_TRACK] and not self.trackArray[ToontownBattleGlobals.SOUND_TRACK]:
                     if self.trackArray[ToontownBattleGlobals.DROP_TRACK] and not self.trackArray[ToontownBattleGlobals.LURE_TRACK]:
                         if soundExp >= trapExp:
-                            self.b_setTrackAccess([1,
-                             0,
-                             0,
-                             1,
-                             1,
-                             1,
-                             1])
+                            self.b_setTrackAccess([1, 0, 0, 1, 1, 1, 1])
                         else:
-                            self.b_setTrackAccess([1,
-                             1,
-                             0,
-                             0,
-                             1,
-                             1,
-                             1])
+                            self.b_setTrackAccess([1, 1, 0, 0, 1, 1, 1])
                     elif soundExp >= trapExp:
-                        self.b_setTrackAccess([1,
-                         0,
-                         1,
-                         1,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([1, 0, 1, 1, 1, 1, 0])
                     else:
-                        self.b_setTrackAccess([1,
-                         1,
-                         1,
-                         0,
-                         1,
-                         1,
-                         0])
+                        self.b_setTrackAccess([1, 1, 1, 0, 1, 1, 0])
                 fixed = 1
         elif numTracks != 6:
             self.notify.warning('bad num tracks in tier: %s, %s' % (self.rewardTier, self.trackArray))
@@ -2035,54 +1904,18 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              dropExp]
             sortedExp.sort()
             if trapExp == sortedExp[0]:
-                self.b_setTrackAccess([1,
-                 0,
-                 1,
-                 1,
-                 1,
-                 1,
-                 1])
+                self.b_setTrackAccess([1, 0, 1, 1, 1, 1, 1])
             elif lureExp == sortedExp[0]:
-                self.b_setTrackAccess([1,
-                 1,
-                 0,
-                 1,
-                 1,
-                 1,
-                 1])
+                self.b_setTrackAccess([1, 1, 0, 1, 1, 1, 1])
             elif dropExp == sortedExp[0]:
-                self.b_setTrackAccess([1,
-                 1,
-                 1,
-                 1,
-                 1,
-                 1,
-                 0])
+                self.b_setTrackAccess([1, 1, 1, 1, 1, 1, 0])
             elif soundExp == sortedExp[0]:
-                self.b_setTrackAccess([1,
-                 1,
-                 1,
-                 0,
-                 1,
-                 1,
-                 1])
+                self.b_setTrackAccess([1, 1, 1, 0, 1, 1, 1])
             elif healExp == sortedExp[0]:
-                self.b_setTrackAccess([0,
-                 1,
-                 1,
-                 1,
-                 1,
-                 1,
-                 1])
+                self.b_setTrackAccess([0, 1, 1, 1, 1, 1, 1])
             else:
                 self.notify.warning('invalid exp?!: %s, %s' % (sortedExp, self.trackArray))
-                self.b_setTrackAccess([1,
-                 0,
-                 1,
-                 1,
-                 1,
-                 1,
-                 1])
+                self.b_setTrackAccess([1, 0, 1, 1, 1, 1, 1])
             fixed = 1
         if fixed:
             self.inventory.zeroInv()
@@ -2261,8 +2094,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setQuests(self.quests[:self.questCarryLimit])
             self.fixAvatar()
             anyChanged = 1
-        if self.emoteAccess[0]:
-            self.emoteAccess[0] = self.emoteAccess[1] and self.emoteAccess[2] and self.emoteAccess[3] and (self.emoteAccess[4] or 1)
+        if not (self.emoteAccess[0] and self.emoteAccess[1] and self.emoteAccess[2] and self.emoteAccess[3] and self.emoteAccess[4]):
+            self.emoteAccess[0] = 1
             self.emoteAccess[1] = 1
             self.emoteAccess[2] = 1
             self.emoteAccess[3] = 1
@@ -3118,7 +2951,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.sendUpdate('setKartAccessoriesOwned', [accessories])
 
         def setKartAccessoriesOwned(self, accessories):
-            if __debug__:
+            if (__debug__):
                 import pdb
             self.accessories = accessories
 
