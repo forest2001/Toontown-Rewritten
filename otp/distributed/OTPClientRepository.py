@@ -57,13 +57,29 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def __init__(self, serverVersion, launcher = None, playGame = None):
         ClientRepositoryBase.__init__(self)
+
+
+
         self.handler = None
+
         self.launcher = launcher
+
         base.launcher = launcher
+
+
+
         self.__currentAvId = 0
+
+
         self.productName = config.GetString('product-name', 'DisneyOnline-US')
+
+
         self.createAvatarClass = None
+
+
         self.systemMessageSfx = None
+
+
         reg_deployment = ''
         if self.productName == 'DisneyOnline-US':
             if self.launcher:
@@ -71,28 +87,39 @@ class OTPClientRepository(ClientRepositoryBase):
                     reg_deployment = self.launcher.getDeployment()
                 else:
                     reg_deployment = self.launcher.getRegistry('DEPLOYMENT')
-                    if reg_deployment != 'UK':
-                        reg_deployment = reg_deployment != 'AP' and self.launcher.getRegistry('GAME_DEPLOYMENT')
+                    if reg_deployment != 'UK' and reg_deployment != 'AP':
+
+                        reg_deployment = self.launcher.getRegistry('GAME_DEPLOYMENT')
                     self.notify.info('reg_deployment=%s' % reg_deployment)
+
                 if reg_deployment == 'UK':
                     self.productName = 'DisneyOnline-UK'
                 elif reg_deployment == 'AP':
                     self.productName = 'DisneyOnline-AP'
+
+
         self.blue = None
         if self.launcher:
             self.blue = self.launcher.getBlue()
+
         fakeBlue = config.GetString('fake-blue', '')
         if fakeBlue:
             self.blue = fakeBlue
+
+
         self.playToken = None
         if self.launcher:
             self.playToken = self.launcher.getPlayToken()
+
         fakePlayToken = config.GetString('fake-playtoken', '')
         if fakePlayToken:
             self.playToken = fakePlayToken
+
+
         self.DISLToken = None
         if self.launcher:
             self.DISLToken = self.launcher.getDISLToken()
+
         fakeDISLToken = config.GetString('fake-DISLToken', '')
         fakeDISLPlayerName = config.GetString('fake-DISL-PlayerName', '')
         if fakeDISLToken:
@@ -104,15 +131,41 @@ class OTPClientRepository(ClientRepositoryBase):
             defaultNumConcur = 1
             subCount = config.GetInt('fake-DISL-NumSubscriptions', 1)
             playerAccountId = config.GetInt('fake-DISL-PlayerAccountId', defaultId)
-            self.DISLToken = 'ACCOUNT_NAME=%s' % fakeDISLPlayerName + '&ACCOUNT_NUMBER=%s' % playerAccountId + '&ACCOUNT_NAME_APPROVAL=%s' % config.GetString('fake-DISL-PlayerNameApproved', 'YES') + '&SWID=%s' % config.GetString('fake-DISL-SWID', '{1763AC36-D73F-41C2-A54A-B579E58B69C8}') + '&FAMILY_NUMBER=%s' % config.GetString('fake-DISL-FamilyAccountId', '-1') + '&familyAdmin=%s' % config.GetString('fake-DISL-FamilyAdmin', '1') + '&PIRATES_ACCESS=%s' % config.GetString('fake-DISL-PiratesAccess', 'FULL') + '&PIRATES_MAX_NUM_AVATARS=%s' % config.GetInt('fake-DISL-MaxAvatars', defaultNumAvatars) + '&PIRATES_NUM_AVATAR_SLOTS=%s' % config.GetInt('fake-DISL-MaxAvatarSlots', defaultNumAvatarSlots) + '&expires=%s' % config.GetString('fake-DISL-expire', '1577898000') + '&OPEN_CHAT_ENABLED=%s' % config.GetString('fake-DISL-OpenChatEnabled', 'YES') + '&CREATE_FRIENDS_WITH_CHAT=%s' % config.GetString('fake-DISL-CreateFriendsWithChat', 'YES') + '&CHAT_CODE_CREATION_RULE=%s' % config.GetString('fake-DISL-ChatCodeCreation', 'YES') + '&FAMILY_MEMBERS=%s' % config.GetString('fake-DISL-FamilyMembers') + '&PIRATES_SUB_COUNT=%s' % subCount
-            for i in range(subCount):
-                self.DISLToken += '&PIRATES_SUB_%s_ACCESS=%s' % (i, config.GetString('fake-DISL-Sub-%s-Access' % i, 'FULL')) + '&PIRATES_SUB_%s_ACTIVE=%s' % (i, config.GetString('fake-DISL-Sub-%s-Active' % i, 'YES')) + '&PIRATES_SUB_%s_ID=%s' % (i, config.GetInt('fake-DISL-Sub-%s-Id' % i, playerAccountId) + config.GetInt('fake-DISL-Sub-Id-Offset', 0)) + '&PIRATES_SUB_%s_LEVEL=%s' % (i, config.GetInt('fake-DISL-Sub-%s-Level' % i, 3)) + '&PIRATES_SUB_%s_NAME=%s' % (i, config.GetString('fake-DISL-Sub-%s-Name' % i, fakeDISLPlayerName)) + '&PIRATES_SUB_%s_NUM_AVATARS=%s' % (i, config.GetInt('fake-DISL-Sub-%s-NumAvatars' % i, defaultNumAvatars)) + '&PIRATES_SUB_%s_NUM_CONCUR=%s' % (i, config.GetInt('fake-DISL-Sub-%s-NumConcur' % i, defaultNumConcur)) + '&PIRATES_SUB_%s_OWNERID=%s' % (i, config.GetInt('fake-DISL-Sub-%s-OwnerId' % i, playerAccountId)) + '&PIRATES_SUB_%s_FOUNDER=%s' % (i, config.GetString('fake-DISL-Sub-%s-Founder' % i, 'YES'))
+            self.DISLToken = ('ACCOUNT_NAME=%s' % fakeDISLPlayerName +
+                              '&ACCOUNT_NUMBER=%s' % playerAccountId +
+                              '&ACCOUNT_NAME_APPROVAL=%s' % config.GetString('fake-DISL-PlayerNameApproved', 'YES') +
+                              '&SWID=%s' % config.GetString('fake-DISL-SWID', '{1763AC36-D73F-41C2-A54A-B579E58B69C8}') +
+                              '&FAMILY_NUMBER=%s' % config.GetString('fake-DISL-FamilyAccountId', '-1') +
+                              '&familyAdmin=%s' % config.GetString('fake-DISL-FamilyAdmin', '1') +
+                              '&PIRATES_ACCESS=%s' % config.GetString('fake-DISL-PiratesAccess', 'FULL') +
+                              '&PIRATES_MAX_NUM_AVATARS=%s' % config.GetInt('fake-DISL-MaxAvatars', defaultNumAvatars) +
+                              '&PIRATES_NUM_AVATAR_SLOTS=%s' % config.GetInt('fake-DISL-MaxAvatarSlots', defaultNumAvatarSlots) +
+                              '&expires=%s' % config.GetString('fake-DISL-expire', '1577898000') +
+                              '&OPEN_CHAT_ENABLED=%s' % config.GetString('fake-DISL-OpenChatEnabled', 'YES') +
+                              '&CREATE_FRIENDS_WITH_CHAT=%s' % config.GetString('fake-DISL-CreateFriendsWithChat', 'YES') +
+                              '&CHAT_CODE_CREATION_RULE=%s' % config.GetString('fake-DISL-ChatCodeCreation', 'YES') +
+                              '&FAMILY_MEMBERS=%s' % config.GetString('fake-DISL-FamilyMembers') + '&PIRATES_SUB_COUNT=%s' % subCount)
 
-            self.DISLToken += '&WL_CHAT_ENABLED=%s' % config.GetString('fake-DISL-WLChatEnabled', 'YES') + '&valid=true'
+            for i in range(subCount):
+                self.DISLToken += ('&PIRATES_SUB_%s_ACCESS=%s' % (i, config.GetString('fake-DISL-Sub-%s-Access' % i, 'FULL')) +
+                                   '&PIRATES_SUB_%s_ACTIVE=%s' % (i, config.GetString('fake-DISL-Sub-%s-Active' % i, 'YES')) +
+                                   '&PIRATES_SUB_%s_ID=%s' % (i, config.GetInt('fake-DISL-Sub-%s-Id' % i, playerAccountId) +  config.GetInt('fake-DISL-Sub-Id-Offset', 0)) +
+                                   '&PIRATES_SUB_%s_LEVEL=%s' % (i, config.GetInt('fake-DISL-Sub-%s-Level' % i, 3)) +
+                                   '&PIRATES_SUB_%s_NAME=%s' % (i, config.GetString('fake-DISL-Sub-%s-Name' % i, fakeDISLPlayerName)) +
+                                   '&PIRATES_SUB_%s_NUM_AVATARS=%s' % (i, config.GetInt('fake-DISL-Sub-%s-NumAvatars' % i, defaultNumAvatars)) +
+                                   '&PIRATES_SUB_%s_NUM_CONCUR=%s' % (i, config.GetInt('fake-DISL-Sub-%s-NumConcur' % i, defaultNumConcur)) +
+                                   '&PIRATES_SUB_%s_OWNERID=%s' % (i, config.GetInt('fake-DISL-Sub-%s-OwnerId' % i, playerAccountId)) +
+                                   '&PIRATES_SUB_%s_FOUNDER=%s' % (i, config.GetString('fake-DISL-Sub-%s-Founder' % i, 'YES')))
+
+            self.DISLToken += ('&WL_CHAT_ENABLED=%s' % config.GetString('fake-DISL-WLChatEnabled', 'YES') +
+                               '&valid=true')
             if base.logPrivateInfo:
                 print self.DISLToken
+
+
         self.requiredLogin = config.GetString('required-login', 'auto')
         if self.requiredLogin == 'auto':
+
             self.notify.info('required-login auto.')
         elif self.requiredLogin == 'green':
             self.notify.error('The green code is out of date')
@@ -130,122 +183,283 @@ class OTPClientRepository(ClientRepositoryBase):
             self.DISLToken = None
         else:
             self.notify.error('The required-login was not recognized.')
+
         self.computeValidateDownload()
+
+
         self.wantMagicWords = base.config.GetString('want-magic-words', '')
-        if self.launcher:
-            if hasattr(self.launcher, 'http'):
-                self.http = self.launcher.http
-            else:
-                self.http = HTTPClient()
-            self.allocateDcFile()
-            self.accountOldAuth = config.GetBool('account-old-auth', 0)
-            self.accountOldAuth = config.GetBool('%s-account-old-auth' % game.name, self.accountOldAuth)
-            self.useNewTTDevLogin = base.config.GetBool('use-tt-specific-dev-login', False)
-            if self.useNewTTDevLogin:
-                self.loginInterface = LoginTTSpecificDevAccount.LoginTTSpecificDevAccount(self)
-                self.notify.info('loginInterface: LoginTTSpecificDevAccount')
-            elif self.accountOldAuth:
-                self.loginInterface = LoginGSAccount.LoginGSAccount(self)
-                self.notify.info('loginInterface: LoginGSAccount')
-            elif self.blue:
-                self.loginInterface = LoginGoAccount.LoginGoAccount(self)
-                self.notify.info('loginInterface: LoginGoAccount')
-            elif self.playToken:
-                self.loginInterface = LoginWebPlayTokenAccount(self)
-                self.notify.info('loginInterface: LoginWebPlayTokenAccount')
-            elif self.DISLToken:
-                self.loginInterface = LoginDISLTokenAccount(self)
-                self.notify.info('loginInterface: LoginDISLTokenAccount')
-            else:
-                self.loginInterface = LoginTTAccount.LoginTTAccount(self)
-                self.notify.info('loginInterface: LoginTTAccount')
-            self.secretChatAllowed = base.config.GetBool('allow-secret-chat', 0)
-            self.openChatAllowed = base.config.GetBool('allow-open-chat', 0)
-            if not base.config.GetBool('secret-chat-needs-parent-password', 0):
-                if self.launcher:
-                    self.secretChatNeedsParentPassword = self.launcher.getNeedPwForSecretKey()
-                    if not base.config.GetBool('parent-password-set', 0):
-                        if self.launcher:
-                            self.parentPasswordSet = self.launcher.getParentPasswordSet()
-                            self.userSignature = base.config.GetString('signature', 'none')
-                            self.freeTimeExpiresAt = -1
-                            self.__isPaid = 0
-                            self.periodTimerExpired = 0
-                            self.periodTimerStarted = None
-                            self.periodTimerSecondsRemaining = None
-                            self.parentMgr.registerParent(OTPGlobals.SPRender, base.render)
-                            self.parentMgr.registerParent(OTPGlobals.SPHidden, NodePath())
-                            self.timeManager = None
-                            if not config.GetBool('detect-leaks', 0):
-                                config.GetBool('client-detect-leaks', 0) and self.startLeakDetector()
-                            self.messengerLeakDetector = config.GetBool('detect-messenger-leaks', 0) or config.GetBool('ai-detect-messenger-leaks', 0) and MessengerLeakDetector.MessengerLeakDetector('client messenger leak detector')
-                            config.GetBool('leak-messages', 0) and MessengerLeakDetector._leakMessengerObject()
-                    noneValue = config.GetBool('run-garbage-reports', 0) or config.GetBool('client-run-garbage-reports', 0) and -1.0
-                    reportWait = config.GetFloat('garbage-report-wait', noneValue)
-                    reportWaitScale = config.GetFloat('garbage-report-wait-scale', noneValue)
-                    reportWait = reportWait == noneValue and 60.0 * 2.0
-                reportWaitScale = reportWaitScale == noneValue and None
-            self.garbageReportScheduler = GarbageReportScheduler(waitBetween=reportWait, waitScale=reportWaitScale)
+
+
+
+        if self.launcher and hasattr(self.launcher, 'http'):
+            self.http = self.launcher.http
+        else:
+            self.http = HTTPClient()
+
+
+        self.allocateDcFile()
+
+        self.accountOldAuth = config.GetBool('account-old-auth', 0)
+
+        self.accountOldAuth = config.GetBool('%s-account-old-auth' % game.name,
+                                             self.accountOldAuth)
+        self.useNewTTDevLogin = base.config.GetBool('use-tt-specific-dev-login', False)
+
+        if self.useNewTTDevLogin:
+            self.loginInterface = LoginTTSpecificDevAccount.LoginTTSpecificDevAccount(self)
+            self.notify.info('loginInterface: LoginTTSpecificDevAccount')
+        elif self.accountOldAuth:
+            self.loginInterface = LoginGSAccount.LoginGSAccount(self)
+            self.notify.info('loginInterface: LoginGSAccount')
+        elif self.blue:
+            self.loginInterface = LoginGoAccount.LoginGoAccount(self)
+            self.notify.info('loginInterface: LoginGoAccount')
+        elif self.playToken:
+            self.loginInterface = LoginWebPlayTokenAccount(self)
+            self.notify.info('loginInterface: LoginWebPlayTokenAccount')
+        elif self.DISLToken:
+            self.loginInterface = LoginDISLTokenAccount(self)
+            self.notify.info('loginInterface: LoginDISLTokenAccount')
+        else:
+            self.loginInterface = LoginTTAccount.LoginTTAccount(self)
+            self.notify.info('loginInterface: LoginTTAccount')
+
+
+        self.secretChatAllowed = base.config.GetBool('allow-secret-chat', 0)
+        self.openChatAllowed = base.config.GetBool('allow-open-chat', 0)
+
+
+        self.secretChatNeedsParentPassword = base.config.GetBool('secret-chat-needs-parent-password', 0) or (self.launcher and self.launcher.getNeedPwForSecretKey())
+
+
+
+
+        self.parentPasswordSet = base.config.GetBool('parent-password-set', 0) or (self.launcher and self.launcher.getParentPasswordSet())
+
+
+        self.userSignature = base.config.GetString('signature', 'none')
+
+
+
+        self.freeTimeExpiresAt = -1
+        self.__isPaid = 0
+
+
+
+        self.periodTimerExpired = 0
+        self.periodTimerStarted = None
+        self.periodTimerSecondsRemaining = None
+
+
+        self.parentMgr.registerParent(OTPGlobals.SPRender, base.render)
+
+
+        self.parentMgr.registerParent(OTPGlobals.SPHidden, NodePath())
+
+        self.timeManager = None
+
+        if config.GetBool('detect-leaks', 0) or config.GetBool('client-detect-leaks', 0):
+            self.startLeakDetector()
+
+        if config.GetBool('detect-messenger-leaks', 0) or config.GetBool('ai-detect-messenger-leaks', 0):
+            self.messengerLeakDetector = MessengerLeakDetector.MessengerLeakDetector('client messenger leak detector')
+
+            if config.GetBool('leak-messages', 0):
+                MessengerLeakDetector._leakMessengerObject()
+
+        if config.GetBool('run-garbage-reports', 0) or config.GetBool('client-run-garbage-reports', 0):
+            noneValue = -1.0
+            reportWait = config.GetFloat('garbage-report-wait', noneValue)
+            reportWaitScale = config.GetFloat('garbage-report-wait-scale', noneValue)
+            if reportWait == noneValue:
+                reportWait = 60.0 * 2.0
+            if reportWaitScale == noneValue:
+                reportWaitScale = None
+            self.garbageReportScheduler = GarbageReportScheduler(waitBetween=reportWait,
+                                                                 waitScale=reportWaitScale)
+
         self._proactiveLeakChecks = config.GetBool('proactive-leak-checks', 1) or config.GetBool('client-proactive-leak-checks', 1)
         self._crashOnProactiveLeakDetect = config.GetBool('crash-on-proactive-leak-detect', 1)
         self.activeDistrictMap = {}
         self.telemetryLimiter = TelemetryLimiter()
         self.serverVersion = serverVersion
         self.waitingForDatabase = None
-        self.loginFSM = ClassicFSM('loginFSM', [State('loginOff', self.enterLoginOff, self.exitLoginOff, ['connect']),
-         State('connect', self.enterConnect, self.exitConnect, ['login', 'failedToConnect', 'failedToGetServerConstants']),
-         State('login', self.enterLogin, self.exitLogin, ['noConnection',
-          'waitForGameList',
-          'createAccount',
-          'reject',
-          'failedToConnect',
-          'shutdown']),
-         State('createAccount', self.enterCreateAccount, self.exitCreateAccount, ['noConnection',
-          'waitForGameList',
-          'login',
-          'reject',
-          'failedToConnect',
-          'shutdown']),
-         State('failedToConnect', self.enterFailedToConnect, self.exitFailedToConnect, ['connect', 'shutdown']),
-         State('failedToGetServerConstants', self.enterFailedToGetServerConstants, self.exitFailedToGetServerConstants, ['connect', 'shutdown', 'noConnection']),
-         State('shutdown', self.enterShutdown, self.exitShutdown, ['loginOff']),
-         State('waitForGameList', self.enterWaitForGameList, self.exitWaitForGameList, ['noConnection', 'waitForShardList', 'missingGameRootObject']),
-         State('missingGameRootObject', self.enterMissingGameRootObject, self.exitMissingGameRootObject, ['waitForGameList', 'shutdown']),
-         State('waitForShardList', self.enterWaitForShardList, self.exitWaitForShardList, ['noConnection', 'waitForAvatarList', 'noShards']),
-         State('noShards', self.enterNoShards, self.exitNoShards, ['noConnection', 'noShardsWait', 'shutdown']),
-         State('noShardsWait', self.enterNoShardsWait, self.exitNoShardsWait, ['noConnection', 'waitForShardList', 'shutdown']),
-         State('reject', self.enterReject, self.exitReject, []),
-         State('noConnection', self.enterNoConnection, self.exitNoConnection, ['login', 'connect', 'shutdown']),
-         State('afkTimeout', self.enterAfkTimeout, self.exitAfkTimeout, ['waitForAvatarList', 'shutdown']),
-         State('periodTimeout', self.enterPeriodTimeout, self.exitPeriodTimeout, ['shutdown']),
-         State('waitForAvatarList', self.enterWaitForAvatarList, self.exitWaitForAvatarList, ['noConnection', 'chooseAvatar', 'shutdown']),
-         State('chooseAvatar', self.enterChooseAvatar, self.exitChooseAvatar, ['noConnection',
-          'createAvatar',
-          'waitForAvatarList',
-          'waitForSetAvatarResponse',
-          'waitForDeleteAvatarResponse',
-          'shutdown',
-          'login']),
-         State('createAvatar', self.enterCreateAvatar, self.exitCreateAvatar, ['noConnection',
-          'chooseAvatar',
-          'waitForSetAvatarResponse',
-          'shutdown']),
-         State('waitForDeleteAvatarResponse', self.enterWaitForDeleteAvatarResponse, self.exitWaitForDeleteAvatarResponse, ['noConnection', 'chooseAvatar', 'shutdown']),
-         State('rejectRemoveAvatar', self.enterRejectRemoveAvatar, self.exitRejectRemoveAvatar, ['noConnection', 'chooseAvatar', 'shutdown']),
-         State('waitForSetAvatarResponse', self.enterWaitForSetAvatarResponse, self.exitWaitForSetAvatarResponse, ['noConnection', 'playingGame', 'shutdown']),
-         State('playingGame', self.enterPlayingGame, self.exitPlayingGame, ['noConnection',
-          'waitForAvatarList',
-          'login',
-          'shutdown',
-          'afkTimeout',
-          'periodTimeout',
-          'noShards'])], 'loginOff', 'loginOff')
-        self.gameFSM = ClassicFSM('gameFSM', [State('gameOff', self.enterGameOff, self.exitGameOff, ['waitOnEnterResponses']),
-         State('waitOnEnterResponses', self.enterWaitOnEnterResponses, self.exitWaitOnEnterResponses, ['playGame', 'tutorialQuestion', 'gameOff']),
-         State('tutorialQuestion', self.enterTutorialQuestion, self.exitTutorialQuestion, ['playGame', 'gameOff']),
-         State('playGame', self.enterPlayGame, self.exitPlayGame, ['gameOff', 'closeShard', 'switchShards']),
-         State('switchShards', self.enterSwitchShards, self.exitSwitchShards, ['gameOff', 'waitOnEnterResponses']),
-         State('closeShard', self.enterCloseShard, self.exitCloseShard, ['gameOff', 'waitOnEnterResponses'])], 'gameOff', 'gameOff')
+        self.loginFSM = ClassicFSM('loginFSM', [
+            State('loginOff',
+                  self.enterLoginOff,
+                  self.exitLoginOff, [
+                      'connect']),
+            State('connect',
+                  self.enterConnect,
+                  self.exitConnect, [
+                      'login',
+                      'failedToConnect',
+                      'failedToGetServerConstants']),
+            State('login',
+                  self.enterLogin,
+                  self.exitLogin, [
+                      'noConnection',
+                      'waitForGameList',
+                      'createAccount',
+                      'reject',
+                      'failedToConnect',
+                      'shutdown']),
+            State('createAccount',
+                  self.enterCreateAccount,
+                  self.exitCreateAccount, [
+                      'noConnection',
+                      'waitForGameList',
+                      'login',
+                      'reject',
+                      'failedToConnect',
+                      'shutdown']),
+            State('failedToConnect',
+                  self.enterFailedToConnect,
+                  self.exitFailedToConnect, [
+                      'connect',
+                      'shutdown']),
+            State('failedToGetServerConstants',
+                  self.enterFailedToGetServerConstants,
+                  self.exitFailedToGetServerConstants, [
+                      'connect',
+                      'shutdown',
+                      'noConnection']),
+            State('shutdown',
+                  self.enterShutdown,
+                  self.exitShutdown, [
+                      'loginOff']),
+            State('waitForGameList',
+                  self.enterWaitForGameList,
+                  self.exitWaitForGameList, [
+                      'noConnection',
+                      'waitForShardList',
+                      'missingGameRootObject']),
+            State('missingGameRootObject',
+                  self.enterMissingGameRootObject,
+                  self.exitMissingGameRootObject, [
+                      'waitForGameList',
+                      'shutdown']),
+            State('waitForShardList',
+                  self.enterWaitForShardList,
+                  self.exitWaitForShardList, [
+                      'noConnection',
+                      'waitForAvatarList',
+                      'noShards']),
+            State('noShards',
+                  self.enterNoShards,
+                  self.exitNoShards, [
+                      'noConnection',
+                      'noShardsWait',
+                      'shutdown']),
+            State('noShardsWait',
+                  self.enterNoShardsWait,
+                  self.exitNoShardsWait, [
+                      'noConnection',
+                      'waitForShardList',
+                      'shutdown']),
+            State('reject',
+                  self.enterReject,
+                  self.exitReject, []),
+            State('noConnection',
+                  self.enterNoConnection,
+                  self.exitNoConnection, [
+                      'login',
+                      'connect',
+                      'shutdown']),
+            State('afkTimeout',
+                  self.enterAfkTimeout,
+                  self.exitAfkTimeout, [
+                      'waitForAvatarList',
+                      'shutdown']),
+            State('periodTimeout',
+                  self.enterPeriodTimeout,
+                  self.exitPeriodTimeout, [
+                      'shutdown']),
+            State('waitForAvatarList',
+                  self.enterWaitForAvatarList,
+                  self.exitWaitForAvatarList, [
+                      'noConnection',
+                      'chooseAvatar',
+                      'shutdown']),
+            State('chooseAvatar',
+                  self.enterChooseAvatar,
+                  self.exitChooseAvatar, [
+                      'noConnection',
+                      'createAvatar',
+                      'waitForAvatarList',
+                      'waitForSetAvatarResponse',
+                      'waitForDeleteAvatarResponse',
+                      'shutdown',
+                      'login']),
+            State('createAvatar',
+                  self.enterCreateAvatar,
+                  self.exitCreateAvatar, [
+                      'noConnection',
+                      'chooseAvatar',
+                      'waitForSetAvatarResponse',
+                      'shutdown']),
+            State('waitForDeleteAvatarResponse',
+                  self.enterWaitForDeleteAvatarResponse,
+                  self.exitWaitForDeleteAvatarResponse, [
+                      'noConnection',
+                      'chooseAvatar',
+                      'shutdown']),
+            State('rejectRemoveAvatar',
+                  self.enterRejectRemoveAvatar,
+                  self.exitRejectRemoveAvatar, [
+                      'noConnection',
+                      'chooseAvatar',
+                      'shutdown']),
+            State('waitForSetAvatarResponse',
+                  self.enterWaitForSetAvatarResponse,
+                  self.exitWaitForSetAvatarResponse, [
+                      'noConnection',
+                      'playingGame',
+                      'shutdown']),
+            State('playingGame',
+                  self.enterPlayingGame,
+                  self.exitPlayingGame, [
+                      'noConnection',
+                      'waitForAvatarList',
+                      'login',
+                      'shutdown',
+                      'afkTimeout',
+                      'periodTimeout',
+                      'noShards'])],
+            'loginOff', 'loginOff')
+        self.gameFSM = ClassicFSM('gameFSM', [
+            State('gameOff',
+                  self.enterGameOff,
+                  self.exitGameOff, [
+                      'waitOnEnterResponses']),
+            State('waitOnEnterResponses',
+                  self.enterWaitOnEnterResponses,
+                  self.exitWaitOnEnterResponses, [
+                      'playGame',
+                      'tutorialQuestion',
+                      'gameOff']),
+            State('tutorialQuestion',
+                  self.enterTutorialQuestion,
+                  self.exitTutorialQuestion, [
+                      'playGame',
+                      'gameOff']),
+            State('playGame',
+                  self.enterPlayGame,
+                  self.exitPlayGame, [
+                      'gameOff',
+                      'closeShard',
+                      'switchShards']),
+            State('switchShards',
+                  self.enterSwitchShards,
+                  self.exitSwitchShards, [
+                      'gameOff',
+                      'waitOnEnterResponses']),
+            State('closeShard',
+                  self.enterCloseShard,
+                  self.exitCloseShard, [
+                      'gameOff',
+                      'waitOnEnterResponses'])],
+            'gameOff', 'gameOff')
         self.loginFSM.getStateNamed('playingGame').addChild(self.gameFSM)
         self.loginFSM.enterInitialState()
         self.loginScreen = None
@@ -257,7 +471,6 @@ class OTPClientRepository(ClientRepositoryBase):
         self.wantSwitchboard = config.GetBool('want-switchboard', 0)
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
-        return None
 
     def startLeakDetector(self):
         if hasattr(self, 'leakDetector'):
@@ -295,10 +508,10 @@ class OTPClientRepository(ClientRepositoryBase):
             self.validateDownload = hash.asHex()
         else:
             self.validateDownload = ''
-            if not os.path.expandvars('$TOONTOWN'):
-                basePath = './toontown'
-                downloadParFilename = Filename.expandFrom(basePath + '/src/configfiles/download.par')
-                downloadPar = downloadParFilename.exists() and open(downloadParFilename.toOsSpecific())
+            basePath = os.path.expandvars('$TOONTOWN') or './toontown'
+            downloadParFilename = Filename.expandFrom(basePath + '/src/configfiles/download.par')
+            if downloadParFilename.exists():
+                downloadPar = open(downloadParFilename.toOsSpecific())
                 for line in downloadPar.readlines():
                     i = string.find(line, 'VALIDATE_DOWNLOAD=')
                     if i != -1:
