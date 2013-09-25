@@ -1031,102 +1031,18 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         self.scores[i] -= 1
         self.scorePanels[i].setScore(self.scores[i])
 
-    def postStep--- This code section failed: ---
-
-0	LOAD_GLOBAL       'DistributedIceWorld'
-3	LOAD_ATTR         'DistributedIceWorld'
-6	LOAD_ATTR         'postStep'
-9	LOAD_FAST         'self'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
-
-16	SETUP_LOOP        '216'
-19	LOAD_GLOBAL       'range'
-22	LOAD_FAST         'self'
-25	LOAD_ATTR         'colCount'
-28	CALL_FUNCTION_1   None
-31	GET_ITER          None
-32	FOR_ITER          '215'
-35	STORE_FAST        'count'
-
-38	LOAD_FAST         'self'
-41	LOAD_ATTR         'getOrderedContacts'
-44	LOAD_FAST         'count'
-47	CALL_FUNCTION_1   None
-50	UNPACK_SEQUENCE_2 None
-53	STORE_FAST        'c0'
-56	STORE_FAST        'c1'
-
-59	LOAD_FAST         'c1'
-62	LOAD_FAST         'self'
-65	LOAD_ATTR         'tireCollideIds'
-68	COMPARE_OP        'in'
-71	JUMP_IF_FALSE     '212'
-
-74	LOAD_FAST         'self'
-77	LOAD_ATTR         'tireCollideIds'
-80	LOAD_ATTR         'index'
-83	LOAD_FAST         'c1'
-86	CALL_FUNCTION_1   None
-89	STORE_FAST        'tireIndex'
-
-92	LOAD_FAST         'c0'
-95	LOAD_FAST         'self'
-98	LOAD_ATTR         'tireCollideIds'
-101	COMPARE_OP        'in'
-104	JUMP_IF_FALSE     '131'
-
-107	LOAD_FAST         'self'
-110	LOAD_ATTR         'tireSounds'
-113	LOAD_FAST         'tireIndex'
-116	BINARY_SUBSCR     None
-117	LOAD_CONST        'tireHit'
-120	BINARY_SUBSCR     None
-121	LOAD_ATTR         'play'
-124	CALL_FUNCTION_0   None
-127	POP_TOP           None
-128	JUMP_ABSOLUTE     '212'
-
-131	LOAD_FAST         'c0'
-134	LOAD_FAST         'self'
-137	LOAD_ATTR         'wallCollideId'
-140	COMPARE_OP        '=='
-143	JUMP_IF_FALSE     '170'
-
-146	LOAD_FAST         'self'
-149	LOAD_ATTR         'tireSounds'
-152	LOAD_FAST         'tireIndex'
-155	BINARY_SUBSCR     None
-156	LOAD_CONST        'wallHit'
-159	BINARY_SUBSCR     None
-160	LOAD_ATTR         'play'
-163	CALL_FUNCTION_0   None
-166	POP_TOP           None
-167	JUMP_ABSOLUTE     '212'
-
-170	LOAD_FAST         'c0'
-173	LOAD_FAST         'self'
-176	LOAD_ATTR         'obstacleCollideId'
-179	COMPARE_OP        '=='
-182	JUMP_IF_FALSE     '209'
-
-185	LOAD_FAST         'self'
-188	LOAD_ATTR         'tireSounds'
-191	LOAD_FAST         'tireIndex'
-194	BINARY_SUBSCR     None
-195	LOAD_CONST        'obstacleHit'
-198	BINARY_SUBSCR     None
-199	LOAD_ATTR         'play'
-202	CALL_FUNCTION_0   None
-205	POP_TOP           None
-206	JUMP_ABSOLUTE     '212'
-
-209	CONTINUE          '32'
-212	JUMP_BACK         '32'
-215	POP_BLOCK         None
-216_0	COME_FROM         '16'
-
-Syntax error at or near `POP_BLOCK' token at offset 215
+    def postStep(self):
+        DistributedIceWorld.DistributedIceWorld.postStep(self)
+        for count in range(self.colCount):
+            c0, c1 = self.getOrderedContacts(count)
+            if c1 in self.tireCollideIds:
+                tireIndex = self.tireCollideIds.index(c1)
+                if c0 in self.tireCollideIds:
+                    self.tireSounds[tireIndex]['tireHit'].play()
+                elif c0 == self.wallCollideId:
+                    self.tireSounds[tireIndex]['wallHit'].play()
+                elif c0 == self.obstacleCollideId:
+                    self.tireSounds[tireIndex]['obstacleHit'].play()
 
     def forceLocalToonToTire(self):
         toon = localAvatar
@@ -1136,109 +1052,3 @@ Syntax error at or near `POP_BLOCK' token at offset 215
             toon.setPosHpr(0, 0, 0, 0, 0, 0)
             toon.setY(1.0)
             toon.setZ(-3)
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedIceGame.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_GLOBAL       'DistributedIceWorld'
-3	LOAD_ATTR         'DistributedIceWorld'
-6	LOAD_ATTR         'postStep'
-9	LOAD_FAST         'self'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
-
-16	SETUP_LOOP        '216'
-19	LOAD_GLOBAL       'range'
-22	LOAD_FAST         'self'
-25	LOAD_ATTR         'colCount'
-28	CALL_FUNCTION_1   None
-31	GET_ITER          None
-32	FOR_ITER          '215'
-35	STORE_FAST        'count'
-
-38	LOAD_FAST         'self'
-41	LOAD_ATTR         'getOrderedContacts'
-44	LOAD_FAST         'count'
-47	CALL_FUNCTION_1   None
-50	UNPACK_SEQUENCE_2 None
-53	STORE_FAST        'c0'
-56	STORE_FAST        'c1'
-
-59	LOAD_FAST         'c1'
-62	LOAD_FAST         'self'
-65	LOAD_ATTR         'tireCollideIds'
-68	COMPARE_OP        'in'
-71	JUMP_IF_FALSE     '212'
-
-74	LOAD_FAST         'self'
-77	LOAD_ATTR         'tireCollideIds'
-80	LOAD_ATTR         'index'
-83	LOAD_FAST         'c1'
-86	CALL_FUNCTION_1   None
-89	STORE_FAST        'tireIndex'
-
-92	LOAD_FAST         'c0'
-95	LOAD_FAST         'self'
-98	LOAD_ATTR         'tireCollideIds'
-101	COMPARE_OP        'in'
-104	JUMP_IF_FALSE     '131'
-
-107	LOAD_FAST         'self'
-110	LOAD_ATTR         'tireSounds'
-113	LOAD_FAST         'tireIndex'
-116	BINARY_SUBSCR     None
-117	LOAD_CONST        'tireHit'
-120	BINARY_SUBSCR     None
-121	LOAD_ATTR         'play'
-124	CALL_FUNCTION_0   None
-127	POP_TOP           None
-128	JUMP_ABSOLUTE     '212'
-
-131	LOAD_FAST         'c0'
-134	LOAD_FAST         'self'
-137	LOAD_ATTR         'wallCollideId'
-140	COMPARE_OP        '=='
-143	JUMP_IF_FALSE     '170'
-
-146	LOAD_FAST         'self'
-149	LOAD_ATTR         'tireSounds'
-152	LOAD_FAST         'tireIndex'
-155	BINARY_SUBSCR     None
-156	LOAD_CONST        'wallHit'
-159	BINARY_SUBSCR     None
-160	LOAD_ATTR         'play'
-163	CALL_FUNCTION_0   None
-166	POP_TOP           None
-167	JUMP_ABSOLUTE     '212'
-
-170	LOAD_FAST         'c0'
-173	LOAD_FAST         'self'
-176	LOAD_ATTR         'obstacleCollideId'
-179	COMPARE_OP        '=='
-182	JUMP_IF_FALSE     '209'
-
-185	LOAD_FAST         'self'
-188	LOAD_ATTR         'tireSounds'
-191	LOAD_FAST         'tireIndex'
-194	BINARY_SUBSCR     None
-195	LOAD_CONST        'obstacleHit'
-198	BINARY_SUBSCR     None
-199	LOAD_ATTR         'play'
-202	CALL_FUNCTION_0   None
-205	POP_TOP           None
-206	JUMP_ABSOLUTE     '212'
-
-209	CONTINUE          '32'
-212	JUMP_BACK         '32'
-215	POP_BLOCK         None
-216_0	COME_FROM         '16'
-
-Syntax error at or near `POP_BLOCK' token at offset 215
-
