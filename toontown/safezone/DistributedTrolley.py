@@ -205,9 +205,9 @@ class DistributedTrolley(DistributedObject.DistributedObject):
     def fillSlot(self, index, avId):
         if avId == 0:
             pass
-        elif avId == base.localAvatar.getDoId():
-            if not self.fsm.getCurrentState().getName() == 'waitEmpty':
-                if not self.fsm.getCurrentState().getName() == 'waitCountdown':
+        else:
+            if avId == base.localAvatar.getDoId():
+                if not (self.fsm.getCurrentState().getName() == 'waitEmpty' or self.fsm.getCurrentState().getName() == 'waitCountdown'):
                     self.notify.warning("Can't board the trolley while in the '%s' state." % self.fsm.getCurrentState().getName())
                     self.loader.place.fsm.request('walk')
                     return
@@ -218,18 +218,19 @@ class DistributedTrolley(DistributedObject.DistributedObject):
                 else:
                     self.notify.warning("Can't board the trolley because it doesn't exist")
                     self.sendUpdate('requestExit')
-            toon = self.cr.doId2do.has_key(avId) and self.cr.doId2do[avId]
-            toon.stopSmooth()
-            toon.wrtReparentTo(self.trolleyCar)
-            toon.setAnimState('run', 1.0)
-            toon.headsUp(-5, -4.5 + index * 3, 1.4)
-            sitStartDuration = toon.getDuration('sit-start')
-            track = Sequence(LerpPosInterval(toon, TOON_BOARD_TIME * 0.75, Point3(-5, -4.5 + index * 3, 1.4)), LerpHprInterval(toon, TOON_BOARD_TIME * 0.25, Point3(90, 0, 0)), Parallel(Sequence(Wait(sitStartDuration * 0.25), LerpPosInterval(toon, sitStartDuration * 0.25, Point3(-3.9, -4.5 + index * 3, 3.0))), ActorInterval(toon, 'sit-start')), Func(toon.setAnimState, 'Sit', 1.0), Func(self.clearToonTrack, avId), name=toon.uniqueName('fillTrolley'), autoPause=1)
-            track.delayDelete = DelayDelete.DelayDelete(toon, 'Trolley.fillSlot')
-            self.storeToonTrack(avId, track)
-            track.start()
-        else:
-            DistributedTrolley.notify.warning('toon: ' + str(avId) + " doesn't exist, and" + ' cannot board the trolley!')
+            if self.cr.doId2do.has_key(avId):
+                toon = self.cr.doId2do[avId]
+                toon.stopSmooth()
+                toon.wrtReparentTo(self.trolleyCar)
+                toon.setAnimState('run', 1.0)
+                toon.headsUp(-5, -4.5 + index * 3, 1.4)
+                sitStartDuration = toon.getDuration('sit-start')
+                track = Sequence(LerpPosInterval(toon, TOON_BOARD_TIME * 0.75, Point3(-5, -4.5 + index * 3, 1.4)), LerpHprInterval(toon, TOON_BOARD_TIME * 0.25, Point3(90, 0, 0)), Parallel(Sequence(Wait(sitStartDuration * 0.25), LerpPosInterval(toon, sitStartDuration * 0.25, Point3(-3.9, -4.5 + index * 3, 3.0))), ActorInterval(toon, 'sit-start')), Func(toon.setAnimState, 'Sit', 1.0), Func(self.clearToonTrack, avId), name=toon.uniqueName('fillTrolley'), autoPause=1)
+                track.delayDelete = DelayDelete.DelayDelete(toon, 'Trolley.fillSlot')
+                self.storeToonTrack(avId, track)
+                track.start()
+            else:
+                DistributedTrolley.notify.warning('toon: ' + str(avId) + " doesn't exist, and" + ' cannot board the trolley!')
 
     def emptySlot0(self, avId, timestamp):
         self.emptySlot(0, avId, timestamp)
