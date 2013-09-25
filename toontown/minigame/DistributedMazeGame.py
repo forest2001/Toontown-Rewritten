@@ -771,650 +771,150 @@ class DistributedMazeGame(DistributedMinigame):
         if avId != self.localAvId:
             self.__showToonHitBySuit(avId, timestamp)
 
-    def __showToonHitBySuit--- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'getAvatar'
-6	LOAD_FAST         'avId'
-9	CALL_FUNCTION_1   None
-12	STORE_DEREF       'toon'
-
-15	LOAD_DEREF        'toon'
-18	LOAD_CONST        None
-21	COMPARE_OP        '=='
-24	JUMP_IF_FALSE     '34'
-
-27	LOAD_CONST        None
-30	RETURN_VALUE      None
-31	JUMP_FORWARD      '34'
-34_0	COME_FROM         '31'
-
-34	LOAD_FAST         'self'
-37	LOAD_ATTR         'toonRNGs'
-40	LOAD_FAST         'self'
-43	LOAD_ATTR         'avIdList'
-46	LOAD_ATTR         'index'
-49	LOAD_FAST         'avId'
-52	CALL_FUNCTION_1   None
-55	BINARY_SUBSCR     None
-56	STORE_FAST        'rng'
-
-59	LOAD_DEREF        'toon'
-62	LOAD_ATTR         'getPos'
-65	LOAD_GLOBAL       'render'
-68	CALL_FUNCTION_1   None
-71	STORE_FAST        'curPos'
-
-74	LOAD_FAST         'self'
-77	LOAD_ATTR         'toonHitTracks'
-80	LOAD_FAST         'avId'
-83	BINARY_SUBSCR     None
-84	STORE_FAST        'oldTrack'
-
-87	LOAD_FAST         'oldTrack'
-90	LOAD_ATTR         'isPlaying'
-93	CALL_FUNCTION_0   None
-96	JUMP_IF_FALSE     '112'
-
-99	LOAD_FAST         'oldTrack'
-102	LOAD_ATTR         'finish'
-105	CALL_FUNCTION_0   None
-108	POP_TOP           None
-109	JUMP_FORWARD      '112'
-112_0	COME_FROM         '109'
-
-112	LOAD_DEREF        'toon'
-115	LOAD_ATTR         'setPos'
-118	LOAD_FAST         'curPos'
-121	CALL_FUNCTION_1   None
-124	POP_TOP           None
-
-125	LOAD_DEREF        'toon'
-128	LOAD_ATTR         'setZ'
-131	LOAD_FAST         'self'
-134	LOAD_ATTR         'TOON_Z'
-137	CALL_FUNCTION_1   None
-140	POP_TOP           None
-
-141	LOAD_GLOBAL       'render'
-144	LOAD_ATTR         'attachNewNode'
-147	LOAD_CONST        'mazeFlyToonParent-'
-150	LOAD_FAST         'avId'
-153	UNARY_CONVERT     None
-154	BINARY_ADD        None
-155	CALL_FUNCTION_1   None
-158	STORE_FAST        'parentNode'
-
-161	LOAD_FAST         'parentNode'
-164	LOAD_ATTR         'setPos'
-167	LOAD_DEREF        'toon'
-170	LOAD_ATTR         'getPos'
-173	CALL_FUNCTION_0   None
-176	CALL_FUNCTION_1   None
-179	POP_TOP           None
-
-180	LOAD_DEREF        'toon'
-183	LOAD_ATTR         'reparentTo'
-186	LOAD_FAST         'parentNode'
-189	CALL_FUNCTION_1   None
-192	POP_TOP           None
-
-193	LOAD_DEREF        'toon'
-196	LOAD_ATTR         'setPos'
-199	LOAD_CONST        0
-202	LOAD_CONST        0
-205	LOAD_CONST        0
-208	CALL_FUNCTION_3   None
-211	POP_TOP           None
-
-212	LOAD_FAST         'parentNode'
-215	LOAD_ATTR         'getPos'
-218	CALL_FUNCTION_0   None
-221	STORE_FAST        'startPos'
-
-224	LOAD_DEREF        'toon'
-227	LOAD_ATTR         'dropShadow'
-230	LOAD_ATTR         'copyTo'
-233	LOAD_FAST         'parentNode'
-236	CALL_FUNCTION_1   None
-239	STORE_FAST        'dropShadow'
-
-242	LOAD_FAST         'dropShadow'
-245	LOAD_ATTR         'setScale'
-248	LOAD_DEREF        'toon'
-251	LOAD_ATTR         'dropShadow'
-254	LOAD_ATTR         'getScale'
-257	LOAD_GLOBAL       'render'
-260	CALL_FUNCTION_1   None
-263	CALL_FUNCTION_1   None
-266	POP_TOP           None
-
-267	LOAD_GLOBAL       'Trajectory'
-270	LOAD_ATTR         'Trajectory'
-273	LOAD_CONST        0
-
-276	LOAD_GLOBAL       'Point3'
-279	LOAD_CONST        0
-282	LOAD_CONST        0
-285	LOAD_CONST        0
-288	CALL_FUNCTION_3   None
-
-291	LOAD_GLOBAL       'Point3'
-294	LOAD_CONST        0
-297	LOAD_CONST        0
-300	LOAD_CONST        50
-303	CALL_FUNCTION_3   None
-
-306	LOAD_CONST        'gravMult'
-309	LOAD_CONST        1.0
-312	CALL_FUNCTION_259 None
-315	STORE_FAST        'trajectory'
-
-318	LOAD_FAST         'trajectory'
-321	LOAD_ATTR         'calcTimeOfImpactOnPlane'
-324	LOAD_CONST        0.0
-327	CALL_FUNCTION_1   None
-330	STORE_FAST        'flyDur'
-
-333	SETUP_LOOP        '429'
-
-336	LOAD_FAST         'rng'
-339	LOAD_ATTR         'randint'
-342	LOAD_CONST        2
-345	LOAD_FAST         'self'
-348	LOAD_ATTR         'maze'
-351	LOAD_ATTR         'width'
-354	LOAD_CONST        1
-357	BINARY_SUBTRACT   None
-358	CALL_FUNCTION_2   None
-361	LOAD_FAST         'rng'
-364	LOAD_ATTR         'randint'
-367	LOAD_CONST        2
-370	LOAD_FAST         'self'
-373	LOAD_ATTR         'maze'
-376	LOAD_ATTR         'height'
-379	LOAD_CONST        1
-382	BINARY_SUBTRACT   None
-383	CALL_FUNCTION_2   None
-386	BUILD_LIST_2      None
-389	STORE_FAST        'endTile'
-
-392	LOAD_FAST         'self'
-395	LOAD_ATTR         'maze'
-398	LOAD_ATTR         'isWalkable'
-401	LOAD_FAST         'endTile'
-404	LOAD_CONST        0
-407	BINARY_SUBSCR     None
-408	LOAD_FAST         'endTile'
-411	LOAD_CONST        1
-414	BINARY_SUBSCR     None
-415	CALL_FUNCTION_2   None
-418	JUMP_IF_FALSE     '425'
-
-421	BREAK_LOOP        None
-422	JUMP_BACK         '336'
-425	JUMP_BACK         '336'
-428	POP_BLOCK         None
-429_0	COME_FROM         '333'
-
-429	LOAD_FAST         'self'
-432	LOAD_ATTR         'maze'
-435	LOAD_ATTR         'tile2world'
-438	LOAD_FAST         'endTile'
-441	LOAD_CONST        0
-444	BINARY_SUBSCR     None
-445	LOAD_FAST         'endTile'
-448	LOAD_CONST        1
-451	BINARY_SUBSCR     None
-452	CALL_FUNCTION_2   None
-455	STORE_FAST        'endWorldCoords'
-
-458	LOAD_GLOBAL       'Point3'
-461	LOAD_FAST         'endWorldCoords'
-464	LOAD_CONST        0
-467	BINARY_SUBSCR     None
-468	LOAD_FAST         'endWorldCoords'
-471	LOAD_CONST        1
-474	BINARY_SUBSCR     None
-475	LOAD_FAST         'startPos'
-478	LOAD_CONST        2
-481	BINARY_SUBSCR     None
-482	CALL_FUNCTION_3   None
-485	STORE_DEREF       'endPos'
-
-488	LOAD_FAST         'startPos'
-491	LOAD_DEREF        'endPos'
-494	LOAD_FAST         'flyDur'
-497	LOAD_FAST         'parentNode'
-500	LOAD_DEREF        'toon'
-503	LOAD_CONST        '<code_object flyFunc>'
-506	MAKE_FUNCTION_5   None
-509	STORE_FAST        'flyFunc'
-
-512	LOAD_GLOBAL       'Sequence'
-515	LOAD_GLOBAL       'LerpFunctionInterval'
-518	LOAD_FAST         'flyFunc'
-
-521	LOAD_CONST        'fromData'
-524	LOAD_CONST        0.0
-527	LOAD_CONST        'toData'
-530	LOAD_FAST         'flyDur'
-
-533	LOAD_CONST        'duration'
-536	LOAD_FAST         'flyDur'
-
-539	LOAD_CONST        'extraArgs'
-542	LOAD_FAST         'trajectory'
-545	BUILD_LIST_1      None
-548	CALL_FUNCTION_1025 None
-
-551	LOAD_CONST        'name'
-554	LOAD_DEREF        'toon'
-557	LOAD_ATTR         'uniqueName'
-560	LOAD_CONST        'hitBySuit-fly'
-563	CALL_FUNCTION_1   None
-566	CALL_FUNCTION_257 None
-569	STORE_FAST        'flyTrack'
-
-572	LOAD_FAST         'avId'
-575	LOAD_FAST         'self'
-578	LOAD_ATTR         'localAvId'
-581	COMPARE_OP        '!='
-584	JUMP_IF_FALSE     '599'
-
-587	LOAD_GLOBAL       'Sequence'
-590	CALL_FUNCTION_0   None
-593	STORE_FAST        'cameraTrack'
-596	JUMP_FORWARD      '815'
-
-599	LOAD_FAST         'self'
-602	LOAD_ATTR         'camParent'
-605	LOAD_ATTR         'reparentTo'
-608	LOAD_FAST         'parentNode'
-611	CALL_FUNCTION_1   None
-614	POP_TOP           None
-
-615	LOAD_GLOBAL       'camera'
-618	LOAD_ATTR         'getPos'
-621	CALL_FUNCTION_0   None
-624	STORE_FAST        'startCamPos'
-
-627	LOAD_GLOBAL       'camera'
-630	LOAD_ATTR         'getPos'
-633	CALL_FUNCTION_0   None
-636	STORE_FAST        'destCamPos'
-
-639	LOAD_FAST         'trajectory'
-642	LOAD_ATTR         'getPos'
-645	LOAD_FAST         'flyDur'
-648	LOAD_CONST        2.0
-651	BINARY_DIVIDE     None
-652	CALL_FUNCTION_1   None
-655	LOAD_CONST        2
-658	BINARY_SUBSCR     None
-659	STORE_FAST        'zenith'
-
-662	LOAD_FAST         'destCamPos'
-665	LOAD_ATTR         'setZ'
-668	LOAD_FAST         'zenith'
-671	LOAD_CONST        1.3
-674	BINARY_MULTIPLY   None
-675	CALL_FUNCTION_1   None
-678	POP_TOP           None
-
-679	LOAD_FAST         'destCamPos'
-682	LOAD_ATTR         'setY'
-685	LOAD_FAST         'destCamPos'
-688	LOAD_CONST        1
-691	BINARY_SUBSCR     None
-692	LOAD_CONST        0.3
-695	BINARY_MULTIPLY   None
-696	CALL_FUNCTION_1   None
-699	POP_TOP           None
-
-700	LOAD_FAST         'zenith'
-703	LOAD_DEREF        'toon'
-706	LOAD_FAST         'startCamPos'
-709	LOAD_FAST         'destCamPos'
-712	LOAD_FAST         'startCamPos'
-715	BINARY_SUBTRACT   None
-716	LOAD_CLOSURE      'toon'
-719	LOAD_CONST        '<code_object camTask>'
-722	MAKE_CLOSURE_4    None
-725	STORE_FAST        'camTask'
-
-728	LOAD_CONST        'mazeToonFlyCam-'
-731	LOAD_FAST         'avId'
-734	UNARY_CONVERT     None
-735	BINARY_ADD        None
-736	STORE_FAST        'camTaskName'
-
-739	LOAD_GLOBAL       'taskMgr'
-742	LOAD_ATTR         'add'
-745	LOAD_FAST         'camTask'
-748	LOAD_FAST         'camTaskName'
-751	LOAD_CONST        'priority'
-754	LOAD_CONST        20
-757	CALL_FUNCTION_258 None
-760	POP_TOP           None
-
-761	LOAD_FAST         'self'
-764	LOAD_DEREF        'toon'
-767	LOAD_FAST         'camTaskName'
-770	LOAD_FAST         'startCamPos'
-773	LOAD_CONST        '<code_object cleanupCamTask>'
-776	MAKE_FUNCTION_4   None
-779	STORE_FAST        'cleanupCamTask'
-
-782	LOAD_GLOBAL       'Sequence'
-785	LOAD_GLOBAL       'Wait'
-788	LOAD_FAST         'flyDur'
-791	CALL_FUNCTION_1   None
-
-794	LOAD_GLOBAL       'Func'
-797	LOAD_FAST         'cleanupCamTask'
-800	CALL_FUNCTION_1   None
-
-803	LOAD_CONST        'name'
-806	LOAD_CONST        'hitBySuit-cameraLerp'
-809	CALL_FUNCTION_258 None
-812	STORE_FAST        'cameraTrack'
-815_0	COME_FROM         '596'
-
-815	LOAD_DEREF        'toon'
-818	LOAD_ATTR         'getGeomNode'
-821	CALL_FUNCTION_0   None
-824	STORE_FAST        'geomNode'
-
-827	LOAD_FAST         'geomNode'
-830	LOAD_ATTR         'getHpr'
-833	CALL_FUNCTION_0   None
-836	STORE_FAST        'startHpr'
-
-839	LOAD_GLOBAL       'Point3'
-842	LOAD_FAST         'startHpr'
-845	CALL_FUNCTION_1   None
-848	STORE_FAST        'destHpr'
-
-851	LOAD_FAST         'rng'
-854	LOAD_ATTR         'randrange'
-857	LOAD_CONST        1
-860	LOAD_CONST        8
-863	CALL_FUNCTION_2   None
-866	STORE_FAST        'hRot'
-
-869	LOAD_FAST         'rng'
-872	LOAD_ATTR         'choice'
-875	LOAD_CONST        0
-878	LOAD_CONST        1
-881	BUILD_LIST_2      None
-884	CALL_FUNCTION_1   None
-887	JUMP_IF_FALSE     '900'
-
-890	LOAD_FAST         'hRot'
-893	UNARY_NEGATIVE    None
-894	STORE_FAST        'hRot'
-897	JUMP_FORWARD      '900'
-900_0	COME_FROM         '897'
-
-900	LOAD_FAST         'destHpr'
-903	LOAD_ATTR         'setX'
-906	LOAD_FAST         'destHpr'
-909	LOAD_CONST        0
-912	BINARY_SUBSCR     None
-913	LOAD_FAST         'hRot'
-916	LOAD_CONST        360
-919	BINARY_MULTIPLY   None
-920	BINARY_ADD        None
-921	CALL_FUNCTION_1   None
-924	POP_TOP           None
-
-925	LOAD_GLOBAL       'Sequence'
-928	LOAD_GLOBAL       'LerpHprInterval'
-931	LOAD_FAST         'geomNode'
-934	LOAD_FAST         'flyDur'
-937	LOAD_FAST         'destHpr'
-940	LOAD_CONST        'startHpr'
-943	LOAD_FAST         'startHpr'
-946	CALL_FUNCTION_259 None
-
-949	LOAD_GLOBAL       'Func'
-952	LOAD_FAST         'geomNode'
-955	LOAD_ATTR         'setHpr'
-958	LOAD_FAST         'startHpr'
-961	CALL_FUNCTION_2   None
-
-964	LOAD_CONST        'name'
-967	LOAD_DEREF        'toon'
-970	LOAD_ATTR         'uniqueName'
-973	LOAD_CONST        'hitBySuit-spinH'
-976	CALL_FUNCTION_1   None
-979	CALL_FUNCTION_258 None
-982	STORE_FAST        'spinHTrack'
-
-985	LOAD_FAST         'geomNode'
-988	LOAD_ATTR         'getParent'
-991	CALL_FUNCTION_0   None
-994	STORE_FAST        'parent'
-
-997	LOAD_FAST         'parent'
-1000	LOAD_ATTR         'attachNewNode'
-1003	LOAD_CONST        'rotNode'
-1006	CALL_FUNCTION_1   None
-1009	STORE_FAST        'rotNode'
-
-1012	LOAD_FAST         'geomNode'
-1015	LOAD_ATTR         'reparentTo'
-1018	LOAD_FAST         'rotNode'
-1021	CALL_FUNCTION_1   None
-1024	POP_TOP           None
-
-1025	LOAD_FAST         'rotNode'
-1028	LOAD_ATTR         'setZ'
-1031	LOAD_DEREF        'toon'
-1034	LOAD_ATTR         'getHeight'
-1037	CALL_FUNCTION_0   None
-1040	LOAD_CONST        2.0
-1043	BINARY_DIVIDE     None
-1044	CALL_FUNCTION_1   None
-1047	POP_TOP           None
-
-1048	LOAD_FAST         'geomNode'
-1051	LOAD_ATTR         'getZ'
-1054	CALL_FUNCTION_0   None
-1057	STORE_FAST        'oldGeomNodeZ'
-
-1060	LOAD_FAST         'geomNode'
-1063	LOAD_ATTR         'setZ'
-1066	LOAD_DEREF        'toon'
-1069	LOAD_ATTR         'getHeight'
-1072	CALL_FUNCTION_0   None
-1075	UNARY_NEGATIVE    None
-1076	LOAD_CONST        2.0
-1079	BINARY_DIVIDE     None
-1080	CALL_FUNCTION_1   None
-1083	POP_TOP           None
-
-1084	LOAD_FAST         'rotNode'
-1087	LOAD_ATTR         'getHpr'
-1090	CALL_FUNCTION_0   None
-1093	STORE_FAST        'startHpr'
-
-1096	LOAD_GLOBAL       'Point3'
-1099	LOAD_FAST         'startHpr'
-1102	CALL_FUNCTION_1   None
-1105	STORE_FAST        'destHpr'
-
-1108	LOAD_FAST         'rng'
-1111	LOAD_ATTR         'randrange'
-1114	LOAD_CONST        1
-1117	LOAD_CONST        3
-1120	CALL_FUNCTION_2   None
-1123	STORE_FAST        'pRot'
-
-1126	LOAD_FAST         'rng'
-1129	LOAD_ATTR         'choice'
-1132	LOAD_CONST        0
-1135	LOAD_CONST        1
-1138	BUILD_LIST_2      None
-1141	CALL_FUNCTION_1   None
-1144	JUMP_IF_FALSE     '1157'
-
-1147	LOAD_FAST         'pRot'
-1150	UNARY_NEGATIVE    None
-1151	STORE_FAST        'pRot'
-1154	JUMP_FORWARD      '1157'
-1157_0	COME_FROM         '1154'
-
-1157	LOAD_FAST         'destHpr'
-1160	LOAD_ATTR         'setY'
-1163	LOAD_FAST         'destHpr'
-1166	LOAD_CONST        1
-1169	BINARY_SUBSCR     None
-1170	LOAD_FAST         'pRot'
-1173	LOAD_CONST        360
-1176	BINARY_MULTIPLY   None
-1177	BINARY_ADD        None
-1178	CALL_FUNCTION_1   None
-1181	POP_TOP           None
-
-1182	LOAD_GLOBAL       'Sequence'
-1185	LOAD_GLOBAL       'LerpHprInterval'
-1188	LOAD_FAST         'rotNode'
-1191	LOAD_FAST         'flyDur'
-1194	LOAD_FAST         'destHpr'
-1197	LOAD_CONST        'startHpr'
-1200	LOAD_FAST         'startHpr'
-1203	CALL_FUNCTION_259 None
-
-1206	LOAD_GLOBAL       'Func'
-1209	LOAD_FAST         'rotNode'
-1212	LOAD_ATTR         'setHpr'
-1215	LOAD_FAST         'startHpr'
-1218	CALL_FUNCTION_2   None
-
-1221	LOAD_CONST        'name'
-1224	LOAD_DEREF        'toon'
-1227	LOAD_ATTR         'uniqueName'
-1230	LOAD_CONST        'hitBySuit-spinP'
-1233	CALL_FUNCTION_1   None
-1236	CALL_FUNCTION_258 None
-1239	STORE_FAST        'spinPTrack'
-
-1242	LOAD_FAST         'self'
-1245	LOAD_ATTR         'avIdList'
-1248	LOAD_ATTR         'index'
-1251	LOAD_FAST         'avId'
-1254	CALL_FUNCTION_1   None
-1257	STORE_FAST        'i'
-
-1260	LOAD_GLOBAL       'Sequence'
-1263	LOAD_GLOBAL       'Func'
-1266	LOAD_GLOBAL       'base'
-1269	LOAD_ATTR         'playSfx'
-1272	LOAD_FAST         'self'
-1275	LOAD_ATTR         'sndTable'
-1278	LOAD_CONST        'hitBySuit'
-1281	BINARY_SUBSCR     None
-1282	LOAD_FAST         'i'
-1285	BINARY_SUBSCR     None
-1286	CALL_FUNCTION_2   None
-
-1289	LOAD_GLOBAL       'Wait'
-1292	LOAD_FAST         'flyDur'
-1295	LOAD_CONST        2.0
-1298	LOAD_CONST        3.0
-1301	BINARY_DIVIDE     None
-1302	BINARY_MULTIPLY   None
-1303	CALL_FUNCTION_1   None
-
-1306	LOAD_GLOBAL       'SoundInterval'
-1309	LOAD_FAST         'self'
-1312	LOAD_ATTR         'sndTable'
-1315	LOAD_CONST        'falling'
-1318	BINARY_SUBSCR     None
-1319	LOAD_FAST         'i'
-1322	BINARY_SUBSCR     None
-
-1323	LOAD_CONST        'duration'
-1326	LOAD_FAST         'flyDur'
-1329	LOAD_CONST        1.0
-1332	LOAD_CONST        3.0
-1335	BINARY_DIVIDE     None
-1336	BINARY_MULTIPLY   None
-1337	CALL_FUNCTION_257 None
-
-1340	LOAD_CONST        'name'
-1343	LOAD_DEREF        'toon'
-1346	LOAD_ATTR         'uniqueName'
-1349	LOAD_CONST        'hitBySuit-soundTrack'
-1352	CALL_FUNCTION_1   None
-1355	CALL_FUNCTION_259 None
-1358	STORE_FAST        'soundTrack'
-
-1361	LOAD_FAST         'self'
-1364	LOAD_FAST         'avId'
-1367	LOAD_DEREF        'toon'
-1370	LOAD_FAST         'dropShadow'
-1373	LOAD_CONST        '<code_object preFunc>'
-1376	MAKE_FUNCTION_4   None
-1379	STORE_FAST        'preFunc'
-
-1382	LOAD_FAST         'self'
-1385	LOAD_FAST         'avId'
-1388	LOAD_FAST         'oldGeomNodeZ'
-1391	LOAD_FAST         'dropShadow'
-1394	LOAD_FAST         'parentNode'
-1397	LOAD_CLOSURE      'toon'
-1400	LOAD_CLOSURE      'endPos'
-1403	LOAD_CONST        '<code_object postFunc>'
-1406	MAKE_CLOSURE_5    None
-1409	STORE_FAST        'postFunc'
-
-1412	LOAD_FAST         'preFunc'
-1415	CALL_FUNCTION_0   None
-1418	POP_TOP           None
-
-1419	LOAD_GLOBAL       'Sequence'
-1422	LOAD_GLOBAL       'Parallel'
-1425	LOAD_FAST         'flyTrack'
-1428	LOAD_FAST         'cameraTrack'
-
-1431	LOAD_FAST         'spinHTrack'
-1434	LOAD_FAST         'spinPTrack'
-1437	LOAD_FAST         'soundTrack'
-1440	CALL_FUNCTION_5   None
-
-1443	LOAD_GLOBAL       'Func'
-1446	LOAD_FAST         'postFunc'
-1449	CALL_FUNCTION_1   None
-
-1452	LOAD_CONST        'name'
-1455	LOAD_DEREF        'toon'
-1458	LOAD_ATTR         'uniqueName'
-1461	LOAD_CONST        'hitBySuit'
-1464	CALL_FUNCTION_1   None
-1467	CALL_FUNCTION_258 None
-1470	STORE_FAST        'hitTrack'
-
-1473	LOAD_FAST         'hitTrack'
-1476	LOAD_FAST         'self'
-1479	LOAD_ATTR         'toonHitTracks'
-1482	LOAD_FAST         'avId'
-1485	STORE_SUBSCR      None
-
-1486	LOAD_FAST         'hitTrack'
-1489	LOAD_ATTR         'start'
-1492	LOAD_GLOBAL       'globalClockDelta'
-1495	LOAD_ATTR         'localElapsedTime'
-1498	LOAD_FAST         'timestamp'
-1501	CALL_FUNCTION_1   None
-1504	CALL_FUNCTION_1   None
-1507	POP_TOP           None
-1508	LOAD_CONST        None
-1511	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 428
+    def __showToonHitBySuit(self, avId, timestamp):
+        toon = self.getAvatar(avId)
+        if toon == None:
+            return
+        rng = self.toonRNGs[self.avIdList.index(avId)]
+        curPos = toon.getPos(render)
+        oldTrack = self.toonHitTracks[avId]
+        if oldTrack.isPlaying():
+            oldTrack.finish()
+        toon.setPos(curPos)
+        toon.setZ(self.TOON_Z)
+        parentNode = render.attachNewNode('mazeFlyToonParent-' + `avId`)
+        parentNode.setPos(toon.getPos())
+        toon.reparentTo(parentNode)
+        toon.setPos(0,0,0)
+        startPos = parentNode.getPos()
+        dropShadow = toon.dropShadow.copyTo(parentNode)
+        dropShadow.setScale(toon.dropShadow.getScale(render))
+        trajectory = Trajectory.Trajectory(
+            0,
+            Point3(0,0,0),
+            Point3(0,0,50),
+            gravMult=1.0)
+        flyDur = trajectory.calcTimeOfImpactOnPlane(0.0)
+        while 1:
+            endTile = [rng.randint(2, self.maze.width-1), rng.randint(2, self.maze.height-1)]
+            if self.maze.isWalkable(endTile[0], endTile[1]):
+                break
+        endWorldCoords = self.maze.tile2world(endTile[0], endTile[1])
+        endPos = Point3(endWorldCoords[0], endWorldCoords[1], startPos[2])
+        def flyFunc(t, trajectory, startPos = startPos, endPos = endPos, dur = flyDur, moveNode = parentNode, flyNode = toon):
+            u = t/dur
+            moveNode.setX(startPos[0] + u * (endPos[0]-startPos[0]))
+            moveNode.setY(startPos[1] + u * (endPos[1]-startPos[1]))
+            flyNode.setPos(trajectory.getPos(t))
+        flyTrack = Sequence(
+            LerpFunctionInterval(flyFunc, fromData=0.0, toData=flyDur, duration=flyDur, extraArgs=[trajectory]),
+            name=toon.uniqueName('hitBySuit-fly'))
+        if avId != self.localAvId:
+            cameraTrack = Sequence()
+        else:
+            self.camParent.reparentTo(parentNode)
+            startCamPos = camera.getPos()
+            destCamPos = camera.getPos()
+            zenith = trajectory.getPos(flyDur/2.0)[2]
+            destCamPos.setZ(zenith*1.3)
+            destCamPos.setY(destCamPos[1]*0.3)
+            def camTask(task, zenith = zenith, flyNode = toon, startCamPos = startCamPos, camOffset = destCamPos - startCamPos):
+                u = flyNode.getZ()/zenith
+                camera.setPos(startCamPos + camOffset*u)
+                camera.lookAt(toon)
+                return Task.cont
+            camTaskName = 'mazeToonFlyCam-' + `avId`
+            taskMgr.add(camTask, camTaskName, priority=20)
+            def cleanupCamTask(self = self, toon = toon, camTaskName = camTaskName, startCamPos = startCamPos):
+                taskMgr.remove(camTaskName)
+                self.camParent.reparentTo(toon)
+                camera.setPos(startCamPos)
+                camera.lookAt(toon)
+
+            cameraTrack = Sequence(
+                Wait(flyDur),
+                Func(cleanupCamTask),
+                name='hitBySuit-cameraLerp')
+
+        geomNode = toon.getGeomNode()
+        startHpr = geomNode.getHpr()
+        destHpr = Point3(startHpr)
+        hRot = rng.randrange(1, 8)
+        if rng.choice([0, 1]):
+            hRot = -hRot
+        destHpr.setX(destHpr[0] + hRot*360)
+        spinHTrack = Sequence(
+            LerpHprInterval(geomNode, flyDur, destHpr, startHpr=startHpr),
+            Func(geomNode.setHpr, startHpr),
+            name=toon.uniqueName('hitBySuit-spinH'))
+        parent = geomNode.getParent()
+        rotNode = parent.attachNewNode('rotNode')
+        geomNode.reparentTo(rotNode)
+        rotNode.setZ(toon.getHeight()/2.0)
+        oldGeomNodeZ = geomNode.getZ()
+        geomNode.setZ(-toon.getHeight()/2.0)
+        startHpr = rotNode.getHpr()
+        destHpr = Point3(startHpr)
+        pRot = rng.randrange(1,3)
+        if rng.choice([0, 1]):
+            pRot = -pRot
+        destHpr.setY(destHpr[1] + pRot*360)
+        spinPTrack = Sequence(
+            LerpHprInterval(rotNode, flyDur, destHpr, startHpr=startHpr),
+            Func(rotNode.setHpr, startHpr),
+            name=toon.uniqueName('hitBySuit-spinP'))
+        i = self.avIdList.index(avId)
+        soundTrack = Sequence(
+            Func(base.playSfx, self.sndTable['hitBySuit'][i]),
+            Wait(flyDur * (2.0/3.0)),
+            SoundInterval(self.sndTable['falling'][i],
+                          duration=flyDur * (1.0/3.0)),
+            name=toon.uniqueName('hitBySuit-soundTrack'))
+
+        def preFunc(self = self, avId = avId, toon = toon, dropShadow = dropShadow):
+            forwardSpeed = toon.forwardSpeed
+            rotateSpeed = toon.rotateSpeed
+            if avId == self.localAvId:
+                self.orthoWalk.stop()
+            else:
+                toon.stopSmooth()
+            if forwardSpeed or rotateSpeed:
+                toon.setSpeed(forwardSpeed, rotateSpeed)
+            toon.dropShadow.hide()
+
+        def postFunc(self = self, avId = avId, oldGeomNodeZ = oldGeomNodeZ, dropShadow = dropShadow, parentNode = parentNode):
+            if avId == self.localAvId:
+                base.localAvatar.setPos(endPos)
+                if hasattr(self, 'orthoWalk'):
+                    if self.gameFSM.getCurrentState().getName() == 'play':
+                        self.orthoWalk.start()
+            dropShadow.removeNode()
+            del dropShadow
+            toon.dropShadow.show()
+            geomNode = toon.getGeomNode()
+            rotNode = geomNode.getParent()
+            baseNode = rotNode.getParent()
+            geomNode.reparentTo(baseNode)
+            rotNode.removeNode()
+            del rotNode
+            geomNode.setZ(oldGeomNodeZ)
+            toon.reparentTo(render)
+            toon.setPos(endPos)
+            parentNode.removeNode()
+            del parentNode
+            if avId != self.localAvId:
+                toon.startSmooth()
+
+        preFunc()
+
+        hitTrack = Sequence(Parallel(flyTrack, cameraTrack,
+                                     spinHTrack, spinPTrack, soundTrack),
+                            Func(postFunc),
+                            name=toon.uniqueName('hitBySuit'))
+
+        self.toonHitTracks[avId] = hitTrack
+
+        hitTrack.start(globalClockDelta.localElapsedTime(timestamp))
 
     def allTreasuresTaken(self):
         if not self.hasLocalToon:
@@ -1570,10 +1070,10 @@ Syntax error at or near `POP_BLOCK' token at offset 428
         self.notify.debug('enterShowScores')
         lerpTrack = Parallel()
         lerpDur = 0.5
-        lerpTrack.append(Parallel(LerpPosInterval(self.goalBar, lerpDur, Point3(0, 0, -0.6), blendType='easeInOut'), LerpScaleInterval(self.goalBar, lerpDur, Vec3(self.goalBar.getScale()) * 2.0, blendType='easeInOut')))
+        lerpTrack.append(Parallel(LerpPosInterval(self.goalBar, lerpDur, Point3(0, 0, -.6), blendType='easeInOut'), LerpScaleInterval(self.goalBar, lerpDur, Vec3(self.goalBar.getScale()) * 2.0, blendType='easeInOut')))
         tY = 0.6
-        bY = -0.05
-        lX = -0.5
+        bY = -.05
+        lX = -.5
         cX = 0
         rX = 0.5
         scorePanelLocs = (((cX, bY),),
@@ -1626,663 +1126,11 @@ Syntax error at or near `POP_BLOCK' token at offset 428
         def cleanup(origCamParent = origCamParent, origCamPos = origCamPos, origCamHpr = origCamHpr, iCamParent = iCamParent):
             camera.reparentTo(origCamParent)
             camera.setPos(origCamPos)
-            camera.setHpr(origC
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\minigame\DistributedMazeGame.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'getAvatar'
-6	LOAD_FAST         'avId'
-9	CALL_FUNCTION_1   None
-12	STORE_DEREF       'toon'
-
-15	LOAD_DEREF        'toon'
-18	LOAD_CONST        None
-21	COMPARE_OP        '=='
-24	JUMP_IF_FALSE     '34'
-
-27	LOAD_CONST        None
-30	RETURN_VALUE      None
-31	JUMP_FORWARD      '34'
-34_0	COME_FROM         '31'
-
-34	LOAD_FAST         'self'
-37	LOAD_ATTR         'toonRNGs'
-40	LOAD_FAST         'self'
-43	LOAD_ATTR         'avIdList'
-46	LOAD_ATTR         'index'
-49	LOAD_FAST         'avId'
-52	CALL_FUNCTION_1   None
-55	BINARY_SUBSCR     None
-56	STORE_FAST        'rng'
-
-59	LOAD_DEREF        'toon'
-62	LOAD_ATTR         'getPos'
-65	LOAD_GLOBAL       'render'
-68	CALL_FUNCTION_1   None
-71	STORE_FAST        'curPos'
-
-74	LOAD_FAST         'self'
-77	LOAD_ATTR         'toonHitTracks'
-80	LOAD_FAST         'avId'
-83	BINARY_SUBSCR     None
-84	STORE_FAST        'oldTrack'
-
-87	LOAD_FAST         'oldTrack'
-90	LOAD_ATTR         'isPlaying'
-93	CALL_FUNCTION_0   None
-96	JUMP_IF_FALSE     '112'
-
-99	LOAD_FAST         'oldTrack'
-102	LOAD_ATTR         'finish'
-105	CALL_FUNCTION_0   None
-108	POP_TOP           None
-109	JUMP_FORWARD      '112'
-112_0	COME_FROM         '109'
-
-112	LOAD_DEREF        'toon'
-115	LOAD_ATTR         'setPos'
-118	LOAD_FAST         'curPos'
-121	CALL_FUNCTION_1   None
-124	POP_TOP           None
-
-125	LOAD_DEREF        'toon'
-128	LOAD_ATTR         'setZ'
-131	LOAD_FAST         'self'
-134	LOAD_ATTR         'TOON_Z'
-137	CALL_FUNCTION_1   None
-140	POP_TOP           None
-
-141	LOAD_GLOBAL       'render'
-144	LOAD_ATTR         'attachNewNode'
-147	LOAD_CONST        'mazeFlyToonParent-'
-150	LOAD_FAST         'avId'
-153	UNARY_CONVERT     None
-154	BINARY_ADD        None
-155	CALL_FUNCTION_1   None
-158	STORE_FAST        'parentNode'
-
-161	LOAD_FAST         'parentNode'
-164	LOAD_ATTR         'setPos'
-167	LOAD_DEREF        'toon'
-170	LOAD_ATTR         'getPos'
-173	CALL_FUNCTION_0   None
-176	CALL_FUNCTION_1   None
-179	POP_TOP           None
-
-180	LOAD_DEREF        'toon'
-183	LOAD_ATTR         'reparentTo'
-186	LOAD_FAST         'parentNode'
-189	CALL_FUNCTION_1   None
-192	POP_TOP           None
-
-193	LOAD_DEREF        'toon'
-196	LOAD_ATTR         'setPos'
-199	LOAD_CONST        0
-202	LOAD_CONST        0
-205	LOAD_CONST        0
-208	CALL_FUNCTION_3   None
-211	POP_TOP           None
-
-212	LOAD_FAST         'parentNode'
-215	LOAD_ATTR         'getPos'
-218	CALL_FUNCTION_0   None
-221	STORE_FAST        'startPos'
-
-224	LOAD_DEREF        'toon'
-227	LOAD_ATTR         'dropShadow'
-230	LOAD_ATTR         'copyTo'
-233	LOAD_FAST         'parentNode'
-236	CALL_FUNCTION_1   None
-239	STORE_FAST        'dropShadow'
-
-242	LOAD_FAST         'dropShadow'
-245	LOAD_ATTR         'setScale'
-248	LOAD_DEREF        'toon'
-251	LOAD_ATTR         'dropShadow'
-254	LOAD_ATTR         'getScale'
-257	LOAD_GLOBAL       'render'
-260	CALL_FUNCTION_1   None
-263	CALL_FUNCTION_1   None
-266	POP_TOP           None
-
-267	LOAD_GLOBAL       'Trajectory'
-270	LOAD_ATTR         'Trajectory'
-273	LOAD_CONST        0
-
-276	LOAD_GLOBAL       'Point3'
-279	LOAD_CONST        0
-282	LOAD_CONST        0
-285	LOAD_CONST        0
-288	CALL_FUNCTION_3   None
-
-291	LOAD_GLOBAL       'Point3'
-294	LOAD_CONST        0
-297	LOAD_CONST        0
-300	LOAD_CONST        50
-303	CALL_FUNCTION_3   None
-
-306	LOAD_CONST        'gravMult'
-309	LOAD_CONST        1.0
-312	CALL_FUNCTION_259 None
-315	STORE_FAST        'trajectory'
-
-318	LOAD_FAST         'trajectory'
-321	LOAD_ATTR         'calcTimeOfImpactOnPlane'
-324	LOAD_CONST        0.0
-327	CALL_FUNCTION_1   None
-330	STORE_FAST        'flyDur'
-
-333	SETUP_LOOP        '429'
-
-336	LOAD_FAST         'rng'
-339	LOAD_ATTR         'randint'
-342	LOAD_CONST        2
-345	LOAD_FAST         'self'
-348	LOAD_ATTR         'maze'
-351	LOAD_ATTR         'width'
-354	LOAD_CONST        1
-357	BINARY_SUBTRACT   None
-358	CALL_FUNCTION_2   None
-361	LOAD_FAST         'rng'
-364	LOAD_ATTR         'randint'
-367	LOAD_CONST        2
-370	LOAD_FAST         'self'
-373	LOAD_ATTR         'maze'
-376	LOAD_ATTR         'height'
-379	LOAD_CONST        1
-382	BINARY_SUBTRACT   None
-383	CALL_FUNCTION_2   None
-386	BUILD_LIST_2      None
-389	STORE_FAST        'endTile'
-
-392	LOAD_FAST         'self'
-395	LOAD_ATTR         'maze'
-398	LOAD_ATTR         'isWalkable'
-401	LOAD_FAST         'endTile'
-404	LOAD_CONST        0
-407	BINARY_SUBSCR     None
-408	LOAD_FAST         'endTile'
-411	LOAD_CONST        1
-414	BINARY_SUBSCR     None
-415	CALL_FUNCTION_2   None
-418	JUMP_IF_FALSE     '425'
-
-421	BREAK_LOOP        None
-422	JUMP_BACK         '336'
-425	JUMP_BACK         '336'
-428	POP_BLOCK         None
-429_0	COME_FROM         '333'
-
-429	LOAD_FAST         'self'
-432	LOAD_ATTR         'maze'
-435	LOAD_ATTR         'tile2world'
-438	LOAD_FAST         'endTile'
-441	LOAD_CONST        0
-444	BINARY_SUBSCR     None
-445	LOAD_FAST         'endTile'
-448	LOAD_CONST        1
-451	BINARY_SUBSCR     None
-452	CALL_FUNCTION_2   None
-455	STORE_FAST        'endWorldCoords'
-
-458	LOAD_GLOBAL       'Point3'
-461	LOAD_FAST         'endWorldCoords'
-464	LOAD_CONST        0
-467	BINARY_SUBSCR     None
-468	LOAD_FAST         'endWorldCoords'
-471	LOAD_CONST        1
-474	BINARY_SUBSCR     None
-475	LOAD_FAST         'startPos'
-478	LOAD_CONST        2
-481	BINARY_SUBSCR     None
-482	CALL_FUNCTION_3   None
-485	STORE_DEREF       'endPos'
-
-488	LOAD_FAST         'startPos'
-491	LOAD_DEREF        'endPos'
-494	LOAD_FAST         'flyDur'
-497	LOAD_FAST         'parentNode'
-500	LOAD_DEREF        'toon'
-503	LOAD_CONST        '<code_object flyFunc>'
-506	MAKE_FUNCTION_5   None
-509	STORE_FAST        'flyFunc'
-
-512	LOAD_GLOBAL       'Sequence'
-515	LOAD_GLOBAL       'LerpFunctionInterval'
-518	LOAD_FAST         'flyFunc'
-
-521	LOAD_CONST        'fromData'
-524	LOAD_CONST        0.0
-527	LOAD_CONST        'toData'
-530	LOAD_FAST         'flyDur'
-
-533	LOAD_CONST        'duration'
-536	LOAD_FAST         'flyDur'
-
-539	LOAD_CONST        'extraArgs'
-542	LOAD_FAST         'trajectory'
-545	BUILD_LIST_1      None
-548	CALL_FUNCTION_1025 None
-
-551	LOAD_CONST        'name'
-554	LOAD_DEREF        'toon'
-557	LOAD_ATTR         'uniqueName'
-560	LOAD_CONST        'hitBySuit-fly'
-563	CALL_FUNCTION_1   None
-566	CALL_FUNCTION_257 None
-569	STORE_FAST        'flyTrack'
-
-572	LOAD_FAST         'avId'
-575	LOAD_FAST         'self'
-578	LOAD_ATTR         'localAvId'
-581	COMPARE_OP        '!='
-584	JUMP_IF_FALSE     '599'
-
-587	LOAD_GLOBAL       'Sequence'
-590	CALL_FUNCTION_0   None
-593	STORE_FAST        'cameraTrack'
-596	JUMP_FORWARD      '815'
-
-599	LOAD_FAST         'self'
-602	LOAD_ATTR         'camParent'
-605	LOAD_ATTR         'reparentTo'
-608	LOAD_FAST         'parentNode'
-611	CALL_FUNCTION_1   None
-614	POP_TOP           None
-
-615	LOAD_GLOBAL       'camera'
-618	LOAD_ATTR         'getPos'
-621	CALL_FUNCTION_0   None
-624	STORE_FAST        'startCamPos'
-
-627	LOAD_GLOBAL       'camera'
-630	LOAD_ATTR         'getPos'
-633	CALL_FUNCTION_0   None
-636	STORE_FAST        'destCamPos'
-
-639	LOAD_FAST         'trajectory'
-642	LOAD_ATTR         'getPos'
-645	LOAD_FAST         'flyDur'
-648	LOAD_CONST        2.0
-651	BINARY_DIVIDE     None
-652	CALL_FUNCTION_1   None
-655	LOAD_CONST        2
-658	BINARY_SUBSCR     None
-659	STORE_FAST        'zenith'
-
-662	LOAD_FAST         'destCamPos'
-665	LOAD_ATTR         'setZ'
-668	LOAD_FAST         'zenith'
-671	LOAD_CONST        1.3
-674	BINARY_MULTIPLY   None
-675	CALL_FUNCTION_1   None
-678	POP_TOP           None
-
-679	LOAD_FAST         'destCamPos'
-682	LOAD_ATTR         'setY'
-685	LOAD_FAST         'destCamPos'
-688	LOAD_CONST        1
-691	BINARY_SUBSCR     None
-692	LOAD_CONST        0.3
-695	BINARY_MULTIPLY   None
-696	CALL_FUNCTION_1   None
-699	POP_TOP           None
-
-700	LOAD_FAST         'zenith'
-703	LOAD_DEREF        'toon'
-706	LOAD_FAST         'startCamPos'
-709	LOAD_FAST         'destCamPos'
-712	LOAD_FAST         'startCamPos'
-715	BINARY_SUBTRACT   None
-716	LOAD_CLOSURE      'toon'
-719	LOAD_CONST        '<code_object camTask>'
-722	MAKE_CLOSURE_4    None
-725	STORE_FAST        'camTask'
-
-728	LOAD_CONST        'mazeToonFlyCam-'
-731	LOAD_FAST         'avId'
-734	UNARY_CONVERT     None
-735	BINARY_ADD        None
-736	STORE_FAST        'camTaskName'
-
-739	LOAD_GLOBAL       'taskMgr'
-742	LOAD_ATTR         'add'
-745	LOAD_FAST         'camTask'
-748	LOAD_FAST         'camTaskName'
-751	LOAD_CONST        'priority'
-754	LOAD_CONST        20
-757	CALL_FUNCTION_258 None
-760	POP_TOP           None
-
-761	LOAD_FAST         'self'
-764	LOAD_DEREF        'toon'
-767	LOAD_FAST         'camTaskName'
-770	LOAD_FAST         'startCamPos'
-773	LOAD_CONST        '<code_object cleanupCamTask>'
-776	MAKE_FUNCTION_4   None
-779	STORE_FAST        'cleanupCamTask'
-
-782	LOAD_GLOBAL       'Sequence'
-785	LOAD_GLOBAL       'Wait'
-788	LOAD_FAST         'flyDur'
-791	CALL_FUNCTION_1   None
-
-794	LOAD_GLOBAL       'Func'
-797	LOAD_FAST         'cleanupCamTask'
-800	CALL_FUNCTION_1   None
-
-803	LOAD_CONST        'name'
-806	LOAD_CONST        'hitBySuit-cameraLerp'
-809	CALL_FUNCTION_258 None
-812	STORE_FAST        'cameraTrack'
-815_0	COME_FROM         '596'
-
-815	LOAD_DEREF        'toon'
-818	LOAD_ATTR         'getGeomNode'
-821	CALL_FUNCTION_0   None
-824	STORE_FAST        'geomNode'
-
-827	LOAD_FAST         'geomNode'
-830	LOAD_ATTR         'getHpr'
-833	CALL_FUNCTION_0   None
-836	STORE_FAST        'startHpr'
-
-839	LOAD_GLOBAL       'Point3'
-842	LOAD_FAST         'startHpr'
-845	CALL_FUNCTION_1   None
-848	STORE_FAST        'destHpr'
-
-851	LOAD_FAST         'rng'
-854	LOAD_ATTR         'randrange'
-857	LOAD_CONST        1
-860	LOAD_CONST        8
-863	CALL_FUNCTION_2   None
-866	STORE_FAST        'hRot'
-
-869	LOAD_FAST         'rng'
-872	LOAD_ATTR         'choice'
-875	LOAD_CONST        0
-878	LOAD_CONST        1
-881	BUILD_LIST_2      None
-884	CALL_FUNCTION_1   None
-887	JUMP_IF_FALSE     '900'
-
-890	LOAD_FAST         'hRot'
-893	UNARY_NEGATIVE    None
-894	STORE_FAST        'hRot'
-897	JUMP_FORWARD      '900'
-900_0	COME_FROM         '897'
-
-900	LOAD_FAST         'destHpr'
-903	LOAD_ATTR         'setX'
-906	LOAD_FAST         'destHpr'
-909	LOAD_CONST        0
-912	BINARY_SUBSCR     None
-913	LOAD_FAST         'hRot'
-916	LOAD_CONST        360
-919	BINARY_MULTIPLY   None
-920	BINARY_ADD        None
-921	CALL_FUNCTION_1   None
-924	POP_TOP           None
-
-925	LOAD_GLOBAL       'Sequence'
-928	LOAD_GLOBAL       'LerpHprInterval'
-931	LOAD_FAST         'geomNode'
-934	LOAD_FAST         'flyDur'
-937	LOAD_FAST         'destHpr'
-940	LOAD_CONST        'startHpr'
-943	LOAD_FAST         'startHpr'
-946	CALL_FUNCTION_259 None
-
-949	LOAD_GLOBAL       'Func'
-952	LOAD_FAST         'geomNode'
-955	LOAD_ATTR         'setHpr'
-958	LOAD_FAST         'startHpr'
-961	CALL_FUNCTION_2   None
-
-964	LOAD_CONST        'name'
-967	LOAD_DEREF        'toon'
-970	LOAD_ATTR         'uniqueName'
-973	LOAD_CONST        'hitBySuit-spinH'
-976	CALL_FUNCTION_1   None
-979	CALL_FUNCTION_258 None
-982	STORE_FAST        'spinHTrack'
-
-985	LOAD_FAST         'geomNode'
-988	LOAD_ATTR         'getParent'
-991	CALL_FUNCTION_0   None
-994	STORE_FAST        'parent'
-
-997	LOAD_FAST         'parent'
-1000	LOAD_ATTR         'attachNewNode'
-1003	LOAD_CONST        'rotNode'
-1006	CALL_FUNCTION_1   None
-1009	STORE_FAST        'rotNode'
-
-1012	LOAD_FAST         'geomNode'
-1015	LOAD_ATTR         'reparentTo'
-1018	LOAD_FAST         'rotNode'
-1021	CALL_FUNCTION_1   None
-1024	POP_TOP           None
-
-1025	LOAD_FAST         'rotNode'
-1028	LOAD_ATTR         'setZ'
-1031	LOAD_DEREF        'toon'
-1034	LOAD_ATTR         'getHeight'
-1037	CALL_FUNCTION_0   None
-1040	LOAD_CONST        2.0
-1043	BINARY_DIVIDE     None
-1044	CALL_FUNCTION_1   None
-1047	POP_TOP           None
-
-1048	LOAD_FAST         'geomNode'
-1051	LOAD_ATTR         'getZ'
-1054	CALL_FUNCTION_0   None
-1057	STORE_FAST        'oldGeomNodeZ'
-
-1060	LOAD_FAST         'geomNode'
-1063	LOAD_ATTR         'setZ'
-1066	LOAD_DEREF        'toon'
-1069	LOAD_ATTR         'getHeight'
-1072	CALL_FUNCTION_0   None
-1075	UNARY_NEGATIVE    None
-1076	LOAD_CONST        2.0
-1079	BINARY_DIVIDE     None
-1080	CALL_FUNCTION_1   None
-1083	POP_TOP           None
-
-1084	LOAD_FAST         'rotNode'
-1087	LOAD_ATTR         'getHpr'
-1090	CALL_FUNCTION_0   None
-1093	STORE_FAST        'startHpr'
-
-1096	LOAD_GLOBAL       'Point3'
-1099	LOAD_FAST         'startHpr'
-1102	CALL_FUNCTION_1   None
-1105	STORE_FAST        'destHpr'
-
-1108	LOAD_FAST         'rng'
-1111	LOAD_ATTR         'randrange'
-1114	LOAD_CONST        1
-1117	LOAD_CONST        3
-1120	CALL_FUNCTION_2   None
-1123	STORE_FAST        'pRot'
-
-1126	LOAD_FAST         'rng'
-1129	LOAD_ATTR         'choice'
-1132	LOAD_CONST        0
-1135	LOAD_CONST        1
-1138	BUILD_LIST_2      None
-1141	CALL_FUNCTION_1   None
-1144	JUMP_IF_FALSE     '1157'
-
-1147	LOAD_FAST         'pRot'
-1150	UNARY_NEGATIVE    None
-1151	STORE_FAST        'pRot'
-1154	JUMP_FORWARD      '1157'
-1157_0	COME_FROM         '1154'
-
-1157	LOAD_FAST         'destHpr'
-1160	LOAD_ATTR         'setY'
-1163	LOAD_FAST         'destHpr'
-1166	LOAD_CONST        1
-1169	BINARY_SUBSCR     None
-1170	LOAD_FAST         'pRot'
-1173	LOAD_CONST        360
-1176	BINARY_MULTIPLY   None
-1177	BINARY_ADD        None
-1178	CALL_FUNCTION_1   None
-1181	POP_TOP           None
-
-1182	LOAD_GLOBAL       'Sequence'
-1185	LOAD_GLOBAL       'LerpHprInterval'
-1188	LOAD_FAST         'rotNode'
-1191	LOAD_FAST         'flyDur'
-1194	LOAD_FAST         'destHpr'
-1197	LOAD_CONST        'startHpr'
-1200	LOAD_FAST         'startHpr'
-1203	CALL_FUNCTION_259 None
-
-1206	LOAD_GLOBAL       'Func'
-1209	LOAD_FAST         'rotNode'
-1212	LOAD_ATTR         'setHpr'
-1215	LOAD_FAST         'startHpr'
-1218	CALL_FUNCTION_2   None
-
-1221	LOAD_CONST        'name'
-1224	LOAD_DEREF        'toon'
-1227	LOAD_ATTR         'uniqueName'
-1230	LOAD_CONST        'hitBySuit-spinP'
-1233	CALL_FUNCTION_1   None
-1236	CALL_FUNCTION_258 None
-1239	STORE_FAST        'spinPTrack'
-
-1242	LOAD_FAST         'self'
-1245	LOAD_ATTR         'avIdList'
-1248	LOAD_ATTR         'index'
-1251	LOAD_FAST         'avId'
-1254	CALL_FUNCTION_1   None
-1257	STORE_FAST        'i'
-
-1260	LOAD_GLOBAL       'Sequence'
-1263	LOAD_GLOBAL       'Func'
-1266	LOAD_GLOBAL       'base'
-1269	LOAD_ATTR         'playSfx'
-1272	LOAD_FAST         'self'
-1275	LOAD_ATTR         'sndTable'
-1278	LOAD_CONST        'hitBySuit'
-1281	BINARY_SUBSCR     None
-1282	LOAD_FAST         'i'
-1285	BINARY_SUBSCR     None
-1286	CALL_FUNCTION_2   None
-
-1289	LOAD_GLOBAL       'Wait'
-1292	LOAD_FAST         'flyDur'
-1295	LOAD_CONST        2.0
-1298	LOAD_CONST        3.0
-1301	BINARY_DIVIDE     None
-1302	BINARY_MULTIPLY   None
-1303	CALL_FUNCTION_1   None
-
-1306	LOAD_GLOBAL       'SoundInterval'
-1309	LOAD_FAST         'self'
-1312	LOAD_ATTR         'sndTable'
-1315	LOAD_CONST        'falling'
-1318	BINARY_SUBSCR     None
-1319	LOAD_FAST         'i'
-1322	BINARY_SUBSCR     None
-
-1323	LOAD_CONST        'duration'
-1326	LOAD_FAST         'flyDur'
-1329	LOAD_CONST        1.0
-1332	LOAD_CONST        3.0
-1335	BINARY_DIVIDE     None
-1336	BINARY_MULTIPLY   None
-1337	CALL_FUNCTION_257 None
-
-1340	LOAD_CONST        'name'
-1343	LOAD_DEREF        'toon'
-1346	LOAD_ATTR         'uniqueName'
-1349	LOAD_CONST        'hitBySuit-soundTrack'
-1352	CALL_FUNCTION_1   None
-1355	CALL_FUNCTION_259 None
-1358	STORE_FAST        'soundTrack'
-
-1361	LOAD_FAST         'self'
-1364	LOAD_FAST         'avId'
-1367	LOAD_DEREF        'toon'
-1370	LOAD_FAST         'dropShadow'
-1373	LOAD_CONST        '<code_object preFunc>'
-1376	MAKE_FUNCTION_4   None
-1379	STORE_FAST        'preFunc'
-
-1382	LOAD_FAST         'self'
-1385	LOAD_FAST         'avId'
-1388	LOAD_FAST         'oldGeomNodeZ'
-1391	LOAD_FAST         'dropShadow'
-1394	LOAD_FAST         'parentNode'
-1397	LOAD_CLOSURE      'toon'
-1400	LOAD_CLOSURE      'endPos'
-1403	LOAD_CONST        '<code_object postFunc>'
-1406	MAKE_CLOSURE_5    None
-1409	STORE_FAST        'postFunc'
-
-1412	LOAD_FAST         'preFunc'
-1415	CALL_FUNCTION_0   None
-1418	POP_TOP           None
-
-1419	LOAD_GLOBAL       'Sequence'
-1422	LOamHpr)
+            camera.setHpr(origCamHpr)
             iCamParent.removeNode()
             del iCamParent
             base.localAvatar.stopLookAround()
 
-        return Sequence(Wait(waitDur), lerpTrack, Func(cleanup))
-AD_GLOBAL       'Parallel'
-1425	LOAD_FAST         'flyTrack'
-1428	LOAD_FAST         'cameraTrack'
-
-1431	LOAD_FAST         'spinHTrack'
-1434	LOAD_FAST         'spinPTrack'
-1437	LOAD_FAST         'soundTrack'
-1440	CALL_FUNCTION_5   None
-
-1443	LOAD_GLOBAL       'Func'
-1446	LOAD_FAST         'postFunc'
-1449	CALL_FUNCTION_1   None
-
-1452	LOAD_CONST        'name'
-1455	LOAD_DEREF        'toon'
-1458	LOAD_ATTR         'uniqueName'
-1461	LOAD_CONST        'hitBySuit'
-1464	CALL_FUNCTION_1   None
-1467	CALL_FUNCTION_258 None
-1470	STORE_FAST        'hitTrack'
-
-1473	LOAD_FAST         'hitTrack'
-1476	LOAD_FAST         'self'
-1479	LOAD_ATTR         'toonHitTracks'
-1482	LOAD_FAST         'avId'
-1485	STORE_SUBSCR      None
-
-1486	LOAD_FAST         'hitTrack'
-1489	LOAD_ATTR         'start'
-1492	LOAD_GLOBAL       'globalClockDelta'
-1495	LOAD_ATTR         'localElapsedTime'
-1498	LOAD_FAST         'timestamp'
-1501	CALL_FUNCTION_1   None
-1504	CALL_FUNCTION_1   None
-1507	POP_TOP           None
-1508	LOAD_CONST        None
-1511	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 428
-
+        return Sequence(Wait(waitDur),
+                        lerpTrack,
+                        Func(cleanup))
