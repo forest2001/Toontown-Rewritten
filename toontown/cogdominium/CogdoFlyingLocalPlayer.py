@@ -112,7 +112,6 @@ class CogdoFlyingLocalPlayer(CogdoFlyingPlayer):
         self.fuel = 0.0
         self._guiMgr.setFuel(self.fuel)
         self.setCheckpointPlatform(self._level.startPlatform)
-        return None
 
     def initSfx(self):
         audioMgr = base.cogdoGameAudioMgr
