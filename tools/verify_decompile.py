@@ -41,6 +41,7 @@ def find_code(to_search):
         yield to_search
 
 def compare_code(c1, c2):
+    ret = True
     if c1.co_name != c2.co_name:
         print "co_name mismatch"
         print "Expected: ", c1.co_name
@@ -65,10 +66,10 @@ def compare_code(c1, c2):
         dis.disco(c2)
         f.close()
         sys.stdout = oldstdout
-    if filter_code(c1.co_consts) != filter_code(c1.co_consts):
+    if filter_code(c1.co_consts) != filter_code(c2.co_consts):
         print "filter_code(c1.co_consts) mismatch"
         print "Expected: ", filter_code(c1.co_consts)
-        print "Got: ", filter_code(c1.co_consts)
+        print "Got: ", filter_code(c2.co_consts)
     if c1.co_flags != c2.co_flags:
         print "co_flags mismatch"
         print "Expected: ", c1.co_flags

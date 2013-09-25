@@ -342,72 +342,146 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def swimTimeoutAction(self):
         pass
 
-    def trackAnimToSpeed(self):
-        pass
+    def trackAnimToSpeed(self, task):
+        speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
+        if speed != 0.0 or rotSpeed != 0.0 or inputState.isSet('jump'):
+            if not self.movingFlag:
+                self.movingFlag = 1
+                self.stopLookAround()
+        else:
+            if self.movingFlag:
+                self.movingFlag = 0
+                self.startLookAround()
+        if self.movingFlag or self.hp <= 0:
+            self.wakeUp()
+        elif not self.sleepFlag:
+            now = globalClock.getFrameTime()
+            if now - self.lastMoved > self.sleepTimeout:
+                self.gotoSleep()
+        state = None
+        if self.sleepFlag:
+            state = 'Sleep'
+        elif self.hp > 0:
+            state = 'Happy'
+        else:
+            state = 'Sad'
+        if state != self.lastState:
+            self.lastState = state
+            self.b_setAnimState(state, self.animMultiplier)
+            if state == 'Sad':
+                self.setWalkSpeedSlow()
+            else:
+                self.setWalkSpeedNormal()
+        if self.cheesyEffect == OTPGlobals.CEFlatProfile or self.cheesyEffect == OTPGlobals.CEFlatPortrait:
+            needH = None
+            if rotSpeed > 0.0:
+                needH = -10
+            elif rotSpeed < 0.0:
+                needH = 10
+            elif speed != 0.0:
+                needH = 0
+            if needH != None and self.lastNeedH != needH:
+                node = self.getGeomNode().getChild(0)
+                lerp = Sequence(LerpHprInterval(node, 0.5, Vec3(needH, 0, 0), 
+                  blendType='easeInOut'), 
+                  name='cheesy-lerp-hpr', 
+                  autoPause=1)
+                lerp.start()
+                self.lastNeedH = needH
+        else:
+            self.lastNeedH = None
+        action = self.setSpeed(speed, rotSpeed)
+        if action != self.lastAction:
+            self.lastAction = action
+            if self.emoteTrack:
+                self.emoteTrack.finish()
+                self.emoteTrack = None
+            if action == OTPGlobals.WALK_INDEX or action == OTPGlobals.REVERSE_INDEX:
+                self.walkSound()
+            elif action == OTPGlobals.RUN_INDEX:
+                self.runSound()
+            else:
+                self.stopSound()
+        return Task.cont        
 
     def hasTrackAnimToSpeed(self):
-        pass
+        taskName = self.taskName('trackAnimToSpeed')
+        return taskMgr.hasTaskNamed(taskName)
 
     def startTrackAnimToSpeed(self):
-        pass
+        taskName = self.taskName('trackAnimToSpeed')
+        taskMgr.remove(taskName)
+        task = Task.Task(self.trackAnimToSpeed)
+        self.lastMoved = globalClock.getFrameTime()
+        self.lastState = None
+        self.lastAction = None
+        self.trackAnimToSpeed(task)
+        taskMgr.add(self.trackAnimToSpeed, taskName, 35)
 
     def stopTrackAnimToSpeed(self):
-        pass
+        taskName = self.taskName('trackAnimToSpeed')
+        taskMgr.remove(taskName)
+        self.stopSound()
 
     def startChat(self):
-        pass
+        self.chatMgr.start()
+        self.accept(OTPGlobals.WhisperIncomingEvent, self.handlePlayerFriendWhisper)
+        self.accept(OTPGlobals.ThinkPosHotkey, self.thinkPos)
+        self.accept(OTPGlobals.PrintCamPosHotkey, self.printCamPos)
+        if self._LocalAvatar__enableMarkerPlacement:
+            self.accept(OTPGlobals.PlaceMarkerHotkey, self._LocalAvatar__placeMarker)
 
     def stopChat(self):
-        pass
+        self.chatMgr.stop()
+        self.ignore(OTPGlobals.WhisperIncomingEvent)
+        self.ignore(OTPGlobals.ThinkPosHotkey)
+        self.ignore(OTPGlobals.PrintCamPosHotkey)
+        if self._LocalAvatar__enableMarkerPlacement:
+            self.ignore(OTPGlobals.PlaceMarkerHotkey)
 
     def printCamPos(self):
-        pass
+        node = base.camera.getParent()
+        pos = base.cam.getPos(node)
+        hpr = base.cam.getHpr(node)
+        print 'cam pos = ', `pos`, ', cam hpr = ', `hpr`
 
     def d_broadcastPositionNow(self):
-        pass
+        self.d_clearSmoothing()
+        self.d_broadcastPosHpr()
 
-    def travCollisionsLOS(self, x=None):
-        pass
+    def travCollisionsLOS(self, n=None):
+        if n == None:
+            n = self._LocalAvatar__geom
+        self.ccTrav.traverse(n)
 
-    def travCollisionsFloor(self, x=None):
-        pass
+    def travCollisionsFloor(self, n=None):
+        if n == None:
+            n = self._LocalAvatar__geom
+        self.ccTravFloor.traverse(n)
 
-    def travCollisionsPusher(self, x=None):
-        pass
+    def travCollisionsPusher(self, n=None):
+        if n == None:
+            n = self._LocalAvatar__geom
+        self.ccPusherTrav.traverse(n)
 
-    def __friendOnline(self, a=0, b=0):
-        pass
+    def __friendOnline(self, doId, commonChatFlags=0, whitelistChatFlags=0):
+        friend = base.cr.identifyFriend(doId)
+        if friend != None and hasattr(friend, 'setCommonAndWhitelistChatFlags'):
+            friend.setCommonAndWhitelistChatFlags(commonChatFlags, whitelistChatFlags)
+        if self.oldFriendsList != None:
+            now = globalClock.getFrameTime()
+            elapsed = now - self.timeFriendsListChanged
+            if elapsed < 10.0 and self.oldFriendsList.count(doId) == 0:
+                self.oldFriendsList.append(doId)
+                return
+        if friend != None:
+            self.setSystemMessage(doId, OTPLocalizer.WhisperFriendComingOnline % friend.getName())
+
 
     def __friendOffline(self, doId):
         friend = base.cr.identifyFriend(doId)
-1990           0 LOAD_GLOBAL              0 (base)
-              3 LOAD_ATTR                1 (cr)
-              6 LOAD_ATTR                2 (identifyFriend)
-              9 LOAD_FAST                1 (doId)
-             12 CALL_FUNCTION            1
-             15 STORE_FAST               2 (friend)
-
-1991          18 LOAD_FAST                2 (friend)
-             21 LOAD_CONST               0 (None)
-             24 COMPARE_OP               3 (!=)
-             27 JUMP_IF_FALSE           33 (to 63)
-             30 POP_TOP             
-
-1992          31 LOAD_FAST                0 (self)
-             34 LOAD_ATTR                7 (setSystemMessage)
-             37 LOAD_CONST               1 (0)
-             40 LOAD_GLOBAL              8 (OTPLocalizer)
-             43 LOAD_ATTR                9 (WhisperFriendLoggedOut)
-             46 LOAD_FAST                2 (friend)
-             49 LOAD_ATTR               10 (getName)
-             52 CALL_FUNCTION            0
-             55 BINARY_MODULO       
-             56 CALL_FUNCTION            2
-             59 POP_TOP             
-             60 JUMP_FORWARD             1 (to 64)
-        >>   63 POP_TOP             
-        >>   64 LOAD_CONST               0 (None)
-             67 RETURN_VALUE        
+        if friend != None:
+            self.setSystemMessage(0, OTPLocalizer.WhisperFriendLoggedOut % friend.getName())
 
     def __playerOnline(self, playerId):
         playerInfo = base.cr.playerFriendsManager.playerId2Info[playerId]
