@@ -226,61 +226,302 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         pass
 
     def getCompromiseCameraPos(self):
-        pass
+        if self._LocalAvatar__idealCameraObstructed == 0:
+            self.compromisePos = self.getIdealCameraPos
+        else:
+            visPnt = self.getVisibilityPoint()
+            idealPos = self.getIdealCameraPos()
+            
+             28 JUMP_FORWARD           144 (to 175)
+        >>   31 POP_TOP             
+
+1085          56 LOAD_GLOBAL              7 (Vec3)
+             59 LOAD_FAST                4 (idealPos)
+             62 LOAD_FAST                3 (visPnt)
+             65 BINARY_SUBTRACT     
+             66 CALL_FUNCTION            1
+             69 LOAD_ATTR                8 (length)
+             72 CALL_FUNCTION            0
+             75 STORE_FAST               1 (distance)
+
+1086          78 LOAD_FAST                0 (self)
+             81 LOAD_ATTR               10 (closestObstructionDistance)
+             84 LOAD_FAST                1 (distance)
+             87 BINARY_DIVIDE       
+             88 STORE_FAST               2 (ratio)
+
+1087          91 LOAD_FAST                4 (idealPos)
+             94 LOAD_FAST                2 (ratio)
+             97 BINARY_MULTIPLY     
+             98 LOAD_FAST                3 (visPnt)
+            101 LOAD_CONST               2 (1)
+            104 LOAD_FAST                2 (ratio)
+            107 BINARY_SUBTRACT     
+            108 BINARY_MULTIPLY     
+            109 BINARY_ADD          
+            110 STORE_FAST               5 (compromisePos)
+
+1089         113 LOAD_CONST               3 (1.0)
+            116 LOAD_FAST                2 (ratio)
+            119 LOAD_FAST                2 (ratio)
+            122 BINARY_MULTIPLY     
+            123 BINARY_SUBTRACT     
+            124 STORE_FAST               6 (liftMult)
+
+1090         127 LOAD_GLOBAL             13 (Point3)
+            130 LOAD_FAST                5 (compromisePos)
+            133 LOAD_CONST               1 (0)
+            136 BINARY_SUBSCR       
+            137 LOAD_FAST                5 (compromisePos)
+            140 LOAD_CONST               2 (1)
+            143 BINARY_SUBSCR       
+
+1091         144 LOAD_FAST                5 (compromisePos)
+            147 LOAD_CONST               4 (2)
+            150 BINARY_SUBSCR       
+            151 LOAD_FAST                0 (self)
+            154 LOAD_ATTR               14 (getHeight)
+            157 CALL_FUNCTION            0
+            160 LOAD_CONST               5 (0.40000000000000002)
+            163 BINARY_MULTIPLY     
+            164 LOAD_FAST                6 (liftMult)
+            167 BINARY_MULTIPLY     
+            168 BINARY_ADD          
+            169 CALL_FUNCTION            3
+            172 STORE_FAST               5 (compromisePos)
+
+1093     >>  175 LOAD_FAST                5 (compromisePos)
+            178 LOAD_ATTR               15 (setZ)
+            181 LOAD_FAST                5 (compromisePos)
+            184 LOAD_CONST               4 (2)
+            187 BINARY_SUBSCR       
+            188 LOAD_FAST                0 (self)
+            191 LOAD_ATTR               16 (cameraZOffset)
+            194 BINARY_ADD          
+            195 CALL_FUNCTION            1
+            198 POP_TOP             
+
+1094         199 LOAD_FAST                5 (compromisePos)
+            202 RETURN_VALUE        
 
     def updateSmartCameraCollisionLineSegment(self):
-        pass
+        pointB = self.getIdealCameraPos()
+        pointA = self.getVisibilityPoint()
+        vectorAB = Vec3(pointB-pointA)
+        lengthAB = vectorAB.length()
+        if lengthAB > 0.001:
+            self.ccLine.setPointA(pointA)
+            self.ccLine.setPointB(pointB)
 
     def initializeSmartCamera(self):
-        pass
+        self._LocalAvatar__idealCameraObstructed = 0
+        self.closestObstructionDistance = 0.0
+        self.cameraIndex = 0
+        self.auxCameraPositions = []
+        self.cameraZOffset = 0.0
+        self._LocalAvatar__onLevelGround = 0
+        self._LocalAvatar__camCollCanMove = 0
+        self._LocalAvatar__geom = render
+        self._LocalAvatar__disableSmartCam = 0
+        self.initializeSmartCameraCollisions()
+        self._smartCamEnabled = False
 
     def shutdownSmartCamera(self):
-        pass
+        self.deleteSmartCameraCollisions()
 
-    def setOnLevelGround(self):
-        pass
+    def setOnLevelGround(self, flag):
+        self._LocalAvatar__onLevelGround = flag
 
-    def setCameraCollisionsCanMove(self):
-        pass
+    def setCameraCollisionsCanMove(self, flag):
+        self._LocalAvatar__camCollCanMove = flag
 
-    def setGeom(self):
-        pass
+    def setGeom(self, geom):
+        self._LocalAvatar__geom = geom
 
-    def startUpdateSmartCamera(self, a=1):
-        pass
+    def startUpdateSmartCamera(self, push=1):
+        if self._smartCamEnabled:
+            LocalAvatar.notify.warning('redundant call to startUpdateSmartCamera')
+            return
+        self._smartCamEnabled = True
+        self._LocalAvatar__floorDetected = 0
+        self._LocalAvatar__cameraHasBeenMoved = 0
+        self.recalcCameraSphere()
+        self.initCameraPositions()
+        self.setCameraPositionByIndex(self.cameraIndex)
+        self.posCamera(0, 0.0)
+        self._LocalAvatar__instantaneousCamPos = camera.getPos()
+        if push:
+            self.cTrav.addCollider(self.ccSphereNodePath, self.camPusher)
+            self.ccTravOnFloor.addCollider(self.ccRay2NodePath, self.camFloorCollisionBroadcaster)
+            self._LocalAvatar__disableSmartCam = 0
+        else:
+            self._LocalAvatar__disableSmartCam = 1
+        self._LocalAvatar__lastPosWrtRender = camera.getPos(render)
+        self._LocalAvatar__lastHprWrtRender = camera.getHpr(render)
+        taskName = self.taskName('updateSmartCamera')
+        taskMgr.remove(taskName)
+        taskMgr.add(self.updateSmartCamera, taskName, priority=47)
+        self.enableSmartCameraViews()
 
     def stopUpdateSmartCamera(self):
-        pass
+        if not self._smartCamEnabled:
+            LocalAvatar.notify.warning('redundant call to stopUpdateSmartCamera')
+            return
+        self.disableSmartCameraViews()
+        self.cTrav.removeCollider(self.ccSphereNodePath)
+        self.ccTravOnFloor.removeCollider(self.ccRay2NodePath)
+        if not base.localAvatar.isEmpty():
+            self.putCameraFloorRayOnAvatar()
+        taskName = self.taskName('updateSmartCamera')
+        taskMgr.remove(taskName)
+        self._smartCamEnabled = False
 
-    def updateSmartCamera(self):
-        pass
+    def updateSmartCamera(self, task):
+        if not self._LocalAvatar__camCollCanMove and not self._LocalAvatar__cameraHasBeenMoved:
+           if self._LocalAvatar__lastPosWrtRender == camera.getPos(render):
+                if self._LocalAvatar__lastHprWrtRender == camera.getHpr(render):
+                    return Task.cont
+        self._LocalAvatar__cameraHasBeenMoved = 0
+        self._LocalAvatar__lastPosWrtRender = camera.getPos(render)
+        self._LocalAvatar__lastHprWrtRender = camera.getHpr(render)
+        self._LocalAvatar__idealCameraObstructed = 0
+        if not self._LocalAvatar__disableSmartCam:
+            self.ccTrav.traverse(self._LocalAvatar__geom)
+            if self.camCollisionQueue.getNumEntries() > 0:
+                self.camCollisionQueue.sortEntries()
+                self.handleCameraObstruction(self.camCollisionQueue.getEntry(0))
+            if not self._LocalAvatar__onLevelGround:
+                self.handleCameraFloorInteraction()
+        if not self._LocalAvatar__idealCameraObstructed:
+            self.nudgeCamera()
+        if not self._LocalAvatar__disableSmartCam:
+            self.ccPusherTrav.traverse(self._LocalAvatar__geom)
+            self.putCameraFloorRayOnCamera()
+        self.ccTravOnFloor.traverse(self._LocalAvatar__geom)
+        return Task.cont
 
-    def positionCameraWithPusher(self):
-        pass
+    def positionCameraWithPusher(self, pos, lookAt):
+        camera.setPos(pos)
+        self.ccPusherTrav.traverse(self._LocalAvatar__geom)
+        camera.lookAt(lookAt)
 
     def nudgeCamera(self):
-        pass
+        CLOSE_ENOUGH = 0.10000000000000001
+        curCamPos = self._LocalAvatar__instantaneousCamPos
+        curCamHpr = camera.getHpr()
+        targetCamPos = self.getCompromiseCameraPos()
+        targetCamLookAt = self.getLookAtPoint()
+        posDone = 0
+        if Vec3(curCamPos-targetCamPos).length() <= CLOSE_ENOUGH:
+            camera.setPos(targetCamPos)
+            posDone = 1
+        camera.setPos(targetCamPos)
+        camera.lookAt(targetCamLookAt)
+        targetCamHpr = camera.getHpr()
+        hprDone = 0
+        if Vec3(curCamHpr-targetCamHpr).length() <= CLOSE_ENOUGH:
+            hprDone = 1
+        if posDone and hprDone:
+            return
+        lerpRatio = 0.14999999999999999
+        lerpRatio = 1-pow(1-lerpRatio,globalClock.getDt()*30.0)
+        self._LocalAvatar__instantaneousCamPos = targetCamPos*lerpRatio+curCamPos*(1-lerpRatio)
+        if self._LocalAvatar__disableSmartCam or not self._LocalAvatar__idealCameraObstructed:
+            newHpr = targetCamHpr*lerpRatio+curCamHpr*(1-lerpRatio)
+        else:
+            newHpr = targetCamHpr
+        camera.setPos(self._LocalAvatar__instantaneousCamPos)
+        camera.setHpr(newHpr)
 
     def popCameraToDest(self):
-        pass
+        newCamPos = self.getCompromiseCameraPos()
+        newCamLookAt = self.getLookAtPoint()
+        self.positionCameraWithPusher(newCamPos, newCamLookAt)
+        self._LocalAvatar__instantaneousCamPos = camera.getPos()
 
-    def handleCameraObstruction(self):
-        pass
+    def handleCameraObstruction(self, camObstrCollisionEntry):
+        collisionPoint = camObstrCollisionEntry.getSurfacePoint(self.ccLineNodePath)
+        collisionVec =  Vec3(collisionPoint-self.ccLine.getPointA())
+        distance = collisionVec.length()
+        self._LocalAvatar__idealCameraObstructed = 1
+        self.closestObstructionDistance = distance
+        self.popCameraToDest()
 
     def handleCameraFloorInteraction(self):
-        pass
+        self.putCameraFloorRayOnCamera()
+        self.ccTravFloor.traverse(self._LocalAvatar__geom)
+        if self._LocalAvatar__onLevelGround:
+            return
+        if self.camFloorCollisionQueue.getNumEntries() == 0:
+            return
+        self.camFloorCollisionQueue.sortEntries()
+        camObstrCollisionEntry = self.camFloorCollisionQueue.getEntry(0)
+        camHeightFromFloor = camObstrCollisionEntry.getSurfacePoint(self.ccRayNodePath)[2]
+        self.cameraZOffset = camera.getPos()[2] + camHeightFromFloor
+        if self.cameraZOffset < 0:
+            self.cameraZOffset = 0
+        if self._LocalAvatar__floorDetected == 0:
+            self._LocalAvatar__floorDetected = 1
+            self.popCameraToDest()
 
-    def lerpCameraFov(self):
-        pass
+    def lerpCameraFov(self, fov, time):
+        taskMgr.remove('cam-fov-lerp-play')
+        oldFov = base.camLens.getHfov()
+        if abs(fov-oldFov) > 0.10000000000000001:
+            def setCamFov(fov):
+                base.camLens.setFov(fov)
+            self.camLerpInterval = LerpFunctionInterval(setCamFov,
+                fromData = oldFov, toData = fov, duration=time,
+                name='cam-fov-lerp'
+            )
+            self.camLerpInterval.start()
 
-    def setCameraFov(self):
-        pass
+    def setCameraFov(self, fov):
+        self.fov = fov
+        if not (self.isPageDown or self.isPageUp):
+            base.camLens.setFov(self.fov)
 
-    def gotoNode(self, x=3):
-        pass
+    def gotoNode(self, node, eyeHeight=3):
+        possiblePoints = (Point3(3, 6, 0),
+            Point3(-3, 6, 0),
+            Point3(6, 6, 0),
+            Point3(-6, 6, 0),
+            Point3(3, 9, 0),
+            Point3(-3, 9, 0),
+            Point3(6, 9, 0),
+            Point3(-6, 9, 0),
+            Point3(9, 9, 0),
+            Point3(-9, 9, 0),
+            Point3(6, 0, 0),
+            Point3(-6, 0, 0),
+            Point3(6, 3, 0),
+            Point3(-6, 3, 0),
+            Point3(9, 9, 0),
+            Point3(-9, 9, 0),
+            Point3(0, 12, 0),
+            Point3(3, 12, 0),
+            Point3(-3, 12, 0),
+            Point3(6, 12, 0),
+            Point3(-6, 12, 0),
+            Point3(9, 12, 0),
+            Point3(-9, 12, 0),
+            Point3(0, -6, 0),
+            Point3(-3, -6, 0),
+            Point3(0, -9, 0),
+            Point3(-6, -9, 0)
+        )
+        for point in possiblePoints:
+            pos = self.positionExaminer.consider(node, point, eyeHeight)
+            if pos:
+                self.setPos(node, pos)
+                self.lookAt(node)
+                self.setHpr(self.getH() + random.choice((-10, 10)), 0, 0)
+                return
+        self.setPos(node, 0, 0, 0)
 
-    def setCustomMessages(self):
-        pass
+    def setCustomMessages(self, customMessages):
+        self.customMessages = customMessages
+        messenger.send('customMessagesChanged')
 
     def displayWhisper(self, fromId, chatString, whisperType):
         sender = None
