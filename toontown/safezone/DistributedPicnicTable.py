@@ -273,11 +273,55 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
 
     def enableChoiceButtons(self):
         if self.tableState[self.seatBumpForObserve] == None and self.isPlaying == False:
-            self.joinButton = DirectButton(relief=None, text=TTLocalizer.PicnicTableJoinButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0, 0, 0.8), scale=0.15, command=lambda self = self: self.joinButtonPushed())
+            self.joinButton = DirectButton(
+                relief=None,
+                text=TTLocalizer.PicnicTableJoinButton,
+                text_fg=(1, 1, 0.65, 1),
+                text_pos=(0, -.23),
+                text_scale=0.8,
+                image=(self.upButton, self.downButton, self.rolloverButton),
+                image_color=(1, 0, 0, 1),
+                image_scale=(20, 1, 11),
+                pos=(0, 0, 0.8),
+                scale=0.15,
+                command=lambda self = self: self.joinButtonPushed())
         if self.isPlaying == True:
-            self.observeButton = DirectButton(relief=None, text=TTLocalizer.PicnicTableObserveButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0, 0, 0.6), scale=0.15, command=lambda self = self: self.observeButtonPushed())
-        self.exitButton = DirectButton(relief=None, text=TTLocalizer.PicnicTableCancelButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(1, 0, 0.6), scale=0.15, command=lambda self = self: self.cancelButtonPushed())
-        self.tutorialButton = DirectButton(relief=None, text=TTLocalizer.PicnicTableTutorial, text_fg=(1, 1, 0.65, 1), text_pos=(-0.05, -0.13), text_scale=0.55, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(-1, 0, 0.6), scale=0.15, command=lambda self = self: self.tutorialButtonPushed())
+            self.observeButton = DirectButton(
+                relief=None,
+                text=TTLocalizer.PicnicTableObserveButton,
+                text_fg=(1, 1, 0.65, 1),
+                text_pos=(0, -.23),
+                text_scale=0.8,
+                image=(self.upButton, self.downButton, self.rolloverButton),
+                image_color=(1, 0, 0, 1),
+                image_scale=(20, 1, 11),
+                pos=(0, 0, 0.6),
+                scale=0.15,
+                command=lambda self = self: self.observeButtonPushed())
+        self.exitButton = DirectButton(
+            relief=None,
+            text=TTLocalizer.PicnicTableCancelButton,
+            text_fg=(1, 1, 0.65, 1),
+            text_pos=(0, -.23),
+            text_scale=0.8,
+            image=(self.upButton, self.downButton, self.rolloverButton),
+            image_color=(1, 0, 0, 1),
+            image_scale=(20, 1, 11),
+            pos=(1, 0, 0.6),
+            scale=0.15,
+            command=lambda self = self: self.cancelButtonPushed())
+        self.tutorialButton = DirectButton(
+            relief=None,
+            text=TTLocalizer.PicnicTableTutorial,
+            text_fg=(1, 1, 0.65, 1),
+            text_pos=(-.05, -.13),
+            text_scale=0.55,
+            image=(self.upButton, self.downButton, self.rolloverButton),
+            image_color=(1, 0, 0, 1),
+            image_scale=(20, 1, 11),
+            pos=(-1, 0, 0.6),
+            scale=0.15,
+            command=lambda self = self: self.tutorialButtonPushed())
         base.cr.playGame.getPlace().setState('stopped')
         return
 
@@ -496,7 +540,18 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         return
 
     def enableStopObserveButton(self):
-        self.stopObserveButton = DirectButton(relief=None, text='Stop Observing', text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.45, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.stopObserveButtonPushed())
+        self.stopObserveButton = DirectButton(
+            relief=None,
+            text='Stop Observing',
+            text_fg=(1, 1, 0.65, 1),
+            text_pos=(0, -.23),
+            text_scale=0.45,
+            image=(self.upButton, self.downButton, self.rolloverButton),
+            image_color=(1, 0, 0, 1),
+            image_scale=(20, 1, 11),
+            pos=(0.92, 0, 0.4),
+            scale=0.15,
+            command=lambda self = self: self.stopObserveButtonPushed())
         return
 
     def stopObserveButtonPushed(self):
