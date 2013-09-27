@@ -282,62 +282,145 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def setCustomMessages(self):
         pass
 
-    def displayWhisper(self):
-        pass
+    def displayWhisper(self, fromId, chatString, whisperType):
+        sender = None
+        sfx = self.soundWhisper
+        if whisperType == WhisperPopup.WTNormal or whisperType == WhisperPopup.WTQuickTalker:
+            if sender == None:
+                return
+            chatString = sender.getName() + ': ' + chatString
+        whisper = WhisperPopup(chatString, OTPGlobals.getInterfaceFont(), whisperType)
+        if sender != None:
+            whisper.setClickable(sender.getName(), fromId)
+        whisper.manage(base.marginManager)
+        base.playSfx(sfx)
 
-    def displayWhisperPlayer(self):
-        pass
+    def displayWhisperPlayer(self, fromId, chatString, whisperType):
+        sender = None
+        playerInfo = None
+        sfx = self.soundWhisper
+        playerInfo = base.cr.playerFriendsManager.playerId2Info.get(fromId, None)
+        if playerInfo == None:
+            return
+        senderName = playerInfo.playerName
+        if whisperType == WhisperPopup.WTNormal or whisperType == WhisperPopup.WTQuickTalker:
+            chatString = senderName + ': ' + chatString
+        whisper = WhisperPopup(chatString, OTPGlobals.getInterfaceFont(), whisperType)
+        if sender != None:
+            whisper.setClickable(senderName, fromId)
+        whisper.manage(base.marginManager)
+        base.playSfx(sfx)   
 
-    def setAnimMultiplier(self):
-        pass
+    def setAnimMultiplier(self, value):
+        self.animMultiplier = value
 
     def getAnimMultiplier(self):
-        pass
+        return self.animMultiplier
 
     def enableRun(self):
-        pass
+        self.accept('arrow_up', self.startRunWatch)
+        self.accept('arrow_up-up', self.stopRunWatch)
+        self.accept('control-arrow_up', self.startRunWatch)
+        self.accept('control-arrow_up-up', self.stopRunWatch)
+        self.accept('alt-arrow_up', self.startRunWatch)
+        self.accept('alt-arrow_up-up', self.stopRunWatch)
+        self.accept('shift-arrow_up', self.startRunWatch)
+        self.accept('shift-arrow_up-up', self.stopRunWatch)
 
     def disableRun(self):
-        pass
+        self.ignore('arrow_up')
+        self.ignore('arrow_up-up')
+        self.ignore('control-arrow_up')
+        self.ignore('control-arrow_up-up')
+        self.ignore('alt-arrow_up')
+        self.ignore('alt-arrow_up-up')
+        self.ignore('shift-arrow_up')
+        self.ignore('shift-arrow_up-up')
 
     def startRunWatch(self):
-        pass
+        def setRun(ignored):
+            messenger.send('running-on')
+        taskMgr.doMethodLater(self.runTimeout, setRun,
+            self.uniqueName('runWatch'))
+        return Task.cont
 
     def stopRunWatch(self):
-        pass
+        taskMgr.remove(self.uniqueName('runWatch'))
+        messenger.send('running-off')
+        return Task.cont
 
     def runSound(self):
-        pass
+        self.soundWalk.stop()
+        base.playSfx(self.soundRun, looping=1)
 
     def walkSound(self):
-        pass
+        self.soundRun.stop()
+        base.playSfx(self.soundWalk, looping=1)
 
     def stopSound(self):
-        pass
+        self.soundRun.stop()
+        self.soundWalk.stop()
 
     def wakeUp(self):
-        pass
+        if self.sleepCallback != None:
+            taskMgr.remove(self.uniqueName('sleepwatch'))
+            self.startSleepWatch(self.sleepCallback)
+        self.lastMoved = globalClock.getFrameTime()
+        if self.sleepFlag:
+            self.sleepFlag = 0
 
     def gotoSleep(self):
-        pass
+        if not self.sleepFlag:
+            self.b_setAnimState('Sleep', self.animMultiplier)
+            self.sleepFlag = 1
 
     def forceGotoSleep(self):
-        pass
+        if self.hp > 0:
+            self.sleepFlag = 0
+            self.gotoSleep()
 
-    def startSleepWatch(self):
-        pass
+    def startSleepWatch(self, callback):
+        self.sleepCallback = callback
+        taskMgr.doMethodLater(self.sleepTimeout, callback, self.uniqueName('sleepwatch'))
 
     def stopSleepWatch(self):
-        pass
+        taskMgr.remove(self.uniqueName('sleepwatch'))
+        self.sleepCallback = None
 
     def startSleepSwimTest(self):
-        pass
+        taskName = self.taskName('sleepSwimTest')
+        taskMgr.remove(taskName)
+        task = Task.Task(self.sleepSwimTest)
+        self.lastMoved = globalClock.getFrameTime()
+        self.lastState = None
+        self.lastAction = None
+        self.sleepSwimTest(task)
+        taskMgr.add(self.sleepSwimTest, taskName, 35)
 
     def stopSleepSwimTest(self):
-        pass
+        taskName = self.taskName('sleepSwimTest')
+        taskMgr.remove(taskName)
+        self.stopSound()
 
-    def sleepSwimTest(self):
+    def sleepSwimTest(self, task):
         pass
+        now = globalClock.getFrameTime()
+        speed, rotSpeed, slideSpeed =  self.controlManager.getSpeeds()
+        if speed != 0.0 or rotSpeed != 0.0 or inputState.isSet('jump'):
+            if not self.swimmingFlag:
+                self.swimmingFlag = 1
+        else:
+            if self.swimmingFlag:
+                self.swimmingFlag = 0
+        if self.swimmingFlag or self.hp <= 0:
+            self.wakeUp()
+        else:
+            if not self.sleepFlag:
+                now = globalClock.getFrameTime()
+                if now-self.lastMoved > self.swimTimeout:
+                    self.swimTimeoutAction()
+                    return Task.done
+        return Task.cont
 
     def swimTimeoutAction(self):
         pass
