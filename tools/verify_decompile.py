@@ -41,6 +41,8 @@ def find_code(to_search):
         yield to_search
 
 def compare_code(c1, c2):
+    if hasattr(c1, 'force_optimize'): c1 = c1.force_optimize()
+    if hasattr(c2, 'force_optimize'): c2 = c2.force_optimize()
     if c1.co_name != c2.co_name:
         print "co_name mismatch"
         print "Expected: ", c1.co_name
