@@ -41,7 +41,6 @@ def find_code(to_search):
         yield to_search
 
 def compare_code(c1, c2):
-    ret = True
     if c1.co_name != c2.co_name:
         print "co_name mismatch"
         print "Expected: ", c1.co_name
