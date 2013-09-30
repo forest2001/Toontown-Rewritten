@@ -219,7 +219,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         mat_origin.setPosHpr(pos[0] - 0.15 * textHeight, pos[1], pos[2], 90, -90, 0)
         self.floorMat = mat_origin.attachNewNode(self.matText)
         self.floorMat.setDepthWrite(0)
-        self.floorMat.setPos(0, -0.025, 0)
+        self.floorMat.setPos(0, -.025, 0)
         self.floorMat.setScale(0.45 * xScale)
         return
 

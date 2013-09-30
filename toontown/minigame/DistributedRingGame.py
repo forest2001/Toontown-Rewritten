@@ -343,7 +343,7 @@ class DistributedRingGame(DistributedMinigame):
         if result == self.RT_UNKNOWN:
             zOffset = 0.015
         xSpacing = 0.085
-        tallyText.setPos(-1.0 + xSpacing * index, 0, -0.93 + zOffset)
+        tallyText.setPos(-1.0 + xSpacing * index, 0, -.93 + zOffset)
         self.tallyMarkers[index] = tallyText
 
     def __deleteTallyMarker(self, index):

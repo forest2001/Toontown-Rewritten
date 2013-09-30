@@ -746,7 +746,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
                     kart = self.geom[0].find('**/main*')
                     bumpDown1 = kart.posInterval(0.1, Vec3(0, 0, -1))
                     bumpUp1 = kart.posInterval(0.15, Vec3(0, 0, 0))
-                    bumpDown2 = kart.posInterval(0.5, Vec3(0, 0, -0.4))
+                    bumpDown2 = kart.posInterval(0.5, Vec3(0, 0, -.4))
                     bumpUp2 = kart.posInterval(0.7, Vec3(0, 0, 0))
                     bumpSeq = Sequence(bumpDown1, bumpUp1, bumpDown2, bumpUp2)
                     bumpSeq.start()
@@ -759,7 +759,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             modifier = 1
         roll = self.leanAmount * 1.5
         roll += (random.random() * 2 - 1) * modifier
-        pitch = self.acceleration * -0.005
+        pitch = self.acceleration * -.005
         pitch += (random.random() * 2 - 1) * modifier
         self.rollSuspension(roll)
         self.pitchSuspension(pitch)
@@ -888,7 +888,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             rotMat = Mat3.rotateMatNormaxis(self.getH(), Vec3.up())
         curHeading = rotMat.xform(Vec3.forward())
         push = (3 - self.getP()) * 0.02
-        curHeading.setZ(curHeading.getZ() - min(0.2, max(-0.2, push)))
+        curHeading.setZ(curHeading.getZ() - min(0.2, max(-.2, push)))
         onScreenDebug.append('vehicle curHeading = %s\n' % curHeading.pPrintValues())
         onScreenDebug.append('vehicle H = %s  newHForTurning=%f\n' % (self.getH(), newHForTurning))
         windResistance = self.surfaceModifiers[self.groundType]['windResistance']

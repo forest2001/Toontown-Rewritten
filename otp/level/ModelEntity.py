@@ -44,11 +44,11 @@ class ModelEntity(BasicEntities.NodePathEntity):
                 self.model.show()
             if self.modelPath in ('phase_9/models/cogHQ/woodCrateB.bam', 'phase_9/models/cogHQ/metal_crateB.bam', 'phase_10/models/cashbotHQ/CBMetalCrate.bam', 'phase_10/models/cogHQ/CBMetalCrate2.bam', 'phase_10/models/cashbotHQ/CBWoodCrate.bam', 'phase_11/models/lawbotHQ/LB_metal_crate.bam', 'phase_11/models/lawbotHQ/LB_metal_crate2.bam'):
                 cNode = self.find('**/wall')
-                cNode.setZ(cNode, -0.75)
+                cNode.setZ(cNode, -.75)
                 colNode = self.find('**/collision')
                 floor = colNode.find('**/floor')
                 floor2 = floor.copyTo(colNode)
-                floor2.setZ(floor2, -0.75)
+                floor2.setZ(floor2, -.75)
             if self.goonHatType is not 'none':
                 self.goonType = {'hardhat': 'pg',
                  'security': 'sg'}[self.goonHatType]

@@ -175,7 +175,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         nameText.setWordwrap(5.36 * FrameScale)
         nameText.setText(name)
         namePath = frame.attachNewNode(nameText.generate())
-        namePath.setPos(0, -0.03, -0.6)
+        namePath.setPos(0, -0.03, -.6)
         namePath.setScale(0.186 / FrameScale)
         frame.setScale(FrameScale, 1.0, FrameScale)
         return frame

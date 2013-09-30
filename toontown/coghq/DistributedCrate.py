@@ -85,11 +85,11 @@ class DistributedCrate(DistributedCrushableEntity.DistributedCrushableEntity):
     def modCrateCollisions(self):
         cNode = self.find('**/wall')
         cNode.setName(self.uniqueName('crateCollision'))
-        cNode.setZ(-0.8)
+        cNode.setZ(-.8)
         colNode = self.find('**/collision')
         floor = colNode.find('**/MovingPlatform*')
         floor2 = floor.copyTo(colNode)
-        floor2.setZ(-0.8)
+        floor2.setZ(-.8)
 
     def __upKeyPressed(self):
         self.ignore('arrow_up')

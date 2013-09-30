@@ -40,7 +40,7 @@ class FireworksGui(DirectFrame):
          gui.find('**/FndsLst_ScrollDN'),
          gui.find('**/FndsLst_ScrollUp_Rllvr'),
          gui.find('**/FndsLst_ScrollUp')), decButton_relief=None, decButton_scale=(0.5, 1, 1), decButton_pos=(0, 0, 0.2), decButton_image3_color=Vec4(1, 1, 1, 0.3))
-        self.panelPicker.setPos(-0.06, 0, 0.42)
+        self.panelPicker.setPos(-.06, 0, 0.42)
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         cancelImageList = (buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr'))
         self.cancelButton = DirectButton(parent=self, relief=None, image=cancelImageList, pos=(0.15, 0, -0.62), text_scale=0.06, text_pos=(0, -0.1), command=self.__cancel)

@@ -49,7 +49,7 @@ def hsv2rgb(h, s, v):
 
 def rgb2yuv(r, g, b):
     y = 0.299 * r + 0.587 * g + 0.114 * b
-    u = -0.169 * r - 0.331 * g + 0.5 * b + 0.5
+    u = -.169 * r - 0.331 * g + 0.5 * b + 0.5
     v = 0.5 * r - 0.419 * g - 0.081 * b + 0.5
     return tuple(map(lambda x: min(max(x, 0), 1), (y, u, v)))
 

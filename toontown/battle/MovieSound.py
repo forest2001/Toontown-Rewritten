@@ -440,10 +440,10 @@ def __doElephant(sound, delay, toon, targets, level):
     instruments = [instrument, instrument2]
 
     def setInstrumentStats(instrument = instrument, instrument2 = instrument2):
-        instrument.setPos(-0.6, -0.9, 0.15)
+        instrument.setPos(-.6, -.9, 0.15)
         instrument.setHpr(145, 0, 85)
         instrument.setScale(instrMin)
-        instrument2.setPos(-0.6, -0.9, 0.15)
+        instrument2.setPos(-.6, -.9, 0.15)
         instrument2.setHpr(145, 0, 85)
         instrument2.setScale(instrMin)
 
@@ -495,10 +495,10 @@ def __doFoghorn(sound, delay, toon, targets, level):
     instruments = [instrument, instrument2]
 
     def setInstrumentStats(instrument = instrument, instrument2 = instrument2):
-        instrument.setPos(-0.8, -0.9, 0.2)
+        instrument.setPos(-.8, -.9, 0.2)
         instrument.setHpr(145, 0, 0)
         instrument.setScale(instrMin)
-        instrument2.setPos(-0.8, -0.9, 0.2)
+        instrument2.setPos(-.8, -.9, 0.2)
         instrument2.setHpr(145, 0, 0)
         instrument2.setScale(instrMin)
 
