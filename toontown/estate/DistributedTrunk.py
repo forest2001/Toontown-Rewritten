@@ -341,7 +341,7 @@ class DistributedTrunk(DistributedCloset.DistributedCloset):
             textMsg = TTLocalizer.TrunkNotPaidMessage
         else:
             textMsg = TTLocalizer.TrunkNotOwnerMessage
-        self.popupInfo = DirectFrame(parent=hidden, relief=None, state='normal', text=textMsg, frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -0.08), text_scale=0.08, text_pos=(0, 0.06))
+        self.popupInfo = DirectFrame(parent=hidden, relief=None, state='normal', text=textMsg, frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -.08), text_scale=0.08, text_pos=(0, 0.06))
         DirectButton(self.popupInfo, image=okButtonImage, relief=None, text=TTLocalizer.ClosetPopupOK, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.0, 0.0, -0.21), command=self._handleNotOwnerMessageOK)
         buttons.removeNode()
         self.popupInfo.reparentTo(aspect2d)
@@ -354,7 +354,7 @@ class DistributedTrunk(DistributedCloset.DistributedCloset):
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okButtonImage = (buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr'))
         cancelButtonImage = (buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr'))
-        self.popupInfo = DirectFrame(parent=hidden, relief=None, state='normal', text=TTLocalizer.TrunkAreYouSureMessage, frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -0.08), text_scale=0.08, text_pos=(0, 0.08))
+        self.popupInfo = DirectFrame(parent=hidden, relief=None, state='normal', text=TTLocalizer.TrunkAreYouSureMessage, frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -.08), text_scale=0.08, text_pos=(0, 0.08))
         DirectButton(self.popupInfo, image=okButtonImage, relief=None, text=TTLocalizer.ClosetPopupOK, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(-0.1, 0.0, -0.21), command=self._handleYesImSure)
         DirectButton(self.popupInfo, image=cancelButtonImage, relief=None, text=TTLocalizer.ClosetPopupCancel, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.1, 0.0, -0.21), command=self._handleNotSure)
         buttons.removeNode()

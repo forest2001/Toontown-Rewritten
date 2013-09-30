@@ -90,7 +90,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
         self.nextRateIndex = 0
         self.drinkPositions = []
         for k in range(4):
-            self.drinkPositions.append(VBase3(-0.2 + 0.2 * k, 16 + 2 * k, 0.0))
+            self.drinkPositions.append(VBase3(-.2 + 0.2 * k, 16 + 2 * k, 0.0))
 
         self.rng = RandomNumGen.RandomNumGen(1000)
         self.introTrack = None
@@ -126,7 +126,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
         self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.mp3')
         self.whistleSound = base.loadSfx('phase_4/audio/sfx/AA_sound_whistle.mp3')
         self.music = base.loadMusic(self.bgm)
-        self.roundText = DirectLabel(text='     ', text_fg=(0, 1, 0, 1), frameColor=(1, 1, 1, 0), text_font=ToontownGlobals.getSignFont(), pos=(0.014, 0, -0.84), scale=0.2)
+        self.roundText = DirectLabel(text='     ', text_fg=(0, 1, 0, 1), frameColor=(1, 1, 1, 0), text_font=ToontownGlobals.getSignFont(), pos=(0.014, 0, -.84), scale=0.2)
         self.powerMeter = MinigamePowerMeter.MinigamePowerMeter(17)
         self.powerMeter.reparentTo(aspect2d)
         self.powerMeter.setPos(0, 0, 0.4)
@@ -138,7 +138,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
             self.arrows[x].reparentTo(self.powerMeter)
             self.arrows[x].hide()
             self.arrows[x].setScale(0.2 - 0.4 * x, 0.2, 0.2)
-            self.arrows[x].setPos(0.12 - 0.24 * x, 0, -0.26)
+            self.arrows[x].setPos(0.12 - 0.24 * x, 0, -.26)
             self.disableArrow(self.arrows[x])
 
         self.splash = Splash.Splash(render)

@@ -64,7 +64,7 @@ class OTPDialog(DirectDialog):
          ('text_font', DGG.getDefaultFont(), None),
          ('text_wordwrap', 12, None),
          ('text_scale', 0.07, None),
-         ('buttonSize', (-0.05, 0.05, -0.05, 0.05), None),
+         ('buttonSize', (-.05, 0.05, -.05, 0.05), None),
          ('button_pad', (0, 0), None),
          ('button_relief', None, None),
          ('button_text_pos', (0, -0.1), None),
