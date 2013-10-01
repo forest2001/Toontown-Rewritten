@@ -307,7 +307,7 @@ class NameShop(StateData.StateData):
          self.arrowUp), incButton_relief=None, incButton_scale=(1.2, 1.2, -1.2), incButton_pos=(0.0189, 0, -0.5335), incButton_image0_color=mcolor, incButton_image1_color=mcolor, incButton_image2_color=mcolor, incButton_image3_color=Vec4(1, 1, 1, 0), decButton_image=(self.arrowUp,
          self.arrowDown,
          self.arrowHover,
-         self.arrowUp), decButton_relief=None, decButton_scale=(1.2, 1.2, 1.2), decButton_pos=(0.0195, 0, 0.1779), decButton_image0_color=mcolor, decButton_image1_color=mcolor, decButton_image2_color=mcolor, decButton_image3_color=Vec4(1, 1, 1, 0), itemFrame_pos=(-0.2, 0, 0.028), itemFrame_scale=1.0, itemFrame_relief=DGG.RAISED, itemFrame_frameSize=(-0.07,
+         self.arrowUp), decButton_relief=None, decButton_scale=(1.2, 1.2, 1.2), decButton_pos=(0.0195, 0, 0.1779), decButton_image0_color=mcolor, decButton_image1_color=mcolor, decButton_image2_color=mcolor, decButton_image3_color=Vec4(1, 1, 1, 0), itemFrame_pos=(-.2, 0, 0.028), itemFrame_scale=1.0, itemFrame_relief=DGG.RAISED, itemFrame_frameSize=(-0.07,
          0.5,
          -0.52,
          0.12), itemFrame_frameColor=mcolor, itemFrame_borderWidth=(0.01, 0.01), numItemsVisible=5, forceHeight=TTLocalizer.NSdirectScrolleList)
@@ -324,11 +324,11 @@ class NameShop(StateData.StateData):
 
     def titleToggle(self, value):
         self.titleActive = self.titleCheck['indicatorValue']
-        if not self.titleActive:
-            if not self.firstActive:
-                self.titleActive = self.lastActive or 1
-            self.__listsChanged()
-            self.titleActive and self.titleScrollList.refresh()
+        if not (self.titleActive or self.firstActive or self.lastActive):
+            self.titleActive = 1
+        self.__listsChanged()
+        if self.titleActive:
+            self.titleScrollList.refresh()
         self.updateCheckBoxes()
 
     def firstToggle(self, value):
@@ -336,13 +336,13 @@ class NameShop(StateData.StateData):
         if self.chastise == 2:
             messenger.send('NameShop-mickeyChange', [[TTLocalizer.ApprovalForName1, TTLocalizer.ApprovalForName2]])
             self.chastise = 0
-        if not self.firstActive:
-            if not self.lastActive:
-                self.firstActive = 1
-                messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
-                self.chastise = 1
-            self.__listsChanged()
-            self.firstActive and self.firstnameScrollList.refresh()
+        if not self.firstActive and not self.lastActive:
+            self.firstActive = 1
+            messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
+            self.chastise = 1
+        self.__listsChanged()
+        if self.firstActive:
+            self.firstnameScrollList.refresh()
         self.updateCheckBoxes()
 
     def lastToggle(self, value):
@@ -350,13 +350,13 @@ class NameShop(StateData.StateData):
         if self.chastise == 1:
             messenger.send('NameShop-mickeyChange', [[TTLocalizer.ApprovalForName1, TTLocalizer.ApprovalForName2]])
             self.chastise = 0
-        if not self.firstActive:
-            if not self.lastActive:
-                self.lastActive = 1
-                messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
-                self.chastise = 2
-            self.__listsChanged()
-            self.lastActive and self.lastprefixScrollList.refresh()
+        if not self.firstActive and not self.lastActive:
+            self.lastActive = 1
+            messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
+            self.chastise = 2
+        self.__listsChanged()
+        if self.lastActive:
+            self.lastprefixScrollList.refresh()
             self.lastsuffixScrollList.refresh()
         self.updateCheckBoxes()
 
@@ -371,7 +371,7 @@ class NameShop(StateData.StateData):
     def load(self):
         self.notify.debug('load')
         if self.isLoaded == 1:
-            return
+            return None
         nameBalloon = loader.loadModel('phase_3/models/props/chatbox_input')
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
         gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_nameShop')
@@ -414,7 +414,7 @@ class NameShop(StateData.StateData):
         self.typeANameButton = DirectButton(parent=aspect2d, relief=None, image=(self.squareUp,
          self.squareDown,
          self.squareHover,
-         self.squareUp), image_scale=(1, 1.1, 0.9), pos=(0.0033, 0, -0.38833), scale=(1.2, 1, 1.2), text=TTLocalizer.TypeANameButton, text_scale=TTLocalizer.NStypeANameButton, text_pos=TTLocalizer.NStypeANameButtonPos, command=self.__typeAName)
+         self.squareUp), image_scale=(1, 1.1, 0.9), pos=(0.0033, 0, -.38833), scale=(1.2, 1, 1.2), text=TTLocalizer.TypeANameButton, text_scale=TTLocalizer.NStypeANameButton, text_pos=TTLocalizer.NStypeANameButtonPos, command=self.__typeAName)
         if base.cr.productName in ['DE', 'BR']:
             self.typeANameButton.hide()
         self.pickANameGUIElements.append(self.typeANameButton)
@@ -448,21 +448,21 @@ class NameShop(StateData.StateData):
         buttonImage = [imageList, imageList]
         buttonText = [TTLocalizer.NameShopPay, TTLocalizer.NameShopPlay]
         self.payDialog = DirectDialog(dialogName='paystate', topPad=0, fadeScreen=0.2, pos=(0, 0.1, 0.1), button_relief=None, text_align=TextNode.ACenter, text=TTLocalizer.NameShopOnlyPaid, buttonTextList=buttonText, buttonImageList=buttonImage, image_color=GlobalDialogColor, buttonValueList=[1, 0], command=self.payAction)
-        self.payDialog.buttonList[0].setPos(0, 0, -0.27)
-        self.payDialog.buttonList[1].setPos(0, 0, -0.4)
+        self.payDialog.buttonList[0].setPos(0, 0, -.27)
+        self.payDialog.buttonList[1].setPos(0, 0, -.4)
         self.payDialog.buttonList[0]['image_scale'] = (1.2, 1, 1.1)
         self.payDialog.buttonList[1]['image_scale'] = (1.2, 1, 1.1)
         self.payDialog['image_scale'] = (0.8, 1, 0.77)
-        self.payDialog.buttonList[0]['text_pos'] = (0, -0.02)
-        self.payDialog.buttonList[1]['text_pos'] = (0, -0.02)
+        self.payDialog.buttonList[0]['text_pos'] = (0, -.02)
+        self.payDialog.buttonList[1]['text_pos'] = (0, -.02)
         self.payDialog.hide()
         buttonText = [TTLocalizer.NameShopContinueSubmission, TTLocalizer.NameShopChooseAnother]
         self.approvalDialog = DirectDialog(dialogName='approvalstate', topPad=0, fadeScreen=0.2, pos=(0, 0.1, 0.1), button_relief=None, image_color=GlobalDialogColor, text_align=TextNode.ACenter, text=TTLocalizer.NameShopToonCouncil, buttonTextList=buttonText, buttonImageList=buttonImage, buttonValueList=[1, 0], command=self.approvalAction)
-        self.approvalDialog.buttonList[0].setPos(0, 0, -0.3)
-        self.approvalDialog.buttonList[1].setPos(0, 0, -0.43)
+        self.approvalDialog.buttonList[0].setPos(0, 0, -.3)
+        self.approvalDialog.buttonList[1].setPos(0, 0, -.43)
         self.approvalDialog['image_scale'] = (0.8, 1, 0.77)
         for x in range(0, 2):
-            self.approvalDialog.buttonList[x]['text_pos'] = (0, -0.01)
+            self.approvalDialog.buttonList[x]['text_pos'] = (0, -.01)
             self.approvalDialog.buttonList[x]['text_scale'] = (0.04, 0.05999)
             self.approvalDialog.buttonList[x].setScale(1.2, 1, 1)
 
@@ -471,7 +471,6 @@ class NameShop(StateData.StateData):
         self.uberhide(self.typeANameGUIElements)
         self.uberhide(self.pickANameGUIElements)
         self.isLoaded = 1
-        return
 
     def ubershow(self, guiObjectsToShow):
         self.notify.debug('ubershow %s' % str(guiObjectsToShow))
@@ -517,7 +516,7 @@ class NameShop(StateData.StateData):
     def unload(self):
         self.notify.debug('unload')
         if self.isLoaded == 0:
-            return
+            return None
         self.exit()
         cleanupDialog('globalDialog')
         self.uberdestroy(self.pickANameGUIElements)
@@ -533,7 +532,6 @@ class NameShop(StateData.StateData):
         self.ignoreAll()
         self.isLoaded = 0
         self.makeAToon = None
-        return
 
     def _checkNpcNames(self, name):
 
