@@ -1,166 +1,255 @@
---- This code section failed: ---
+import os
+import sys
+import time
+import types
 
-0	LOAD_CONST        None
-3	IMPORT_NAME       'os'
-6	STORE_NAME        'os'
+ltime = 1 and time.localtime()
+logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,  ltime[1], ltime[2],
+                                           ltime[3], ltime[4], ltime[5])
 
-9	LOAD_CONST        None
-12	IMPORT_NAME       'sys'
-15	STORE_NAME        'sys'
+logfile = 'toontownD-' + logSuffix + '.log'
 
-18	LOAD_CONST        None
-21	IMPORT_NAME       'time'
-24	STORE_NAME        'time'
+class LogAndOutput:
+    def __init__(self, orig, log):
+        self.orig = orig
+        self.log = log
 
-27	LOAD_CONST        None
-30	IMPORT_NAME       'types'
-33	STORE_NAME        'types'
+    def write(self, str):
+        self.log.write(str)
+        self.log.flush()
+        self.orig.write(str)
+        self.orig.flush()
 
-36	LOAD_NAME         'time'
-39	LOAD_ATTR         'localtime'
-42	CALL_FUNCTION_0   None
-45	STORE_NAME        'ltime'
+    def flush(self):
+        self.log.flush()
+        self.orig.flush()
 
-48	LOAD_CONST        '%02d%02d%02d_%02d%02d%02d'
-51	LOAD_NAME         'ltime'
-54	LOAD_CONST        0
-57	BINARY_SUBSCR     None
-58	LOAD_CONST        2000
-61	BINARY_SUBTRACT   None
-62	LOAD_NAME         'ltime'
-65	LOAD_CONST        1
-68	BINARY_SUBSCR     None
-69	LOAD_NAME         'ltime'
-72	LOAD_CONST        2
-75	BINARY_SUBSCR     None
-76	LOAD_NAME         'ltime'
-79	LOAD_CONST        3
-82	BINARY_SUBSCR     None
-83	LOAD_NAME         'ltime'
-86	LOAD_CONST        4
-89	BINARY_SUBSCR     None
-90	LOAD_NAME         'ltime'
-93	LOAD_CONST        5
-96	BINARY_SUBSCR     None
-97	BUILD_TUPLE_6     None
-100	BINARY_MODULO     None
-101	STORE_NAME        'logSuffix'
+log = open(logfile, 'a')
+logOut = LogAndOutput(sys.__stdout__, log)
+logErr = LogAndOutput(sys.__stderr__, log)
+sys.stdout = logOut
+sys.stderr = logErr
 
-104	LOAD_CONST        'toontownD-'
-107	LOAD_NAME         'logSuffix'
-110	BINARY_ADD        None
-111	LOAD_CONST        '.log'
-114	BINARY_ADD        None
-115	STORE_NAME        'logfile'
+print('\n\nStarting Toontown...')
 
-118	LOAD_CONST        'LogAndOutput'
-121	BUILD_TUPLE_0     None
-124	LOAD_CONST        '<code_object LogAndOutput>'
-127	MAKE_FUNCTION_0   None
-130	CALL_FUNCTION_0   None
-133	BUILD_CLASS       None
-134	STORE_NAME        'LogAndOutput'
+if 1:
+    print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
+    print 'sys.path = ', sys.path
+    print 'sys.argv = ', sys.argv
 
-137	LOAD_NAME         'open'
-140	LOAD_NAME         'logfile'
-143	LOAD_CONST        'a'
-146	CALL_FUNCTION_2   None
-149	STORE_NAME        'log'
+from otp.launcher.LauncherBase import LauncherBase
+from otp.otpbase import OTPLauncherGlobals
+from pandac.libpandaexpressModules import *
+from toontown.toonbase import TTLocalizer
 
-152	LOAD_NAME         'LogAndOutput'
-155	LOAD_NAME         'sys'
-158	LOAD_ATTR         '__stdout__'
-161	LOAD_NAME         'log'
-164	CALL_FUNCTION_2   None
-167	STORE_NAME        'logOut'
+class ToontownLauncher(LauncherBase):
+    GameName = 'Toontown'
+    LauncherPhases = [3, 3.5, 4, 5, 5.5, 6, 7, 8, 9, 10, 11, 12, 13]
+    TmpOverallMap = [0.25, 0.15, 0.12, 0.17, 0.08, 0.07, 0.05, 0.05, 0.017,
+                     0.011, 0.01, 0.012, 0.01]
+    RegistryKey = 'Software\\Disney\\Disney Online\\Toontown'
+    ForegroundSleepTime = 0.01
+    Localizer = TTLocalizer
+    VerifyFiles = 1
+    DecompressMultifiles = True
 
-170	LOAD_NAME         'LogAndOutput'
-173	LOAD_NAME         'sys'
-176	LOAD_ATTR         '__stderr__'
-179	LOAD_NAME         'log'
-182	CALL_FUNCTION_2   None
-185	STORE_NAME        'logErr'
+    def __init__(self):
+        if sys.argv[2] == 'Phase2.py':
+            sys.argv = sys.argv[:1] + sys.argv[3:]
+        if len(sys.argv) == 5 or len(sys.argv) == 6:
+            self.gameServer = sys.argv[2]
+            self.accountServer = sys.argv[3]
+            self.testServerFlag = int(sys.argv[4])
+        else:
+            print 'Error: Launcher: incorrect number of parameters'
+            sys.exit()
 
-188	LOAD_NAME         'logOut'
-191	LOAD_NAME         'sys'
-194	STORE_ATTR        'stdout'
+        self.toontownBlueKey = 'TOONTOWN_BLUE'
+        self.toontownPlayTokenKey = 'TOONTOWN_PLAYTOKEN'
+        self.launcherMessageKey = 'LAUNCHER_MESSAGE'
+        self.game1DoneKey = 'GAME1_DONE'
+        self.game2DoneKey = 'GAME2_DONE'
+        self.tutorialCompleteKey = 'TUTORIAL_DONE'
+        self.toontownRegistryKey = 'Software\\Disney\\Disney Online\\Toontown'
+        if self.testServerFlag:
+            self.toontownRegistryKey = '%s%s' % (self.toontownRegistryKey, 'Test')
+        self.toontownRegistryKey = '%s%s' % (self.toontownRegistryKey, self.getProductName())
+        LauncherBase.__init__(self)
+        self.webAcctParams = 'WEB_ACCT_PARAMS'
+        self.parseWebAcctParams()
+        self.mainLoop()
 
-197	LOAD_NAME         'logErr'
-200	LOAD_NAME         'sys'
-203	STORE_ATTR        'stderr'
+    def getValue(self, key, default=None):
+        try:
+            return self.getRegistry(key, default)
+        except:
+            return self.getRegistry(key)
 
-206	LOAD_CONST        '\n\nStarting Toontown...'
-209	PRINT_ITEM        None
-210	PRINT_NEWLINE_CONT None
+    def setValue(self, key, value):
+        self.setRegistry(key, value)
 
-211	LOAD_CONST        'Current time: '
-214	LOAD_NAME         'time'
-217	LOAD_ATTR         'asctime'
-220	LOAD_NAME         'time'
-223	LOAD_ATTR         'localtime'
-226	LOAD_NAME         'time'
-229	LOAD_ATTR         'time'
-232	CALL_FUNCTION_0   None
-235	CALL_FUNCTION_1   None
-238	CALL_FUNCTION_1   None
-241	BINARY_ADD        None
-242	LOAD_CONST        ' '
-245	BINARY_ADD        None
-246	LOAD_NAME         'time'
-249	LOAD_ATTR         'tzname'
-252	LOAD_CONST        0
-255	BINARY_SUBSCR     None
-256	BINARY_ADD        None
-257	PRINT_ITEM        None
-258	PRINT_NEWLINE_CONT None
+    def getVerifyFiles(self):
+        return 1
 
-259	LOAD_CONST        'sys.path = '
-262	PRINT_ITEM        None
-263	LOAD_NAME         'sys'
-266	LOAD_ATTR         'path'
-269	PRINT_ITEM_CONT   None
-270	PRINT_NEWLINE_CONT None
+    def getTestServerFlag(self):
+        return self.testServerFlag
 
-271	LOAD_CONST        'sys.argv = '
-274	PRINT_ITEM        None
-275	LOAD_NAME         'sys'
-278	LOAD_ATTR         'argv'
-281	PRINT_ITEM_CONT   None
-282	PRINT_NEWLINE_CONT None
-283	JUMP_FORWARD      '286'
-286_0	COME_FROM         '283'
+    def getGameServer(self):
+        return self.gameServer
 
-286	LOAD_CONST        ('LauncherBase',)
-289	IMPORT_NAME       'otp.launcher.LauncherBase'
-292	IMPORT_FROM       'LauncherBase'
-295	STORE_NAME        'LauncherBase'
-298	POP_TOP           None
+    def getLogFileName(self):
+        return 'toontown'
 
-299	LOAD_CONST        ('OTPLauncherGlobals',)
-302	IMPORT_NAME       'otp.otpbase'
-305	IMPORT_FROM       'OTPLauncherGlobals'
-308	STORE_NAME        'OTPLauncherGlobals'
-311	POP_TOP           None
+    def parseWebAcctParams(self):
+        s = config.GetString('fake-web-acct-params', '')
+        if not s:
+            s = self.getRegistry(self.webAcctParams)
+        self.setRegistry(self.webAcctParams, '')
+        l = s.split('&')
+        length = len(l)
+        dict = {}
+        for index in range(0, len(l)):
+            args = l[index].split('=')
+            if len(args) == 3:
+                [name, value] = args[-2:]
+                dict[name] = int(value)
+            elif len(args) == 2:
+                [name, value] = args
+                dict[name] = int(value)
 
-312	LOAD_CONST        ('*',)
-315	IMPORT_NAME       'pandac.libpandaexpressModules'
-318	IMPORT_STAR       None
+        self.secretNeedsParentPasswordKey = 1
+        if dict.has_key('secretsNeedsParentPassword'):
+            self.secretNeedsParentPasswordKey = dict['secretsNeedsParentPassword']
+        else:
+            self.notify.warning('no secretNeedsParentPassword token in webAcctParams')
+        self.notify.info('secretNeedsParentPassword = %d' % self.secretNeedsParentPasswordKey)
 
-319	LOAD_CONST        ('TTLocalizer',)
-322	IMPORT_NAME       'toontown.toonbase'
-325	IMPORT_FROM       'TTLocalizer'
-328	STORE_NAME        'TTLocalizer'
-331	POP_TOP           None
+        self.chatEligibleKey = 0
+        if dict.has_key('chatEligible'):
+            self.chatEligibleKey = dict['chatEligible']
+        else:
+            self.notify.warning('no chatEligible token in webAcctParams')
+        self.notify.info('chatEligibleKey = %d' % self.chatEligibleKey)
 
-332	LOAD_CONST        'ToontownLauncher'
-335	LOAD_NAME         'LauncherBase'
-338	BUILD_TUPLE_1     None
-341	LOAD_CONST        '<code_object ToontownLauncher>'
-344	MAKE_FUNCTION_0   None
-347	CALL_FUNCTION_0   None
-350	BUILD_CLASS       None
-351	STORE_NAME        'ToontownLauncher'
+    def getBlue(self):
+        blue = self.getValue(self.toontownBlueKey)
+        self.setValue(self.toontownBlueKey, '')
+        if blue == 'NO BLUE':
+            blue = None
+        return blue
 
-Syntax error at or near `COME_FROM' token at offset 286_0
+    def getPlayToken(self):
+        playToken = self.getValue(self.toontownPlayTokenKey)
+        self.setValue(self.toontownPlayTokenKey, '')
+        if playToken == 'NO PLAYTOKEN':
+            playToken = None
+        return playToken
 
+    def setRegistry(self, name, value):
+        if not self.WIN32:
+            return
 
+        t = type(value)
+        if t == types.IntType:
+            WindowsRegistry.setIntValue(self.toontownRegistryKey, name, value)
+        elif t == types.StringType:
+            WindowsRegistry.setStringValue(self.toontownRegistryKey, name, value)
+        else:
+            self.notify.warning('setRegistry: Invalid type for registry value: ' + `value`)
+
+    def getRegistry(self, name, missingValue=None):
+        self.notify.info('getRegistry%s' % ((name, missingValue),))
+        if not self.WIN32:
+            if missingValue == None:
+                missingValue = ''
+            value = os.environ.get(name, missingValue)
+            try:
+                value = int(value)
+            except: pass
+            return value
+
+        t = WindowsRegistry.getKeyType(self.toontownRegistryKey, name)
+        if t == WindowsRegistry.TInt:
+            if missingValue == None:
+                missingValue = 0
+            return WindowsRegistry.getIntValue(self.toontownRegistryKey,
+                                                name, missingValue)
+        elif t == WindowsRegistry.TString:
+            if missingValue == None:
+                missingValue = ''
+            return WindowsRegistry.getStringValue(self.toontownRegistryKey,
+                                                    name, missingValue)
+        else:
+            return missingValue
+
+    def getCDDownloadPath(self, origPath, serverFilePath):
+        return '%s/%s%s/CD_%d/%s' % (origPath, self.ServerVersion, self.ServerVersionSuffix, self.fromCD, serverFilePath)
+
+    def getDownloadPath(self, origPath, serverFilePath):
+        return '%s/%s%s/%s' % (origPath, self.ServerVersion, self.ServerVersionSuffix, serverFilePath)
+
+    def getPercentPatchComplete(self, bytesWritten):
+        if self.totalPatchDownload:
+            return LauncherBase.getPercentPatchComplete(self, bytesWritten)
+        else:
+            return 0
+
+    def hashIsValid(self, serverHash, hashStr):
+        return serverHash.setFromDec(hashStr) or serverHash.setFromHex(hashStr)
+
+    def launcherMessage(self, msg):
+        LauncherBase.launcherMessage(self, msg)
+        self.setRegistry(self.launcherMessageKey, msg)
+
+    def getAccountServer(self):
+        return self.accountServer
+
+    def setTutorialComplete(self):
+        self.setRegistry(self.tutorialCompleteKey, 0)
+
+    def getTutorialComplete(self):
+        return self.getRegistry(self.tutorialCompleteKey, 0)
+
+    def getGame2Done(self):
+        return self.getRegistry(self.game2DoneKey, 0)
+
+    def setPandaErrorCode(self, code):
+        self.pandaErrorCode = code
+        if self.WIN32:
+            self.notify.info('setting panda error code to %s' % code)
+            exitCode2exitPage = {
+                OTPLauncherGlobals.ExitEnableChat: 'chat',
+                OTPLauncherGlobals.ExitSetParentPassword: 'setparentpassword',
+                OTPLauncherGlobals.ExitPurchase: 'purchase'}
+            if code in exitCode2exitPage:
+                self.setRegistry('EXIT_PAGE', exitCode2exitPage[code])
+                self.setRegistry(self.PandaErrorCodeKey, 0)
+            else:
+                self.setRegistry(self.PandaErrorCodeKey, code)
+        else:
+            LauncherBase.setPandaErrorCode(self, code)
+
+    def getNeedPwForSecretKey(self):
+        return self.secretNeedsParentPasswordKey
+
+    def getParentPasswordSet(self):
+        return self.chatEligibleKey
+
+    def MakeNTFSFilesGlobalWriteable(self, pathToSet=None):
+        if not self.WIN32:
+            return
+        LauncherBase.MakeNTFSFilesGlobalWriteable(self, pathToSet)
+
+    def startGame(self):
+        try:
+            os.remove('Phase3.py')
+        except: pass
+
+        import Phase3
+
+        self.newTaskManager()
+
+        from direct.showbase.EventManagerGlobal import eventMgr
+        eventMgr.restart()
+
+        from toontown.toonbase import ToontownStart
