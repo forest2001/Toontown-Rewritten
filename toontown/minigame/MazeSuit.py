@@ -38,13 +38,13 @@ class MazeSuit(DirectObject):
         self.difficulty = difficulty
         self._walkSameDirectionProb = walkSameDirectionProb
         self._walkTurnAroundProb = walkTurnAroundProb
-        if not walkAnimName:
-            self._walkAnimName = 'walk'
-            self.suit = Suit.Suit()
-            d = SuitDNA.SuitDNA()
-            d.newSuit(suitDnaName)
-            self.suit.setDNA(d)
-            defaultStartPos = startTile is None and MazeGameGlobals.SUIT_START_POSITIONS[self.serialNum]
+        self._walkAnimName = walkAnimName or 'walk'
+        self.suit = Suit.Suit()
+        d = SuitDNA.SuitDNA()
+        d.newSuit(suitDnaName)
+        self.suit.setDNA(d)
+        if startTile is None:
+            defaultStartPos = MazeGameGlobals.SUIT_START_POSITIONS[self.serialNum]
             self.startTile = (defaultStartPos[0] * self.maze.width, defaultStartPos[1] * self.maze.height)
         else:
             self.startTile = startTile
