@@ -67,10 +67,10 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
         self.dialog = dialogClass(dialogName='loginDialog', doneEvent=self.dialogDoneEvent, message='', style=OTPDialog.Acknowledge, sortOrder=NO_FADE_SORT_INDEX + 100)
         self.dialog.hide()
         self.failDialog = DirectFrame(parent=aspect2dp, relief=DGG.RAISED, borderWidth=(0.01, 0.01), pos=(0, 0.1, 0), text='', text_scale=0.08, text_pos=(0.0, 0.3), text_wordwrap=15, sortOrder=NO_FADE_SORT_INDEX)
-        linePos = -0.05
-        self.failTryAgainButton = DirectButton(parent=self.failDialog, relief=DGG.RAISED, borderWidth=(0.01, 0.01), pos=(0, 0, linePos), scale=0.9, text=OTPLocalizer.LoginScreenTryAgain, text_scale=0.06, text_pos=(0, -0.02), command=self.__handleFailTryAgain)
+        linePos = -.05
+        self.failTryAgainButton = DirectButton(parent=self.failDialog, relief=DGG.RAISED, borderWidth=(0.01, 0.01), pos=(0, 0, linePos), scale=0.9, text=OTPLocalizer.LoginScreenTryAgain, text_scale=0.06, text_pos=(0, -.02), command=self.__handleFailTryAgain)
         linePos -= buttonLineHeight
-        self.failCreateAccountButton = DirectButton(parent=self.failDialog, relief=DGG.RAISED, borderWidth=(0.01, 0.01), pos=(0, 0, linePos), scale=0.9, text=OTPLocalizer.LoginScreenCreateAccount, text_scale=0.06, text_pos=(0, -0.02), command=self.__handleFailCreateAccount)
+        self.failCreateAccountButton = DirectButton(parent=self.failDialog, relief=DGG.RAISED, borderWidth=(0.01, 0.01), pos=(0, 0, linePos), scale=0.9, text=OTPLocalizer.LoginScreenCreateAccount, text_scale=0.06, text_pos=(0, -.02), command=self.__handleFailCreateAccount)
         linePos -= buttonLineHeight
         self.failDialog.hide()
         self.connectionProblemDialogDoneEvent = 'loginConnectionProblemDlgAck'
@@ -283,39 +283,39 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
         accountDetailRecord.playerNameApproved = di.getInt8()
         accountDetailRecord.maxAvatars = di.getInt32()
         self.cr.openChatAllowed = accountDetailRecord.openChatEnabled
-        if not accountDetailRecord.chatCodeCreation:
-            self.cr.secretChatAllowed = parentControlledChat
-            self.cr.setIsPaid(accountDetailRecord.piratesAccess)
-            self.userName = accountDetailRecord.playerName
-            self.cr.userName = accountDetailRecord.playerName
-            accountDetailRecord.numSubs = di.getUint16()
-            for i in range(accountDetailRecord.numSubs):
-                subDetailRecord = SubDetailRecord()
-                subDetailRecord.subId = di.getUint32()
-                subDetailRecord.subOwnerId = di.getUint32()
-                subDetailRecord.subName = di.getString()
-                subDetailRecord.subActive = di.getString()
-                access = di.getString()
-                if access == 'VELVET':
-                    access = OTPGlobals.AccessVelvetRope
-                elif access == 'FULL':
-                    access = OTPGlobals.AccessFull
-                else:
-                    access = OTPGlobals.AccessUnknown
-                subDetailRecord.subAccess = access
-                subDetailRecord.subLevel = di.getUint8()
-                subDetailRecord.subNumAvatars = di.getUint8()
-                subDetailRecord.subNumConcur = di.getUint8()
-                subDetailRecord.subFounder = di.getString() == 'YES'
-                accountDetailRecord.subDetails[subDetailRecord.subId] = subDetailRecord
-
-            accountDetailRecord.WLChatEnabled = di.getString() == 'YES'
-            if accountDetailRecord.WLChatEnabled:
-                self.cr.whiteListChatEnabled = 1
+        self.cr.secretChatAllowed = accountDetailRecord.chatCodeCreation or parentControlledChat
+        self.cr.setIsPaid(accountDetailRecord.piratesAccess)
+        self.userName = accountDetailRecord.playerName
+        self.cr.userName = accountDetailRecord.playerName
+        accountDetailRecord.numSubs = di.getUint16()
+        for i in range(accountDetailRecord.numSubs):
+            subDetailRecord = SubDetailRecord()
+            subDetailRecord.subId = di.getUint32()
+            subDetailRecord.subOwnerId = di.getUint32()
+            subDetailRecord.subName = di.getString()
+            subDetailRecord.subActive = di.getString()
+            access = di.getString()
+            if access == 'VELVET':
+                access = OTPGlobals.AccessVelvetRope
+            elif access == 'FULL':
+                access = OTPGlobals.AccessFull
             else:
-                self.cr.whiteListChatEnabled = 0
-            self.notify.info('End of DISL token parse')
-            base.logPrivateInfo and self.notify.info('accountDetailRecord: %s' % accountDetailRecord)
+                access = OTPGlobals.AccessUnknown
+            subDetailRecord.subAccess = access
+            subDetailRecord.subLevel = di.getUint8()
+            subDetailRecord.subNumAvatars = di.getUint8()
+            subDetailRecord.subNumConcur = di.getUint8()
+            subDetailRecord.subFounder = di.getString() == 'YES'
+            accountDetailRecord.subDetails[subDetailRecord.subId] = subDetailRecord
+
+        accountDetailRecord.WLChatEnabled = di.getString() == 'YES'
+        if accountDetailRecord.WLChatEnabled:
+            self.cr.whiteListChatEnabled = 1
+        else:
+            self.cr.whiteListChatEnabled = 0
+        self.notify.info('End of DISL token parse')
+        if base.logPrivateInfo:
+            self.notify.info('accountDetailRecord: %s' % accountDetailRecord)
         self.cr.accountDetailRecord = accountDetailRecord
         self.__handleLoginSuccess()
 
@@ -485,9 +485,10 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
 
     def handleLoginToontownResponse(self, di):
         self.notify.debug("handleLoginToontownResponse")
-        if base.logPrivateInfo:
-            dgram = di.getDatagram()
-            dgram.dumpHex(ostream)
+        if 1:
+            if base.logPrivateInfo:
+                dgram = di.getDatagram()
+                dgram.dumpHex(ostream)
         now = time.time()
         returnCode = di.getUint8()
         respString = di.getString()
@@ -505,16 +506,16 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
         if base.logPrivateInfo:
             self.notify.info("CREATE_FRIENDS_WITH_CHAT from game server login: %s %s" % (createFriendsWithChat, canChat))
         self.chatCodeCreationRule = di.getString()
-        self.cr.chatCodeCreationRule = self.chatCodeCreationRule
+        self.cr.chatChatCodeCreationRule = self.chatCodeCreationRule
         if base.logPrivateInfo:
-            self.notify.info("Chat code creation rule = %s" % self.chatCodeCrationRule)
+            self.notify.info("Chat code creation rule = %s" % self.chatCodeCreationRule)
         self.cr.secretChatNeedsParentPassword = self.chatCodeCreationRule == "PARENT"
         sec = di.getUint32()
         usec = di.getUint32()
         serverTime = sec + (usec/1000000.0)
         self.cr.serverTimeUponLogin = serverTime
         self.cr.clientTimeUponLogin = now
-        self.cr.globalClockRealTimeUponLogin = globalClocl.getRealTime()
+        self.cr.globalClockRealTimeUponLogin = globalClock.getRealTime()
         if hasattr(self.cr, "toontownTimeManager"):
             self.cr.toontownTimeManager.updateLoginTimes(serverTime, now, self.cr.globalClockRealTimeUponLogin)
         serverDelta = serverTime - now
@@ -535,12 +536,12 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
             self.cr.whiteListChatEnabled = 0
         self.lastLoggedInStr = di.getString()
         self.cr.lastLoggedIn = datetime.now()
-        if hasattr(srlf.cr, "toontownTimeManager"):
-            self.cr.toontownTimeManager.convertStrToToontownTime(self.lastLoggedInStr)
+        if hasattr(self.cr, "toontownTimeManager"):
+            self.cr.lastLoggedIn = self.cr.toontownTimeManager.convertStrToToontownTime(self.lastLoggedInStr)
         if di.getRemainingSize() > 0:
             self.cr.accountDays = self.parseAccountDays(di.getInt32())
         else:
-            self.cr.accountDays = 10000
+            self.cr.accountDays = 100000
         self.toonAccountType = di.getString()
         if self.toonAccountType == "WITH_PARENT_ACCOUNT":
             self.cr.withParentAccount = True
@@ -549,15 +550,15 @@ class LoginScreen(StateData.StateData, GuiScreen.GuiScreen):
         else:
             self.notify.error("unknown toon account type %s" % self.toonAccountType)
         if base.logPrivateInfo:
-            self.notify.info("toonAccountType=%s" % toonAccountType)
+            self.notify.info("toonAccountType=%s" % self.toonAccountType)
         self.userName = di.getString()
         self.cr.userName = self.userName
         self.notify.info("Login response return code %s" % returnCode)
         if returnCode == 0:
-            self.__handleLoginSuccess() #to 1186
+            self.__handleLoginSuccess()
         elif returnCode == -13:
             self.notify.info("Period Time Expired")
-            self.fsm.request("showLoginFailDialog", OTPLocalizer.LoginScreenPeriodTimeExpired)
+            self.fsm.request("showLoginFailDialog", [OTPLocalizer.LoginScreenPeriodTimeExpired])
         else:
             self.notify.info("Login failed: %s" % errorString)
-            messenger.send(self.doneEvent, ["mode" : "reject"])
+            messenger.send(self.doneEvent, [{'mode': 'reject'}])
