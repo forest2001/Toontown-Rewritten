@@ -195,7 +195,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
             time = globalClockDelta.networkToLocalTime(turnEnd)
             timeLeft = int(time - globalClock.getRealTime())
             if timeLeft > 0:
-                self.clockNode.setPos(-0.74, 0, -0.2)
+                self.clockNode.setPos(-.74, 0, -0.2)
                 if self.isMyTurn:
                     self.clockNode.countdown(timeLeft, self.doNothing)
                 else:
@@ -297,11 +297,11 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         self.clockNode.reset()
 
     def enableExitButton(self):
-        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
         return
 
     def enableScreenText(self):
-        defaultPos = (-0.8, -0.4)
+        defaultPos = (-.8, -0.4)
         if self.playerNum == 1:
             message = TTLocalizer.CheckersColorWhite
             color = Vec4(1, 1, 1, 1)
@@ -311,15 +311,15 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         else:
             message = TTLocalizer.CheckersObserver
             color = Vec4(0, 0, 0, 1)
-            defaultPos = (-0.8, -0.4)
+            defaultPos = (-.8, -0.4)
         self.screenText = OnscreenText(text=message, pos=defaultPos, scale=0.1, fg=color, align=TextNode.ACenter, mayChange=1)
 
     def enableStartButton(self):
-        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.6, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.1), scale=0.15, command=lambda self = self: self.startButtonPushed())
+        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.6, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.1), scale=0.15, command=lambda self = self: self.startButtonPushed())
         return
 
     def enableLeaveButton(self):
-        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.13), text_scale=0.5, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.13), text_scale=0.5, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
         return
 
     def enableTurnScreenText(self, player):
@@ -449,294 +449,39 @@ class DistributedCheckers(DistributedNode.DistributedNode):
                 self.moveList = []
                 self.isMyTurn = False
 
-    def existsLegalJumpsFrom--- This code section failed: ---
-
-0	LOAD_FAST         'peice'
-3	LOAD_CONST        'king'
-6	COMPARE_OP        '=='
-9	JUMP_IF_FALSE     '315'
-
-12	SETUP_LOOP        '308'
-15	LOAD_GLOBAL       'range'
-18	LOAD_CONST        4
-21	CALL_FUNCTION_1   None
-24	GET_ITER          None
-25	FOR_ITER          '307'
-28	STORE_FAST        'x'
-
-31	LOAD_FAST         'self'
-34	LOAD_ATTR         'board'
-37	LOAD_ATTR         'squareList'
-40	LOAD_FAST         'index'
-43	BINARY_SUBSCR     None
-44	LOAD_ATTR         'getAdjacent'
-47	CALL_FUNCTION_0   None
-50	LOAD_FAST         'x'
-53	BINARY_SUBSCR     None
-54	LOAD_CONST        None
-57	COMPARE_OP        '!='
-60	JUMP_IF_FALSE     '304'
-63	LOAD_FAST         'self'
-66	LOAD_ATTR         'board'
-69	LOAD_ATTR         'squareList'
-72	LOAD_FAST         'index'
-75	BINARY_SUBSCR     None
-76	LOAD_ATTR         'getJumps'
-79	CALL_FUNCTION_0   None
-82	LOAD_FAST         'x'
-85	BINARY_SUBSCR     None
-86	LOAD_CONST        None
-89	COMPARE_OP        '!='
-92_0	COME_FROM         '60'
-92	JUMP_IF_FALSE     '304'
-
-95	LOAD_FAST         'self'
-98	LOAD_ATTR         'board'
-101	LOAD_ATTR         'squareList'
-104	LOAD_FAST         'self'
-107	LOAD_ATTR         'board'
-110	LOAD_ATTR         'squareList'
-113	LOAD_FAST         'index'
-116	BINARY_SUBSCR     None
-117	LOAD_ATTR         'getAdjacent'
-120	CALL_FUNCTION_0   None
-123	LOAD_FAST         'x'
-126	BINARY_SUBSCR     None
-127	BINARY_SUBSCR     None
-128	STORE_FAST        'adj'
-
-131	LOAD_FAST         'self'
-134	LOAD_ATTR         'board'
-137	LOAD_ATTR         'squareList'
-140	LOAD_FAST         'self'
-143	LOAD_ATTR         'board'
-146	LOAD_ATTR         'squareList'
-149	LOAD_FAST         'index'
-152	BINARY_SUBSCR     None
-153	LOAD_ATTR         'getJumps'
-156	CALL_FUNCTION_0   None
-159	LOAD_FAST         'x'
-162	BINARY_SUBSCR     None
-163	BINARY_SUBSCR     None
-164	STORE_FAST        'jump'
-
-167	LOAD_FAST         'adj'
-170	LOAD_ATTR         'getState'
-173	CALL_FUNCTION_0   None
-176	LOAD_CONST        0
-179	COMPARE_OP        '=='
-182	JUMP_IF_FALSE     '188'
-
-185	JUMP_ABSOLUTE     '304'
-
-188	LOAD_FAST         'adj'
-191	LOAD_ATTR         'getState'
-194	CALL_FUNCTION_0   None
-197	LOAD_FAST         'self'
-200	LOAD_ATTR         'playerNum'
-203	COMPARE_OP        '=='
-206	JUMP_IF_TRUE      '234'
-209	LOAD_FAST         'adj'
-212	LOAD_ATTR         'getState'
-215	CALL_FUNCTION_0   None
-218	LOAD_FAST         'self'
-221	LOAD_ATTR         'playerNum'
-224	LOAD_CONST        2
-227	BINARY_ADD        None
-228	COMPARE_OP        '=='
-231_0	COME_FROM         '206'
-231	JUMP_IF_FALSE     '237'
-
-234	JUMP_ABSOLUTE     '304'
-
-237	LOAD_FAST         'jump'
-240	LOAD_ATTR         'getState'
-243	CALL_FUNCTION_0   None
-246	LOAD_CONST        0
-249	COMPARE_OP        '=='
-252	JUMP_IF_FALSE     '301'
-
-255	LOAD_FAST         'index'
-258	LOAD_FAST         'self'
-261	LOAD_ATTR         'moveList'
-264	COMPARE_OP        'not in'
-267	JUMP_IF_FALSE     '298'
-270	LOAD_FAST         'jump'
-273	LOAD_ATTR         'getNum'
-276	CALL_FUNCTION_0   None
-279	LOAD_FAST         'self'
-282	LOAD_ATTR         'moveList'
-285	COMPARE_OP        'not in'
-288_0	COME_FROM         '267'
-288	JUMP_IF_FALSE     '298'
-
-291	LOAD_GLOBAL       'True'
-294	RETURN_END_IF     None
-295	JUMP_ABSOLUTE     '301'
-298	JUMP_ABSOLUTE     '304'
-
-301	CONTINUE          '25'
-304	JUMP_BACK         '25'
-307	POP_BLOCK         None
-308_0	COME_FROM         '12'
-
-308	LOAD_GLOBAL       'False'
-311	RETURN_VALUE      None
-312	JUMP_FORWARD      '663'
-
-315	LOAD_FAST         'peice'
-318	LOAD_CONST        'normal'
-321	COMPARE_OP        '=='
-324	JUMP_IF_FALSE     '663'
-
-327	LOAD_FAST         'self'
-330	LOAD_ATTR         'playerNum'
-333	LOAD_CONST        1
-336	COMPARE_OP        '=='
-339	JUMP_IF_FALSE     '357'
-
-342	LOAD_CONST        1
-345	LOAD_CONST        2
-348	BUILD_LIST_2      None
-351	STORE_FAST        'moveForward'
-354	JUMP_FORWARD      '387'
-
-357	LOAD_FAST         'self'
-360	LOAD_ATTR         'playerNum'
-363	LOAD_CONST        2
-366	COMPARE_OP        '=='
-369	JUMP_IF_FALSE     '387'
-
-372	LOAD_CONST        0
-375	LOAD_CONST        3
-378	BUILD_LIST_2      None
-381	STORE_FAST        'moveForward'
-384	JUMP_FORWARD      '387'
-387_0	COME_FROM         '354'
-387_1	COME_FROM         '384'
-
-387	SETUP_LOOP        '656'
-390	LOAD_FAST         'moveForward'
-393	GET_ITER          None
-394	FOR_ITER          '655'
-397	STORE_FAST        'x'
-
-400	LOAD_FAST         'self'
-403	LOAD_ATTR         'board'
-406	LOAD_ATTR         'squareList'
-409	LOAD_FAST         'index'
-412	BINARY_SUBSCR     None
-413	LOAD_ATTR         'getAdjacent'
-416	CALL_FUNCTION_0   None
-419	LOAD_FAST         'x'
-422	BINARY_SUBSCR     None
-423	LOAD_CONST        None
-426	COMPARE_OP        '!='
-429	JUMP_IF_FALSE     '652'
-432	LOAD_FAST         'self'
-435	LOAD_ATTR         'board'
-438	LOAD_ATTR         'squareList'
-441	LOAD_FAST         'index'
-444	BINARY_SUBSCR     None
-445	LOAD_ATTR         'getJumps'
-448	CALL_FUNCTION_0   None
-451	LOAD_FAST         'x'
-454	BINARY_SUBSCR     None
-455	LOAD_CONST        None
-458	COMPARE_OP        '!='
-461_0	COME_FROM         '429'
-461	JUMP_IF_FALSE     '652'
-
-464	LOAD_FAST         'self'
-467	LOAD_ATTR         'board'
-470	LOAD_ATTR         'squareList'
-473	LOAD_FAST         'self'
-476	LOAD_ATTR         'board'
-479	LOAD_ATTR         'squareList'
-482	LOAD_FAST         'index'
-485	BINARY_SUBSCR     None
-486	LOAD_ATTR         'getAdjacent'
-489	CALL_FUNCTION_0   None
-492	LOAD_FAST         'x'
-495	BINARY_SUBSCR     None
-496	BINARY_SUBSCR     None
-497	STORE_FAST        'adj'
-
-500	LOAD_FAST         'self'
-503	LOAD_ATTR         'board'
-506	LOAD_ATTR         'squareList'
-509	LOAD_FAST         'self'
-512	LOAD_ATTR         'board'
-515	LOAD_ATTR         'squareList'
-518	LOAD_FAST         'index'
-521	BINARY_SUBSCR     None
-522	LOAD_ATTR         'getJumps'
-525	CALL_FUNCTION_0   None
-528	LOAD_FAST         'x'
-531	BINARY_SUBSCR     None
-532	BINARY_SUBSCR     None
-533	STORE_FAST        'jump'
-
-536	LOAD_FAST         'adj'
-539	LOAD_ATTR         'getState'
-542	CALL_FUNCTION_0   None
-545	LOAD_CONST        0
-548	COMPARE_OP        '=='
-551	JUMP_IF_FALSE     '557'
-
-554	JUMP_ABSOLUTE     '652'
-
-557	LOAD_FAST         'adj'
-560	LOAD_ATTR         'getState'
-563	CALL_FUNCTION_0   None
-566	LOAD_FAST         'self'
-569	LOAD_ATTR         'playerNum'
-572	COMPARE_OP        '=='
-575	JUMP_IF_TRUE      '603'
-578	LOAD_FAST         'adj'
-581	LOAD_ATTR         'getState'
-584	CALL_FUNCTION_0   None
-587	LOAD_FAST         'self'
-590	LOAD_ATTR         'playerNum'
-593	LOAD_CONST        2
-596	BINARY_ADD        None
-597	COMPARE_OP        '=='
-600_0	COME_FROM         '575'
-600	JUMP_IF_FALSE     '606'
-
-603	JUMP_ABSOLUTE     '652'
-
-606	LOAD_FAST         'jump'
-609	LOAD_ATTR         'getState'
-612	CALL_FUNCTION_0   None
-615	LOAD_CONST        0
-618	COMPARE_OP        '=='
-621	JUMP_IF_FALSE     '649'
-
-624	LOAD_FAST         'index'
-627	LOAD_FAST         'self'
-630	LOAD_ATTR         'moveList'
-633	COMPARE_OP        'not in'
-636	JUMP_IF_FALSE     '646'
-
-639	LOAD_GLOBAL       'True'
-642	RETURN_VALUE      None
-643	JUMP_ABSOLUTE     '649'
-646	JUMP_ABSOLUTE     '652'
-649	JUMP_BACK         '394'
-652	JUMP_BACK         '394'
-655	POP_BLOCK         None
-656_0	COME_FROM         '387'
-
-656	LOAD_GLOBAL       'False'
-659	RETURN_VALUE      None
-660	JUMP_FORWARD      '663'
-663_0	COME_FROM         '312'
-663_1	COME_FROM         '660'
-663	LOAD_CONST        None
-666	RETURN_VALUE      None
-
-Syntax error at or near `CONTINUE' token at offset 301
+    def existsLegalJumpsFrom(self, index, peice):
+        if peice == 'king':
+            for x in range(4):
+                if self.board.squareList[index].getAdjacent()[x] != None and \
+                        self.board.squareList[index].getJumps()[x] != None:
+                    adj = self.board.squareList[self.board.squareList[index].getAdjacent()[x]]
+                    jump = self.board.squareList[self.board.squareList[index].getJumps()[x]]
+                    if adj.getState() == 0:
+                        pass
+                    elif adj.getState() == self.playerNum or adj.getState() == self.playerNum + 2:
+                        pass
+                    elif jump.getState() == 0:
+                        if index not in self.moveList and jump.getNum() not in self.moveList:
+                            return True
+            return False
+        elif peice == 'normal':
+            if self.playerNum == 1:
+                moveForward = [1, 2]
+            elif self.playerNum == 2:
+                moveForward = [0, 3]
+            for x in moveForward:
+                if self.board.squareList[index].getAdjacent()[x] != None and \
+                        self.board.squareList[index].getJumps()[x] != None:
+                    adj = self.board.squareList[self.board.squareList[index].getAdjacent()[x]]
+                    jump = self.board.squareList[self.board.squareList[index].getJumps()[x]]
+                    if adj.getState() == 0:
+                        pass
+                    elif adj.getState() == self.playerNum or adj.getState() == self.playerNum + 2:
+                        pass
+                    elif jump.getState() == 0:
+                        if index not in self.moveList:
+                            return True
+            return False
 
     def existsLegalMovesFrom(self, index, peice):
         if peice == 'king':
@@ -912,156 +657,7 @@ Syntax error at or near `CONTINUE' token at offset 301
                     self.hasNormalMoves = True
                     break
                 else:
-                    self.hasNormalM
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\safezone\DistributedCheckers.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'peice'
-3	LOAD_CONST        'king'
-6	COMPARE_OP        '=='
-9	JUMP_IF_FALSE     '315'
-
-12	SETUP_LOOP        '308'
-15	LOAD_GLOBAL       'range'
-18	LOAD_CONST        4
-21	CALL_FUNCTION_1   None
-24	GET_ITER          None
-25	FOR_ITER          '307'
-28	STORE_FAST        'x'
-
-31	LOAD_FAST         'self'
-34	LOAD_ATTR         'board'
-37	LOAD_ATTR         'squareList'
-40	LOAD_FAST         'index'
-43	BINARY_SUBSCR     None
-44	LOAD_ATTR         'getAdjacent'
-47	CALL_FUNCTION_0   None
-50	LOAD_FAST         'x'
-53	BINARY_SUBSCR     None
-54	LOAD_CONST        None
-57	COMPARE_OP        '!='
-60	JUMP_IF_FALSE     '304'
-63	LOAD_FAST         'self'
-66	LOAD_ATTR         'board'
-69	LOAD_ATTR         'squareList'
-72	LOAD_FAST         'index'
-75	BINARY_SUBSCR     None
-76	LOAD_ATTR         'getJumps'
-79	CALL_FUNCTION_0   None
-82	LOAD_FAST         'x'
-85	BINARY_SUBSCR     None
-86	LOAD_CONST        None
-89	COMPARE_OP        '!='
-92_0	COME_FROM         '60'
-92	JUMP_IF_FALSE     '304'
-
-95	LOAD_FAST         'self'
-98	LOAD_ATTR         'board'
-101	LOAD_ATTR         'squareList'
-104	LOAD_FAST         'self'
-107	LOAD_ATTR         'board'
-110	LOAD_ATTR         'squareList'
-113	LOAD_FAST         'index'
-116	BINARY_SUBSCR     None
-117	LOAD_ATTR         'getAdjacent'
-120	CALL_FUNCTION_0   None
-123	LOAD_FAST         'x'
-126	BINARY_SUBSCR     None
-127	BINARY_SUBSCR     None
-128	STORE_FAST        'adj'
-
-131	LOAD_FAST         'self'
-134	LOAD_ATTR         'board'
-137	LOAD_ATTR         'squareList'
-140	LOAD_FAST         'self'
-143	LOAD_ATTR         'board'
-146	LOAD_ATTR         'squareList'
-149	LOAD_FAST         'index'
-152	BINARY_SUBSCR     None
-153	LOAD_ATTR         'getJumps'
-156	CALL_FUNCTION_0   None
-159	LOAD_FAST         'x'
-162	BINARY_SUBSCR     None
-163	BINARY_SUBSCR     None
-164	STORE_FAST        'jump'
-
-167	LOAD_FAST         'adj'
-170	LOAD_ATTR         'getState'
-173	CALL_FUNCTION_0   None
-176	LOAD_CONST        0
-179	COMPARE_OP        '=='
-182	JUMP_IF_FALSE     '188'
-
-185	JUMP_ABSOLUTE     '304'
-
-188	LOAD_FAST         'adj'
-191	LOAD_ATTR         'getState'
-194	CALL_FUNCTION_0   None
-197	LOAD_FAST         'self'
-200	LOAD_ATTR         'playerNum'
-203	COMPARE_OP        '=='
-206	JUMP_IF_TRUE      '234'
-209	LOAD_FAST         'adj'
-212	LOAD_ATTR         'getState'
-215	CALL_FUNCTION_0   None
-218	LOAD_FAST         'self'
-221	LOAD_ATTR         'playerNum'
-224	LOAD_CONST        2
-227	BINARY_ADD        None
-228	COMPARE_OP        '=='
-231_0	COME_FROM         '206'
-231	JUMP_IF_FALSE     '237'
-
-234	JUMP_ABSOLUTE     '304'
-
-237	LOAD_FAST         'jump'
-240	LOAD_ATTR         'getState'
-243	CALL_FUNCTION_0   None
-246	LOAD_CONST        0
-249	COMPARE_OP        '=='
-252	JUMP_IF_FALSE     '301'
-
-255	LOAD_FAST         'index'
-258	LOAD_FAST         'self'
-261	LOAD_ATTR         'moveList'
-264	COMPARE_OP        'not in'
-267	JUMP_IF_FALSE     '298'
-270	LOAD_FAST         'jump'
-273	LOAD_ATTR         'getNum'
-276	CALL_FUNCTION_0   None
-279	LOAD_FAST         'self'
-282	LOAD_ATTR         'moveList'
-285	COMPARE_OP        'not in'
-288_0	COME_FROM         '267'
-288	JUMP_IF_FALSE     '298'
-
-291	LOAD_GLOBAL       'True'
-294	RETURN_END_IF     None
-295	JUMP_ABSOLUTE     '301'
-298	JUMP_ABSOLUTE     '304'
-
-301	CONTINUE          '25'
-304	JUMP_BACK         '25'
-307	POP_BLOCK         None
-308_0	COME_FROM         '12'
-
-308	LOAD_GLOBAL       'False'
-311	RETURN_VALUE      None
-312	JUMP_FORWARD      '663'
-
-315	LOAD_FAST         'peice'
-318	LOAD_CONST        'normal'
-321	COMPARE_OP        '=='
-324	JUMP_IF_FALSE     '663'
-
-327	LOoves = False
+                    self.hasNormalMoves = False
                 if self.hasNormalMoves == False:
                     for x in self.myKings:
                         if self.existsLegalMovesFrom(x, 'king') == True:
@@ -1140,152 +736,3 @@ ParserError: --- This code section failed: ---
 
     def doNothing(self):
         pass
-AD_FAST         'self'
-330	LOAD_ATTR         'playerNum'
-333	LOAD_CONST        1
-336	COMPARE_OP        '=='
-339	JUMP_IF_FALSE     '357'
-
-342	LOAD_CONST        1
-345	LOAD_CONST        2
-348	BUILD_LIST_2      None
-351	STORE_FAST        'moveForward'
-354	JUMP_FORWARD      '387'
-
-357	LOAD_FAST         'self'
-360	LOAD_ATTR         'playerNum'
-363	LOAD_CONST        2
-366	COMPARE_OP        '=='
-369	JUMP_IF_FALSE     '387'
-
-372	LOAD_CONST        0
-375	LOAD_CONST        3
-378	BUILD_LIST_2      None
-381	STORE_FAST        'moveForward'
-384	JUMP_FORWARD      '387'
-387_0	COME_FROM         '354'
-387_1	COME_FROM         '384'
-
-387	SETUP_LOOP        '656'
-390	LOAD_FAST         'moveForward'
-393	GET_ITER          None
-394	FOR_ITER          '655'
-397	STORE_FAST        'x'
-
-400	LOAD_FAST         'self'
-403	LOAD_ATTR         'board'
-406	LOAD_ATTR         'squareList'
-409	LOAD_FAST         'index'
-412	BINARY_SUBSCR     None
-413	LOAD_ATTR         'getAdjacent'
-416	CALL_FUNCTION_0   None
-419	LOAD_FAST         'x'
-422	BINARY_SUBSCR     None
-423	LOAD_CONST        None
-426	COMPARE_OP        '!='
-429	JUMP_IF_FALSE     '652'
-432	LOAD_FAST         'self'
-435	LOAD_ATTR         'board'
-438	LOAD_ATTR         'squareList'
-441	LOAD_FAST         'index'
-444	BINARY_SUBSCR     None
-445	LOAD_ATTR         'getJumps'
-448	CALL_FUNCTION_0   None
-451	LOAD_FAST         'x'
-454	BINARY_SUBSCR     None
-455	LOAD_CONST        None
-458	COMPARE_OP        '!='
-461_0	COME_FROM         '429'
-461	JUMP_IF_FALSE     '652'
-
-464	LOAD_FAST         'self'
-467	LOAD_ATTR         'board'
-470	LOAD_ATTR         'squareList'
-473	LOAD_FAST         'self'
-476	LOAD_ATTR         'board'
-479	LOAD_ATTR         'squareList'
-482	LOAD_FAST         'index'
-485	BINARY_SUBSCR     None
-486	LOAD_ATTR         'getAdjacent'
-489	CALL_FUNCTION_0   None
-492	LOAD_FAST         'x'
-495	BINARY_SUBSCR     None
-496	BINARY_SUBSCR     None
-497	STORE_FAST        'adj'
-
-500	LOAD_FAST         'self'
-503	LOAD_ATTR         'board'
-506	LOAD_ATTR         'squareList'
-509	LOAD_FAST         'self'
-512	LOAD_ATTR         'board'
-515	LOAD_ATTR         'squareList'
-518	LOAD_FAST         'index'
-521	BINARY_SUBSCR     None
-522	LOAD_ATTR         'getJumps'
-525	CALL_FUNCTION_0   None
-528	LOAD_FAST         'x'
-531	BINARY_SUBSCR     None
-532	BINARY_SUBSCR     None
-533	STORE_FAST        'jump'
-
-536	LOAD_FAST         'adj'
-539	LOAD_ATTR         'getState'
-542	CALL_FUNCTION_0   None
-545	LOAD_CONST        0
-548	COMPARE_OP        '=='
-551	JUMP_IF_FALSE     '557'
-
-554	JUMP_ABSOLUTE     '652'
-
-557	LOAD_FAST         'adj'
-560	LOAD_ATTR         'getState'
-563	CALL_FUNCTION_0   None
-566	LOAD_FAST         'self'
-569	LOAD_ATTR         'playerNum'
-572	COMPARE_OP        '=='
-575	JUMP_IF_TRUE      '603'
-578	LOAD_FAST         'adj'
-581	LOAD_ATTR         'getState'
-584	CALL_FUNCTION_0   None
-587	LOAD_FAST         'self'
-590	LOAD_ATTR         'playerNum'
-593	LOAD_CONST        2
-596	BINARY_ADD        None
-597	COMPARE_OP        '=='
-600_0	COME_FROM         '575'
-600	JUMP_IF_FALSE     '606'
-
-603	JUMP_ABSOLUTE     '652'
-
-606	LOAD_FAST         'jump'
-609	LOAD_ATTR         'getState'
-612	CALL_FUNCTION_0   None
-615	LOAD_CONST        0
-618	COMPARE_OP        '=='
-621	JUMP_IF_FALSE     '649'
-
-624	LOAD_FAST         'index'
-627	LOAD_FAST         'self'
-630	LOAD_ATTR         'moveList'
-633	COMPARE_OP        'not in'
-636	JUMP_IF_FALSE     '646'
-
-639	LOAD_GLOBAL       'True'
-642	RETURN_VALUE      None
-643	JUMP_ABSOLUTE     '649'
-646	JUMP_ABSOLUTE     '652'
-649	JUMP_BACK         '394'
-652	JUMP_BACK         '394'
-655	POP_BLOCK         None
-656_0	COME_FROM         '387'
-
-656	LOAD_GLOBAL       'False'
-659	RETURN_VALUE      None
-660	JUMP_FORWARD      '663'
-663_0	COME_FROM         '312'
-663_1	COME_FROM         '660'
-663	LOAD_CONST        None
-666	RETURN_VALUE      None
-
-Syntax error at or near `CONTINUE' token at offset 301
-
