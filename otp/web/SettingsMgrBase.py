@@ -15,24 +15,9 @@ class SettingsMgrBase:
     def _initSettings(self):
         pass
 
-    def _iterSettingNames--- This code section failed: ---
-
-0	SETUP_LOOP        '30'
-3	LOAD_FAST         'self'
-6	LOAD_ATTR         '_settings'
-9	LOAD_ATTR         'iterkeys'
-12	CALL_FUNCTION_0   None
-15	GET_ITER          None
-16	FOR_ITER          '29'
-19	STORE_FAST        'name'
-
-22	LOAD_FAST         'name'
-25	YIELD_VALUE       None
-26	JUMP_BACK         '16'
-29	POP_BLOCK         None
-30_0	COME_FROM         '0'
-
-Syntax error at or near `POP_BLOCK' token at offset 29
+    def _iterSettingNames(self):
+        for name in self._settings.iterkeys():
+            yield name
 
     def _addSettings(self, *settings):
         for setting in settings:
@@ -77,32 +62,4 @@ Syntax error at or near `POP_BLOCK' token at offset 29
             return
 
         setting.setValue(val)
-        self._currentValueReprs[settingName] = valueStr
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\otp\web\SettingsMgrBase.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	SETUP_LOOP        '30'
-3	LOAD_FAST         'self'
-6	LOAD_ATTR         '_settings'
-9	LOAD_ATTR         'iterkeys'
-12	CALL_FUNCTION_0   None
-15	GET_ITER          None
-16	FOR_ITER          '29'
-19	STORE_FAST        'name'
-
-22	LOAD_FAST         'name'
-25	YIELD_VALUE       None
-26	JUMP_BACK         '16'
-29	POP_BLOCK         None
-30_0	COME_FROM         '0'
-
-Syntax error at or near `POP_BLOCK' token at offset 29
-
+        self._currentValueReprs[settingName] = valueStr# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
