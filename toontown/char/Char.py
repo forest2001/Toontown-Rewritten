@@ -260,12 +260,19 @@ class Char(Avatar.Avatar):
             for lodName in self.getLODNames():
                 self.drawInFront('joint_pupil?', 'eyes*', -3, lodName=lodName)
 
-        elif not self.name == 'witch_minnie':
-            if not self.name == 'vampire_mickey':
-                self.geoEyes = self.name == 'super_goofy' or (self.name == 'western_pluto' or self.name == 'police_chip' or self.name == 'jailbird_dale' or self.name == 'franken_donald' or self.name == 'sockHop_daisy') and 1
-                self.eyeOpenList = []
-                self.eyeCloseList = []
-                self.find('**/1200/**/eyesOpen').isEmpty() and self.eyeCloseList.append(self.find('**/eyesClosed'))
+        elif (self.name == 'witch_minnie' or
+              self.name == 'vampire_mickey' or
+              self.name == 'super_goofy' or
+              self.name == 'western_pluto' or
+              self.name == 'police_chip' or
+              self.name == 'jailbird_dale' or
+              self.name == 'franken_donald' or
+              self.name == 'sockHop_daisy'):
+            self.geoEyes = 1
+            self.eyeOpenList = []
+            self.eyeCloseList = []
+            if self.find('**/1200/**/eyesOpen').isEmpty():
+                self.eyeCloseList.append(self.find('**/eyesClosed'))
                 self.eyeOpenList.append(self.find('**/eyesOpen'))
             else:
                 self.eyeCloseList.append(self.find('**/1200/**/eyesClosed'))
