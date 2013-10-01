@@ -220,8 +220,8 @@ class DistributedTwoDGame(DistributedMinigame):
         lerpTrack = Parallel()
         lerpDur = 0.5
         tY = 0.6
-        bY = -0.6
-        lX = -0.7
+        bY = -.6
+        lX = -.7
         cX = 0
         rX = 0.7
         scorePanelLocs = (((cX, bY),),
@@ -400,8 +400,8 @@ class DistributedTwoDGame(DistributedMinigame):
 
     def localToonHitByEnemy(self):
         currToonState = self.toonSDs[self.localAvId].fsm.getCurrentState().getName()
-        if not currToonState == 'fallBack':
-            currToonState == 'squish' or self.toonSDs[self.localAvId].fsm.request('fallBack')
+        if not (currToonState == 'fallBack' or currToonState == 'squish'):
+            self.toonSDs[self.localAvId].fsm.request('fallBack')
             timestamp = globalClockDelta.localToNetworkTime(globalClock.getFrameTime())
             self.updateScore(self.localAvId, ToonBlitzGlobals.ScoreLossPerEnemyCollision[self.getSafezoneId()])
             self.sendUpdate('toonHitByEnemy', [self.localAvId, timestamp])
@@ -415,8 +415,8 @@ class DistributedTwoDGame(DistributedMinigame):
 
     def localToonSquished(self):
         currToonState = self.toonSDs[self.localAvId].fsm.getCurrentState().getName()
-        if not currToonState == 'fallBack':
-            currToonState == 'squish' or self.toonSDs[self.localAvId].fsm.request('squish')
+        if not (currToonState == 'fallBack' or currToonState == 'squish'):
+            self.toonSDs[self.localAvId].fsm.request('squish')
             timestamp = globalClockDelta.localToNetworkTime(globalClock.getFrameTime())
             self.updateScore(self.localAvId, ToonBlitzGlobals.ScoreLossPerStomperSquish[self.getSafezoneId()])
             self.sendUpdate('toonSquished', [self.localAvId, timestamp])
