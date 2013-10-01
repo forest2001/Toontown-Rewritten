@@ -478,8 +478,8 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         lerpTrack = Parallel()
         lerpDur = 0.5
         tY = 0.6
-        bY = -0.05
-        lX = -0.5
+        bY = -.05
+        lX = -.5
         cX = 0
         rX = 0.5
         scorePanelLocs = (((cX, bY),),
