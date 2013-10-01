@@ -342,36 +342,36 @@ class DistributedVineGame(DistributedMinigame):
             newVineIndex = 0
         if newVineT < 0 or newVineT > 1:
             self.notify.warning('invalid vineT for %d, setting to 0' % avId)
-        if not newFacingRight == 0:
-            if not newFacingRight == 1:
-                self.notify.warning('invalid facingRight for %d, forcing to 1' % avId)
-                newFacingRight = 1
-            if newPosX < -1000 or newPosX > 2000:
-                self.notify.warning('invalid posX for %d, forcing to 0' % avId)
-                newPosX = 0
-            if newPosZ < -100 or newPosZ > 1000:
-                self.notify.warning('invalid posZ for %d, forcing to 0' % avId)
-                newPosZ = 0
-            if newVelX < -1000 or newVelX > 1000:
-                self.notify.warning('invalid velX %s for %d, forcing to 0' % (newVelX, avId))
-                newVelX = 0
-            if newVelZ < -1000 or newVelZ > 1000:
-                self.notify.warning('invalid velZ %s for %d, forcing to 0' % (newVelZ, avId))
-                newVelZ = 0
-            if newFallingInfo < self.FallingNot or newFallingInfo > self.FallingBat:
-                self.notify.warning('invalid fallingInfo for %d, forcing to 0' % avId)
-                newFallingInfo = 0
-            newInfo = [newVineIndex,
-             newVineT,
-             newPosX,
-             newPosZ,
-             newFacingRight,
-             newClimbDir,
-             newVelX,
-             newVelZ,
-             newFallingInfo]
-            self.toonInfo[avId] = newInfo
-            oldInfo and self.applyToonInfoChange(avId, newInfo, oldInfo)
+        if not (newFacingRight == 0 or newFacingRight == 1):
+            self.notify.warning('invalid facingRight for %d, forcing to 1' % avId)
+            newFacingRight = 1
+        if newPosX < -1000 or newPosX > 2000:
+            self.notify.warning('invalid posX for %d, forcing to 0' % avId)
+            newPosX = 0
+        if newPosZ < -100 or newPosZ > 1000:
+            self.notify.warning('invalid posZ for %d, forcing to 0' % avId)
+            newPosZ = 0
+        if newVelX < -1000 or newVelX > 1000:
+            self.notify.warning('invalid velX %s for %d, forcing to 0' % (newVelX, avId))
+            newVelX = 0
+        if newVelZ < -1000 or newVelZ > 1000:
+            self.notify.warning('invalid velZ %s for %d, forcing to 0' % (newVelZ, avId))
+            newVelZ = 0
+        if newFallingInfo < self.FallingNot or newFallingInfo > self.FallingBat:
+            self.notify.warning('invalid fallingInfo for %d, forcing to 0' % avId)
+            newFallingInfo = 0
+        newInfo = [newVineIndex,
+            newVineT,
+            newPosX,
+            newPosZ,
+            newFacingRight,
+            newClimbDir,
+            newVelX,
+            newVelZ,
+            newFallingInfo]
+        self.toonInfo[avId] = newInfo
+        if oldInfo:
+            self.applyToonInfoChange(avId, newInfo, oldInfo)
         self.sanityCheck()
         return
 
@@ -560,8 +560,8 @@ class DistributedVineGame(DistributedMinigame):
         lerpTrack = Parallel()
         lerpDur = 0.5
         tY = 0.6
-        bY = -0.05
-        lX = -0.5
+        bY = -.05
+        lX = -.5
         cX = 0
         rX = 0.5
         scorePanelLocs = (((cX, bY),),
@@ -1229,8 +1229,8 @@ class DistributedVineGame(DistributedMinigame):
     def setupChangeFacingInterval(self, vineIndex, newFacingRight):
         self.clearChangeFacingInterval()
         self.changeFacingInterval = Sequence()
-        if not vineIndex == 0:
-            destPos = vineIndex == VineGameGlobals.NumVines - 1 or self.getFocusCameraPos(vineIndex, newFacingRight)
+        if not (vineIndex == 0 or vineIndex == VineGameGlobals.NumVines - 1):
+            destPos = self.getFocusCameraPos(vineIndex, newFacingRight)
             self.changeFacingInterval.append(LerpPosInterval(base.camera, 0.5, destPos))
             self.changeFacingInterval.append(Func(self.clearChangeFacingInterval))
         self.changeFacingInterval.start()
@@ -1324,8 +1324,8 @@ class DistributedVineGame(DistributedMinigame):
         self.notify.debug('toonHitSpider')
         if self.toonInfo[self.localAvId][0] == -1:
             fallingInfo = self.toonInfo[self.localAvId][8]
-            if not fallingInfo == self.FallingBat:
-                fallingInfo == self.FallingSpider or self.spiderHitSound.play()
+            if not (fallingInfo == self.FallingBat or fallingInfo == self.FallingSpider):
+                self.spiderHitSound.play()
                 self.makeLocalToonFallFromMidair(self.FallingSpider)
         else:
             self.spiderHitSound.play()
@@ -1338,8 +1338,8 @@ class DistributedVineGame(DistributedMinigame):
         if self.toonInfo[self.localAvId][0] == -1:
             self.batHitMidairSound.play()
             fallingInfo = self.toonInfo[self.localAvId][8]
-            if not fallingInfo == self.FallingBat:
-                fallingInfo == self.FallingSpider or self.makeLocalToonFallFromMidair(self.FallingBat)
+            if not (fallingInfo == self.FallingBat or fallingInfo == self.FallingSpider):
+                self.makeLocalToonFallFromMidair(self.FallingBat)
         else:
             self.batHitVineSound.play()
             self.makeLocalToonFallFromVine(self.FallingBat)
