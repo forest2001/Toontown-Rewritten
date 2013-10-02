@@ -426,8 +426,8 @@ class GardenDropGame(DirectObject.DirectObject):
                             if self.testDistance(movingSprite.nodeObj, testSprite.nodeObj) < self.queExtent * (movingSprite.size + testSprite.size):
                                 self.push(movingSprite, testSprite)
                         elif self.testDistance(movingSprite.nodeObj, testSprite.nodeObj) < movingSprite.size + testSprite.size:
-                            if movingSprite.isActive:
-                                testSprite.isActive or self.__collide(movingSprite, testSprite)
+                            if not (movingSprite.isActive and testSprite.isActive):
+                                self.__collide(movingSprite, testSprite)
                         if self.tick == 5:
                             pass
 
