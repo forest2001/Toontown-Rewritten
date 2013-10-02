@@ -393,16 +393,16 @@ class RaceGUI:
         minutes = int(t / 60)
         t -= minutes * 60
         seconds = int(t)
-        if not (seconds < 10 and ['0']):
-            padding = [''][0]
-            t -= seconds
-            fraction = str(t)[2:4]
-            fraction = fraction + '0' * (2 - len(fraction))
-            if self.timerEnabled and self.maxLapHit < self.race.lapCount:
-                self.timeLabels[self.maxLapHit][0]['text'] = "%d'" % minutes
-                self.timeLabels[self.maxLapHit][1]['text'] = "%s%d''" % (padding, seconds)
-                self.timeLabels[self.maxLapHit][2]['text'] = '%s' % fraction
-            self.race.wrongWay and not self.wrongWaySeq.isPlaying() and self.wrongWaySeq.loop()
+        padding = (seconds < 10 and ['0'] or [''])[0]
+        t -= seconds
+        fraction = str(t)[2:4]
+        fraction = fraction + '0' * (2 - len(fraction))
+        if self.timerEnabled and self.maxLapHit < self.race.lapCount:
+            self.timeLabels[self.maxLapHit][0]['text'] = "%d'" % minutes
+            self.timeLabels[self.maxLapHit][1]['text'] = "%s%d''" % (padding, seconds)
+            self.timeLabels[self.maxLapHit][2]['text'] = '%s' % fraction
+        if self.race.wrongWay and not self.wrongWaySeq.isPlaying():
+            self.wrongWaySeq.loop()
         elif not self.race.wrongWay and self.wrongWaySeq.isPlaying():
             self.wrongWaySeq.finish()
 
