@@ -25,11 +25,22 @@ class HalloweenHolidayDecorator(HolidayDecorator.HolidayDecorator):
             return False
 
     def __checkHoodValidity(self):
-        if hasattr(base.cr.playGame, 'getPlace'):
-            return base.cr.playGame.getPlace() and isinstance(base.cr.playGame.getPlace(), Playground.Playground) or isinstance(base.cr.playGame.getPlace(), Estate.Estate) and hasattr(base.cr.playGame.getPlace(), 'loader') and base.cr.playGame.getPlace().loader and hasattr(base.cr.playGame.getPlace().loader, 'hood') and base.cr.playGame.getPlace().loader.hood and hasattr(base.cr.playGame.getPlace().loader.hood, 'loader') and base.cr.playGame.getPlace().loader.hood.loader and hasattr(base.cr.playGame.getPlace().loader.hood.loader, 'geom') and base.cr.playGame.getPlace().loader.hood.loader.geom and True
+        if (hasattr(base.cr.playGame, 'getPlace') and
+            base.cr.playGame.getPlace() and
+                (isinstance(base.cr.playGame.getPlace(), Playground.Playground) or
+                 isinstance(base.cr.playGame.getPlace(), Estate.Estate)) and
+            hasattr(base.cr.playGame.getPlace(), 'loader') and
+            base.cr.playGame.getPlace().loader and
+            hasattr(base.cr.playGame.getPlace().loader, 'hood') and
+            base.cr.playGame.getPlace().loader.hood and
+            hasattr(base.cr.playGame.getPlace().loader.hood, 'loader') and
+            base.cr.playGame.getPlace().loader.hood.loader and
+            hasattr(base.cr.playGame.getPlace().loader.hood.loader, 'geom') and
+            base.cr.playGame.getPlace().loader.hood.loader.geom):
+                return True
         else:
-            if hasattr(base.cr.playGame, 'getPlace'):
-                base.cr.playGame.getPlace() and self.notify.debug('Failed Hood Check %s' % base.cr.playGame.getPlace())
+            if hasattr(base.cr.playGame, 'getPlace') and base.cr.playGame.getPlace():
+                self.notify.debug('Failed Hood Check %s' % base.cr.playGame.getPlace())
             else:
                 self.notify.debug('Failed Hood Check')
             return False
