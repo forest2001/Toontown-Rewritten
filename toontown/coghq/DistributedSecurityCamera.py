@@ -193,14 +193,14 @@ class DistributedSecurityCamera(BasicEntities.DistributedNodePathEntity):
         posY = localAvatar.getPos(self)[1]
         tileX = int(posX / (self.gridScaleX / self.gridNumX))
         tileY = int(posY / (self.gridScaleY / self.gridNumY))
-        if not self.toonX != tileX:
-            if self.toonY != tileY or not self.isToonIn:
-                self.toonX = tileX
-                self.toonY = tileY
-                self.isToonIn = 1
-                if self.gridData[tileX][tileY] < len(self.gridSymbols):
-                    tileFunction = self.gridSymbols[self.gridData[tileX][tileY]][0]
-                    tileFunction and tileFunction()
+        if self.toonX != tileX or self.toonY != tileY or not self.isToonIn:
+            self.toonX = tileX
+            self.toonY = tileY
+            self.isToonIn = 1
+            if self.gridData[tileX][tileY] < len(self.gridSymbols):
+                tileFunction = self.gridSymbols[self.gridData[tileX][tileY]][0]
+                if tileFunction:
+                    tileFunction()
             self.sendHit()
         self.isToonIn = 1
 
