@@ -1172,9 +1172,9 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
                 if testSprite and movingSprite:
                     if movingSpriteIndex != testSpriteIndex and (movingSprite.isActive or testSprite.isActive):
                         if self.testDistance(movingSprite.spriteBase, testSprite.spriteBase) < self.radiusBall * 1.65:
-                            if movingSprite.isActive:
-                                if not testSprite.isActive:
-                                    movingSprite.canCollide and testSprite.canCollide and self.__collide(movingSprite, testSprite)
+                            if not (movingSprite.isActive and testSprite.isActive):
+                                if movingSprite.canCollide and testSprite.canCollide:
+                                    self.__collide(movingSprite, testSprite)
                         if self.tick == 5:
                             pass
 
