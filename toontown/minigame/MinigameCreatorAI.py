@@ -49,24 +49,24 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
         mgId = simbase.forcedMinigameId
     else:
         randomList = list(copy.copy(ToontownGlobals.MinigamePlayerMatrix[len(playerArray)]))
-        if simbase.air.useAllMinigames:
-            if len(playerArray) > 1:
-                randomList = list(copy.copy(ToontownGlobals.MinigameIDs))
-                for gameId in [ToontownGlobals.TravelGameId]:
-                    if gameId in randomList:
-                        randomList.remove(gameId)
-
+        if simbase.air.useAllMinigames and len(playerArray) > 1:
+            randomList = list(copy.copy(ToontownGlobals.MinigameIDs))
             for gameId in [ToontownGlobals.TravelGameId]:
                 if gameId in randomList:
                     randomList.remove(gameId)
 
-            if previousGameId != ToontownGlobals.NoPreviousGameId:
-                if randomList.count(previousGameId) != 0:
-                    randomList.remove(previousGameId)
-            randomList = removeUnreleasedMinigames(randomList, True)
-            mgId = random.choice(randomList)
-            if metagameRound > -1:
-                mgId = metagameRound % 2 == 0 and ToontownGlobals.TravelGameId
+        for gameId in [ToontownGlobals.TravelGameId]:
+            if gameId in randomList:
+                randomList.remove(gameId)
+
+        if previousGameId != ToontownGlobals.NoPreviousGameId:
+            if randomList.count(previousGameId) != 0:
+                randomList.remove(previousGameId)
+        randomList = removeUnreleasedMinigames(randomList, True)
+        mgId = random.choice(randomList)
+        if metagameRound > -1:
+            if metagameRound % 2 == 0:
+                mgId = ToontownGlobals.TravelGameId
             elif desiredNextGame:
                 mgId = desiredNextGame
     mgCtors = {ToontownGlobals.RaceGameId: DistributedRaceGameAI.DistributedRaceGameAI,
@@ -129,7 +129,6 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
     retVal['minigameZone'] = minigameZone
     retVal['minigameId'] = mgId
     return retVal
-    return None
 
 
 def acquireMinigameZone(zoneId):
