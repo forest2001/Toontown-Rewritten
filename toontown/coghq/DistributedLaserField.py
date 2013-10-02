@@ -403,14 +403,14 @@ class DistributedLaserField(BattleBlocker.BattleBlocker):
         tileY = int(posY / (self.gridScaleY / self.gridNumY))
         oldX = self.toonX
         oldY = self.toonY
-        if not self.toonX != tileX:
-            if self.toonY != tileY or not self.isToonIn:
-                self.toonX = tileX
-                self.toonY = tileY
-                self.isToonIn = 1
-                if self.gridData[tileX][tileY] < len(self.gridSymbols):
-                    tileFunction = self.gridSymbols[self.gridData[tileX][tileY]][0]
-                    tileFunction and tileFunction()
+        if self.toonX != tileX or self.toonY != tileY or not self.isToonIn:
+            self.toonX = tileX
+            self.toonY = tileY
+            self.isToonIn = 1
+            if self.gridData[tileX][tileY] < len(self.gridSymbols):
+                tileFunction = self.gridSymbols[self.gridData[tileX][tileY]][0]
+                if tileFunction:
+                    tileFunction()
             self.sendHit(self.toonX, self.toonY, oldX, oldY)
             self.genGrid()
         self.isToonIn = 1
