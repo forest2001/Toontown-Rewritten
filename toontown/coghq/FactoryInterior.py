@@ -223,108 +223,28 @@ class FactoryInterior(BattlePlace.BattlePlace):
         else:
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
 
-    def handleFactoryWinEvent--- This code section failed: ---
+    def handleFactoryWinEvent(self):
+        FactoryInterior.notify.info('handleFactoryWinEvent')
 
-0	LOAD_GLOBAL       'FactoryInterior'
-3	LOAD_ATTR         'notify'
-6	LOAD_ATTR         'info'
-9	LOAD_CONST        'handleFactoryWinEvent'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
+        if base.cr.playGame.getPlace().fsm.getCurrentState().getName() == 'died':
+            return
 
-16	LOAD_GLOBAL       'base'
-19	LOAD_ATTR         'cr'
-22	LOAD_ATTR         'playGame'
-25	LOAD_ATTR         'getPlace'
-28	CALL_FUNCTION_0   None
-31	LOAD_ATTR         'fsm'
-34	LOAD_ATTR         'getCurrentState'
-37	CALL_FUNCTION_0   None
-40	LOAD_ATTR         'getName'
-43	CALL_FUNCTION_0   None
-46	LOAD_CONST        'died'
-49	COMPARE_OP        '=='
-52	JUMP_IF_FALSE     '62'
+        self.factoryDefeated = 1
 
-55	LOAD_CONST        None
-58	RETURN_VALUE      None
-59	JUMP_FORWARD      '62'
-62_0	COME_FROM         '59'
+        if 1:
+            zoneId = ZoneUtil.getHoodId(self.zoneId)
+        else:
+            zoneId = ZoneUtil.getSafeZoneId(base.localAvatar.defaultZone)
 
-62	LOAD_CONST        1
-65	LOAD_FAST         'self'
-68	STORE_ATTR        'factoryDefeated'
-
-71	LOAD_GLOBAL       'ZoneUtil'
-74	LOAD_ATTR         'getHoodId'
-77	LOAD_FAST         'self'
-80	LOAD_ATTR         'zoneId'
-83	CALL_FUNCTION_1   None
-86	STORE_FAST        'zoneId'
-89	JUMP_FORWARD      '113'
-
-92	LOAD_GLOBAL       'ZoneUtil'
-95	LOAD_ATTR         'getSafeZoneId'
-98	LOAD_GLOBAL       'base'
-101	LOAD_ATTR         'localAvatar'
-104	LOAD_ATTR         'defaultZone'
-107	CALL_FUNCTION_1   None
-110	STORE_FAST        'zoneId'
-113_0	COME_FROM         '89'
-
-113	LOAD_FAST         'self'
-116	LOAD_ATTR         'fsm'
-119	LOAD_ATTR         'request'
-122	LOAD_CONST        'teleportOut'
-125	BUILD_MAP         None
-128	DUP_TOP           None
-129	LOAD_CONST        'loader'
-132	LOAD_GLOBAL       'ZoneUtil'
-135	LOAD_ATTR         'getLoaderName'
-138	LOAD_FAST         'zoneId'
-141	CALL_FUNCTION_1   None
-144	ROT_THREE         None
-145	STORE_SUBSCR      None
-146	DUP_TOP           None
-147	LOAD_CONST        'where'
-150	LOAD_GLOBAL       'ZoneUtil'
-153	LOAD_ATTR         'getToonWhereName'
-156	LOAD_FAST         'zoneId'
-159	CALL_FUNCTION_1   None
-162	ROT_THREE         None
-163	STORE_SUBSCR      None
-164	DUP_TOP           None
-165	LOAD_CONST        'how'
-168	LOAD_CONST        'teleportIn'
-171	ROT_THREE         None
-172	STORE_SUBSCR      None
-173	DUP_TOP           None
-174	LOAD_CONST        'hoodId'
-177	LOAD_FAST         'zoneId'
-180	ROT_THREE         None
-181	STORE_SUBSCR      None
-182	DUP_TOP           None
-183	LOAD_CONST        'zoneId'
-186	LOAD_FAST         'zoneId'
-189	ROT_THREE         None
-190	STORE_SUBSCR      None
-191	DUP_TOP           None
-192	LOAD_CONST        'shardId'
-195	LOAD_CONST        None
-198	ROT_THREE         None
-199	STORE_SUBSCR      None
-200	DUP_TOP           None
-201	LOAD_CONST        'avId'
-204	LOAD_CONST        -1
-207	ROT_THREE         None
-208	STORE_SUBSCR      None
-209	BUILD_LIST_1      None
-212	CALL_FUNCTION_2   None
-215	POP_TOP           None
-216	LOAD_CONST        None
-219	RETURN_VALUE      None
-
-Syntax error at or near `LOAD_GLOBAL' token at offset 92
+        self.fsm.request('teleportOut', [{
+            'loader': ZoneUtil.getLoaderName(zoneId),
+            'where': ZoneUtil.getToonWhereName(zoneId),
+            'how': 'teleportIn',
+            'hoodId': zoneId,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1,
+            }])
 
     def enterDied(self, requestStatus, callback = None):
         FactoryInterior.notify.info('enterDied')
@@ -354,115 +274,3 @@ Syntax error at or near `LOAD_GLOBAL' token at offset 92
         if hasattr(self, 'flaDialog'):
             self.flaDialog.cleanup()
             del self.flaDialog
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\coghq\FactoryInterior.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_GLOBAL       'FactoryInterior'
-3	LOAD_ATTR         'notify'
-6	LOAD_ATTR         'info'
-9	LOAD_CONST        'handleFactoryWinEvent'
-12	CALL_FUNCTION_1   None
-15	POP_TOP           None
-
-16	LOAD_GLOBAL       'base'
-19	LOAD_ATTR         'cr'
-22	LOAD_ATTR         'playGame'
-25	LOAD_ATTR         'getPlace'
-28	CALL_FUNCTION_0   None
-31	LOAD_ATTR         'fsm'
-34	LOAD_ATTR         'getCurrentState'
-37	CALL_FUNCTION_0   None
-40	LOAD_ATTR         'getName'
-43	CALL_FUNCTION_0   None
-46	LOAD_CONST        'died'
-49	COMPARE_OP        '=='
-52	JUMP_IF_FALSE     '62'
-
-55	LOAD_CONST        None
-58	RETURN_VALUE      None
-59	JUMP_FORWARD      '62'
-62_0	COME_FROM         '59'
-
-62	LOAD_CONST        1
-65	LOAD_FAST         'self'
-68	STORE_ATTR        'factoryDefeated'
-
-71	LOAD_GLOBAL       'ZoneUtil'
-74	LOAD_ATTR         'getHoodId'
-77	LOAD_FAST         'self'
-80	LOAD_ATTR         'zoneId'
-83	CALL_FUNCTION_1   None
-86	STORE_FAST        'zoneId'
-89	JUMP_FORWARD      '113'
-
-92	LOAD_GLOBAL       'ZoneUtil'
-95	LOAD_ATTR         'getSafeZoneId'
-98	LOAD_GLOBAL       'base'
-101	LOAD_ATTR         'localAvatar'
-104	LOAD_ATTR         'defaultZone'
-107	CALL_FUNCTION_1   None
-110	STORE_FAST        'zoneId'
-113_0	COME_FROM         '89'
-
-113	LOAD_FAST         'self'
-116	LOAD_ATTR         'fsm'
-119	LOAD_ATTR         'request'
-122	LOAD_CONST        'teleportOut'
-125	BUILD_MAP         None
-128	DUP_TOP           None
-129	LOAD_CONST        'loader'
-132	LOAD_GLOBAL       'ZoneUtil'
-135	LOAD_ATTR         'getLoaderName'
-138	LOAD_FAST         'zoneId'
-141	CALL_FUNCTION_1   None
-144	ROT_THREE         None
-145	STORE_SUBSCR      None
-146	DUP_TOP           None
-147	LOAD_CONST        'where'
-150	LOAD_GLOBAL       'ZoneUtil'
-153	LOAD_ATTR         'getToonWhereName'
-156	LOAD_FAST         'zoneId'
-159	CALL_FUNCTION_1   None
-162	ROT_THREE         None
-163	STORE_SUBSCR      None
-164	DUP_TOP           None
-165	LOAD_CONST        'how'
-168	LOAD_CONST        'teleportIn'
-171	ROT_THREE         None
-172	STORE_SUBSCR      None
-173	DUP_TOP           None
-174	LOAD_CONST        'hoodId'
-177	LOAD_FAST         'zoneId'
-180	ROT_THREE         None
-181	STORE_SUBSCR      None
-182	DUP_TOP           None
-183	LOAD_CONST        'zoneId'
-186	LOAD_FAST         'zoneId'
-189	ROT_THREE         None
-190	STORE_SUBSCR      None
-191	DUP_TOP           None
-192	LOAD_CONST        'shardId'
-195	LOAD_CONST        None
-198	ROT_THREE         None
-199	STORE_SUBSCR      None
-200	DUP_TOP           None
-201	LOAD_CONST        'avId'
-204	LOAD_CONST        -1
-207	ROT_THREE         None
-208	STORE_SUBSCR      None
-209	BUILD_LIST_1      None
-212	CALL_FUNCTION_2   None
-215	POP_TOP           None
-216	LOAD_CONST        None
-219	RETURN_VALUE      None
-
-Syntax error at or near `LOAD_GLOBAL' token at offset 92
-
