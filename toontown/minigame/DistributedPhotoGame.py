@@ -572,7 +572,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
             interest = self.getSubjectTrackState(subject)[3]
             quality = centering[0] - (centering[1] + centering[2] + centering[3] + centering[4])
             tooClose = centering[1] and centering[2] or centering[3] and centering[4]
-            portrait = centering[1] and (centering[2] or centering[3] or not centering[4])
+            portrait = centering[1] and not (centering[2] or centering[3] or centering[4])
             self.notify.debug('angle %s facing %s' % (angle, facing))
             self.notify.debug('Interest %s' % interest)
             self.notify.debug('Quality %s' % quality)
