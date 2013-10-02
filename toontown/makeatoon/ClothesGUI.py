@@ -143,7 +143,7 @@ class ClothesGUI(StateData.StateData):
         self.updateScrollButtons(self.topChoice, length, 0, self.topLButton, self.topRButton)
         if self.topChoice < 0 or self.topChoice >= len(self.tops) or len(self.tops[self.topChoice]) != 4:
             self.notify.warning('topChoice index is out of range!')
-            return
+            return None
         self.toon.style.topTex = self.tops[self.topChoice][0]
         self.toon.style.topTexColor = self.tops[self.topChoice][1]
         self.toon.style.sleeveTex = self.tops[self.topChoice][2]
@@ -152,7 +152,6 @@ class ClothesGUI(StateData.StateData):
         if self.swapEvent != None:
             messenger.send(self.swapEvent)
         messenger.send('wakeup')
-        return
 
     def swapBottom(self, offset):
         length = len(self.bottoms)
@@ -162,7 +161,7 @@ class ClothesGUI(StateData.StateData):
         self.updateScrollButtons(self.bottomChoice, length, 0, self.bottomLButton, self.bottomRButton)
         if self.bottomChoice < 0 or self.bottomChoice >= len(self.bottoms) or len(self.bottoms[self.bottomChoice]) != 2:
             self.notify.warning('bottomChoice index is out of range!')
-            return
+            return None
         self.toon.style.botTex = self.bottoms[self.bottomChoice][0]
         self.toon.style.botTexColor = self.bottoms[self.bottomChoice][1]
         if self.toon.generateToonClothes() == 1:
@@ -171,7 +170,6 @@ class ClothesGUI(StateData.StateData):
         if self.swapEvent != None:
             messenger.send(self.swapEvent)
         messenger.send('wakeup')
-        return
 
     def updateScrollButtons(self, choice, length, startTex, lButton, rButton):
         if choice >= length - 1:
