@@ -500,8 +500,8 @@ class DistributedTravelGame(DistributedMinigame):
                 curStr = TTLocalizer.TravelGameOneToonVote % {'name': self.avNames[index],
                  'numVotes': numVotes,
                  'dir': TTLocalizer.TravelGameDirections[dir]}
-                if numVotes == 0:
-                    avId in self.disconnectedAvIds or self.resultsStr += curStr
+                if not (numVotes == 0 and avId in self.disconnectedAvIds):
+                    self.resultsStr += curStr
 
         directionStr = TTLocalizer.TravelGameTotals
         for index in range(len(directionTotals)):
