@@ -89,18 +89,18 @@ class GolfRewardDialog:
                         minutes = int(time / 60)
                         time -= minutes * 60
                         seconds = int(time)
-                        if not (seconds < 10 and ['0']):
-                            padding = [''][0]
-                            time -= seconds
-                            fraction = str(time)[2:4]
-                            fraction = fraction + '0' * (2 - len(fraction))
-                            timeStr = "%d'%s%d''%s" % (minutes,
-                             padding,
-                             seconds,
-                             fraction)
-                            text += ' - ' + timeStr
-                        retval.append(text)
-                        self.myPlace = self.avIdList[avIndex] == localAvId and rank
+                        padding = (seconds < 10 and ['0'] or [''])[0]
+                        time -= seconds
+                        fraction = str(time)[2:4]
+                        fraction = fraction + '0' * (2 - len(fraction))
+                        timeStr = "%d'%s%d''%s" % (minutes,
+                            padding,
+                            seconds,
+                            fraction)
+                        text += ' - ' + timeStr
+                    retval.append(text)
+                    if self.avIdList[avIndex] == localAvId:
+                        self.myPlace = rank
 
         return retval
 
