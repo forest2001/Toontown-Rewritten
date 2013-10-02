@@ -92,7 +92,7 @@ class TrunkGUI(StateData.StateData):
         if self.isOwner:
             trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui.bam')
             trashImage = (trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_RLVR'))
-            self.trashPanel = DirectFrame(parent=aspect2d, image=DGG.getDefaultDialogGeom(), image_color=(1, 1, 0.75, 0.8), image_scale=(0.36, 0, 1.2), pos=(-0.86, 0, 0.1), relief=None)
+            self.trashPanel = DirectFrame(parent=aspect2d, image=DGG.getDefaultDialogGeom(), image_color=(1, 1, 0.75, 0.8), image_scale=(0.36, 0, 1.2), pos=(-.86, 0, 0.1), relief=None)
 
             def addTrashButton(posZ, text, extraArg):
                 return DirectButton(parent=self.trashPanel, image=trashImage, relief=None, pos=(-0.09, 0, posZ), command=self.__handleDelete, text=text, extraArgs=[extraArg], scale=(0.5, 0.5, 0.5), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.12, text_pos=(0.3, 0), text_fg=(0.8, 0.2, 0.2, 1), text_shadow=(0, 0, 0, 1), textMayChange=0)
@@ -336,13 +336,12 @@ class TrunkGUI(StateData.StateData):
         self.updateScrollButtons(self.hatChoice, length, 0, self.hatLButton, self.hatRButton)
         if self.hatChoice < 0 or self.hatChoice >= len(self.hats) or len(self.hats[self.hatChoice]) != 3:
             self.notify.warning('hatChoice index is out of range!')
-            return
+            return None
         hat = self.hats[self.hatChoice]
         self.toon.setHat(hat[0], hat[1], hat[2])
         if self.swapHatEvent != None:
             messenger.send(self.swapHatEvent)
         messenger.send('wakeup')
-        return
 
     def swapGlasses(self, offset):
         length = len(self.glasses)
@@ -352,13 +351,12 @@ class TrunkGUI(StateData.StateData):
         self.updateScrollButtons(self.glassesChoice, length, 0, self.glassesLButton, self.glassesRButton)
         if self.glassesChoice < 0 or self.glassesChoice >= len(self.glasses) or len(self.glasses[self.glassesChoice]) != 3:
             self.notify.warning('glassesChoice index is out of range!')
-            return
+            return None
         glasses = self.glasses[self.glassesChoice]
         self.toon.setGlasses(glasses[0], glasses[1], glasses[2])
         if self.swapGlassesEvent != None:
             messenger.send(self.swapGlassesEvent)
         messenger.send('wakeup')
-        return
 
     def swapBackpack(self, offset):
         length = len(self.backpacks)
@@ -368,13 +366,12 @@ class TrunkGUI(StateData.StateData):
         self.updateScrollButtons(self.backpackChoice, length, 0, self.backpackLButton, self.backpackRButton)
         if self.backpackChoice < 0 or self.backpackChoice >= len(self.backpacks) or len(self.backpacks[self.backpackChoice]) != 3:
             self.notify.warning('backpackChoice index is out of range!')
-            return
+            return None
         backpack = self.backpacks[self.backpackChoice]
         self.toon.setBackpack(backpack[0], backpack[1], backpack[2])
         if self.swapBackpackEvent != None:
             messenger.send(self.swapBackpackEvent)
         messenger.send('wakeup')
-        return
 
     def swapShoes(self, offset):
         length = len(self.shoes)
@@ -384,13 +381,12 @@ class TrunkGUI(StateData.StateData):
         self.updateScrollButtons(self.shoesChoice, length, 0, self.shoesLButton, self.shoesRButton)
         if self.shoesChoice < 0 or self.shoesChoice >= len(self.shoes) or len(self.shoes[self.shoesChoice]) != 3:
             self.notify.warning('shoesChoice index is out of range!')
-            return
+            return None
         shoes = self.shoes[self.shoesChoice]
         self.toon.setShoes(shoes[0], shoes[1], shoes[2])
         if self.swapShoesEvent != None:
             messenger.send(self.swapShoesEvent)
         messenger.send('wakeup')
-        return
 
     def updateScrollButtons(self, choice, length, startTex, lButton, rButton):
         if choice >= length - 1:
