@@ -41,20 +41,21 @@ def loadParticleFile(name):
         if AppRunnerGlobal.appRunner:
             particleSearchPath.appendDirectory(Filename.expandFrom('$TT_3_5_ROOT/phase_3.5/etc'))
         else:
-            if not os.path.expandvars('$TOONTOWN'):
-                basePath = './toontown'
-                particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/battle'))
-                particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/safezone'))
-                particleSearchPath.appendDirectory(Filename('phase_3.5/etc'))
-                particleSearchPath.appendDirectory(Filename('phase_4/etc'))
-                particleSearchPath.appendDirectory(Filename('phase_5/etc'))
-                particleSearchPath.appendDirectory(Filename('phase_8/etc'))
-                particleSearchPath.appendDirectory(Filename('phase_9/etc'))
-                particleSearchPath.appendDirectory(Filename('.'))
-            pfile = Filename(name)
-            found = vfs.resolveFilename(pfile, particleSearchPath)
-            found or notify.warning('loadParticleFile() - no path: %s' % name)
-            return
+            basePath = os.path.expandvars('$TOONTOWN') or './toontown'
+            particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/battle'))
+            particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/safezone'))
+            particleSearchPath.appendDirectory(Filename('phase_3.5/etc'))
+            particleSearchPath.appendDirectory(Filename('phase_4/etc'))
+            particleSearchPath.appendDirectory(Filename('phase_5/etc'))
+            particleSearchPath.appendDirectory(Filename('phase_8/etc'))
+            particleSearchPath.appendDirectory(Filename('phase_9/etc'))
+            particleSearchPath.appendDirectory(Filename('.'))
+
+    pfile = Filename(name)
+    found = vfs.resolveFilename(pfile, particleSearchPath)
+    if not found:
+        notify.warning('loadParticleFile() - no path: %s' % name)
+        return
     notify.debug('Loading particle file: %s' % pfile)
     effect = ParticleEffect()
     effect.loadConfig(pfile)
