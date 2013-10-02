@@ -138,7 +138,7 @@ class FriendsListPanel(DirectFrame, StateData.StateData):
 
     def load(self):
         if self.isLoaded == 1:
-            return
+            return None
         self.isLoaded = 1
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
         auxGui = loader.loadModel('phase_3.5/models/gui/avatar_panel_gui')
@@ -259,7 +259,7 @@ class FriendsListPanel(DirectFrame, StateData.StateData):
 
     def enter(self):
         if self.isEntered == 1:
-            return
+            return None
         self.isEntered = 1
         if self.isLoaded == 0:
             self.load()
