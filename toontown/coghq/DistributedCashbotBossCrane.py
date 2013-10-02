@@ -531,9 +531,9 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
         self.arm.setH(limitH)
         y = self.crane.getY() + yd * self.slideSpeed * dt
         limitY = max(min(y, self.craneMaxY), self.craneMinY)
-        if not limitH != h:
-            atLimit = limitY != y
-            now = atLimit and globalClock.getFrameTime()
+        atLimit = limitH != h or limitY != y
+        if atLimit:
+            now = globalClock.getFrameTime()
             x = math.sin(now * 79) * 0.05
             z = math.sin(now * 70) * 0.02
             self.crane.setPos(x, limitY, z)
