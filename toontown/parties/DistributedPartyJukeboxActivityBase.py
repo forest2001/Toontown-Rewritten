@@ -151,12 +151,12 @@ class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
         return
 
     def __addSongToQueue(self, songInfo, isLocalQueue = False):
-        if isLocalQueue:
-            isHost = self.isUserHost()
-            data = self.getMusicData(sanitizePhase(songInfo[0]), songInfo[1])
-            if data:
-                listItem = self.gui.addSongToQueue(data[0], highlight=isLocalQueue, moveToTopButton=isHost)
-                self.localQueuedSongInfo = isLocalQueue and songInfo
+        isHost = isLocalQueue and self.isUserHost()
+        data = self.getMusicData(sanitizePhase(songInfo[0]), songInfo[1])
+        if data:
+            listItem = self.gui.addSongToQueue(data[0], highlight=isLocalQueue, moveToTopButton=isHost)
+            if isLocalQueue:
+                self.localQueuedSongInfo = songInfo
                 self.localQueuedSongListItem = listItem
 
     def __localClearQueuedSong(self):
