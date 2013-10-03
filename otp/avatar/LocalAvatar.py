@@ -848,8 +848,8 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
 
     def setCameraFov(self, fov):
         self.fov = fov
-        if not self.isPageDown:
-            self.isPageUp or base.camLens.setFov(self.fov)
+        if not (self.isPageDown or self.isPageUp):
+            base.camLens.setFov(self.fov)
 
     def gotoNode(self, node, eyeHeight = 3):
         possiblePoints = (Point3(3, 6, 0),
