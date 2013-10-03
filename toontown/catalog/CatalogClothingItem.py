@@ -316,9 +316,9 @@ class CatalogClothingItem(CatalogItem.CatalogItem):
         article = ClothingTypes[self.clothingType][CTArticle]
         if article == AShirt or article == AShorts:
             return 0
-        if not article == ABoysShirt:
-            forBoys = article == ABoysShorts
-            return avatar.getStyle().getGender() == 'm' and not forBoys
+        forBoys = (article == ABoysShirt or article == ABoysShorts)
+        if avatar.getStyle().getGender() == 'm':
+            return not forBoys
         else:
             return forBoys
 
