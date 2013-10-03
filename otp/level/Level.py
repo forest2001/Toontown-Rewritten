@@ -84,10 +84,11 @@ class Level:
         while len(self.createdEntIds) > 0:
             entId = self.createdEntIds.pop()
             entity = self.getEntity(entId)
-            entity is not None and Level.notify.debug('destroying %s %s' % (self.getEntityType(entId), entId))
-            entity.destroy()
-            continue
-            Level.notify.error('trying to destroy entity %s, but it is already gone' % entId)
+            if entity is not None:
+                Level.notify.debug('destroying %s %s' % (self.getEntityType(entId), entId))
+                entity.destroy()
+            else:
+                Level.notify.error('trying to destroy entity %s, but it is already gone' % entId)
 
         return
 
