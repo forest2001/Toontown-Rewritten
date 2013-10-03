@@ -307,37 +307,76 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         pass
 
     def runSound(self):
-        pass
+        self.soundWalk.stop()
+        base.playSfx(self.soundRun, looping=1)
 
     def walkSound(self):
-        pass
+        self.soundRun.stop()
+        base.playSfx(self.soundWalk, looping=1)
 
     def stopSound(self):
-        pass
+        self.soundRun.stop()
+        self.soundWalk.stop()
 
     def wakeUp(self):
-        pass
+        if self.sleepCallback != None:
+            taskMgr.remove(self.uniqueName('sleepwatch'))
+            self.startSleepWatch(self.sleepCallback)
+        self.lastMoved = globalClock.getFrameTime()
+        if self.sleepFlag:
+            self.sleepFlag = 0
 
     def gotoSleep(self):
-        pass
+        if not self.sleepFlag:
+            self.b_setAnimState('Sleep', self.animMultiplier)
+            self.sleepFlag = 1
 
     def forceGotoSleep(self):
-        pass
+        if self.hp > 0:
+            self.sleepFlag = 0
+            self.gotoSleep()
 
-    def startSleepWatch(self):
-        pass
+    def startSleepWatch(self, callback):
+        self.sleepCallback = callback
+        taskMgr.doMethodLater(self.sleepTimeout, callback, self.uniqueName('sleepwatch'))
 
     def stopSleepWatch(self):
-        pass
+        taskMgr.remove(self.uniqueName('sleepwatch'))
+        self.sleepCallback = None
 
     def startSleepSwimTest(self):
-        pass
+        taskName = self.taskName('sleepSwimTest')
+        taskMgr.remove(taskName)
+        task = Task.Task(self.sleepSwimTest)
+        self.lastMoved = globalClock.getFrameTime()
+        self.lastState = None
+        self.lastAction = None
+        self.sleepSwimTest(task)
+        taskMgr.add(self.sleepSwimTest, taskName, 35)
 
     def stopSleepSwimTest(self):
-        pass
+        taskName = self.taskName('sleepSwimTest')
+        taskMgr.remove(taskName)
+        self.stopSound()
 
-    def sleepSwimTest(self):
-        pass
+    def sleepSwimTest(self, task):
+        now = globalClock.getFrameTime()
+        speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
+        if speed != 0.0 or rotSpeed != 0.0 or inputState.isSet('jump'):
+            if not self.swimmingFlag:
+                self.swimmingFlag = 1
+        elif self.swimmingFlag:
+            self.swimmingFlag = 0
+
+        if self.swimmingFlag or self.hp <= 0:
+            self.wakeUp()
+        elif not self.sleepFlag:
+            now = globalClock.getFrameTime()
+            if now - self.lastMoved > self.swimTimeout:
+                self.swimTimeoutAction()
+                return Task.done
+
+        return Task.cont
 
     def swimTimeoutAction(self):
         pass
