@@ -177,35 +177,38 @@ class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
         return self.active
 
     def sendChat(self, text, overflow = False):
-        if len(text) > 0:
-            if not text[0] in ['~', '>']:
-                if self.prefilter:
-                    words = text.split(' ')
-                    newwords = []
-                    for word in words:
-                        if word == '' or self.whiteList.isWord(word) or self.promoteWhiteList:
-                            newwords.append(word)
-                        else:
-                            newwords.append(base.whiteList.defaultWord)
+        if not (len(text) > 0 and text[0] in ['~', '>']):
+            if self.prefilter:
+                words = text.split(' ')
+                newwords = []
+                for word in words:
+                    if word == '' or self.whiteList.isWord(word) or self.promoteWhiteList:
+                        newwords.append(word)
+                    else:
+                        newwords.append(base.whiteList.defaultWord)
 
-                    text = ' '.join(newwords)
-                else:
-                    text = self.chatEntry.get(plain=True)
-            if text:
-                self.chatEntry.set('')
-                if base.config.GetBool('exec-chat', 0) and text[0] == '>':
-                    text = self.__execMessage(text[1:])
-                    base.localAvatar.setChatAbsolute(text, CFSpeech | CFTimeout)
-                    return
-                else:
-                    self.sendChatBySwitch(text)
-                if self.wantHistory:
-                    self.addToHistory(text)
+                text = ' '.join(newwords)
             else:
-                localAvatar.chatMgr.deactivateChat()
-            if not overflow:
-                self.hide()
-                self.autoOff and self.requestMode('Off')
+                text = self.chatEntry.get(plain=True)
+
+        if text:
+            self.chatEntry.set('')
+            if base.config.GetBool('exec-chat', 0) and text[0] == '>':
+                text = self.__execMessage(text[1:])
+                base.localAvatar.setChatAbsolute(text, CFSpeech | CFTimeout)
+                return
+            else:
+                self.sendChatBySwitch(text)
+            if self.wantHistory:
+                self.addToHistory(text)
+        else:
+            localAvatar.chatMgr.deactivateChat()
+
+        if not overflow:
+            self.hide()
+            if self.autoOff:
+                self.requestMode('Off')
+
             localAvatar.chatMgr.messageSent()
 
     def sendChatBySwitch(self, text):
