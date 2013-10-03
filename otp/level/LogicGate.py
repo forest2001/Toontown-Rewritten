@@ -13,21 +13,21 @@ def orTest(self, a, b):
 
 
 def xorTest(self, a, b):
-    messenger.send(self.getOutputEventName(), a and not b and (a or [b]))
+    messenger.send(self.getOutputEventName(), [not (a and b) and (a or b)])
 
 
 def nandTest(self, a, b):
     if b:
-        messenger.send(self.getOutputEventName(), a and [not b])
+        messenger.send(self.getOutputEventName(), [not (a and b)])
 
 
 def norTest(self, a, b):
     if not b:
-        messenger.send(self.getOutputEventName(), a or [not b])
+        messenger.send(self.getOutputEventName(), [not (a or b)])
 
 
 def xnorTest(self, a, b):
-    messenger.send(self.getOutputEventName(), a and b or a or [not b])
+    messenger.send(self.getOutputEventName(), [(a and b) or not (a or b)])
 
 
 class LogicGate(Entity.Entity, DirectObject.DirectObject):
