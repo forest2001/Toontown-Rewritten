@@ -34,7 +34,7 @@ def loadModel(baseName, game = 'shared', type = 'model', group = 'area'):
 
 
 class VariableContainer:
-
+    pass
 
 class DevVariableContainer:
 
