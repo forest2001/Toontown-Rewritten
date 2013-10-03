@@ -1587,9 +1587,9 @@ class CatalogGenerator:
                 startYYYY = 1969
                 endYYYY = year
                 list = monthlyItems[4]
-            if not year > startYYYY:
-                pastStart = year == startYYYY and month > startMM or month == startMM and day >= startDD
-                pastStart and itemLists.append(list)
+            pastStart = year > startYYYY or (year == startYYYY and (month > startMM or (month == startMM and day >= startDD)))
+            if pastStart:
+                itemLists.append(list)
 
         self.__releasedItemLists[dayNumber] = itemLists
         return itemLists
@@ -1618,11 +1618,11 @@ class CatalogGenerator:
                 startYYYY = 1969
                 endYYYY = year
                 list = monthlyItems[4]
-            if year >= startYYYY:
-                if not month > startMM:
-                    pastStart = month == startMM and day >= startDD
-                    beforeEnd = year <= endYYYY and month < endMM or month == endMM and day <= endDD
-                    endMM < startMM and (pastStart or beforeEnd) and itemLists.append(list)
+            pastStart = year >= startYYYY and (month > startMM or (month == startMM and day >= startDD))
+            beforeEnd = year <= endYYYY and (month < endMM or (month == endMM and day <= endDD))
+            if endMM < startMM:
+                if pastStart or beforeEnd:
+                    itemLists.append(list)
             elif pastStart and beforeEnd:
                 itemLists.append(list)
 
