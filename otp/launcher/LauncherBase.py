@@ -106,206 +106,206 @@ class LauncherBase(DirectObject):
         self.pandaErrorCode = 0
         self.WIN32 = os.name == 'nt'
         if self.WIN32:
-            if sys.getwindowsversion()[3] == 2:
-                self.VISTA = sys.getwindowsversion()[0] == 6
-            else:
-                self.VISTA = 0
-            ltime = time.localtime()
-            logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,
-             ltime[1],
-             ltime[2],
-             ltime[3],
-             ltime[4],
-             ltime[5])
-            logPrefix = ''
-            if not self.WIN32:
-                logPrefix = os.environ.get('LOGFILE_PREFIX', '')
-            logfile = logPrefix + self.getLogFileName() + '-' + logSuffix + '.log'
-            self.errorfile = 'errorCode'
-            log = open(logfile, 'a')
-            logOut = LogAndOutput(sys.__stdout__, log)
-            logErr = LogAndOutput(sys.__stderr__, log)
-            sys.stdout = logOut
-            sys.stderr = logErr
-            if sys.platform == 'darwin':
-                os.system('/usr/sbin/system_profiler >>' + logfile)
-            elif sys.platform == 'linux2':
-                os.system('cat /proc/cpuinfo >>' + logfile)
-                os.system('cat /proc/meminfo >>' + logfile)
-                os.system('/sbin/ifconfig -a >>' + logfile)
-            print '\n\nStarting %s...' % self.GameName
-            print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
-            print 'sys.path = ', sys.path
-            print 'sys.argv = ', sys.argv
-            if len(sys.argv) >= self.ArgCount:
-                Configrc_args = sys.argv[self.ArgCount - 1]
-                print "generating configrc using: '" + Configrc_args + "'"
-            else:
-                Configrc_args = ''
-                print 'generating standard configrc'
-            if os.environ.has_key('PRC_EXECUTABLE_ARGS'):
-                print 'PRC_EXECUTABLE_ARGS is set to: ' + os.environ['PRC_EXECUTABLE_ARGS']
-                print 'Resetting PRC_EXECUTABLE_ARGS'
-            ExecutionEnvironment.setEnvironmentVariable('PRC_EXECUTABLE_ARGS', '-stdout ' + Configrc_args)
-            if os.environ.has_key('CONFIG_CONFIG'):
-                print 'CONFIG_CONFIG is set to: ' + os.environ['CONFIG_CONFIG']
-                print 'Resetting CONFIG_CONFIG'
-            os.environ['CONFIG_CONFIG'] = ':_:configdir_.:configpath_:configname_Configrc.exe:configexe_1:configargs_-stdout ' + Configrc_args
-            cpMgr = ConfigPageManager.getGlobalPtr()
-            cpMgr.reloadImplicitPages()
-            launcherConfig = getConfigExpress()
-            __builtin__.config = launcherConfig
-            if config.GetBool('log-private-info', 0):
-                print 'os.environ = ', os.environ
-            elif '__COMPAT_LAYER' in os.environ:
-                print '__COMPAT_LAYER = %s' % (os.environ['__COMPAT_LAYER'],)
-            self.miniTaskMgr = MiniTaskManager()
-            self.VerifyFiles = self.getVerifyFiles()
-            self.setServerVersion(launcherConfig.GetString('server-version', 'no_version_set'))
-            self.ServerVersionSuffix = launcherConfig.GetString('server-version-suffix', '')
-            self.UserUpdateDelay = launcherConfig.GetFloat('launcher-user-update-delay', 0.5)
-            self.TELEMETRY_BANDWIDTH = launcherConfig.GetInt('launcher-telemetry-bandwidth', 2000)
-            self.INCREASE_THRESHOLD = launcherConfig.GetFloat('launcher-increase-threshold', 0.75)
-            self.DECREASE_THRESHOLD = launcherConfig.GetFloat('launcher-decrease-threshold', 0.5)
-            self.BPS_WINDOW = launcherConfig.GetFloat('launcher-bps-window', 8.0)
-            self.DECREASE_BANDWIDTH = launcherConfig.GetBool('launcher-decrease-bandwidth', 1)
-            self.MAX_BANDWIDTH = launcherConfig.GetInt('launcher-max-bandwidth', 0)
-            self.nout = MultiplexStream()
-            Notify.ptr().setOstreamPtr(self.nout, 0)
-            self.nout.addFile(Filename(logfile))
-            if launcherConfig.GetBool('console-output', 0):
-                self.nout.addStandardOutput()
-                sys.stdout.console = True
-                sys.stderr.console = True
-            self.notify = directNotify.newCategory('Launcher')
-            self.clock = TrueClock.getGlobalPtr()
-            self.logPrefix = logPrefix
-            self.testServerFlag = self.getTestServerFlag()
-            self.notify.info('isTestServer: %s' % self.testServerFlag)
-            downloadServerString = launcherConfig.GetString('download-server', '')
-            if downloadServerString:
-                self.notify.info('Overriding downloadServer to %s.' % downloadServerString)
-            else:
-                downloadServerString = self.getValue('DOWNLOAD_SERVER', '')
-            self.notify.info('Download Server List %s' % downloadServerString)
-            self.downloadServerList = []
-            for name in string.split(downloadServerString, ';'):
-                url = URLSpec(name, 1)
-                self.downloadServerList.append(url)
+            self.VISTA = sys.getwindowsversion()[3] == 2 and sys.getwindowsversion()[0] == 6
+        else:
+            self.VISTA = 0
+        ltime = time.localtime()
+        logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,
+            ltime[1],
+            ltime[2],
+            ltime[3],
+            ltime[4],
+            ltime[5])
+        logPrefix = ''
+        if not self.WIN32:
+            logPrefix = os.environ.get('LOGFILE_PREFIX', '')
+        logfile = logPrefix + self.getLogFileName() + '-' + logSuffix + '.log'
+        self.errorfile = 'errorCode'
+        log = open(logfile, 'a')
+        logOut = LogAndOutput(sys.__stdout__, log)
+        logErr = LogAndOutput(sys.__stderr__, log)
+        sys.stdout = logOut
+        sys.stderr = logErr
+        if sys.platform == 'darwin':
+            os.system('/usr/sbin/system_profiler >>' + logfile)
+        elif sys.platform == 'linux2':
+            os.system('cat /proc/cpuinfo >>' + logfile)
+            os.system('cat /proc/meminfo >>' + logfile)
+            os.system('/sbin/ifconfig -a >>' + logfile)
+        print '\n\nStarting %s...' % self.GameName
+        print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
+        print 'sys.path = ', sys.path
+        print 'sys.argv = ', sys.argv
+        if len(sys.argv) >= self.ArgCount:
+            Configrc_args = sys.argv[self.ArgCount - 1]
+            print "generating configrc using: '" + Configrc_args + "'"
+        else:
+            Configrc_args = ''
+            print 'generating standard configrc'
+        if os.environ.has_key('PRC_EXECUTABLE_ARGS'):
+            print 'PRC_EXECUTABLE_ARGS is set to: ' + os.environ['PRC_EXECUTABLE_ARGS']
+            print 'Resetting PRC_EXECUTABLE_ARGS'
+        ExecutionEnvironment.setEnvironmentVariable('PRC_EXECUTABLE_ARGS', '-stdout ' + Configrc_args)
+        if os.environ.has_key('CONFIG_CONFIG'):
+            print 'CONFIG_CONFIG is set to: ' + os.environ['CONFIG_CONFIG']
+            print 'Resetting CONFIG_CONFIG'
+        os.environ['CONFIG_CONFIG'] = ':_:configdir_.:configpath_:configname_Configrc.exe:configexe_1:configargs_-stdout ' + Configrc_args
+        cpMgr = ConfigPageManager.getGlobalPtr()
+        cpMgr.reloadImplicitPages()
+        launcherConfig = getConfigExpress()
+        __builtin__.config = launcherConfig
+        if config.GetBool('log-private-info', 0):
+            print 'os.environ = ', os.environ
+        elif '__COMPAT_LAYER' in os.environ:
+            print '__COMPAT_LAYER = %s' % (os.environ['__COMPAT_LAYER'],)
+        self.miniTaskMgr = MiniTaskManager()
+        self.VerifyFiles = self.getVerifyFiles()
+        self.setServerVersion(launcherConfig.GetString('server-version', 'no_version_set'))
+        self.ServerVersionSuffix = launcherConfig.GetString('server-version-suffix', '')
+        self.UserUpdateDelay = launcherConfig.GetFloat('launcher-user-update-delay', 0.5)
+        self.TELEMETRY_BANDWIDTH = launcherConfig.GetInt('launcher-telemetry-bandwidth', 2000)
+        self.INCREASE_THRESHOLD = launcherConfig.GetFloat('launcher-increase-threshold', 0.75)
+        self.DECREASE_THRESHOLD = launcherConfig.GetFloat('launcher-decrease-threshold', 0.5)
+        self.BPS_WINDOW = launcherConfig.GetFloat('launcher-bps-window', 8.0)
+        self.DECREASE_BANDWIDTH = launcherConfig.GetBool('launcher-decrease-bandwidth', 1)
+        self.MAX_BANDWIDTH = launcherConfig.GetInt('launcher-max-bandwidth', 0)
+        self.nout = MultiplexStream()
+        Notify.ptr().setOstreamPtr(self.nout, 0)
+        self.nout.addFile(Filename(logfile))
+        if launcherConfig.GetBool('console-output', 0):
+            self.nout.addStandardOutput()
+            sys.stdout.console = True
+            sys.stderr.console = True
+        self.notify = directNotify.newCategory('Launcher')
+        self.clock = TrueClock.getGlobalPtr()
+        self.logPrefix = logPrefix
+        self.testServerFlag = self.getTestServerFlag()
+        self.notify.info('isTestServer: %s' % self.testServerFlag)
+        downloadServerString = launcherConfig.GetString('download-server', '')
+        if downloadServerString:
+            self.notify.info('Overriding downloadServer to %s.' % downloadServerString)
+        else:
+            downloadServerString = self.getValue('DOWNLOAD_SERVER', '')
+        self.notify.info('Download Server List %s' % downloadServerString)
+        self.downloadServerList = []
+        for name in string.split(downloadServerString, ';'):
+            url = URLSpec(name, 1)
+            self.downloadServerList.append(url)
 
-            self.nextDownloadServerIndex = 0
-            self.getNextDownloadServer()
-            self.gameServer = self.getGameServer()
-            self.notify.info('Game Server %s' % self.gameServer)
-            self.downloadServerRetries = 3
-            self.multifileRetries = 1
-            self.curMultifileRetry = 0
-            self.downloadServerRetryPause = 1
-            self.bandwidthIndex = len(self.BANDWIDTH_ARRAY) - 1
-            self.everIncreasedBandwidth = 0
-            self.goUserName = ''
-            self.downloadPercentage = 90
-            self.decompressPercentage = 5
-            self.extractPercentage = 4
-            self.lastLauncherMsg = None
-            self.topDir = Filename.fromOsSpecific(self.getValue(self.InstallDirKey, '.'))
-            self.setRegistry(self.GameLogFilenameKey, logfile)
-            tmpVal = self.getValue(self.PatchCDKey)
-            if tmpVal == None:
-                self.fromCD = 0
-            else:
-                self.fromCD = tmpVal
-            self.notify.info('patch directory is ' + `(self.fromCD)`)
-            self.dbDir = self.topDir
-            self.patchDir = self.topDir
-            self.mfDir = self.topDir
-            self.contentDir = 'content/'
-            self.clientDbFilename = 'client.ddb'
-            self.compClientDbFilename = self.clientDbFilename + '.pz'
-            self.serverDbFilename = 'server.ddb'
-            self.compServerDbFilename = self.serverDbFilename + '.pz'
-            self.serverDbFilePath = self.contentDir + self.compServerDbFilename
-            self.clientStarterDbFilePath = self.contentDir + self.compClientDbFilename
-            self.progressFilename = 'progress'
-            self.overallComplete = 0
-            self.progressSoFar = 0
-            self.patchExtension = 'pch'
-            self.scanForHacks()
-            self.firstPhase = self.LauncherPhases[0]
-            self.finalPhase = self.LauncherPhases[-1]
-            self.showPhase = 3.5
-            self.numPhases = len(self.LauncherPhases)
-            self.phaseComplete = {}
-            self.phaseNewDownload = {}
-            self.phaseOverallMap = {}
-            tmpOverallMap = self.TmpOverallMap
-            tmpPhase3Map = [0.001,
-             0.996,
-             0.0,
-             0.0,
-             0.003]
-            phaseIdx = 0
-            for phase in self.LauncherPhases:
-                percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + `phase`
-                self.setRegistry(percentPhaseCompleteKey, 0)
-                self.phaseComplete[phase] = 0
-                self.phaseNewDownload[phase] = 0
-                self.phaseOverallMap[phase] = tmpOverallMap[phaseIdx]
-                phaseIdx += 1
+        self.nextDownloadServerIndex = 0
+        self.getNextDownloadServer()
+        self.gameServer = self.getGameServer()
+        self.notify.info('Game Server %s' % self.gameServer)
+        self.downloadServerRetries = 3
+        self.multifileRetries = 1
+        self.curMultifileRetry = 0
+        self.downloadServerRetryPause = 1
+        self.bandwidthIndex = len(self.BANDWIDTH_ARRAY) - 1
+        self.everIncreasedBandwidth = 0
+        self.goUserName = ''
+        self.downloadPercentage = 90
+        self.decompressPercentage = 5
+        self.extractPercentage = 4
+        self.lastLauncherMsg = None
+        self.topDir = Filename.fromOsSpecific(self.getValue(self.InstallDirKey, '.'))
+        self.setRegistry(self.GameLogFilenameKey, logfile)
+        tmpVal = self.getValue(self.PatchCDKey)
+        if tmpVal == None:
+            self.fromCD = 0
+        else:
+            self.fromCD = tmpVal
+        self.notify.info('patch directory is ' + `(self.fromCD)`)
+        self.dbDir = self.topDir
+        self.patchDir = self.topDir
+        self.mfDir = self.topDir
+        self.contentDir = 'content/'
+        self.clientDbFilename = 'client.ddb'
+        self.compClientDbFilename = self.clientDbFilename + '.pz'
+        self.serverDbFilename = 'server.ddb'
+        self.compServerDbFilename = self.serverDbFilename + '.pz'
+        self.serverDbFilePath = self.contentDir + self.compServerDbFilename
+        self.clientStarterDbFilePath = self.contentDir + self.compClientDbFilename
+        self.progressFilename = 'progress'
+        self.overallComplete = 0
+        self.progressSoFar = 0
+        self.patchExtension = 'pch'
+        self.scanForHacks()
+        self.firstPhase = self.LauncherPhases[0]
+        self.finalPhase = self.LauncherPhases[-1]
+        self.showPhase = 3.5
+        self.numPhases = len(self.LauncherPhases)
+        self.phaseComplete = {}
+        self.phaseNewDownload = {}
+        self.phaseOverallMap = {}
+        tmpOverallMap = self.TmpOverallMap
+        tmpPhase3Map = [0.001,
+            0.996,
+            0.0,
+            0.0,
+            0.003]
+        phaseIdx = 0
+        for phase in self.LauncherPhases:
+            percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + `phase`
+            self.setRegistry(percentPhaseCompleteKey, 0)
+            self.phaseComplete[phase] = 0
+            self.phaseNewDownload[phase] = 0
+            self.phaseOverallMap[phase] = tmpOverallMap[phaseIdx]
+            phaseIdx += 1
 
-            self.patchList = []
-            self.reextractList = []
-            self.byteRate = 0
-            self.byteRateRequested = 0
-            self.resetBytesPerSecond()
-            self.dldb = None
-            self.currentMfname = None
-            self.currentPhaseIndex = 0
-            self.currentPhase = self.LauncherPhases[self.currentPhaseIndex]
-            self.currentPhaseName = self.Localizer.LauncherPhaseNames[self.currentPhaseIndex]
-            if self.getServerVersion() == 'no_version_set':
-                self.setPandaErrorCode(10)
-                self.notify.info('Aborting, Configrc did not run!')
-                sys.exit()
-            self.launcherMessage(self.Localizer.LauncherStartingMessage)
-            self.http = HTTPClient()
-            if self.http.getProxySpec() == '':
-                self.http.setProxySpec(self.getValue(self.ProxyServerKey, ''))
-                self.http.setDirectHostSpec(self.getValue(self.ProxyDirectHostsKey, ''))
-            self.notify.info('Proxy spec is: %s' % self.http.getProxySpec())
-            if self.http.getDirectHostSpec() != '':
-                self.notify.info('Direct hosts list is: %s' % self.http.getDirectHostSpec())
-            self.httpChannel = self.http.makeChannel(0)
-            self.httpChannel.setDownloadThrottle(1)
-            connOk = 0
-            while not connOk:
-                proxies = self.http.getProxiesForUrl(self.downloadServer)
-                if proxies == 'DIRECT':
-                    self.notify.info('No proxy for download.')
+        self.patchList = []
+        self.reextractList = []
+        self.byteRate = 0
+        self.byteRateRequested = 0
+        self.resetBytesPerSecond()
+        self.dldb = None
+        self.currentMfname = None
+        self.currentPhaseIndex = 0
+        self.currentPhase = self.LauncherPhases[self.currentPhaseIndex]
+        self.currentPhaseName = self.Localizer.LauncherPhaseNames[self.currentPhaseIndex]
+        if self.getServerVersion() == 'no_version_set':
+            self.setPandaErrorCode(10)
+            self.notify.info('Aborting, Configrc did not run!')
+            sys.exit()
+        self.launcherMessage(self.Localizer.LauncherStartingMessage)
+        self.http = HTTPClient()
+        if self.http.getProxySpec() == '':
+            self.http.setProxySpec(self.getValue(self.ProxyServerKey, ''))
+            self.http.setDirectHostSpec(self.getValue(self.ProxyDirectHostsKey, ''))
+        self.notify.info('Proxy spec is: %s' % self.http.getProxySpec())
+        if self.http.getDirectHostSpec() != '':
+            self.notify.info('Direct hosts list is: %s' % self.http.getDirectHostSpec())
+        self.httpChannel = self.http.makeChannel(0)
+        self.httpChannel.setDownloadThrottle(1)
+        connOk = 0
+        while not connOk:
+            proxies = self.http.getProxiesForUrl(self.downloadServer)
+            if proxies == 'DIRECT':
+                self.notify.info('No proxy for download.')
+            else:
+                self.notify.info('Download proxy: %s' % proxies)
+            testurl = self.addDownloadVersion(self.launcherFileDbFilename)
+            connOk = self.httpChannel.getHeader(DocumentSpec(testurl))
+            statusCode = self.httpChannel.getStatusCode()
+            statusString = self.httpChannel.getStatusString()
+            if not connOk:
+                self.notify.warning('Could not contact download server at %s' % testurl.cStr())
+                self.notify.warning('Status code = %s %s' % (statusCode, statusString))
+                if statusCode == 407 or statusCode == 1407 or statusCode == HTTPChannel.SCSocksNoAcceptableLoginMethod:
+                    self.setPandaErrorCode(3)
+                elif statusCode == 404:
+                    self.setPandaErrorCode(13)
+                elif statusCode < 100:
+                    self.setPandaErrorCode(4)
+                elif statusCode > 1000:
+                    self.setPandaErrorCode(9)
                 else:
-                    self.notify.info('Download proxy: %s' % proxies)
-                testurl = self.addDownloadVersion(self.launcherFileDbFilename)
-                connOk = self.httpChannel.getHeader(DocumentSpec(testurl))
-                statusCode = self.httpChannel.getStatusCode()
-                statusString = self.httpChannel.getStatusString()
-                if not connOk:
-                    self.notify.warning('Could not contact download server at %s' % testurl.cStr())
-                    self.notify.warning('Status code = %s %s' % (statusCode, statusString))
-                    if statusCode == 407 or statusCode == 1407 or statusCode == HTTPChannel.SCSocksNoAcceptableLoginMethod:
-                        self.setPandaErrorCode(3)
-                    elif statusCode == 404:
-                        self.setPandaErrorCode(13)
-                    elif statusCode < 100:
-                        self.setPandaErrorCode(4)
-                    elif statusCode > 1000:
-                        self.setPandaErrorCode(9)
-                    else:
-                        self.setPandaErrorCode(6)
-                    if not self.getNextDownloadServer():
-                        sys.exit()
+                    self.setPandaErrorCode(6)
+                if not self.getNextDownloadServer():
+                    sys.exit()
 
-            self.notify.info('Download server: %s' % self.downloadServer.cStr())
-            self.notify.getDebug() and self.accept('page_up', self.increaseBandwidth)
+        self.notify.info('Download server: %s' % self.downloadServer.cStr())
+        if self.notify.getDebug():
+            self.accept('page_up', self.increaseBandwidth)
             self.accept('page_down', self.decreaseBandwidth)
         self.httpChannel.setPersistentConnection(1)
         self.foreground()
@@ -1685,17 +1685,18 @@ class LauncherBase(DirectObject):
         self.bpsList = []
 
     def recordBytesPerSecond(self):
-        bytesDownloaded = self.httpChannel.getBytesDownloaed()
+        bytesDownloaded = self.httpChannel.getBytesDownloaded()
         bytesRequested  = self.httpChannel.getBytesRequested()
         t = self.getTime()
         self.bpsList.append((t, bytesDownloaded, bytesRequested))
-        while True:
-            if len(self.bpsList()) == 0:
+        while 1:
+            if len(self.bpsList) == 0:
                 break
             ft, fb, fr = self.bpsList[0]
-            if ft-t < self.BPS_WINDOW:
-                self.bpsList.pop()
-            break
+            if ft < t-self.BPS_WINDOW:
+                self.bpsList.pop(0)
+            else:
+                break
 
     def getBytesPerSecond(self):
         if len(self.bpsList) < 2:
@@ -1808,23 +1809,24 @@ class LauncherBase(DirectObject):
                 [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\aspeeder']]
         }
         try:
-            for prog in knownHacksRegistryKeys:
+            for prog in knownHacksRegistryKeys.keys():
                 for key in knownHacksRegistryKeys[prog]:
                     try:
                         h = _winreg.OpenKey(key[0], key[1])
                         hacksInstalled[prog] = 1
                         _winreg.CloseKey(h)
-                    finally:
+                        break
+                    except:
                         pass
-        finally:
+        except:
             pass
-        knownHacksMUI = {'!xspeednet' : hackName[0], 'aspeeder' : hackName[1], 'speed gear' : hackName[2]}
+        knownHacksMUI = {'!xspeednet': hackName[0], 'aspeeder': hackName[1], 'speed gear': hackName[2]}
         i = 0
         try:
             rh = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache')
-            while True:
+            while 1:
                 name, value, type = _winreg.EnumValue(rh, i)
-                i = i + 1
+                i += 1
                 if type == 1:
                     val = value.lower()
                     for hackprog in knownHacksMUI:
@@ -1832,22 +1834,22 @@ class LauncherBase(DirectObject):
                             hacksInstalled[knownHacksMUI[hackprog]] = 1
                             break
             _winreg.CloseKey(rh)
-        finally:
+        except:
             pass
 
         try:
             import otp.launcher.procapi
-        finally:
+        except:
             pass
-
-        knownHacksExe = {hackName[0] : '!xspeednet.exe', hackName[1] : 'aspeeder.exe', hackName[2] : 'speedgear.exe'}
-        try:
-            for p in procapi.getProcessList():
-                pname = p.name
-                if knownHacksExe.has_key(pname):
-                    hacksRunning[knownHacksExe[pname]] = 1
-        finally:
-            pass
+        else:
+            knownHacksExe = {'!xspeednet.exe': hackName[0], 'aspeeder.exe': hackName[1], 'speedgear.exe': hackName[2]}
+            try:
+                for p in procapi.getProcessList():
+                    pname = p.name
+                    if knownHacksExe.has_key(pname):
+                        hacksRunning[knownHacksExe[pname]] = 1
+            except:
+                pass
 
         if len(hacksInstalled) > 0:
             self.notify.info("Third party programs installed:")
@@ -1855,8 +1857,21 @@ class LauncherBase(DirectObject):
                 self.notify.info(hack)
         
         if len(hacksRunning) > 0:
-            self.notify.info("Third party programs running")
-            for(hack in hacksRunning.keys():
+            self.notify.info("Third party programs running:")
+            for hack in hacksRunning.keys():
                 self.notify.info(hack)
             self.setPandaErrorCode(8)
             sys.exit()
+
+    def getBlue(self):
+        return None
+
+    def getPlayToken(self):
+        return None
+
+    def getDISLToken(self):
+        DISLToken = self.getValue(self.DISLTokenKey)
+        self.setValue(self.DISLTokenKey, '')
+        if DISLToken == 'NO DISLTOKEN':
+            DISLToken = None
+        return DISLToken
