@@ -278,9 +278,8 @@ class CogdoFlyingGame(DirectObject):
     def handleLocalToonEnterGatherable(self, gatherable):
         if gatherable.wasPickedUp():
             return
-        if gatherable.isPowerUp():
-            if gatherable.wasPickedUpByToon(self.localPlayer.toon):
-                return
+        if gatherable.isPowerUp() and gatherable.wasPickedUpByToon(self.localPlayer.toon):
+            return
         if gatherable.type in [Globals.Level.GatherableTypes.LaffPowerup, Globals.Level.GatherableTypes.InvulPowerup]:
             self.distGame.d_sendRequestPickup(gatherable.serialNum, gatherable.type)
         elif gatherable.type == Globals.Level.GatherableTypes.Memo:
