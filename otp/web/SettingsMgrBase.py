@@ -62,4 +62,4 @@ class SettingsMgrBase:
             return
 
         setting.setValue(val)
-        self._currentValueReprs[settingName] = valueStr# decompiled 0 files: 0 okay, 1 failed, 0 verify failed
+        self._currentValueReprs[settingName] = valueStr
