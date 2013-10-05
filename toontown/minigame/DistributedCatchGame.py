@@ -83,12 +83,12 @@ class DistributedCatchGame(DistributedMinigame):
             if modelScales.has_key(objType.name):
                 model.setScale(modelScales[objType.name])
             if objType == Name2DropObjectType['pear']:
-                model.setZ(-0.6)
+                model.setZ(-.6)
             if objType == Name2DropObjectType['coconut']:
                 model.setP(180)
             if objType == Name2DropObjectType['watermelon']:
                 model.setH(135)
-                model.setZ(-0.5)
+                model.setZ(-.5)
             if objType == Name2DropObjectType['pineapple']:
                 model.setZ(-1.7)
             if objType == Name2DropObjectType['anvil']:
@@ -894,7 +894,7 @@ class DistributedCatchGame(DistributedMinigame):
             trajIval = Sequence(Func(object.wrtReparentTo, render), trajIval, Func(object.wrtReparentTo, hidden))
             if isAnvil:
                 trajIval.append(SoundInterval(self.sndAnvilLand))
-            objIval = Track((grabFrame * framePeriod, Sequence(Func(object.reparentTo, hand), Func(object.setPosHpr, 0.05, -0.13, 0.62, 0, 0, 336.8), LerpScaleInterval(object, objScaleDur, 1.0, startScale=0.1, blendType='easeInOut'))), (releaseFrame * framePeriod, trajIval))
+            objIval = Track((grabFrame * framePeriod, Sequence(Func(object.reparentTo, hand), Func(object.setPosHpr, 0.05, -.13, 0.62, 0, 0, 336.8), LerpScaleInterval(object, objScaleDur, 1.0, startScale=0.1, blendType='easeInOut'))), (releaseFrame * framePeriod, trajIval))
 
             def cleanup(object = object):
                 object.reparentTo(hidden)

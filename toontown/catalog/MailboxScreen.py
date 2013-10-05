@@ -184,8 +184,8 @@ class MailboxScreen(DirectObject.DirectObject):
         isAward = False
         if isinstance(item, CatalogItem.CatalogItem):
             isAward = item.isAward()
-        if not base.cr.isPaid():
-            (isinstance(item, InviteInfoBase) or not isAward) and TeaserPanel(pageName='clothing')
+        if not base.cr.isPaid() and not (isinstance(item, InviteInfoBase) or isAward):
+            TeaserPanel(pageName='clothing')
         else:
             self.acceptingIndex = self.itemIndex
             self.acceptButton['state'] = DGG.DISABLED

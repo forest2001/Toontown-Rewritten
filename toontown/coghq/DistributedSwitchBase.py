@@ -5,3 +5,4 @@ def stubFunction(*args):
 
 
 class DistributedSwitchBase:
+    pass

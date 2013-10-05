@@ -118,7 +118,7 @@ class NameTumbler(DirectFrame):
          self.downArrow), incButton_relief=None, incButton_scale=(0.2, 0.05, 0.05), incButton_pos=(0, 0, -0.58), decButton_image=(self.upArrow,
          self.downArrow,
          self.circle,
-         self.upArrow), decButton_relief=None, decButton_scale=(0.2, 0.05, 0.05), decButton_pos=(0, 0, 0.23), itemFrame_pos=(-0.2, 0, 0.028), itemFrame_scale=1.0, itemFrame_relief=None, itemFrame_image=self.background, itemFrame_image_scale=(0.38, 0, 0.33), itemFrame_image_pos=(0.2, 0, -0.2), itemFrame_frameSize=(-0.05,
+         self.upArrow), decButton_relief=None, decButton_scale=(0.2, 0.05, 0.05), decButton_pos=(0, 0, 0.23), itemFrame_pos=(-.2, 0, 0.028), itemFrame_scale=1.0, itemFrame_relief=None, itemFrame_image=self.background, itemFrame_image_scale=(0.38, 0, 0.33), itemFrame_image_pos=(0.2, 0, -0.2), itemFrame_frameSize=(-0.05,
          0.48,
          -0.5,
          0.1), itemFrame_borderWidth=(0.01, 0.01), numItemsVisible=5)

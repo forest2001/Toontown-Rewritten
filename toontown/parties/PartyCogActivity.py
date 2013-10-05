@@ -546,34 +546,33 @@ class PartyCogActivity(DirectObject):
             cogID = int(parts[1])
             point = colEntry.getSurfacePoint(self.cogManager.cogs[cogID].root)
             cog = self.cogManager.cogs[cogID]
-            if point.getZ() > cog.getHeadLocation():
-                hitHead = not parts[2].startswith('Arm')
-                if self.activity.getTeam(base.localAvatar.doId) == PartyGlobals.TeamActivityTeams.LeftTeam:
-                    direction = -1.0
-                else:
-                    direction = 1.0
-                self.activity.b_pieHitsCog(timestamp, cogID, point, direction, hitHead)
-                if hitHead:
-                    hitPoints = self.player.hitHead()
-                else:
-                    hitPoints = self.player.hitBody()
-                self.player.updateScore()
-                if hitPoints > 0:
-                    cog.showHitScore(hitPoints)
+            hitHead = point.getZ() > cog.getHeadLocation() and not parts[2].startswith('Arm')
+            if self.activity.getTeam(base.localAvatar.doId) == PartyGlobals.TeamActivityTeams.LeftTeam:
+                direction = -1.0
+            else:
+                direction = 1.0
+            self.activity.b_pieHitsCog(timestamp, cogID, point, direction, hitHead)
+            if hitHead:
+                hitPoints = self.player.hitHead()
+            else:
+                hitPoints = self.player.hitBody()
+            self.player.updateScore()
+            if hitPoints > 0:
+                cog.showHitScore(hitPoints)
+            handled = True
+        elif 'distAvatarCollNode' in intoName:
+            parts = intoName.split('-')
+            hitToonId = int(parts[1])
+            toon = base.cr.doId2do.get(hitToonId)
+            if toon is not None and self.activity.getTeam(hitToonId) != self.player.team:
+                point = colEntry.getSurfacePoint(toon)
+                self.activity.b_pieHitsToon(hitToonId, timestamp, point)
                 handled = True
-            elif 'distAvatarCollNode' in intoName:
-                parts = intoName.split('-')
-                hitToonId = int(parts[1])
-                toon = base.cr.doId2do.get(hitToonId)
-                if toon is not None and self.activity.getTeam(hitToonId) != self.player.team:
-                    point = colEntry.getSurfacePoint(toon)
-                    self.activity.b_pieHitsToon(hitToonId, timestamp, point)
-                    handled = True
-            if handled:
-                eventName = self.toonPieEventNames.get(colEntry.getFromNodePath())
-                eventName is not None and self.ignore(eventName)
+        if handled:
+            eventName = self.toonPieEventNames.get(colEntry.getFromNodePath())
+            if eventName is not None:
+                self.ignore(eventName)
                 del self.toonPieEventNames[colEntry.getFromNodePath()]
-        return
 
     def pieHitsCog(self, timestamp, cogNum, pos, direction, part):
         cog = self.cogManager.cogs[cogNum]

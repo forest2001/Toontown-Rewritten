@@ -281,19 +281,19 @@ class PartyCogActivityGui(DirectObject):
         return task.cont
 
     def _updateVictoryBar(self):
-        if hasattr(self, '_victoryBalanceBar'):
-            if not self._victoryBalanceBar:
-                return
-            netDistance = 0
-            for cog in self.cogs:
-                netDistance = netDistance + cog.targetDistance
+        if not (hasattr(self, '_victoryBalanceBar') and self._victoryBalanceBar):
+            return
+        netDistance = 0
+        for cog in self.cogs:
+            netDistance = netDistance + cog.targetDistance
 
-            teamDistance = netDistance / 6.0
-            self._victoryBalanceBarOrange.setScale(PartyGlobals.CogActivityBarStartScale + teamDistance * 10 * PartyGlobals.CogActivityBarUnitScale, 1.0, 1.0)
-            self._victoryBalanceBarPie.setX(PartyGlobals.CogActivityVictoryBarPiePos[0] + teamDistance * 10 * PartyGlobals.CogActivityBarPieUnitMove)
-            self._victoryBalanceBarPie.setY(PartyGlobals.CogActivityVictoryBarPiePos[1])
-            self._victoryBalanceBarPie.setZ(PartyGlobals.CogActivityVictoryBarPiePos[2])
-            teamDistance > 0.0 and self._victoryBalanceBarArrow.setColor(PartyGlobals.CogActivityColors[1])
+        teamDistance = netDistance / 6.0
+        self._victoryBalanceBarOrange.setScale(PartyGlobals.CogActivityBarStartScale + teamDistance * 10 * PartyGlobals.CogActivityBarUnitScale, 1.0, 1.0)
+        self._victoryBalanceBarPie.setX(PartyGlobals.CogActivityVictoryBarPiePos[0] + teamDistance * 10 * PartyGlobals.CogActivityBarPieUnitMove)
+        self._victoryBalanceBarPie.setY(PartyGlobals.CogActivityVictoryBarPiePos[1])
+        self._victoryBalanceBarPie.setZ(PartyGlobals.CogActivityVictoryBarPiePos[2])
+        if teamDistance > 0.0:
+            self._victoryBalanceBarArrow.setColor(PartyGlobals.CogActivityColors[1])
         elif teamDistance < 0.0:
             self._victoryBalanceBarArrow.setColor(PartyGlobals.CogActivityColors[0])
         else:

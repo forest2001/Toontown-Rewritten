@@ -217,7 +217,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
             self.arrows[x] = loader.loadModel('phase_3/models/props/arrow')
             self.arrows[x].reparentTo(self.powerMeter)
             self.arrows[x].setScale(0.2 - 0.4 * x, 0.2, 0.2)
-            self.arrows[x].setPos(0.12 - 0.24 * x, 0, -0.26)
+            self.arrows[x].setPos(0.12 - 0.24 * x, 0, -.26)
 
         return
 

@@ -31,7 +31,7 @@ class ClosetGUI(ClothesGUI.ClothesGUI):
         if self.isOwner:
             trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui.bam')
             trashImage = (trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_RLVR'))
-            self.trashPanel = DirectFrame(parent=aspect2d, image=DGG.getDefaultDialogGeom(), image_color=(1, 1, 0.75, 0.8), image_scale=(0.36, 0, 0.75), pos=(-0.86, 0, -0.05), relief=None)
+            self.trashPanel = DirectFrame(parent=aspect2d, image=DGG.getDefaultDialogGeom(), image_color=(1, 1, 0.75, 0.8), image_scale=(0.36, 0, 0.75), pos=(-.86, 0, -.05), relief=None)
             self.topTrashButton = DirectButton(parent=self.trashPanel, image=trashImage, relief=None, pos=(-0.09, 0, 0.2), command=self.__handleDelete, extraArgs=[ClosetGlobals.SHIRT], scale=(0.5, 0.5, 0.5), text=TTLocalizer.ClosetDeleteShirt, text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.12, text_pos=(0.3, 0), text_fg=(0.8, 0.2, 0.2, 1), text_shadow=(0, 0, 0, 1), textMayChange=0)
             self.bottomTrashButton = DirectButton(parent=self.trashPanel, image=trashImage, relief=None, textMayChange=1, pos=(-0.09, 0, -0.2), command=self.__handleDelete, extraArgs=[ClosetGlobals.SHORTS], scale=(0.5, 0.5, 0.5), text=TTLocalizer.ClosetDeleteShorts, text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.12, text_pos=(0.3, 0), text_fg=(0.8, 0.2, 0.2, 1), text_shadow=(0, 0, 0, 1))
             self.button = DirectButton(relief=None, image=(self.gui.find('**/CrtAtoon_Btn1_UP'), self.gui.find('**/CrtAtoon_Btn1_DOWN'), self.gui.find('**/CrtAtoon_Btn1_RLLVR')), pos=(-0.15, 0, -0.85), command=self.__handleButton, text=('', TTLocalizer.MakeAToonDone, TTLocalizer.MakeAToonDone), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_pos=(0, -0.03), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
@@ -137,7 +137,7 @@ class ClosetGUI(ClothesGUI.ClothesGUI):
         self.updateScrollButtons(self.bottomChoice, length, 0, self.bottomLButton, self.bottomRButton)
         if self.bottomChoice < 0 or self.bottomChoice >= len(self.bottoms) or len(self.bottoms[self.bottomChoice]) != 2:
             self.notify.warning('bottomChoice index is out of range!')
-            return
+            return None
         self.toon.style.botTex = self.bottoms[self.bottomChoice][0]
         self.toon.style.botTexColor = self.bottoms[self.bottomChoice][1]
         if self.genderChange == 1:
@@ -152,7 +152,6 @@ class ClosetGUI(ClothesGUI.ClothesGUI):
             self.updateTrashButtons()
         if self.swapEvent != None:
             messenger.send(self.swapEvent)
-        return
 
     def __handleGenderBender(self, type):
         if type == 1:

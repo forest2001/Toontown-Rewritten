@@ -74,63 +74,63 @@ class RaceResultsPanel(DirectFrame):
         minutes = int(time / 60)
         time -= minutes * 60
         seconds = int(time)
-        if not (seconds < 10 and ['0']):
-            padding = [''][0]
-            time -= seconds
-            fraction = str(time)[2:4]
-            fraction = fraction + '0' * (2 - len(fraction))
-            timeStr = "%d'%s%d''%s" % (minutes,
-             padding,
-             seconds,
-             fraction)
-            self.entryList[place - 1][3].configure(text_fg=(0.0, 0.0, 0.0, 1.0))
-            self.entryList[place - 1][3]['text'] = timeStr
+        padding = (seconds < 10 and ['0'] or [''])[0]
+        time -= seconds
+        fraction = str(time)[2:4]
+        fraction = fraction + '0' * (2 - len(fraction))
+        timeStr = "%d'%s%d''%s" % (minutes,
+            padding,
+            seconds,
+            fraction)
+        self.entryList[place - 1][3].configure(text_fg=(0.0, 0.0, 0.0, 1.0))
+        self.entryList[place - 1][3]['text'] = timeStr
 
-            def flipText(flip, label = self.entryList[place - 1][3], timeStr = timeStr, recStr = TTLocalizer.KartRace_Record):
-                self.entryList[place - 1][3].configure(text_scale=0.06)
-                self.entryList[place - 1][3].configure(text_fg=(0.95, 0.0, 0.0, 1.0))
-                if flip:
-                    self.entryList[place - 1][3].configure(text_font=DGG.getDefaultFont())
-                    self.entryList[place - 1][3]['text'] = timeStr
-                else:
-                    self.entryList[place - 1][3].configure(text_font=ToontownGlobals.getSignFont())
-                    self.entryList[place - 1][3]['text'] = recStr
+        def flipText(flip, label = self.entryList[place - 1][3], timeStr = timeStr, recStr = TTLocalizer.KartRace_Record):
+            self.entryList[place - 1][3].configure(text_scale=0.06)
+            self.entryList[place - 1][3].configure(text_fg=(0.95, 0.0, 0.0, 1.0))
+            if flip:
+                self.entryList[place - 1][3].configure(text_font=DGG.getDefaultFont())
+                self.entryList[place - 1][3]['text'] = timeStr
+            else:
+                self.entryList[place - 1][3].configure(text_font=ToontownGlobals.getSignFont())
+                self.entryList[place - 1][3]['text'] = recStr
 
-            bonusSeq = Sequence()
-            if qualify and bonus:
-                qText = TTLocalizer.KartRace_Qualified
-                for i in range(1, 7):
-                    bonusSeq.append(Func(flipText, 0, recStr=qText))
-                    bonusSeq.append(Wait(0.5))
-                    bonusSeq.append(Func(flipText, 1))
-                    bonusSeq.append(Wait(0.5))
-                    bonusSeq.append(Func(flipText, 0))
-                    bonusSeq.append(Wait(0.5))
-                    bonusSeq.append(Func(flipText, 1))
-                    bonusSeq.append(Wait(0.5))
+        bonusSeq = Sequence()
+        if qualify and bonus:
+            qText = TTLocalizer.KartRace_Qualified
+            for i in range(1, 7):
+                bonusSeq.append(Func(flipText, 0, recStr=qText))
+                bonusSeq.append(Wait(0.5))
+                bonusSeq.append(Func(flipText, 1))
+                bonusSeq.append(Wait(0.5))
+                bonusSeq.append(Func(flipText, 0))
+                bonusSeq.append(Wait(0.5))
+                bonusSeq.append(Func(flipText, 1))
+                bonusSeq.append(Wait(0.5))
 
-            elif qualify:
-                qText = TTLocalizer.KartRace_Qualified
-                for i in range(0, 12):
-                    bonusSeq.append(Func(flipText, i % 2, recStr=qText))
-                    bonusSeq.append(Wait(0.5))
+        elif qualify:
+            qText = TTLocalizer.KartRace_Qualified
+            for i in range(0, 12):
+                bonusSeq.append(Func(flipText, i % 2, recStr=qText))
+                bonusSeq.append(Wait(0.5))
 
-            elif bonus:
-                for i in range(0, 12):
-                    bonusSeq.append(Func(flipText, i % 2))
-                    bonusSeq.append(Wait(0.5))
+        elif bonus:
+            for i in range(0, 12):
+                bonusSeq.append(Func(flipText, i % 2))
+                bonusSeq.append(Wait(0.5))
 
-            if trophies:
-                DirectFrame(parent=headFrame, relief=None, image=loader.loadModel('phase_6/models/karting/trophy'), image_pos=(0.25, -1.01, -0.25), image_scale=0.25)
+        if trophies:
+            DirectFrame(parent=headFrame, relief=None, image=loader.loadModel('phase_6/models/karting/trophy'), image_pos=(0.25, -1.01, -0.25), image_scale=0.25)
 
-            def ticketTicker(t, label = self.entryList[place - 1][4], tickets = tickets):
-                label['text'] = TTLocalizer.KartRace_TicketPhrase % int(t * tickets)
+        def ticketTicker(t, label = self.entryList[place - 1][4], tickets = tickets):
+            label['text'] = TTLocalizer.KartRace_TicketPhrase % int(t * tickets)
 
-            ticketSeq = LerpFunc(ticketTicker, duration=2)
-            displayPar = Parallel(bonusSeq, ticketSeq)
-            displayPar.start()
-            self.entryListSeqs.append(displayPar)
-            circuitPoints == [] or self.pointsLabel.show()
+        ticketSeq = LerpFunc(ticketTicker, duration=2)
+        displayPar = Parallel(bonusSeq, ticketSeq)
+        displayPar.start()
+        self.entryListSeqs.append(displayPar)
+        if not circuitPoints == []:
+            self.pointsLabel.show()
             newPoints = circuitPoints[:].pop()
             currentPoints = sum(circuitPoints[:-1])
             self.entryList[place - 1][5]['text'] = '%s' % currentPoints
@@ -147,7 +147,6 @@ class RaceResultsPanel(DirectFrame):
 
             seq = Sequence(Wait(1), Parallel(LerpFunc(totalPointTicker, duration=1), LerpFunc(newPointTicker, duration=1)), Func(endTicker))
             self.pointSeqs.append(seq)
-        return
 
     def updateWinnings(self, place, newTotalTickets):
         self.notify.debug('updateWinnings: self.tickets=%s place=%d newTotalTickets=%d' % (self.tickets, place, newTotalTickets))
@@ -298,7 +297,7 @@ class RaceWinningsPanel(DirectFrame):
             self.doubleTicketsLabel.stash()
         if ticBonus:
             ticketSeq.append(Sequence(Func(self.ticketFrame.hide), Func(self.bonusFrame.show), Func(self.trophyFrame.hide), Func(self.bonusComponents[0].configure, text=wrapStr(TTLocalizer.KartRace_RecordString % (TTLocalizer.KartRecordStrings[bonusType], TTLocalizer.KartRace_TrackNames[track], str(ticBonus)))), Wait(3)))
-        ticketSeq.append(Sequence(Func(self.bonusFrame.hide), Func(self.trophyFrame.hide), Func(self.ticketFrame.show), Func(self.ticketComponents[3].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[0].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=ticDeposit and [1] or [0][0], extraArgs=[self.ticketComponents[0], 0, ticDeposit]), LerpFunc(ticketTicker, duration=ticDeposit and [1] or [0][0], extraArgs=[self.ticketComponents[3], 0, ticDeposit])), Func(self.ticketComponents[0].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[1].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=ticWon and [1] or [0][0], extraArgs=[self.ticketComponents[1], 0, ticWon]), LerpFunc(ticketTicker, duration=ticWon and [1] or [0][0], extraArgs=[self.ticketComponents[3], ticDeposit, ticDeposit + ticWon])), Func(self.ticketComponents[1].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[2].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=origTicBonus and [1] or [0][0], extraArgs=[self.ticketComponents[2], 0, origTicBonus]), LerpFunc(ticketTicker, duration=origTicBonus and [1] or [0][0], extraArgs=[self.ticketComponents[3], ticDeposit + ticWon, ticDeposit + ticWon + origTicBonus])), Func(self.ticketComponents[2].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[3].configure, text_color=Vec4(1, 0, 0, 1))))
+        ticketSeq.append(Sequence(Func(self.bonusFrame.hide), Func(self.trophyFrame.hide), Func(self.ticketFrame.show), Func(self.ticketComponents[3].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[0].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=(ticDeposit and [1] or [0])[0], extraArgs=[self.ticketComponents[0], 0, ticDeposit]), LerpFunc(ticketTicker, duration=(ticDeposit and [1] or [0])[0], extraArgs=[self.ticketComponents[3], 0, ticDeposit])), Func(self.ticketComponents[0].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[1].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=(ticWon and [1] or [0])[0], extraArgs=[self.ticketComponents[1], 0, ticWon]), LerpFunc(ticketTicker, duration=(ticWon and [1] or [0])[0], extraArgs=[self.ticketComponents[3], ticDeposit, ticDeposit + ticWon])), Func(self.ticketComponents[1].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[2].configure, text_color=Vec4(1, 0, 0, 1)), Parallel(LerpFunc(ticketTicker, duration=(origTicBonus and [1] or [0])[0], extraArgs=[self.ticketComponents[2], 0, origTicBonus]), LerpFunc(ticketTicker, duration=(origTicBonus and [1] or [0])[0], extraArgs=[self.ticketComponents[3], ticDeposit + ticWon, ticDeposit + ticWon + origTicBonus])), Func(self.ticketComponents[2].configure, text_color=Vec4(0, 0, 0, 1)), Func(self.ticketComponents[3].configure, text_color=Vec4(1, 0, 0, 1))))
         winningsSeq = Sequence(Func(self.ticketFrame.show), Func(self.bonusFrame.hide), Func(self.trophyFrame.hide), Wait(5))
         if ticBonus:
             winningsSeq.append(Sequence(Func(self.ticketFrame.hide), Func(self.bonusFrame.show), Func(self.trophyFrame.hide), Wait(5)))

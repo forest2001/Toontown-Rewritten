@@ -443,9 +443,9 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
         self.d_setDominantMood(self.mood.getDominantMood())
 
     def attemptBattleTrick(self, trickId):
-        self.lerpMoods({'boredom': -0.1,
+        self.lerpMoods({'boredom': -.1,
          'excitement': 0.05,
-         'loneliness': -0.05})
+         'loneliness': -.05})
         if self._willDoTrick(trickId):
             self._handleDidTrick(trickId)
             self.b_setLastSeenTimestamp(self.getCurEpochTimestamp())

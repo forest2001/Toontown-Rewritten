@@ -166,36 +166,34 @@ class CalendarGuiDay(DirectFrame):
         return
 
     def addWeeklyHolidays(self):
-        if not self.filter == ToontownGlobals.CalendarFilterShowAll:
-            if not self.filter == ToontownGlobals.CalendarFilterShowOnlyHolidays:
-                return
-            if base.cr.newsManager:
-                holidays = base.cr.newsManager.getHolidaysForWeekday(self.myDate.weekday())
-                holidayName = ''
-                holidayDesc = ''
-                for holidayId in holidays:
-                    if holidayId in TTLocalizer.HolidayNamesInCalendar:
-                        holidayName = TTLocalizer.HolidayNamesInCalendar[holidayId][0]
-                        holidayDesc = TTLocalizer.HolidayNamesInCalendar[holidayId][1]
-                    else:
-                        holidayName = TTLocalizer.UnknownHoliday % holidayId
-                    self.addTitleAndDescToScrollList(holidayName, holidayDesc)
+        if not self.filter == ToontownGlobals.CalendarFilterShowAll and not self.filter == ToontownGlobals.CalendarFilterShowOnlyHolidays:
+            return
+        if base.cr.newsManager:
+            holidays = base.cr.newsManager.getHolidaysForWeekday(self.myDate.weekday())
+            holidayName = ''
+            holidayDesc = ''
+            for holidayId in holidays:
+                if holidayId in TTLocalizer.HolidayNamesInCalendar:
+                    holidayName = TTLocalizer.HolidayNamesInCalendar[holidayId][0]
+                    holidayDesc = TTLocalizer.HolidayNamesInCalendar[holidayId][1]
+                else:
+                    holidayName = TTLocalizer.UnknownHoliday % holidayId
+                self.addTitleAndDescToScrollList(holidayName, holidayDesc)
 
-                self.scrollList.refresh()
-            if base.config.GetBool('calendar-test-items', 0):
-                if self.myDate.date() + datetime.timedelta(days=-1) == base.cr.toontownTimeManager.getCurServerDateTime().date():
-                    testItems = ('1:00 AM Party', '2:00 AM CEO', '11:15 AM Party', '5:30 PM CJ', '11:00 PM Party', 'Really Really Long String')
-                    for text in testItems:
-                        newItem = DirectLabel(relief=None, text=text, text_scale=self.ScrollListTextSize, text_align=TextNode.ALeft)
-                        self.scrollList.addItem(newItem)
+            self.scrollList.refresh()
+        if base.config.GetBool('calendar-test-items', 0):
+            if self.myDate.date() + datetime.timedelta(days=-1) == base.cr.toontownTimeManager.getCurServerDateTime().date():
+                testItems = ('1:00 AM Party', '2:00 AM CEO', '11:15 AM Party', '5:30 PM CJ', '11:00 PM Party', 'Really Really Long String')
+                for text in testItems:
+                    newItem = DirectLabel(relief=None, text=text, text_scale=self.ScrollListTextSize, text_align=TextNode.ALeft)
+                    self.scrollList.addItem(newItem)
 
-                testItems = self.myDate.date() + datetime.timedelta(days=-2) == base.cr.toontownTimeManager.getCurServerDateTime().date() and ('1:00 AM Party', '3:00 AM CFO', '11:00 AM Party')
+            if self.myDate.date() + datetime.timedelta(days=-2) == base.cr.toontownTimeManager.getCurServerDateTime().date():
+                testItems = ('1:00 AM Party', '3:00 AM CFO', '11:00 AM Party')
                 textSize = self.ScrollListTextSize
                 for text in testItems:
                     newItem = DirectLabel(relief=None, text=text, text_scale=textSize, text_align=TextNode.ALeft)
                     self.scrollList.addItem(newItem)
-
-        return
 
     def updateArrowButtons(self):
         numItems = 0

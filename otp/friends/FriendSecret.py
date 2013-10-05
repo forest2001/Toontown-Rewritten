@@ -263,7 +263,7 @@ class FriendSecret(DirectFrame, StateData.StateData):
 
     def load(self):
         if self.isLoaded == 1:
-            return
+            return None
         self.isLoaded = 1
         self.introText = DirectLabel(parent=self, relief=None, pos=(0, 0, 0.4), scale=0.05, text=OTPLocalizer.FriendSecretIntro, text_fg=(0, 0, 0, 1), text_wordwrap=30)
         self.introText.hide()
@@ -306,7 +306,6 @@ class FriendSecret(DirectFrame, StateData.StateData):
         self.makeFriendTypeButtons()
         self.accept('clientCleanup', self.__handleCleanup)
         self.accept('walkDone', self.__handleStop)
-        return
 
     def __handleStop(self, message):
         self.exit()

@@ -19,28 +19,15 @@ from otp.otpbase import OTPGlobals
 class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonAvatarPanel')
 
-
-
-
-
-
-
-
     def __init__(self, avatar, playerId = None):
         from toontown.friends import FriendsListPanel
-
 
         if base.cr.doId2do.get(avatar.getDoId()):
             avatar = base.cr.doId2do.get(avatar.getDoId())
         AvatarPanelBase.AvatarPanelBase.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
 
-
-
-
-
         self.notify.debug('Opening toon panel, avId=%d' % self.avId)
         self.playerId = playerId
-
 
         if not self.playerId:
             av = base.cr.doId2do.get(self.avId)
@@ -57,8 +44,6 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         wantsLaffMeter = hasattr(avatar, 'hp')
 
         if not hasattr(avatar, 'style'):
-
-
             self.notify.warning("Avatar has no 'style'. Abort initialization.")
             AvatarPanelBase.AvatarPanelBase.cleanup(self)
             return
@@ -71,14 +56,11 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
                                  relief=None,
                                  pos=(1.1, 100, 0.525))
 
-
         self.disabledImageColor = Vec4(1, 1, 1, 0.4)
         self.text0Color = Vec4(1, 1, 1, 1)
         self.text1Color = Vec4(0.5, 1, 0.5, 1)
         self.text2Color = Vec4(1, 1, 0.5, 1)
         self.text3Color = Vec4(0.6, 0.6, 0.6, 1)
-
-
 
         self.head = self.frame.attachNewNode('head')
         self.head.setPos(0.02, 0, 0.31)
@@ -86,7 +68,6 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         self.headModel.setupHead(avatar.style, forGui=1)
         self.headModel.fitAndCenterHead(0.175, forGui=1)
         self.headModel.reparentTo(self.head)
-
 
         self.headModel.startBlink()
         self.headModel.startLookAround()
@@ -235,13 +216,10 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
             self.secretsButton['state'] = DGG.DISABLED
 
 
-
-
         from toontown.coghq import CogHQBossBattle
         if isinstance(base.cr.playGame.getPlace(), CogHQBossBattle.CogHQBossBattle) and \
                 base.localAvatar.getGameAccess() != OTPGlobals.AccessFull:
             self.secretsButton['state'] = DGG.DISABLED
-
 
         ignoreStr, ignoreCmd, ignoreScale = self.getIgnoreButtonInfo()
 
@@ -265,7 +243,6 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
             text_pos=(0.06, -0.015),
             text_align=TextNode.ALeft,
             command=ignoreCmd)
-
 
 
         if base.cr.productName not in ['JP', 'DE', 'BR', 'FR']:
@@ -292,8 +269,6 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
 
 
         if not base.localAvatar.isTeleportAllowed():
-
-
             self.goToButton['state'] = DGG.DISABLED
 
         self.detailButton = DirectButton(
@@ -321,11 +296,6 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         self.__checkGroupStatus()
 
         gui.removeNode()
-
-
-
-
-
 
 
         if wantsLaffMeter:

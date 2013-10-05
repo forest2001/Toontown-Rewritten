@@ -25,7 +25,7 @@ class FireworkItemPanel(DirectFrame):
         self.picture.initialiseoptions(self.picture)
         panelWidth = 7
         nameFont = ToontownGlobals.getInterfaceFont()
-        self.quantityLabel = DirectLabel(parent=self.picture, relief=None, pos=(0, 0, 0.0), scale=0.45, text=self.name, text_scale=0.6, text_fg=(0, 0, 0, 1), text_pos=(0, -0.14, 0), text_font=nameFont, text_wordwrap=panelWidth)
+        self.quantityLabel = DirectLabel(parent=self.picture, relief=None, pos=(0, 0, 0.0), scale=0.45, text=self.name, text_scale=0.6, text_fg=(0, 0, 0, 1), text_pos=(0, -.14, 0), text_font=nameFont, text_wordwrap=panelWidth)
         return
 
     def unload(self):

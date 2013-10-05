@@ -26,249 +26,60 @@ def addHit(dict, suitId, hitCount):
         dict[suitId] = hitCount
 
 
-def doFires--- This code section failed: ---
+def doFires(fires):
+    if len(fires) == 0:
+        return (None, None)
 
-0	LOAD_GLOBAL       'len'
-3	LOAD_FAST         'fires'
-6	CALL_FUNCTION_1   None
-9	LOAD_CONST        0
-12	COMPARE_OP        '=='
-15	JUMP_IF_FALSE     '25'
+    suitFiresDict = {}
+    for fire in fires:
+        suitId = fire['target']['suit'].doId
+        if suitFiresDict.has_key(suitId):
+            suitFiresDict[suitId].append(fire)
+        else:
+            suitFiresDict[suitId] = [fire]
 
-18	LOAD_CONST        (None, None)
-21	RETURN_VALUE      None
-22	JUMP_FORWARD      '25'
-25_0	COME_FROM         '22'
+    suitFires = suitFiresDict.values()
+    def compFunc(a, b):
+        if len(a) > len(b):
+            return 1
+        elif len(a) < len(b):
+            return -1
+        return 0
+    suitFires.sort(compFunc)
 
-25	BUILD_MAP         None
-28	STORE_FAST        'suitFiresDict'
+    totalHitDict = {}
+    singleHitDict = {}
+    groupHitDict = {}
 
-31	SETUP_LOOP        '113'
-34	LOAD_FAST         'fires'
-37	GET_ITER          None
-38	FOR_ITER          '112'
-41	STORE_FAST        'fire'
+    for fire in fires:
+        suitId = fire['target']['suit'].doId
+        if 1:
+            if fire['target']['hp'] > 0:
+                addHit(singleHitDict, suitId, 1)
+                addHit(totalHitDict, suitId, 1)
+            else:
+                addHit(singleHitDict, suitId, 0)
+                addHit(totalHitDict, suitId, 0)
 
-44	LOAD_FAST         'fire'
-47	LOAD_CONST        'target'
-50	BINARY_SUBSCR     None
-51	LOAD_CONST        'suit'
-54	BINARY_SUBSCR     None
-55	LOAD_ATTR         'doId'
-58	STORE_FAST        'suitId'
+    notify.debug('singleHitDict = %s' % singleHitDict)
+    notify.debug('groupHitDict = %s' % groupHitDict)
+    notify.debug('totalHitDict = %s' % totalHitDict)
 
-61	LOAD_FAST         'suitFiresDict'
-64	LOAD_ATTR         'has_key'
-67	LOAD_FAST         'suitId'
-70	CALL_FUNCTION_1   None
-73	JUMP_IF_FALSE     '96'
+    delay = 0.0
+    mtrack = Parallel()
+    firedTargets = []
+    for sf in suitFires:
+        if len(sf) > 0:
+            ival = __doSuitFires(sf)
+            if ival:
+                mtrack.append(Sequence(Wait(delay), ival))
+            delay = delay + TOON_FIRE_SUIT_DELAY
 
-76	LOAD_FAST         'suitFiresDict'
-79	LOAD_FAST         'suitId'
-82	BINARY_SUBSCR     None
-83	LOAD_ATTR         'append'
-86	LOAD_FAST         'fire'
-89	CALL_FUNCTION_1   None
-92	POP_TOP           None
-93	JUMP_BACK         '38'
-
-96	LOAD_FAST         'fire'
-99	BUILD_LIST_1      None
-102	LOAD_FAST         'suitFiresDict'
-105	LOAD_FAST         'suitId'
-108	STORE_SUBSCR      None
-109	JUMP_BACK         '38'
-112	POP_BLOCK         None
-113_0	COME_FROM         '31'
-
-113	LOAD_FAST         'suitFiresDict'
-116	LOAD_ATTR         'values'
-119	CALL_FUNCTION_0   None
-122	STORE_FAST        'suitFires'
-
-125	LOAD_CONST        '<code_object compFunc>'
-128	MAKE_FUNCTION_0   None
-131	STORE_FAST        'compFunc'
-
-134	LOAD_FAST         'suitFires'
-137	LOAD_ATTR         'sort'
-140	LOAD_FAST         'compFunc'
-143	CALL_FUNCTION_1   None
-146	POP_TOP           None
-
-147	BUILD_MAP         None
-150	STORE_FAST        'totalHitDict'
-
-153	BUILD_MAP         None
-156	STORE_FAST        'singleHitDict'
-
-159	BUILD_MAP         None
-162	STORE_FAST        'groupHitDict'
-
-165	SETUP_LOOP        '289'
-168	LOAD_FAST         'fires'
-171	GET_ITER          None
-172	FOR_ITER          '288'
-175	STORE_FAST        'fire'
-
-178	LOAD_FAST         'fire'
-181	LOAD_CONST        'target'
-184	BINARY_SUBSCR     None
-185	LOAD_CONST        'suit'
-188	BINARY_SUBSCR     None
-189	LOAD_ATTR         'doId'
-192	STORE_FAST        'suitId'
-
-195	LOAD_FAST         'fire'
-198	LOAD_CONST        'target'
-201	BINARY_SUBSCR     None
-202	LOAD_CONST        'hp'
-205	BINARY_SUBSCR     None
-206	LOAD_CONST        0
-209	COMPARE_OP        '>'
-212	JUMP_IF_FALSE     '250'
-
-215	LOAD_GLOBAL       'addHit'
-218	LOAD_FAST         'singleHitDict'
-221	LOAD_FAST         'suitId'
-224	LOAD_CONST        1
-227	CALL_FUNCTION_3   None
-230	POP_TOP           None
-
-231	LOAD_GLOBAL       'addHit'
-234	LOAD_FAST         'totalHitDict'
-237	LOAD_FAST         'suitId'
-240	LOAD_CONST        1
-243	CALL_FUNCTION_3   None
-246	POP_TOP           None
-247	JUMP_ABSOLUTE     '285'
-
-250	LOAD_GLOBAL       'addHit'
-253	LOAD_FAST         'singleHitDict'
-256	LOAD_FAST         'suitId'
-259	LOAD_CONST        0
-262	CALL_FUNCTION_3   None
-265	POP_TOP           None
-
-266	LOAD_GLOBAL       'addHit'
-269	LOAD_FAST         'totalHitDict'
-272	LOAD_FAST         'suitId'
-275	LOAD_CONST        0
-278	CALL_FUNCTION_3   None
-281	POP_TOP           None
-282	JUMP_BACK         '172'
-285	JUMP_BACK         '172'
-288	POP_BLOCK         None
-289_0	COME_FROM         '165'
-
-289	LOAD_GLOBAL       'notify'
-292	LOAD_ATTR         'debug'
-295	LOAD_CONST        'singleHitDict = %s'
-298	LOAD_FAST         'singleHitDict'
-301	BINARY_MODULO     None
-302	CALL_FUNCTION_1   None
-305	POP_TOP           None
-
-306	LOAD_GLOBAL       'notify'
-309	LOAD_ATTR         'debug'
-312	LOAD_CONST        'groupHitDict = %s'
-315	LOAD_FAST         'groupHitDict'
-318	BINARY_MODULO     None
-319	CALL_FUNCTION_1   None
-322	POP_TOP           None
-
-323	LOAD_GLOBAL       'notify'
-326	LOAD_ATTR         'debug'
-329	LOAD_CONST        'totalHitDict = %s'
-332	LOAD_FAST         'totalHitDict'
-335	BINARY_MODULO     None
-336	CALL_FUNCTION_1   None
-339	POP_TOP           None
-
-340	LOAD_CONST        0.0
-343	STORE_FAST        'delay'
-
-346	LOAD_GLOBAL       'Parallel'
-349	CALL_FUNCTION_0   None
-352	STORE_FAST        'mtrack'
-
-355	BUILD_LIST_0      None
-358	STORE_FAST        'firedTargets'
-
-361	SETUP_LOOP        '458'
-364	LOAD_FAST         'suitFires'
-367	GET_ITER          None
-368	FOR_ITER          '457'
-371	STORE_FAST        'sf'
-
-374	LOAD_GLOBAL       'len'
-377	LOAD_FAST         'sf'
-380	CALL_FUNCTION_1   None
-383	LOAD_CONST        0
-386	COMPARE_OP        '>'
-389	JUMP_IF_FALSE     '454'
-
-392	LOAD_GLOBAL       '__doSuitFires'
-395	LOAD_FAST         'sf'
-398	CALL_FUNCTION_1   None
-401	STORE_FAST        'ival'
-
-404	LOAD_FAST         'ival'
-407	JUMP_IF_FALSE     '441'
-
-410	LOAD_FAST         'mtrack'
-413	LOAD_ATTR         'append'
-416	LOAD_GLOBAL       'Sequence'
-419	LOAD_GLOBAL       'Wait'
-422	LOAD_FAST         'delay'
-425	CALL_FUNCTION_1   None
-428	LOAD_FAST         'ival'
-431	CALL_FUNCTION_2   None
-434	CALL_FUNCTION_1   None
-437	POP_TOP           None
-438	JUMP_FORWARD      '441'
-441_0	COME_FROM         '438'
-
-441	LOAD_FAST         'delay'
-444	LOAD_GLOBAL       'TOON_FIRE_SUIT_DELAY'
-447	BINARY_ADD        None
-448	STORE_FAST        'delay'
-451	JUMP_BACK         '368'
-454	JUMP_BACK         '368'
-457	POP_BLOCK         None
-458_0	COME_FROM         '361'
-
-458	LOAD_GLOBAL       'Sequence'
-461	CALL_FUNCTION_0   None
-464	STORE_FAST        'retTrack'
-
-467	LOAD_FAST         'retTrack'
-470	LOAD_ATTR         'append'
-473	LOAD_FAST         'mtrack'
-476	CALL_FUNCTION_1   None
-479	POP_TOP           None
-
-480	LOAD_FAST         'retTrack'
-483	LOAD_ATTR         'getDuration'
-486	CALL_FUNCTION_0   None
-489	STORE_FAST        'camDuration'
-
-492	LOAD_GLOBAL       'MovieCamera'
-495	LOAD_ATTR         'chooseFireShot'
-498	LOAD_FAST         'fires'
-501	LOAD_FAST         'suitFiresDict'
-
-504	LOAD_FAST         'camDuration'
-507	CALL_FUNCTION_3   None
-510	STORE_FAST        'camTrack'
-
-513	LOAD_FAST         'retTrack'
-516	LOAD_FAST         'camTrack'
-519	BUILD_TUPLE_2     None
-522	RETURN_VALUE      None
-
-Syntax error at or near `LOAD_GLOBAL' token at offset 250
-
+    retTrack = Sequence()
+    retTrack.append(mtrack)
+    camDuration = retTrack.getDuration()
+    camTrack = MovieCamera.chooseFireShot(fires, suitFiresDict, camDuration)
+    return (retTrack, camTrack)
 
 def __doSuitFires(fires):
     toonTracks = Parallel()
@@ -507,159 +318,8 @@ def __throwPie(throw, delay, hitCount, showCannon = 1):
         playSoundCannonAdjust = SoundInterval(soundCannonAdjust, duration=0.6, node=cannonHolder)
         soundCogPanic = base.loadSfx('phase_5/audio/sfx/ENC_cogafssm.mp3')
         playSoundCogPanic = SoundInterval(soundCogPanic, node=cannonHolder)
-        reactIval = Parallel(ActorInterval(suit, 'pie-small-react'), Sequence(Wait(0.0), LerpPosInterval(cannonHolder, 2.0, posFinal, startPos=posInit, blendType='easeInOut'), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 45, 0), startHpr=Point3(0, 90, 0), blendType='easeIn'), playSoundCannonAdjust), Wait(2.0), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 90, 0), startHpr=Point3(0, 45, 0), blendType='easeIn'), playSoundCannonAdjust), LerpPosInterval(cannonHolder, 1.0, posInit, startPos=posFinal, blendType='easeInOut')), Sequence(Wait(0.0), Parallel(ActorInterval(suit, 'flail'), suit.scaleInterval(1.0, suitScale), LerpPosInterval(suit, 0.25, Point3(0, -1.0, 0.0)), Sequence(Wait(0.25), Parallel(playSoundCogPanic, LerpPosInterval(suit, 1.5, Point3(0, -deep, 0.0), blendType='easeIn')))), Wait(2.5), Parallel(playSoundBomb, playSoundFly, Sequence(Func(smoke.show), Parallel(LerpScaleInterval(smoke, 0.5, 3), LerpColorScaleInterval(smoke, 0.5, Vec4(2, 2, 2, 0))), Func(smoke.hide)), Sequence(Func(kapow.show), ActorInterval(kapow, 'kapow'), Func(kapow.hide)), LerpPosInterval(suit, 3.0, Point3(0, 1
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieFire.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_GLOBAL       'len'
-3	LOAD_FAST         'fires'
-6	CALL_FUNCTION_1   None
-9	LOAD_CONST        0
-12	COMPARE_OP        '=='
-15	JUMP_IF_FALSE     '25'
-
-18	LOAD_CONST        (None, None)
-21	RETURN_VALUE      None
-22	JUMP_FORWARD      '25'
-25_0	COME_FROM         '22'
-
-25	BUILD_MAP         None
-28	STORE_FAST        'suitFiresDict'
-
-31	SETUP_LOOP        '113'
-34	LOAD_FAST         'fires'
-37	GET_ITER          None
-38	FOR_ITER          '112'
-41	STORE_FAST        'fire'
-
-44	LOAD_FAST         'fire'
-47	LOAD_CONST        'target'
-50	BINARY_SUBSCR     None
-51	LOAD_CONST        'suit'
-54	BINARY_SUBSCR     None
-55	LOAD_ATTR         'doId'
-58	STORE_FAST        'suitId'
-
-61	LOAD_FAST         'suitFiresDict'
-64	LOAD_ATTR         'has_key'
-67	LOAD_FAST         'suitId'
-70	CALL_FUNCTION_1   None
-73	JUMP_IF_FALSE     '96'
-
-76	LOAD_FAST         'suitFiresDict'
-79	LOAD_FAST         'suitId'
-82	BINARY_SUBSCR     None
-83	LOAD_ATTR         'append'
-86	LOAD_FAST         'fire'
-89	CALL_FUNCTION_1   None
-92	POP_TOP           None
-93	JUMP_BACK         '38'
-
-96	LOAD_FAST         'fire'
-99	BUILD_LIST_1      None
-102	LOAD_FAST         'suitFiresDict'
-105	LOAD_FAST         'suitId'
-108	STORE_SUBSCR      None
-109	JUMP_BACK         '38'
-112	POP_BLOCK         None
-113_0	COME_FROM         '31'
-
-113	LOAD_FAST         'suitFiresDict'
-116	LOAD_ATTR         'values'
-119	CALL_FUNCTION_0   None
-122	STORE_FAST        'suitFires'
-
-125	LOAD_CONST        '<code_object compFunc>'
-128	MAKE_FUNCTION_0   None
-131	STORE_FAST        'compFunc'
-
-134	LOAD_FAST         'suitFires'
-137	LOAD_ATTR         'sort'
-140	LOAD_FAST         'compFunc'
-143	CALL_FUNCTION_1   None
-146	POP_TOP           None
-
-147	BUILD_MAP         None
-150	STORE_FAST        'totalHitDict'
-
-153	BUILD_MAP         None
-156	STORE_FAST        'singleHitDict'
-
-159	BUILD_MAP         None
-162	STORE_FAST        'groupHitDict'
-
-165	SETUP_LOOP        '289'
-168	LOAD_FAST         'fires'
-171	GET_ITER          None
-172	FOR_ITER          '288'
-175	STORE_FAST        'fire'
-
-178	LOAD_FAST         'fire'
-181	LOAD_CONST        'target'
-184	BINARY_SUBSCR     None
-185	LOAD_CONST        'suit'
-188	BINARY_SUBSCR     None
-189	LOAD_ATTR         'doId'
-192	STORE_FAST        'suitId'
-
-195	LOAD_FAST         'fire'
-198	LOAD_CONST        'target'
-201	BINARY_SUBSCR     None
-202	LOAD_CONST        'hp'
-205	BINARY_SUBSCR     None
-206	LOAD_CONST        0
-209	COMPARE_OP        '>'
-212	JUMP_IF_FALSE     '250'
-
-215	LOAD_GLOBAL       'addHit'
-218	LOAD_FAST         'singleHitDict'
-221	LOAD_FAST         'suitId'
-224	LOAD_CONST        1
-227	CALL_FUNCTION_3   None
-230	POP_TOP           None
-
-231	LOAD_GLOBAL       'addHit'
-234	LOAD_FAST         'totalHitDict'
-237	LOAD_FAST         'suitId'
-240	LOAD_CONST        1
-243	CALL_FUNCTION_3   None
-246	POP_TOP           None
-247	JUMP_ABSOLUTE     '285'
-
-250	LOAD_GLOBAL       'addHit'
-253	LOAD_FAST         'singleHitDict'
-256	LOAD_FAST         'suitId'
-259	LOAD_CONST        0
-262	CALL_FUNCTION_3   None
-265	POP_TOP           None
-
-266	LOAD_GLOBAL       'addHit'
-269	LOAD_FAST         'totalHitDict'
-272	LOAD_FAST         'suitId'
-275	LOAD_CONST        0
-278	CALL_FUNCTION_3   None
-281	POP_TOP           None
-282	JUMP_BACK         '172'
-285	JUMP_BACK         '172'
-288	POP_BLOCK         None
-289_0	COME_FROM         '165'
-
-289	LOAD_GLOBAL       'notify'
-292	LOAD_ATTR         'debug'
-295	LOAD_CONST        'singleHitDict = %s'
-298	LOAD_FAST         'singleHitDict'
-301	BINARY_MODULO     None
-302	CALL_FUNCTION_1   None
-305	POP_TOP           None
-
-306	LOAD_GLOBAL       'notify'50.0, 0.0)), suit.scaleInterval(3.0, 0.01)), Func(suit.hide)))
+        reactIval = Parallel(ActorInterval(suit, 'pie-small-react'), Sequence(Wait(0.0), LerpPosInterval(cannonHolder, 2.0, posFinal, startPos=posInit, blendType='easeInOut'), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 45, 0), startHpr=Point3(0, 90, 0), blendType='easeIn'), playSoundCannonAdjust), Wait(2.0), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 90, 0), startHpr=Point3(0, 45, 0), blendType='easeIn'), playSoundCannonAdjust), LerpPosInterval(cannonHolder, 1.0, posInit, startPos=posFinal, blendType='easeInOut')), Sequence(Wait(0.0), Parallel(ActorInterval(suit, 'flail'), suit.scaleInterval(1.0, suitScale), LerpPosInterval(suit, 0.25, Point3(0, -1.0, 0.0)), Sequence(Wait(0.25), Parallel(playSoundCogPanic, LerpPosInterval(suit, 1.5, Point3(0, -deep, 0.0), blendType='easeIn')))), Wait(2.5), Parallel(playSoundBomb, playSoundFly, Sequence(Func(smoke.show), Parallel(LerpScaleInterval(smoke, 0.5, 3), LerpColorScaleInterval(smoke, 0.5, Vec4(2, 2, 2, 0))), Func(smoke.hide)), Sequence(Func(kapow.show), 
+ActorInterval(kapow, 'kapow'), Func(kapow.hide)), LerpPosInterval(suit, 3.0, Point3(0, 150.0, 0.0)), suit.scaleInterval(3.0, 0.01)), Func(suit.hide)))
         if hitCount == 1:
             sival = Sequence(Parallel(reactIval, MovieUtil.createSuitStunInterval(suit, 0.3, 1.3)), Wait(0.0), Func(cannonHolder.remove))
         else:
@@ -680,103 +340,3 @@ ParserError: --- This code section failed: ---
      soundTrack,
      buttonTrack,
      suitResponseTrack]
-
-309	LOAD_ATTR         'debug'
-312	LOAD_CONST        'groupHitDict = %s'
-315	LOAD_FAST         'groupHitDict'
-318	BINARY_MODULO     None
-319	CALL_FUNCTION_1   None
-322	POP_TOP           None
-
-323	LOAD_GLOBAL       'notify'
-326	LOAD_ATTR         'debug'
-329	LOAD_CONST        'totalHitDict = %s'
-332	LOAD_FAST         'totalHitDict'
-335	BINARY_MODULO     None
-336	CALL_FUNCTION_1   None
-339	POP_TOP           None
-
-340	LOAD_CONST        0.0
-343	STORE_FAST        'delay'
-
-346	LOAD_GLOBAL       'Parallel'
-349	CALL_FUNCTION_0   None
-352	STORE_FAST        'mtrack'
-
-355	BUILD_LIST_0      None
-358	STORE_FAST        'firedTargets'
-
-361	SETUP_LOOP        '458'
-364	LOAD_FAST         'suitFires'
-367	GET_ITER          None
-368	FOR_ITER          '457'
-371	STORE_FAST        'sf'
-
-374	LOAD_GLOBAL       'len'
-377	LOAD_FAST         'sf'
-380	CALL_FUNCTION_1   None
-383	LOAD_CONST        0
-386	COMPARE_OP        '>'
-389	JUMP_IF_FALSE     '454'
-
-392	LOAD_GLOBAL       '__doSuitFires'
-395	LOAD_FAST         'sf'
-398	CALL_FUNCTION_1   None
-401	STORE_FAST        'ival'
-
-404	LOAD_FAST         'ival'
-407	JUMP_IF_FALSE     '441'
-
-410	LOAD_FAST         'mtrack'
-413	LOAD_ATTR         'append'
-416	LOAD_GLOBAL       'Sequence'
-419	LOAD_GLOBAL       'Wait'
-422	LOAD_FAST         'delay'
-425	CALL_FUNCTION_1   None
-428	LOAD_FAST         'ival'
-431	CALL_FUNCTION_2   None
-434	CALL_FUNCTION_1   None
-437	POP_TOP           None
-438	JUMP_FORWARD      '441'
-441_0	COME_FROM         '438'
-
-441	LOAD_FAST         'delay'
-444	LOAD_GLOBAL       'TOON_FIRE_SUIT_DELAY'
-447	BINARY_ADD        None
-448	STORE_FAST        'delay'
-451	JUMP_BACK         '368'
-454	JUMP_BACK         '368'
-457	POP_BLOCK         None
-458_0	COME_FROM         '361'
-
-458	LOAD_GLOBAL       'Sequence'
-461	CALL_FUNCTION_0   None
-464	STORE_FAST        'retTrack'
-
-467	LOAD_FAST         'retTrack'
-470	LOAD_ATTR         'append'
-473	LOAD_FAST         'mtrack'
-476	CALL_FUNCTION_1   None
-479	POP_TOP           None
-
-480	LOAD_FAST         'retTrack'
-483	LOAD_ATTR         'getDuration'
-486	CALL_FUNCTION_0   None
-489	STORE_FAST        'camDuration'
-
-492	LOAD_GLOBAL       'MovieCamera'
-495	LOAD_ATTR         'chooseFireShot'
-498	LOAD_FAST         'fires'
-501	LOAD_FAST         'suitFiresDict'
-
-504	LOAD_FAST         'camDuration'
-507	CALL_FUNCTION_3   None
-510	STORE_FAST        'camTrack'
-
-513	LOAD_FAST         'retTrack'
-516	LOAD_FAST         'camTrack'
-519	BUILD_TUPLE_2     None
-522	RETURN_VALUE      None
-
-Syntax error at or near `LOAD_GLOBAL' token at offset 250
-

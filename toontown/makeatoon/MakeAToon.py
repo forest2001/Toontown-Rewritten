@@ -202,7 +202,7 @@ class MakeAToon(StateData.StateData):
         self.spotlightActor.loadAnims({'spotlightShake': 'phase_3/models/makeatoon/roomAnim_spotlightShake'})
         self.spotlightActor.reparentTo(render)
         self.spotlightJoint = self.spotlightActor.find('**/spotlightJoint')
-        ee = DirectFrame(pos=(-1, 1, 1), frameSize=(-0.01, 0.01, -0.01, 0.01), frameColor=(0, 0, 0, 0.05), state='normal')
+        ee = DirectFrame(pos=(-1, 1, 1), frameSize=(-.01, 0.01, -.01, 0.01), frameColor=(0, 0, 0, 0.05), state='normal')
         ee.bind(DGG.B1PRESS, lambda x, ee = ee: self.toggleSlide())
         self.eee = ee
         self.room = loader.loadModel('phase_3/models/makeatoon/tt_m_ara_mat_room')

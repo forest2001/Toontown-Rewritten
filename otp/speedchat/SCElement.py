@@ -147,7 +147,7 @@ class SCElement(SCObject, NodePath):
          'text_font': OTPGlobals.getInterfaceFont(),
          'text_align': TextNode.ALeft,
          'text_fg': self.getColorScheme().getTextColor() + (1,),
-         'text_pos': (textX, -0.25 - halfHeight, 0),
+         'text_pos': (textX, -.25 - halfHeight, 0),
          'relief': DGG.FLAT,
          'pressEffect': 0}
         args.update(dbArgs)

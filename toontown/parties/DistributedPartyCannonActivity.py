@@ -28,6 +28,7 @@ INITIAL_VELOCITY = 90.0
 WHISTLE_SPEED = INITIAL_VELOCITY * 0.35
 
 class DistributedPartyCannonActivity(DistributedPartyActivity):
+    # I never go anywhere without my party cannon!
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyCannonActivity')
     HIT_GROUND = 0
     HIT_TOWER = 1
@@ -516,27 +517,27 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
 
     def __moveFlyingToon(self, toon):
         toonP = toon.getP(render)
-        if toonP > -150:
-            isToonFlyingHorizontal = toonP < -30
-            OFFSET = 0.25
-            rotVel = 0
-            if self.gui.leftPressed:
-                if isToonFlyingHorizontal:
-                    rotVel += CANNON_ROTATION_VEL
-                else:
-                    self.flyingToonOffsetX -= OFFSET
-            if self.gui.rightPressed:
-                if isToonFlyingHorizontal:
-                    rotVel -= CANNON_ROTATION_VEL
-                else:
-                    self.flyingToonOffsetX += OFFSET
-            self.flyingToonOffsetRotation += rotVel * globalClock.getDt()
-            angVel = 0
-            if self.gui.upPressed:
-                if not isToonFlyingHorizontal:
-                    self.flyingToonOffsetY -= OFFSET
-            if self.gui.downPressed:
-                isToonFlyingHorizontal and angVel += CANNON_ANGLE_VEL
+        isToonFlyingHorizontal = toonP > -150 and toonP < -30
+        OFFSET = 0.25
+        rotVel = 0
+        if self.gui.leftPressed:
+            if isToonFlyingHorizontal:
+                rotVel += CANNON_ROTATION_VEL
+            else:
+                self.flyingToonOffsetX -= OFFSET
+        if self.gui.rightPressed:
+            if isToonFlyingHorizontal:
+                rotVel -= CANNON_ROTATION_VEL
+            else:
+                self.flyingToonOffsetX += OFFSET
+        self.flyingToonOffsetRotation += rotVel * globalClock.getDt()
+        angVel = 0
+        if self.gui.upPressed:
+            if not isToonFlyingHorizontal:
+                self.flyingToonOffsetY -= OFFSET
+        if self.gui.downPressed:
+            if isToonFlyingHorizontal:
+                angVel += CANNON_ANGLE_VEL
             else:
                 self.flyingToonOffsetY += OFFSET
         self.flyingToonOffsetAngle += angVel * globalClock.getDt()

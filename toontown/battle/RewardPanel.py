@@ -25,7 +25,7 @@ class RewardPanel(DirectFrame):
 
     def __init__(self, name):
         gscale = (TTLocalizer.RPdirectFrame[0], TTLocalizer.RPdirectFrame[1], TTLocalizer.RPdirectFrame[2] * 1.1)
-        DirectFrame.__init__(self, relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_pos=Point3(0, 0, -0.05), geom_scale=gscale, pos=(0, 0, 0.587))
+        DirectFrame.__init__(self, relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_pos=Point3(0, 0, -.05), geom_scale=gscale, pos=(0, 0, 0.587))
         self.initialiseoptions(RewardPanel)
         self.avNameLabel = DirectLabel(parent=self, relief=None, pos=(0, 0, 0.3), text=name, text_scale=0.08)
         self.gagExpFrame = DirectFrame(parent=self, relief=None, pos=(-0.32, 0, 0.24))

@@ -42,29 +42,11 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
         name = GardenGlobals.Specials[self.gardenIndex]['photoName']
         return name
 
-    def recordPurchase--- This code section failed: ---
-
-0	LOAD_FAST         'avatar'
-3	JUMP_IF_FALSE     '31'
-
-6	LOAD_FAST         'avatar'
-9	LOAD_ATTR         'addGardenItem'
-12	LOAD_FAST         'self'
-15	LOAD_ATTR         'gardenIndex'
-18	LOAD_FAST         'self'
-21	LOAD_ATTR         'numItems'
-24	CALL_FUNCTION_2   None
-27	POP_TOP           None
-28	JUMP_FORWARD      '31'
-31_0	COME_FROM         '28'
-
-31	LOAD_GLOBAL       'ToontownGlobals'
-34	LOAD_ATTR         'P_ItemAvailable'
-37	RETURN_VALUE      None
-38	JUMP_FORWARD      '41'
-41_0	COME_FROM         '38'
-
-Syntax error at or near `JUMP_FORWARD' token at offset 38
+    def recordPurchase(self, avatar, optional):
+        if avatar:
+            avatar.addGardenItem(self.gardenIndex, self.numItems)
+        if 1:
+            return ToontownGlobals.P_ItemAvailable
 
     def getPicture(self, avatar):
         photoModel = GardenGlobals.Specials[self.gardenIndex]['photoModel']
@@ -191,36 +173,3 @@ Syntax error at or near `JUMP_FORWARD' token at offset 38
 
     def isGift(self):
         return 0
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\catalog\CatalogGardenItem.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'avatar'
-3	JUMP_IF_FALSE     '31'
-
-6	LOAD_FAST         'avatar'
-9	LOAD_ATTR         'addGardenItem'
-12	LOAD_FAST         'self'
-15	LOAD_ATTR         'gardenIndex'
-18	LOAD_FAST         'self'
-21	LOAD_ATTR         'numItems'
-24	CALL_FUNCTION_2   None
-27	POP_TOP           None
-28	JUMP_FORWARD      '31'
-31_0	COME_FROM         '28'
-
-31	LOAD_GLOBAL       'ToontownGlobals'
-34	LOAD_ATTR         'P_ItemAvailable'
-37	RETURN_VALUE      None
-38	JUMP_FORWARD      '41'
-41_0	COME_FROM         '38'
-
-Syntax error at or near `JUMP_FORWARD' token at offset 38
-

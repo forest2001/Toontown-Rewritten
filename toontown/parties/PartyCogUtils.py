@@ -97,11 +97,11 @@ class StrafingControl:
         if self.player._aimMode and not self.player.input.throwPiePressed and (self.player.input.upPressed or self.player.input.downPressed or self.player.input.leftPressed or self.player.input.rightPressed):
             self.toggleAim()
         if not self.player._aimMode:
-            if not self.player.input.upPressed:
-                if not self.player.input.downPressed:
-                    self.player.input.leftPressed or self.player.input.rightPressed or self.player.faceForward()
-                return
-            self.player.input.throwPiePressed and self.player.gui.updatePiePowerMeter(self.player.getPieThrowingPower(globalClock.getFrameTime()))
+            if not (self.player.input.upPressed or self.player.input.downPressed or self.player.input.leftPressed or self.player.input.rightPressed):
+                self.player.faceForward()
+            return
+        if self.player.input.throwPiePressed:
+            self.player.gui.updatePiePowerMeter(self.player.getPieThrowingPower(globalClock.getFrameTime()))
 
     def toggleAim(self):
         self.player._aimMode = not self.player._aimMode

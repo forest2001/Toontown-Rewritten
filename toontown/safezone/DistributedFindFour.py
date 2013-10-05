@@ -126,7 +126,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
             collNode = CollisionNode('startpicker%d' % x)
             collNode.setIntoCollideMask(BitMask32(4096))
             tempList.append(self.startingPositions[x].attachNewNode(collNode))
-            tempList[x].node().addSolid(CollisionTube(0, 0, 0.23, 0, 0, -0.23, 0.2))
+            tempList[x].node().addSolid(CollisionTube(0, 0, 0.23, 0, 0, -.23, 0.2))
 
         for z in self.startingPositions:
             y = instancePiece.copyTo(z)
@@ -354,11 +354,11 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         self.clockNode.reset()
 
     def enableExitButton(self):
-        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.8), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.8), scale=0.15, command=lambda self = self: self.exitButtonPushed())
         return
 
     def enableScreenText(self):
-        defaultPos = (-0.7, -0.29)
+        defaultPos = (-.7, -0.29)
         if self.playerNum == 1:
             message = 'You are Red'
             color = Vec4(1, 0, 0, 1)
@@ -371,11 +371,11 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         self.screenText = OnscreenText(text=message, pos=defaultPos, scale=0.1, fg=color, align=TextNode.ACenter, mayChange=1)
 
     def enableStartButton(self):
-        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=0.6, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.57), scale=0.15, command=lambda self = self: self.startButtonPushed())
+        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.6, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.57), scale=0.15, command=lambda self = self: self.startButtonPushed())
         return
 
     def enableLeaveButton(self):
-        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.13), text_scale=0.5, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.8), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.13), text_scale=0.5, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.8), scale=0.15, command=lambda self = self: self.exitButtonPushed())
         return
 
     def enableTurnScreenText(self, player):

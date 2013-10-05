@@ -103,7 +103,6 @@ class OrthoDrive:
         return Task.cont
 
     def __handleHeading(self, xVel, yVel):
-
         def getHeading(xVel, yVel):
             angTab = [[None, 0, 180], [-90, -45, -135], [90, 45, 135]]
             return angTab[xVel][yVel] + self.upHeading
@@ -118,15 +117,14 @@ class OrthoDrive:
             else:
                 self.turnLocalToonIval.start()
 
-        (xVel != self.lastXVel or yVel != self.lastYVel) and taskMgr.remove(OrthoDrive.SET_ATREST_HEADING_TASK)
-        if not xVel:
-            if not yVel:
+        if xVel != self.lastXVel or yVel != self.lastYVel:
+            taskMgr.remove(OrthoDrive.SET_ATREST_HEADING_TASK)
+            if not (xVel or yVel):
                 orientToon(self.atRestHeading)
             else:
                 curHeading = getHeading(xVel, yVel)
-                if self.lastXVel:
-
-                    def setAtRestHeading(task, self = self.lastYVel and xVel and not yVel and self, angle = curHeading):
+                if ((self.lastXVel and self.lastYVel) and not (xVel and yVel)):
+                    def setAtRestHeading(task, self = self, angle = curHeading):
                         self.atRestHeading = angle
                         return Task.done
 

@@ -939,9 +939,9 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
     def notOfferedTo(self, avatar):
         if self.getFlags() & FLCloset or self.getFlags() & FLTrunk:
             decade = self.furnitureType - self.furnitureType % 10
-            if not decade == 500:
-                forBoys = decade == 4000
-                return avatar.getStyle().getGender() == 'm' and not forBoys
+            forBoys = (decade == 500 or decade == 4000)
+            if avatar.getStyle().getGender() == 'm':
+                return not forBoys
             else:
                 return forBoys
         return 0
@@ -1121,7 +1121,7 @@ def nextAvailableCloset(avatar, duplicateItems):
     else:
         index = 1
     if not hasattr(avatar, 'maxClothes'):
-        return
+        return None
     closetIds = ClothesToCloset.get(avatar.getMaxClothes())
     closetIds = list(closetIds)
     closetIds.sort()

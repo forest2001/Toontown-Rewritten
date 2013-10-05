@@ -78,7 +78,7 @@ class AvatarChooser(StateData.StateData):
 
     def load(self, isPaid):
         if self.isLoaded == 1:
-            return
+            return None
         self.isPaid = isPaid
         gui = loader.loadModel('phase_3/models/gui/pick_a_toon_gui')
         gui2 = loader.loadModel('phase_3/models/gui/quit_button')
@@ -118,7 +118,6 @@ class AvatarChooser(StateData.StateData):
         if len(self.avatarList) > 0:
             self.initLookAtInfo()
         self.isLoaded = 1
-        return
 
     def getLookAtPosition(self, toonHead, toonidx):
         lookAtChoice = random.random()

@@ -432,8 +432,8 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
                 self.fsm.request('localAdjusting')
 
         def requestLocalCasting(mouseEvent):
-            if self.av.isFishTankFull():
-                self.__allowSellFish() or self.fsm.request('localCasting')
+            if not (self.av.isFishTankFull() and self.__allowSellFish()):
+                self.fsm.request('localCasting')
 
         self.castButton.bind(DGG.B1PRESS, requestLocalAdjusting)
         self.castButton.bind(DGG.B3PRESS, requestLocalAdjusting)
@@ -646,10 +646,10 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             base.setCellsAvailable(base.rightCells, 0)
             bucket.setScale(0.9)
             bucket.setX(-1.9)
-            bucket.setZ(-0.11)
+            bucket.setZ(-.11)
             jar.setScale(0.9)
-            jar.setX(-0.375)
-            jar.setZ(-0.135)
+            jar.setX(-.375)
+            jar.setZ(-.135)
         else:
             self.notify.debug('__setItemFramePos: Has No Pond Bingo Manager')
             bucket = self.castGui.find('**/bucket')
@@ -680,10 +680,10 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         jar = self.castGui.find('**/jar')
         self.castGui.find('**/display_jar').reparentTo(jar)
         self.jar.reparentTo(jar)
-        bucketPosInt = bucket.posInterval(3.0, Point3(-1.9, 0, -0.11), startPos=bucket.getPos(), blendType='easeInOut')
+        bucketPosInt = bucket.posInterval(3.0, Point3(-1.9, 0, -.11), startPos=bucket.getPos(), blendType='easeInOut')
         bucketScaleInt = bucket.scaleInterval(3.0, VBase3(0.9, 0.9, 0.9), startScale=bucket.getScale(), blendType='easeInOut')
         bucketTrack = Parallel(bucketPosInt, bucketScaleInt)
-        jarPosInt = jar.posInterval(3.0, Point3(-0.375, 0, -0.135), startPos=jar.getPos(), blendType='easeInOut')
+        jarPosInt = jar.posInterval(3.0, Point3(-.375, 0, -.135), startPos=jar.getPos(), blendType='easeInOut')
         jarScaleInt = jar.scaleInterval(3.0, VBase3(0.9, 0.9, 0.9), startScale=jar.getScale(), blendType='easeInOut')
         jarTrack = Parallel(jarPosInt, jarScaleInt)
         self.guiTrack = Parallel(bucketTrack, jarTrack)

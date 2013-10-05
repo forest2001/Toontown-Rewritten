@@ -41,7 +41,7 @@ class OTPTimer(DirectFrame):
         self.setPos(1.16, 0, 0.58)
 
     def posAboveShtikerBook(self):
-        self.setPos(1.16, 0, -0.63)
+        self.setPos(1.16, 0, -.63)
 
     def setTime(self, time):
         time = bound(time, 0, 999)

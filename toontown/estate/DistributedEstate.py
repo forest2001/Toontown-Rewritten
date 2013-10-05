@@ -142,7 +142,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
             bannerText.setText('Happy halloween!!!')
             self.bn = self.airplane.attachNewNode(bannerText.generate())
             self.bn.setHpr(0, 0, 0)
-            self.bn.setPos(20.0, -0.1, 0)
+            self.bn.setPos(20.0, -.1, 0)
             self.bn.setScale(2.35)
 
         replacement = Sequence(LerpColorScaleInterval(self.airplane, 0.1, Vec4(1, 1, 1, 0)), Func(__replaceAirplane__), LerpColorScaleInterval(self.airplane, 0.1, Vec4(1, 1, 1, 1)))

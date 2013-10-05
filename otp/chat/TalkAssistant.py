@@ -372,13 +372,13 @@ class TalkAssistant(DirectObject.DirectObject):
         if reject == 1:
             newMessage.setBody(OTPLocalizer.AntiSpamInChat)
         if reject != 2:
-            if self.spamDictByDoId.get(senderAvId):
-                isSpam = reject
-                if not isSpam:
-                    self.historyComplete.append(newMessage)
-                    self.historyOpen.append(newMessage)
-                    messenger.send('NewOpenMessage', [newMessage])
-                self.spamDictByDoId[senderAvId] = newMessage.getBody() == OTPLocalizer.AntiSpamInChat and 1
+            isSpam = self.spamDictByDoId.get(senderAvId) and reject
+            if not isSpam:
+                self.historyComplete.append(newMessage)
+                self.historyOpen.append(newMessage)
+                messenger.send('NewOpenMessage', [newMessage])
+            if newMessage.getBody() == OTPLocalizer.AntiSpamInChat:
+                self.spamDictByDoId[senderAvId] = 1
             else:
                 self.spamDictByDoId[senderAvId] = 0
         return error
@@ -433,13 +433,13 @@ class TalkAssistant(DirectObject.DirectObject):
             if reject == 1:
                 newMessage.setBody(OTPLocalizer.AntiSpamInChat)
             if reject != 2:
-                if self.spamDictByDoId.get(senderAvId):
-                    isSpam = reject
-                    if not isSpam:
-                        self.historyComplete.append(newMessage)
-                        self.historyGuild.append(newMessage)
-                        messenger.send('NewOpenMessage', [newMessage])
-                    self.spamDictByDoId[senderAvId] = newMessage.getBody() == OTPLocalizer.AntiSpamInChat and 1
+                isSpam = self.spamDictByDoId.get(senderAvId) and reject
+                if not isSpam:
+                    self.historyComplete.append(newMessage)
+                    self.historyGuild.append(newMessage)
+                    messenger.send('NewOpenMessage', [newMessage])
+                if newMessage.getBody() == OTPLocalizer.AntiSpamInChat:
+                    self.spamDictByDoId[senderAvId] = 1
                 else:
                     self.spamDictByDoId[senderAvId] = 0
         return error

@@ -90,7 +90,7 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
         return self.pondBingoMgr
 
     def hasPondBingoManager(self):
-        return self.pondBingoMgr and [1] or [0][0]
+        return (self.pondBingoMgr and [1] or [0])[0]
 
     def handleBingoCatch(self, catch):
         if self.pondBingoMgr:

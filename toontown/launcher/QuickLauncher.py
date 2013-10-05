@@ -184,79 +184,17 @@ class QuickLauncher(LauncherBase):
             return
         raise StandardError, 'Some phases not listed in LauncherPhases: %s' % self.requiredInstallFiles
 
-    def getDecompressMultifile--- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'DecompressMultifiles'
-6	JUMP_IF_TRUE      '22'
-
-9	LOAD_FAST         'self'
-12	LOAD_ATTR         'decompressMultifileDone'
-15	CALL_FUNCTION_0   None
-18	POP_TOP           None
-19	JUMP_FORWARD      '162'
-
-22	LOAD_FAST         'self'
-25	LOAD_ATTR         'notify'
-28	LOAD_ATTR         'info'
-31	LOAD_CONST        'decompressMultifile: Decompressing multifile: '
-34	LOAD_FAST         'mfname'
-37	BINARY_ADD        None
-38	CALL_FUNCTION_1   None
-41	POP_TOP           None
-
-42	LOAD_FAST         'self'
-45	LOAD_ATTR         'mfDetails'
-48	LOAD_FAST         'self'
-51	LOAD_ATTR         'currentMfname'
-54	BINARY_SUBSCR     None
-55	UNPACK_SEQUENCE_3 None
-58	STORE_FAST        'curVer'
-61	STORE_FAST        'expectedSize'
-64	STORE_FAST        'expectedMd5'
-
-67	LOAD_GLOBAL       'Filename'
-70	LOAD_FAST         'self'
-73	LOAD_ATTR         'topDir'
-76	LOAD_GLOBAL       'Filename'
-79	LOAD_CONST        '_%s.%s.%s'
-82	LOAD_FAST         'mfname'
-85	LOAD_FAST         'curVer'
-88	LOAD_FAST         'self'
-91	LOAD_ATTR         'CompressionExt'
-94	BUILD_TUPLE_3     None
-97	BINARY_MODULO     None
-98	CALL_FUNCTION_1   None
-101	CALL_FUNCTION_2   None
-104	STORE_FAST        'localFilename'
-
-107	LOAD_FAST         'self'
-110	LOAD_ATTR         'decompressMultifile'
-113	LOAD_FAST         'mfname'
-116	LOAD_FAST         'localFilename'
-119	LOAD_FAST         'self'
-122	LOAD_ATTR         'decompressMultifileDone'
-125	CALL_FUNCTION_3   None
-128	POP_TOP           None
-129	JUMP_FORWARD      '162'
-
-132	LOAD_FAST         'self'
-135	LOAD_ATTR         'notify'
-138	LOAD_ATTR         'info'
-141	LOAD_CONST        'decompressMultifile: Multifile already decompressed: %s'
-144	LOAD_FAST         'mfname'
-147	BINARY_MODULO     None
-148	CALL_FUNCTION_1   None
-151	POP_TOP           None
-
-152	LOAD_FAST         'self'
-155	LOAD_ATTR         'decompressMultifileDone'
-158	CALL_FUNCTION_0   None
-161	POP_TOP           None
-162_0	COME_FROM         '19'
-162_1	COME_FROM         '129'
-
-Syntax error at or near `LOAD_FAST' token at offset 132
+    def getDecompressMultifile(self, mfname):
+        if not self.DecompressMultifiles:
+            self.decompressMultifileDone()
+        elif 1:
+            self.notify.info('decompressMultifile: Decompressing multifile: ' + mfname)
+            curVer, expectedSize, expectedMd5 = self.mfDetails[self.currentMfname]
+            localFilename = Filename(self.topDir, Filename('_%s.%s.%s' % (mfname, curVer, self.CompressionExt)))
+            self.decompressMultifile(mfname, localFilename, self.decompressMultifileDone)
+        else:
+            self.notify.info('decompressMultifile: Multifile already decompressed: %s' % mfname)
+            self.decompressMultifileDone()
 
     def decompressMultifile(self, mfname, localFilename, callback):
         self.notify.info('decompressMultifile: request: ' + localFilename.cStr())
@@ -367,11 +305,12 @@ Syntax error at or near `LOAD_FAST' token at offset 132
                 name, value = args
                 dict[name] = int(value)
 
-        if dict.has_key('secretsNeedsParentPassword'):
+        if dict.has_key('secretsNeedsParentPassword') and 1:
             self.secretNeedsParentPasswordKey = dict['secretsNeedsParentPassword']
             self.notify.info('secretNeedsParentPassword = %d' % self.secretNeedsParentPasswordKey)
         else:
             self.notify.warning('no secretNeedsParentPassword token in webAcctParams')
+
         if dict.has_key('chatEligible'):
             self.chatEligibleKey = dict['chatEligible']
             self.notify.info('chatEligibleKey = %d' % self.chatEligibleKey)
@@ -462,86 +401,3 @@ Syntax error at or near `LOAD_FAST' token at offset 132
         self.newTaskManager()
         eventMgr.restart()
         from toontown.toonbase import ToontownStart
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\launcher\QuickLauncher.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'DecompressMultifiles'
-6	JUMP_IF_TRUE      '22'
-
-9	LOAD_FAST         'self'
-12	LOAD_ATTR         'decompressMultifileDone'
-15	CALL_FUNCTION_0   None
-18	POP_TOP           None
-19	JUMP_FORWARD      '162'
-
-22	LOAD_FAST         'self'
-25	LOAD_ATTR         'notify'
-28	LOAD_ATTR         'info'
-31	LOAD_CONST        'decompressMultifile: Decompressing multifile: '
-34	LOAD_FAST         'mfname'
-37	BINARY_ADD        None
-38	CALL_FUNCTION_1   None
-41	POP_TOP           None
-
-42	LOAD_FAST         'self'
-45	LOAD_ATTR         'mfDetails'
-48	LOAD_FAST         'self'
-51	LOAD_ATTR         'currentMfname'
-54	BINARY_SUBSCR     None
-55	UNPACK_SEQUENCE_3 None
-58	STORE_FAST        'curVer'
-61	STORE_FAST        'expectedSize'
-64	STORE_FAST        'expectedMd5'
-
-67	LOAD_GLOBAL       'Filename'
-70	LOAD_FAST         'self'
-73	LOAD_ATTR         'topDir'
-76	LOAD_GLOBAL       'Filename'
-79	LOAD_CONST        '_%s.%s.%s'
-82	LOAD_FAST         'mfname'
-85	LOAD_FAST         'curVer'
-88	LOAD_FAST         'self'
-91	LOAD_ATTR         'CompressionExt'
-94	BUILD_TUPLE_3     None
-97	BINARY_MODULO     None
-98	CALL_FUNCTION_1   None
-101	CALL_FUNCTION_2   None
-104	STORE_FAST        'localFilename'
-
-107	LOAD_FAST         'self'
-110	LOAD_ATTR         'decompressMultifile'
-113	LOAD_FAST         'mfname'
-116	LOAD_FAST         'localFilename'
-119	LOAD_FAST         'self'
-122	LOAD_ATTR         'decompressMultifileDone'
-125	CALL_FUNCTION_3   None
-128	POP_TOP           None
-129	JUMP_FORWARD      '162'
-
-132	LOAD_FAST         'self'
-135	LOAD_ATTR         'notify'
-138	LOAD_ATTR         'info'
-141	LOAD_CONST        'decompressMultifile: Multifile already decompressed: %s'
-144	LOAD_FAST         'mfname'
-147	BINARY_MODULO     None
-148	CALL_FUNCTION_1   None
-151	POP_TOP           None
-
-152	LOAD_FAST         'self'
-155	LOAD_ATTR         'decompressMultifileDone'
-158	CALL_FUNCTION_0   None
-161	POP_TOP           None
-162_0	COME_FROM         '19'
-162_1	COME_FROM         '129'
-
-Syntax error at or near `LOAD_FAST' token at offset 132
-

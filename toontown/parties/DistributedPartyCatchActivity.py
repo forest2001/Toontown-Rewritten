@@ -78,129 +78,24 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
             return
         return self._orderedGenerations[self._orderedGenerationIndex]
 
-    def _addGeneration--- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'Generation'
-6	LOAD_FAST         'generation'
-9	LOAD_FAST         'startTime'
-12	LOAD_FAST         'startNetworkTime'
-15	LOAD_FAST         'numPlayers'
-18	CALL_FUNCTION_4   None
-21	LOAD_FAST         'self'
-24	LOAD_ATTR         '_id2gen'
-27	LOAD_FAST         'generation'
-30	STORE_SUBSCR      None
-
-31	LOAD_CONST        0
-34	STORE_FAST        'i'
-
-37	SETUP_LOOP        '168'
-
-40	LOAD_FAST         'i'
-43	LOAD_GLOBAL       'len'
-46	LOAD_FAST         'self'
-49	LOAD_ATTR         '_orderedGenerations'
-52	CALL_FUNCTION_1   None
-55	COMPARE_OP        '>='
-58	JUMP_IF_FALSE     '65'
-
-61	BREAK_LOOP        None
-62	JUMP_FORWARD      '65'
-65_0	COME_FROM         '62'
-
-65	LOAD_FAST         'self'
-68	LOAD_ATTR         '_orderedGenerations'
-71	LOAD_FAST         'i'
-74	BINARY_SUBSCR     None
-75	STORE_FAST        'gen'
-
-78	LOAD_FAST         'self'
-81	LOAD_ATTR         '_id2gen'
-84	LOAD_FAST         'gen'
-87	BINARY_SUBSCR     None
-88	LOAD_ATTR         'startTime'
-91	STORE_FAST        'startNetT'
-
-94	LOAD_FAST         'self'
-97	LOAD_ATTR         '_id2gen'
-100	LOAD_FAST         'gen'
-103	BINARY_SUBSCR     None
-104	LOAD_ATTR         'generation'
-107	STORE_FAST        'genId'
-
-110	LOAD_FAST         'startNetT'
-113	LOAD_FAST         'startNetworkTime'
-116	COMPARE_OP        '>'
-119	JUMP_IF_FALSE     '126'
-
-122	BREAK_LOOP        None
-123	JUMP_FORWARD      '126'
-126_0	COME_FROM         '123'
-
-126	LOAD_FAST         'startNetT'
-129	LOAD_FAST         'startNetworkTime'
-132	COMPARE_OP        '=='
-135	JUMP_IF_FALSE     '154'
-138	LOAD_FAST         'genId'
-141	LOAD_FAST         'generation'
-144	COMPARE_OP        '>'
-147_0	COME_FROM         '135'
-147	JUMP_IF_FALSE     '154'
-
-150	BREAK_LOOP        None
-151	JUMP_FORWARD      '154'
-154_0	COME_FROM         '151'
-
-154	LOAD_FAST         'i'
-157	LOAD_CONST        1
-160	INPLACE_ADD       None
-161	STORE_FAST        'i'
-164	JUMP_BACK         '40'
-167	POP_BLOCK         None
-168_0	COME_FROM         '37'
-
-168	LOAD_FAST         'self'
-171	LOAD_ATTR         '_orderedGenerations'
-174	LOAD_FAST         'i'
-177	SLICE+2           None
-178	LOAD_FAST         'generation'
-181	BUILD_LIST_1      None
-184	BINARY_ADD        None
-185	LOAD_FAST         'self'
-188	LOAD_ATTR         '_orderedGenerations'
-191	LOAD_FAST         'i'
-194	SLICE+1           None
-195	BINARY_ADD        None
-196	LOAD_FAST         'self'
-199	STORE_ATTR        '_orderedGenerations'
-
-202	LOAD_FAST         'self'
-205	LOAD_ATTR         '_orderedGenerationIndex'
-208	LOAD_CONST        None
-211	COMPARE_OP        'is not'
-214	JUMP_IF_FALSE     '253'
-
-217	LOAD_FAST         'self'
-220	LOAD_ATTR         '_orderedGenerationIndex'
-223	LOAD_FAST         'i'
-226	COMPARE_OP        '>='
-229	JUMP_IF_FALSE     '250'
-
-232	LOAD_FAST         'self'
-235	DUP_TOP           None
-236	LOAD_ATTR         '_orderedGenerationIndex'
-239	LOAD_CONST        1
-242	INPLACE_ADD       None
-243	ROT_TWO           None
-244	STORE_ATTR        '_orderedGenerationIndex'
-247	JUMP_ABSOLUTE     '253'
-250	JUMP_FORWARD      '253'
-253_0	COME_FROM         '250'
-253	LOAD_CONST        None
-256	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 167
+    def _addGeneration(self, generation, startTime, startNetworkTime, numPlayers):
+        self._id2gen[generation] = self.Generation(generation, startTime, startNetworkTime, numPlayers)
+        i = 0
+        while 1:
+            if i >= len(self._orderedGenerations):
+                break
+            gen = self._orderedGenerations[i]
+            startNetT = self._id2gen[gen].startTime
+            genId = self._id2gen[gen].generation
+            if startNetT > startNetworkTime:
+                break
+            if startNetT == startNetworkTime and genId > generation:
+                break
+            i += 1
+        self._orderedGenerations = self._orderedGenerations[:i] + [generation] + self._orderedGenerations[i:]
+        if self._orderedGenerationIndex is not None:
+            if self._orderedGenerationIndex >= i:
+                self._orderedGenerationIndex += 1
 
     def _removeGeneration(self, generation):
         del self._id2gen[generation]
@@ -266,7 +161,7 @@ Syntax error at or near `POP_BLOCK' token at offset 167
         exitTextNp = exitTextLoc.attachNewNode(exitText)
         exitTextNp.setDepthWrite(0)
         exitTextNp.setScale(4)
-        exitTextNp.setZ(-0.5)
+        exitTextNp.setZ(-.5)
         self.sign.reparentTo(self.treesAndFence.find('**/loc_eventSign'))
         self.sign.wrtReparentTo(self.root)
         self.avatarNodePath = NodePath('PartyCatchAvatarNodePath')
@@ -300,12 +195,12 @@ Syntax error at or near `POP_BLOCK' token at offset 167
             if modelScales.has_key(objType.name):
                 model.setScale(modelScales[objType.name])
             if objType == PartyGlobals.Name2DropObjectType['pear']:
-                model.setZ(-0.6)
+                model.setZ(-.6)
             if objType == PartyGlobals.Name2DropObjectType['coconut']:
                 model.setP(180)
             if objType == PartyGlobals.Name2DropObjectType['watermelon']:
                 model.setH(135)
-                model.setZ(-0.5)
+                model.setZ(-.5)
             if objType == PartyGlobals.Name2DropObjectType['pineapple']:
                 model.setZ(-1.7)
             if objType == PartyGlobals.Name2DropObjectType['anvil']:
@@ -974,136 +869,3 @@ Syntax error at or near `POP_BLOCK' token at offset 167
             DistributedPartyActivity.showJellybeanReward(self, earnedAmount, jarAmount, message)
         else:
             base.cr.playGame.getPlace().fsm.request('walk')
-
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\parties\DistributedPartyCatchActivity.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         'Generation'
-6	LOAD_FAST         'generation'
-9	LOAD_FAST         'startTime'
-12	LOAD_FAST         'startNetworkTime'
-15	LOAD_FAST         'numPlayers'
-18	CALL_FUNCTION_4   None
-21	LOAD_FAST         'self'
-24	LOAD_ATTR         '_id2gen'
-27	LOAD_FAST         'generation'
-30	STORE_SUBSCR      None
-
-31	LOAD_CONST        0
-34	STORE_FAST        'i'
-
-37	SETUP_LOOP        '168'
-
-40	LOAD_FAST         'i'
-43	LOAD_GLOBAL       'len'
-46	LOAD_FAST         'self'
-49	LOAD_ATTR         '_orderedGenerations'
-52	CALL_FUNCTION_1   None
-55	COMPARE_OP        '>='
-58	JUMP_IF_FALSE     '65'
-
-61	BREAK_LOOP        None
-62	JUMP_FORWARD      '65'
-65_0	COME_FROM         '62'
-
-65	LOAD_FAST         'self'
-68	LOAD_ATTR         '_orderedGenerations'
-71	LOAD_FAST         'i'
-74	BINARY_SUBSCR     None
-75	STORE_FAST        'gen'
-
-78	LOAD_FAST         'self'
-81	LOAD_ATTR         '_id2gen'
-84	LOAD_FAST         'gen'
-87	BINARY_SUBSCR     None
-88	LOAD_ATTR         'startTime'
-91	STORE_FAST        'startNetT'
-
-94	LOAD_FAST         'self'
-97	LOAD_ATTR         '_id2gen'
-100	LOAD_FAST         'gen'
-103	BINARY_SUBSCR     None
-104	LOAD_ATTR         'generation'
-107	STORE_FAST        'genId'
-
-110	LOAD_FAST         'startNetT'
-113	LOAD_FAST         'startNetworkTime'
-116	COMPARE_OP        '>'
-119	JUMP_IF_FALSE     '126'
-
-122	BREAK_LOOP        None
-123	JUMP_FORWARD      '126'
-126_0	COME_FROM         '123'
-
-126	LOAD_FAST         'startNetT'
-129	LOAD_FAST         'startNetworkTime'
-132	COMPARE_OP        '=='
-135	JUMP_IF_FALSE     '154'
-138	LOAD_FAST         'genId'
-141	LOAD_FAST         'generation'
-144	COMPARE_OP        '>'
-147_0	COME_FROM         '135'
-147	JUMP_IF_FALSE     '154'
-
-150	BREAK_LOOP        None
-151	JUMP_FORWARD      '154'
-154_0	COME_FROM         '151'
-
-154	LOAD_FAST         'i'
-157	LOAD_CONST        1
-160	INPLACE_ADD       None
-161	STORE_FAST        'i'
-164	JUMP_BACK         '40'
-167	POP_BLOCK         None
-168_0	COME_FROM         '37'
-
-168	LOAD_FAST         'self'
-171	LOAD_ATTR         '_orderedGenerations'
-174	LOAD_FAST         'i'
-177	SLICE+2           None
-178	LOAD_FAST         'generation'
-181	BUILD_LIST_1      None
-184	BINARY_ADD        None
-185	LOAD_FAST         'self'
-188	LOAD_ATTR         '_orderedGenerations'
-191	LOAD_FAST         'i'
-194	SLICE+1           None
-195	BINARY_ADD        None
-196	LOAD_FAST         'self'
-199	STORE_ATTR        '_orderedGenerations'
-
-202	LOAD_FAST         'self'
-205	LOAD_ATTR         '_orderedGenerationIndex'
-208	LOAD_CONST        None
-211	COMPARE_OP        'is not'
-214	JUMP_IF_FALSE     '253'
-
-217	LOAD_FAST         'self'
-220	LOAD_ATTR         '_orderedGenerationIndex'
-223	LOAD_FAST         'i'
-226	COMPARE_OP        '>='
-229	JUMP_IF_FALSE     '250'
-
-232	LOAD_FAST         'self'
-235	DUP_TOP           None
-236	LOAD_ATTR         '_orderedGenerationIndex'
-239	LOAD_CONST        1
-242	INPLACE_ADD       None
-243	ROT_TWO           None
-244	STORE_ATTR        '_orderedGenerationIndex'
-247	JUMP_ABSOLUTE     '253'
-250	JUMP_FORWARD      '253'
-253_0	COME_FROM         '250'
-253	LOAD_CONST        None
-256	RETURN_VALUE      None
-
-Syntax error at or near `POP_BLOCK' token at offset 167
-

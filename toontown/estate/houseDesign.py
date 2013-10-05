@@ -868,7 +868,7 @@ class ObjectManager(NodePath, DirectObject):
          guiCCWArrowUp), image_pos=(0, 0, 0.1), image_scale=0.15, image3_color=Vec4(0.5, 0.5, 0.5, 0.75), text=('',
          TTLocalizer.HDRotateCCWLabel,
          TTLocalizer.HDRotateCCWLabel,
-         ''), text_pos=(0.135, -0.1), text_scale=0.1, text_align=TextNode.ARight, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), pos=(-0.125, 0, -0.2), scale=0.7, command=self.rotateLeft)
+         ''), text_pos=(0.135, -0.1), text_scale=0.1, text_align=TextNode.ARight, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), pos=(-.125, 0, -.2), scale=0.7, command=self.rotateLeft)
         self.rotateLeftButton.bind(DGG.EXIT, self.enableButtonFrameTask)
         guiCWArrowUp = guiModels.find('**/RarrowUp')
         guiCWArrowDown = guiModels.find('**/RarrowDown')
@@ -907,9 +907,9 @@ class ObjectManager(NodePath, DirectObject):
         tNodePath.setPos(self.selectedObject.center)
         nearVec = self.getNearProjectionPoint(tNodePath)
         nearVec *= base.camLens.getFocalLength() / base.camLens.getNear()
-        render2dX = CLAMP(nearVec[0] / (base.camLens.getFilmSize()[0] / 2.0), -0.9, 0.9)
+        render2dX = CLAMP(nearVec[0] / (base.camLens.getFilmSize()[0] / 2.0), -.9, 0.9)
         aspect2dX = render2dX * base.getAspectRatio()
-        aspect2dZ = CLAMP(nearVec[2] / (base.camLens.getFilmSize()[1] / 2.0), -0.8, 0.9)
+        aspect2dZ = CLAMP(nearVec[2] / (base.camLens.getFilmSize()[1] / 2.0), -.8, 0.9)
         tNodePath.removeNode()
         return Vec3(aspect2dX, 0, aspect2dZ)
 
