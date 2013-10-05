@@ -1963,12 +1963,12 @@ ReportPanelCategoryHacking = 'Hacking'
 ReportPanelConfirmations = ('You are about to report that %s has used obscene, bigoted or sexually explicit language.',
  'You are about to report that %s is being unsafe by giving out or requesting a phone number, address, last name, email address, password or account name.',
  'You are about to report that %s is bullying, harassing, or using extreme behavior to disrupt the game.',
- "You are about to report that %s has created a name that does not follow Disney's House Rules.",
+ "You are about to report that %s has created a name that does not follow the Toontown Rewritten rules.",
  'You are about to report that %s has hacked/tampered with the game or used third party software.')
 ReportPanelWarning = "We take reporting very seriously. Your report will be viewed by a Moderator who will take appropriate action for anyone breaking our rules. If your account is found to have participated in breaking the rules, or if you make false reports or abuse the 'Report a Player' system, a Moderator may take action against your account. Are you absolutely sure you want to report this player?"
 ReportPanelThanks = 'Thank you! Your report has been sent to a Moderator for review. There is no need to contact us again about the issue. The moderation team will take appropriate action for a player found breaking our rules.'
 ReportPanelRemovedFriend = 'We have automatically removed %s from your Toon Friends List.'
-ReportPanelRemovedPlayerFriend = 'We have automatically removed %s as a Player friend so as such you will not see them as your friend in any Disney product.'
+ReportPanelRemovedPlayerFriend = 'We have automatically removed %s as a Player friend so as such you will not see them as your friend in any Toontown Rewritten product.'
 ReportPanelAlreadyReported = 'You have already reported %s during this session. A Moderator will review your previous report.'
 IgnorePanelTitle = 'Ignore A Player'
 IgnorePanelAddIgnore = 'Would you like to ignore %s for the rest of this session?'
@@ -2746,7 +2746,7 @@ SuitAttackTaunts = {'Audit': ["I believe your books don't balance.",
               "You aren't above the law!",
               'There should be a law against you.',
               "There's no ex post facto with me!",
-              "The opinions expressed in this attack are not those of Disney's Toontown Online.",
+              "The opinions expressed in this attack are not those of Toontown Rewritten.",
               'We cannot be held responsible for damages suffered in this attack.',
               'Your results for this attack may vary.',
               'This attack is void where prohibited.',
@@ -3929,7 +3929,7 @@ SillyPhase2Chatter = ['Silly levels are still rising!',
  'A mailbox on Lighthouse Lane has gone nuts!',
  'Go see the Silly Meter in Toon Hall!',
  'Keep causing those silly surges!']
-SillyPhase3Chatter = ['The Cogs hated how silly Toontown was becoming!',
+SillyPhase3Chatter = ['The Cogs hate how silly Toontown is becoming!',
  'Keep a sharp eye out for Cog Invasions!',
  'Cog Invasions have caused the silly levels to drop!',
  'The Silly Meter went down after the Cog Invasions!',
@@ -4040,7 +4040,7 @@ FriendInviterPlayer = 'Player'
 FriendInviterThatPlayer = 'That player'
 FriendInviterBegin = 'What type of friend would you like to make?'
 FriendInviterToonFriendInfo = 'A friend only in Toontown'
-FriendInviterPlayerFriendInfo = 'A friend across the Disney.com network'
+FriendInviterPlayerFriendInfo = 'A friend across the Toontown Rewritten network'
 FriendInviterToonTooMany = 'You have too many toon friends to add another one now. You will have to remove some toon friends if you want to make friends with %s. You could also try making player friends them.'
 FriendInviterPlayerTooMany = 'You have too many player friends to add another one now. You will have to remove some player friends if you want to make friends with %s. You could also try making toon friends with them.'
 FriendInviterToonAlready = '%s is already your toon friend.'
@@ -4105,7 +4105,7 @@ LauncherPhaseNames = {0: 'Initialization',
  12: Bossbot + ' HQ',
  13: 'Parties'}
 LauncherProgress = '%(name)s (%(current)s of %(total)s)'
-LauncherStartingMessage = "Starting Disney's Toontown Online... "
+LauncherStartingMessage = "Starting Toontown Rewritten... "
 LauncherDownloadFile = 'Downloading update for ' + LauncherProgress + '...'
 LauncherDownloadFileBytes = 'Downloading update for ' + LauncherProgress + ': %(bytes)s'
 LauncherDownloadFilePercent = 'Downloading update for ' + LauncherProgress + ': %(percent)s%%'
@@ -4115,16 +4115,16 @@ LauncherExtractingFile = 'Extracting update for ' + LauncherProgress + '...'
 LauncherExtractingPercent = 'Extracting update for ' + LauncherProgress + ': %(percent)s%%'
 LauncherPatchingFile = 'Applying update for ' + LauncherProgress + '...'
 LauncherPatchingPercent = 'Applying update for ' + LauncherProgress + ': %(percent)s%%'
-LauncherConnectProxyAttempt = 'Connecting to Toontown: %s (proxy: %s) attempt: %s'
-LauncherConnectAttempt = 'Connecting to Toontown: %s attempt %s'
-LauncherDownloadServerFileList = 'Updating Toontown...'
-LauncherCreatingDownloadDb = 'Updating Toontown...'
-LauncherDownloadClientFileList = 'Updating Toontown...'
-LauncherFinishedDownloadDb = 'Updating Toontown... '
-LauncherStartingGame = 'Starting Toontown...'
-LauncherRecoverFiles = 'Updating Toontown. Recovering files...'
+LauncherConnectProxyAttempt = 'Connecting to Toontown Rewritten: %s (proxy: %s) attempt: %s'
+LauncherConnectAttempt = 'Connecting to Toontown Rewritten: %s attempt %s'
+LauncherDownloadServerFileList = 'Updating Toontown Rewritten...'
+LauncherCreatingDownloadDb = 'Updating Toontown Rewritten...'
+LauncherDownloadClientFileList = 'Updating Toontown Rewritten...'
+LauncherFinishedDownloadDb = 'Updating Toontown Rewritten... '
+LauncherStartingGame = 'Starting Toontown Rewritten...'
+LauncherRecoverFiles = 'Updating Toontown Rewritten. Recovering files...'
 LauncherCheckUpdates = 'Checking for updates for ' + LauncherProgress
-LauncherVerifyPhase = 'Updating Toontown...'
+LauncherVerifyPhase = 'Updating Toontown Rewritten...'
 LoadingDownloadWatcherUpdate = 'Loading %s'
 AvatarChoiceMakeAToon = 'Make A\nToon'
 AvatarChoicePlayThisToon = 'Play\nThis Toon'
@@ -4688,7 +4688,7 @@ OptionsPageDisplaySettings = 'Display: %(screensize)s, %(api)s'
 OptionsPageDisplaySettingsNoApi = 'Display: %(screensize)s'
 OptionsPageExitConfirm = 'Exit Toontown?'
 DisplaySettingsTitle = 'Display Settings'
-DisplaySettingsIntro = 'The following settings are used to configure the way Toontown is displayed on your computer.  It is probably not necessary to adjust these unless you are experiencing a problem.'
+DisplaySettingsIntro = 'The following settings are used to configure the way Toontown is displayed on your computer.  It is usually unnecessary to adjust these unless you are experiencing a problem.'
 DisplaySettingsIntroSimple = 'You may adjust the screen resolution to a higher value to improve the clarity of text and graphics in Toontown, but depending on your graphics card, some higher values may make the game run less smoothly or may not work at all.'
 DisplaySettingsApi = 'Graphics API:'
 DisplaySettingsResolution = 'Resolution:'
@@ -5452,7 +5452,7 @@ NameShopChooseAnother = 'Choose Another Name'
 NameShopToonCouncil = 'The Toon Council\nwill review your\nname.  ' + 'Review may\ntake a few days.\nWhile you wait\nyour name will be\n '
 PleaseTypeName = 'Please type your name:'
 AllNewNames = 'All new names must be\napproved by the Toon Council.'
-NameMessages = 'Be creative and remember:\nno Disney-related names, please.'
+NameMessages = 'Be creative, and remember:\nno NPC names, please.'
 NameShopNameRejected = 'The name you\nsubmitted has\nbeen rejected.'
 NameShopNameAccepted = 'Congratulations!\nThe name you\nsubmitted has\nbeen accepted!'
 NoPunctuation = "You can't use punctuation marks in your name!"
@@ -5592,7 +5592,7 @@ QuestScriptTutorialBlocker_3 = "Oh! You don't know how to use SpeedChat!"
 QuestScriptTutorialBlocker_4 = 'Click on the button to say something.'
 QuestScriptTutorialBlocker_5 = 'Very good!\x07Where you are going there are many Toons to talk to.'
 QuestScriptTutorialBlocker_6 = "If you want to chat with other Toons using the keyboard, there's another button you can use."
-QuestScriptTutorialBlocker_7 = "It's called the Chat button. You need to turn on Speedchat Plus in your Account Manager on the Toontown Web site to use it."
+QuestScriptTutorialBlocker_7 = "It's called the SpeedChat Plus button. You need to turn on Speedchat Plus in your Account Manager on the Toontown Rewritten Website to use it."
 QuestScriptTutorialBlocker_8 = 'Good luck! See you later!'
 QuestScriptGagShop_1 = 'Welcome to the Gag Shop!'
 QuestScriptGagShop_1a = 'This is where Toons come to buy gags to use against the Cogs.'
@@ -8248,7 +8248,7 @@ FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Happy New Y
 FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
 FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
 BlockerTitle = 'LOADING TOONTOWN...'
-BlockerLoadingTexts = ['Scrubbing pie tins',
+BlockerLoadingTexts = ['Rewritting history',
  'Baking pie crusts',
  'Heating pie filling',
  'Loading Doodle chow',
@@ -8296,7 +8296,7 @@ TipDict = {TIP_NONE: ('',),
                'Open or close your Shticker Book by pressing the "F8" key.',
                'You can look up by pressing the "Page Up" key and look down by pressing the "Page Down" key.',
                'Press the "Control" key to jump.',
-               'Press the "F9" key to take a screenshot, which will be saved in your Toontown folder on your computer.',
+               'Press the "F9" key to take a screenshot, which will be saved in your Toontown Rewritten folder on your computer.',
                'You can change your screen resolution, adjust audio, and control other options on the Options Page in the Shticker Book.',
                "Try on your friend's clothing at the closet in their house.",
                'You can go to your house using the "Go Home" button on your map.',
@@ -8310,7 +8310,7 @@ TipDict = {TIP_NONE: ('',),
                'Change to different views of your Toon by pressing the Tab Key.',
                'Sometimes you can find several different ToonTasks offered for the same reward. Shop around!',
                'Finding friends with similar ToonTasks is a fun way to progress through the game.',
-               'You never need to save your Toontown progress. The Toontown servers continually save all the necessary information.',
+               'You never need to save your Toontown progress. The Toontown Rewritten servers continually save all the necessary information.',
                'You can whisper to other Toons either by clicking on them or by selecting them from your Friends List.',
                'Some SpeedChat phrases play emotion animations on your Toon.',
                'If the area you are in is crowded, try changing Districts. Go to the District Page in the Shticker Book and select a different one.',
