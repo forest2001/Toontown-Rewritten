@@ -23,207 +23,55 @@ sprayScales = [0.2,
  2.0]
 WaterSprayColor = Point4(0.75, 0.75, 1.0, 0.8)
 
-def doSquirts--- This code section failed: ---
+def doSquirts(squirts):
+    if len(squirts) == 0:
+        return (None, None)
+    
+    suitSquirtsDict = {}
+    doneUber = 0
+    skip = 0
+    for squirt in squirts:
+        skip = 0
+        if skip:
+            pass
+        elif type(squirt['target']) == type([]):
+            if 1:
+                target = squirt['target'][0]
+                suitId = target['suit'].doId
+                if suitSquirtsDict.has_key(suitId):
+                    suitSquirtsDict[suitId].append(squirt)
+                else:
+                    suitSquirtsDict[suitId] = [squirt]
+        else:
+            suitId = squirt['target']['suit'].doId
+            if suitSquirtsDict.has_key(suitId):
+                suitSquirtsDict[suitId].append(squirt)
+            else:
+                suitSquirtsDict[suitId] = [squirt]
 
-0	LOAD_GLOBAL       'len'
-3	LOAD_FAST         'squirts'
-6	CALL_FUNCTION_1   None
-9	LOAD_CONST        0
-12	COMPARE_OP        '=='
-15	JUMP_IF_FALSE     '25'
+    suitSquirts = suitSquirtsDict.values()
+    
+    def compFunc(a, b):
+        if len(a) > len(b):
+            return 1
+        elif len(a) < len(b):
+            return -1
+        return 0
+    suitSquirts.sort(compFunc)
 
-18	LOAD_CONST        (None, None)
-21	RETURN_VALUE      None
-22	JUMP_FORWARD      '25'
-25_0	COME_FROM         '22'
+    delay = 0.0
 
-25	BUILD_MAP         None
-28	STORE_FAST        'suitSquirtsDict'
+    mtrack = Parallel()
+    for st in suitSquirts:
+        if len(st) > 0:
+            ival = __doSuitSquirts(st)
+            if ival:
+                mtrack.append(Sequence(Wait(delay), ival))
+            delay = delay + TOON_SQUIRT_SUIT_DELAY
 
-31	LOAD_CONST        0
-34	STORE_FAST        'doneUber'
-
-37	LOAD_CONST        0
-40	STORE_FAST        'skip'
-
-43	SETUP_LOOP        '249'
-46	LOAD_FAST         'squirts'
-49	GET_ITER          None
-50	FOR_ITER          '248'
-53	STORE_FAST        'squirt'
-
-56	LOAD_CONST        0
-59	STORE_FAST        'skip'
-
-62	LOAD_FAST         'skip'
-65	JUMP_IF_FALSE     '71'
-
-68	JUMP_BACK         '50'
-
-71	LOAD_GLOBAL       'type'
-74	LOAD_FAST         'squirt'
-77	LOAD_CONST        'target'
-80	BINARY_SUBSCR     None
-81	CALL_FUNCTION_1   None
-84	LOAD_GLOBAL       'type'
-87	BUILD_LIST_0      None
-90	CALL_FUNCTION_1   None
-93	COMPARE_OP        '=='
-96	JUMP_IF_FALSE     '180'
-
-99	LOAD_FAST         'squirt'
-102	LOAD_CONST        'target'
-105	BINARY_SUBSCR     None
-106	LOAD_CONST        0
-109	BINARY_SUBSCR     None
-110	STORE_FAST        'target'
-
-113	LOAD_FAST         'target'
-116	LOAD_CONST        'suit'
-119	BINARY_SUBSCR     None
-120	LOAD_ATTR         'doId'
-123	STORE_FAST        'suitId'
-
-126	LOAD_FAST         'suitSquirtsDict'
-129	LOAD_ATTR         'has_key'
-132	LOAD_FAST         'suitId'
-135	CALL_FUNCTION_1   None
-138	JUMP_IF_FALSE     '161'
-
-141	LOAD_FAST         'suitSquirtsDict'
-144	LOAD_FAST         'suitId'
-147	BINARY_SUBSCR     None
-148	LOAD_ATTR         'append'
-151	LOAD_FAST         'squirt'
-154	CALL_FUNCTION_1   None
-157	POP_TOP           None
-158	JUMP_ABSOLUTE     '177'
-
-161	LOAD_FAST         'squirt'
-164	BUILD_LIST_1      None
-167	LOAD_FAST         'suitSquirtsDict'
-170	LOAD_FAST         'suitId'
-173	STORE_SUBSCR      None
-174	JUMP_ABSOLUTE     '245'
-177	JUMP_BACK         '50'
-
-180	LOAD_FAST         'squirt'
-183	LOAD_CONST        'target'
-186	BINARY_SUBSCR     None
-187	LOAD_CONST        'suit'
-190	BINARY_SUBSCR     None
-191	LOAD_ATTR         'doId'
-194	STORE_FAST        'suitId'
-
-197	LOAD_FAST         'suitSquirtsDict'
-200	LOAD_ATTR         'has_key'
-203	LOAD_FAST         'suitId'
-206	CALL_FUNCTION_1   None
-209	JUMP_IF_FALSE     '232'
-
-212	LOAD_FAST         'suitSquirtsDict'
-215	LOAD_FAST         'suitId'
-218	BINARY_SUBSCR     None
-219	LOAD_ATTR         'append'
-222	LOAD_FAST         'squirt'
-225	CALL_FUNCTION_1   None
-228	POP_TOP           None
-229	JUMP_BACK         '50'
-
-232	LOAD_FAST         'squirt'
-235	BUILD_LIST_1      None
-238	LOAD_FAST         'suitSquirtsDict'
-241	LOAD_FAST         'suitId'
-244	STORE_SUBSCR      None
-245	JUMP_BACK         '50'
-248	POP_BLOCK         None
-249_0	COME_FROM         '43'
-
-249	LOAD_FAST         'suitSquirtsDict'
-252	LOAD_ATTR         'values'
-255	CALL_FUNCTION_0   None
-258	STORE_FAST        'suitSquirts'
-
-261	LOAD_CONST        '<code_object compFunc>'
-264	MAKE_FUNCTION_0   None
-267	STORE_FAST        'compFunc'
-
-270	LOAD_FAST         'suitSquirts'
-273	LOAD_ATTR         'sort'
-276	LOAD_FAST         'compFunc'
-279	CALL_FUNCTION_1   None
-282	POP_TOP           None
-
-283	LOAD_CONST        0.0
-286	STORE_FAST        'delay'
-
-289	LOAD_GLOBAL       'Parallel'
-292	CALL_FUNCTION_0   None
-295	STORE_FAST        'mtrack'
-
-298	SETUP_LOOP        '395'
-301	LOAD_FAST         'suitSquirts'
-304	GET_ITER          None
-305	FOR_ITER          '394'
-308	STORE_FAST        'st'
-
-311	LOAD_GLOBAL       'len'
-314	LOAD_FAST         'st'
-317	CALL_FUNCTION_1   None
-320	LOAD_CONST        0
-323	COMPARE_OP        '>'
-326	JUMP_IF_FALSE     '391'
-
-329	LOAD_GLOBAL       '__doSuitSquirts'
-332	LOAD_FAST         'st'
-335	CALL_FUNCTION_1   None
-338	STORE_FAST        'ival'
-
-341	LOAD_FAST         'ival'
-344	JUMP_IF_FALSE     '378'
-
-347	LOAD_FAST         'mtrack'
-350	LOAD_ATTR         'append'
-353	LOAD_GLOBAL       'Sequence'
-356	LOAD_GLOBAL       'Wait'
-359	LOAD_FAST         'delay'
-362	CALL_FUNCTION_1   None
-365	LOAD_FAST         'ival'
-368	CALL_FUNCTION_2   None
-371	CALL_FUNCTION_1   None
-374	POP_TOP           None
-375	JUMP_FORWARD      '378'
-378_0	COME_FROM         '375'
-
-378	LOAD_FAST         'delay'
-381	LOAD_GLOBAL       'TOON_SQUIRT_SUIT_DELAY'
-384	BINARY_ADD        None
-385	STORE_FAST        'delay'
-388	JUMP_BACK         '305'
-391	JUMP_BACK         '305'
-394	POP_BLOCK         None
-395_0	COME_FROM         '298'
-
-395	LOAD_FAST         'mtrack'
-398	LOAD_ATTR         'getDuration'
-401	CALL_FUNCTION_0   None
-404	STORE_FAST        'camDuration'
-
-407	LOAD_GLOBAL       'MovieCamera'
-410	LOAD_ATTR         'chooseSquirtShot'
-413	LOAD_FAST         'squirts'
-416	LOAD_FAST         'suitSquirtsDict'
-
-419	LOAD_FAST         'camDuration'
-422	CALL_FUNCTION_3   None
-425	STORE_FAST        'camTrack'
-
-428	LOAD_FAST         'mtrack'
-431	LOAD_FAST         'camTrack'
-434	BUILD_TUPLE_2     None
-437	RETURN_VALUE      None
-
-Syntax error at or near `JUMP_BACK' token at offset 177
+    camDuration = mtrack.getDuration()
+    camTrack = MovieCamera.chooseSquirtShot(squirts, suitSquirtsDict, camDuration)
+    return (mtrack, camTrack)
 
 
 def __doSuitSquirts(squirts):
@@ -822,162 +670,7 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
     tContact = 2.9
     tSpray = 1
     tSuitDodges = 1.8
-    button = 
-# Can't uncompyle C:\Users\Maverick\Documents\Visual Studio 2010\Projects\Unfreezer\py2\toontown\battle\MovieSquirt.pyc
-Traceback (most recent call last):
-  File "C:\python27\lib\uncompyle2\__init__.py", line 206, in main
-    uncompyle_file(infile, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 143, in uncompyle_file
-    uncompyle(version, co, outstream, showasm, showast)
-  File "C:\python27\lib\uncompyle2\__init__.py", line 132, in uncompyle
-    raise walk.ERROR
-ParserError: --- This code section failed: ---
-
-0	LOAD_GLOBAL       'len'
-3	LOAD_FAST         'squirts'
-6	CALL_FUNCTION_1   None
-9	LOAD_CONST        0
-12	COMPARE_OP        '=='
-15	JUMP_IF_FALSE     '25'
-
-18	LOAD_CONST        (None, None)
-21	RETURN_VALUE      None
-22	JUMP_FORWARD      '25'
-25_0	COME_FROM         '22'
-
-25	BUILD_MAP         None
-28	STORE_FAST        'suitSquirtsDict'
-
-31	LOAD_CONST        0
-34	STORE_FAST        'doneUber'
-
-37	LOAD_CONST        0
-40	STORE_FAST        'skip'
-
-43	SETUP_LOOP        '249'
-46	LOAD_FAST         'squirts'
-49	GET_ITER          None
-50	FOR_ITER          '248'
-53	STORE_FAST        'squirt'
-
-56	LOAD_CONST        0
-59	STORE_FAST        'skip'
-
-62	LOAD_FAST         'skip'
-65	JUMP_IF_FALSE     '71'
-
-68	JUMP_BACK         '50'
-
-71	LOAD_GLOBAL       'type'
-74	LOAD_FAST         'squirt'
-77	LOAD_CONST        'target'
-80	BINARY_SUBSCR     None
-81	CALL_FUNCTION_1   None
-84	LOAD_GLOBAL       'type'
-87	BUILD_LIST_0      None
-90	CALL_FUNCTION_1   None
-93	COMPARE_OP        '=='
-96	JUMP_IF_FALSE     '180'
-
-99	LOAD_FAST         'squirt'
-102	LOAD_CONST        'target'
-105	BINARY_SUBSCR     None
-106	LOAD_CONST        0
-109	BINARY_SUBSCR     None
-110	STORE_FAST        'target'
-
-113	LOAD_FAST         'target'
-116	LOAD_CONST        'suit'
-119	BINARY_SUBSCR     None
-120	LOAD_ATTR         'doId'
-123	STORE_FAST        'suitId'
-
-126	LOAD_FAST         'suitSquirtsDict'
-129	LOAD_ATTR         'has_key'
-132	LOAD_FAST         'suitId'
-135	CALL_FUNCTION_1   None
-138	JUMP_IF_FALSE     '161'
-
-141	LOAD_FAST         'suitSquirtsDict'
-144	LOAD_FAST         'suitId'
-147	BINARY_SUBSCR     None
-148	LOAD_ATTR         'append'
-151	LOAD_FAST         'squirt'
-154	CALL_FUNCTION_1   None
-157	POP_TOP           None
-158	JUMP_ABSOLUTE     '177'
-
-161	LOAD_FAST         'squirt'
-164	BUILD_LIST_1      None
-167	LOAD_FAST         'suitSquirtsDict'
-170	LOAD_FAST         'suitId'
-173	STORE_SUBSCR      None
-174	JUMP_ABSOLUTE     '245'
-177	JUMP_BACK         '50'
-
-180	LOAD_FAST         'squirt'
-183	LOAD_CONST        'target'
-186	BINARY_SUBSCR     None
-187	LOAD_CONST        'suit'
-190	BINARY_SUBSCR     None
-191	LOAD_ATTR         'doId'
-194	STORE_FAST        'suitId'
-
-197	LOAD_FAST         'suitSquirtsDict'
-200	LOAD_ATTR         'has_key'
-203	LOAD_FAST         'suitId'
-206	CALL_FUNCTION_1   None
-209	JUMP_IF_FALSE     '232'
-
-212	LOAD_FAST         'suitSquirtsDict'
-215	LOAD_FAST         'suitId'
-218	BINARY_SUBSCR     None
-219	LOAD_ATTR         'append'
-222	LOAD_FAST         'squirt'
-225	CALL_FUNCTION_1   None
-228	POP_TOP           None
-229	JUMP_BACK         '50'
-
-232	LOAD_FAST         'squirt'
-235	BUILD_LIST_1      None
-238	LOAD_FAST         'suitSquirtsDict'
-241	LOAD_FAST         'suitId'
-244	STORE_SUBSCR      None
-245	JUMP_BACK         '50'
-248	POP_BLOCK         None
-249_0	COME_FROM         '43'
-
-249	LOAD_FAST         'suitSquirtsDict'
-252	LOAD_ATTR         'values'
-255	CALL_FUNCTION_0   None
-258	STORE_FAST        'suitSquirts'
-
-261	LOAD_CONST        '<code_object compFunc>'
-264	MAKE_FUNCTION_0   None
-267	STORE_FAST        'compFunc'
-
-270	LOAD_FAST         'suitSquirts'
-273	LOAD_ATTR         'sort'
-276	LOAD_FAST         'compFunc'
-279	CALL_FUNCTION_1   None
-282	POP_TOP           None
-
-283	LOAD_CONST        0.0
-286	STORE_FAST        'delay'
-
-289	LOAD_GLOBAL       'Parallel'
-292	CALL_FUNCTION_0   None
-295	STORE_FAST        'mtrack'
-
-298	SETUP_LOOP        '395'
-301	LOAD_FAST         'suitSquirts'
-304	GET_ITER          None
-305	FOR_ITER          '394'
-308	STORE_FAST        'st'
-
-311	LOAD_GLOBAL       'len'
-314	LOAD_FAST         'st'
-317	CALL_FUNCTION_1  globalPropPool.getProp('button')
+    button = globalPropPool.getProp('button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
@@ -1051,59 +744,3 @@ squirtfn_array = (__doFlower,
  __doFireHose,
  __doStormCloud,
  __doGeyser)
- None
-320	LOAD_CONST        0
-323	COMPARE_OP        '>'
-326	JUMP_IF_FALSE     '391'
-
-329	LOAD_GLOBAL       '__doSuitSquirts'
-332	LOAD_FAST         'st'
-335	CALL_FUNCTION_1   None
-338	STORE_FAST        'ival'
-
-341	LOAD_FAST         'ival'
-344	JUMP_IF_FALSE     '378'
-
-347	LOAD_FAST         'mtrack'
-350	LOAD_ATTR         'append'
-353	LOAD_GLOBAL       'Sequence'
-356	LOAD_GLOBAL       'Wait'
-359	LOAD_FAST         'delay'
-362	CALL_FUNCTION_1   None
-365	LOAD_FAST         'ival'
-368	CALL_FUNCTION_2   None
-371	CALL_FUNCTION_1   None
-374	POP_TOP           None
-375	JUMP_FORWARD      '378'
-378_0	COME_FROM         '375'
-
-378	LOAD_FAST         'delay'
-381	LOAD_GLOBAL       'TOON_SQUIRT_SUIT_DELAY'
-384	BINARY_ADD        None
-385	STORE_FAST        'delay'
-388	JUMP_BACK         '305'
-391	JUMP_BACK         '305'
-394	POP_BLOCK         None
-395_0	COME_FROM         '298'
-
-395	LOAD_FAST         'mtrack'
-398	LOAD_ATTR         'getDuration'
-401	CALL_FUNCTION_0   None
-404	STORE_FAST        'camDuration'
-
-407	LOAD_GLOBAL       'MovieCamera'
-410	LOAD_ATTR         'chooseSquirtShot'
-413	LOAD_FAST         'squirts'
-416	LOAD_FAST         'suitSquirtsDict'
-
-419	LOAD_FAST         'camDuration'
-422	CALL_FUNCTION_3   None
-425	STORE_FAST        'camTrack'
-
-428	LOAD_FAST         'mtrack'
-431	LOAD_FAST         'camTrack'
-434	BUILD_TUPLE_2     None
-437	RETURN_VALUE      None
-
-Syntax error at or near `JUMP_BACK' token at offset 177
-
