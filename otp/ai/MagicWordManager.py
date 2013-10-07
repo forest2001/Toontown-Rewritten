@@ -717,7 +717,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         return None
 
     def showfont(self, fontname):
-        fontname = string.lower(fontname.strip())
+        fontname = fontname.lower().strip()
         font = self.getFontByName(fontname)
         if font == None:
             self.setMagicWordResponse('Unknown font: %s' % fontname)
@@ -844,7 +844,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         lowerName = name.lower()
         for av in Avatar.Avatar.ActiveAvatars:
-            if isinstance(av, self.GameAvatarClass) and string.lower(av.getName(.strip())) == lowerName:
+            if isinstance(av, self.GameAvatarClass) and av.getName().lower().strip() == lowerName:
                 return av.doId
 
         try:
