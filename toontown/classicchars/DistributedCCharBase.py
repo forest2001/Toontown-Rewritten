@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from otp.avatar import Avatar
-from libotp import CFQuicktalker
 from toontown.char import CharDNA
 from toontown.char import DistributedChar
 from direct.directnotify import DirectNotifyGlobal
