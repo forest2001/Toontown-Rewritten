@@ -26,18 +26,12 @@ from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import Avatar
 from otp.avatar.DistributedPlayer import DistributedPlayer
 from otp.login import TTAccount
-from otp.login import LoginTTSpecificDevAccount
-from otp.login import AccountServerConstants
 from otp.login.CreateAccountScreen import CreateAccountScreen
 from otp.login import LoginScreen
 from otp.otpgui import OTPDialog
 from otp.avatar import DistributedAvatar
 from otp.otpbase import OTPLocalizer
-from otp.login import LoginGSAccount
-from otp.login import LoginGoAccount
-from otp.login.LoginWebPlayTokenAccount import LoginWebPlayTokenAccount
-from otp.login.LoginDISLTokenAccount import LoginDISLTokenAccount
-from otp.login import LoginTTAccount
+from otp.login import LoginTTRAccount
 from otp.login import HTTPUtil
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLauncherGlobals
@@ -201,26 +195,8 @@ class OTPClientRepository(ClientRepositoryBase):
 
         self.accountOldAuth = config.GetBool('%s-account-old-auth' % game.name,
                                              self.accountOldAuth)
-        self.useNewTTDevLogin = base.config.GetBool('use-tt-specific-dev-login', False)
 
-        if self.useNewTTDevLogin:
-            self.loginInterface = LoginTTSpecificDevAccount.LoginTTSpecificDevAccount(self)
-            self.notify.info('loginInterface: LoginTTSpecificDevAccount')
-        elif self.accountOldAuth:
-            self.loginInterface = LoginGSAccount.LoginGSAccount(self)
-            self.notify.info('loginInterface: LoginGSAccount')
-        elif self.blue:
-            self.loginInterface = LoginGoAccount.LoginGoAccount(self)
-            self.notify.info('loginInterface: LoginGoAccount')
-        elif self.playToken:
-            self.loginInterface = LoginWebPlayTokenAccount(self)
-            self.notify.info('loginInterface: LoginWebPlayTokenAccount')
-        elif self.DISLToken:
-            self.loginInterface = LoginDISLTokenAccount(self)
-            self.notify.info('loginInterface: LoginDISLTokenAccount')
-        else:
-            self.loginInterface = LoginTTAccount.LoginTTAccount(self)
-            self.notify.info('loginInterface: LoginTTAccount')
+        self.loginInterface = LoginTTRAccount.LoginTTRAccount(self)
 
 
         self.secretChatAllowed = base.config.GetBool('allow-secret-chat', 0)
@@ -557,13 +533,6 @@ class OTPClientRepository(ClientRepositoryBase):
         self.gotoFirstScreen()
 
     def gotoFirstScreen(self):
-        try:
-            self.accountServerConstants = AccountServerConstants.AccountServerConstants(self)
-        except TTAccount.TTAccountException, e:
-            self.notify.debug(str(e))
-            self.loginFSM.request('failedToGetServerConstants', [e])
-            return
-
         self.startReaderPollTask()
         self.startHeartbeat()
         newInstall = launcher.getIsNewInstallation()
@@ -697,7 +666,6 @@ class OTPClientRepository(ClientRepositoryBase):
     def enterFailedToGetServerConstants(self, e):
         self.handler = self.handleMessageType
         messenger.send('connectionIssue')
-        url = AccountServerConstants.AccountServerConstants.getServerURL()
         statusCode = 0
         if isinstance(e, HTTPUtil.ConnectionError):
             statusCode = e.statusCode
