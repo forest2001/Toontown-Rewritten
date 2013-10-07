@@ -1,0 +1,9 @@
+FNoQuitButton=256
+CFPageButton=16
+CFQuicktalker=4
+CFQuitButton=32
+CFReversed=64
+CFSndOpenchat=128
+CFSpeech=1
+CFThought=2
+CFTimeout=8
