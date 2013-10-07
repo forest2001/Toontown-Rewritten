@@ -785,9 +785,6 @@ class DistributedCannon(DistributedObject.DistributedObject):
         if not self.toonHead:
             return Task.done
         flightResults = self.__calcFlightResults(avId, launchTime)
-        if not isClient():
-            print 'EXECWARNING DistributedCannon: %s' % flightResults
-            printStack()
         for key in flightResults:
             exec "%s = flightResults['%s']" % (key, key)
 

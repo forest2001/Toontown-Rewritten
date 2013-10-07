@@ -103,15 +103,9 @@ class ChatInputNormal(DirectObject.DirectObject):
             exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
             self.importExecNamespace()
         try:
-            if not isClient():
-                print 'EXECWARNING ChatInputNormal eval: %s' % message
-                printStack()
             return str(eval(message, globals(), ChatInputNormal.ExecNamespace))
         except SyntaxError:
             try:
-                if not isClient():
-                    print 'EXECWARNING ChatInputNormal exec: %s' % message
-                    printStack()
                 exec message in globals(), ChatInputNormal.ExecNamespace
                 return 'ok'
             except:

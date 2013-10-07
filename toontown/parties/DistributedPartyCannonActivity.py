@@ -263,9 +263,6 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         if self.isLocalToonId(toonId):
             self.inWater = 0
             flightResults = self.__calcFlightResults(cannon, toonId, launchTime)
-            if not isClient():
-                print 'EXECWARNING DistributedPartyCannonActivity: %s' % flightResults
-                printStack()
             for key in flightResults:
                 exec "%s = flightResults['%s']" % (key, key)
 

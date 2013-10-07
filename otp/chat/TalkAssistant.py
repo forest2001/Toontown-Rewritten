@@ -252,15 +252,9 @@ class TalkAssistant(DirectObject.DirectObject):
             exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
             self.importExecNamespace()
         try:
-            if not isClient():
-                print 'EXECWARNING TalkAssistant eval: %s' % message
-                printStack()
             return str(eval(message, globals(), TalkAssistant.ExecNamespace))
         except SyntaxError:
             try:
-                if not isClient():
-                    print 'EXECWARNING TalkAssistant exec: %s' % message
-                    printStack()
                 exec message in globals(), TalkAssistant.ExecNamespace
                 return 'ok'
             except:
