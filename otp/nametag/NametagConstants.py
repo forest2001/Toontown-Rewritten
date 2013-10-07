@@ -1,4 +1,4 @@
-FNoQuitButton=256
+CFNoQuitButton=256
 CFPageButton=16
 CFQuicktalker=4
 CFQuitButton=32
