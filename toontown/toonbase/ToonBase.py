@@ -163,10 +163,6 @@ class ToonBase(OTPBase.OTPBase):
     def disableShowbaseMouse(self):
         self.useDrive()
         self.disableMouse()
-        if self.mouseInterface:
-            self.mouseInterface.reparentTo(self.dataUnused)
-        if base.mouse2cam:
-            self.mouse2cam.reparentTo(self.dataUnused)
 
     def __walking(self, pressed):
         self.walking = pressed
