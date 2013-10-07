@@ -208,7 +208,7 @@ class TalkAssistant(DirectObject.DirectObject):
             return 0
         elif len(message) == 0:
             return 0
-        elif string.find(message, ThoughtPrefix, 0, len(ThoughtPrefix)) >= 0:
+        elif message.find(ThoughtPrefix, 0, len(ThoughtPrefix)) >= 0:
             return 1
         else:
             return 0

@@ -13,7 +13,6 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.toontowngui import TTDialog
 import re
-import string
 from toontown.toonbase import TTLocalizer
 import NameGenerator
 import random
@@ -537,7 +536,7 @@ class NameShop(StateData.StateData):
 
         def match(npcName, name = name):
             name = TextEncoder().encodeWtext(name)
-            name = string.strip(name)
+            name = name.strip()
             return TextEncoder.upper(npcName) == TextEncoder.upper(name)
 
         for npcId in NPCToons.NPCToonDict.keys():
