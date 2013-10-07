@@ -3,7 +3,6 @@ from direct.showbase import GarbageReport, ContainerReport, MessengerLeakDetecto
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.InputStateGlobal import inputState
-from direct.showbase.ObjectCount import ObjectCount
 from direct.task import Task
 from direct.task.TaskProfiler import TaskProfiler
 from otp.avatar import Avatar
@@ -327,11 +326,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 self.baselineObjReport = report
             self.setMagicWordResponse('objects logged')
         elif wordIs('~objectcount'):
-
-            def handleObjectCountDone(objectCount):
-                self.setMagicWordResponse('object count logged')
-
-            oc = ObjectCount('~objectcount', doneCallback=handleObjectCountDone)
+            self.setMagicWordResponse('not supported')
         elif wordIs('~objecthg'):
             import gc
             objs = gc.get_objects()
