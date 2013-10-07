@@ -1,6 +1,4 @@
 from pandac.PandaModules import *
-from libotp import Nametag, NametagGroup
-from libotp import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from direct.actor.Actor import Actor
@@ -40,12 +38,13 @@ class Avatar(Actor, ShadowCaster):
         self.avatarType = ''
         self.nametagNodePath = None
         self.__nameVisible = 1
-        self.nametag = NametagGroup()
-        self.nametag.setAvatar(self)
-        self.nametag.setFont(OTPGlobals.getInterfaceFont())
-        self.nametag2dContents = Nametag.CName | Nametag.CSpeech
-        self.nametag2dDist = Nametag.CName | Nametag.CSpeech
-        self.nametag2dNormalContents = Nametag.CName | Nametag.CSpeech
+        # TODO: Nametags were part of libotp, which we cannot use.
+        self.nametag = self.attachNewNode('nametag')
+        #self.nametag.setAvatar(self)
+        #self.nametag.setFont(OTPGlobals.getInterfaceFont())
+        self.nametag2dContents = 0#Nametag.CName | Nametag.CSpeech
+        self.nametag2dDist = 0#Nametag.CName | Nametag.CSpeech
+        self.nametag2dNormalContents = 0#Nametag.CName | Nametag.CSpeech
         self.nametag3d = self.attachNewNode('nametag3d')
         self.nametag3d.setTag('cam', 'nametag')
         self.nametag3d.setLightOff()
