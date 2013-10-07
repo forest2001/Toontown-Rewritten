@@ -1,6 +1,5 @@
 from pandac.PandaModules import *
-# TODO:
-#from otp.margins.WhisperPopup import WhisperPopup
+from otp.margins.WhisperPopup import WhisperPopup
 from otp.nametag.NametagConstants import CFQuicktalker, CFPageButton, CFQuitButton, CFSpeech, CFThought, CFTimeout
 from otp.chat import ChatGarbler
 import string
