@@ -10,6 +10,7 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.nametag.ChatBalloon import ChatBalloon
 from otp.nametag import NametagGlobals
+from otp.margins.MarginManager import MarginManager
 import sys
 import os
 import math
