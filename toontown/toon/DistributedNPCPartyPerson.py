@@ -5,6 +5,7 @@ from toontown.toonbase import TTLocalizer
 from direct.task.Task import Task
 from direct.distributed import ClockDelta
 from pandac.PandaModules import Point3
+from otp.nametag.NametagGlobals import CFSpeech, CFTimeout
 from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPLocalizer
 from toontown.parties import PartyGlobals
@@ -109,7 +110,7 @@ class DistributedNPCPartyPerson(DistributedNPCToonBase):
                 if self.askGui:
                     self.askGui.hide()
                     self.ignore(self.planPartyQuestionGuiDoneEvent)
-            self.setChatAbsolute(TTLocalizer.STOREOWNER_TOOKTOOLONG)
+            self.setChatAbsolute(TTLocalizer.STOREOWNER_TOOKTOOLONG, CFSpeech | CFTimeout)
             self.resetPartyPerson()
         elif mode == NPCToons.PARTY_MOVIE_START:
             self.av = base.cr.doId2do.get(avId)
@@ -124,10 +125,10 @@ class DistributedNPCPartyPerson(DistributedNPCToonBase):
                 camera.lerpPosHpr(-5, 9, base.localAvatar.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
                 taskMgr.doMethodLater(1.0, self.popupAskGUI, self.uniqueName('popupAskGUI'))
             else:
-                self.setChatAbsolute(TTLocalizer.PartyDoYouWantToPlan)
+                self.setChatAbsolute(TTLocalizer.PartyDoYouWantToPlan, CFSpeech | CFTimeout)
         elif mode == NPCToons.PARTY_MOVIE_COMPLETE:
             chatStr = TTLocalizer.PartyPlannerOnYourWay
-            self.setChatAbsolute(chatStr)
+            self.setChatAbsolute(chatStr, CFSpeech | CFTimeout)
             self.resetPartyPerson()
             if self.isInteractingWithLocalToon:
                 base.localAvatar.aboutToPlanParty = True

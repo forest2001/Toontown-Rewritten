@@ -1,6 +1,8 @@
 import math
 import random
 from pandac.PandaModules import VBase3, CollisionPlane, CollisionNode, CollisionSphere, CollisionTube, NodePath, Plane, Vec3, Vec2, Point3, BitMask32, CollisionHandlerEvent, TextureStage, VBase4, BoundingSphere
+from otp.nametag.NametagConstants import CFSpeech
+#from otp.nametag.NametagGroup import NametagGroup # TODO -- NAMETAGTODO
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, LerpHprInterval, Parallel, LerpPosInterval, Track, ActorInterval, ParallelEndTogether, LerpFunctionInterval, LerpScaleInterval, LerpPosHprInterval, SoundInterval
 from direct.task import Task
 from direct.fsm import FSM
@@ -27,7 +29,6 @@ from toontown.suit import SuitDNA
 from toontown.effects import DustCloud
 OneBossCog = None
 TTL = TTLocalizer
-CFSpeech = None # TODO: NAMETAGTODO
 
 class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBossbotBoss')
@@ -193,8 +194,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         npc = Toon.Toon()
         npc.setName(TTLocalizer.BossbotResistanceToonName)
         npc.setPickable(0)
-        # TODO: NAMETAGTODO
-        #npc.setPlayerType(NametagGroup.CCNonPlayer)
+        npc.setPlayerType(NametagGroup.CCNonPlayer)
         dna = ToonDNA.ToonDNA()
         dna.newToonRandom(11237, 'm', 1)
         dna.head = 'sls'

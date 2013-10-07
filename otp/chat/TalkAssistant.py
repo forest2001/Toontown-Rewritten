@@ -11,6 +11,7 @@ from otp.chat.TalkHandle import TalkHandle
 import time
 from otp.chat.TalkGlobals import *
 from otp.chat.ChatGlobals import *
+from otp.nametag.NametagConstants import CFSpeech, CFTimeout, CFThought
 ThoughtPrefix = '.'
 
 class TalkAssistant(DirectObject.DirectObject):
@@ -615,10 +616,9 @@ class TalkAssistant(DirectObject.DirectObject):
             messenger.send('magicWord', [message])
             self.receiveDeveloperMessage(message)
         else:
-            #chatFlags = CFSpeech | CFTimeout
-            #if self.isThought(message):
-            #    chatFlags = CFThought
-            chatFlags = 0
+            chatFlags = CFSpeech | CFTimeout
+            if self.isThought(message):
+                chatFlags = CFThought
             base.localAvatar.sendUpdate('setTalk', [0,
              0,
              '',
