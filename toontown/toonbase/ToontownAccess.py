@@ -1,10 +1,8 @@
-from pandac.PandaModules import listProcessModules
 from direct.task import Task
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 
 class ToontownAccess:
-
     def __init__(self):
         self.startupModules = []
 
@@ -28,11 +26,10 @@ class ToontownAccess:
         return task.again
 
     def getModuleList(self):
-        moduleString = listProcessModules()
-        moduleList = []
-        if moduleString:
-            moduleList = moduleString.split(',')
-        return moduleList
+        # TODO: This funciton is supposed to return a list of all modules that
+        # have been linked into the process at runtime. It is only needed for
+        # hack detect.
+        return []
 
     def sendUpdate(self, fieldName, args = [], sendToId = None):
         if base.cr and hasattr(base, 'localAvatar'):
