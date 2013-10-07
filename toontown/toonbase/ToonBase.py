@@ -9,6 +9,7 @@ from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.nametag.ChatBalloon import ChatBalloon
+from otp.nametag import NametagGlobals
 import sys
 import os
 import math
