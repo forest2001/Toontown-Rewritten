@@ -5,7 +5,7 @@ from toontown.toonbase import TTLocalizer
 from direct.task.Task import Task
 from direct.distributed import ClockDelta
 from pandac.PandaModules import Point3
-from otp.nametag.NametagGlobals import CFSpeech, CFTimeout
+from otp.nametag.NametagConstants import CFSpeech, CFTimeout
 from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPLocalizer
 from toontown.parties import PartyGlobals
