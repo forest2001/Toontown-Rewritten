@@ -197,8 +197,6 @@ class OTPClientRepository(ClientRepositoryBase):
             self.http = HTTPClient()
 
 
-        self.allocateDcFile()
-
         self.accountOldAuth = config.GetBool('account-old-auth', 0)
 
         self.accountOldAuth = config.GetBool('%s-account-old-auth' % game.name,
@@ -1866,12 +1864,6 @@ class OTPClientRepository(ClientRepositoryBase):
             fieldId = dclass.getFieldByName(fieldName).getNumber()
             self.queryObjectFieldId(doId, fieldId, context)
         return
-
-    def allocateDcFile(self):
-        dcName = 'Shard %s cannot be found.'
-        hash = HashVal()
-        hash.hashString(dcName)
-        self.http.setClientCertificatePassphrase(hash.asHex())
 
     def lostConnection(self):
         ClientRepositoryBase.lostConnection(self)
