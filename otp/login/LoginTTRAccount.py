@@ -16,6 +16,9 @@ class LoginTTRAccount(LoginBase.LoginBase):
     def supportsRelogin(self):
         return 0
 
+    def authorize(self, username, password):
+        return 0 # No error!
+
     def sendLoginMsg(self):
         cr = self.cr
         datagram = PyDatagram()
