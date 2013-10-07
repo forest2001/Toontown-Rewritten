@@ -534,7 +534,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def gotoFirstScreen(self):
         self.startReaderPollTask()
-        self.startHeartbeat()
+        #self.startHeartbeat()
         newInstall = launcher.getIsNewInstallation()
         newInstall = base.config.GetBool('new-installation', newInstall)
         if newInstall:
