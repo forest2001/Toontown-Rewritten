@@ -21,13 +21,6 @@ class ToonBase(OTPBase.OTPBase):
 
     def __init__(self):
         OTPBase.OTPBase.__init__(self)
-        if not self.isMainWindowOpen():
-            try:
-                launcher.setPandaErrorCode(7)
-            except:
-                pass
-
-            sys.exit(1)
         self.disableShowbaseMouse()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
         self.toonChatSounds = self.config.GetBool('toon-chat-sounds', 1)
