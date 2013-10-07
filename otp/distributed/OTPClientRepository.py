@@ -41,6 +41,10 @@ from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
 from PotentialAvatar import PotentialAvatar
 
+# TODO: Get rid of this once the def is in direct...
+CLIENT_HELLO = 1
+CLIENT_HELLO_RESP = 2
+
 class OTPClientRepository(ClientRepositoryBase):
     notify = directNotify.newCategory('OTPClientRepository')
     avatarLimit = 6
@@ -266,6 +270,7 @@ class OTPClientRepository(ClientRepositoryBase):
             State('connect',
                   self.enterConnect,
                   self.exitConnect, [
+                      'noConnection',
                       'login',
                       'failedToConnect',
                       'failedToGetServerConstants']),
@@ -502,8 +507,21 @@ class OTPClientRepository(ClientRepositoryBase):
         self.connectingBox = dialogClass(message=OTPLocalizer.CRConnecting)
         self.connectingBox.show()
         self.renderFrame()
-        self.handler = self.handleMessageType
-        self.connect(self.serverList, successCallback=self._handleConnected, failureCallback=self.failedToConnect)
+        self.handler = self.handleConnecting
+        self.connect(self.serverList, successCallback=self._sendHello, failureCallback=self.failedToConnect)
+
+    def _sendHello(self):
+        datagram = PyDatagram()
+        datagram.addUint16(CLIENT_HELLO)
+        datagram.addUint32(self.hashVal)
+        datagram.addString(self.serverVersion)
+        self.send(datagram)
+
+    def handleConnecting(self, msgtype, di):
+        if msgtype == CLIENT_HELLO_RESP:
+            self._handleConnected()
+        else:
+            self.handleMessageType(msgtype, di)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def failedToConnect(self, statusCode, statusString):

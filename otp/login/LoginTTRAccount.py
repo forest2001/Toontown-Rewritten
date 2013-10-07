@@ -4,9 +4,6 @@ from direct.directnotify import DirectNotifyGlobal
 import LoginBase
 from direct.distributed.PyDatagram import PyDatagram
 
-# TODO: Get rid of this once the def is in direct...
-CLIENT_HELLO = 1
-
 class LoginTTRAccount(LoginBase.LoginBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('LoginTTRAccount')
 
@@ -21,11 +18,7 @@ class LoginTTRAccount(LoginBase.LoginBase):
 
     def sendLoginMsg(self):
         cr = self.cr
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_HELLO)
-        datagram.addUint32(cr.hashVal)
-        datagram.addString(cr.serverVersion)
-        cr.send(datagram)
+        # TODO
 
     def resendPlayToken(self):
         self.notify.error('Cannot resend playtoken!')
