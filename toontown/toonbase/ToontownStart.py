@@ -1,4 +1,10 @@
+from pandac.PandaModules import *
 import __builtin__
+
+if __debug__:
+    # __debug__ is only 1 in dev builds; Mirai's builder will set it to 0
+    # (and it will, in fact, remove entire if __debug__: sections)
+    loadPrcFile('config/dev.prc')
 
 class game:
     name = 'toontown'
@@ -26,7 +32,6 @@ while not launcher.getGame2Done():
 
 print 'ToontownStart: Game2 is finished.'
 print 'ToontownStart: Starting the game.'
-from pandac.PandaModules import *
 if launcher.isDummy():
     http = HTTPClient()
 else:
