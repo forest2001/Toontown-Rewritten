@@ -3,7 +3,7 @@ import string
 import os
 import sys
 import datetime
-from pandac.PandaModules import loadPrcFileData, Settings, WindowProperties
+from pandac.PandaModules import loadPrcFileData, WindowProperties
 from otp.otpgui import OTPDialog
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPRender
@@ -21,6 +21,8 @@ class DisplayOptions:
         self.loadFromSettings()
 
     def loadFromSettings(self):
+        self.notify.info('TODO: This needs to load from the new settings file!')
+        return
         Settings.readSettings()
         mode = not Settings.getWindowedMode()
         music = Settings.getMusic()

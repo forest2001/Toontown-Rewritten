@@ -20,31 +20,6 @@ class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):
-        if not config.GetInt('ignore-user-options', 0):
-            Settings.readSettings()
-            mode = not Settings.getWindowedMode()
-            music = Settings.getMusic()
-            sfx = Settings.getSfx()
-            toonChatSounds = Settings.getToonChatSounds()
-            musicVol = Settings.getMusicVolume()
-            sfxVol = Settings.getSfxVolume()
-            resList = [(640, 480),
-             (800, 600),
-             (1024, 768),
-             (1280, 1024),
-             (1600, 1200)]
-            res = resList[Settings.getResolution()]
-            if mode == None:
-                mode = 1
-            if res == None:
-                res = (800, 600)
-            loadPrcFileData('toonBase Settings Window Res', 'win-size %s %s' % (res[0], res[1]))
-            loadPrcFileData('toonBase Settings Window FullScreen', 'fullscreen %s' % mode)
-            loadPrcFileData('toonBase Settings Music Active', 'audio-music-active %s' % music)
-            loadPrcFileData('toonBase Settings Sound Active', 'audio-sfx-active %s' % sfx)
-            loadPrcFileData('toonBase Settings Music Volume', 'audio-master-music-volume %s' % musicVol)
-            loadPrcFileData('toonBase Settings Sfx Volume', 'audio-master-sfx-volume %s' % sfxVol)
-            loadPrcFileData('toonBase Settings Toon Chat Sounds', 'toon-chat-sounds %s' % toonChatSounds)
         OTPBase.OTPBase.__init__(self)
         if not self.isMainWindowOpen():
             try:
