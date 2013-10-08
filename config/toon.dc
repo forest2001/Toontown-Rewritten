@@ -206,6 +206,7 @@ from toontown.racing import DistributedLeaderBoard/AI
 from toontown.racing import DistributedGag/AI
 from toontown.racing import DistributedProjectile/AI
 from toontown.racing.DistributedStartingBlock/AI import DistributedViewingBlock/AI
+from toontown.uberdog.ClientServicesManager/UD import ClientServicesManager/UD
 from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliveryManager/AI/UD
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
 from toontown.suit import DistributedLawbotBoss/AI
@@ -3204,6 +3205,11 @@ dclass DistributedPartyManager : DistributedObject {
 
 dclass DistributedObjectGlobal : DistributedObject {
 };
+
+dclass ClientServicesManager : DistributedObjectGlobal {
+  login(string cookie) clsend;
+  acceptLogin();
+}
 
 dclass RATManager : DistributedObjectGlobal {
 };

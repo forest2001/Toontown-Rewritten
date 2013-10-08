@@ -449,7 +449,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
 
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
-        #self.csm = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
+        self.csm = None # To be set by subclass.
 
     def startLeakDetector(self):
         if hasattr(self, 'leakDetector'):
@@ -564,7 +564,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.sendSetAvatarIdMsg(0)
         self.loginDoneEvent = 'loginDone'
         self.accept(self.loginDoneEvent, self.__handleLoginDone)
-        #self.csm.performLogin(self.loginDoneEvent)
+        self.csm.performLogin(self.loginDoneEvent)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def __handleLoginDone(self, doneStatus):

@@ -11,6 +11,10 @@ uberdogs:
       id: 4688
       anonymous: false
 
+    - class: ClientServicesManager
+      id: 4665
+      anonymous: true
+
     - class: FriendManager
       id: 4501
       anonymous: false
