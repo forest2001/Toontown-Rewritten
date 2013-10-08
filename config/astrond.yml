@@ -11,6 +11,30 @@ uberdogs:
       id: 4688
       anonymous: false
 
+    - class: FriendManager
+      id: 4501
+      anonymous: false
+
+    - class: AvatarFriendsManager
+      id: 4686
+      anonymous: false
+
+    - class: PlayerFriendsManager
+      id: 4687
+      anonymous: false
+
+    - class: TTSpeedchatRelay
+      id: 4712
+      anonymous: false
+
+    - class: DistributedDeliveryManager
+      id: 4683
+      anonymous: false
+
+    - class: TTCodeRedemptionMgr
+      id: 4695
+      anonymous: false
+
 roles:
     - type: clientagent
       bind: 127.0.0.1:7198
