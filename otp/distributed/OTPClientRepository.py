@@ -565,6 +565,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.loginDoneEvent = 'loginDone'
         self.accept(self.loginDoneEvent, self.__handleLoginDone)
         self.csm.performLogin(self.loginDoneEvent)
+        self.waitForDatabaseTimeout(requestName='WaitOnCSMLoginResponse')
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def __handleLoginDone(self, doneStatus):
@@ -590,6 +591,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitLogin(self):
+        self.cleanupWaitingForDatabase()
         self.ignore(self.loginDoneEvent)
         del self.loginDoneEvent
         self.handler = None
