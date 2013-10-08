@@ -27,7 +27,6 @@ from otp.avatar import Avatar
 from otp.avatar.DistributedPlayer import DistributedPlayer
 from otp.login import TTAccount
 from otp.login.CreateAccountScreen import CreateAccountScreen
-from otp.login import LoginScreen
 from otp.otpgui import OTPDialog
 from otp.avatar import DistributedAvatar
 from otp.otpbase import OTPLocalizer
@@ -441,7 +440,6 @@ class OTPClientRepository(ClientRepositoryBase):
             'gameOff', 'gameOff')
         self.loginFSM.getStateNamed('playingGame').addChild(self.gameFSM)
         self.loginFSM.enterInitialState()
-        self.loginScreen = None
         self.music = None
         self.gameDoneEvent = 'playGameDone'
         self.playGame = playGame(self.gameFSM, self.gameDoneEvent)
@@ -449,7 +447,9 @@ class OTPClientRepository(ClientRepositoryBase):
         self.uberZoneInterest = None
         self.wantSwitchboard = config.GetBool('want-switchboard', 0)
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
+
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
+        #self.csm = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
 
     def startLeakDetector(self):
         if hasattr(self, 'leakDetector'):
@@ -563,10 +563,8 @@ class OTPClientRepository(ClientRepositoryBase):
     def enterLogin(self):
         self.sendSetAvatarIdMsg(0)
         self.loginDoneEvent = 'loginDone'
-        self.loginScreen = LoginScreen.LoginScreen(self, self.loginDoneEvent)
         self.accept(self.loginDoneEvent, self.__handleLoginDone)
-        self.loginScreen.load()
-        self.loginScreen.enter()
+        #self.csm.performLogin(self.loginDoneEvent)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def __handleLoginDone(self, doneStatus):
@@ -588,15 +586,10 @@ class OTPClientRepository(ClientRepositoryBase):
         elif mode == 'failure':
             self.loginFSM.request('failedToConnect', [-1, '?'])
         else:
-            self.notify.error('Invalid doneStatus mode from loginScreen: ' + str(mode))
+            self.notify.error('Invalid doneStatus mode from ClientServicesManager: ' + str(mode))
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitLogin(self):
-        if self.loginScreen:
-            self.loginScreen.exit()
-            self.loginScreen.unload()
-            self.loginScreen = None
-            self.renderFrame()
         self.ignore(self.loginDoneEvent)
         del self.loginDoneEvent
         self.handler = None
