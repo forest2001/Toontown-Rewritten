@@ -1,0 +1,22 @@
+general:
+    dc_files:
+        - otp.dc
+        - toon.dc
+
+messagedirector:
+    bind: 127.0.0.1:7199
+
+uberdogs:
+    - class: CentralLogger
+      id: 4688
+      anonymous: false
+
+roles:
+    - type: clientagent
+      bind: 127.0.0.1:7198
+      channels:
+        min: 1000000000
+        max: 1009999999
+
+    - type: stateserver
+      control: 10000
