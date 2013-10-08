@@ -7,7 +7,7 @@ class ClientServicesManager(DistributedObjectGlobal):
     def performLogin(self, doneEvent):
         self.doneEvent = doneEvent
 
-        cookie = 'test'
+        cookie = self.cr.playToken or 'dev'
 
         self.notify.debug('Sending login cookie: ' + cookie)
         self.sendUpdate('login', [cookie])
