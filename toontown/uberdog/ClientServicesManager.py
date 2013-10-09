@@ -13,4 +13,4 @@ class ClientServicesManager(DistributedObjectGlobal):
         self.sendUpdate('login', [cookie])
 
     def acceptLogin(self):
-        messenger.send(self.doneEvent)
+        messenger.send(self.doneEvent, [{'mode': 'success'}])
