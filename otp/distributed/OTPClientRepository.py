@@ -219,7 +219,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
 
         self.freeTimeExpiresAt = -1
-        self.__isPaid = 0
+        self.__isPaid = 1
 
 
 
