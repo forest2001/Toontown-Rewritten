@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
-# TODO -- NAMETAGTODO:
-#from otp.nametag.Nametag import Nametag
-#from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
+from otp.nametag.NametagGroup import NametagGroup
 from otp.nametag.NametagConstants import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
