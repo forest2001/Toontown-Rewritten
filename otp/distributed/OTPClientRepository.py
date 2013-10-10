@@ -887,9 +887,8 @@ class OTPClientRepository(ClientRepositoryBase):
         self.__currentAvId = 0
         self.stopHeartbeat()
         self.stopReaderPollTask()
-        gameUsername = launcher.getValue('GAME_USERNAME', base.cr.userName)
         if self.bootedIndex != None and OTPLocalizer.CRBootedReasons.has_key(self.bootedIndex):
-            message = OTPLocalizer.CRBootedReasons[self.bootedIndex] % {'name': gameUsername}
+            message = OTPLocalizer.CRBootedReasons[self.bootedIndex] % {'name': '???'}
         elif self.bootedText != None:
             message = OTPLocalizer.CRBootedReasonUnknownCode % self.bootedIndex
         else:
@@ -1767,7 +1766,6 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def logAccountInfo(self):
         self.notify.info('*** ACCOUNT INFO ***')
-        self.notify.info('username: %s' % self.userName)
         if base.logPrivateInfo:
             if self.blue:
                 self.notify.info('paid: %s (blue)' % self.isPaid())
