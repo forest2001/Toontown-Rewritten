@@ -62,3 +62,8 @@ toon = None
 def setToon(t):
     global toon
     toon = t
+
+masterArrowsOn = 0
+def setMasterArrowsOn(mao):
+    global masterArrowsOn
+    masterArrowsOn = mao
