@@ -1081,7 +1081,6 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterWaitForSetAvatarResponse(self, potAv):
-        self.handler = self.handleWaitForSetAvatarResponse
         self.sendSetAvatarMsg(potAv)
         self.waitForDatabaseTimeout(requestName='WaitForSetAvatarResponse')
 
@@ -1100,32 +1099,15 @@ class OTPClientRepository(ClientRepositoryBase):
     def sendSetAvatarIdMsg(self, avId):
         if avId != self.__currentAvId:
             self.__currentAvId = avId
-            self.csm.d_setAvatar(avId)
+            self.csm.sendChooseAvatar(avId)
             if avId == 0:
                 self.stopPeriodTimer()
             else:
                 self.startPeriodTimer()
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleAvatarResponseMsg(self, di):
+    def handleAvatarResponseMsg(self, avatarId, di):
         pass
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleWaitForSetAvatarResponse(self, msgType, di):
-        if msgType == CLIENT_GET_AVATAR_DETAILS_RESP:
-            self.handleAvatarResponseMsg(di)
-        elif msgType == CLIENT_GET_PET_DETAILS_RESP:
-            self.handleAvatarResponseMsg(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_RESP:
-            self.handleGetFriendsList(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_EXTENDED_RESP:
-            self.handleGetFriendsListExtended(di)
-        elif msgType == CLIENT_FRIEND_ONLINE:
-            self.handleFriendOnline(di)
-        elif msgType == CLIENT_FRIEND_OFFLINE:
-            self.handleFriendOffline(di)
-        else:
-            self.handleMessageType(msgType, di)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterPlayingGame(self):

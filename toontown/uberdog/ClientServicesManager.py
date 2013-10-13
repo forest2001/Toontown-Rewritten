@@ -1,6 +1,7 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.distributed.PotentialAvatar import PotentialAvatar
+from pandac.PandaModules import *
 
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
@@ -29,3 +30,13 @@ class ClientServicesManager(DistributedObjectGlobal):
             avList.append(PotentialAvatar(avNum, names, avDNA, avPosition, aname))
 
         self.cr.handleAvatarsList(avList)
+
+
+    # --- AVATAR CHOICE ---
+    def sendChooseAvatar(self, avId):
+        self.sendUpdate('chooseAvatar', [avId])
+
+    def avatarResponse(self, avatarId, avDetails):
+        dg = Datagram(avDetails)
+        di = DatagramIterator(dg)
+        self.cr.handleAvatarResponseMsg(avatarId, di)

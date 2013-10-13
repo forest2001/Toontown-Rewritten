@@ -357,34 +357,28 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             del self.newPotAv
         return
 
-    def handleAvatarResponseMsg(self, di):
+    def handleAvatarResponseMsg(self, avatarId, di):
         self.cleanupWaitingForDatabase()
-        avatarId = di.getUint32()
-        returnCode = di.getUint8()
-        if returnCode == 0:
-            dclass = self.dclassesByName['DistributedToon']
-            NametagGlobals.setMasterArrowsOn(0)
-            loader.beginBulkLoad('localAvatarPlayGame', OTPLocalizer.CREnteringToontown, 400, 1, TTLocalizer.TIP_GENERAL)
-            localAvatar = LocalToon.LocalToon(self)
-            localAvatar.dclass = dclass
-            base.localAvatar = localAvatar
-            __builtins__['localAvatar'] = base.localAvatar
-            NametagGlobals.setToon(base.localAvatar)
-            localAvatar.doId = avatarId
-            self.localAvatarDoId = avatarId
-            parentId = None
-            zoneId = None
-            localAvatar.setLocation(parentId, zoneId)
-            localAvatar.generateInit()
-            localAvatar.generate()
-            localAvatar.updateAllRequiredFields(dclass, di)
-            self.doId2do[avatarId] = localAvatar
-            localAvatar.initInterface()
-            self.sendGetFriendsListRequest()
-            self.loginFSM.request('playingGame')
-        else:
-            self.notify.error('Bad avatar: return code %d' % returnCode)
-        return
+        dclass = self.dclassesByName['DistributedToon']
+        NametagGlobals.setMasterArrowsOn(0)
+        loader.beginBulkLoad('localAvatarPlayGame', OTPLocalizer.CREnteringToontown, 400, 1, TTLocalizer.TIP_GENERAL)
+        localAvatar = LocalToon.LocalToon(self)
+        localAvatar.dclass = dclass
+        base.localAvatar = localAvatar
+        __builtins__['localAvatar'] = base.localAvatar
+        NametagGlobals.setToon(base.localAvatar)
+        localAvatar.doId = avatarId
+        self.localAvatarDoId = avatarId
+        parentId = None
+        zoneId = None
+        localAvatar.setLocation(parentId, zoneId)
+        localAvatar.generateInit()
+        localAvatar.generate()
+        localAvatar.updateAllRequiredFields(dclass, di)
+        self.doId2do[avatarId] = localAvatar
+        localAvatar.initInterface()
+        self.sendGetFriendsListRequest()
+        self.loginFSM.request('playingGame')
 
     def getAvatarDetails(self, avatar, func, *args):
         pad = ScratchPad()

@@ -3220,6 +3220,9 @@ dclass ClientServicesManager : DistributedObjectGlobal {
 
   requestAvatars() clsend;
   setAvatars(PotentialToon[]);
+
+  chooseAvatar(uint32 avId) clsend;
+  avatarResponse(uint32 avId, blob avdata);
 };
 
 dclass RATManager : DistributedObjectGlobal {
