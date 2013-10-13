@@ -3206,10 +3206,21 @@ dclass DistributedPartyManager : DistributedObject {
 dclass DistributedObjectGlobal : DistributedObject {
 };
 
+struct PotentialToon {
+  uint32 avNum;
+  string avName;
+  string avDNA;
+  uint8 avPosition;
+  uint8 aname;
+};
+
 dclass ClientServicesManager : DistributedObjectGlobal {
   login(string cookie) clsend;
   acceptLogin();
-}
+
+  requestAvatars() clsend;
+  setAvatars(PotentialToon[]);
+};
 
 dclass RATManager : DistributedObjectGlobal {
 };
