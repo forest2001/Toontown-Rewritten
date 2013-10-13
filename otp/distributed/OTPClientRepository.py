@@ -38,7 +38,6 @@ from otp.uberdog import OtpAvatarManager
 from otp.distributed import OtpDoGlobals
 from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
-from PotentialAvatar import PotentialAvatar
 
 # TODO: Get rid of this once the def is in direct...
 CLIENT_HELLO = 1
@@ -966,12 +965,11 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterWaitForAvatarList(self):
-        self.handler = self.handleWaitForAvatarList
         self._requestAvatarList()
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def _requestAvatarList(self):
-        self.sendGetAvatarsMsg()
+        self.csm.requestAvatars()
         self.waitForDatabaseTimeout(requestName='WaitForAvatarList')
         self.acceptOnce(OtpAvatarManager.OtpAvatarManager.OnlineEvent, self._requestAvatarList)
 
@@ -988,68 +986,9 @@ class OTPClientRepository(ClientRepositoryBase):
         self.handler = None
         return
 
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleWaitForAvatarList(self, msgType, di):
-        if msgType == CLIENT_GET_AVATARS_RESP:
-            self.handleGetAvatarsRespMsg(di)
-        elif msgType == CLIENT_GET_AVATARS_RESP2:
-            pass
-        else:
-            self.handleMessageType(msgType, di)
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleGetAvatarsRespMsg(self, di):
-        returnCode = di.getUint8()
-        if returnCode == 0:
-            avatarTotal = di.getUint16()
-            avList = []
-            for i in range(0, avatarTotal):
-                avNum = di.getUint32()
-                avNames = ['',
-                 '',
-                 '',
-                 '']
-                avNames[0] = di.getString()
-                avNames[1] = di.getString()
-                avNames[2] = di.getString()
-                avNames[3] = di.getString()
-                avDNA = di.getString()
-                avPosition = di.getUint8()
-                aname = di.getUint8()
-                potAv = PotentialAvatar(avNum, avNames, avDNA, avPosition, aname)
-                avList.append(potAv)
-
-            self.avList = avList
-            self.loginFSM.request('chooseAvatar', [self.avList])
-        else:
-            self.notify.error('Bad avatar list return code: ' + str(returnCode))
-            self.loginFSM.request('shutdown')
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleGetAvatarsResp2Msg(self, di):
-        returnCode = di.getUint8()
-        if returnCode == 0:
-            avatarTotal = di.getUint16()
-            avList = []
-            for i in range(0, avatarTotal):
-                avNum = di.getUint32()
-                avNames = ['',
-                 '',
-                 '',
-                 '']
-                avNames[0] = di.getString()
-                avDNA = None
-                avPosition = di.getUint8()
-                aname = None
-                potAv = PotentialAvatar(avNum, avNames, avDNA, avPosition, aname)
-                avList.append(potAv)
-
-            self.avList = avList
-            self.loginFSM.request('chooseAvatar', [self.avList])
-        else:
-            self.notify.error('Bad avatar list return code: ' + str(returnCode))
-            self.loginFSM.request('shutdown')
-        return
+    def handleAvatarsList(self, avatars):
+        self.avList = avatars
+        self.loginFSM.request('chooseAvatar', [self.avList])
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterChooseAvatar(self, avList):
@@ -1161,10 +1100,7 @@ class OTPClientRepository(ClientRepositoryBase):
     def sendSetAvatarIdMsg(self, avId):
         if avId != self.__currentAvId:
             self.__currentAvId = avId
-            datagram = PyDatagram()
-            datagram.addUint16(CLIENT_SET_AVATAR)
-            datagram.addUint32(avId)
-            self.send(datagram)
+            self.csm.d_setAvatar(avId)
             if avId == 0:
                 self.stopPeriodTimer()
             else:
