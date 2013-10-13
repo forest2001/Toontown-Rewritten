@@ -31,4 +31,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.sendUpdateToChannel(self.air.getMsgSender(), 'setAvatars', [avs])
 
     def chooseAvatar(self, avId):
+        dg = PyDatagram()
+        dg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addChannel(avId)
+        self.air.send(dg)
+
         self.sendUpdateToChannel(self.air.getMsgSender(), 'avatarResponse', [avId, SHOCKLEY])
