@@ -11,7 +11,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         pdg = PyDatagram()
-        pdg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, 3110)
+        pdg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_STATE)
         pdg.addUint16(2)
         self.air.send(pdg)
 
