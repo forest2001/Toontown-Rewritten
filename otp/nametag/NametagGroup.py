@@ -38,3 +38,18 @@ class NametagGroup:
 
     def setColorCode(self, cc):
         pass
+
+    def setName(self, name):
+        pass
+
+    def setDisplayName(self, name):
+        pass
+
+    def setQtColor(self, color):
+        pass
+
+    def clearShadow(self):
+        pass
+
+    def manage(self, manager):
+        pass
