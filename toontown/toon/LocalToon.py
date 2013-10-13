@@ -162,8 +162,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             if not hasattr(base.cr, 'lastLoggedIn'):
                 base.cr.lastLoggedIn = self.cr.toontownTimeManager.convertStrToToontownTime('')
             self.setLastTimeReadNews(base.cr.lastLoggedIn)
-            self.acceptingNewFriends = Settings.getAcceptingNewFriends() and base.config.GetBool('accepting-new-friends-default', True)
-            self.acceptingNonFriendWhispers = Settings.getAcceptingNonFriendWhispers() and base.config.GetBool('accepting-non-friend-whispers-default', True)
+            # TODO: SETTINGSTODO:
+            self.acceptingNewFriends = True #Settings.getAcceptingNewFriends() and base.config.GetBool('accepting-new-friends-default', True)
+            self.acceptingNonFriendWhispers = True #Settings.getAcceptingNonFriendWhispers() and base.config.GetBool('accepting-non-friend-whispers-default', True)
             self.physControls.event.addAgainPattern('again%in')
             self.oldPos = None
             self.questMap = None
