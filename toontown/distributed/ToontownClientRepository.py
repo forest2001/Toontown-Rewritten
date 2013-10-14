@@ -809,7 +809,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.friendsListError = 0
         datagram = PyDatagram()
         datagram.addUint16(CLIENT_GET_FRIEND_LIST)
-        self.send(datagram)
+        #self.send(datagram)
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -925,6 +925,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             messenger.send('friendOffline', [doId])
         except:
             pass
+
+    def handleGenerateWithRequiredOtherOwner(self, di):
+        pass # Toontown does not make use of OwnerViews.
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase
