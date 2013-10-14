@@ -33,6 +33,12 @@ class NametagGroup:
     def getChatStomp(self):
         return 0
 
+    def getChat(self):
+        return ''
+
+    def getStompText(self):
+        return ''
+
     def getUniqueId(self):
         return 'foo'
 
