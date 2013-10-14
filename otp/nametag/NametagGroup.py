@@ -33,6 +33,9 @@ class NametagGroup:
     def getChatStomp(self):
         return 0
 
+    def getUniqueId(self):
+        return 'foo'
+
     def setActive(self, active):
         pass
 
