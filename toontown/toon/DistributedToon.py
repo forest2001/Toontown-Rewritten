@@ -9,6 +9,7 @@ from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
 from otp.chat import TalkAssistant
+from otp.nametag.NametagConstants import *
 import Toon
 from direct.task.Task import Task
 from direct.distributed import DistributedSmoothNode
