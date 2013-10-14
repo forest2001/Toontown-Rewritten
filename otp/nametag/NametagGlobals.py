@@ -67,3 +67,8 @@ masterArrowsOn = 0
 def setMasterArrowsOn(mao):
     global masterArrowsOn
     masterArrowsOn = mao
+
+masterNametagsActive = 0
+def setMasterNametagsActive(mna):
+    global masterNametagsActive
+    masterNametagsActive = mna

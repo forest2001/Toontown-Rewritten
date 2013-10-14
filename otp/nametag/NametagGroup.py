@@ -27,6 +27,12 @@ class NametagGroup:
     def getNameIcon(self):
         return self.icon
 
+    def getNumChatPages(self):
+        return 0
+
+    def getChatStomp(self):
+        return 0
+
     def setActive(self, active):
         pass
 
@@ -46,6 +52,9 @@ class NametagGroup:
         pass
 
     def setQtColor(self, color):
+        pass
+
+    def setChat(self, chatString, chatFlags):
         pass
 
     def clearShadow(self):
