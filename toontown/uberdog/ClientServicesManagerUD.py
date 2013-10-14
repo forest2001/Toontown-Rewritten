@@ -33,7 +33,26 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
     def chooseAvatar(self, avId):
         dg = PyDatagram()
         dg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
-        dg.addChannel(avId)
+        dg.addChannel((5<<32) | avId)
+        self.air.send(dg)
+
+        dg = PyDatagram()
+        dg.addServerHeader(avId, self.air.ourChannel, STATESERVER_OBJECT_DELETE_RAM)
+        dg.addUint32(avId)
+        self.air.send(dg)
+
+        dg = PyDatagram()
+        dg.addServerHeader(self.air.serverId, self.air.ourChannel, STATESERVER_OBJECT_GENERATE_WITH_REQUIRED)
+        dg.addUint32(0)
+        dg.addUint32(0)
+        dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
+        dg.addUint32(avId)
+        dg.appendData(SHOCKLEY)
+        self.air.send(dg)
+
+        dg = PyDatagram()
+        dg.addServerHeader(avId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
+        dg.addChannel((5<<32) | avId)
         self.air.send(dg)
 
         self.sendUpdateToChannel(self.air.getMsgSender(), 'avatarResponse', [avId, SHOCKLEY])
