@@ -4,6 +4,7 @@ from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from direct.distributed.AstronInternalRepository import AstronInternalRepository
 from direct.distributed.PyDatagram import *
 from otp.distributed.OtpDoGlobals import *
+from otp.ai.AIZoneData import *
 
 class ToontownAIRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
@@ -12,6 +13,8 @@ class ToontownAIRepository(AstronInternalRepository):
         AstronInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
 
         self.districtName = districtName
+
+        self.zoneDataStore = AIZoneDataStore()
 
         self.doLiveUpdates = False
 
@@ -43,6 +46,9 @@ class ToontownAIRepository(AstronInternalRepository):
 
     def decrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
+
+    def getZoneDataStore(self):
+        return self.zoneDataStore
 
     def createGlobals(self):
         """
