@@ -1,6 +1,7 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
+from otp.ai.TimeManagerAI import TimeManagerAI
 from direct.distributed.AstronInternalRepository import AstronInternalRepository
 from direct.distributed.PyDatagram import *
 from otp.distributed.OtpDoGlobals import *
@@ -50,6 +51,12 @@ class ToontownAIRepository(AstronInternalRepository):
     def getZoneDataStore(self):
         return self.zoneDataStore
 
+    def getAvatarIdFromSender(self):
+        return self.getMsgSender() & 0xFFFFFFFF
+
+    def getAccountIdFromSender(self):
+        return (self.getMsgSender()>>32) & 0xFFFFFFFF
+
     def createGlobals(self):
         """
         Create "global" objects, e.g. TimeManager et al.
@@ -57,6 +64,9 @@ class ToontownAIRepository(AstronInternalRepository):
         self.districtStats = ToontownDistrictStatsAI(self)
         self.districtStats.settoontownDistrictId(self.districtId)
         self.districtStats.generateWithRequired(2)
+
+        self.timeManager = TimeManagerAI(self)
+        self.timeManager.generateWithRequired(2)
 
         self.holidayManager = None
 

@@ -1,14 +1,16 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from direct.distributed.ClockDelta import globalClockDelta
+import time
 
 class TimeManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("TimeManagerAI")
 
-    def requestServerTime(self, todo0):
-        pass
-
-    def serverTime(self, todo0, todo1, todo2):
-        pass
+    def requestServerTime(self, context):
+        self.sendUpdateToAvatarId(self.air.getAvatarIdFromSender(),
+                                  'serverTime', [context,
+                                                 globalClockDelta.getRealNetworkTime(bits=32),
+                                                 int(time.time())])
 
     def setDisconnectReason(self, todo0):
         pass
@@ -36,7 +38,3 @@ class TimeManagerAI(DistributedObjectAI):
 
     def checkAvOnDistrict(self, todo0, todo1):
         pass
-
-    def checkAvOnDistrictResult(self, todo0, todo1, todo2):
-        pass
-

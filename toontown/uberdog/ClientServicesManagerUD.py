@@ -39,7 +39,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
     def chooseAvatar(self, avId):
         dg = PyDatagram()
         dg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
-        dg.addChannel((5<<32) | avId)
+        dg.addChannel((1<<32) | avId)
         self.air.send(dg)
 
         dg = PyDatagram()
@@ -58,7 +58,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         dg = PyDatagram()
         dg.addServerHeader(avId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
-        dg.addChannel((5<<32) | avId)
+        dg.addChannel((1<<32) | avId)
         self.air.send(dg)
 
         self.sendUpdateToChannel(self.air.getMsgSender(), 'avatarResponse', [avId, SHOCKLEY])
