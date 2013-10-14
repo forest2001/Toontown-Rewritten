@@ -1,5 +1,6 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
+from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from direct.distributed.AstronInternalRepository import AstronInternalRepository
 from direct.distributed.PyDatagram import *
 from otp.distributed.OtpDoGlobals import *
@@ -37,11 +38,21 @@ class ToontownAIRepository(AstronInternalRepository):
 
         self.distributedDistrict.b_setAvailable(1)
 
+    def incrementPopulation(self):
+        self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)
+
+    def decrementPopulation(self):
+        self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
+
     def createGlobals(self):
         """
         Create "global" objects, e.g. TimeManager et al.
         """
+        self.districtStats = ToontownDistrictStatsAI(self)
+        self.districtStats.settoontownDistrictId(self.districtId)
+        self.districtStats.generateWithRequired(2)
 
+        self.holidayManager = None
 
     def loadDNA(self):
         """
