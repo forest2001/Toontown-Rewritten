@@ -367,44 +367,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: CHAT: Speedchat Plus')
         messenger.send('wakeup')
-        if base.cr.productName in ['DisneyOnline-US', 'ES']:
-            if base.cr.whiteListChatEnabled:
-                self.fsm.request('normalChat')
-            elif not base.cr.isParentPasswordSet():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.cr.allowSecretChat():
-                self.fsm.request('noSecretChatAtAllAndNoWhitelist')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        elif base.cr.productName == 'Terra-DMC':
-            if not base.cr.allowSecretChat():
-                self.fsm.request('noSecretChatWarning')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        elif base.cr.productName in ['DisneyOnline-UK',
-         'DisneyOnline-AP',
-         'JP',
-         'BR',
-         'FR']:
-            if base.cr.whiteListChatEnabled:
-                self.fsm.request('normalChat')
-            elif not base.cr.isParentPasswordSet():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.cr.allowSecretChat():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        else:
-            print 'ChatManager: productName: %s not recognized' % base.cr.productName
+        self.fsm.request('normalChat')
 
     def __scButtonPressed(self):
         if base.config.GetBool('want-qa-regression', 0):
