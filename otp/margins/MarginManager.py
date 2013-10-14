@@ -6,3 +6,6 @@ class MarginManager(PandaNode):
 
     def addGridCell(self, a, b, c, d, e, f):
         pass
+
+    def setCellAvailable(self, cell, available):
+        pass

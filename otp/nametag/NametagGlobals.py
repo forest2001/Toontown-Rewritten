@@ -72,3 +72,21 @@ masterNametagsActive = 0
 def setMasterNametagsActive(mna):
     global masterNametagsActive
     masterNametagsActive = mna
+
+min2dAlpha = 0.0
+def setMin2dAlpha(m2a):
+    global min2dAlpha
+    min2dAlpha = m2a
+
+def getMin2dAlpha():
+    global min2dAlpha
+    return min2dAlpha
+
+max2dAlpha = 0.0
+def setMax2dAlpha(m2a):
+    global max2dAlpha
+    max2dAlpha = m2a
+
+def getMax2dAlpha():
+    global max2dAlpha
+    return max2dAlpha
