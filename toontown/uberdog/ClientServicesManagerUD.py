@@ -26,7 +26,13 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
               1,
               0]
 
-        avs = [av]
+        av2 = [124,
+              'Shockley',
+              't\x05\x01\x01\x01\x01\t\x01\t\x00\r\x1a\x00\x1a\x1a',
+              2,
+              0]
+
+        avs = [av, av2]
 
         self.sendUpdateToChannel(self.air.getMsgSender(), 'setAvatars', [avs])
 
