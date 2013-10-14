@@ -57,6 +57,9 @@ class ToontownAIRepository(AstronInternalRepository):
     def getAccountIdFromSender(self):
         return (self.getMsgSender()>>32) & 0xFFFFFFFF
 
+    def getAvatarExitEvent(self, avId):
+        return 'avatar_leaving-%d' % avId
+
     def createGlobals(self):
         """
         Create "global" objects, e.g. TimeManager et al.
