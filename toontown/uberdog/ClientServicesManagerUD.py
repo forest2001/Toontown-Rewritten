@@ -201,6 +201,13 @@ class LoginAccountFSM(OperationFSM):
         dg.addUint16(2) # ESTABLISHED state. BIG FAT SECURITY RISK!!!
         self.csm.air.send(dg)
 
+        # Update the last login timestamp:
+        self.csm.air.dbInterface.updateObject(
+            self.csm.air.dbId,
+            self.accountId,
+            self.csm.air.dclassesByName['AccountUD'],
+            {'LAST_LOGIN': time.ctime()})
+
         # We're done.
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
