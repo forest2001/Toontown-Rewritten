@@ -229,6 +229,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         dbtype = simbase.config.GetString('accountdb-type', 'local')
         if dbtype == 'local':
             self.accountDB = LocalAccountDB(self)
+        elif dbtype == 'remote':
+            self.accountDB = RemoteAccountDB(self)
         else:
             self.notify.error('Invalid account DB type configured: %s' % dbtype)
 
