@@ -126,8 +126,15 @@ class LoginAccountFSM(OperationFSM):
             self.demand('CreateAccount')
 
     def enterRetrieveAccount(self):
-        # TODO: When DB query code is operational.
-        self.account = {}
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.accountId,
+                                             self.__handleRetrieve)
+
+    def __handleRetrieve(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['AccountUD']:
+            self.demand('Kill', 'Your account object was not found in the database!')
+            return
+
+        self.account = fields
         self.demand('SetAccount')
 
     def enterCreateAccount(self):
