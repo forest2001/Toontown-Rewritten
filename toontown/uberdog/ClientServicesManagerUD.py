@@ -3,6 +3,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import *
 import anydbm
+import time
 
 class LocalAccountDB:
     def __init__(self, csm):
@@ -101,6 +102,7 @@ class OperationFSM(FSM):
 
 class LoginAccountFSM(OperationFSM):
     TARGET_CONNECTION = True
+    notify = directNotify.newCategory('LoginAccountFSM')
 
     def enterStart(self, cookie):
         self.cookie = cookie
@@ -129,9 +131,30 @@ class LoginAccountFSM(OperationFSM):
         self.demand('SetAccount')
 
     def enterCreateAccount(self):
-        # TODO: When DB query code is operational.
-        self.accountId = 100
-        self.account = {}
+        self.account = {'ACCOUNT_AV_SET': [0]*6,
+                        'pirateAvatars': [],
+                        'HOUSE_ID_SET': [0]*6,
+                        'ESTATE_ID': 0,
+                        'CREATED': time.ctime(),
+                        'LAST_LOGIN': time.ctime()}
+
+        self.csm.air.dbInterface.createObject(
+            self.csm.air.dbId,
+            self.csm.air.dclassesByName['AccountUD'],
+            self.account,
+            self.__handleCreate)
+
+    def __handleCreate(self, accountId):
+        if self.state != 'CreateAccount':
+            self.notify.warning('Received create account response outside of CreateAccount state.')
+            return
+
+        if not accountId:
+            self.notify.warning('Database failed to construct an account object!')
+            self.demand('Kill', 'Your account object could not be created in the game database.')
+            return
+
+        self.accountId = accountId
         self.demand('StoreAccountID')
 
     def enterStoreAccountID(self):

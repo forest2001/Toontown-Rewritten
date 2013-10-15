@@ -6,6 +6,7 @@ from otp.distributed.OtpDoGlobals import *
 
 class ToontownUberRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
+    dbId = 4003
 
     def __init__(self, baseChannel, serverId):
         AstronInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='UD')
