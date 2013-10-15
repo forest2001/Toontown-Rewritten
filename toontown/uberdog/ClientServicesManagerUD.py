@@ -44,7 +44,7 @@ class RemoteAccountDB:
         self.http.setVerifySsl(0) # Whatever OS certs my laptop trusts with panda doesn't include ours. whatever
 
     def lookup(self, cookie, callback):
-        response = self.__executeHttpRequest("https://www.toontownrewritten.com/api/gameserver/verify/%s" % cookie, cookie)
+        response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
         if (not response['status'] or not response['valid']): # status will be false if there's an hmac error, for example
             callback({'success': False,
                       'reason': response['banner']})
@@ -56,21 +56,21 @@ class RemoteAccountDB:
                       'accountId': response['user_id'],
                       'databaseId': gsUserId})
     def storeAccountID(self, databaseId, accountId, callback):
-        response = self.__executeHttpRequest("https://www.toontownrewritten.com/api/gameserver/associate_user/%s/with/%s" % (accountId, databaseId), str(accountId) + str(databaseId))
+        response = self.__executeHttpRequest("associate_user/%s/with/%s" % (accountId, databaseId), str(accountId) + str(databaseId))
         if (not response['status']):
-            self.csm.notify.info("Unable to set databaseId with account server! Message: %s" % response['banner'])
+            self.csm.notify.warning("Unable to set databaseId with account server! Message: %s" % response['banner'])
             callback(False)
         else:
             callback(True)
 
     def __executeHttpRequest(self, url, message):
         channel = self.http.makeChannel(True)
-        spec = DocumentSpec(url)
+        spec = DocumentSpec(simbase.config.GetString("account-server-endpoint", "https://www.toontownrewritten.com/api/gameserver/") + url)
         rf = Ramfile()
-        digest = hmac.new(simbase.config.GetString('account-server-secret', ''), message, hashlib.sha256)
+        digest = hmac.new(simbase.config.GetString('account-server-secret', 'dev'), message, hashlib.sha256)
         expiration = str((int(time()) * 1000) + 60000)
         digest.update(expiration)
-        channel.sendExtraHeader('User-agent', 'TTR CSM bot')
+        channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
         channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
         channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
         channel.getDocument(spec)

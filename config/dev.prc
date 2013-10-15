@@ -5,7 +5,7 @@ server-version dev
 dc-file config/toon.dc
 dc-file config/otp.dc
 
-account-server-secret oAUHbkPOZouv902blLPphuatbx90bk
+account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
 
 default-model-extension .bam
 
