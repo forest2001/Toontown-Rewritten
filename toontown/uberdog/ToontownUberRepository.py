@@ -17,6 +17,12 @@ class ToontownUberRepository(AstronInternalRepository):
 
         self.createGlobals()
 
+    def getAvatarIdFromSender(self):
+        return self.getMsgSender() & 0xFFFFFFFF
+
+    def getAccountIdFromSender(self):
+        return (self.getMsgSender()>>32) & 0xFFFFFFFF
+
     def createGlobals(self):
         """
         Create "global" objects.

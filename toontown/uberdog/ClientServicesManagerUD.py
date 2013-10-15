@@ -2,6 +2,8 @@ from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import *
+from toontown.toon.ToonDNA import ToonDNA
+from toontown.toonbase import TTLocalizer
 import anydbm
 import time
 
@@ -212,6 +214,97 @@ class LoginAccountFSM(OperationFSM):
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
 
+class CreateAvatarFSM(OperationFSM):
+    def enterStart(self, dna, index):
+        # Basic sanity-checking:
+        if index >= 6:
+            self.demand('Kill', 'Invalid index specified!')
+            return
+
+        if not ToonDNA().isValidNetString(dna):
+            self.demand('Kill', 'Invalid DNA specified!')
+            return
+
+        self.index = index
+        self.dna = dna
+
+        # Okay, we're good to go, let's query their account.
+        self.demand('RetrieveAccount')
+
+    def enterRetrieveAccount(self):
+        # self.target is the accountId, so:
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.target,
+                                             self.__handleRetrieve)
+
+    def __handleRetrieve(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['AccountUD']:
+            self.demand('Kill', 'Your account object was not found in the database!')
+            return
+
+        self.account = fields
+
+        self.avList = self.account['ACCOUNT_AV_SET']
+        # Sanitize; just in case avList is too long/short:
+        self.avList = self.avList[:6]
+        self.avList += [0] * (6-len(self.avList))
+
+        # Make sure the index is open:
+        if self.avList[self.index]:
+            self.demand('Kill', 'This avatar slot is already taken by another avatar!')
+            return
+
+        # Okay, there's space, let's create the avatar!
+        self.demand('CreateAvatar')
+
+    def enterCreateAvatar(self):
+        dna = ToonDNA()
+        dna.makeFromNetString(self.dna)
+        colorstring = TTLocalizer.NumToColor[dna.headColor]
+        animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
+        name = colorstring + ' ' + animaltype
+
+        toonFields = {
+            'setName': (name,),
+            'setDNAString': (self.dna,)
+        }
+
+        self.csm.air.dbInterface.createObject(
+            self.csm.air.dbId,
+            self.csm.air.dclassesByName['DistributedToonUD'],
+            toonFields,
+            self.__handleCreate)
+
+    def __handleCreate(self, avId):
+        if not avId:
+            self.demand('Kill', 'Database failed to create the new avatar object!')
+            return
+
+        self.avId = avId
+
+        self.demand('StoreAvatar')
+
+    def enterStoreAvatar(self):
+        # Associate the avatar with the account...
+        self.avList[self.index] = self.avId
+
+        self.csm.air.dbInterface.updateObject(
+            self.csm.air.dbId,
+            self.target, # i.e. the account ID
+            self.csm.air.dclassesByName['AccountUD'],
+            {'ACCOUNT_AV_SET': self.avList},
+            {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET']},
+            self.__handleStoreAvatar)
+
+    def __handleStoreAvatar(self, fields):
+        if fields:
+            # TODO: delete self.avId
+            self.demand('Kill', 'Database failed to associate the new avatar to your account!')
+            return
+
+        # Otherwise, we're done!
+        self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
+        self.demand('Off')
+
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
@@ -281,6 +374,19 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         avs = []
 
         self.sendUpdateToChannel(self.air.getMsgSender(), 'setAvatars', [avs])
+
+    def createAvatar(self, dna, index):
+        sender = self.air.getAccountIdFromSender()
+
+        if not sender:
+            self.killAccount(sender, 'Client is not logged in.')
+
+        if sender in self.account2fsm:
+            self.killAccountFSM(sender)
+            return
+
+        self.account2fsm[sender] = CreateAvatarFSM(self, sender)
+        self.account2fsm[sender].request('Start', dna, index)
 
     def chooseAvatar(self, avId):
         pass

@@ -312,7 +312,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.avCreate.enter()
         self.handler = self.handleCreateAvatar
         self.accept('makeAToonComplete', self.__handleMakeAToon, [avList, index])
-        self.accept('nameShopCreateAvatar', self.sendCreateAvatarMsg)
         self.accept('nameShopPost', self.relayMessage)
         return
 
@@ -349,7 +348,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
     def exitCreateAvatar(self):
         self.ignore('makeAToonComplete')
         self.ignore('nameShopPost')
-        self.ignore('nameShopCreateAvatar')
         self.avCreate.unload()
         self.avCreate = None
         self.handler = None

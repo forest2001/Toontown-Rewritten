@@ -6,6 +6,11 @@ from pandac.PandaModules import *
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
 
+    def announceGenerate(self):
+        DistributedObjectGlobal.announceGenerate(self)
+
+        self.accept('nameShopCreateAvatar', self.sendCreateAvatar)
+
     # --- LOGIN LOGIC ---
     def performLogin(self, doneEvent):
         self.doneEvent = doneEvent
@@ -31,6 +36,12 @@ class ClientServicesManager(DistributedObjectGlobal):
 
         self.cr.handleAvatarsList(avList)
 
+    # --- AVATAR CREATION ---
+    def sendCreateAvatar(self, avDNA, _, index):
+        self.sendUpdate('createAvatar', [avDNA.makeNetString(), index])
+
+    def createAvatarResp(self, avId):
+        messenger.send('nameShopCreateAvatarDone', [avId])
 
     # --- AVATAR CHOICE ---
     def sendChooseAvatar(self, avId):
