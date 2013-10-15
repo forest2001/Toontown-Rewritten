@@ -1,64 +1,205 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
+from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import *
+import anydbm
 
-SHOCKLEY = "\x08\x00Shockley\x04\x00acct\x00\x00\x01\x01\x00\x0f\x00t\x05\x01\x01\x01\x01\t\x01\t\x00\r\x1a\x00\x1a\x1a\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0f\x00\x0f\x00\x00\x00\x00\x00\x0e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x0e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\xff\x00\x00\x00\x00\x07\x00\xff\xff\xff\xff\xff\xff\xff*\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x004\x00\xe8\x03\x00\x00\xd0\x07\x00\x00\xb8\x0b\x00\x00\xa0\x0f\x00\x00\x88\x13\x00\x00p\x17\x00\x00@\x1f\x00\x00(#\x00\x00\x10'\x00\x00\xf8*\x00\x00\xe0.\x00\x00\xc82\x00\x00hB\x00\x004\x00\xe8\x03\x00\x00\xd0\x07\x00\x00\xb8\x0b\x00\x00\xa0\x0f\x00\x00\x88\x13\x00\x00p\x17\x00\x00@\x1f\x00\x00(#\x00\x00\x10'\x00\x00\xf8*\x00\x00\xe0.\x00\x00\xc82\x00\x00hB\x00\x00\x00\x00\x00\x00\x00\x00\x01\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x014\x00\xe8\x03\x00\x00\xd0\x07\x00\x00\xb8\x0b\x00\x00\xa0\x0f\x00\x00\x88\x13\x00\x00p\x17\x00\x00@\x1f\x00\x00(#\x00\x00\x10'\x00\x00\xf8*\x00\x00\xe0.\x00\x00\xc82\x00\x00hB\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xc8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1c\x00\x01e\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\xd4\x07e\x00\x00\x00\xc0\x01\x08\x00\x00\x1a\x00\x01e\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\xd4\x07e\x00\x00\x00\x9d\x01\x01"
+class LocalAccountDB:
+    def __init__(self, csm):
+        self.csm = csm
+
+        # This uses dbm, so we open the DB file:
+        filename = simbase.config.GetString('accountdb-local-file',
+                                            'dev-accounts.db')
+        self.dbm = anydbm.open(filename, 'c')
+
+    def lookup(self, cookie, callback):
+        if cookie.startswith('.'):
+            # Beginning a cookie with . symbolizes "invalid"
+            callback({'success': False,
+                      'reason': 'Invalid cookie specified!'})
+            return
+
+        # See if the cookie is in the DBM:
+        if cookie in self.dbm:
+            # Return it w/ account ID!
+            callback({'success': True,
+                      'accountId': int(self.dbm[cookie]),
+                      'databaseId': cookie})
+        else:
+            # Nope, let's return w/o account ID:
+            callback({'success': True,
+                      'accountId': 0,
+                      'databaseId': cookie})
+
+    def storeAccountID(self, databaseId, accountId, callback):
+        self.dbm[databaseId] = str(accountId)
+        callback()
+
+
+class OperationFSM(FSM):
+    TARGET_CONNECTION = False
+
+    def __init__(self, csm, target):
+        self.csm = csm
+        self.target = target
+        FSM.__init__(self, self.__class__.__name__)
+
+    def enterKill(self, reason=''):
+        if self.TARGET_CONNECTION:
+            self.csm.killConnection(self.target, reason)
+        else:
+            self.csm.killAccount(self.target, reason)
+
+    def enterOff(self):
+        if self.TARGET_CONNECTION:
+            del self.csm.connection2fsm[self.target]
+        else:
+            del self.csm.account2fsm[self.target]
+
+class LoginAccountFSM(OperationFSM):
+    TARGET_CONNECTION = True
+
+    def enterStart(self, cookie):
+        self.cookie = cookie
+
+        self.demand('QueryAccountDB')
+
+    def enterQueryAccountDB(self):
+        self.csm.accountDB.lookup(self.cookie, self.__handleLookup)
+
+    def __handleLookup(self, result):
+        if not result.get('success'):
+            self.demand('Kill', result.get('reason', 'The accounts database rejected your cookie.'))
+            return
+
+        self.databaseId = result.get('databaseId', 0)
+        accountId = result.get('accountId', 0)
+        if accountId:
+            self.accountId = accountId
+            self.demand('RetrieveAccount')
+        else:
+            self.demand('CreateAccount')
+
+    def enterRetrieveAccount(self):
+        # TODO: When DB query code is operational.
+        self.account = {}
+        self.demand('SetAccount')
+
+    def enterCreateAccount(self):
+        # TODO: When DB query code is operational.
+        self.accountId = 100
+        self.account = {}
+        self.demand('StoreAccountID')
+
+    def enterStoreAccountID(self):
+        self.csm.accountDB.storeAccountID(self.databaseId, self.accountId, self.__handleStored)
+
+    def __handleStored(self, success=True):
+        if not success:
+            self.demand('Kill', 'The account server could not save your account DB ID!')
+            return
+
+        self.demand('SetAccount')
+
+    def enterSetAccount(self):
+        # First, if there's anybody on the account, kill 'em for redundant login:
+        dg = PyDatagram()
+        dg.addServerHeader(self.csm.GetAccountConnectionChannel(self.accountId),
+                           self.csm.air.ourChannel, CLIENTAGENT_DISCONNECT)
+        dg.addUint16(100)
+        dg.addString('This account has been logged in elsewhere.')
+        self.csm.air.send(dg)
+
+        # Next, add this connection to the account channel.
+        dg = PyDatagram()
+        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
+        dg.addChannel(self.csm.GetAccountConnectionChannel(self.accountId))
+        self.csm.air.send(dg)
+
+        # Now set their sender channel to represent their account affiliation:
+        dg = PyDatagram()
+        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addChannel(self.accountId << 32) # accountId in high 32 bits, 0 in low (no avatar)
+        self.csm.air.send(dg)
+
+        # Un-sandbox them!
+        dg = PyDatagram()
+        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_SET_STATE)
+        dg.addUint16(2) # ESTABLISHED state. BIG FAT SECURITY RISK!!!
+        self.csm.air.send(dg)
+
+        # We're done.
+        self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
+        self.demand('Off')
 
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
+    def announceGenerate(self):
+        DistributedObjectGlobalUD.announceGenerate(self)
+
+        # These keep track of the connection/account IDs currently undergoing an
+        # operation on the CSM. This is to prevent (hacked) clients from firing up more
+        # than one operation at a time, which could potentially lead to exploitation
+        # of race conditions.
+        self.connection2fsm = {}
+        self.account2fsm = {}
+
+        # Instantiate our account DB interface using config:
+        dbtype = simbase.config.GetString('accountdb-type', 'local')
+        if dbtype == 'local':
+            self.accountDB = LocalAccountDB(self)
+        else:
+            self.notify.error('Invalid account DB type configured: %s' % dbtype)
+
+    def killConnection(self, connId, reason):
+        dg = PyDatagram()
+        dg.addServerHeader(connId, self.air.ourChannel, CLIENTAGENT_DISCONNECT)
+        dg.addUint16(122)
+        dg.addString(reason)
+        self.air.send(dg)
+
+    def killConnectionFSM(self, connId):
+        fsm = self.connection2fsm.get(connId)
+        if not fsm:
+            self.notify.warning('Tried to kill connection %d for duplicate FSM, but none exists!' % connId)
+            return
+        self.killConnection(connId, 'An operation is already underway: ' + fsm.name)
+
+    def killAccount(self, accountId, reason):
+        self.killConnection(self.GetAccountConnectionChannel(accountId), reason)
+
+    def killAccountFSM(self, accountId):
+        fsm = self.account2fsm.get(accountId)
+        if not fsm:
+            self.notify.warning('Tried to kill account %d for duplicate FSM, but none exists!' % accountId)
+            return
+        self.killAccount(accountId, 'An operation is already underway: ' + fsm.name)
+
     def login(self, cookie):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
-        pdg = PyDatagram()
-        pdg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_STATE)
-        pdg.addUint16(2)
-        self.air.send(pdg)
+        sender = self.air.getMsgSender()
 
-        self.sendUpdateToChannel(self.air.getMsgSender(), 'acceptLogin', [])
+        if sender>>32:
+            # Oops, they have an account ID on their conneciton already!
+            self.killConnection(sender, 'Client is already logged in.')
+            return
+
+        if sender in self.connection2fsm:
+            self.killConnectionFSM(sender)
+            return
+
+        self.connection2fsm[sender] = LoginAccountFSM(self, sender)
+        self.connection2fsm[sender].request('Start', cookie)
 
     def requestAvatars(self):
         self.notify.debug('Received avatar list request from %d' % (self.air.getMsgSender()))
 
-        av = [123,
-              'Shockley',
-              't\x05\x01\x01\x01\x01\t\x01\t\x00\r\x1a\x00\x1a\x1a',
-              1,
-              0]
-
-        av2 = [124,
-              'Shockley',
-              't\x05\x01\x01\x01\x01\t\x01\t\x00\r\x1a\x00\x1a\x1a',
-              2,
-              0]
-
-        avs = [av, av2]
+        avs = []
 
         self.sendUpdateToChannel(self.air.getMsgSender(), 'setAvatars', [avs])
 
     def chooseAvatar(self, avId):
-        dg = PyDatagram()
-        dg.addServerHeader(self.air.getMsgSender(), self.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
-        dg.addChannel((1<<32) | avId)
-        self.air.send(dg)
-
-        dg = PyDatagram()
-        dg.addServerHeader(avId, self.air.ourChannel, STATESERVER_OBJECT_DELETE_RAM)
-        dg.addUint32(avId)
-        self.air.send(dg)
-
-        dg = PyDatagram()
-        dg.addServerHeader(self.air.serverId, self.air.ourChannel, STATESERVER_OBJECT_GENERATE_WITH_REQUIRED)
-        dg.addUint32(0)
-        dg.addUint32(0)
-        dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
-        dg.addUint32(avId)
-        dg.appendData(SHOCKLEY)
-        self.air.send(dg)
-
-        dg = PyDatagram()
-        dg.addServerHeader(avId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
-        dg.addChannel((1<<32) | avId)
-        self.air.send(dg)
-
-        self.sendUpdateToChannel(self.air.getMsgSender(), 'avatarResponse', [avId, SHOCKLEY])
+        pass
