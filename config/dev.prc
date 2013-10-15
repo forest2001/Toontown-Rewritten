@@ -5,6 +5,8 @@ server-version dev
 dc-file config/toon.dc
 dc-file config/otp.dc
 
+account-server-secret oAUHbkPOZouv902blLPphuatbx90bk
+
 default-model-extension .bam
 
 want-pets #f

@@ -36,6 +36,47 @@ class LocalAccountDB:
         self.dbm[databaseId] = str(accountId)
         callback()
 
+class RemoteAccountDB:
+    def __init__(self, csm):
+        self.csm = csm
+
+        self.http = HTTPClient()
+        self.http.setVerifySsl(0) # Whatever OS certs my laptop trusts with panda doesn't include ours. whatever
+
+    def lookup(self, cookie, callback):
+        response = self.__executeHttpRequest("https://www.toontownrewritten.com/api/gameserver/verify/%s" % cookie, cookie)
+        if (not response['status'] or not response['valid']): # status will be false if there's an hmac error, for example
+            callback({'success': False,
+                      'reason': response['banner']})
+        else:
+            gsUserId = response['gs_user_id']
+            if (gsUserId == -1):
+                gsUserId = 0
+            callback({'success': True,
+                      'accountId': response['user_id'],
+                      'databaseId': gsUserId})
+    def storeAccountID(self, databaseId, accountId, callback):
+        response = self.__executeHttpRequest("https://www.toontownrewritten.com/api/gameserver/associate_user/%s/with/%s" % (accountId, databaseId), str(accountId) + str(databaseId))
+        if (not response['status']):
+            self.csm.notify.info("Unable to set databaseId with account server! Message: %s" % response['banner'])
+            callback(False)
+        else:
+            callback(True)
+
+    def __executeHttpRequest(self, url, message):
+        channel = self.http.makeChannel(True)
+        spec = DocumentSpec(url)
+        rf = Ramfile()
+        digest = hmac.new(simbase.config.GetString('account-server-secret', ''), message, hashlib.sha256)
+        expiration = str((int(time()) * 1000) + 60000)
+        digest.update(expiration)
+        channel.sendExtraHeader('User-agent', 'TTR CSM bot')
+        channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
+        channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
+        channel.getDocument(spec)
+        channel.downloadToRam(rf)
+        # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
+        return json.loads(rf.getData())
 
 class OperationFSM(FSM):
     TARGET_CONNECTION = False
