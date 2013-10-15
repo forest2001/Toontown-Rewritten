@@ -2,7 +2,6 @@ import math
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from direct.showbase.PythonUtil import quantizeVec
 from direct.task.Task import Task
 from toontown.toontowngui import TTDialog
 from toontown.toonbase.ToonBaseGlobal import *
@@ -263,9 +262,6 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         if self.isLocalToonId(toonId):
             self.inWater = 0
             flightResults = self.__calcFlightResults(cannon, toonId, launchTime)
-            if not isClient():
-                print 'EXECWARNING DistributedPartyCannonActivity: %s' % flightResults
-                printStack()
             for key in flightResults:
                 exec "%s = flightResults['%s']" % (key, key)
 
@@ -369,6 +365,12 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         return Task.cont
 
     def __calcFlightResults(self, cannon, toonId, launchTime):
+        def quantizeVec(vec, divisor):
+            quantize = lambda value, divisor: float(int(value * int(divisor))) / int(divisor)
+            vec[0] = quantize(vec[0], divisor)
+            vec[1] = quantize(vec[1], divisor)
+            vec[2] = quantize(vec[2], divisor)
+
         startPos = cannon.getToonFirePos()
         startHpr = cannon.getToonFireHpr()
         startVel = cannon.getToonFireVel()

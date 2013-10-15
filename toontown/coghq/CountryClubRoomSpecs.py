@@ -41,9 +41,6 @@ BossbotCountryClubMiddleRoomIDs = (2, 5, 6)
 BossbotCountryClubFinalRoomIDs = (18,)
 BossbotCountryClubConnectorRooms = ('phase_12/models/bossbotHQ/Connector_Tunnel_A', 'phase_12/models/bossbotHQ/Connector_Tunnel_B')
 CashbotMintSpecModules = {}
-if not isClient():
-    print 'EXECWARNING CountryClubRoomSpecs: %s' % BossbotCountryClubRoomName2RoomId
-    printStack()
 for roomName, roomId in BossbotCountryClubRoomName2RoomId.items():
     exec 'from toontown.coghq import %s' % roomName
     CashbotMintSpecModules[roomId] = eval(roomName)

@@ -389,7 +389,7 @@ class QuestPoster(DirectFrame):
                         rIconGeom = self.createSuitHead(holder)
                     lPos.setX(-0.18)
                     auxText = TTLocalizer.QuestPosterAuxFrom
-                infoText = string.capwords(quest.getLocationName())
+                infoText = quest.getLocationName().capwords()
                 if infoText == '':
                     infoText = TTLocalizer.QuestPosterAnywhere
         elif quest.getType() == Quests.VisitQuest:
@@ -867,7 +867,7 @@ class QuestPoster(DirectFrame):
                 lIconGeomScale = IMAGE_SCALE_SMALL
                 cogIcons.removeNode()
             if not fComplete:
-                infoText = string.capwords(quest.getLocationName())
+                infoText = quest.getLocationName().capwords()
                 if infoText == '':
                     infoText = TTLocalizer.QuestPosterAnywhere
         if fComplete:

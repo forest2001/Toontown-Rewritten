@@ -288,15 +288,9 @@ class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
             exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
             self.importExecNamespace()
         try:
-            if not isClient():
-                print 'EXECWARNING ChatInputWhiteListFrame eval: %s' % message
-                printStack()
             return str(eval(message, globals(), ChatInputTyped.ExecNamespace))
         except SyntaxError:
             try:
-                if not isClient():
-                    print 'EXECWARNING ChatInputWhiteListFrame exec: %s' % message
-                    printStack()
                 exec message in globals(), ChatInputTyped.ExecNamespace
                 return 'ok'
             except:

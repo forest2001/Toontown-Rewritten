@@ -11,7 +11,7 @@ from pandac.PandaModules import *
 from otp.chat import ChatManager
 from TTChatInputSpeedChat import TTChatInputSpeedChat
 from TTChatInputNormal import TTChatInputNormal
-from TTChatInputWhiteList import TTChatInputWhiteList
+#from TTChatInputWhiteList import TTChatInputWhiteList
 
 class HackedDirectRadioButton(DirectCheckButton):
 
@@ -56,15 +56,15 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.normalPos = Vec3(-1.083, 0, 0.804)
         self.whisperPos = Vec3(0.0, 0, 0.71)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
-        self.chatInputWhiteList = TTChatInputWhiteList()
-        if self.defaultToWhiteList:
-            self.chatInputNormal = self.chatInputWhiteList
-            self.chatInputNormal.setPos(self.normalPos)
-            self.chatInputNormal.desc = 'chatInputNormal'
-        else:
-            self.chatInputNormal = TTChatInputNormal(self)
-        self.chatInputWhiteList.setPos(self.speedChatPlusPos)
-        self.chatInputWhiteList.desc = 'chatInputWhiteList'
+        #self.chatInputWhiteList = TTChatInputWhiteList()
+        #if self.defaultToWhiteList:
+        #    self.chatInputNormal = self.chatInputWhiteList
+        #    self.chatInputNormal.setPos(self.normalPos)
+        #    self.chatInputNormal.desc = 'chatInputNormal'
+        #else:
+        self.chatInputNormal = TTChatInputNormal(self)
+        #self.chatInputWhiteList.setPos(self.speedChatPlusPos)
+        #self.chatInputWhiteList.desc = 'chatInputWhiteList'
         return
 
     def delete(self):
@@ -83,8 +83,8 @@ class ToontownChatManager(ChatManager.ChatManager):
         del self.whisperScButton
         self.whisperCancelButton.destroy()
         del self.whisperCancelButton
-        self.chatInputWhiteList.destroy()
-        del self.chatInputWhiteList
+        #self.chatInputWhiteList.destroy()
+        #del self.chatInputWhiteList
 
     def sendSCResistanceChatMessage(self, textId):
         messenger.send('chatUpdateSCResistance', [textId])
@@ -131,11 +131,11 @@ class ToontownChatManager(ChatManager.ChatManager):
 
     def enterMainMenu(self):
         self.chatInputNormal.setPos(self.normalPos)
-        if self.chatInputWhiteList.isActive():
-            self.notify.debug('enterMainMenu calling checkObscured')
-            ChatManager.ChatManager.checkObscurred(self)
-        else:
-            ChatManager.ChatManager.enterMainMenu(self)
+        #if self.chatInputWhiteList.isActive():
+        #    self.notify.debug('enterMainMenu calling checkObscured')
+        #    ChatManager.ChatManager.checkObscurred(self)
+        #else:
+        ChatManager.ChatManager.enterMainMenu(self)
 
     def exitOpenChatWarning(self):
         self.openChatWarning.hide()
@@ -367,44 +367,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: CHAT: Speedchat Plus')
         messenger.send('wakeup')
-        if base.cr.productName in ['DisneyOnline-US', 'ES']:
-            if base.cr.whiteListChatEnabled:
-                self.fsm.request('normalChat')
-            elif not base.cr.isParentPasswordSet():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.cr.allowSecretChat():
-                self.fsm.request('noSecretChatAtAllAndNoWhitelist')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        elif base.cr.productName == 'Terra-DMC':
-            if not base.cr.allowSecretChat():
-                self.fsm.request('noSecretChatWarning')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        elif base.cr.productName in ['DisneyOnline-UK',
-         'DisneyOnline-AP',
-         'JP',
-         'BR',
-         'FR']:
-            if base.cr.whiteListChatEnabled:
-                self.fsm.request('normalChat')
-            elif not base.cr.isParentPasswordSet():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.cr.allowSecretChat():
-                self.paidNoParentPassword = 1
-                self.fsm.request('unpaidChatWarning')
-            elif not base.localAvatar.canChat():
-                self.fsm.request('openChatWarning')
-            else:
-                self.fsm.request('normalChat')
-        else:
-            print 'ChatManager: productName: %s not recognized' % base.cr.productName
+        self.fsm.request('normalChat')
 
     def __scButtonPressed(self):
         if base.config.GetBool('want-qa-regression', 0):

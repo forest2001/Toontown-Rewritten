@@ -11,7 +11,7 @@ from otp.chat.TalkHandle import TalkHandle
 import time
 from otp.chat.TalkGlobals import *
 from otp.chat.ChatGlobals import *
-from libotp import CFSpeech, CFTimeout, CFThought
+from otp.nametag.NametagConstants import CFSpeech, CFTimeout, CFThought
 ThoughtPrefix = '.'
 
 class TalkAssistant(DirectObject.DirectObject):
@@ -209,7 +209,7 @@ class TalkAssistant(DirectObject.DirectObject):
             return 0
         elif len(message) == 0:
             return 0
-        elif string.find(message, ThoughtPrefix, 0, len(ThoughtPrefix)) >= 0:
+        elif message.find(ThoughtPrefix, 0, len(ThoughtPrefix)) >= 0:
             return 1
         else:
             return 0
@@ -253,15 +253,9 @@ class TalkAssistant(DirectObject.DirectObject):
             exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
             self.importExecNamespace()
         try:
-            if not isClient():
-                print 'EXECWARNING TalkAssistant eval: %s' % message
-                printStack()
             return str(eval(message, globals(), TalkAssistant.ExecNamespace))
         except SyntaxError:
             try:
-                if not isClient():
-                    print 'EXECWARNING TalkAssistant exec: %s' % message
-                    printStack()
                 exec message in globals(), TalkAssistant.ExecNamespace
                 return 'ok'
             except:

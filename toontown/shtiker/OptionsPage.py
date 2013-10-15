@@ -122,9 +122,6 @@ class OptionsTabPage(DirectFrame):
     DisplaySettingsDelay = 60
     ChangeDisplaySettings = base.config.GetBool('change-display-settings', 1)
     ChangeDisplayAPI = base.config.GetBool('change-display-api', 0)
-    DisplaySettingsApiMap = {'OpenGL': Settings.GL,
-     'DirectX7': Settings.DX7,
-     'DirectX8': Settings.DX8}
 
     def __init__(self, parent = aspect2d):
         self.parent = parent
@@ -215,8 +212,6 @@ class OptionsTabPage(DirectFrame):
     def exit(self):
         self.ignore('confirmDone')
         self.hide()
-        if self.settingsChanged != 0:
-            Settings.writeSettings()
         self.speedChatStyleText.exit()
         if self.displaySettingsChanged:
             taskMgr.doMethodLater(self.DisplaySettingsDelay, self.writeDisplaySettings, self.DisplaySettingsTaskName)
@@ -258,10 +253,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.musicActive:
             base.enableMusic(0)
-            Settings.setMusic(0)
         else:
             base.enableMusic(1)
-            Settings.setMusic(1)
         self.settingsChanged = 1
         self.__setMusicButton()
 
@@ -277,10 +270,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.sfxActive:
             base.enableSoundEffects(0)
-            Settings.setSfx(0)
         else:
             base.enableSoundEffects(1)
-            Settings.setSfx(1)
         self.settingsChanged = 1
         self.__setSoundFXButton()
 
@@ -288,10 +279,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.toonChatSounds:
             base.toonChatSounds = 0
-            Settings.setToonChatSounds(0)
         else:
             base.toonChatSounds = 1
-            Settings.setToonChatSounds(1)
         self.settingsChanged = 1
         self.__setToonChatSoundsButton()
 
@@ -322,10 +311,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNewFriends:
             base.localAvatar.acceptingNewFriends = 0
-            Settings.setAcceptingNewFriends(0)
         else:
             base.localAvatar.acceptingNewFriends = 1
-            Settings.setAcceptingNewFriends(1)
         self.settingsChanged = 1
         self.__setAcceptFriendsButton()
 
@@ -333,10 +320,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNonFriendWhispers:
             base.localAvatar.acceptingNonFriendWhispers = 0
-            Settings.setAcceptingNonFriendWhispers(0)
         else:
             base.localAvatar.acceptingNonFriendWhispers = 1
-            Settings.setAcceptingNonFriendWhispers(1)
         self.settingsChanged = 1
         self.__setAcceptWhispersButton()
 
@@ -438,17 +423,6 @@ class OptionsTabPage(DirectFrame):
          self.displaySettingsFullscreen,
          self.displaySettingsEmbedded,
          self.displaySettingsApi))
-        Settings.setResolutionDimensions(self.displaySettingsSize[0], self.displaySettingsSize[1])
-        Settings.setWindowedMode(not self.displaySettingsFullscreen)
-        Settings.setEmbeddedMode(self.displaySettingsEmbedded)
-        if self.displaySettingsApiChanged:
-            api = self.DisplaySettingsApiMap.get(self.displaySettingsApi)
-            if api == None:
-                self.notify.warning('Cannot save unknown display API: %s' % self.displaySettingsApi)
-            else:
-                Settings.setDisplayDriver(api)
-        Settings.writeSettings()
-        self.displaySettingsChanged = 0
         return Task.done
 
     def __handleExitShowWithConfirm(self):

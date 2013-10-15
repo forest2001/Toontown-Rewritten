@@ -5,7 +5,6 @@ from direct.distributed import DistributedNode
 from direct.actor.DistributedActor import DistributedActor
 from direct.task import Task
 from direct.showbase import PythonUtil
-from libotp import Nametag
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from otp.speedchat import SCDecoders
@@ -88,11 +87,11 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def do_setParent(self, parentToken):
         if not self.isDisabled():
-            if parentToken == OTPGlobals.SPHidden:
-                self.nametag2dDist &= ~Nametag.CName
-            else:
-                self.nametag2dDist |= Nametag.CName
-            self.nametag.getNametag2d().setContents(self.nametag2dContents & self.nametag2dDist)
+            #if parentToken == OTPGlobals.SPHidden:
+            #    self.nametag2dDist &= ~Nametag.CName
+            #else:
+            #    self.nametag2dDist |= Nametag.CName
+            #self.nametag.getNametag2d().setContents(self.nametag2dContents & self.nametag2dDist)
             DistributedActor.do_setParent(self, parentToken)
             self.__setTags()
 

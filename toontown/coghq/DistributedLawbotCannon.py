@@ -668,9 +668,6 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         if self.toonHead == None or not self.boss.state == 'BattleTwo':
             return Task.done
         flightResults = self.__calcFlightResults(avId, launchTime)
-        if not isClient():
-            print 'EXECWARNING DistributedLawbotCannon: %s' % flightResults
-            printStack()
         for key in flightResults:
             exec "%s = flightResults['%s']" % (key, key)
 

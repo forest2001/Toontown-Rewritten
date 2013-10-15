@@ -9,6 +9,7 @@ from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
 from otp.chat import TalkAssistant
+from otp.nametag.NametagConstants import *
 import Toon
 from direct.task.Task import Task
 from direct.distributed import DistributedSmoothNode
@@ -254,7 +255,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.announceGenerate(self)
         if self.animFSM.getCurrentState().getName() == 'off':
             self.setAnimState('neutral')
-        self._startZombieCheck()
 
     def _handleClientCleanup(self):
         if self.track != None:
@@ -2587,28 +2587,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if hasattr(self, 'gmIcon') and self.gmIcon:
             self.gmIcon.detachNode()
             del self.gmIcon
-
-    def _startZombieCheck(self):
-        self._zombieCheckSerialGen = SerialNumGen(random.randrange(1 << 31))
-        taskMgr.doMethodLater(2.0 + 60.0 * random.random(), self._doZombieCheck, self._getZombieCheckTaskName())
-
-    def _stopZombieCheck(self):
-        taskMgr.remove(self._getZombieCheckTaskName())
-
-    def _getZombieCheckTaskName(self):
-        return self.uniqueName('zombieCheck')
-
-    def _doZombieCheck(self, task = None):
-        self._lastZombieContext = self._zombieCheckSerialGen.next()
-        self.cr.timeManager.checkAvOnDistrict(self, self._lastZombieContext)
-        taskMgr.doMethodLater(60.0, self._doZombieCheck, self._getZombieCheckTaskName())
-
-    def _zombieCheckResult(self, context, present):
-        if context == self._lastZombieContext:
-            print '_zombieCheckResult[%s]: %s' % (self.doId, present)
-            if not present:
-                self.notify.warning('hiding av %s because they are not on the district!' % self.doId)
-                self.setParent(OTPGlobals.SPHidden)
 
     def ping(self, val):
         module = ''

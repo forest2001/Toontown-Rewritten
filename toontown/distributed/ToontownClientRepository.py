@@ -17,13 +17,6 @@ from direct.showbase.InputStateGlobal import inputState
 from otp.avatar import Avatar
 from otp.avatar import DistributedAvatar
 from otp.friends import FriendManager
-from otp.login import TTAccount
-from otp.login import AccountServerConstants
-from otp.login import LoginScreen
-from otp.login import LoginGSAccount
-from otp.login import LoginGoAccount
-from otp.login import LoginWebPlayTokenAccount
-from otp.login import LoginTTAccount
 from otp.login import HTTPUtil
 from otp.distributed import OTPClientRepository
 from otp.distributed import PotentialAvatar
@@ -86,7 +79,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.toons = {}
         if self.http.getVerifySsl() != HTTPClient.VSNoVerify:
             self.http.setVerifySsl(HTTPClient.VSNoDateCheck)
-        prepareAvatar(self.http)
         self.__forbidCheesyEffects = 0
         self.friendManager = None
         self.speedchatRelay = None
@@ -100,13 +92,17 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.partyManager = None
         self.inGameNewsMgr = None
         self.whitelistMgr = None
+
         self.toontownTimeManager = ToontownTimeManager.ToontownTimeManager()
+
+        self.csm = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
         self.avatarFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_AVATAR_FRIENDS_MANAGER, 'AvatarFriendsManager')
         self.playerFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_PLAYER_FRIENDS_MANAGER, 'TTPlayerFriendsManager')
         self.speedchatRelay = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_SPEEDCHAT_RELAY, 'TTSpeedchatRelay')
         self.deliveryManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         if config.GetBool('want-code-redemption', 1):
             self.codeRedemptionManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_CODE_REDEMPTION_MANAGER, 'TTCodeRedemptionMgr')
+
         self.streetSign = None
         self.furnitureManager = None
         self.objectManager = None
@@ -361,34 +357,28 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             del self.newPotAv
         return
 
-    def handleAvatarResponseMsg(self, di):
+    def handleAvatarResponseMsg(self, avatarId, di):
         self.cleanupWaitingForDatabase()
-        avatarId = di.getUint32()
-        returnCode = di.getUint8()
-        if returnCode == 0:
-            dclass = self.dclassesByName['DistributedToon']
-            NametagGlobals.setMasterArrowsOn(0)
-            loader.beginBulkLoad('localAvatarPlayGame', OTPLocalizer.CREnteringToontown, 400, 1, TTLocalizer.TIP_GENERAL)
-            localAvatar = LocalToon.LocalToon(self)
-            localAvatar.dclass = dclass
-            base.localAvatar = localAvatar
-            __builtins__['localAvatar'] = base.localAvatar
-            NametagGlobals.setToon(base.localAvatar)
-            localAvatar.doId = avatarId
-            self.localAvatarDoId = avatarId
-            parentId = None
-            zoneId = None
-            localAvatar.setLocation(parentId, zoneId)
-            localAvatar.generateInit()
-            localAvatar.generate()
-            localAvatar.updateAllRequiredFields(dclass, di)
-            self.doId2do[avatarId] = localAvatar
-            localAvatar.initInterface()
-            self.sendGetFriendsListRequest()
-            self.loginFSM.request('playingGame')
-        else:
-            self.notify.error('Bad avatar: return code %d' % returnCode)
-        return
+        dclass = self.dclassesByName['DistributedToon']
+        NametagGlobals.setMasterArrowsOn(0)
+        loader.beginBulkLoad('localAvatarPlayGame', OTPLocalizer.CREnteringToontown, 400, 1, TTLocalizer.TIP_GENERAL)
+        localAvatar = LocalToon.LocalToon(self)
+        localAvatar.dclass = dclass
+        base.localAvatar = localAvatar
+        __builtins__['localAvatar'] = base.localAvatar
+        NametagGlobals.setToon(base.localAvatar)
+        localAvatar.doId = avatarId
+        self.localAvatarDoId = avatarId
+        parentId = None
+        zoneId = None
+        localAvatar.setLocation(parentId, zoneId)
+        localAvatar.generateInit()
+        localAvatar.generate()
+        localAvatar.updateAllRequiredFields(dclass, di)
+        self.doId2do[avatarId] = localAvatar
+        localAvatar.initInterface()
+        self.sendGetFriendsListRequest()
+        self.loginFSM.request('playingGame')
 
     def getAvatarDetails(self, avatar, func, *args):
         pad = ScratchPad()
@@ -819,7 +809,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.friendsListError = 0
         datagram = PyDatagram()
         datagram.addUint16(CLIENT_GET_FRIEND_LIST)
-        self.send(datagram)
+        #self.send(datagram)
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -935,6 +925,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             messenger.send('friendOffline', [doId])
         except:
             pass
+
+    def handleGenerateWithRequiredOtherOwner(self, di):
+        pass # Toontown does not make use of OwnerViews.
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase
