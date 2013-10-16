@@ -56,12 +56,19 @@ class ClientServicesManager(DistributedObjectGlobal):
     # No deleteAvatarResp; it just sends a setAvatars when the deed is done.
 
     # --- AVATAR NAMING ---
+    def sendSetNameTyped(self, avId, name, callback):
+        self._callback = callback
+        self.sendUpdate('setNameTyped', [avId, name])
+
+    def setNameTypedResp(self, avId, status):
+        self._callback(avId, status)
+
     def sendAcknowledgeAvatarName(self, avId, callback):
-        self.ackCallback = callback
+        self._callback = callback
         self.sendUpdate('acknowledgeAvatarName', [avId])
 
     def acknowledgeAvatarNameResp(self):
-        self.ackCallback()
+        self._callback()
 
     # --- AVATAR CHOICE ---
     def sendChooseAvatar(self, avId):

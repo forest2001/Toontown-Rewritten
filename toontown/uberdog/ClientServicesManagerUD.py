@@ -10,6 +10,11 @@ import hmac
 import hashlib
 import json
 
+def judgeName(name):
+    # Judge a typed name for approval-queue candidacy.
+    # For now we reject only "Rejectnow" for debugging.
+    return name != 'Rejectnow'
+
 class LocalAccountDB:
     def __init__(self, csm):
         self.csm = csm
@@ -427,6 +432,54 @@ class DeleteAvatarFSM(GetAvatarsFSM):
 
         self.demand('QueryAvatars')
 
+class SetNameTypedFSM(AvatarOperationFSM):
+    POST_ACCOUNT_STATE = 'RetrieveAvatar'
+
+    def enterStart(self, avId, name):
+        self.avId = avId
+        self.name = name
+
+        if self.avId:
+            self.demand('RetrieveAccount')
+            return
+
+        # Hmm, self.avId was 0. Okay, let's just cut to the judging:
+        self.demand('JudgeName')
+
+    def enterRetrieveAvatar(self):
+        if self.avId and self.avId not in self.avList:
+            self.demand('Kill', 'Tried to name an avatar not in the account!')
+            return
+
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.avId,
+                                             self.__handleAvatar)
+
+    def __handleAvatar(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
+            self.demand('Kill', "One of the account's avatars is invalid!")
+            return
+
+        if fields['WishNameState'][0] != 'OPEN':
+            self.demand('Kill', 'Avatar is not in a namable state!')
+            return
+
+        self.demand('JudgeName')
+
+    def enterJudgeName(self):
+        # Let's see if the name is valid:
+        status = judgeName(self.name)
+
+        if self.avId and status:
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                self.avId,
+                self.csm.air.dclassesByName['DistributedToonUD'],
+                {'WishNameState': ('PENDING',),
+                 'WishName': (self.name,)})
+
+        self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
+        self.demand('Off')
+
 class AcknowledgeNameFSM(AvatarOperationFSM):
     POST_ACCOUNT_STATE = 'GetTargetAvatar'
 
@@ -564,6 +617,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def deleteAvatar(self, avId):
         self.runAccountFSM(DeleteAvatarFSM, avId)
+
+    def setNameTyped(self, avId, name):
+        self.runAccountFSM(SetNameTypedFSM, avId, name)
 
     def acknowledgeAvatarName(self, avId):
         self.runAccountFSM(AcknowledgeNameFSM, avId)
