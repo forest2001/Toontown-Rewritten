@@ -3226,6 +3226,8 @@ dclass ClientServicesManager : DistributedObjectGlobal {
 
   setNameTyped(uint32 avId, string name) clsend;
   setNameTypedResp(uint32 avId, uint8 status);
+  setNamePattern(uint32 avId, int16 p1, uint8 f1, int16 p2, uint8 f2, int16 p3, uint8 f3, int16 p4, uint8 f4) clsend;
+  setNamePatternResp(uint32 avId, uint8 status);
 
   acknowledgeAvatarName(uint32 avId) clsend;
   acknowledgeAvatarNameResp();

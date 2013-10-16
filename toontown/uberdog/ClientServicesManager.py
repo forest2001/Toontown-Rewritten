@@ -63,6 +63,13 @@ class ClientServicesManager(DistributedObjectGlobal):
     def setNameTypedResp(self, avId, status):
         self._callback(avId, status)
 
+    def sendSetNamePattern(self, avId, p1, f1, p2, f2, p3, f3, p4, f4, callback):
+        self._callback = callback
+        self.sendUpdate('setNamePattern', [avId, p1, f1, p2, f2, p3, f3, p4, f4])
+
+    def setNamePatternResp(self, avId, status):
+        self._callback(avId, status)
+
     def sendAcknowledgeAvatarName(self, avId, callback):
         self._callback = callback
         self.sendUpdate('acknowledgeAvatarName', [avId])

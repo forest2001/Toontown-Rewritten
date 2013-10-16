@@ -857,39 +857,29 @@ class NameShop(StateData.StateData):
         self.notify.debug('nameShopHandler')
         if msgType == CLIENT_CREATE_AVATAR_RESP:
             self.handleCreateAvatarResponseMsg(di)
-        elif msgType == CLIENT_SET_NAME_PATTERN_ANSWER:
-            self.handleSetNamePatternAnswerMsg(di)
         return None
 
     def checkNamePattern(self):
         self.notify.debug('checkNamePattern')
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_SET_NAME_PATTERN)
-        datagram.addUint32(self.avId)
-        datagram.addInt16(self.nameIndices[0])
-        datagram.addInt16(self.nameFlags[0])
-        datagram.addInt16(self.nameIndices[1])
-        datagram.addInt16(self.nameFlags[1])
-        datagram.addInt16(self.nameIndices[2])
-        datagram.addInt16(self.nameFlags[2])
-        datagram.addInt16(self.nameIndices[3])
-        datagram.addInt16(self.nameFlags[3])
-        messenger.send('nameShopPost', [datagram])
+        base.cr.csm.sendSetNamePattern(self.avId,
+                                       self.nameIndices[0], self.nameFlags[0],
+                                       self.nameIndices[1], self.nameFlags[1],
+                                       self.nameIndices[2], self.nameFlags[2],
+                                       self.nameIndices[3], self.nameFlags[3],
+                                       self.handleSetNamePatternResp)
         self.waitForServer()
 
-    def handleSetNamePatternAnswerMsg(self, di):
-        self.notify.debug('handleSetNamePatternAnswerMsg')
+    def handleSetNamePatternResp(self, avId, status):
+        self.notify.debug('handleSetNamePatternResp')
         self.cleanupWaitForServer()
-        newavId = di.getUint32()
-        if newavId != self.avId:
+        if avId != self.avId:
             self.notify.debug("doid's don't match up!")
             self.rejectName(TTLocalizer.NameError)
-        returnCode = di.getUint8()
-        if returnCode == 0:
+        if status == 1:
             style = self.toon.getStyle()
             avDNA = style.makeNetString()
             self.notify.debug('pattern name accepted')
-            newPotAv = PotentialAvatar.PotentialAvatar(newavId, self.names, avDNA, self.index, 0)
+            newPotAv = PotentialAvatar.PotentialAvatar(avId, self.names, avDNA, self.index, 0)
             self.avList.append(newPotAv)
             self.doneStatus = 'done'
             self.storeSkipTutorialRequest()
@@ -930,7 +920,7 @@ class NameShop(StateData.StateData):
         self.waitForServer()
 
     def handleSetNameTypedResp(self, avId, status):
-        self.notify.debug('handleSetNameTypedAnswerMsg')
+        self.notify.debug('handleSetNameTypedResp')
         self.cleanupWaitForServer()
         if avId and avId != self.avId:
             self.notify.debug("doid's don't match up!")

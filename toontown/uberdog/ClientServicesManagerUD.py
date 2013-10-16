@@ -3,6 +3,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import *
 from toontown.toon.ToonDNA import ToonDNA
+from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
 import anydbm
 import time
@@ -480,6 +481,58 @@ class SetNameTypedFSM(AvatarOperationFSM):
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
 
+class SetNamePatternFSM(AvatarOperationFSM):
+    POST_ACCOUNT_STATE = 'RetrieveAvatar'
+
+    def enterStart(self, avId, pattern):
+        self.avId = avId
+        self.pattern = pattern
+
+        self.demand('RetrieveAccount')
+
+    def enterRetrieveAvatar(self):
+        if self.avId and self.avId not in self.avList:
+            self.demand('Kill', 'Tried to name an avatar not in the account!')
+            return
+
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.avId,
+                                             self.__handleAvatar)
+
+    def __handleAvatar(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
+            self.demand('Kill', "One of the account's avatars is invalid!")
+            return
+
+        if fields['WishNameState'][0] != 'OPEN':
+            self.demand('Kill', 'Avatar is not in a namable state!')
+            return
+
+        self.demand('SetName')
+
+    def enterSetName(self):
+        # Render pattern into a string:
+        parts = []
+        for p,f in self.pattern:
+            part = self.csm.nameGenerator.nameDictionary.get(p, ('',''))[1]
+            if f: part = part.capitalize()
+            else: part = part.lower()
+            parts.append(part)
+
+        parts[2] += parts.pop(3) # Merge 2&3 (the last name) as there should be no space.
+        while '' in parts: parts.remove('')
+        name = ' '.join(parts)
+
+        self.csm.air.dbInterface.updateObject(
+            self.csm.air.dbId,
+            self.avId,
+            self.csm.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': ('',),
+             'WishName': ('',),
+             'setName': (name,)})
+
+        self.csm.sendUpdateToAccountId(self.target, 'setNamePatternResp', [self.avId, 1])
+        self.demand('Off')
+
 class AcknowledgeNameFSM(AvatarOperationFSM):
     POST_ACCOUNT_STATE = 'GetTargetAvatar'
 
@@ -544,6 +597,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         # of race conditions.
         self.connection2fsm = {}
         self.account2fsm = {}
+
+        # For processing name patterns.
+        self.nameGenerator = NameGenerator()
 
         # Instantiate our account DB interface using config:
         dbtype = simbase.config.GetString('accountdb-type', 'local')
@@ -620,6 +676,10 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def setNameTyped(self, avId, name):
         self.runAccountFSM(SetNameTypedFSM, avId, name)
+
+    def setNamePattern(self, avId, p1, f1, p2, f2, p3, f3, p4, f4):
+        self.runAccountFSM(SetNamePatternFSM, avId, [(p1, f1), (p2, f2),
+                                                     (p3, f3), (p4, f4)])
 
     def acknowledgeAvatarName(self, avId):
         self.runAccountFSM(AcknowledgeNameFSM, avId)
