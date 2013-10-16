@@ -310,6 +310,9 @@ class CreateAvatarFSM(OperationFSM):
         self.demand('Off')
 
 class GetAvatarsFSM(OperationFSM):
+    # DeleteAvatarFSM overrides this
+    POST_ACCOUNT_STATE = 'QueryAvatars'
+
     def enterStart(self):
         # Query the account:
         self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.target,
@@ -320,12 +323,13 @@ class GetAvatarsFSM(OperationFSM):
             self.demand('Kill', 'Your account object was not found in the database!')
             return
 
-        self.avList = fields['ACCOUNT_AV_SET']
+        self.account = fields
+        self.avList = self.account['ACCOUNT_AV_SET']
         # Sanitize; just in case avList is too long/short:
         self.avList = self.avList[:6]
         self.avList += [0] * (6-len(self.avList))
 
-        self.demand('QueryAvatars')
+        self.demand(self.POST_ACCOUNT_STATE)
 
     def enterQueryAvatars(self):
         self.pendingAvatars = set()
@@ -360,6 +364,43 @@ class GetAvatarsFSM(OperationFSM):
 
         self.csm.sendUpdateToAccountId(self.target, 'setAvatars', [potentialAvs])
         self.demand('Off')
+
+# This inherits from GetAvatarsFSM, because the delete operation ends in a
+# setAvatars message being sent to the client.
+class DeleteAvatarFSM(GetAvatarsFSM):
+    POST_ACCOUNT_STATE = 'ProcessDelete'
+
+    def enterStart(self, avId):
+        self.avId = avId
+        GetAvatarsFSM.enterStart(self)
+
+    def enterProcessDelete(self):
+        if self.avId not in self.avList:
+            self.demand('Kill', 'Tried to delete an avatar not in the account!')
+            return
+
+        index = self.avList.index(self.avId)
+        self.avList[index] = 0
+
+        avsDeleted = list(self.account.get('ACCOUNT_AV_SET_DEL', []))
+        avsDeleted.append([self.avId, int(time.time())])
+
+        self.csm.air.dbInterface.updateObject(
+            self.csm.air.dbId,
+            self.target, # i.e. the account ID
+            self.csm.air.dclassesByName['AccountUD'],
+            {'ACCOUNT_AV_SET': self.avList,
+             'ACCOUNT_AV_SET_DEL': avsDeleted},
+            {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
+             'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
+            self.__handleDelete)
+
+    def __handleDelete(self, fields):
+        if fields:
+            self.demand('Kill', 'Database failed to mark the avatar deleted!')
+            return
+
+        self.demand('QueryAvatars')
 
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
@@ -443,6 +484,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def createAvatar(self, dna, index):
         self.runAccountFSM(CreateAvatarFSM, dna, index)
+
+    def deleteAvatar(self, avId):
+        self.runAccountFSM(DeleteAvatarFSM, avId)
 
     def chooseAvatar(self, avId):
         pass

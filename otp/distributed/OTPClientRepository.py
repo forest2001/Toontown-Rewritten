@@ -1034,29 +1034,12 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterWaitForDeleteAvatarResponse(self, potAv):
-        self.handler = self.handleWaitForDeleteAvatarResponse
-        self.sendDeleteAvatarMsg(potAv.id)
+        self.csm.sendDeleteAvatar(potAv.id)
         self.waitForDatabaseTimeout(requestName='WaitForDeleteAvatarResponse')
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def sendDeleteAvatarMsg(self, avId):
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_DELETE_AVATAR)
-        datagram.addUint32(avId)
-        self.send(datagram)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitWaitForDeleteAvatarResponse(self):
         self.cleanupWaitingForDatabase()
-        self.handler = None
-        return
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleWaitForDeleteAvatarResponse(self, msgType, di):
-        if msgType == CLIENT_DELETE_AVATAR_RESP:
-            self.handleGetAvatarsRespMsg(di)
-        else:
-            self.handleMessageType(msgType, di)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterRejectRemoveAvatar(self, reasonCode):

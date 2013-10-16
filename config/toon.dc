@@ -3222,7 +3222,9 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   setAvatars(PotentialToon[]);
 
   createAvatar(blob dna, uint8 index) clsend;
-  createAvatarResp(uint32 doId);
+  createAvatarResp(uint32 avId);
+
+  deleteAvatar(uint32 avId) clsend;
 
   chooseAvatar(uint32 avId) clsend;
   avatarResponse(uint32 avId, blob avdata);
