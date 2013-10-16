@@ -919,7 +919,12 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             pass
 
     def handleGenerateWithRequiredOtherOwner(self, di):
-        pass # Toontown does not make use of OwnerViews.
+        # Toontown only makes use of OwnerViews for LocalToon.
+        if self.loginFSM.getCurrentState().getName() == 'waitForSetAvatarResponse':
+            di.getUint32() # parent
+            di.getUint32() # zone
+            di.getUint16() # dclass
+            self.handleAvatarResponseMsg(di.getUint32(), di)
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase

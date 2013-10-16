@@ -585,6 +585,134 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
         self.csm.sendUpdateToAccountId(self.target, 'acknowledgeAvatarNameResp', [])
         self.demand('Off')
 
+class LoadAvatarFSM(AvatarOperationFSM):
+    POST_ACCOUNT_STATE = 'GetTargetAvatar'
+
+    def enterStart(self, avId):
+        self.avId = avId
+        self.demand('RetrieveAccount')
+
+    def enterGetTargetAvatar(self):
+        # Make sure the target avatar is part of the account:
+        if self.avId not in self.avList:
+            self.demand('Kill', 'Tried to play an avatar not in the account!')
+            return
+
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.avId,
+                                             self.__handleAvatar)
+
+    def __handleAvatar(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
+            self.demand('Kill', "One of the account's avatars is invalid!")
+            return
+
+        self.avatar = fields
+        self.demand('SetAvatar')
+
+    def generateAvatar(self):
+        dclass = self.csm.air.dclassesByName['DistributedToonUD']
+        requiredPacker = DCPacker()
+        otherCount = 0
+        otherPacker = DCPacker()
+
+        for f in range(dclass.getNumInheritedFields()):
+            field = dclass.getInheritedField(f)
+            if field.isRequired():
+                requiredPacker.beginPack(field)
+                if field.getName() in self.avatar:
+                    field.packArgs(requiredPacker, self.avatar[field.getName()])
+                else:
+                    requiredPacker.packDefaultValue()
+                requiredPacker.endPack()
+            elif field.isRam() and field.getName() in self.avatar:
+                otherPacker.rawPackUint16(field.getNumber())
+                otherPacker.beginPack(field)
+                field.packArgs(otherPacker, self.avatar[field.getName()])
+                otherPacker.endPack()
+                otherCount += 1
+
+        dg = PyDatagram()
+        dg.addServerHeader(self.csm.air.serverId, self.csm.air.ourChannel, STATESERVER_OBJECT_GENERATE_WITH_REQUIRED_OTHER)
+        dg.addUint32(0)
+        dg.addUint32(0)
+        dg.addUint16(dclass.getNumber())
+        dg.addUint32(self.avId)
+        dg.appendData(requiredPacker.getString())
+        dg.addUint16(otherCount)
+        dg.appendData(otherPacker.getString())
+        self.csm.air.send(dg)
+
+    def enterSetAvatar(self):
+        channel = self.csm.GetAccountConnectionChannel(self.target)
+
+        # First, give them a POSTREMOVE to unload the avatar, just in case they
+        # disconnect while we're working.
+        dgcleanup = PyDatagram()
+        dgcleanup.addServerHeader(self.avId, channel, STATESERVER_OBJECT_DELETE_RAM)
+        dgcleanup.addUint32(self.avId)
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
+        self.csm.air.send(dg)
+
+        # TODO: When we have the DBSS, this will just be a simple ACTIVATE.
+        self.generateAvatar()
+
+        # Next, add them to the avatar channel:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
+        dg.addChannel(self.csm.GetPuppetConnectionChannel(self.avId))
+        self.csm.air.send(dg)
+
+        # Now set their sender channel to represent their account affiliation:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
+        self.csm.air.send(dg)
+
+        # Finally, grant ownership and shut down.
+        dg = PyDatagram()
+        dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
+        dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
+        self.csm.air.send(dg)
+        self.demand('Off')
+
+class UnloadAvatarFSM(OperationFSM):
+    def enterStart(self, avId):
+        self.avId = avId
+
+        # We don't even need to query the account, we know the avatar is being played!
+        self.demand('UnloadAvatar')
+
+    def enterUnloadAvatar(self):
+        channel = self.csm.GetAccountConnectionChannel(self.target)
+
+        # Clear off POSTREMOVE:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLEAR_POST_REMOVE)
+        self.csm.air.send(dg)
+
+        # Remove avatar channel:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLOSE_CHANNEL)
+        dg.addChannel(self.csm.GetPuppetConnectionChannel(self.avId))
+        self.csm.air.send(dg)
+
+        # Reset sender channel:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addChannel(self.target<<32) # accountId in high 32 bits, no avatar in low
+        self.csm.air.send(dg)
+
+        # Unload avatar object:
+        dg = PyDatagram()
+        dg.addServerHeader(self.avId, channel, STATESERVER_OBJECT_DELETE_RAM)
+        dg.addUint32(self.avId)
+        self.csm.air.send(dg)
+
+        # Done!
+        self.demand('Off')
+
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
@@ -685,4 +813,17 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.runAccountFSM(AcknowledgeNameFSM, avId)
 
     def chooseAvatar(self, avId):
-        self.killAccount(self.air.getAccountIdFromSender(), 'No playing yet!')
+        currentAvId = self.air.getAvatarIdFromSender()
+        accountId = self.air.getAccountIdFromSender()
+        if currentAvId and avId:
+            self.killAccount(accountId, 'A Toon is already chosen!')
+            return
+        elif not currentAvId and not avId:
+            # This isn't really an error, the client is probably just making sure
+            # none of its Toons are active.
+            return
+
+        if avId:
+            self.runAccountFSM(LoadAvatarFSM, avId)
+        else:
+            self.runAccountFSM(UnloadAvatarFSM, currentAvId)

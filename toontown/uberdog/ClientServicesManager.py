@@ -76,7 +76,4 @@ class ClientServicesManager(DistributedObjectGlobal):
     def sendChooseAvatar(self, avId):
         self.sendUpdate('chooseAvatar', [avId])
 
-    def avatarResponse(self, avatarId, avDetails):
-        dg = Datagram(avDetails)
-        di = DatagramIterator(dg)
-        self.cr.handleAvatarResponseMsg(avatarId, di)
+    # No response: instead, an OwnerView is sent or deleted.
