@@ -514,7 +514,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
         parts = []
         for p,f in self.pattern:
             part = self.csm.nameGenerator.nameDictionary.get(p, ('',''))[1]
-            if f: part = part.capitalize()
+            if f: part = part[:1].upper() + part[1:]
             else: part = part.lower()
             parts.append(part)
 
