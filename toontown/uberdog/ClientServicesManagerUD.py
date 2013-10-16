@@ -305,6 +305,55 @@ class CreateAvatarFSM(OperationFSM):
         self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
         self.demand('Off')
 
+class GetAvatarsFSM(OperationFSM):
+    def enterStart(self):
+        # Query the account:
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.target,
+                                             self.__handleRetrieve)
+
+    def __handleRetrieve(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['AccountUD']:
+            self.demand('Kill', 'Your account object was not found in the database!')
+            return
+
+        self.avList = fields['ACCOUNT_AV_SET']
+        # Sanitize; just in case avList is too long/short:
+        self.avList = self.avList[:6]
+        self.avList += [0] * (6-len(self.avList))
+
+        self.demand('QueryAvatars')
+
+    def enterQueryAvatars(self):
+        self.pendingAvatars = set()
+        self.avatarFields = {}
+        for avId in self.avList:
+            if avId:
+                self.pendingAvatars.add(avId)
+
+                def response(dclass, fields, avId=avId):
+                    if self.state != 'QueryAvatars': return
+                    if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
+                        self.demand('Kill', "One of the account's avatars is invalid!")
+                        return
+                    self.avatarFields[avId] = fields
+                    self.pendingAvatars.remove(avId)
+                    if not self.pendingAvatars:
+                        self.demand('SendAvatars')
+
+                self.csm.air.dbInterface.queryObject(self.csm.air.dbId, avId,
+                                                     response)
+
+    def enterSendAvatars(self):
+        potentialAvs = []
+
+        for avId, fields in self.avatarFields.items():
+            index = self.avList.index(avId)
+            potentialAvs.append([avId, fields['setName'][0], fields['setDNAString'][0],
+                                 index, 0])
+
+        self.csm.sendUpdateToAccountId(self.target, 'setAvatars', [potentialAvs])
+        self.demand('Off')
+
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
@@ -370,10 +419,17 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def requestAvatars(self):
         self.notify.debug('Received avatar list request from %d' % (self.air.getMsgSender()))
+        sender = self.air.getAccountIdFromSender()
 
-        avs = []
+        if not sender:
+            self.killAccount(sender, 'Client is not logged in.')
 
-        self.sendUpdateToChannel(self.air.getMsgSender(), 'setAvatars', [avs])
+        if sender in self.account2fsm:
+            self.killAccountFSM(sender)
+            return
+
+        self.account2fsm[sender] = GetAvatarsFSM(self, sender)
+        self.account2fsm[sender].request('Start')
 
     def createAvatar(self, dna, index):
         sender = self.air.getAccountIdFromSender()
