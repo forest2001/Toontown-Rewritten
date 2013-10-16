@@ -6,11 +6,6 @@ from pandac.PandaModules import *
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
 
-    def announceGenerate(self):
-        DistributedObjectGlobal.announceGenerate(self)
-
-        self.accept('nameShopCreateAvatar', self.sendCreateAvatar)
-
     # --- LOGIN LOGIC ---
     def performLogin(self, doneEvent):
         self.doneEvent = doneEvent

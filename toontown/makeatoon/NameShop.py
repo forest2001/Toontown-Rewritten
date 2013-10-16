@@ -961,7 +961,7 @@ class NameShop(StateData.StateData):
         else:
             self.requestingSkipTutorial = False
         if not self.avExists or self.avExists and self.avId == 'deleteMe':
-            messenger.send('nameShopCreateAvatar', [style, '', self.index])
+            base.cr.csm.sendCreateAvatar(style, '', self.index)
             self.accept('nameShopCreateAvatarDone', self.handleCreateAvatarResponse)
         else:
             self.checkNameTyped()
