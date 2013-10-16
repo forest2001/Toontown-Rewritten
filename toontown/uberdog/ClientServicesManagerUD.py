@@ -625,4 +625,4 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.runAccountFSM(AcknowledgeNameFSM, avId)
 
     def chooseAvatar(self, avId):
-        pass
+        self.killAccount(self.air.getAccountIdFromSender(), 'No playing yet!')
