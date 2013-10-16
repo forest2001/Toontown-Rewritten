@@ -56,4 +56,4 @@ roles:
         max: 399999999
       engine:
         type: yaml
-        foldername: ttdev_db
+        foldername: ../databases/astrondb
