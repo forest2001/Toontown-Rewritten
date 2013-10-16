@@ -347,6 +347,9 @@ class GetAvatarsFSM(OperationFSM):
                 self.csm.air.dbInterface.queryObject(self.csm.air.dbId, avId,
                                                      response)
 
+        if not self.pendingAvatars:
+            self.demand('SendAvatars')
+
     def enterSendAvatars(self):
         potentialAvs = []
 
