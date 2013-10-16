@@ -147,6 +147,7 @@ class LoginAccountFSM(OperationFSM):
                         'pirateAvatars': [],
                         'HOUSE_ID_SET': [0]*6,
                         'ESTATE_ID': 0,
+                        'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime()}
 
