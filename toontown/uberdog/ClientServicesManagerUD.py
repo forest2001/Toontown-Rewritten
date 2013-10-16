@@ -404,6 +404,19 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             return
         self.killAccount(accountId, 'An operation is already underway: ' + fsm.name)
 
+    def runAccountFSM(self, fsmtype, *args):
+        sender = self.air.getAccountIdFromSender()
+
+        if not sender:
+            self.killAccount(sender, 'Client is not logged in.')
+
+        if sender in self.account2fsm:
+            self.killAccountFSM(sender)
+            return
+
+        self.account2fsm[sender] = fsmtype(self, sender)
+        self.account2fsm[sender].request('Start', *args)
+
     def login(self, cookie):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
@@ -423,30 +436,10 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def requestAvatars(self):
         self.notify.debug('Received avatar list request from %d' % (self.air.getMsgSender()))
-        sender = self.air.getAccountIdFromSender()
-
-        if not sender:
-            self.killAccount(sender, 'Client is not logged in.')
-
-        if sender in self.account2fsm:
-            self.killAccountFSM(sender)
-            return
-
-        self.account2fsm[sender] = GetAvatarsFSM(self, sender)
-        self.account2fsm[sender].request('Start')
+        self.runAccountFSM(GetAvatarsFSM)
 
     def createAvatar(self, dna, index):
-        sender = self.air.getAccountIdFromSender()
-
-        if not sender:
-            self.killAccount(sender, 'Client is not logged in.')
-
-        if sender in self.account2fsm:
-            self.killAccountFSM(sender)
-            return
-
-        self.account2fsm[sender] = CreateAvatarFSM(self, sender)
-        self.account2fsm[sender].request('Start', dna, index)
+        self.runAccountFSM(CreateAvatarFSM, dna, index)
 
     def chooseAvatar(self, avId):
         pass
