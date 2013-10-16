@@ -269,6 +269,8 @@ class CreateAvatarFSM(OperationFSM):
 
         toonFields = {
             'setName': (name,),
+            'WishNameState': ('OPEN',),
+            'WishName': ('',),
             'setDNAString': (self.dna,)
         }
 
@@ -309,11 +311,11 @@ class CreateAvatarFSM(OperationFSM):
         self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
         self.demand('Off')
 
-class GetAvatarsFSM(OperationFSM):
-    # DeleteAvatarFSM overrides this
-    POST_ACCOUNT_STATE = 'QueryAvatars'
+class AvatarOperationFSM(OperationFSM):
+    # This needs to be overridden.
+    POST_ACCOUNT_STATE = 'Off'
 
-    def enterStart(self):
+    def enterRetrieveAccount(self):
         # Query the account:
         self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.target,
                                              self.__handleRetrieve)
@@ -330,6 +332,12 @@ class GetAvatarsFSM(OperationFSM):
         self.avList += [0] * (6-len(self.avList))
 
         self.demand(self.POST_ACCOUNT_STATE)
+
+class GetAvatarsFSM(AvatarOperationFSM):
+    POST_ACCOUNT_STATE = 'QueryAvatars'
+
+    def enterStart(self):
+        self.demand('RetrieveAccount')
 
     def enterQueryAvatars(self):
         self.pendingAvatars = set()
@@ -359,8 +367,25 @@ class GetAvatarsFSM(OperationFSM):
 
         for avId, fields in self.avatarFields.items():
             index = self.avList.index(avId)
-            potentialAvs.append([avId, fields['setName'][0], fields['setDNAString'][0],
-                                 index, 0])
+            wns = fields.get('WishNameState', [''])[0]
+            name = fields['setName'][0]
+            if wns == 'OPEN':
+                nameState = 1
+            elif wns == 'PENDING':
+                nameState = 2
+            elif wns == 'APPROVED':
+                nameState = 3
+                name = fields['WishName'][0]
+            elif wns == 'REJECTED':
+                nameState = 4
+            elif wns == '':
+                nameState = 0
+            else:
+                self.csm.notify.warning('Avatar %d is in unknown name state %s.' % (avId, wns))
+                nameState = 0
+
+            potentialAvs.append([avId, name, fields['setDNAString'][0],
+                                 index, nameState])
 
         self.csm.sendUpdateToAccountId(self.target, 'setAvatars', [potentialAvs])
         self.demand('Off')
@@ -401,6 +426,58 @@ class DeleteAvatarFSM(GetAvatarsFSM):
             return
 
         self.demand('QueryAvatars')
+
+class AcknowledgeNameFSM(AvatarOperationFSM):
+    POST_ACCOUNT_STATE = 'GetTargetAvatar'
+
+    def enterStart(self, avId):
+        self.avId = avId
+        self.demand('RetrieveAccount')
+
+    def enterGetTargetAvatar(self):
+        # Make sure the target avatar is part of the account:
+        if self.avId not in self.avList:
+            self.demand('Kill', 'Tried to acknowledge name on an avatar not in the account!')
+            return
+
+        self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.avId,
+                                             self.__handleAvatar)
+
+    def __handleAvatar(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
+            self.demand('Kill', "One of the account's avatars is invalid!")
+            return
+
+        # Process the WishNameState change.
+        wns = fields['WishNameState'][0]
+        wn = fields['WishName'][0]
+        name = fields['setName'][0]
+
+        if wns == 'APPROVED':
+            wns = ''
+            name = wn
+            wn = ''
+        elif wns == 'REJECTED':
+            wns = 'OPEN'
+            wn = ''
+        else:
+            self.demand('Kill', "Tried to acknowledge name on an avatar in %s state!" % wns)
+            return
+
+        # Push the change back through:
+        self.csm.air.dbInterface.updateObject(
+            self.csm.air.dbId,
+            self.avId,
+            self.csm.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': (wns,),
+             'WishName': (wn,),
+             'setName': (name,)},
+            {'WishNameState': fields['WishNameState'],
+             'WishName': fields['WishName'],
+             'setName': fields['setName']})
+
+        self.csm.sendUpdateToAccountId(self.target, 'acknowledgeAvatarNameResp', [])
+        self.demand('Off')
 
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
@@ -487,6 +564,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def deleteAvatar(self, avId):
         self.runAccountFSM(DeleteAvatarFSM, avId)
+
+    def acknowledgeAvatarName(self, avId):
+        self.runAccountFSM(AcknowledgeNameFSM, avId)
 
     def chooseAvatar(self, avId):
         pass

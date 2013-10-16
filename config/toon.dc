@@ -3224,6 +3224,9 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   createAvatar(blob dna, uint8 index) clsend;
   createAvatarResp(uint32 avId);
 
+  acknowledgeAvatarName(uint32 avId) clsend;
+  acknowledgeAvatarNameResp();
+
   deleteAvatar(uint32 avId) clsend;
 
   chooseAvatar(uint32 avId) clsend;

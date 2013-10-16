@@ -30,9 +30,16 @@ class ClientServicesManager(DistributedObjectGlobal):
 
     def setAvatars(self, avatars):
         avList = []
-        for avNum, avName, avDNA, avPosition, aname in avatars:
+        for avNum, avName, avDNA, avPosition, nameState in avatars:
+            nameOpen = int(nameState == 1)
             names = [avName, '', '', '']
-            avList.append(PotentialAvatar(avNum, names, avDNA, avPosition, aname))
+            if nameState == 2: # PENDING
+                names[1] = avName
+            elif nameState == 3: # APPROVED
+                names[2] = avName
+            elif nameState == 4: # REJECTED
+                names[3] = avName
+            avList.append(PotentialAvatar(avNum, names, avDNA, avPosition, nameOpen))
 
         self.cr.handleAvatarsList(avList)
 
@@ -47,6 +54,14 @@ class ClientServicesManager(DistributedObjectGlobal):
         self.sendUpdate('deleteAvatar', [avId])
 
     # No deleteAvatarResp; it just sends a setAvatars when the deed is done.
+
+    # --- AVATAR NAMING ---
+    def sendAcknowledgeAvatarName(self, avId, callback):
+        self.ackCallback = callback
+        self.sendUpdate('acknowledgeAvatarName', [avId])
+
+    def acknowledgeAvatarNameResp(self):
+        self.ackCallback()
 
     # --- AVATAR CHOICE ---
     def sendChooseAvatar(self, avId):
