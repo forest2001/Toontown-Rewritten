@@ -243,7 +243,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         from otp.friends import FriendInfo
 
     def disable(self):
-        self.stopHackObservation()
         self.laffMeter.destroy()
         del self.laffMeter
         self.questMap.destroy()
@@ -252,7 +251,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.purchaseButton.destroy()
             del self.purchaseButton
         self.newsButtonMgr.request('Off')
-        base.whiteList.unload()
         self.book.unload()
         del self.optionsPage
         del self.shardPage
