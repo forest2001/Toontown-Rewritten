@@ -71,3 +71,6 @@ class NametagGroup:
 
     def manage(self, manager):
         pass
+
+    def unmanage(self, manager):
+        pass
