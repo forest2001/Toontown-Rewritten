@@ -6,6 +6,9 @@ from toontown.toon.ToonDNA import ToonDNA
 from toontown.toonbase import TTLocalizer
 import anydbm
 import time
+import hmac
+import hashlib
+import json
 
 class LocalAccountDB:
     def __init__(self, csm):
@@ -56,12 +59,12 @@ class RemoteAccountDB:
             if (gsUserId == -1):
                 gsUserId = 0
             callback({'success': True,
-                      'accountId': response['user_id'],
-                      'databaseId': gsUserId})
+                      'databaseId': response['user_id'],
+                      'accountId': gsUserId})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (accountId, databaseId), str(accountId) + str(databaseId))
         if (not response['status']):
-            self.csm.notify.warning("Unable to set databaseId with account server! Message: %s" % response['banner'])
+            self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response['banner'])
             callback(False)
         else:
             callback(True)
@@ -71,7 +74,7 @@ class RemoteAccountDB:
         spec = DocumentSpec(simbase.config.GetString("account-server-endpoint", "https://www.toontownrewritten.com/api/gameserver/") + url)
         rf = Ramfile()
         digest = hmac.new(simbase.config.GetString('account-server-secret', 'dev'), message, hashlib.sha256)
-        expiration = str((int(time()) * 1000) + 60000)
+        expiration = str((int(time.time()) * 1000) + 60000)
         digest.update(expiration)
         channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
         channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
