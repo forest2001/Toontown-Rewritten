@@ -25,6 +25,7 @@ class ToonBase(OTPBase.OTPBase):
     def __init__(self):
         OTPBase.OTPBase.__init__(self)
         self.disableShowbaseMouse()
+        self.addCullBins()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
         self.toonChatSounds = self.config.GetBool('toon-chat-sounds', 1)
         self.placeBeforeObjects = config.GetBool('place-before-objects', 1)
@@ -162,6 +163,11 @@ class ToonBase(OTPBase.OTPBase):
         base.cam.node().getLens().setFilmSize(newX, newY)
         self.oldX = newX
         self.oldY = newY
+
+    def addCullBins(self):
+        cbm = CullBinManager.getGlobalPtr()
+        cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
+        cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
 
     def disableShowbaseMouse(self):
         self.useDrive()
