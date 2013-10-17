@@ -16,7 +16,8 @@ reserved = {
   'FRONT_DOOR_POINT' : 'FRONT_DOOR_POINT',
   'SIDE_DOOR_POINT' : 'SIDE_DOOR_POINT',
   'COGHQ_IN_POINT' : 'COGHQ_IN_POINT',
-  'COGHQ_OUT_POINT' : 'COGHQ_OUT_POINT'
+  'COGHQ_OUT_POINT' : 'COGHQ_OUT_POINT',
+  'suit_edge' : 'SUIT_EDGE',
 }
 tokens += reserved.values()
 t_QUOTED_STRING = r'["][^"]*["]'
@@ -64,18 +65,24 @@ class DNAStorage:
         self.suitPoints = []
         self.suitPointMap = {}
         self.DNAGroups = {}
+        self.suitEdges = {}# stored as {startIndex : [edges]}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
         self.suitPoints += [suitPoint]
         self.suitPointMap[suitPoint.getIndex()] = suitPoint
     def getSuitPointAtIndex(self, index):
-        return self.suitPoints[index]
+        if index in self.suitPoints:
+            return self.suitPoints[index]
+        return None
     def getSuitPointWithIndex(self, index):
-        return self.suitPointMap[index]
+        if index in self.suitPointMap:
+            return self.suitPointMap[index]
+        return None
     def resetSuitPoints(self):
         self.suitPoints = []
         self.suitPointMap = {}
+        self.suitEdges = {}
     def findDNAGroup(self, node):
         return DNAGroups[node]
     def removeDNAGroup(self, dnagroup):
@@ -84,8 +91,23 @@ class DNAStorage:
                 del self.DNAGroups[node]
     def resetDNAGroups(self):
         self.DNAGroups = {}
+    def storeSuitEdge(self, startIndex, endIndex, zoneId):
+        startPoint = self.getSuitPointWithIndex(startIndex)
+        endPoint = self.getSuitPointWithIndex(endIndex)
+        if startPoint is None or endPoint is None:
+            return
+        if not startIndex in self.suitEdges:
+            self.suitEdges[startIndex] = []
+        self.suitEdges[startIndex] += [DNASuitEdge(startPoint, endPoint, zoneId)]
+    def getSuitEdge(self, startIndex, endIndex):
+        if not startIndex in self.suitEdges:
+            return None
+        for edge in self.suitEdges[startIndex]:
+            if edge.getEndPoint().getIndex() == endIndex:
+                return edge
+        return None
     def ls(self):
-        print 'DNASuitPoints: '
+        print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
             print '\t', suitPoint
 
@@ -139,6 +161,20 @@ class DNASuitPoint:
                 raise TypeError('%s is not a valid DNASuitPointType' % type)
     def setPos(self, pos):
         self.pos = pos
+
+class DNASuitEdge:
+    def __init__(self, startpt, endpt, zoneId):
+        self.startpt = startpt
+        self.endpt = endpt
+        self.zoneId = zoneId
+    def getEndPoint(self):
+        return self.endpt
+    def getStartPoint(self):
+        return seld.startpt
+    def getZoneId(self):
+        return self.zoneId
+    def setZoneId(self, zoneId):
+        self.zoneId = zoneId
 
 class DNAGroup:
     def __init__(self, name):
@@ -259,7 +295,7 @@ def p_lpoint3f(p):
 
 def p_suitpoint(p):
     '''suitpoint : STORE_SUIT_POINT "[" number "," suitpointtype "," lpoint3f "]"'''
-    dnaStore.storeSuitPoint(DNASuitPoint(p[3], p[5], p[7]))
+    p.parser.dnaStore.storeSuitPoint(DNASuitPoint(p[3], p[5], p[7]))
 
 def p_suitpointtype(p):
     '''suitpointtype : STREET_POINT
@@ -312,11 +348,18 @@ def p_group(p):
              | visgroup'''
     p[0] = p[1]
 
+def p_suitedge(p):
+    '''suitedge : SUIT_EDGE "[" number number "]"'''
+    zoneId = p.parser.parentGroup.getName()
+    p.parser.dnaStore.storeSuitEdge(p[2], p[3], zoneId)
+
 def p_subgroup_opt(p):
     '''subgroup_list : subgroup_list group
-                    | empty'''
+                     | subgroup_list suitedge
+                     | empty'''
     p[0] = p[1]
     if len(p) == 3:
-        p[0] += [p[2]]
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
     else:
         p[0] = []
