@@ -1,0 +1,5 @@
+group "toontownCentralTutorial" [
+ visgroup "20001" [
+  vis [   "20001"   ]
+ ]
+]
