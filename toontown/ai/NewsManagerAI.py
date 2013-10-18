@@ -52,17 +52,32 @@ class NewsManagerAI(DistributedObjectAI):
     def setWeeklyCalendarHolidays(self, todo0):
         pass
 
+    def getWeeklyCalendarHolidays(self):
+        return []
+
     def setYearlyCalendarHolidays(self, todo0):
         pass
+
+    def getYearlyCalendarHolidays(self):
+        return []
 
     def setOncelyCalendarHolidays(self, todo0):
         pass
 
+    def getOncelyCalendarHolidays(self):
+        return []
+
     def setRelativelyCalendarHolidays(self, todo0):
         pass
 
+    def getRelativelyCalendarHolidays(self):
+        return []
+
     def setMultipleStartHolidays(self, todo0):
         pass
+
+    def getMultipleStartHolidays(self):
+        return []
 
     def sendSystemMessage(self, todo0, todo1):
         pass

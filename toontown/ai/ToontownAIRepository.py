@@ -3,6 +3,7 @@ from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
+from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.hood.TTHoodAI import TTHoodAI
 from toontown.toonbase import ToontownGlobals
@@ -21,7 +22,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods = []
         self.zoneDataStore = AIZoneDataStore()
 
-        self.useAllMinigames = self.config.GetBool('want-all-minigames', True)
+        self.useAllMinigames = self.config.GetBool('want-all-minigames', False)
         self.doLiveUpdates = False
 
         self.holidayManager = HolidayManagerAI()
@@ -77,6 +78,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.timeManager = TimeManagerAI(self)
         self.timeManager.generateWithRequired(2)
+
+        self.newsManager = NewsManagerAI(self)
+        self.newsManager.generateWithRequired(2)
 
     def createZones(self):
         """
