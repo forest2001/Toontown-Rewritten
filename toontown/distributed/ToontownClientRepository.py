@@ -222,14 +222,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
     def __handleAvatarChooserDone(self, avList, doneStatus):
         done = doneStatus['mode']
         if done == 'exit':
-            if not launcher.isDummy() and launcher.VISTA:
-                if not self.isPaid():
-                    self.loginFSM.request('shutdown', [OTPLauncherGlobals.ExitUpsell])
-                else:
-                    self.loginFSM.request('shutdown')
-            else:
-                self.loginFSM.request('shutdown')
-            return
+            self.loginFSM.request('shutdown')
         index = self.avChoice.getChoice()
         for av in avList:
             if av.position == index:
