@@ -9,5 +9,6 @@ group "toontownCentralTutorial" [
   suit_edge [ 1 2 ]
   suit_edge [ 2 3 ]
   suit_edge [ 3 0 ]
+  battle_cell [ 20 20 75 20 -0.5 ]
  ]
 ]

@@ -18,6 +18,7 @@ reserved = {
   'COGHQ_IN_POINT' : 'COGHQ_IN_POINT',
   'COGHQ_OUT_POINT' : 'COGHQ_OUT_POINT',
   'suit_edge' : 'SUIT_EDGE',
+  'battle_cell': 'BATTLE_CELL',
 }
 tokens += reserved.values()
 t_QUOTED_STRING = r'["][^"]*["]'
@@ -66,6 +67,7 @@ class DNAStorage:
         self.suitPointMap = {}
         self.DNAGroups = {}
         self.suitEdges = {}# stored as {startIndex : [edges]}
+        self.battleCells = []
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -106,10 +108,19 @@ class DNAStorage:
             if edge.getEndPoint().getIndex() == endIndex:
                 return edge
         return None
+    def removeBattleCell(self, cell):
+        self.battleCells.remove(cell)
+    def storeBattleCell(self, cell):
+        self.battleCells += [cell]
+    def resetBattleCells(self):
+        self.battleCells = []
     def ls(self):
         print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
             print '\t', suitPoint
+        print 'DNABattleCells:'
+        for cell in self.battleCells:
+            print '\t', cell
 
 class DNASuitPoint:
     pointTypeMap = {
@@ -161,6 +172,23 @@ class DNASuitPoint:
                 raise TypeError('%s is not a valid DNASuitPointType' % type)
     def setPos(self, pos):
         self.pos = pos
+
+class DNABattleCell:
+    def __init__(self, width, height, pos):
+        self.width = width
+        self.height = height
+        self.pos = pos
+    def __str__(self):
+        return 'DNABattleCell width: ' + str(self.width) + ' height: ' + str(self.height) + ' pos: ' + str(self.pos)
+    def getWidth(self):
+        return self.width
+    def getHeight(self):
+        return self.height
+    def getPos(self):
+        return self.pos
+    def setWidthHeight(width, height):
+        self.width = width
+        self.height = height
 
 class DNASuitEdge:
     def __init__(self, startpt, endpt, zoneId):
@@ -353,9 +381,16 @@ def p_suitedge(p):
     zoneId = p.parser.parentGroup.getName()
     p.parser.dnaStore.storeSuitEdge(p[2], p[3], zoneId)
 
+def p_battlecell(p):
+    '''battlecell : BATTLE_CELL "[" number number lpoint3f "]"'''
+    p[0] = DNABattleCell(p[3], p[4], p[5])
+    p.parser.dnaStore.storeBattleCell(p[0])
+    p.parser.parentGroup.addBattleCell(p[0])
+
 def p_subgroup_opt(p):
     '''subgroup_list : subgroup_list group
                      | subgroup_list suitedge
+                     | subgroup_list battlecell
                      | empty'''
     p[0] = p[1]
     if len(p) == 3:
