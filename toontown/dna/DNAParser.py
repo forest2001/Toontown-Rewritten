@@ -399,7 +399,7 @@ def p_dnagroup(p):
     p.parser.parentGroup = p[0].getParent()
 
 def p_visgroup(p):
-    '''visgroup : visgroupdef "[" vis subvisgroup_list "]"'''
+    '''visgroup : visgroupdef "[" subvisgroup_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
@@ -457,6 +457,7 @@ def p_subvisgroup_list(p):
     '''subvisgroup_list : subvisgroup_list group
                      | subvisgroup_list suitedge
                      | subvisgroup_list battlecell
+                     | subvisgroup_list vis
                      | empty'''
     p[0] = p[1]
     if len(p) == 3:
