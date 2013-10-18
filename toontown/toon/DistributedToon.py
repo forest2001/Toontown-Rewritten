@@ -193,7 +193,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             soundSequence.finish()
 
         self.soundSequenceList = []
-        self._stopZombieCheck()
         if self.boardingParty:
             self.boardingParty.demandDrop()
             self.boardingParty = None
