@@ -97,9 +97,9 @@ class DistributedTarget(DistributedObject.DistributedObject):
             if self.fadeTrack:
                 self.fadeTrack.pause()
             if enabled:
-                self.fadeTrack = Sequence(Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameStart), Func(self.geom.unstash), Func(self.geom.lerpColorScale, Vec4(1.0, 1.0, 1.0, 0.0), Vec4(1.0, 1.0, 1.0, 1.0), 1.0), Wait(1), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameInst))
+                self.fadeTrack = Sequence(Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameStart), Func(self.geom.unstash), self.geom.colorScaleInterval(1.0, Vec4(1.0, 1.0, 1.0, 1.0)), Wait(1), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameInst))
             else:
-                self.fadeTrack = Sequence(Func(self.geom.lerpColorScale, Vec4(1.0, 1.0, 1.0, 1.0), Vec4(1.0, 1.0, 1.0, 0.0), 1.0), Func(self.geom.stash), Func(self.hideTimer), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameEnd))
+                self.fadeTrack = Sequence(self.geom.colorScaleInterval(1.0, Vec4(1.0, 1.0, 1.0, 0.0)), Func(self.geom.stash), Func(self.hideTimer), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameEnd))
             self.fadeTrack.start()
             self.enabled = enabled
         if score != self.score:

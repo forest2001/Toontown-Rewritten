@@ -5,6 +5,7 @@ from toontown.distributed.ToontownMsgTypes import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
 from direct.task.Task import Task
+from direct.interval.IntervalGlobal import *
 from toontown.minigame import Purchase
 from direct.gui import OnscreenText
 from toontown.building import SuitInterior
@@ -56,12 +57,8 @@ class Hood(StateData.StateData):
         self.titleText.setColor(Vec4(*self.titleColor))
         self.titleText.clearColorScale()
         self.titleText.setFg(self.titleColor)
-        seq = Task.sequence(Task.pause(0.1), Task.pause(6.0), self.titleText.lerpColorScale(Vec4(1.0, 1.0, 1.0, 1.0), Vec4(1.0, 1.0, 1.0, 0.0), 0.5), Task(self.hideTitleTextTask))
-        taskMgr.add(seq, 'titleText')
-
-    def hideTitleTextTask(self, task):
-        self.titleText.hide()
-        return Task.done
+        seq = Sequence(Wait(0.1), Wait(6.0), self.titleText.colorScaleInterval(0.5, Vec4(1.0, 1.0, 1.0, 0.0)), Func(self.titleText.hide))
+        seq.start()
 
     def hideTitleText(self):
         if self.titleText:
