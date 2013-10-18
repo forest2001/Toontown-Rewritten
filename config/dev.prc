@@ -5,6 +5,7 @@ server-version dev
 dc-file config/toon.dc
 dc-file config/otp.dc
 
+eventlog-host 127.0.0.1
 accountdb-local-file databases/csm-cookies.db
 
 account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
