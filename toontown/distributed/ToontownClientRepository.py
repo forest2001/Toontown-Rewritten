@@ -175,12 +175,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         del self.okButton
         del self.acceptedText
         del self.acceptedBanner
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_SET_WISHNAME_CLEAR)
-        datagram.addUint32(avatarChoice.id)
-        datagram.addUint8(1)
-        self.send(datagram)
-        self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice])
+        self.csm.sendAcknowledgeAvatarName(
+            avatarChoice.id,
+            lambda: self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice]))
 
     def betterlucknexttime(self, avList, index):
         self.rejectDoneEvent = 'rejectDone'
@@ -191,8 +188,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def __handleReject(self, avList, index):
         self.rejectDialog.cleanup()
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_SET_WISHNAME_CLEAR)
         avid = 0
         for k in avList:
             if k.position == index:
@@ -200,10 +195,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
         if avid == 0:
             self.notify.error('Avatar rejected not found in avList.  Index is: ' + str(index))
-        datagram.addUint32(avid)
-        datagram.addUint8(0)
-        self.send(datagram)
-        self.loginFSM.request('waitForAvatarList')
+        self.csm.sendAcknowledgeAvatarName(
+            avid,
+            lambda: self.loginFSM.request('waitForAvatarList'))
 
     def enterChooseAvatar(self, avList):
         ModelPool.garbageCollect()
@@ -310,20 +304,12 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.avCreate = MakeAToon.MakeAToon(self.loginFSM, avList, 'makeAToonComplete', index, self.isPaid())
         self.avCreate.load()
         self.avCreate.enter()
-        self.handler = self.handleCreateAvatar
         self.accept('makeAToonComplete', self.__handleMakeAToon, [avList, index])
-        self.accept('nameShopCreateAvatar', self.sendCreateAvatarMsg)
         self.accept('nameShopPost', self.relayMessage)
         return
 
     def relayMessage(self, dg):
         self.send(dg)
-
-    def handleCreateAvatar(self, msgType, di):
-        if msgType == CLIENT_CREATE_AVATAR_RESP or msgType == CLIENT_SET_NAME_PATTERN_ANSWER or msgType == CLIENT_SET_WISHNAME_RESP:
-            self.avCreate.ns.nameShopHandler(msgType, di)
-        else:
-            self.handleMessageType(msgType, di)
 
     def __handleMakeAToon(self, avList, avPosition):
         done = self.avCreate.getDoneStatus()
@@ -349,7 +335,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
     def exitCreateAvatar(self):
         self.ignore('makeAToonComplete')
         self.ignore('nameShopPost')
-        self.ignore('nameShopCreateAvatar')
         self.avCreate.unload()
         self.avCreate = None
         self.handler = None
@@ -479,7 +464,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.handlerArgs = {'hoodId': hoodId,
          'zoneId': zoneId,
          'avId': avId}
-        self.handler = self.handleTutorialQuestion
         self.__requestSkipTutorial(hoodId, zoneId, avId)
 
     def __requestSkipTutorial(self, hoodId, zoneId, avId):
@@ -506,32 +490,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return
 
     def enterTutorialQuestion(self, hoodId, zoneId, avId):
-        self.handler = self.handleTutorialQuestion
         self.__requestTutorial(hoodId, zoneId, avId)
-
-    def handleTutorialQuestion(self, msgType, di):
-        if msgType == CLIENT_CREATE_OBJECT_REQUIRED:
-            self.handleGenerateWithRequired(di)
-        elif msgType == CLIENT_CREATE_OBJECT_REQUIRED_OTHER:
-            self.handleGenerateWithRequiredOther(di)
-        elif msgType == CLIENT_OBJECT_UPDATE_FIELD:
-            self.handleUpdateField(di)
-        elif msgType == CLIENT_OBJECT_DISABLE_RESP:
-            self.handleDisable(di)
-        elif msgType == CLIENT_OBJECT_DELETE_RESP:
-            self.handleDelete(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_RESP:
-            self.handleGetFriendsList(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_EXTENDED_RESP:
-            self.handleGetFriendsListExtended(di)
-        elif msgType == CLIENT_FRIEND_ONLINE:
-            self.handleFriendOnline(di)
-        elif msgType == CLIENT_FRIEND_OFFLINE:
-            self.handleFriendOffline(di)
-        elif msgType == CLIENT_GET_AVATAR_DETAILS_RESP:
-            self.handleGetAvatarDetailsResp(di)
-        else:
-            self.handleMessageType(msgType, di)
 
     def __requestTutorial(self, hoodId, zoneId, avId):
         self.notify.debug('requesting tutorial')
@@ -787,16 +746,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def removeFriend(self, avatarId):
         base.localAvatar.sendUpdate('friendsNotify', [base.localAvatar.doId, 1], sendToId=avatarId)
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_REMOVE_FRIEND)
-        datagram.addUint32(avatarId)
-        self.send(datagram)
-        self.estateMgr.removeFriend(base.localAvatar.doId, avatarId)
-        for pair in base.localAvatar.friendsList:
-            friendId = pair[0]
-            if friendId == avatarId:
-                base.localAvatar.friendsList.remove(pair)
-                return
+        self.notify.warning('removeFriend: TODO!')
 
     def clearFriendState(self):
         self.friendsMap = {}
@@ -805,11 +755,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.friendsListError = 0
 
     def sendGetFriendsListRequest(self):
-        self.friendsMapPending = 1
-        self.friendsListError = 0
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_GET_FRIEND_LIST)
-        #self.send(datagram)
+        self.notify.warning('sendGetFriendsListRequest: TODO!')
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -927,7 +873,12 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             pass
 
     def handleGenerateWithRequiredOtherOwner(self, di):
-        pass # Toontown does not make use of OwnerViews.
+        # Toontown only makes use of OwnerViews for LocalToon.
+        if self.loginFSM.getCurrentState().getName() == 'waitForSetAvatarResponse':
+            di.getUint32() # parent
+            di.getUint32() # zone
+            di.getUint16() # dclass
+            self.handleAvatarResponseMsg(di.getUint32(), di)
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase
@@ -1102,13 +1053,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return 0
 
     def requestAvatarInfo(self, avId):
-        if avId == 0:
-            return
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_GET_FRIEND_LIST_EXTENDED)
-        datagram.addUint16(1)
-        datagram.addUint32(avId)
-        base.cr.send(datagram)
+        self.notify.warning('requestAvatarInfo: TODO!')
 
     def queueRequestAvatarInfo(self, avId):
         removeTask = 0
@@ -1121,15 +1066,4 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         taskMgr.doMethodLater(0.1, self.sendAvatarInfoRequests, 'avatarRequestQueueTask')
 
     def sendAvatarInfoRequests(self, task = None):
-        print 'Sending request Queue for AV Handles'
-        if not hasattr(self, 'avatarInfoRequests'):
-            return
-        if len(self.avatarInfoRequests) == 0:
-            return
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_GET_FRIEND_LIST_EXTENDED)
-        datagram.addUint16(len(self.avatarInfoRequests))
-        for avId in self.avatarInfoRequests:
-            datagram.addUint32(avId)
-
-        base.cr.send(datagram)
+        self.notify.warning('sendAvatarInfoRequests: TODO!')

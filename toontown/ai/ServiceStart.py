@@ -1,9 +1,6 @@
 from pandac.PandaModules import *
 
 # Dev stuff that should probably be removed before deployment:
-from direct import distributed
-distributed.__path__ = ['/home/cfsworks/Desktop/incremental/direct/src/distributed']
-
 loadPrcFile('config/dev.prc')
 
 class game:

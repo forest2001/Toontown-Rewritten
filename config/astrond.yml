@@ -56,4 +56,8 @@ roles:
         max: 399999999
       engine:
         type: yaml
-        foldername: ttdev_db
+        foldername: ../databases/astrondb
+
+    - type: eventlogger
+      bind: 127.0.0.1:7197
+      output: ../events-%y%m%d_%H%M%S.log

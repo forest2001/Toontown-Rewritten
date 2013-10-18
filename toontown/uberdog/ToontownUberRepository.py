@@ -6,6 +6,7 @@ from otp.distributed.OtpDoGlobals import *
 
 class ToontownUberRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
+    dbId = 4003
 
     def __init__(self, baseChannel, serverId):
         AstronInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='UD')
@@ -15,6 +16,12 @@ class ToontownUberRepository(AstronInternalRepository):
         rootObj.generateWithRequiredAndId(self.getGameDoId(), 0, 0)
 
         self.createGlobals()
+
+    def getAvatarIdFromSender(self):
+        return self.getMsgSender() & 0xFFFFFFFF
+
+    def getAccountIdFromSender(self):
+        return (self.getMsgSender()>>32) & 0xFFFFFFFF
 
     def createGlobals(self):
         """

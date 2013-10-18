@@ -39,10 +39,6 @@ from otp.distributed import OtpDoGlobals
 from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
 
-# TODO: Get rid of this once the def is in direct...
-CLIENT_HELLO = 1
-CLIENT_HELLO_RESP = 2
-
 class OTPClientRepository(ClientRepositoryBase):
     notify = directNotify.newCategory('OTPClientRepository')
     avatarLimit = 6
@@ -974,12 +970,6 @@ class OTPClientRepository(ClientRepositoryBase):
         self.acceptOnce(OtpAvatarManager.OtpAvatarManager.OnlineEvent, self._requestAvatarList)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def sendGetAvatarsMsg(self):
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_GET_AVATARS)
-        self.send(datagram)
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitWaitForAvatarList(self):
         self.cleanupWaitingForDatabase()
         self.ignore(OtpAvatarManager.OtpAvatarManager.OnlineEvent)
@@ -1007,56 +997,13 @@ class OTPClientRepository(ClientRepositoryBase):
         pass
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def sendCreateAvatarMsg(self, avDNA, avName, avPosition):
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_CREATE_AVATAR)
-        datagram.addUint16(0)
-        datagram.addString(avDNA.makeNetString())
-        datagram.addUint8(avPosition)
-        self.newName = avName
-        self.newDNA = avDNA
-        self.newPosition = avPosition
-        self.send(datagram)
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def sendCreateAvatar2Msg(self, avClass, avDNA, avName, avPosition):
-        className = avClass.__name__
-        dclass = self.dclassesByName[className]
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_CREATE_AVATAR2)
-        datagram.addUint16(0)
-        datagram.addUint8(avPosition)
-        datagram.addUint16(dclass.getNumber())
-        self.newName = avName
-        self.newDNA = avDNA
-        self.newPosition = avPosition
-        self.send(datagram)
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterWaitForDeleteAvatarResponse(self, potAv):
-        self.handler = self.handleWaitForDeleteAvatarResponse
-        self.sendDeleteAvatarMsg(potAv.id)
+        self.csm.sendDeleteAvatar(potAv.id)
         self.waitForDatabaseTimeout(requestName='WaitForDeleteAvatarResponse')
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def sendDeleteAvatarMsg(self, avId):
-        datagram = PyDatagram()
-        datagram.addUint16(CLIENT_DELETE_AVATAR)
-        datagram.addUint32(avId)
-        self.send(datagram)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitWaitForDeleteAvatarResponse(self):
         self.cleanupWaitingForDatabase()
-        self.handler = None
-        return
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleWaitForDeleteAvatarResponse(self, msgType, di):
-        if msgType == CLIENT_DELETE_AVATAR_RESP:
-            self.handleGetAvatarsRespMsg(di)
-        else:
-            self.handleMessageType(msgType, di)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterRejectRemoveAvatar(self, reasonCode):
@@ -1341,7 +1288,6 @@ class OTPClientRepository(ClientRepositoryBase):
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterWaitOnEnterResponses(self, shardId, hoodId, zoneId, avId):
         self.cleanGameExit = False
-        self.handler = self.handleWaitOnEnterResponses
         self.handlerArgs = {'hoodId': hoodId,
          'zoneId': zoneId,
          'avId': avId}
@@ -1363,21 +1309,6 @@ class OTPClientRepository(ClientRepositoryBase):
         self.waitForDatabaseTimeout(requestName='WaitOnEnterResponses')
         self.handleSetShardComplete()
         return
-
-    @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
-    def handleWaitOnEnterResponses(self, msgType, di):
-        if msgType == CLIENT_GET_FRIEND_LIST_RESP:
-            self.handleGetFriendsList(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_EXTENDED_RESP:
-            self.handleGetFriendsListExtended(di)
-        elif msgType == CLIENT_FRIEND_ONLINE:
-            self.handleFriendOnline(di)
-        elif msgType == CLIENT_FRIEND_OFFLINE:
-            self.handleFriendOffline(di)
-        elif msgType == CLIENT_GET_PET_DETAILS_RESP:
-            self.handleGetAvatarDetailsResp(di)
-        else:
-            self.handleMessageType(msgType, di)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def handleSetShardComplete(self):
@@ -1576,18 +1507,6 @@ class OTPClientRepository(ClientRepositoryBase):
             self.handleDisable(di)
         elif msgType == CLIENT_OBJECT_DELETE_RESP:
             self.handleDelete(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_RESP:
-            self.handleGetFriendsList(di)
-        elif msgType == CLIENT_GET_FRIEND_LIST_EXTENDED_RESP:
-            self.handleGetFriendsListExtended(di)
-        elif msgType == CLIENT_FRIEND_ONLINE:
-            self.handleFriendOnline(di)
-        elif msgType == CLIENT_FRIEND_OFFLINE:
-            self.handleFriendOffline(di)
-        elif msgType == CLIENT_GET_AVATAR_DETAILS_RESP:
-            self.handleGetAvatarDetailsResp(di)
-        elif msgType == CLIENT_GET_PET_DETAILS_RESP:
-            self.handleGetAvatarDetailsResp(di)
         else:
             self.handleMessageType(msgType, di)
 
@@ -1868,10 +1787,6 @@ class OTPClientRepository(ClientRepositoryBase):
             self.handleGoGetLost(di)
         elif msgType == CLIENT_HEARTBEAT:
             self.handleServerHeartbeat(di)
-        elif msgType == CLIENT_SYSTEM_MESSAGE:
-            self.handleSystemMessage(di)
-        elif msgType == CLIENT_SYSTEMMESSAGE_AKNOWLEDGE:
-            self.handleSystemMessageAknowledge(di)
         elif msgType == CLIENT_CREATE_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
         elif msgType == CLIENT_CREATE_OBJECT_REQUIRED_OTHER:
@@ -1888,8 +1803,6 @@ class OTPClientRepository(ClientRepositoryBase):
             self.handleDelete(di)
         elif msgType == CLIENT_DONE_INTEREST_RESP:
             self.gotInterestDoneMessage(di)
-        elif msgType == CLIENT_GET_STATE_RESP:
-            pass
         elif msgType == CLIENT_OBJECT_LOCATION:
             self.gotObjectLocationMessage(di)
         elif msgType == CLIENT_SET_WISHNAME_RESP:
