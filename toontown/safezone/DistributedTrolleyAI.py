@@ -1,45 +1,127 @@
 from direct.directnotify import DirectNotifyGlobal
+from direct.distributed.ClockDelta import *
+from direct.fsm.FSM import FSM
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from TrolleyConstants import *
+from toontown.minigame.MinigameCreatorAI import *
 
-class DistributedTrolleyAI(DistributedObjectAI):
+class DistributedTrolleyAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTrolleyAI")
 
-    def setState(self, todo0, todo1):
-        pass
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        FSM.__init__(self, 'DistributedTrolleyAI')
 
-    def fillSlot0(self, todo0):
-        pass
+        self.trolleyCountdownTime = simbase.config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
 
-    def fillSlot1(self, todo0):
-        pass
+        self.slots = [None, None, None, None]
+        self.boardable = False
 
-    def fillSlot2(self, todo0):
-        pass
+    def announceGenerate(self):
+        self.b_setState('WaitEmpty')
 
-    def fillSlot3(self, todo0):
-        pass
+    def setState(self, state):
+        self.request(state)
 
-    def emptySlot0(self, todo0, todo1):
-        pass
+    def d_setState(self, state):
+        state = state[:1].lower() + state[1:]
+        self.sendUpdate('setState', [state, globalClockDelta.getRealNetworkTime()])
 
-    def emptySlot1(self, todo0, todo1):
-        pass
+    def b_setState(self, state):
+        self.setState(state)
+        self.d_setState(state)
 
-    def emptySlot2(self, todo0, todo1):
-        pass
+    def enterWaitEmpty(self):
+        self.boardable = True
 
-    def emptySlot3(self, todo0, todo1):
-        pass
+    def exitWaitEmpty(self):
+        self.boardable = False
+
+    def enterWaitCountdown(self):
+        self.boardable = True
+        self.departureTask = taskMgr.doMethodLater(self.trolleyCountdownTime, self.__depart, 'trolleyDepartureTask')
+
+    def __depart(self, task):
+        self.b_setState('Leaving')
+        return task.done
+
+    def exitWaitCountdown(self):
+        taskMgr.remove(self.departureTask)
+        self.boardable = False
+
+    def enterLeaving(self):
+        self.leavingTask = taskMgr.doMethodLater(TROLLEY_EXIT_TIME, self.__activateMinigame, 'trolleyLeaveTask')
+
+    def __activateMinigame(self, task):
+        for slot in range(4):
+            self.sendUpdate('fillSlot%d' % slot, [0])
+            self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
+
+        players = [player for player in self.slots if player is not None]
+        mg = createMinigame(self.air, players, self.zoneId)
+        for player in players:
+            self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
+
+        self.b_setState('Entering')
+        return task.done
+
+    def exitLeaving(self):
+        taskMgr.remove(self.leavingTask)
+
+    def enterEntering(self):
+        self.enteringTask = taskMgr.doMethodLater(TROLLEY_ENTER_TIME, self.__doneEntering, 'trolleyEnterTask')
+
+    def __doneEntering(self, task):
+        self.b_setState('WaitEmpty')
+        return task.done
+
+    def exitEntering(self):
+        taskMgr.remove(self.enteringTask)
+
+    def getBoardingSlot(self):
+        if not self.boardable:
+            return -1
+
+        if None not in self.slots:
+            return -1
+
+        return self.slots.index(None)
 
     def requestBoard(self):
-        pass
+        avId = self.air.getAvatarIdFromSender()
 
-    def rejectBoard(self, todo0):
-        pass
+        if avId in self.slots:
+            self.air.writeServerEvent('suspicious', avId, 'Toon requested to board a trolley twice!')
+            self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
+            return
+
+        slot = self.getBoardingSlot()
+        if slot == -1:
+            self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
+            return
+
+        self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
+        self.sendUpdate('fillSlot%d' % slot, [avId])
+        self.slots[slot] = avId
+
+        if self.state == 'WaitEmpty':
+            self.b_setState('WaitCountdown')
 
     def requestExit(self):
-        pass
+        avId = self.air.getAvatarIdFromSender()
 
-    def setMinigameZone(self, todo0, todo1):
-        pass
+        if avId not in self.slots:
+            self.air.writeServerEvent('suspicious', avId, 'Toon requested to exit a trolley they are not on!')
+            return
 
+        if not self.boardable:
+            # Trolley's leaving, can't hop off!
+            return
+
+        slot = self.slots.index(avId)
+        self.sendUpdate('fillSlot%d' % slot, [0])
+        self.sendUpdate('emptySlot%d' % slot, [avId, globalClockDelta.getRealNetworkTime()])
+        self.slots[slot] = None
+
+        if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
+            self.b_setState('WaitEmpty')
