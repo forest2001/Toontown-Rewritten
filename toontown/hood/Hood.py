@@ -106,7 +106,7 @@ class Hood(StateData.StateData):
             del self.loader
         del self.fsm
         del self.parentFSM
-        self.dnaStore.resetHood()
+        #self.dnaStore.resetHood()
         del self.dnaStore
         self.sky.removeNode()
         del self.sky

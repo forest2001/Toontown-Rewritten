@@ -72,6 +72,8 @@ class SafeZoneLoader(StateData.StateData):
     def createSafeZone(self, dnaFile):
         self.geom = NodePath('')
         self.nodeList = []
+        self.holidayPropTransforms = {}
+        self.animPropDict = {}
         return # TODO: DNATODO
         if self.safeZoneStorageDNAFile:
             loader.loadDNAFile(self.hood.dnaStore, self.safeZoneStorageDNAFile)
