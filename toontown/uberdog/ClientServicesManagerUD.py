@@ -125,6 +125,7 @@ class LoginAccountFSM(OperationFSM):
 
     def __handleLookup(self, result):
         if not result.get('success'):
+            self.csm.air.writeServerEvent('cookieRejected', self.target, self.cookie)
             self.demand('Kill', result.get('reason', 'The accounts database rejected your cookie.'))
             return
 
@@ -172,6 +173,8 @@ class LoginAccountFSM(OperationFSM):
             self.notify.warning('Database failed to construct an account object!')
             self.demand('Kill', 'Your account object could not be created in the game database.')
             return
+
+        self.csm.air.writeServerEvent('accountCreated', accountId)
 
         self.accountId = accountId
         self.demand('StoreAccountID')
@@ -221,6 +224,7 @@ class LoginAccountFSM(OperationFSM):
             {'LAST_LOGIN': time.ctime()})
 
         # We're done.
+        self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.cookie)
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
 
@@ -316,6 +320,7 @@ class CreateAvatarFSM(OperationFSM):
             return
 
         # Otherwise, we're done!
+        self.csm.air.writeServerEvent('avatarCreated', self.avId, self.target, self.dna.encode('hex'), self.index)
         self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
         self.demand('Off')
 
@@ -435,6 +440,7 @@ class DeleteAvatarFSM(GetAvatarsFSM):
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
 
+        self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
         self.demand('QueryAvatars')
 
 class SetNameTypedFSM(AvatarOperationFSM):
@@ -482,6 +488,9 @@ class SetNameTypedFSM(AvatarOperationFSM):
                 self.csm.air.dclassesByName['DistributedToonUD'],
                 {'WishNameState': ('PENDING',),
                  'WishName': (self.name,)})
+
+        if self.avId:
+            self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
 
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
@@ -536,6 +545,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
              'WishName': ('',),
              'setName': (name,)})
 
+        self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
         self.csm.sendUpdateToAccountId(self.target, 'setNamePatternResp', [self.avId, 1])
         self.demand('Off')
 
@@ -683,6 +693,8 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
         dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
         self.csm.air.send(dg)
+
+        self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
         self.demand('Off')
 
 class UnloadAvatarFSM(OperationFSM):
@@ -721,6 +733,7 @@ class UnloadAvatarFSM(OperationFSM):
         self.csm.air.send(dg)
 
         # Done!
+        self.csm.air.writeServerEvent('avatarUnload', self.avId)
         self.demand('Off')
 
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
