@@ -428,7 +428,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, toonId in zip(self.counters, self.ids):
-            curCount = int(triglerp(0, counter.max, t))
+            curCount = int(t * counter.max)
             if curCount != counter.count:
                 self._changeCounterUp(task, counter, curCount, toonId)
 
@@ -477,7 +477,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, total, toonId in zip(self.counters, self.totalCounters, self.ids):
-            curCount = int(triglerp(counter.max, 0, t))
+            curCount = int(counter.max * (1 - t))
             if curCount != counter.count:
                 self._changeCounterDown(task, counter, curCount, total, toonId)
 
