@@ -225,6 +225,8 @@ class LoginAccountFSM(OperationFSM):
         self.demand('Off')
 
 class CreateAvatarFSM(OperationFSM):
+    notify = directNotify.newCategory('CreateAvatarFSM')
+
     def enterStart(self, dna, index):
         # Basic sanity-checking:
         if index >= 6:
@@ -340,6 +342,7 @@ class AvatarOperationFSM(OperationFSM):
         self.demand(self.POST_ACCOUNT_STATE)
 
 class GetAvatarsFSM(AvatarOperationFSM):
+    notify = directNotify.newCategory('GetAvatarsFSM')
     POST_ACCOUNT_STATE = 'QueryAvatars'
 
     def enterStart(self):
@@ -399,6 +402,7 @@ class GetAvatarsFSM(AvatarOperationFSM):
 # This inherits from GetAvatarsFSM, because the delete operation ends in a
 # setAvatars message being sent to the client.
 class DeleteAvatarFSM(GetAvatarsFSM):
+    notify = directNotify.newCategory('DeleteAvatarFSM')
     POST_ACCOUNT_STATE = 'ProcessDelete'
 
     def enterStart(self, avId):
@@ -434,6 +438,7 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         self.demand('QueryAvatars')
 
 class SetNameTypedFSM(AvatarOperationFSM):
+    notify = directNotify.newCategory('SetNameTypedFSM')
     POST_ACCOUNT_STATE = 'RetrieveAvatar'
 
     def enterStart(self, avId, name):
@@ -482,6 +487,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
         self.demand('Off')
 
 class SetNamePatternFSM(AvatarOperationFSM):
+    notify = directNotify.newCategory('SetNamePatternFSM')
     POST_ACCOUNT_STATE = 'RetrieveAvatar'
 
     def enterStart(self, avId, pattern):
@@ -534,6 +540,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
         self.demand('Off')
 
 class AcknowledgeNameFSM(AvatarOperationFSM):
+    notify = directNotify.newCategory('AcknowledgeNameFSM')
     POST_ACCOUNT_STATE = 'GetTargetAvatar'
 
     def enterStart(self, avId):
@@ -586,6 +593,7 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
         self.demand('Off')
 
 class LoadAvatarFSM(AvatarOperationFSM):
+    notify = directNotify.newCategory('LoadAvatarFSM')
     POST_ACCOUNT_STATE = 'GetTargetAvatar'
 
     def enterStart(self, avId):
@@ -678,6 +686,8 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.demand('Off')
 
 class UnloadAvatarFSM(OperationFSM):
+    notify = directNotify.newCategory('UnloadAvatarFSM')
+
     def enterStart(self, avId):
         self.avId = avId
 
