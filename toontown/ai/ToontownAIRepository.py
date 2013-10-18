@@ -37,7 +37,6 @@ class ToontownAIRepository(AstronInternalRepository):
         simbase.air.send(dg)
 
         self.createGlobals()
-        self.loadDNA()
         self.createZones()
 
         self.distributedDistrict.b_setAvailable(1)
@@ -73,11 +72,6 @@ class ToontownAIRepository(AstronInternalRepository):
         self.timeManager.generateWithRequired(2)
 
         self.holidayManager = None
-
-    def loadDNA(self):
-        """
-        Load DNA files for all zones.
-        """
 
     def createZones(self):
         """
