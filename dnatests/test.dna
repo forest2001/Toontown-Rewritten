@@ -10,5 +10,12 @@ group "toontownCentralTutorial" [
   suit_edge [ 2 3 ]
   suit_edge [ 3 0 ]
   battle_cell [ 20 20 75 20 -0.5 ]
+  group "tutorial" [
+   prop "linktunnel_tt_0_DNARoot" [
+	code [ "prop_safe_zone_entrance_tunnel" ]
+    pos [ 210 40 0 ]
+    hpr [ -90 0 0 ]
+   ]
+  ]
  ]
 ]

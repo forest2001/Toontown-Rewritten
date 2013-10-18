@@ -18,7 +18,13 @@ reserved = {
   'COGHQ_IN_POINT' : 'COGHQ_IN_POINT',
   'COGHQ_OUT_POINT' : 'COGHQ_OUT_POINT',
   'suit_edge' : 'SUIT_EDGE',
-  'battle_cell': 'BATTLE_CELL',
+  'battle_cell' : 'BATTLE_CELL',
+  'prop' : 'PROP',
+  'pos' : 'POS',
+  'hpr' : 'HPR',
+  'scale' : 'SCALE',
+  'code' : 'CODE',
+  'color' : 'COLOR',
 }
 tokens += reserved.values()
 t_QUOTED_STRING = r'["][^"]*["]'
@@ -289,6 +295,39 @@ class DNAData(DNAGroup):
         parser.dnaStore = self.getDnaStorage()
         parser.parse(stream.read())
 
+class DNANode(DNAGroup):
+    def __init__(self, name):
+        DNAGroup.__init__(self, name)
+        self.pos = (0,0,0)
+        self.hpr = (0,0,0)
+        self.scale = (0,0,0)
+    def getPos(self):
+        return self.pos
+    def getHpr(self):
+        return self.hpr
+    def getScale(self):
+        return self.scale
+    def setPos(self, pos):
+        self.pos = pos
+    def setHpr(self, hpr):
+        self.hpr = hpr
+    def setScale(self, scape):
+        self.scale = scale
+
+class DNAProp(DNANode):
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+        self.code = ''
+        self.color = (0, 0, 0, 0)
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -360,7 +399,7 @@ def p_dnagroup(p):
     p.parser.parentGroup = p[0].getParent()
 
 def p_visgroup(p):
-    '''visgroup : visgroupdef "[" vis subgroup_list "]"'''
+    '''visgroup : visgroupdef "[" vis subvisgroup_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
@@ -373,8 +412,26 @@ def p_empty(p):
 
 def p_group(p):
     '''group : dnagroup
-             | visgroup'''
+             | visgroup
+             | dnanode'''
     p[0] = p[1]
+
+def p_dnanode(p):
+    '''dnanode : prop'''
+    p[0] = p[1]
+
+def p_prop(p):
+    '''prop : propdef "[" subprop_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
+def p_propdef(p):
+    '''propdef : PROP string'''
+    print "New prop: ", p[2]
+    p[0] = DNAProp(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
 
 def p_suitedge(p):
     '''suitedge : SUIT_EDGE "[" number number "]"'''
@@ -387,11 +444,63 @@ def p_battlecell(p):
     p.parser.dnaStore.storeBattleCell(p[0])
     p.parser.parentGroup.addBattleCell(p[0])
 
-def p_subgroup_opt(p):
+def p_subgroup_list(p):
     '''subgroup_list : subgroup_list group
-                     | subgroup_list suitedge
-                     | subgroup_list battlecell
                      | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subvisgroup_list(p):
+    '''subvisgroup_list : subvisgroup_list group
+                     | subvisgroup_list suitedge
+                     | subvisgroup_list battlecell
+                     | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_pos(p):
+    '''pos : POS "[" lpoint3f "]"'''
+    p.parser.parentGroup.setPos(p[3])
+
+def p_hpr(p):
+    '''hpr : HPR "[" lpoint3f "]"'''
+    p.parser.parentGroup.setHpr(p[3])
+
+def p_scale(p):
+    '''scale : SCALE "[" lpoint3f "]"'''
+    p.parser.parentGroup.setScale(p[3])
+
+def p_dnanode_subs(p):
+    '''dnanode_sub : group
+                   | pos
+                   | hpr
+                   | scale'''
+    p[0] = p[1]
+
+def p_dnaprop_sub(p):
+    '''dnaprop_sub : code
+                   | color'''
+    p[0] = p[1]
+
+def p_code(p):
+    '''code : CODE "[" string "]"'''
+    p.parser.parentGroup.setCode(p[3])
+
+def p_color(p):
+    '''color : COLOR "[" number number number number "]"'''
+    p.parser.parentGroup.setColor((p[3],p[4],p[5],p[6]))
+
+def p_subprop_list(p):
+    '''subprop_list : subprop_list dnanode_sub
+                    | subprop_list dnaprop_sub
+                    | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):
