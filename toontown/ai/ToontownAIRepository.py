@@ -66,7 +66,8 @@ class ToontownAIRepository(AstronInternalRepository):
         """
         self.districtStats = ToontownDistrictStatsAI(self)
         self.districtStats.settoontownDistrictId(self.districtId)
-        self.districtStats.generateWithRequired(2)
+        self.districtStats.generateWithRequiredAndId(self.allocateChannel(),
+                                                     self.getGameDoId(), 3)
 
         self.timeManager = TimeManagerAI(self)
         self.timeManager.generateWithRequired(2)
