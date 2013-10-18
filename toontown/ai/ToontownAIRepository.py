@@ -2,16 +2,13 @@ import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
-from direct.distributed.AstronInternalRepository import AstronInternalRepository
+from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from direct.distributed.PyDatagram import *
-from otp.distributed.OtpDoGlobals import *
 from otp.ai.AIZoneData import *
 
-class ToontownAIRepository(AstronInternalRepository):
-    GameGlobalsId = OTP_DO_ID_TOONTOWN
-
+class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
-        AstronInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
+        ToontownInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
 
         self.districtName = districtName
 
@@ -49,12 +46,6 @@ class ToontownAIRepository(AstronInternalRepository):
 
     def getZoneDataStore(self):
         return self.zoneDataStore
-
-    def getAvatarIdFromSender(self):
-        return self.getMsgSender() & 0xFFFFFFFF
-
-    def getAccountIdFromSender(self):
-        return (self.getMsgSender()>>32) & 0xFFFFFFFF
 
     def getAvatarExitEvent(self, avId):
         return 'avatar_leaving-%d' % avId
