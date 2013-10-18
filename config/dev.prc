@@ -12,6 +12,8 @@ account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
 
 default-model-extension .bam
 
+show-total-population #t
+
 want-pets #f
 want-news-page #f
 want-news-tab #f
