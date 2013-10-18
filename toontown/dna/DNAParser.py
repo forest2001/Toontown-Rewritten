@@ -1,6 +1,7 @@
 import ply.lex as lex
 import sys, collections
-from panda3d.core import PandaNode, NodePath
+from panda3d.core import PandaNode, NodePath, Filename
+from direct.showbase import Loader
 tokens = [
   'FLOAT',
   'INTEGER',
@@ -25,9 +26,10 @@ reserved = {
   'scale' : 'SCALE',
   'code' : 'CODE',
   'color' : 'COLOR',
+  'model' : 'MODEL',
+  'store_node' : 'STORE_NODE',
 }
 tokens += reserved.values()
-t_QUOTED_STRING = r'["][^"]*["]'
 t_ignore = ' \t'
 
 literals = '[],'
@@ -37,6 +39,11 @@ def t_ignore_COMMENT(t):
 
 def t_ignore_ML_COMMENT(t):
     r'\/\*([^*]|[\r\n])*\*/'
+
+def t_QUOTED_STRING(t):
+    r'["][^"]*["]'
+    t.value = t.value[1:-1]
+    return t
 
 def t_FLOAT(t):
     r'[+-]?\d+[.]\d*'
@@ -74,6 +81,7 @@ class DNAStorage:
         self.DNAGroups = {}
         self.suitEdges = {}# stored as {startIndex : [edges]}
         self.battleCells = []
+        self.nodes = {}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -120,6 +128,14 @@ class DNAStorage:
         self.battleCells += [cell]
     def resetBattleCells(self):
         self.battleCells = []
+    def findNode(self, code):
+        if code in self.nodes:
+            return self.nodes[code]
+        return None
+    def resetNodes(self):
+        self.nodes = []
+    def storeNode(self, node, code):
+        self.nodes[code] = node
     def ls(self):
         print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
@@ -233,9 +249,9 @@ class DNAGroup:
         return self.name
     def traverse(self, nodePath, dnaStorage):
         node = PandaNode(self.name)
-        nodePath.attachNewNode(node, 0)
+        nodePath = nodePath.attachNewNode(node, 0)
         for child in self.children:
-            child.traverse(nodePath, dnaStorage, storeInStorage)
+            child.traverse(nodePath, dnaStorage)
 
 class DNAVisGroup(DNAGroup):
     def __init__(self, name):
@@ -293,6 +309,7 @@ class DNAData(DNAGroup):
         parser.dnaData = self
         parser.parentGroup = parser.dnaData
         parser.dnaStore = self.getDnaStorage()
+        parser.nodePath = None
         parser.parse(stream.read())
 
 class DNANode(DNAGroup):
@@ -300,7 +317,7 @@ class DNANode(DNAGroup):
         DNAGroup.__init__(self, name)
         self.pos = (0,0,0)
         self.hpr = (0,0,0)
-        self.scale = (0,0,0)
+        self.scale = (1,1,1)
     def getPos(self):
         return self.pos
     def getHpr(self):
@@ -313,6 +330,11 @@ class DNANode(DNAGroup):
         self.hpr = hpr
     def setScale(self, scape):
         self.scale = scale
+    def traverse(self, nodePath, dnaStorage):
+        node = PandaNode(self.name)
+        nodePath = nodePath.attachNewNode(node, 0).setPosHprScale(self.pos, self.hpr, self.scale)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
 
 class DNAProp(DNANode):
     def __init__(self, name):
@@ -327,6 +349,14 @@ class DNAProp(DNANode):
         return self.code
     def getColor(self):
         return self.color
+    def traverse(self, nodePath, dnaStorage):
+        if self.code == 'DCS':
+            raise NotImplemented
+        node = dnaStorage.findNode(self.code)
+        if not node is None:
+            nodePath = nodePath.attachNewNode(node.getNode(0), 0)
+            nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
+            nodePath.setName(self.name)
 
 class DNALoader:
     def __init__(self):
@@ -336,6 +366,7 @@ class DNALoader:
     def buildGraph(self):
         '''Traverses the DNAGroup tree and builds a NodePath'''
         self.data.traverse(self.nodePath, self.data.getDnaStorage())
+        return self.nodePath.getChild(0).getChild(0)
     def getData(self):
         return self.data
     
@@ -348,7 +379,8 @@ def p_dna(p):
 
 def p_object(p):
     '''object : suitpoint
-                | group'''
+              | group
+              | model'''
     p[0] = p[1]
 
 def p_number(p):
@@ -508,3 +540,24 @@ def p_subprop_list(p):
             p[0] += [p[2]]
     else:
         p[0] = []
+
+def p_modeldef(p):
+    '''modeldef : MODEL string'''
+    filename = Filename(p[2])
+    filename.setExtension('bam')
+    loader = Loader.Loader(None)
+    p.parser.nodePath = loader.loadModel(filename)
+
+def p_model(p):
+    '''model : modeldef "[" modelnode_list "]"'''
+
+def p_modelnode_list(p):
+    '''modelnode_list : modelnode_list node
+                      | empty'''
+
+def p_node(p):
+    '''node : STORE_NODE "[" string string "]"'''
+    nodePath = p.parser.nodePath.find('**/' + p[4])
+    nodePath.setTag('DNACode', p[4])
+    nodePath.setTag('DNARoot', p[3])
+    p.parser.dnaStore.storeNode(nodePath, p[4])

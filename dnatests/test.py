@@ -7,3 +7,4 @@ from toontown.dna import DNAParser
 loader = DNAParser.DNALoader()
 loader.getData().read(open('dnatests/test.dna'))
 loader.getData().getDnaStorage().ls()
+loader.buildGraph().ls()

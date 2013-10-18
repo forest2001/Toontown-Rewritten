@@ -1,3 +1,7 @@
+model "phase_3.5/models/modules/safe_zone_entrance_tunnel_TT" [
+	store_node [ "prop" "prop_safe_zone_entrance_tunnel" ]
+        ]
+
 store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
 store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
 store_suit_point [ 2, STREET_POINT, 55 15 -0.5 ]
