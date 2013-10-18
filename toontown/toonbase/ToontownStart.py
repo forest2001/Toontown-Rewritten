@@ -20,11 +20,10 @@ import __builtin__
 try:
     launcher
 except:
-    from toontown.launcher.ToontownDummyLauncher import ToontownDummyLauncher
-    launcher = ToontownDummyLauncher()
+    from toontown.launcher.TTRLauncher import TTRLauncher
+    launcher = TTRLauncher()
     __builtin__.launcher = launcher
 
-launcher.setRegistry('EXIT_PAGE', 'normal')
 pollingDelay = 0.5
 print 'ToontownStart: Polling for game2 to finish...'
 while not launcher.getGame2Done():
@@ -108,7 +107,7 @@ del version
 base.loader = base.loader
 __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
-if autoRun and launcher.isDummy() and (not Thread.isTrueThreads() or __name__ == '__main__'):
+if autoRun:
     try:
         run()
     except SystemExit:

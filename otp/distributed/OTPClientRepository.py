@@ -25,7 +25,6 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import Avatar
 from otp.avatar.DistributedPlayer import DistributedPlayer
-from otp.login import TTAccount
 from otp.login.CreateAccountScreen import CreateAccountScreen
 from otp.otpgui import OTPDialog
 from otp.avatar import DistributedAvatar
@@ -176,8 +175,6 @@ class OTPClientRepository(ClientRepositoryBase):
         else:
             self.notify.error('The required-login was not recognized.')
 
-        self.computeValidateDownload()
-
 
         self.wantMagicWords = base.config.GetString('want-magic-words', '')
 
@@ -201,12 +198,12 @@ class OTPClientRepository(ClientRepositoryBase):
         self.openChatAllowed = base.config.GetBool('allow-open-chat', 0)
 
 
-        self.secretChatNeedsParentPassword = base.config.GetBool('secret-chat-needs-parent-password', 0) or (self.launcher and self.launcher.getNeedPwForSecretKey())
+        self.secretChatNeedsParentPassword = base.config.GetBool('secret-chat-needs-parent-password', 0)
 
 
 
 
-        self.parentPasswordSet = base.config.GetBool('parent-password-set', 0) or (self.launcher and self.launcher.getParentPasswordSet())
+        self.parentPasswordSet = base.config.GetBool('parent-password-set', 0)
 
 
         self.userSignature = base.config.GetString('signature', 'none')
@@ -473,24 +470,6 @@ class OTPClientRepository(ClientRepositoryBase):
     def exitLoginOff(self):
         self.handler = None
         return
-
-    def computeValidateDownload(self):
-        if self.launcher:
-            hash = HashVal()
-            hash.mergeWith(launcher.launcherFileDbHash)
-            hash.mergeWith(launcher.serverDbFileHash)
-            self.validateDownload = hash.asHex()
-        else:
-            self.validateDownload = ''
-            basePath = os.path.expandvars('$TOONTOWN') or './toontown'
-            downloadParFilename = Filename.expandFrom(basePath + '/src/configfiles/download.par')
-            if downloadParFilename.exists():
-                downloadPar = open(downloadParFilename.toOsSpecific())
-                for line in downloadPar.readlines():
-                    i = line.find('VALIDATE_DOWNLOAD=')
-                    if i != -1:
-                        self.validateDownload = line[i + 18:].strip()
-                        break
 
     def getServerVersion(self):
         return self.serverVersion
@@ -1727,13 +1706,6 @@ class OTPClientRepository(ClientRepositoryBase):
         if gsg:
             render2d.prepareScene(gsg)
         base.graphicsEngine.renderFrame()
-
-    def refreshAccountServerDate(self, forceRefresh = 0):
-        try:
-            self.accountServerDate.grabDate(force=forceRefresh)
-        except TTAccount.TTAccountException, e:
-            self.notify.debug(str(e))
-            return 1
 
     def resetPeriodTimer(self, secondsRemaining):
         self.periodTimerExpired = 0
