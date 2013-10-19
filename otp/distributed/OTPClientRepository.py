@@ -2015,7 +2015,7 @@ class OTPClientRepository(ClientRepositoryBase):
         if not self.isLocalId(doId):
             self.disableDoId(doId, ownerView)
 
-        if getattr(base, 'localAvatar', None) and doId == base.localAvatar.doId:
+        if doId == self.__currentAvId:
             self.bootedIndex = 153
             self.bootedText = ''
 
