@@ -1,6 +1,12 @@
 from pandac.PandaModules import *
-from toontown.coghq import DistributedHealBarrelAI
-from toontown.coghq import DistributedGagBarrelAI
+
+try:
+    from toontown.coghq.DistributedHealBarrelAI import DistributedHealBarrelAI
+    from toontown.coghq.DistributedGagBarrelAI import DistributedGagBarrelAI
+except ImportError:
+    DistributedHealBarrelAI = None
+    DistributedGagBarrelAI = None
+
 PieToonup = 1
 PieToonupNerfed = 2
 PieDamageMult = 1.0
@@ -9,12 +15,12 @@ AttackMult = 1.0
 AttackMultNerfed = 0.5
 HitCountDamage = 35
 HitCountDamageNerfed = 50
-BarrelDefs = {8000: {'type': DistributedHealBarrelAI.DistributedHealBarrelAI,
+BarrelDefs = {8000: {'type': DistributedHealBarrelAI,
         'pos': Point3(15, 23, 0),
         'hpr': Vec3(-45, 0, 0),
         'rewardPerGrab': 50,
         'rewardPerGrabMax': 0},
- 8001: {'type': DistributedGagBarrelAI.DistributedGagBarrelAI,
+ 8001: {'type': DistributedGagBarrelAI,
         'pos': Point3(15, -23, 0),
         'hpr': Vec3(-135, 0, 0),
         'gagLevel': 3,
@@ -22,7 +28,7 @@ BarrelDefs = {8000: {'type': DistributedHealBarrelAI.DistributedHealBarrelAI,
         'gagTrack': 3,
         'rewardPerGrab': 10,
         'rewardPerGrabMax': 0},
- 8002: {'type': DistributedGagBarrelAI.DistributedGagBarrelAI,
+ 8002: {'type': DistributedGagBarrelAI,
         'pos': Point3(21, 20, 0),
         'hpr': Vec3(-45, 0, 0),
         'gagLevel': 3,
@@ -30,7 +36,7 @@ BarrelDefs = {8000: {'type': DistributedHealBarrelAI.DistributedHealBarrelAI,
         'gagTrack': 4,
         'rewardPerGrab': 10,
         'rewardPerGrabMax': 0},
- 8003: {'type': DistributedGagBarrelAI.DistributedGagBarrelAI,
+ 8003: {'type': DistributedGagBarrelAI,
         'pos': Point3(21, -20, 0),
         'hpr': Vec3(-135, 0, 0),
         'gagLevel': 3,

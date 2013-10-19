@@ -10,6 +10,27 @@ from toontown.coghq import LawbotOfficeDiamondRoom_Trap00_Cogs
 from toontown.coghq import LawbotOfficeDiamondRoom_Battle00_Cogs
 from toontown.coghq import LawbotOfficeGearRoom_Battle00_Cogs
 
+# Explicit room imports...
+from toontown.coghq import LawbotOfficeEntrance_Action00
+from toontown.coghq import LawbotOfficeOilRoom_Battle00
+from toontown.coghq import LawbotOfficeOilRoom_Battle01
+from toontown.coghq import LawbotOfficeBoilerRoom_Security00
+from toontown.coghq import LawbotOfficeBoilerRoom_Battle00
+from toontown.coghq import LawbotOfficeGearRoom_Action00
+from toontown.coghq import LawbotOfficeLobby_Action00
+from toontown.coghq import LawbotOfficeGearRoom_Security00
+from toontown.coghq import LawbotOfficeLobby_Trap00
+from toontown.coghq import LawbotOfficeDiamondRoom_Security00
+from toontown.coghq import LawbotOfficeDiamondRoom_Trap00
+from toontown.coghq import LawbotOfficeGearRoom_Platform00
+from toontown.coghq import LawbotOfficeLobby_Lights00
+from toontown.coghq import LawbotOfficeBoilerRoom_Action01
+from toontown.coghq import LawbotOfficeDiamondRoom_Action00
+from toontown.coghq import LawbotOfficeDiamondRoom_Action01
+from toontown.coghq import LawbotOfficeLobby_Action01
+from toontown.coghq import LawbotOfficeDiamondRoom_Battle00
+from toontown.coghq import LawbotOfficeGearRoom_Battle00
+
 def getStageRoomSpecModule(roomId):
     return CashbotStageSpecModules[roomId]
 
@@ -49,8 +70,7 @@ CashbotStageFinalRoomIDs = (2,)
 CashbotStageConnectorRooms = ('phase_11/models/lawbotHQ/LB_connector_7cubeL2', 'phase_11/models/lawbotHQ/LB_connector_7cubeLR')
 CashbotStageSpecModules = {}
 for roomName, roomId in CashbotStageRoomName2RoomId.items():
-    exec 'from toontown.coghq import %s' % roomName
-    CashbotStageSpecModules[roomId] = eval(roomName)
+    CashbotStageSpecModules[roomId] = locals()[roomName]
 
 CogSpecModules = {'LawbotOfficeOilRoom_Battle00': LawbotOfficeOilRoom_Battle00_Cogs,
  'LawbotOfficeOilRoom_Battle01': LawbotOfficeOilRoom_Battle01_Cogs,
