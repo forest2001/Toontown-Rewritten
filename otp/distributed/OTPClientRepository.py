@@ -2015,6 +2015,16 @@ class OTPClientRepository(ClientRepositoryBase):
         if not self.isLocalId(doId):
             self.disableDoId(doId, ownerView)
 
+        if getattr(base, 'localAvatar', None) and doId == base.localAvatar.doId:
+            self.bootedIndex = 153
+            self.bootedText = ''
+
+            self.notify.warning("Avatar deleted! Closing connection...")
+
+            # disconnect now, don't wait for send/recv to fail
+            self.stopReaderPollTask()
+            self.lostConnection()
+
     def sendSetLocation(self, doId, parentId, zoneId):
         datagram = PyDatagram()
         datagram.addUint16(CLIENT_OBJECT_LOCATION)
