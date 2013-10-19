@@ -63,14 +63,22 @@ class ClientBuilder(object):
 
     def include_dcimports(self):
         for m in xrange(self.dcf.getNumImportModules()):
-            mod = self.dcf.getImportModule(m).split('/')[0]
-            self.mf.import_hook(mod)
-            for s in xrange(self.dcf.getNumImportSymbols(m)):
-                sym = self.dcf.getImportSymbol(m,s).split('/')[0]
-                try:
-                    self.mf.import_hook('%s.%s' % (mod,sym))
-                except ImportError:
-                    pass
+            modparts = self.dcf.getImportModule(m).split('/')
+            mods = [modparts[0]]
+            if 'OV' in modparts[1:]:
+                mods.append(modparts[0]+'OV')
+            for mod in mods:
+                self.mf.import_hook(mod)
+                for s in xrange(self.dcf.getNumImportSymbols(m)):
+                    symparts = self.dcf.getImportSymbol(m,s).split('/')
+                    syms = [symparts[0]]
+                    if 'OV' in symparts[1:]:
+                        syms.append(symparts[0]+'OV')
+                    for sym in syms:
+                        try:
+                            self.mf.import_hook('%s.%s' % (mod,sym))
+                        except ImportError:
+                            pass
 
     def build_modules(self):
         for modname, mod in self.mf.modules.items():
