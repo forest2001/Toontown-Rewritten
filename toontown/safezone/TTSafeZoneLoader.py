@@ -23,6 +23,7 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         # alpha testers don't complain.
         sign = loader.loadModel('phase_4/models/props/construction_sign')
         sign.setH(180)
+        sign.setY(-4)
         for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
             sign.instanceTo(tunnel)
 
