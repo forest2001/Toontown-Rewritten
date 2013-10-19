@@ -53,11 +53,13 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
         self.leavingTask = taskMgr.doMethodLater(TROLLEY_EXIT_TIME, self.__activateMinigame, 'trolleyLeaveTask')
 
     def __activateMinigame(self, task):
+        players = [player for player in self.slots if player is not None]
+
         for slot in range(4):
             self.sendUpdate('fillSlot%d' % slot, [0])
             self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
+            self.slots[slot] = None
 
-        players = [player for player in self.slots if player is not None]
         mg = createMinigame(self.air, players, self.zoneId)
         for player in players:
             self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
