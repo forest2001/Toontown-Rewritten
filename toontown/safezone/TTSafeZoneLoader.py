@@ -16,7 +16,16 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
+
         self.geom = loader.loadModel('phase_4/models/neighborhoods/toontown_central_full')
+
+        # Drop "under construction" signs in front of the tunnels so the
+        # alpha testers don't complain.
+        sign = loader.loadModel('phase_4/models/props/construction_sign')
+        sign.setH(180)
+        for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
+            sign.instanceTo(tunnel)
+
         self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.mp3', 'phase_4/audio/sfx/SZ_TC_bird2.mp3', 'phase_4/audio/sfx/SZ_TC_bird3.mp3'])
 
     def unload(self):
