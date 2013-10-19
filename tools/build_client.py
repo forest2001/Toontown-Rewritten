@@ -6,6 +6,8 @@ from panda3d.direct import DCFile
 from modulefinder import ModuleFinder
 import os
 import sys
+import imp
+import marshal
 import zipfile
 
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -22,6 +24,7 @@ class ClientBuilder(object):
         self.directory = directory
 
         self.dcfiles = []
+        self.modules = {}
 
         self.mf = ModuleFinder(sys.path+[self.directory])
         self.dcf = DCFile()
@@ -69,6 +72,15 @@ class ClientBuilder(object):
                 except ImportError:
                     pass
 
+    def build_modules(self):
+        for modname, mod in self.mf.modules.items():
+            modfile = mod.__file__
+            if not (modfile and modfile.endswith('.py')): continue
+            is_package = modfile.endswith('__init__.py')
+            with open(modfile, 'r') as f:
+                code = compile(f.read(), modname, 'exec')
+            self.modules[modname] = (is_package, code)
+
     def build(self, outfile):
         self.outfile = outfile
 
@@ -82,16 +94,16 @@ class ClientBuilder(object):
 
         self.include_dcimports()
 
+        self.build_modules()
+
         zip = zipfile.ZipFile(outfile, 'w')
-        for modname, mod in self.mf.modules.items():
-            if not (mod.__file__ and mod.__file__.endswith('.py')): continue
-            is_package = mod.__file__.endswith('__init__.py')
-            an = modname.replace('.','/')
+        for modname, (is_package, code) in self.modules.items():
+            mcode = imp.get_magic() + '\x00'*4 + marshal.dumps(code)
+            name = modname.replace('.','/')
             if is_package:
-                an += '/__init__.py'
-            else:
-                an += '.py'
-            zip.write(mod.__file__, an)
+                name += '/__init__'
+            name += '.pyc'
+            zip.writestr(name, mcode)
         zip.close()
 
 if __name__ == '__main__':
