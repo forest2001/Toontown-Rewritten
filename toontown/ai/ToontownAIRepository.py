@@ -65,7 +65,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         return self.zoneDataStore
 
     def getAvatarExitEvent(self, avId):
-        return 'avatar_leaving-%d' % avId
+        return 'distObjDelete-%d' % avId
 
     def createGlobals(self):
         """

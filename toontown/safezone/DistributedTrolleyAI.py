@@ -55,14 +55,10 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
     def __activateMinigame(self, task):
         players = [player for player in self.slots if player is not None]
 
-        for slot in range(4):
-            self.sendUpdate('fillSlot%d' % slot, [0])
-            self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
-            self.slots[slot] = None
-
         mg = createMinigame(self.air, players, self.zoneId)
         for player in players:
             self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
+            self.removeFromTrolley(player)
 
         self.b_setState('Entering')
         return task.done
@@ -102,6 +98,8 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
             return
 
+        self.acceptOnce(self.air.getAvatarExitEvent(avId), self.removeFromTrolley, extraArgs=[avId])
+
         self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
         self.sendUpdate('fillSlot%d' % slot, [avId])
         self.slots[slot] = avId
@@ -120,9 +118,19 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # Trolley's leaving, can't hop off!
             return
 
+        self.removeFromTrolley(avId, True)
+
+    def removeFromTrolley(self, avId, hopOff=False):
+        if avId not in self.slots:
+            return
+
+        self.ignore(self.air.getAvatarExitEvent(avId))
+
+        emptyId = avId if hopOff else 0
+
         slot = self.slots.index(avId)
         self.sendUpdate('fillSlot%d' % slot, [0])
-        self.sendUpdate('emptySlot%d' % slot, [avId, globalClockDelta.getRealNetworkTime()])
+        self.sendUpdate('emptySlot%d' % slot, [emptyId, globalClockDelta.getRealNetworkTime()])
         self.slots[slot] = None
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
