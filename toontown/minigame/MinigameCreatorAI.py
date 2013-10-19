@@ -60,7 +60,7 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
                 randomList.remove(gameId)
 
         if previousGameId != ToontownGlobals.NoPreviousGameId:
-            if randomList.count(previousGameId) != 0:
+            if randomList.count(previousGameId) != 0 and len(randomList) > 1:
                 randomList.remove(previousGameId)
         randomList = removeUnreleasedMinigames(randomList, True)
         mgId = random.choice(randomList)
@@ -122,8 +122,9 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
         if toon != None:
             toons.append(toon)
 
-    for toon in toons:
-        simbase.air.questManager.toonPlayedMinigame(toon, toons)
+    # TODO: QUESTTODO
+    #for toon in toons:
+    #    simbase.air.questManager.toonPlayedMinigame(toon, toons)
 
     retVal = {}
     retVal['minigameZone'] = minigameZone

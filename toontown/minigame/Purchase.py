@@ -1,4 +1,6 @@
 from PurchaseBase import *
+from otp.nametag.NametagFloat2d import *
+from otp.nametag import NametagGlobals
 from direct.task.Task import Task
 from toontown.toon import ToonHead
 from toontown.toonbase import ToontownTimer
@@ -426,7 +428,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, toonId in zip(self.counters, self.ids):
-            curCount = int(triglerp(0, counter.max, t))
+            curCount = int(t * counter.max)
             if curCount != counter.count:
                 self._changeCounterUp(task, counter, curCount, toonId)
 
@@ -475,7 +477,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, total, toonId in zip(self.counters, self.totalCounters, self.ids):
-            curCount = int(triglerp(counter.max, 0, t))
+            curCount = int(counter.max * (1 - t))
             if curCount != counter.count:
                 self._changeCounterDown(task, counter, curCount, total, toonId)
 
@@ -725,12 +727,12 @@ class PurchaseHeadFrame(DirectFrame):
         self.tag2Node = NametagFloat2d()
         self.tag2Node.setContents(Nametag.CName)
         self.av.nametag.addNametag(self.tag2Node)
-        self.tag2 = self.attachNewNode(self.tag2Node.upcastToPandaNode())
+        self.tag2 = self.attachNewNode(self.tag2Node)
         self.tag2.setPosHprScale(-0.22, 10.0, 0.12, 0, 0, 0, 0.046, 0.046, 0.046)
         self.tag1Node = NametagFloat2d()
         self.tag1Node.setContents(Nametag.CSpeech | Nametag.CThought)
         self.av.nametag.addNametag(self.tag1Node)
-        self.tag1 = self.attachNewNode(self.tag1Node.upcastToPandaNode())
+        self.tag1 = self.attachNewNode(self.tag1Node)
         self.tag1.setPosHprScale(-0.15, 0, -0.1, 0, 0, 0, 0.046, 0.046, 0.046)
         self.hide()
         return

@@ -90,3 +90,8 @@ def setMax2dAlpha(m2a):
 def getMax2dAlpha():
     global max2dAlpha
     return max2dAlpha
+
+onscreenChatForced = 0
+def setOnscreenChatForced(ocf):
+    global onscreenChatForced
+    onscreenChatForced = ocf

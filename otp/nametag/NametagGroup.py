@@ -14,9 +14,13 @@ class NametagGroup:
     CCFreeChat = 8
 
     def __init__(self):
-        self.nametag2d = Nametag2d('')
-        self.nametag3d = Nametag3d('')
+        self.nametag2d = Nametag2d()
+        self.nametag3d = Nametag3d()
         self.icon = PandaNode('icon')
+
+        self.nametags = []
+        self.addNametag(self.nametag2d)
+        self.addNametag(self.nametag3d)
 
     def getNametag2d(self):
         return self.nametag2d
@@ -68,6 +72,12 @@ class NametagGroup:
 
     def clearShadow(self):
         pass
+
+    def addNametag(self, nametag):
+        self.nametags.append(nametag)
+
+    def removeNametag(self, nametag):
+        self.nametags.remove(nametag)
 
     def manage(self, manager):
         pass

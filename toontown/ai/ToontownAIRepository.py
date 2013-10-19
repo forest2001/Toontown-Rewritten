@@ -2,7 +2,11 @@ import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
+from toontown.ai.HolidayManagerAI import HolidayManagerAI
+from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
+from toontown.hood.TTHoodAI import TTHoodAI
+from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 
@@ -12,9 +16,16 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.districtName = districtName
 
+        self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
+                                               ToontownGlobals.DynamicZonesEnd)
+
+        self.hoods = []
         self.zoneDataStore = AIZoneDataStore()
 
+        self.useAllMinigames = self.config.GetBool('want-all-minigames', False)
         self.doLiveUpdates = False
+
+        self.holidayManager = HolidayManagerAI()
 
     def getTrackClsends(self):
         return False
@@ -44,11 +55,17 @@ class ToontownAIRepository(ToontownInternalRepository):
     def decrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
 
+    def allocateZone(self):
+        return self.zoneAllocator.allocate()
+
+    def deallocateZone(self, zone):
+        self.zoneAllocator.free(zone)
+
     def getZoneDataStore(self):
         return self.zoneDataStore
 
     def getAvatarExitEvent(self, avId):
-        return 'avatar_leaving-%d' % avId
+        return 'distObjDelete-%d' % avId
 
     def createGlobals(self):
         """
@@ -62,9 +79,12 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.timeManager = TimeManagerAI(self)
         self.timeManager.generateWithRequired(2)
 
-        self.holidayManager = None
+        self.newsManager = NewsManagerAI(self)
+        self.newsManager.generateWithRequired(2)
 
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
         """
+
+        self.hoods.append(TTHoodAI(self))

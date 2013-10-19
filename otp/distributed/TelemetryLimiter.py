@@ -80,7 +80,7 @@ class TLGatherAllAvs(DirectObject):
             self._handlePlayerArrive(av)
 
         self.accept(DistributedPlayer.GetPlayerGenerateEvent(), self._handlePlayerArrive)
-        self.accept(DistributedPlayer.GetPlayerNetworkDeleteEvent(), self._handlePlayerLeave)
+        self.accept(DistributedPlayer.GetPlayerDeleteEvent(), self._handlePlayerLeave)
 
     def _handlePlayerArrive(self, av):
         if av is not localAvatar:
