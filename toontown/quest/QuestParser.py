@@ -1067,9 +1067,10 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
 
 searchPath = DSearchPath()
+searchPath.appendDirectory(Filename('phase_3/etc'))
 if __debug__:
-    searchPath.appendDirectory(Filename('resources'))
-scriptFile = Filename('phase_3/etc/QuestScripts.txt')
+    searchPath.appendDirectory(Filename('resources/phase_3/etc'))
+scriptFile = Filename('QuestScripts.txt')
 found = vfs.resolveFilename(scriptFile, searchPath)
 if not found:
     notify.error('Could not find QuestScripts.txt file')
