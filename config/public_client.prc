@@ -17,6 +17,9 @@ want-news-page #f
 want-news-tab #f
 want-housing #f
 
+model-path /
+model-cache-models #f
+model-cache-textures #f
 vfs-mount phase_3.mf /
 vfs-mount phase_3.5.mf /
 vfs-mount phase_4.mf /
