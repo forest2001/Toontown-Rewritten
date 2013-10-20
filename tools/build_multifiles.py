@@ -16,9 +16,13 @@ if not os.path.exists(dest) or os.listdir(dest):
     print('Destination must be an empty directory!')
     sys.exit(1)
 
-for d in os.listdir(source):
-    phase = os.path.join(source, d)
+# Canonicalize dest...
+dest = os.path.realpath(dest)
+
+os.chdir(source)
+for phase in os.listdir('.'):
+    if not phase.startswith('phase_'): continue
     if not os.path.isdir(phase): continue
-    out = os.path.join(dest, d+'.mf')
+    out = os.path.join(dest, phase+'.mf')
 
     os.system('multify -c -f %s %s' % (out, phase))
