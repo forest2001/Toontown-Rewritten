@@ -7,9 +7,19 @@
 # (stripped) DC file and configuration.
 import _miraidata
 
+# Load all packaged config pages:
 from libpanda import loadPrcFileData
 for i,config in enumerate(_miraidata.CONFIG):
     loadPrcFileData('Mirai Packaged Config Page #%d' % i, config)
+
+# The VirtualFileSystem, which has already initialized, doesn't see the mount
+# directives in the config(s) yet. We have to force it to load those manually:
+from libpandaexpress import VirtualFileSystem, ConfigVariableList, Filename
+vfs = VirtualFileSystem.getGlobalPtr()
+mounts = ConfigVariableList('vfs-mount')
+for mount in mounts:
+    mountfile, mountpoint = (mount.split(' ', 2) + [None, None, None])[:2]
+    vfs.mount(Filename(mountfile), Filename(mountpoint), 0)
 
 # DC data is a little bit trickier... The stock ConnectionRepository likes to
 # read DC from filenames only. DCFile does let us read in istreams, but there's
