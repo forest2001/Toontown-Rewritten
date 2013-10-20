@@ -1,13 +1,17 @@
 #!/usr/bin/python2.7 -OO
 # Yes, the above flags matter: We have to do this on 2.7 and we have to optimize.
 
-from panda3d.core import Filename
+from panda3d.core import Filename, StringStream
 from panda3d.direct import DCFile
 from modulefinder import ModuleFinder
 import os
 import sys
+import subprocess
 import imp
 import marshal
+import tempfile
+import shutil
+import atexit
 import zipfile
 
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -61,6 +65,32 @@ class ClientBuilder(object):
                 if filename.endswith('.dc'):
                     self.dcfiles.append(filepath)
 
+    def create_miraidata(self):
+        # Create a temporary _miraidata.py and throw it on the path somewhere...
+
+        # First, we need the minified DC file contents:
+        dcStream = StringStream()
+        self.dcf.write(dcStream, True)
+        dcData = dcStream.getData()
+
+        # Next we need config files...
+        configData = []
+        with open(os.path.join(self.directory, 'config/public_client.prc')) as f:
+            fd = f.read()
+            fd = fd.replace('SERVER_VERSION_HERE', determineVersion(self.directory))
+            configData.append(fd)
+
+        md = 'CONFIG = %r\nDC = %r\n' % (configData, dcData)
+
+        # Now we use tempfile to dump md:
+        td = tempfile.mkdtemp()
+        with open(os.path.join(td, '_miraidata.py'), 'w') as f:
+            f.write(md)
+
+        self.mf.path.append(td)
+
+        atexit.register(shutil.rmtree, td)
+
     def include_dcimports(self):
         for m in xrange(self.dcf.getNumImportModules()):
             modparts = self.dcf.getImportModule(m).split('/')
@@ -95,10 +125,12 @@ class ClientBuilder(object):
         self.find_dcfiles()
         self.find_excludes()
 
-        self.mf.import_hook('toontown.toonbase.ToontownStart')
-
         for dc in self.dcfiles:
             self.dcf.read(Filename(dc))
+
+        self.create_miraidata()
+
+        self.mf.import_hook('toontown.toonbase.MiraiStart')
 
         self.include_dcimports()
 
