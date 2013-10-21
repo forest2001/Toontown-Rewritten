@@ -627,39 +627,6 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.avatar = fields
         self.demand('SetAvatar')
 
-    def generateAvatar(self):
-        dclass = self.csm.air.dclassesByName['DistributedToonUD']
-        requiredPacker = DCPacker()
-        otherCount = 0
-        otherPacker = DCPacker()
-
-        for f in range(dclass.getNumInheritedFields()):
-            field = dclass.getInheritedField(f)
-            if field.isRequired():
-                requiredPacker.beginPack(field)
-                if field.getName() in self.avatar:
-                    field.packArgs(requiredPacker, self.avatar[field.getName()])
-                else:
-                    requiredPacker.packDefaultValue()
-                requiredPacker.endPack()
-            elif field.isRam() and field.getName() in self.avatar:
-                otherPacker.rawPackUint16(field.getNumber())
-                otherPacker.beginPack(field)
-                field.packArgs(otherPacker, self.avatar[field.getName()])
-                otherPacker.endPack()
-                otherCount += 1
-
-        dg = PyDatagram()
-        dg.addServerHeader(self.csm.air.serverId, self.csm.air.ourChannel, STATESERVER_CREATE_OBJECT_WITH_REQUIRED_OTHER)
-        dg.addUint32(self.avId)
-        dg.addUint32(0)
-        dg.addUint32(0)
-        dg.addUint16(dclass.getNumber())
-        dg.appendData(requiredPacker.getString())
-        dg.addUint16(otherCount)
-        dg.appendData(otherPacker.getString())
-        self.csm.air.send(dg)
-
     def enterSetAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
 
