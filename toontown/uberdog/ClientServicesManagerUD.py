@@ -711,7 +711,7 @@ class UnloadAvatarFSM(OperationFSM):
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()
-        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLEAR_POST_REMOVE)
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLEAR_POST_REMOVES)
         self.csm.air.send(dg)
 
         # Remove avatar channel:
