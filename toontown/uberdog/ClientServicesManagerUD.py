@@ -673,8 +673,13 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addString(dgcleanup.getMessage())
         self.csm.air.send(dg)
 
-        # TODO: When we have the DBSS, this will just be a simple ACTIVATE.
-        self.generateAvatar()
+        # Activate the avatar on the DBSS:
+        dg = PyDatagram()
+        dg.addServerHeader(self.avId, self.csm.air.ourChannel, DBSS_OBJECT_ACTIVATE_WITH_DEFAULTS)
+        dg.addUint32(self.avId)
+        dg.addUint32(0)
+        dg.addUint32(0)
+        self.csm.air.send(dg)
 
         # Next, add them to the avatar channel:
         dg = PyDatagram()
