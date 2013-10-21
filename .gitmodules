@@ -1,0 +1,3 @@
+[submodule "resources"]
+	path = resources
+	url = git@git.riotcave.com:privatetoon/resources.git
