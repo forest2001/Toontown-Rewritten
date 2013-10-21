@@ -126,11 +126,16 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         self.ignore(self.air.getAvatarExitEvent(avId))
 
-        emptyId = avId if hopOff else 0
-
         slot = self.slots.index(avId)
         self.sendUpdate('fillSlot%d' % slot, [0])
-        self.sendUpdate('emptySlot%d' % slot, [emptyId, globalClockDelta.getRealNetworkTime()])
+        if hopOff:
+            # FIXME: Is this the correct way to make sure that the emptySlot
+            # doesn't persist, yet still animate the avId hopping off? There
+            # should probably be a timer that sets the slot to 0 after the
+            # hopoff animation finishes playing. (And such a timer will have to
+            # be canceled if another Toon occpuies the same slot in that time.)
+            self.sendUpdate('emptySlot%d' % slot, [avId, globalClockDelta.getRealNetworkTime()])
+        self.sendUpdate('emptySlot%d' % slot, [0, globalClockDelta.getRealNetworkTime()])
         self.slots[slot] = None
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
