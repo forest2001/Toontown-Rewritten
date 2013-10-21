@@ -1476,15 +1476,13 @@ class OTPClientRepository(ClientRepositoryBase):
     def handlePlayGame(self, msgType, di):
         if self.notify.getDebug():
             self.notify.debug('handle play game got message type: ' + `msgType`)
-        if msgType == CLIENT_CREATE_OBJECT_REQUIRED:
+        if msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
-        elif msgType == CLIENT_CREATE_OBJECT_REQUIRED_OTHER:
+        elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
             self.handleGenerateWithRequiredOther(di)
-        elif msgType == CLIENT_OBJECT_UPDATE_FIELD:
+        elif msgType == CLIENT_OBJECT_SET_FIELD:
             self.handleUpdateField(di)
-        elif msgType == CLIENT_OBJECT_DISABLE_RESP:
-            self.handleDisable(di)
-        elif msgType == CLIENT_OBJECT_DELETE_RESP:
+        elif msgType == CLIENT_OBJECT_LEAVING:
             self.handleDelete(di)
         else:
             self.handleMessageType(msgType, di)
@@ -1755,30 +1753,26 @@ class OTPClientRepository(ClientRepositoryBase):
         return Task.done
 
     def handleMessageType(self, msgType, di):
-        if msgType == CLIENT_GO_GET_LOST:
+        if msgType == CLIENT_EJECT:
             self.handleGoGetLost(di)
         elif msgType == CLIENT_HEARTBEAT:
             self.handleServerHeartbeat(di)
-        elif msgType == CLIENT_CREATE_OBJECT_REQUIRED:
+        elif msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
-        elif msgType == CLIENT_CREATE_OBJECT_REQUIRED_OTHER:
+        elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
             self.handleGenerateWithRequiredOther(di)
-        elif msgType == CLIENT_CREATE_OBJECT_REQUIRED_OTHER_OWNER:
+        elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER_OWNER:
             self.handleGenerateWithRequiredOtherOwner(di)
-        elif msgType == CLIENT_OBJECT_UPDATE_FIELD:
+        elif msgType == CLIENT_OBJECT_SET_FIELD:
             self.handleUpdateField(di)
-        elif msgType == CLIENT_OBJECT_DISABLE:
+        elif msgType == CLIENT_OBJECT_LEAVING:
             self.handleDisable(di)
-        elif msgType == CLIENT_OBJECT_DISABLE_OWNER:
+        elif msgType == CLIENT_OBJECT_LEAVING_OWNER:
             self.handleDisable(di, ownerView=True)
-        elif msgType == CLIENT_OBJECT_DELETE_RESP:
-            self.handleDelete(di)
         elif msgType == CLIENT_DONE_INTEREST_RESP:
             self.gotInterestDoneMessage(di)
         elif msgType == CLIENT_OBJECT_LOCATION:
             self.gotObjectLocationMessage(di)
-        elif msgType == CLIENT_SET_WISHNAME_RESP:
-            self.gotWishnameResponse(di)
         else:
             currentLoginState = self.loginFSM.getCurrentState()
             if currentLoginState:
@@ -1935,10 +1929,10 @@ class OTPClientRepository(ClientRepositoryBase):
         return False
 
     def handleGenerateWithRequired(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
@@ -1947,10 +1941,10 @@ class OTPClientRepository(ClientRepositoryBase):
         dclass.stopGenerate()
 
     def handleGenerateWithRequiredOther(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
@@ -1981,30 +1975,30 @@ class OTPClientRepository(ClientRepositoryBase):
             self.doGenerate(parentId, zoneId, classId, doId, di)
 
     def handleGenerateWithRequiredOtherOwner(self, di):
-        classId = di.getUint16()
         doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
+        classId = di.getUint16()
         dclass = self.dclassesByNumber[classId]
         dclass.startGenerate()
         distObj = self.generateWithRequiredOtherFieldsOwner(dclass, doId, di)
         dclass.stopGenerate()
 
     def handleQuietZoneGenerateWithRequired(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         dclass.startGenerate()
         distObj = self.generateWithRequiredFields(dclass, doId, di, parentId, zoneId)
         dclass.stopGenerate()
 
     def handleQuietZoneGenerateWithRequiredOther(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         dclass.startGenerate()
         distObj = self.generateWithRequiredOtherFields(dclass, doId, di, parentId, zoneId)

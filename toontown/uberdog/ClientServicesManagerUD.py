@@ -193,7 +193,7 @@ class LoginAccountFSM(OperationFSM):
         # First, if there's anybody on the account, kill 'em for redundant login:
         dg = PyDatagram()
         dg.addServerHeader(self.csm.GetAccountConnectionChannel(self.accountId),
-                           self.csm.air.ourChannel, CLIENTAGENT_DISCONNECT)
+                           self.csm.air.ourChannel, CLIENTAGENT_EJECT)
         dg.addUint16(100)
         dg.addString('This account has been logged in elsewhere.')
         self.csm.air.send(dg)
@@ -206,7 +206,7 @@ class LoginAccountFSM(OperationFSM):
 
         # Now set their sender channel to represent their account affiliation:
         dg = PyDatagram()
-        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_SET_CLIENT_ID)
         dg.addChannel(self.accountId << 32) # accountId in high 32 bits, 0 in low (no avatar)
         self.csm.air.send(dg)
 
@@ -650,11 +650,11 @@ class LoadAvatarFSM(AvatarOperationFSM):
                 otherCount += 1
 
         dg = PyDatagram()
-        dg.addServerHeader(self.csm.air.serverId, self.csm.air.ourChannel, STATESERVER_OBJECT_GENERATE_WITH_REQUIRED_OTHER)
+        dg.addServerHeader(self.csm.air.serverId, self.csm.air.ourChannel, STATESERVER_CREATE_OBJECT_WITH_REQUIRED_OTHER)
+        dg.addUint32(self.avId)
         dg.addUint32(0)
         dg.addUint32(0)
         dg.addUint16(dclass.getNumber())
-        dg.addUint32(self.avId)
         dg.appendData(requiredPacker.getString())
         dg.addUint16(otherCount)
         dg.appendData(otherPacker.getString())
@@ -684,13 +684,13 @@ class LoadAvatarFSM(AvatarOperationFSM):
 
         # Now set their sender channel to represent their account affiliation:
         dg = PyDatagram()
-        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_CLIENT_ID)
         dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
         self.csm.air.send(dg)
 
         # Finally, grant ownership and shut down.
         dg = PyDatagram()
-        dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
+        dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
         dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
         self.csm.air.send(dg)
 
@@ -722,7 +722,7 @@ class UnloadAvatarFSM(OperationFSM):
 
         # Reset sender channel:
         dg = PyDatagram()
-        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_SENDER_ID)
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_SET_CLIENT_ID)
         dg.addChannel(self.target<<32) # accountId in high 32 bits, no avatar in low
         self.csm.air.send(dg)
 
@@ -763,7 +763,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
     def killConnection(self, connId, reason):
         dg = PyDatagram()
-        dg.addServerHeader(connId, self.air.ourChannel, CLIENTAGENT_DISCONNECT)
+        dg.addServerHeader(connId, self.air.ourChannel, CLIENTAGENT_EJECT)
         dg.addUint16(122)
         dg.addString(reason)
         self.air.send(dg)

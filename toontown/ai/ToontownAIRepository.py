@@ -39,8 +39,7 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         # Claim ownership of that district...
         dg = PyDatagram()
-        dg.addServerHeader(simbase.air.districtId, simbase.air.ourChannel, STATESERVER_OBJECT_SET_AI_CHANNEL)
-        dg.addUint32(simbase.air.districtId)
+        dg.addServerHeader(simbase.air.districtId, simbase.air.ourChannel, STATESERVER_OBJECT_SET_AI)
         dg.addChannel(simbase.air.ourChannel)
         simbase.air.send(dg)
 

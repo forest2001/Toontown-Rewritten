@@ -350,7 +350,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         localAvatar.setLocation(parentId, zoneId)
         localAvatar.generateInit()
         localAvatar.generate()
-        localAvatar.updateAllRequiredFields(dclass, di)
+        dclass.receiveUpdateBroadcastRequiredOwner(localAvatar, di)
+        localAvatar.announceGenerate()
+        localAvatar.postGenerateMessage()
         self.doId2do[avatarId] = localAvatar
         localAvatar.initInterface()
         self.sendGetFriendsListRequest()
@@ -747,6 +749,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def sendGetFriendsListRequest(self):
         self.notify.warning('sendGetFriendsListRequest: TODO!')
+        self.friendsMapPending = 0
+        messenger.send('friendsMapComplete')
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -866,10 +870,11 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
     def handleGenerateWithRequiredOtherOwner(self, di):
         # Toontown only makes use of OwnerViews for LocalToon.
         if self.loginFSM.getCurrentState().getName() == 'waitForSetAvatarResponse':
-            di.getUint32() # parent
-            di.getUint32() # zone
-            di.getUint16() # dclass
-            self.handleAvatarResponseMsg(di.getUint32(), di)
+            doId = di.getUint32()
+            parentId = di.getUint32()
+            zoneId = di.getUint32()
+            dclassId = di.getUint16()
+            self.handleAvatarResponseMsg(doId, di)
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase
@@ -977,10 +982,10 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.sendSetZoneMsg(OTPGlobals.QuietZone)
 
     def handleQuietZoneGenerateWithRequired(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         if dclass.getClassDef().neverDisable:
             dclass.startGenerate()
@@ -988,10 +993,10 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             dclass.stopGenerate()
 
     def handleQuietZoneGenerateWithRequiredOther(self, di):
+        doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        doId = di.getUint32()
         dclass = self.dclassesByNumber[classId]
         if dclass.getClassDef().neverDisable:
             dclass.startGenerate()
