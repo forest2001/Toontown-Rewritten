@@ -25,6 +25,8 @@ def determineVersion(cwd):
     return 'ttr-alpha-g%s' % (git,)
 
 class ClientBuilder(object):
+    MAINMODULE = 'toontown.toonbase.MiraiStart'
+
     def __init__(self, directory):
         self.directory = directory
 
@@ -129,7 +131,9 @@ class ClientBuilder(object):
 
         self.create_miraidata()
 
-        self.mf.import_hook('toontown.toonbase.MiraiStart')
+        self.mf.import_hook(self.MAINMODULE)
+        self.modules['__main__'] = (False, compile('import %s' % self.MAINMODULE,
+                                                   '__main__', 'exec'))
 
         self.include_dcimports()
 
