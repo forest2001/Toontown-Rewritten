@@ -30,7 +30,8 @@ class ClientBuilder(object):
     def __init__(self, directory):
         self.directory = directory
 
-        self.dcfiles = []
+        self.dcfiles = [os.path.join(directory, 'config/otp.dc'),
+                        os.path.join(directory, 'config/toon.dc')]
         self.modules = {}
 
         self.mf = ModuleFinder(sys.path+[self.directory])
@@ -123,7 +124,7 @@ class ClientBuilder(object):
             self.modules[modname] = (is_package, code)
 
     def load_modules(self):
-        self.find_dcfiles()
+        #self.find_dcfiles()
         self.find_excludes()
 
         for dc in self.dcfiles:
