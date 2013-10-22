@@ -23,7 +23,7 @@ class LocalAccountDB:
         # This uses dbm, so we open the DB file:
         filename = simbase.config.GetString('accountdb-local-file',
                                             'dev-accounts.db')
-        self.dbm = anydbm.open(filename, 'c')
+        self.dbm = anydbm.open(filename, 'cs')
 
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):
