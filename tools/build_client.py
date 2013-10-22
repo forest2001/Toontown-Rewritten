@@ -12,6 +12,7 @@ import marshal
 import tempfile
 import shutil
 import atexit
+import argparse
 import zipfile
 
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -119,9 +120,7 @@ class ClientBuilder(object):
                 code = compile(f.read(), modname, 'exec')
             self.modules[modname] = (is_package, code)
 
-    def build(self, outfile):
-        self.outfile = outfile
-
+    def load_modules(self):
         self.find_dcfiles()
         self.find_excludes()
 
@@ -136,16 +135,53 @@ class ClientBuilder(object):
 
         self.build_modules()
 
+
+    def write_zip(self, outfile):
         zip = zipfile.ZipFile(outfile, 'w')
         for modname, (is_package, code) in self.modules.items():
             mcode = imp.get_magic() + '\x00'*4 + marshal.dumps(code)
             name = modname.replace('.','/')
             if is_package:
                 name += '/__init__'
-            name += '.pyc'
+            name += '.pyo'
             zip.writestr(name, mcode)
         zip.close()
 
+    def write_list(self, outfile):
+        with open(outfile,'w') as out:
+            for modname in sorted(self.modules.keys()):
+                is_package, code = self.modules[modname]
+                out.write('%s%s\n' % (modname, ' [PKG]' if is_package else ''))
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--mirai-path', help='The path to the Mirai repository root.')
+    parser.add_argument('--format', default='mirai', choices=['mirai', 'zip', 'list'],
+                        help='The output format to produce. Choices are:\n'
+                        'mirai -- a Mirai package\n'
+                        'zip -- a zip file of pyos\n'
+                        'list -- a plaintext list of included modules')
+    parser.add_argument('output', help='The filename of the built file to output.')
+
+    args = parser.parse_args()
+    if args.mirai_path:
+        sys.path.append(args.mirai_path)
+
+
     cb = ClientBuilder(root)
-    cb.build(sys.argv[1])
+    cb.load_modules()
+
+    if args.format == 'zip':
+        cb.write_zip(args.output)
+    elif args.format == 'list':
+        cb.write_list(args.output)
+    elif args.format == 'mirai':
+        try:
+            from mirai.packager import MiraiPackager
+        except ImportError:
+            sys.stderr.write('Could not import Mirai! Check your --mirai-path\n')
+            sys.exit(1)
+
+        mp = MiraiPackager(args.output)
+        mp.write_modules(cb.modules)
+        mp.close()
