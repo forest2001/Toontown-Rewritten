@@ -16,6 +16,7 @@ def judgeName(name):
     # For now we reject only "Rejectnow" for debugging.
     return name != 'Rejectnow'
 
+# --- ACCOUNT DATABASES ---
 class LocalAccountDB:
     def __init__(self, csm):
         self.csm = csm
@@ -90,6 +91,7 @@ class RemoteAccountDB:
         # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
         return json.loads(rf.getData())
 
+# --- FSMs ---
 class OperationFSM(FSM):
     TARGET_CONNECTION = False
 
@@ -708,6 +710,7 @@ class UnloadAvatarFSM(OperationFSM):
         self.csm.air.writeServerEvent('avatarUnload', self.avId)
         self.demand('Off')
 
+# --- ACTUAL CSMUD ---
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
