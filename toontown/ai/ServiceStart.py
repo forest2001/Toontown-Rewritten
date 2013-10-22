@@ -9,7 +9,7 @@ parser.add_argument('--stateserver', help="The control channel of this AI's desi
 parser.add_argument('--district-name', help="What this AI Server's district will be named.")
 parser.add_argument('--astron-ip', help="The IP address of the Astron Message Director to connect to.")
 parser.add_argument('--eventlogger-ip', help="The IP address of the Astron Event Logger to log to.")
-parser.add_argument('config', nargs='?', default=['config/dev.prc'], help="PRC file(s) to load.")
+parser.add_argument('config', nargs='*', default=['config/dev.prc'], help="PRC file(s) to load.")
 args = parser.parse_args()
 
 for prc in args.config:
