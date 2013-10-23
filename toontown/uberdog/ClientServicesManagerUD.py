@@ -69,7 +69,7 @@ class RemoteAccountDB:
                       'databaseId': response['user_id'],
                       'accountId': gsUserId})
     def storeAccountID(self, databaseId, accountId, callback):
-        response = self.__executeHttpRequest("associate_user/%s/with/%s" % (accountId, databaseId), str(accountId) + str(databaseId))
+        response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
         if (not response['status']):
             self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response['banner'])
             callback(False)
