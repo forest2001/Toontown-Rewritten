@@ -9,6 +9,7 @@ import sys
 import subprocess
 import imp
 import marshal
+import pytz
 import tempfile
 import shutil
 import atexit
@@ -84,7 +85,12 @@ class ClientBuilder(object):
             fd = fd.replace('SERVER_VERSION_HERE', determineVersion(self.directory))
             configData.append(fd)
 
-        md = 'CONFIG = %r\nDC = %r\n' % (configData, dcData)
+        # Now add pytz timezones:
+        zoneinfo = {}
+        for zone in pytz.all_timezones:
+            zoneinfo['zoneinfo/'+zone] = pytz.open_resource(zone).read()
+
+        md = 'CONFIG = %r\nDC = %r\nZONEINFO = %r\n' % (configData, dcData, zoneinfo)
 
         # Now we use tempfile to dump md:
         td = tempfile.mkdtemp()
