@@ -134,7 +134,7 @@ class ClientBuilder(object):
         self.find_excludes()
 
         for dc in self.dcfiles:
-            self.dcf.read(Filename(dc))
+            self.dcf.read(Filename.fromOsSpecific(dc))
 
         self.create_miraidata()
 
