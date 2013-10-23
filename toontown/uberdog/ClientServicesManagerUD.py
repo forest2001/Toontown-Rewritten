@@ -226,7 +226,7 @@ class LoginAccountFSM(OperationFSM):
             {'LAST_LOGIN': time.ctime()})
 
         # We're done.
-        self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.cookie)
+        self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.databaseId)
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
 
