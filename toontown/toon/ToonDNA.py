@@ -6,6 +6,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import AvatarDNA
 notify = directNotify.newCategory('ToonDNA')
+mergeMATTailor = config.GetBool('merge-mat-tailor', 0)
 toonSpeciesTypes = ['d',
  'c',
  'h',
@@ -1714,16 +1715,20 @@ MakeAToonGirlSkirts = []
 MakeAToonGirlShorts = []
 
 #Combine all tailors into MAKE_A_TOON tailor.
-for tailors in TailorCollections:
-    if not tailors==1 and not tailors==2004: #skip TTC tailor and MAKE_A_TOON tailor, we don't want duplicates!
+if mergeMATTailor:
+    for tailors in TailorCollections:
         for girlBottoms in TailorCollections[tailors][GIRL_BOTTOMS]:
-            TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS].append(girlBottoms)
+            if girlBottoms not in TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS]:
+                TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS].append(girlBottoms)
         for boyShorts in TailorCollections[tailors][BOY_SHORTS]:
-            TailorCollections[MAKE_A_TOON][BOY_SHORTS].append(boyShorts)
+            if boyShorts not in TailorCollections[MAKE_A_TOON][BOY_SHORTS]:
+                 TailorCollections[MAKE_A_TOON][BOY_SHORTS].append(boyShorts)
         for girlShirts in TailorCollections[tailors][GIRL_SHIRTS]:
-            TailorCollections[MAKE_A_TOON][GIRL_SHIRTS].append(girlShirts)
+            if girlShirts not in TailorCollections[MAKE_A_TOON][GIRL_SHIRTS]:
+                 TailorCollections[MAKE_A_TOON][GIRL_SHIRTS].append(girlShirts)
         for boyShirts in TailorCollections[tailors][BOY_SHIRTS]:
-            TailorCollections[MAKE_A_TOON][BOY_SHIRTS].append(boyShirts)
+            if boyShirts not in TailorCollections[MAKE_A_TOON][BOY_SHIRTS]:
+                 TailorCollections[MAKE_A_TOON][BOY_SHIRTS].append(boyShirts)
 
 for style in TailorCollections[MAKE_A_TOON][BOY_SHORTS]:
     index = BottomStyles[style][0]
