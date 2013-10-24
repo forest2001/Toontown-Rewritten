@@ -1697,6 +1697,7 @@ TailorCollections = {MAKE_A_TOON: [['bss1', 'bss2'],
                   ['gss13', 'gss15'],
                   ['bbs8'],
                   ['gsk7']]}
+                  
 BOY_SHIRTS = 0
 GIRL_SHIRTS = 1
 BOY_SHORTS = 2
@@ -1711,6 +1712,19 @@ MakeAToonGirlBottoms = []
 MakeAToonGirlShirts = []
 MakeAToonGirlSkirts = []
 MakeAToonGirlShorts = []
+
+#Combine all tailors into MAKE_A_TOON tailor.
+for tailors in TailorCollections:
+    if not tailors==1 and not tailors==2004: #skip TTC tailor and MAKE_A_TOON tailor, we don't want duplicates!
+        for girlBottoms in TailorCollections[tailors][GIRL_BOTTOMS]:
+            TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS].append(girlBottoms)
+        for boyShorts in TailorCollections[tailors][BOY_SHORTS]:
+            TailorCollections[MAKE_A_TOON][BOY_SHORTS].append(boyShorts)
+        for girlShirts in TailorCollections[tailors][GIRL_SHIRTS]:
+            TailorCollections[MAKE_A_TOON][GIRL_SHIRTS].append(girlShirts)
+        for boyShirts in TailorCollections[tailors][BOY_SHIRTS]:
+            TailorCollections[MAKE_A_TOON][BOY_SHIRTS].append(boyShirts)
+
 for style in TailorCollections[MAKE_A_TOON][BOY_SHORTS]:
     index = BottomStyles[style][0]
     MakeAToonBoyBottoms.append(index)
