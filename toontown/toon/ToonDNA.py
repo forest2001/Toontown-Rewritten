@@ -6,7 +6,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import AvatarDNA
 notify = directNotify.newCategory('ToonDNA')
-mergeMATTailor = config.GetBool('merge-mat-tailor', 0)
+mergeMATTailor = config.GetBool('want-mat-all-tailors', 0)
 toonSpeciesTypes = ['d',
  'c',
  'h',
@@ -1678,8 +1678,8 @@ TailorCollections = {MAKE_A_TOON: [['bss1', 'bss2'],
                 ['gss1', 'gss2'],
                 ['bbs1', 'bbs2'],
                 ['gsk1', 'gsh1']],
- LONGJOHN_LEROY: [['bss3', 'bss4', 'bss14'],
-                  ['gss3', 'gss4', 'gss14'],
+ LONGJOHN_LEROY: [['bss3', 'bss14'],
+                  ['gss3', 'gss14'],
                   ['bbs3', 'bbs4'],
                   ['gsk2', 'gsh2']],
  TAILOR_HARMONY: [['bss5', 'bss6', 'bss10'],
