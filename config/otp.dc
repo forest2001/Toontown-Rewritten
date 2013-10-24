@@ -50,6 +50,7 @@ dclass Account {
   string PLAYED_MINUTES_PERIOD db;
   string CREATED db;
   string LAST_LOGIN db;
+  string ACCOUNT_ID db;
 };
 
 struct BarrierData {

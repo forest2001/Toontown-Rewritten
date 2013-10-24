@@ -158,7 +158,8 @@ class LoginAccountFSM(OperationFSM):
                         'ESTATE_ID': 0,
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
-                        'LAST_LOGIN': time.ctime()}
+                        'LAST_LOGIN': time.ctime(),
+                        'ACCOUNT_ID': str(self.databaseId)}
 
         self.csm.air.dbInterface.createObject(
             self.csm.air.dbId,
@@ -223,7 +224,8 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.dbId,
             self.accountId,
             self.csm.air.dclassesByName['AccountUD'],
-            {'LAST_LOGIN': time.ctime()})
+            {'LAST_LOGIN': time.ctime(),
+             'ACCOUNT_ID': str(self.databaseId)})
 
         # We're done.
         self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.databaseId)
