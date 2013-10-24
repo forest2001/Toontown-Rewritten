@@ -6,6 +6,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import AvatarDNA
 notify = directNotify.newCategory('ToonDNA')
+mergeMATTailor = config.GetBool('want-mat-all-tailors', 0)
 toonSpeciesTypes = ['d',
  'c',
  'h',
@@ -1677,8 +1678,8 @@ TailorCollections = {MAKE_A_TOON: [['bss1', 'bss2'],
                 ['gss1', 'gss2'],
                 ['bbs1', 'bbs2'],
                 ['gsk1', 'gsh1']],
- LONGJOHN_LEROY: [['bss3', 'bss4', 'bss14'],
-                  ['gss3', 'gss4', 'gss14'],
+ LONGJOHN_LEROY: [['bss3', 'bss14'],
+                  ['gss3', 'gss14'],
                   ['bbs3', 'bbs4'],
                   ['gsk2', 'gsh2']],
  TAILOR_HARMONY: [['bss5', 'bss6', 'bss10'],
@@ -1697,6 +1698,7 @@ TailorCollections = {MAKE_A_TOON: [['bss1', 'bss2'],
                   ['gss13', 'gss15'],
                   ['bbs8'],
                   ['gsk7']]}
+                  
 BOY_SHIRTS = 0
 GIRL_SHIRTS = 1
 BOY_SHORTS = 2
@@ -1711,6 +1713,23 @@ MakeAToonGirlBottoms = []
 MakeAToonGirlShirts = []
 MakeAToonGirlSkirts = []
 MakeAToonGirlShorts = []
+
+#Combine all tailors into MAKE_A_TOON tailor.
+if mergeMATTailor:
+    for tailors in TailorCollections:
+        for girlBottoms in TailorCollections[tailors][GIRL_BOTTOMS]:
+            if girlBottoms not in TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS]:
+                TailorCollections[MAKE_A_TOON][GIRL_BOTTOMS].append(girlBottoms)
+        for boyShorts in TailorCollections[tailors][BOY_SHORTS]:
+            if boyShorts not in TailorCollections[MAKE_A_TOON][BOY_SHORTS]:
+                 TailorCollections[MAKE_A_TOON][BOY_SHORTS].append(boyShorts)
+        for girlShirts in TailorCollections[tailors][GIRL_SHIRTS]:
+            if girlShirts not in TailorCollections[MAKE_A_TOON][GIRL_SHIRTS]:
+                 TailorCollections[MAKE_A_TOON][GIRL_SHIRTS].append(girlShirts)
+        for boyShirts in TailorCollections[tailors][BOY_SHIRTS]:
+            if boyShirts not in TailorCollections[MAKE_A_TOON][BOY_SHIRTS]:
+                 TailorCollections[MAKE_A_TOON][BOY_SHIRTS].append(boyShirts)
+
 for style in TailorCollections[MAKE_A_TOON][BOY_SHORTS]:
     index = BottomStyles[style][0]
     MakeAToonBoyBottoms.append(index)
