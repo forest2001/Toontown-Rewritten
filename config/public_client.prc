@@ -10,7 +10,7 @@ server-version SERVER_VERSION_HERE
 default-model-extension .bam
 
 show-total-population #t
-merge-mat-tailor #t
+want-mat-all-tailors #t
 
 # For alpha, we have to disable a few features for now.
 want-pets #f
