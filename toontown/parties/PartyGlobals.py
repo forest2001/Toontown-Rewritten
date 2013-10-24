@@ -740,7 +740,7 @@ MUSIC_MIN_LENGTH_SECONDS = 50.0
 MUSIC_GAP = 2.5
 PhaseToMusicData = {3.5: {'TC_SZ.mid': [TTLocalizer.MusicTcSz, 57]},
  3: {'create_a_toon.mid': [TTLocalizer.MusicCreateAToon, 175],
-     'tt_theme.mid': [TTLocalizer.MusicTtTheme, 51]},
+     'ttr_theme.ogg': [TTLocalizer.MusicTtTheme, 51]},
  4: {'TC_nbrhood.mid': [TTLocalizer.MusicTcNbrhood, 59],
      'MG_TwoDGame.mid': [TTLocalizer.MusicMgTwodgame, 60],
      'MG_Vine.mid': [TTLocalizer.MusicMgVine, 32],
