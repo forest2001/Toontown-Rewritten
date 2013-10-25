@@ -7,8 +7,8 @@ class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     def __init__(self, hood, parentFSM, doneEvent):
         SafeZoneLoader.SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)
         self.playgroundClass = DGPlayground.DGPlayground
-        self.musicFile = 'phase_8/audio/bgm/DG_nbrhood.mid'
-        self.activityMusicFile = 'phase_8/audio/bgm/DG_SZ.mid'
+        self.musicFile = 'phase_8/audio/bgm/DG_nbrhood.ogg'
+        self.activityMusicFile = 'phase_8/audio/bgm/DG_SZ.ogg'
         self.dnaFile = 'phase_8/dna/daisys_garden_sz.dna'
         self.safeZoneStorageDNAFile = 'phase_8/dna/storage_DG_sz.dna'
 

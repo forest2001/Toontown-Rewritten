@@ -171,8 +171,8 @@ WaterCoolerCollisionName = 'WaterCooler_Collision'
 WaterCoolerShowEventName = 'CogdoMazeWaterCooler_Show'
 WaterCoolerHideEventName = 'CogdoMazeWaterCooler_Hide'
 AudioCutoff = 75.0
-MusicFiles = {'normal': 'phase_9/audio/bgm/CHQ_FACT_bg.mid',
- 'timeRunningOut': 'phase_7/audio/bgm/encntr_suit_winning_indoor.mid'}
+MusicFiles = {'normal': 'phase_9/audio/bgm/CHQ_FACT_bg.ogg',
+ 'timeRunningOut': 'phase_7/audio/bgm/encntr_suit_winning_indoor.ogg'}
 SfxFiles = {'toonHitByDrop': 'phase_5/audio/sfx/tt_s_ara_cmg_toonHit.mp3',
  'toonHit': 'phase_4/audio/sfx/MG_cannon_hit_dirt.mp3',
  'getMemo': 'phase_4/audio/sfx/MG_maze_pickup.mp3',
