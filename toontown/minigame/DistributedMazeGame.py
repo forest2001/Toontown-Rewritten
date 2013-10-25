@@ -694,7 +694,8 @@ class DistributedMazeGame(DistributedMinigame):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)
-            scorePanel.setPos(1.12, 0.0, 0.5 - 0.28 * i)
+            scorePanel.reparentTo(base.a2dTopRight)
+            scorePanel.setPos(-0.213, 0.0, -0.5 - 0.28 * i)
             self.scorePanels.append(scorePanel)
 
         self.goalBar.show()
@@ -1087,6 +1088,7 @@ class DistributedMazeGame(DistributedMinigame):
         for i in xrange(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
+            panel.wrtReparentTo(aspect2d)
             lerpTrack.append(Parallel(LerpPosInterval(panel, lerpDur, Point3(pos[0], 0, pos[1]), blendType='easeInOut'), LerpScaleInterval(panel, lerpDur, Vec3(panel.getScale()) * 2.0, blendType='easeInOut')))
 
         self.showScoreTrack = Parallel(lerpTrack, Sequence(Wait(MazeGameGlobals.SHOWSCORES_DURATION), Func(self.gameOver)))
