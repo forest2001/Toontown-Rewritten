@@ -5,7 +5,7 @@ usePytz = True
 try:
     import _miraidata
     usePytz = False
-finally:
+except ImportError:
     pass
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
