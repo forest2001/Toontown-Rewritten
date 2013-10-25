@@ -1,6 +1,12 @@
 import time
 from datetime import datetime, timedelta
 import pytz
+usePytz = True
+try:
+    import _miraidata
+    usePytz = False
+finally:
+    pass
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
@@ -19,7 +25,8 @@ class ToontownTimeManager(DistributedObject.DistributedObject):
             except:
                 notify.error('ToontownTimeManager does not have access to base or simbase.')
 
-        self.serverTimeZone = pytz.timezone(self.serverTimeZoneString)
+        if usePytz:
+            self.serverTimeZone = pytz.timezone(self.serverTimeZoneString)
         self.updateLoginTimes(serverTimeUponLogin, clientTimeUponLogin, globalClockRealTimeUponLogin)
         self.debugSecondsAdded = 0
 
@@ -29,21 +36,31 @@ class ToontownTimeManager(DistributedObject.DistributedObject):
         self.globalClockRealTimeUponLogin = globalClockRealTimeUponLogin
         naiveTime = datetime.utcfromtimestamp(self.serverTimeUponLogin)
         self.utcServerDateTime = naiveTime.replace(tzinfo=pytz.utc)
-        self.serverDateTime = datetime.fromtimestamp(self.serverTimeUponLogin, self.serverTimeZone)
+        if usePytz:
+            self.serverDateTime = datetime.fromtimestamp(self.serverTimeUponLogin, self.serverTimeZone)
+        else:
+            self.serverDateTime = datetime.fromtimestamp(self.serverTimeUponLogin)
 
     def getCurServerDateTime(self):
         secondsPassed = globalClock.getRealTime() - self.globalClockRealTimeUponLogin + self.debugSecondsAdded
-        curDateTime = self.serverTimeZone.normalize(self.serverDateTime + timedelta(seconds=secondsPassed))
+        if usePytz:
+            curDateTime = self.serverTimeZone.normalize(self.serverDateTime + timedelta(seconds=secondsPassed))
+        else:
+            return secondsPassed
         return curDateTime
 
     def getRelativeServerDateTime(self, timeOffset):
         secondsPassed = globalClock.getRealTime() - self.globalClockRealTimeUponLogin + self.debugSecondsAdded
         secondsPassed += timeOffset
+        if not usePytz:
+            return secondsPassed
         curDateTime = self.serverTimeZone.normalize(self.serverDateTime + timedelta(seconds=secondsPassed))
         return curDateTime
 
     def getCurServerDateTimeForComparison(self):
         secondsPassed = globalClock.getRealTime() - self.globalClockRealTimeUponLogin + self.debugSecondsAdded
+        if not usePytz:
+            return secondsPassed
         curDateTime = self.serverDateTime + timedelta(seconds=secondsPassed)
         curDateTime = curDateTime.replace(tzinfo=self.serverTimeZone)
         return curDateTime
