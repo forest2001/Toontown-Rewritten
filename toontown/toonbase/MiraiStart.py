@@ -7,6 +7,9 @@
 # (stripped) DC file and configuration.
 import _miraidata
 
+# This is to get the dependency walker to include the ascii encoding, as it's needed by some things
+import encodings.ascii
+
 # Load all packaged config pages:
 from libpanda import loadPrcFileData
 for i,config in enumerate(_miraidata.CONFIG):
