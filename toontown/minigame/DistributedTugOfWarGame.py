@@ -25,7 +25,7 @@ import MinigamePowerMeter
 from direct.task.Task import Task
 
 class DistributedTugOfWarGame(DistributedMinigame):
-    bgm = 'phase_4/audio/bgm/MG_tug_o_war.mid'
+    bgm = 'phase_4/audio/bgm/MG_tug_o_war.ogg'
     toonAnimNames = ['neutral',
      'tug-o-war',
      'slip-forward',

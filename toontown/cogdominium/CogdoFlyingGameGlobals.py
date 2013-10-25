@@ -172,11 +172,11 @@ Dev.Invincibility = False
 Dev.NoLegalEagleAttacks = False
 Audio = VariableContainer()
 Audio.Cutoff = 75.0
-Audio.MusicFiles = {'normal': 'phase_4/audio/bgm/MG_cannon_game.mid',
- 'end': 'phase_4/audio/bgm/FF_safezone.mid',
- 'waiting': 'phase_4/audio/bgm/m_match_bg2.mid',
- 'invul': 'phase_4/audio/bgm/MG_CogThief.mid',
- 'timeRunningOut': 'phase_7/audio/bgm/encntr_suit_winning_indoor.mid'}
+Audio.MusicFiles = {'normal': 'phase_4/audio/bgm/MG_cannon_game.ogg',
+ 'end': 'phase_4/audio/bgm/FF_safezone.ogg',
+ 'waiting': 'phase_4/audio/bgm/m_match_bg2.ogg',
+ 'invul': 'phase_4/audio/bgm/MG_CogThief.ogg',
+ 'timeRunningOut': 'phase_7/audio/bgm/encntr_suit_winning_indoor.ogg'}
 Audio.SfxFiles = {'propeller': 'phase_4/audio/sfx/TB_propeller.wav',
  'propeller_damaged': 'phase_5/audio/sfx/tt_s_ara_cfg_propellers_damaged.mp3',
  'fan': 'phase_4/audio/sfx/target_wind_float_loop.wav',

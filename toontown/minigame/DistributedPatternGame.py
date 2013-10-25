@@ -23,7 +23,7 @@ class DistributedPatternGame(DistributedMinigame):
      phase4snd + 'm_match_guitar.mp3',
      phase4snd + 'm_match_drums.mp3',
      phase4snd + 'm_match_piano.mp3')
-    bgm = 'phase_4/audio/bgm/m_match_bg1.mid'
+    bgm = 'phase_4/audio/bgm/m_match_bg1.ogg'
     strWatch = TTLocalizer.PatternGameWatch
     strGo = TTLocalizer.PatternGameGo
     strRight = TTLocalizer.PatternGameRight

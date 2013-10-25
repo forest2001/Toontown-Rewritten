@@ -20,8 +20,8 @@ class PartyLoader(SafeZoneLoader.SafeZoneLoader):
          State.State('party', self.enterParty, self.exitParty, ['quietZone']),
          State.State('quietZone', self.enterQuietZone, self.exitQuietZone, ['planning', 'party']),
          State.State('final', self.enterFinal, self.exitFinal, ['start'])], 'start', 'final')
-        self.musicFile = 'phase_13/audio/bgm/party_original_theme.mid'
-        self.activityMusicFile = 'phase_13/audio/bgm/party_waltz_dance.mid'
+        self.musicFile = 'phase_13/audio/bgm/party_original_theme.ogg'
+        self.activityMusicFile = 'phase_13/audio/bgm/party_waltz_dance.ogg'
         self.dnaFile = 'phase_13/dna/party_sz.dna'
         self.safeZoneStorageDNAFile = None
         self.cloudSwitch = 0

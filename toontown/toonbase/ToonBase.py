@@ -119,7 +119,7 @@ class ToonBase(OTPBase.OTPBase):
         self.canScreenShot = 1
         self.glitchCount = 0
         self.walking = 0
-        self.resetMusic = self.loadMusic('phase_3/audio/bgm/MIDI_Events_16channels.mid')
+        self.resetMusic = self.loadMusic('phase_3/audio/bgm/MIDI_Events_16channels.ogg')
         self.oldX = max(1, base.win.getXSize())
         self.oldY = max(1, base.win.getYSize())
         self.aspectRatio = float(self.oldX) / self.oldY

@@ -53,7 +53,7 @@ class TownLoader(StateData.StateData):
         self.canonicalBranchZone = ZoneUtil.getCanonicalBranchZone(zoneId)
         self.music = base.loadMusic(self.musicFile)
         self.activityMusic = base.loadMusic(self.activityMusicFile)
-        self.battleMusic = base.loadMusic('phase_3.5/audio/bgm/encntr_general_bg.mid')
+        self.battleMusic = base.loadMusic('phase_3.5/audio/bgm/encntr_general_bg.ogg')
         self.townBattle = TownBattle.TownBattle(self.townBattleDoneEvent)
         self.townBattle.load()
 
