@@ -9,7 +9,7 @@ class Nametag(ClickablePopup):
 
     def __init__(self):
         ClickablePopup.__init__(self)
-        self.contents = 0
+        self.contents = (self.CName|self.CSpeech|self.CThought)
 
         self.font = None
         self.name = ''
