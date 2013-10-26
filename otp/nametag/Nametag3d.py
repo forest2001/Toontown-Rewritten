@@ -9,4 +9,4 @@ class Nametag3d(Nametag):
 
     def showSpeech(self):
         bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font)
-        bubble.reparentTo(NodePath(self))
+        bubble.reparentTo(NodePath.anyPath(self))
