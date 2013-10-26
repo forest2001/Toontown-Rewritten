@@ -1,4 +1,5 @@
 from pandac.PandaModules import *
 
 class ClickablePopup(PandaNode):
-    pass
+    def __init__(self):
+        PandaNode.__init__(self, 'popup')
