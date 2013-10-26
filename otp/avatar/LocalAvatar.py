@@ -894,7 +894,6 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         messenger.send('customMessagesChanged')
 
     def displayWhisper(self, fromId, chatString, whisperType):
-        return # TODO: We really need a replacement for libotp before we can display these...
         sender = None
         sfx = self.soundWhisper
         if whisperType == WhisperPopup.WTNormal or whisperType == WhisperPopup.WTQuickTalker:
