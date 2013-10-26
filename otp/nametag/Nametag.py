@@ -1,6 +1,7 @@
 from NametagConstants import *
 import NametagGlobals
 from otp.margins.ClickablePopup import ClickablePopup
+from pandac.PandaModules import *
 
 class Nametag(ClickablePopup):
     CName = 1
@@ -10,6 +11,8 @@ class Nametag(ClickablePopup):
     def __init__(self):
         ClickablePopup.__init__(self)
         self.contents = (self.CName|self.CSpeech|self.CThought)
+
+        self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
         self.font = None
         self.name = ''
@@ -22,7 +25,7 @@ class Nametag(ClickablePopup):
         self.contents = contents
 
     def update(self):
-        self.removeAllChildren()
+        self.innerNP.node().removeAllChildren()
         if self.contents&self.CThought and self.chatFlags&CFThought:
             self.showThought()
         elif self.contents&self.CSpeech and self.chatFlags&CFSpeech:
