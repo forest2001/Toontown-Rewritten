@@ -1,7 +1,5 @@
-from Nametag import *
 from pandac.PandaModules import *
 
-class Nametag3d(Nametag, PandaNode):
+class MarginPopup(PandaNode):
     def __init__(self):
-        Nametag.__init__(self)
         PandaNode.__init__(self, '')

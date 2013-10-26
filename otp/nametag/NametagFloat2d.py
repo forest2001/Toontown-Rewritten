@@ -1,4 +1,4 @@
-from Nametag2d import *
+from Nametag3d import *
 
-class NametagFloat2d(Nametag2d):
+class NametagFloat2d(Nametag3d):
     pass
