@@ -21,7 +21,7 @@ from toontown.effects.SkullBurst import SkullBurst
 from toontown.effects.SkullFlash import SkullFlash
 from toontown.effects.TrailExplosion import TrailExplosion
 from toontown.effects.IceCream import IceCream
-trailSfxNames = ['phase_4/audio/sfx/firework_whistle_01.ogg', 'phase_4/audio/sfx/firework_whistle_02.mp3']
+trailSfxNames = ['phase_4/audio/sfx/firework_whistle_01.ogg', 'phase_4/audio/sfx/firework_whistle_02.ogg']
 burstSfxNames = ['phase_4/audio/sfx/firework_explosion_01.ogg',
  'phase_4/audio/sfx/firework_explosion_02.ogg',
  'phase_4/audio/sfx/firework_explosion_03.ogg',
