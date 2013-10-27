@@ -4,14 +4,21 @@ from NametagConstants import *
 from pandac.PandaModules import *
 
 class Nametag3d(Nametag):
-    CONTENTS_SCALE = 0.33
+    CONTENTS_SCALE = 0.25
+    BILLBOARD_OFFSET = 3.0
 
     def __init__(self):
         Nametag.__init__(self)
 
         self.contents = self.CName|self.CSpeech|self.CThought
 
-        self.innerNP.setBillboardPointWorld()
+        self.innerNP.setEffect(BillboardEffect.make(
+            Vec3(0,0,1),
+            True,
+            False,
+            self.BILLBOARD_OFFSET,
+            NametagGlobals.camera,
+            Point3(0,0,0)))
         self.innerNP.setScale(self.CONTENTS_SCALE)
 
     def showSpeech(self):
