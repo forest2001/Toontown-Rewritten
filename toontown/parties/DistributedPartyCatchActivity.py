@@ -235,9 +235,9 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         del self.sndAnvilLand
         del self.sndPerfect
 
-    def setStartTimestamp(self, timest.ogg2):
-        self.notify.info('setStartTimestamp(%s)' % (timest.ogg2,))
-        self._startTimestamp = globalClockDelta.networkToLocalTime(timest.ogg2, bits=32)
+    def setStartTimestamp(self, timestamp32):
+        self.notify.info('setStartTimestamp(%s)' % (timestamp32,))
+        self._startTimestamp = globalClockDelta.networkToLocalTime(timestamp32, bits=32)
 
     def getCurrentCatchActivityTime(self):
         return globalClock.getFrameTime() - self._startTimestamp
@@ -597,9 +597,9 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         gen2t = {}
         gen2nt = {}
         gen2np = {}
-        for id, timest.ogg2, numPlayers in generations:
-            gen2t[id] = globalClockDelta.networkToLocalTime(timest.ogg2, bits=32) - self._startTimestamp
-            gen2nt[id] = timest.ogg2
+        for id, timestamp32, numPlayers in generations:
+            gen2t[id] = globalClockDelta.networkToLocalTime(timestamp32, bits=32) - self._startTimestamp
+            gen2nt[id] = timestamp32
             gen2np[id] = numPlayers
 
         ids = self._id2gen.keys()

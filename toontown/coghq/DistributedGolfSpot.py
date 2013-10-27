@@ -703,7 +703,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         if flyBallCodeStr:
             flyBallCode = int(flyBallCodeStr)
         pos = entry.getSurfacePoint(render)
-        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
         throwerId = int(entry.getFromNodePath().getNetTag('throwerId'))
         splat = self.getFlyBallSplatInterval(pos[0], pos[1], pos[2], flyBallCode, throwerId)
         splat = Sequence(splat, Func(self.flyBallFinishedSplatting, sequence))

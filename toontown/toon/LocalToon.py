@@ -671,14 +671,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__presentingPie = 1
         pos = self.getPos()
         hpr = self.getHpr()
-        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
         self.sendUpdate('presentPie', [pos[0],
          pos[1],
          pos[2],
          hpr[0] % 360.0,
          hpr[1],
          hpr[2],
-         timest.ogg2])
+         timestamp32])
         Emote.globalEmote.disableBody(self)
         messenger.send('begin-pie')
         ival = self.getPresentPieInterval(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
@@ -739,7 +739,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             return
         pos = self.getPos()
         hpr = self.getHpr()
-        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
         sequence = self.__pieSequence
         if self.tossTrack:
             tossTrack = self.tossTrack
@@ -759,7 +759,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__piePowerMeterSequence = sequence
         pieBubble = self.getPieBubble().instanceTo(NodePath())
 
-        def pieFlies(self = self, pos = pos, hpr = hpr, sequence = sequence, power = power, timest.ogg2 = timestamp32, pieBubble = pieBubble):
+        def pieFlies(self = self, pos = pos, hpr = hpr, sequence = sequence, power = power, timestamp32 = timestamp32, pieBubble = pieBubble):
             self.sendUpdate('tossPie', [pos[0],
              pos[1],
              pos[2],
@@ -768,7 +768,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
              hpr[2],
              sequence,
              power,
-             timest.ogg2])
+             timestamp32])
             if self.numPies != ToontownGlobals.FullPies:
                 self.setNumPies(self.numPies - 1)
             base.cTrav.addCollider(pieBubble, self.pieHandler)
@@ -811,13 +811,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if pieCodeStr:
             pieCode = int(pieCodeStr)
         pos = entry.getSurfacePoint(render)
-        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
         self.sendUpdate('pieSplat', [pos[0],
          pos[1],
          pos[2],
          sequence,
          pieCode,
-         timest.ogg2])
+         timestamp32])
         splat = self.getPieSplatInterval(pos[0], pos[1], pos[2], pieCode)
         splat = Sequence(splat, Func(self.pieFinishedSplatting, sequence))
         self.splatTracks[sequence] = splat

@@ -1378,7 +1378,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         return True
 
-    def presentPie(self, x, y, z, h, p, r, timest.ogg2):
+    def presentPie(self, x, y, z, h, p, r, timestamp32):
         if self.numPies <= 0:
             return
         if not launcher.getPhaseComplete(5):
@@ -1387,7 +1387,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.tossTrack:
             lastTossTrack = self.tossTrack
             tossTrack = None
-        ts = globalClockDelta.localElapsedTime(timest.ogg2, bits=32)
+        ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
         ival = self.getPresentPieInterval(x, y, z, h, p, r)
         if ts > 0:
@@ -1402,7 +1402,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.tossTrack = ival
         return
 
-    def tossPie(self, x, y, z, h, p, r, sequence, power, timest.ogg2):
+    def tossPie(self, x, y, z, h, p, r, sequence, power, timestamp32):
         if self.numPies <= 0:
             return
         if self.numPies != ToontownGlobals.FullPies:
@@ -1418,7 +1418,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.pieTracks.has_key(sequence):
             lastPieTrack = self.pieTracks[sequence]
             del self.pieTracks[sequence]
-        ts = globalClockDelta.localElapsedTime(timest.ogg2, bits=32)
+        ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
         toss, pie, flyPie = self.getTossPieInterval(x, y, z, h, p, r, power)
         if ts > 0:
@@ -1446,7 +1446,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.splatTracks.has_key(sequence):
             del self.splatTracks[sequence]
 
-    def pieSplat(self, x, y, z, sequence, pieCode, timest.ogg2):
+    def pieSplat(self, x, y, z, sequence, pieCode, timestamp32):
         if self.isLocal():
             return
         elapsed = globalClock.getFrameTime() - self.lastTossedPie
@@ -1462,7 +1462,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             lastSplatTrack = self.splatTracks[sequence]
             del self.splatTracks[sequence]
             lastSplatTrack.finish()
-        ts = globalClockDelta.localElapsedTime(timest.ogg2, bits=32)
+        ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
         splat = self.getPieSplatInterval(x, y, z, pieCode)
         splat = Sequence(Func(messenger.send, 'pieSplat', [self, pieCode]), splat)
