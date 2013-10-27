@@ -72,7 +72,7 @@ class Purchase(PurchaseBase):
          purchaseModels.find('**/PurchScrn_BTN_RLVR'),
          purchaseModels.find('**/PurchScrn_BTN_UP')), text=TTLocalizer.GagShopBackToPlayground, text_fg=(0, 0.1, 0.7, 1), text_scale=0.05, text_pos=(0, 0.015, 0), image3_color=Vec4(0.6, 0.6, 0.6, 1), text3_fg=Vec4(0, 0, 0.4, 1), command=self.__handleBackToPlayground)
         self.timer = ToontownTimer.ToontownTimer()
-        self.timer.reparentTo(self.frame)
+        self.timer.hide()
         self.timer.posInTopRightCorner()
         numAvs = 0
         count = 0
@@ -165,6 +165,7 @@ class Purchase(PurchaseBase):
         self.backToPlayground.destroy()
         del self.backToPlayground
         self.timer.stop()
+        self.timer.destroy()
         del self.timer
         for counter in self.counters:
             counter.destroy()
@@ -620,6 +621,7 @@ class Purchase(PurchaseBase):
             return
         if not self.tutorialMode:
             if not config.GetBool('disable-purchase-timer', 0):
+                self.timer.show()
                 self.timer.countdown(self.remain, self.__timerExpired)
             if config.GetBool('metagame-disable-playAgain', 0):
                 if self.metagameRound > -1:
