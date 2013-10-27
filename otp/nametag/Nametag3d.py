@@ -8,7 +8,7 @@ class Nametag3d(Nametag):
 
     def __init__(self):
         Nametag.__init__(self)
-        self.innerNP.setBillboardAxis()
+        self.innerNP.setBillboardPointWorld()
         self.innerNP.setScale(self.CONTENTS_SCALE)
 
     def showSpeech(self):
