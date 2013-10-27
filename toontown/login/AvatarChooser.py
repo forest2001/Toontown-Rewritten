@@ -14,11 +14,11 @@ from direct.interval.IntervalGlobal import *
 import random
 MAX_AVATARS = 6
 POSITIONS = (Vec3(-0.840167, 0, 0.359333),
- Vec3(0.01033349, 0, 0.306533),
- Vec3(0.962, 0, 0.3293),
+ Vec3(0.00933349, 0, 0.306533),
+ Vec3(0.862, 0, 0.3293),
  Vec3(-0.863554, 0, -0.445659),
- Vec3(0.014, 0, -0.5181),
- Vec3(0.964907, 0, -0.445659))
+ Vec3(0.00999999, 0, -0.5181),
+ Vec3(0.864907, 0, -0.445659))
 COLORS = (Vec4(0.917, 0.164, 0.164, 1),
  Vec4(0.152, 0.75, 0.258, 1),
  Vec4(0.598, 0.402, 0.875, 1),
@@ -26,6 +26,7 @@ COLORS = (Vec4(0.917, 0.164, 0.164, 1),
  Vec4(0.895, 0.348, 0.602, 1),
  Vec4(0.977, 0.816, 0.133, 1))
 chooser_notify = DirectNotifyGlobal.directNotify.newCategory('AvatarChooser')
+
 class AvatarChooser(StateData.StateData):
 
     def __init__(self, avatarList, parentFSM, doneEvent):
