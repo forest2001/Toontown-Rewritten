@@ -1,10 +1,10 @@
 from Nametag import *
+from otp.margins.MarginPopup import *
 from pandac.PandaModules import *
 
-class Nametag2d(Nametag, PandaNode):
+class Nametag2d(Nametag, MarginPopup):
     def __init__(self):
         Nametag.__init__(self)
-        PandaNode.__init__(self, '')
+        MarginPopup.__init__(self)
 
-    def setContents(self, contents):
-        pass
+        self.contents = self.CName|self.CSpeech

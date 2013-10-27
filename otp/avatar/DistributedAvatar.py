@@ -1,6 +1,7 @@
 import time
 import string
 from pandac.PandaModules import *
+from otp.nametag.Nametag import Nametag
 from direct.distributed import DistributedNode
 from direct.actor.DistributedActor import DistributedActor
 from direct.task import Task
@@ -88,11 +89,11 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def do_setParent(self, parentToken):
         if not self.isDisabled():
-            #if parentToken == OTPGlobals.SPHidden:
-            #    self.nametag2dDist &= ~Nametag.CName
-            #else:
-            #    self.nametag2dDist |= Nametag.CName
-            #self.nametag.getNametag2d().setContents(self.nametag2dContents & self.nametag2dDist)
+            if parentToken == OTPGlobals.SPHidden:
+                self.nametag2dDist &= ~Nametag.CName
+            else:
+                self.nametag2dDist |= Nametag.CName
+            self.nametag.getNametag2d().setContents(self.nametag2dContents & self.nametag2dDist)
             DistributedActor.do_setParent(self, parentToken)
             self.__setTags()
 
