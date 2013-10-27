@@ -8,6 +8,9 @@ class Nametag3d(Nametag):
 
     def __init__(self):
         Nametag.__init__(self)
+
+        self.contents = self.CName|self.CSpeech|self.CThought
+
         self.innerNP.setBillboardPointWorld()
         self.innerNP.setScale(self.CONTENTS_SCALE)
 

@@ -10,7 +10,7 @@ class Nametag(ClickablePopup):
 
     def __init__(self):
         ClickablePopup.__init__(self)
-        self.contents = (self.CName|self.CSpeech|self.CThought)
+        self.contents = 0 # To be set by subclass.
 
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
