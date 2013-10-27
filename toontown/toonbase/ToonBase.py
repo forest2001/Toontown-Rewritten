@@ -119,7 +119,6 @@ class ToonBase(OTPBase.OTPBase):
         self.canScreenShot = 1
         self.glitchCount = 0
         self.walking = 0
-        self.resetMusic = self.loadMusic('phase_3/audio/bgm/MIDI_Events_16channels.ogg')
         self.oldX = max(1, base.win.getXSize())
         self.oldY = max(1, base.win.getYSize())
         self.aspectRatio = float(self.oldX) / self.oldY
@@ -373,5 +372,4 @@ class ToonBase(OTPBase.OTPBase):
             return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP))
 
     def playMusic(self, music, looping = 0, interrupt = 1, volume = None, time = 0.0):
-        OTPBase.OTPBase.playMusic(self, self.resetMusic)
         OTPBase.OTPBase.playMusic(self, music, looping, interrupt, volume, time)
