@@ -65,6 +65,7 @@ class NametagGroup:
 
     def setFont(self, font):
         self.font = font
+        self.updateTags()
 
     def setColorCode(self, cc):
         pass
