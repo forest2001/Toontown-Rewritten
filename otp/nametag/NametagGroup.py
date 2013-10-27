@@ -55,7 +55,7 @@ class NametagGroup:
         return ''
 
     def getUniqueId(self):
-        return 'foo'
+        return 'Nametag-%d' % id(self)
 
     def setActive(self, active):
         pass
@@ -93,7 +93,7 @@ class NametagGroup:
 
     def _startChatTimeout(self):
         self.chatTimeoutTask = taskMgr.doMethodLater(5, self.__doChatTimeout,
-                                                     'ChatTimeout-%d' % id(self))
+                                                     'ChatTimeout-' + self.getUniqueId())
 
     def __doChatTimeout(self, task):
         self.setChat('', 0)
