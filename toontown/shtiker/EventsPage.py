@@ -483,7 +483,8 @@ class EventsPage(ShtikerPage.ShtikerPage):
         self.hostTab.destroy()
         self.invitedTab.destroy()
         self.calendarTab.destroy()
-        self.calendarGuiMonth.destroy()
+        if self.calendarGuiMonth:
+            self.calendarGuiMonth.destroy()
         self.toontownTimeGui.destroy()
         taskMgr.remove('EventsPageUpdateTask-doLater')
         taskMgr.remove(self.DownloadArticlesTaskName)
