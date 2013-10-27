@@ -48,7 +48,7 @@ class Nametag(ClickablePopup):
             return
 
         # Create text node:
-        t = self.innerNP.attachNewNode(TextNode('name'))
+        t = self.innerNP.attachNewNode(TextNode('name'), 1)
         t.node().setFont(self.font)
         t.node().setAlign(TextNode.ACenter)
         t.node().setWordwrap(self.wordWrap)
@@ -60,7 +60,7 @@ class Nametag(ClickablePopup):
         t.setDepthOffset(100)
 
         # Apply panel behind the text:
-        panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP)
+        panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP, 0)
         panel.setPos((t.node().getLeft()+t.node().getRight())/2.0, 0,
                      (t.node().getTop()+t.node().getBottom())/2.0)
         panel.setScale(width, 1, height)
