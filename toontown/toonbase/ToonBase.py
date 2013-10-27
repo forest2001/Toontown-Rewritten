@@ -122,6 +122,7 @@ class ToonBase(OTPBase.OTPBase):
         self.oldX = max(1, base.win.getXSize())
         self.oldY = max(1, base.win.getYSize())
         self.aspectRatio = float(self.oldX) / self.oldY
+        self.localAvatarStyle = None
         return
 
     def windowEvent(self, win):
