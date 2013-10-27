@@ -86,10 +86,9 @@ class NametagGroup:
         self.chatFlags = chatFlags
         self.updateTags()
 
+        self._stopChatTimeout()
         if chatFlags&CFTimeout:
             self._startChatTimeout()
-        else:
-            self._stopChatTimeout()
 
     def _startChatTimeout(self):
         self.chatTimeoutTask = taskMgr.doMethodLater(5, self.__doChatTimeout,
