@@ -148,8 +148,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
          146 / 255.0,
          113 / 255.0,
          1), textMayChange=0)
-        curServerDate = base.cr.toontownTimeManager.getCurServerDateTime()
-        self.calendarGuiMonth = CalendarGuiMonth(self.calendarDisplay, curServerDate, onlyFutureMonthsClickable=True)
+        self.calendarGuiMonth = None # To be set upon tab's first opening.
         pos = (0.35, 0, -0.69)
         self.toontownTimeGui = ServerTimeGui(self.calendarDisplay, pos)
         return
@@ -570,6 +569,9 @@ class EventsPage(ShtikerPage.ShtikerPage):
             self.invitationDisplay.hide()
             self.calendarDisplay.show()
             self.newsDisplay.hide()
+            if not self.calendarGuiMonth:
+                curServerDate = base.cr.toontownTimeManager.getCurServerDateTime()
+                self.calendarGuiMonth = CalendarGuiMonth(self.calendarDisplay, curServerDate, onlyFutureMonthsClickable=True)
             self.calendarGuiMonth.changeMonth(0)
         elif self.mode == EventsPage_News:
             self.titleLabel['text'] = ''
