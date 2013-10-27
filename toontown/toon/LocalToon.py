@@ -81,9 +81,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             LocalAvatar.LocalAvatar.__init__(self, cr, chatMgr, talkAssistant, passMessagesThrough=True)
             self.soundRun = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_runloop.wav')
             self.soundWalk = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_walkloop.wav')
-            self.soundWhisper = base.loadSfx('phase_3.5/audio/sfx/GUI_whisper_3.mp3')
-            self.soundPhoneRing = base.loadSfx('phase_3.5/audio/sfx/telephone_ring.mp3')
-            self.soundSystemMessage = base.loadSfx('phase_3/audio/sfx/clock03.mp3')
+            self.soundWhisper = base.loadSfx('phase_3.5/audio/sfx/GUI_whisper_3.ogg')
+            self.soundPhoneRing = base.loadSfx('phase_3.5/audio/sfx/telephone_ring.ogg')
+            self.soundSystemMessage = base.loadSfx('phase_3/audio/sfx/clock03.ogg')
             self.positionExaminer = PositionExaminer.PositionExaminer()
             friendsGui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
             friendsButtonNormal = friendsGui.find('**/FriendsBox_Closed')
@@ -671,14 +671,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__presentingPie = 1
         pos = self.getPos()
         hpr = self.getHpr()
-        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
         self.sendUpdate('presentPie', [pos[0],
          pos[1],
          pos[2],
          hpr[0] % 360.0,
          hpr[1],
          hpr[2],
-         timestamp32])
+         timest.ogg2])
         Emote.globalEmote.disableBody(self)
         messenger.send('begin-pie')
         ival = self.getPresentPieInterval(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
@@ -739,7 +739,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             return
         pos = self.getPos()
         hpr = self.getHpr()
-        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
         sequence = self.__pieSequence
         if self.tossTrack:
             tossTrack = self.tossTrack
@@ -759,7 +759,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__piePowerMeterSequence = sequence
         pieBubble = self.getPieBubble().instanceTo(NodePath())
 
-        def pieFlies(self = self, pos = pos, hpr = hpr, sequence = sequence, power = power, timestamp32 = timestamp32, pieBubble = pieBubble):
+        def pieFlies(self = self, pos = pos, hpr = hpr, sequence = sequence, power = power, timest.ogg2 = timestamp32, pieBubble = pieBubble):
             self.sendUpdate('tossPie', [pos[0],
              pos[1],
              pos[2],
@@ -768,7 +768,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
              hpr[2],
              sequence,
              power,
-             timestamp32])
+             timest.ogg2])
             if self.numPies != ToontownGlobals.FullPies:
                 self.setNumPies(self.numPies - 1)
             base.cTrav.addCollider(pieBubble, self.pieHandler)
@@ -811,13 +811,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if pieCodeStr:
             pieCode = int(pieCodeStr)
         pos = entry.getSurfacePoint(render)
-        timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
+        timest.ogg2 = globalClockDelta.getFrameNetworkTime(bits=32)
         self.sendUpdate('pieSplat', [pos[0],
          pos[1],
          pos[2],
          sequence,
          pieCode,
-         timestamp32])
+         timest.ogg2])
         splat = self.getPieSplatInterval(pos[0], pos[1], pos[2], pieCode)
         splat = Sequence(splat, Func(self.pieFinishedSplatting, sequence))
         self.splatTracks[sequence] = splat
@@ -1409,7 +1409,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             changeString = TTLocalizer.GardeningNoSkill
         else:
             changeString = '+%s %s' % (change, TTLocalizer.GardeningWaterSkill)
-        self.waterTrack = Sequence(Wait(0.0), Func(self.changeButtonText, self.wateringCanButtonFake, changeString), SoundInterval(globalBattleSoundCache.getSound('GUI_balloon_popup.mp3'), node=self), Wait(1.0), Func(self.hideWateringCanButtonFake, 1))
+        self.waterTrack = Sequence(Wait(0.0), Func(self.changeButtonText, self.wateringCanButtonFake, changeString), SoundInterval(globalBattleSoundCache.getSound('GUI_balloon_popup.ogg'), node=self), Wait(1.0), Func(self.hideWateringCanButtonFake, 1))
         self.waterTrack.start()
 
     def levelShovel(self, change = 1):
@@ -1423,7 +1423,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         plant = base.cr.doId2do.get(self.shovelRelatedDoId)
         if plant:
             self.holdShovelText = plant.getShovelAction()
-        self.shovelTrack = Sequence(Wait(0.0), Func(self.changeButtonText, self.shovelButtonFake, changeString), SoundInterval(globalBattleSoundCache.getSound('GUI_balloon_popup.mp3'), node=self), Wait(1.0), Func(self.hideShovelButtonFake, 1))
+        self.shovelTrack = Sequence(Wait(0.0), Func(self.changeButtonText, self.shovelButtonFake, changeString), SoundInterval(globalBattleSoundCache.getSound('GUI_balloon_popup.ogg'), node=self), Wait(1.0), Func(self.hideShovelButtonFake, 1))
         self.shovelTrack.start()
 
     def setGuiConflict(self, con):

@@ -173,10 +173,10 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         self.dropObjModels = {}
         if loadModels:
             self.__loadDropModels()
-        self.sndGoodCatch = base.loadSfx('phase_4/audio/sfx/SZ_DD_treasure.mp3')
-        self.sndOof = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
-        self.sndAnvilLand = base.loadSfx('phase_4/audio/sfx/AA_drop_anvil_miss.mp3')
-        self.sndPerfect = base.loadSfx('phase_4/audio/sfx/ring_perfect.mp3')
+        self.sndGoodCatch = base.loadSfx('phase_4/audio/sfx/SZ_DD_treasure.ogg')
+        self.sndOof = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
+        self.sndAnvilLand = base.loadSfx('phase_4/audio/sfx/AA_drop_anvil_miss.ogg')
+        self.sndPerfect = base.loadSfx('phase_4/audio/sfx/ring_perfect.ogg')
         self.__textGen = TextNode('partyCatchActivity')
         self.__textGen.setFont(ToontownGlobals.getSignFont())
         self.__textGen.setAlign(TextNode.ACenter)
@@ -235,9 +235,9 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         del self.sndAnvilLand
         del self.sndPerfect
 
-    def setStartTimestamp(self, timestamp32):
-        self.notify.info('setStartTimestamp(%s)' % (timestamp32,))
-        self._startTimestamp = globalClockDelta.networkToLocalTime(timestamp32, bits=32)
+    def setStartTimestamp(self, timest.ogg2):
+        self.notify.info('setStartTimestamp(%s)' % (timest.ogg2,))
+        self._startTimestamp = globalClockDelta.networkToLocalTime(timest.ogg2, bits=32)
 
     def getCurrentCatchActivityTime(self):
         return globalClock.getFrameTime() - self._startTimestamp
@@ -597,9 +597,9 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         gen2t = {}
         gen2nt = {}
         gen2np = {}
-        for id, timestamp32, numPlayers in generations:
-            gen2t[id] = globalClockDelta.networkToLocalTime(timestamp32, bits=32) - self._startTimestamp
-            gen2nt[id] = timestamp32
+        for id, timest.ogg2, numPlayers in generations:
+            gen2t[id] = globalClockDelta.networkToLocalTime(timest.ogg2, bits=32) - self._startTimestamp
+            gen2nt[id] = timest.ogg2
             gen2np[id] = numPlayers
 
         ids = self._id2gen.keys()

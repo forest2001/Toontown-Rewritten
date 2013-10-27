@@ -10,9 +10,9 @@ import MovieUtil
 import MovieNPCSOS
 from toontown.toonbase import ToontownBattleGlobals
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
-soundFiles = ('AA_sound_bikehorn.mp3', 'AA_sound_whistle.mp3', 'AA_sound_bugle.mp3', 'AA_sound_aoogah.mp3', 'AA_sound_elephant.mp3', 'SZ_DD_foghorn.mp3', 'AA_sound_Opera_Singer.mp3')
-appearSoundFiles = ('MG_tag_1.mp3', 'LB_receive_evidence.mp3', 'm_match_trumpet.mp3', 'TL_step_on_rake.mp3', 'toonbldg_grow.mp3', 'mailbox_full_wobble.mp3', 'mailbox_full_wobble.mp3')
-hitSoundFiles = ('AA_sound_Opera_Singer_Cog_Glass.mp3',)
+soundFiles = ('AA_sound_bikehorn.ogg', 'AA_sound_whistle.mp3', 'AA_sound_bugle.mp3', 'AA_sound_aoogah.mp3', 'AA_sound_elephant.mp3', 'SZ_DD_foghorn.mp3', 'AA_sound_Opera_Singer.mp3')
+appearSoundFiles = ('MG_tag_1.ogg', 'LB_receive_evidence.mp3', 'm_match_trumpet.mp3', 'TL_step_on_rake.mp3', 'toonbldg_grow.mp3', 'mailbox_full_wobble.mp3', 'mailbox_full_wobble.mp3')
+hitSoundFiles = ('AA_sound_Opera_Singer_Cog_Glass.ogg',)
 tSound = 2.45
 tSuitReact = 2.8
 DISTANCE_TO_WALK_BACK = MovieUtil.SUIT_LURE_DISTANCE * 0.75

@@ -511,7 +511,7 @@ class OTPClientRepository(ClientRepositoryBase):
         whisper = WhisperPopup(message, OTPGlobals.getInterfaceFont(), WhisperPopup.WTSystem)
         whisper.manage(base.marginManager)
         if not self.systemMessageSfx:
-            self.systemMessageSfx = base.loadSfx('phase_3/audio/sfx/clock03.mp3')
+            self.systemMessageSfx = base.loadSfx('phase_3/audio/sfx/clock03.ogg')
         if self.systemMessageSfx:
             base.playSfx(self.systemMessageSfx)
 

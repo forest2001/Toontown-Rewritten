@@ -2512,7 +2512,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         return True
 
-    def tossPie(self, x, y, z, h, p, r, sequence, power, timestamp32):
+    def tossPie(self, x, y, z, h, p, r, sequence, power, timest.ogg2):
         if not self.validate(self.doId, self.numPies > 0, 'tossPie with no pies available'):
             return
         if self.numPies != ToontownGlobals.FullPies:

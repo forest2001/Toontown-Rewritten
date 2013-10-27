@@ -78,7 +78,7 @@ class DistributedPhysicsWorld(DistributedObject.DistributedObject, PhysicsWorldB
                 odeBody = pair[1]
                 if odeBody == box:
                     self.notify.debug('nodePath = %s' % pandaNodePathGeom)
-                    moverSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Moving_Barrier.mp3')
+                    moverSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Moving_Barrier.ogg')
                     moverSoundInterval = SoundInterval(moverSfx, node=pandaNodePathGeom, listenerNode=base.camera, seamlessLoop=True, volume=0.5)
                     moverSoundInterval.start()
                     self.physicsSfxDict[index] = (moverSfx, moverSoundInterval, index)

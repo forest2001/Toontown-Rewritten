@@ -14,10 +14,10 @@ class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
-        self.bird1Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_01.mp3')
-        self.bird2Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_02.mp3')
-        self.bird3Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_03.mp3')
-        self.bird4Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_04.mp3')
+        self.bird1Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_01.ogg')
+        self.bird2Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_02.ogg')
+        self.bird3Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_03.ogg')
+        self.bird4Sound = base.loadSfx('phase_8/audio/sfx/SZ_DG_bird_04.ogg')
 
     def unload(self):
         SafeZoneLoader.SafeZoneLoader.unload(self)

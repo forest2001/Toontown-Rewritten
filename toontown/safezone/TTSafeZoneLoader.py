@@ -27,7 +27,7 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
             sign.instanceTo(tunnel)
 
-        self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.mp3', 'phase_4/audio/sfx/SZ_TC_bird2.mp3', 'phase_4/audio/sfx/SZ_TC_bird3.mp3'])
+        self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.mp3', 'phase_4/audio/sfx/SZ_TC_bird3.mp3'])
 
     def unload(self):
         del self.birdSound

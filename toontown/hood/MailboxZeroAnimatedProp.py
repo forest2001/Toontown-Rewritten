@@ -11,7 +11,7 @@ class MailboxZeroAnimatedProp(ZeroAnimatedProp.ZeroAnimatedProp):
      3: ('tt_a_ara_dod_mailbox_firstMoveFlagSpin3', 8 * PauseTimeMult),
      4: ('tt_a_ara_dod_mailbox_firstMoveJumpSummersault', 6 * PauseTimeMult),
      5: ('tt_a_ara_dod_mailbox_firstMoveJumpFall', 4 * PauseTimeMult),
-     6: ('tt_a_ara_dod_mailbox_firstMoveJump3Summersaults', 2 * PauseTimeMult)}
+     6: ('tt_a_ara_dod_mailbox_firstMoveJ.oggSummersaults', 2 * PauseTimeMult)}
 
     def __init__(self, node):
         ZeroAnimatedProp.ZeroAnimatedProp.__init__(self, node, 'mailbox', self.PhaseInfo, ToontownGlobals.MAILBOX_ZERO_HOLIDAY)
