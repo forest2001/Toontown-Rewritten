@@ -4,7 +4,7 @@ from NametagConstants import *
 from pandac.PandaModules import *
 
 class Nametag3d(Nametag):
-    CONTENTS_SCALE = 0.25
+    CONTENTS_SCALE = 0.17
     BILLBOARD_OFFSET = 3.0
     SHOULD_BILLBOARD = True
 
