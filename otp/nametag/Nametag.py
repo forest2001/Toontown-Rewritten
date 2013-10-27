@@ -19,6 +19,7 @@ class Nametag(ClickablePopup):
         self.font = None
         self.name = ''
         self.displayName = ''
+        self.qtColor = VBase4(1,1,1,1)
 
         self.chatString = ''
         self.chatFlags = 0

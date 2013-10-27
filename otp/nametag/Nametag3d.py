@@ -1,5 +1,6 @@
 from Nametag import *
 import NametagGlobals
+from NametagConstants import *
 from pandac.PandaModules import *
 
 class Nametag3d(Nametag):
@@ -11,9 +12,13 @@ class Nametag3d(Nametag):
         self.innerNP.setScale(self.CONTENTS_SCALE)
 
     def showSpeech(self):
-        bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font)
+        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
+        bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font,
+                                                         balloonColor=color)
         bubble.reparentTo(self.innerNP)
 
     def showThought(self):
-        bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font)
+        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
+        bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font,
+                                                          balloonColor=color)
         bubble.reparentTo(self.innerNP)
