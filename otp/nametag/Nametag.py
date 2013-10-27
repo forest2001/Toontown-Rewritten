@@ -26,6 +26,7 @@ class Nametag(ClickablePopup):
 
     def setContents(self, contents):
         self.contents = contents
+        self.update()
 
     def update(self):
         self.innerNP.node().removeAllChildren()
