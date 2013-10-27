@@ -33,7 +33,7 @@ class Nametag(ClickablePopup):
             self.showThought()
         elif self.contents&self.CSpeech and self.chatFlags&CFSpeech:
             self.showSpeech()
-        elif self.contents&self.CName:
+        elif self.contents&self.CName and self.displayName:
             self.showName()
 
     def showThought(self):
