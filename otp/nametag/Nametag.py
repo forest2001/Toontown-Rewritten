@@ -14,6 +14,8 @@ class Nametag(ClickablePopup):
 
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
+        self.wordWrap = 10
+
         self.font = None
         self.name = ''
         self.displayName = ''
@@ -40,4 +42,24 @@ class Nametag(ClickablePopup):
         pass
 
     def showName(self):
-        pass
+        if not self.font:
+            # If no font is set, we can't actually display a name yet...
+            return
+
+        # Create text node:
+        t = self.innerNP.attachNewNode(TextNode('name'))
+        t.node().setFont(self.font)
+        t.node().setAlign(TextNode.ACenter)
+        t.node().setWordwrap(self.wordWrap)
+        t.node().setText(self.displayName)
+        t.node().setTextColor(VBase4(0,0,0,1))
+
+        width, height = t.node().getWidth(), t.node().getHeight()
+
+        t.setDepthOffset(1)
+
+        # Apply panel behind the text:
+        panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP)
+        panel.setPos((t.node().getLeft()+t.node().getRight())/2.0, 0,
+                     (t.node().getTop()+t.node().getBottom())/2.0)
+        panel.setScale(width, 1, height)
