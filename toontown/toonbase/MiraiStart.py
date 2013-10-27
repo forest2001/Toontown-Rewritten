@@ -7,9 +7,6 @@
 # (stripped) DC file and configuration.
 import _miraidata
 
-# This is to get the dependency walker to include the ascii encoding, as it's needed by some things
-import encodings.ascii
-
 # Load all packaged config pages:
 from libpanda import loadPrcFileData
 for i,config in enumerate(_miraidata.CONFIG):
@@ -195,7 +192,7 @@ class dictloader(object):
         self.dict = dict
 
     def get_data(self, key):
-        return self.dict.get(key)
+        return self.dict.get(key.replace('\\','/'))
 
 import pytz
 pytz.__loader__ = dictloader(_miraidata.ZONEINFO)

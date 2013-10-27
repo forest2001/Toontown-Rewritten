@@ -16,6 +16,12 @@ import atexit
 import argparse
 import zipfile
 
+# These are to get the dependency walker to find and binarize them, as they would not be found by it normally
+EXTRA_MODULES = (
+  'encodings.ascii',
+  '_strptime',
+)
+
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 def determineVersion(cwd):
@@ -139,6 +145,8 @@ class ClientBuilder(object):
         self.create_miraidata()
 
         self.mf.import_hook(self.MAINMODULE)
+        for module in EXTRA_MODULES:
+            self.mf.import_hook(module)
         self.modules['__main__'] = (False, compile('import %s' % self.MAINMODULE,
                                                    '__main__', 'exec'))
 
