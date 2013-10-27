@@ -57,7 +57,7 @@ class Nametag(ClickablePopup):
 
         width, height = t.node().getWidth(), t.node().getHeight()
 
-        t.setDepthOffset(1)
+        t.setDepthOffset(100)
 
         # Apply panel behind the text:
         panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP)
