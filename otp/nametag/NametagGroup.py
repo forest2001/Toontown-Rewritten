@@ -48,7 +48,7 @@ class NametagGroup:
         return 0
 
     def getChat(self):
-        return ''
+        return self.chatString
 
     def getStompText(self):
         return ''
@@ -103,6 +103,9 @@ class NametagGroup:
 
     def clearShadow(self):
         pass
+
+    def clearChat(self):
+        self.setChat('', 0)
 
     def updateNametag(self, tag):
         tag.font = self.font
