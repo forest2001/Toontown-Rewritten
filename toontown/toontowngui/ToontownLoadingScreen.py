@@ -10,10 +10,10 @@ class ToontownLoadingScreen:
         self.__expectedCount = 0
         self.__count = 0
         self.gui = loader.loadModel('phase_3/models/gui/progress-background')
-        self.banner = loader.loadModel('phase_3/models/gui/toon_council').find('**/scroll')
-        self.banner.reparentTo(self.gui)
-        self.banner.setScale(0.4, 0.4, 0.4)
-        self.tip = DirectLabel(guiId='ToontownLoadingScreenTip', parent=self.banner, relief=None, text='', text_scale=TTLocalizer.TLStip, textMayChange=1, pos=(-1.2, 0.0, 0.1), text_fg=(0.4, 0.3, 0.2, 1), text_wordwrap=13, text_align=TextNode.ALeft)
+        #self.banner = loader.loadModel('phase_3/models/gui/toon_council').find('**/scroll')
+        #self.banner.reparentTo(self.gui)
+        #self.banner.setScale(0.4, 0.4, 0.4)
+        #self.tip = DirectLabel(guiId='ToontownLoadingScreenTip', parent=self.banner, relief=None, text='', text_scale=TTLocalizer.TLStip, textMayChange=1, pos=(-1.2, 0.0, 0.1), text_fg=(0.4, 0.3, 0.2, 1), text_wordwrap=13, text_align=TextNode.ALeft)
         self.title = DirectLabel(guiId='ToontownLoadingScreenTitle', parent=self.gui, relief=None, pos=(-1.06, 0, -0.77), text='', textMayChange=1, text_scale=0.08, text_fg=(0, 0, 0.5, 1), text_align=TextNode.ALeft)
         self.waitBar = DirectWaitBar(guiId='ToontownLoadingScreenWaitBar', parent=self.gui, frameSize=(-1.06,
          1.06,
@@ -26,7 +26,7 @@ class ToontownLoadingScreen:
         self.tip.destroy()
         self.title.destroy()
         self.waitBar.destroy()
-        self.banner.removeNode()
+        #self.banner.removeNode()
         self.gui.removeNode()
 
     def getTip(self, tipCategory):
@@ -35,7 +35,7 @@ class ToontownLoadingScreen:
     def begin(self, range, label, gui, tipCategory):
         self.waitBar['range'] = range
         self.title['text'] = label
-        self.tip['text'] = self.getTip(tipCategory)
+        #self.tip['text'] = self.getTip(tipCategory)
         self.__count = 0
         self.__expectedCount = range
         if gui:
@@ -44,9 +44,12 @@ class ToontownLoadingScreen:
                 self.head = ToonHead.ToonHead()
                 self.head.setupHead(base.localAvatarStyle, forGui=1)
                 self.head.reparentTo(self.gui)
-                self.head.setH(180)
-                self.head.setScale(0.2)
-                self.head.setPos(-0.8, 0, 0.8)
+                self.head.fitAndCenterHead(0.9, forGui=1)
+                self.head.setHpr(140, 10, 0)
+                self.head.find('**/def_left_pupil').setPos(-0.1, 0, 0)
+                self.head.find('**/def_right_pupil').setPos(-0.1, 0, 0)
+                self.head.showSmileMuzzle()
+                self.head.hideNormalMuzzle()
             self.waitBar.reparentTo(self.gui)
             self.title.reparentTo(self.gui)
             self.gui.reparentTo(aspect2dp, NO_FADE_SORT_INDEX)
