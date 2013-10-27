@@ -168,6 +168,7 @@ class ToonBase(OTPBase.OTPBase):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
+        cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
 
     def disableShowbaseMouse(self):
         self.useDrive()
