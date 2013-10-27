@@ -19,6 +19,7 @@ class ToontownLoadingScreen:
          1.06,
          -0.03,
          0.03), pos=(0, 0, -0.85), text='')
+        self.head = None
         return
 
     def destroy(self):
@@ -38,6 +39,14 @@ class ToontownLoadingScreen:
         self.__count = 0
         self.__expectedCount = range
         if gui:
+            if base.localAvatarStyle:
+                from toontown.toon import ToonHead
+                self.head = ToonHead.ToonHead()
+                self.head.setupHead(base.localAvatarStyle, forGui=1)
+                self.head.reparentTo(self.gui)
+                self.head.setH(180)
+                self.head.setScale(0.2)
+                self.head.setPos(-0.8, 0, 0.8)
             self.waitBar.reparentTo(self.gui)
             self.title.reparentTo(self.gui)
             self.gui.reparentTo(aspect2dp, NO_FADE_SORT_INDEX)
@@ -48,6 +57,9 @@ class ToontownLoadingScreen:
         self.waitBar.update(self.__count)
 
     def end(self):
+        if self.head:
+            self.head.delete()
+            self.head = None
         self.waitBar.finish()
         self.waitBar.reparentTo(self.gui)
         self.title.reparentTo(self.gui)
