@@ -10,3 +10,7 @@ class Nametag3d(Nametag):
     def showSpeech(self):
         bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font)
         bubble.reparentTo(self.innerNP)
+
+    def showThought(self):
+        bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font)
+        bubble.reparentTo(self.innerNP)
