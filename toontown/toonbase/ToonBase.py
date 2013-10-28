@@ -179,8 +179,12 @@ class ToonBase(OTPBase.OTPBase):
         self.walking = pressed
 
     def takeScreenShot(self):
+        if not os.path.exists('screenshots/'):
+            os.makedirs('screenshots/')
+            print 'ToonBase: Made new directory to save screenshots.'
+        
         namePrefix = 'screenshot'
-        namePrefix = launcher.logPrefix + namePrefix
+        namePrefix = 'screenshots/' + launcher.logPrefix + namePrefix
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
         if self.glitchCount > 10 and self.walking:
             return
