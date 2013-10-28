@@ -58,11 +58,11 @@ class RemoteAccountDB:
 
     def lookup(self, cookie, callback):
         response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if (not response['status'] or not response['valid']): # status will be false if there's an hmac error, for example
+        if (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
             callback({'success': False,
-                      'reason': response['banner']})
+                      'reason': response.get('banner', 'Failed for unknown reason')})
         else:
-            gsUserId = response['gs_user_id']
+            gsUserId = response.get('gs_user_id', -1)
             if (gsUserId == -1):
                 gsUserId = 0
             callback({'success': True,
@@ -70,8 +70,8 @@ class RemoteAccountDB:
                       'accountId': gsUserId})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
-        if (not response['status']):
-            self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response['banner'])
+        if (not response.get('success')):
+            self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response.get('banner', '[NON-PRESENT]'))
             callback(False)
         else:
             callback(True)
