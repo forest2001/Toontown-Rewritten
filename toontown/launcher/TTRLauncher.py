@@ -34,10 +34,10 @@ class TTRLauncher(LauncherBase):
 
         
         if not os.path.exists('logs/'):
-            os.makedirs('logs/')
-            print 'TTRLauncher: Made new directory to save logs.'
+            os.mkdir('logs/')
+            self.notify.info('Made new directory to save logs.')
         
-        logfile = 'logs/' + self.logPrefix + logSuffix + '.log'
+        logfile = os.path.join('logs', self.logPrefix + logSuffix + '.log')
 
         log = open(logfile, 'a')
         logOut = LogAndOutput(sys.stdout, log)
