@@ -38,6 +38,7 @@ class ClientBuilder(object):
         self.dcfiles = [os.path.join(directory, 'config/otp.dc'),
                         os.path.join(directory, 'config/toon.dc')]
         self.modules = {}
+        self.path_overrides = {}
 
         self.mf = ModuleFinder(sys.path+[self.directory])
         from panda3d.direct import DCFile
@@ -128,7 +129,10 @@ class ClientBuilder(object):
 
     def build_modules(self):
         for modname, mod in self.mf.modules.items():
-            modfile = mod.__file__
+            if modname in self.path_overrides:
+                modfile = self.path_overrides[modname]
+            else:
+                modfile = mod.__file__
             if not (modfile and modfile.endswith('.py')): continue
             is_package = modfile.endswith('__init__.py')
             with open(modfile, 'r') as f:
@@ -186,9 +190,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.mirai_path:
         sys.path.append(args.mirai_path)
-
+        p3d_path = os.path.join(args.mirai_path, 'panda3d-1.8.1')
+        sys.path.insert(0, p3d_path)
 
     cb = ClientBuilder(root)
+
+    if args.mirai_path:
+        cb.mf.import_hook('direct').__path__ = [os.path.join(p3d_path, 'direct/src')]
+        cb.path_overrides['pandac.extension_native_helpers'] = \
+            os.path.join(p3d_path, 'direct/src/extensions_native/extension_native_helpers.py')
+
     cb.load_modules()
 
     if args.format == 'zip':
