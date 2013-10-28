@@ -32,7 +32,12 @@ class TTRLauncher(LauncherBase):
         logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,  ltime[1], ltime[2],
                                                    ltime[3], ltime[4], ltime[5])
 
-        logfile = self.logPrefix + logSuffix + '.log'
+        
+        if not os.path.exists('logs/'):
+            os.makedirs('logs/')
+            print 'TTRLauncher: Made new directory to save logs.'
+        
+        logfile = 'logs/' + self.logPrefix + logSuffix + '.log'
 
         log = open(logfile, 'a')
         logOut = LogAndOutput(sys.stdout, log)
