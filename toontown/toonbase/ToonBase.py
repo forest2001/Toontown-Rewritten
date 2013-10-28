@@ -181,7 +181,7 @@ class ToonBase(OTPBase.OTPBase):
     def takeScreenShot(self):
         if not os.path.exists('screenshots/'):
             os.mkdir('screenshots/')
-            self.notify.info('ToonBase: Made new directory to save screenshots.')
+            self.notify.info('Made new directory to save screenshots.')
         
         namePrefix = 'screenshots/' + launcher.logPrefix + 'screenshot'
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
