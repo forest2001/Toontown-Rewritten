@@ -3,11 +3,6 @@
 # (だからHi Hi Hi! しあわせが
 #  きっとHi Hi Hi! 歌うたい出だす)
 
-# A frozen Mirai does not load anything from DLLs. Attempting to do so with a
-# valid Panda3D on the path somewhere will cause crashes. If we're frozen, kill
-# the Dtool_PreloadDLL function and empty the path (which is also good for
-# general security)...
-import imp
 # This is included in the package by the builder script. It contains the
 # (stripped) DC file and configuration.
 import _miraidata
