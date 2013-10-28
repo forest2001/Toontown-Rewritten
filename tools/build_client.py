@@ -1,8 +1,6 @@
 #!/usr/bin/python2.7 -OO
 # Yes, the above flags matter: We have to do this on 2.7 and we have to optimize.
 
-from panda3d.core import Filename, StringStream
-from panda3d.direct import DCFile
 from modulefinder import ModuleFinder
 import os
 import sys
@@ -42,6 +40,7 @@ class ClientBuilder(object):
         self.modules = {}
 
         self.mf = ModuleFinder(sys.path+[self.directory])
+        from panda3d.direct import DCFile
         self.dcf = DCFile()
 
     def should_exclude(self, modname):
@@ -80,6 +79,7 @@ class ClientBuilder(object):
         # Create a temporary _miraidata.py and throw it on the path somewhere...
 
         # First, we need the minified DC file contents:
+        from panda3d.core import StringStream
         dcStream = StringStream()
         self.dcf.write(dcStream, True)
         dcData = dcStream.getData()
@@ -139,6 +139,7 @@ class ClientBuilder(object):
         #self.find_dcfiles()
         self.find_excludes()
 
+        from panda3d.core import Filename
         for dc in self.dcfiles:
             self.dcf.read(Filename.fromOsSpecific(dc))
 
