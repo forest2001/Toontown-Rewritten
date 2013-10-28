@@ -8,25 +8,6 @@
 # the Dtool_PreloadDLL function and empty the path (which is also good for
 # general security)...
 import imp
-import sys
-if imp.is_frozen(__name__):
-    sys.path = []
-
-    # HACK: This is EXTREMELY ugly, and we need a better way to do it.
-    def Dtool_PreloadDLL(dll):
-        try:
-            __import__(dll)
-        except ImportError:
-            raise ImportError('DLL loader cannot find')
-
-    # On win32, it's going to crash if it doesn't find a DLL directory:
-    plat, sys.platform = sys.platform, 'other'
-    from pandac import extension_native_helpers
-    extension_native_helpers.Dtool_PreloadDLL = Dtool_PreloadDLL
-    from direct.extensions_native import extension_native_helpers
-    extension_native_helpers.Dtool_PreloadDLL = Dtool_PreloadDLL
-    sys.platform = plat
-
 # This is included in the package by the builder script. It contains the
 # (stripped) DC file and configuration.
 import _miraidata
