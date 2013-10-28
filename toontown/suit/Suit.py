@@ -227,8 +227,8 @@ def cogExists(filePrefix):
 def loadSuitAnims(suit, flag = 1):
     if suit in SuitDNA.suitHeadTypes:
         try:
-            animList = eval(suit)
-        except NameError:
+            animList = locals()[suit]
+        except KeyError:
             animList = ()
 
     else:
@@ -662,8 +662,8 @@ class Suit(Avatar.Avatar):
                     animDict[anim[0]] = 'phase_12/models/char/suitC-' + anim[1]
 
         try:
-            animList = eval(self.style.name)
-        except NameError:
+            animList = locals()[self.style.name]
+        except KeyError:
             animList = ()
 
         for anim in animList:

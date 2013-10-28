@@ -80,12 +80,12 @@ def getLineOfTokens(gen):
             nextNeg = 1
         elif token[0] == tokenize.NUMBER:
             if nextNeg:
-                tokens.append(-eval(token[1]))
+                tokens.append(-float(token[1]))
                 nextNeg = 0
             else:
-                tokens.append(eval(token[1]))
+                tokens.append(float(token[1]))
         elif token[0] == tokenize.STRING:
-            tokens.append(eval(token[1]))
+            tokens.append(token[1])
         elif token[0] == tokenize.NAME:
             tokens.append(token[1])
         else:
