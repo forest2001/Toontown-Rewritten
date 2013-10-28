@@ -249,6 +249,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
                 avatarChoice.rejectedName = ''
                 self.betterlucknexttime(avList, index)
             else:
+                base.localAvatarStyle = dna
                 self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice])
         elif done == 'nameIt':
             self.accept('downloadAck-response', self.__handleDownloadAck, [avList, index])
@@ -440,6 +441,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             NametagGlobals.setToon(base.cam)
             del base.localAvatar
             del __builtins__['localAvatar']
+        base.localAvatarStyle = None
         loader.abortBulkLoad()
         base.transitions.noTransitions()
         if self._userLoggingOut:
