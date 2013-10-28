@@ -50,7 +50,7 @@ class VineBat(NodePath, DirectObject):
         self.collNodePath = self.attachNewNode(self.collNode)
         self.collNodePath.hide()
         self.accept('enter' + self.sphereName, self.__handleEnterSphere)
-        self.screechSfx = base.loadSfx('phase_4/audio/sfx/MG_sfx_vine_game_bat_shriek_3.mp3')
+        self.screechSfx = base.loadSfx('phase_4/audio/sfx/MG_sfx_vine_game_bat_shriek_3.ogg')
         self.flySfx = base.loadSfx('phase_4/audio/sfx/MG_sfx_vine_game_bat_flying_lp.wav')
         self.oldCutoffDistance = base.sfxPlayer.getCutoffDistance()
         base.sfxPlayer.setCutoffDistance(240)

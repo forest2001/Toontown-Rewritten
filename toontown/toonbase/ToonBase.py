@@ -168,6 +168,7 @@ class ToonBase(OTPBase.OTPBase):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
+        cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
 
     def disableShowbaseMouse(self):
         self.useDrive()
@@ -220,9 +221,9 @@ class ToonBase(OTPBase.OTPBase):
     def initNametagGlobals(self):
         arrow = loader.loadModel('phase_3/models/props/arrow')
         card = loader.loadModel('phase_3/models/props/panel')
-        speech3d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox'))
-        thought3d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox_thought_cutout'))
-        speech2d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox_noarrow'))
+        speech3d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox'))
+        thought3d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox_thought_cutout'))
+        speech2d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox_noarrow'))
         chatButtonGui = loader.loadModel('phase_3/models/gui/chat_button_gui')
         NametagGlobals.setCamera(self.cam)
         NametagGlobals.setArrowModel(arrow)

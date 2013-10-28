@@ -34,8 +34,8 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.toons = []
         self.activeIntervals = {}
-        self.openSfx = base.loadSfx('phase_5/audio/sfx/elevator_door_open.mp3')
-        self.closeSfx = base.loadSfx('phase_5/audio/sfx/elevator_door_close.mp3')
+        self.openSfx = base.loadSfx('phase_5/audio/sfx/elevator_door_open.ogg')
+        self.closeSfx = base.loadSfx('phase_5/audio/sfx/elevator_door_close.ogg')
         self.suits = []
         self.reserveSuits = []
         self.joiningReserves = []
@@ -173,8 +173,8 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
 
     def handleAnnounceGenerate(self, obj):
         self.ignore(self.announceGenerateName)
-        self.cageDoorSfx = loader.loadSfx('phase_5/audio/sfx/CHQ_SOS_cage_door.mp3')
-        self.cageLowerSfx = loader.loadSfx('phase_5/audio/sfx/CHQ_SOS_cage_lower.mp3')
+        self.cageDoorSfx = loader.loadSfx('phase_5/audio/sfx/CHQ_SOS_cage_door.ogg')
+        self.cageLowerSfx = loader.loadSfx('phase_5/audio/sfx/CHQ_SOS_cage_lower.ogg')
         self.sendUpdate('setAvatarJoined', [])
 
     def disable(self):

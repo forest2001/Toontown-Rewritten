@@ -208,7 +208,7 @@ dclass TalkPath_account {
 dclass AvatarHandle : TalkPath_whisper {
 };
 
-dclass DistributedAvatar : DistributedSmoothNode, TalkPath_owner, TalkPath_whisper {
+dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   string DcObjectType db;
   setName(string = "[Name not set]") required broadcast db airecv;
   friendsNotify(int32, int8) ownrecv airecv clsend;

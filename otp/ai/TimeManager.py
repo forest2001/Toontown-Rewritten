@@ -145,6 +145,10 @@ class TimeManager(DistributedObject.DistributedObject):
         self._gotFirstTimeSync = True
         messenger.send('gotTimeSync')
 
+        toontownTimeManager = getattr(base.cr, 'toontownTimeManager', None)
+        if toontownTimeManager:
+            toontownTimeManager.updateLoginTimes(timeOfDay, int(time.time()), globalClock.getRealTime())
+
     def setDisconnectReason(self, disconnectCode):
         self.notify.info('Client disconnect reason %s.' % disconnectCode)
         self.sendUpdate('setDisconnectReason', [disconnectCode])
