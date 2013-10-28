@@ -26,13 +26,18 @@ class TTRLauncher(LauncherBase):
     def __init__(self):
         self.http = HTTPClient()
 
-        self.logPrefix = 'toontown-'
+        self.logPrefix = 'ttr-'
 
         ltime = 1 and time.localtime()
         logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,  ltime[1], ltime[2],
                                                    ltime[3], ltime[4], ltime[5])
 
-        logfile = self.logPrefix + logSuffix + '.log'
+        
+        if not os.path.exists('logs/'):
+            os.mkdir('logs/')
+            self.notify.info('Made new directory to save logs.')
+        
+        logfile = os.path.join('logs', self.logPrefix + logSuffix + '.log')
 
         log = open(logfile, 'a')
         logOut = LogAndOutput(sys.stdout, log)
