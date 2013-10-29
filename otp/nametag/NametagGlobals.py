@@ -95,3 +95,6 @@ onscreenChatForced = 0
 def setOnscreenChatForced(ocf):
     global onscreenChatForced
     onscreenChatForced = ocf
+    
+def setGlobalNametagScale(s):
+    pass 
