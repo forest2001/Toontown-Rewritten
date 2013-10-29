@@ -1015,7 +1015,7 @@ class DistributedMazeGame(DistributedMinigame):
         for suit in self.suits:
             suit.destroy()
 
-        del self.suits
+        self.suits = []
 
     def __spawnUpdateSuitsTask(self):
         self.notify.debug('spawnUpdateSuitsTask')
