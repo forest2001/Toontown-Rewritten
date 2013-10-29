@@ -942,7 +942,7 @@ class DistributedCannonGame(DistributedMinigame):
         targetHpr = camera.getHpr()
         camera.setPos(oldPos)
         camera.setHpr(oldHpr)
-        camera.lerpPosHpr(Point3(targetPos), targetHpr, duration, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
+        camera.posHprInterval(duration, Point3(targetPos), targetHpr, blendType='easeInOut').start()
 
     def __taskLookInWater(self, task):
         task.data['cannonCenter'] = Point3(0, CANNON_Y, CANNON_Z)
@@ -987,6 +987,6 @@ class DistributedCannonGame(DistributedMinigame):
         camera.reparentTo(lerpNode)
         camera.setPos(relCamPos)
         camera.setHpr(relCamHpr)
-        lerpNode.lerpHpr(endRotation, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
-        camera.lerpPos(endPos, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
+        lerpNode.hprInterval(self.T_TOONHEAD2CANNONBACK, endRotation, blendType='easeInOut').start()
+        camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut').start()
         return Task.done
