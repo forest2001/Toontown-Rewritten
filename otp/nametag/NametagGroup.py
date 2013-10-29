@@ -14,6 +14,10 @@ class NametagGroup:
     CCSpeedChat = 7
     CCFreeChat = 8
 
+    CHAT_TIMEOUT_MAX = 12.0
+    CHAT_TIMEOUT_MIN = 4.0
+    CHAT_TIMEOUT_PROP = 0.5
+
     def __init__(self):
         self.nametag2d = Nametag2d()
         self.nametag3d = Nametag3d()
@@ -95,7 +99,9 @@ class NametagGroup:
             self._startChatTimeout()
 
     def _startChatTimeout(self):
-        self.chatTimeoutTask = taskMgr.doMethodLater(5, self.__doChatTimeout,
+        length = len(self.chatString)
+        timeout = min(max(length*self.CHAT_TIMEOUT_PROP, self.CHAT_TIMEOUT_MIN), self.CHAT_TIMEOUT_MAX)
+        self.chatTimeoutTask = taskMgr.doMethodLater(timeout, self.__doChatTimeout,
                                                      'ChatTimeout-' + self.getUniqueId())
 
     def __doChatTimeout(self, task):
