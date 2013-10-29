@@ -253,7 +253,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
         self.notify.debug('onstage')
         DistributedMinigame.onstage(self)
         self.lt = base.localAvatar
-        #NametagGlobals.setGlobalNametagScale(1)
+        NametagGlobals.setGlobalNametagScale(1)
         self.arrowKeys = ArrowKeys.ArrowKeys()
         self.room.reparentTo(render)
         self.room.setPosHpr(0.0, 18.39, -ToontownGlobals.FloorOffset, 0.0, 0.0, 0.0)
@@ -297,7 +297,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
             self.setupTrack = None
         base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
         base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
-        #NametagGlobals.setGlobalNametagScale(1.0)
+        NametagGlobals.setGlobalNametagScale(1.0)
         if self.arrowKeys:
             self.arrowKeys.setPressHandlers(self.arrowKeys.NULL_HANDLERS)
             self.arrowKeys.setReleaseHandlers(self.arrowKeys.NULL_HANDLERS)
