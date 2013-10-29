@@ -55,6 +55,9 @@ class NametagGroup:
     def getStompText(self):
         return ''
 
+    def getStompDelay(self):
+        return 0.0
+
     def getUniqueId(self):
         return 'Nametag-%d' % id(self)
 
