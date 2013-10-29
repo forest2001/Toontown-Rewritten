@@ -917,6 +917,7 @@ class DistributedCannonGame(DistributedMinigame):
         self.T_LONGVIEW2TOONHEAD = 2
         self.T_TOONHEAD = 2
         self.T_TOONHEAD2CANNONBACK = 2
+        self.__introCameraInterval = None
         taskLookInWater = Task(self.__taskLookInWater)
         taskPullBackFromWater = Task(self.__taskPullBackFromWater)
         taskFlyUpToToon = Task(self.__flyUpToToon)
@@ -931,7 +932,8 @@ class DistributedCannonGame(DistributedMinigame):
 
     def __stopIntro(self):
         taskMgr.remove(self.INTRO_TASK_NAME)
-        taskMgr.remove(self.INTRO_TASK_NAME_CAMERA_LERP)
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
         camera.wrtReparentTo(render)
 
     def __spawnCameraLookAtLerp(self, targetPos, targetLookAt, duration):
@@ -942,7 +944,10 @@ class DistributedCannonGame(DistributedMinigame):
         targetHpr = camera.getHpr()
         camera.setPos(oldPos)
         camera.setHpr(oldHpr)
-        camera.posHprInterval(duration, Point3(targetPos), targetHpr, blendType='easeInOut').start()
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
+        self.__introCameraInterval = camera.posHprInterval(duration, Point3(targetPos), targetHpr, blendType='easeInOut')
+        self.__introCameraInterval.start()
 
     def __taskLookInWater(self, task):
         task.data['cannonCenter'] = Point3(0, CANNON_Y, CANNON_Z)
@@ -987,6 +992,10 @@ class DistributedCannonGame(DistributedMinigame):
         camera.reparentTo(lerpNode)
         camera.setPos(relCamPos)
         camera.setHpr(relCamHpr)
-        lerpNode.hprInterval(self.T_TOONHEAD2CANNONBACK, endRotation, blendType='easeInOut').start()
-        camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut').start()
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
+        self.__introCameraInterval = Parallel(
+            lerpNode.hprInterval(self.T_TOONHEAD2CANNONBACK, endRotation, blendType='easeInOut'),
+            camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut'))
+        self.__introCameraInterval.start()
         return Task.done
