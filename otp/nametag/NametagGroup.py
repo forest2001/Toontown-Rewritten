@@ -44,7 +44,7 @@ class NametagGroup:
         return self.icon
 
     def getNumChatPages(self):
-        return 0
+        return 1 if self.chatString and self.chatFlags else 0
 
     def getChatStomp(self):
         return 0
