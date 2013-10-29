@@ -38,18 +38,10 @@ def loadParticleFile(name):
     global particleSearchPath
     if particleSearchPath == None:
         particleSearchPath = DSearchPath()
-        if AppRunnerGlobal.appRunner:
-            particleSearchPath.appendDirectory(Filename.expandFrom('$TT_3_5_ROOT/phase_3.5/etc'))
-        else:
-            basePath = os.path.expandvars('$TOONTOWN') or './toontown'
-            particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/battle'))
-            particleSearchPath.appendDirectory(Filename.fromOsSpecific(basePath + '/src/safezone'))
-            particleSearchPath.appendDirectory(Filename('phase_3.5/etc'))
-            particleSearchPath.appendDirectory(Filename('phase_4/etc'))
-            particleSearchPath.appendDirectory(Filename('phase_5/etc'))
-            particleSearchPath.appendDirectory(Filename('phase_8/etc'))
-            particleSearchPath.appendDirectory(Filename('phase_9/etc'))
-            particleSearchPath.appendDirectory(Filename('.'))
+        for phase in ['3.5', '4', '5', '8', '9']:
+            particleSearchPath.appendDirectory(Filename('phase_%s/etc' % phase))
+            if __debug__:
+                particleSearchPath.appendDirectory(Filename('resources/phase_%s/etc' % phase))
 
     pfile = Filename(name)
     found = vfs.resolveFilename(pfile, particleSearchPath)
