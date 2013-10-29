@@ -25,6 +25,7 @@ class NametagGroup:
         self.name = ''
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
+        self.avatar = None
 
         self.chatString = ''
         self.chatFlags = 0
@@ -61,7 +62,7 @@ class NametagGroup:
         pass
 
     def setAvatar(self, avatar):
-        pass
+        self.avatar = avatar
 
     def setFont(self, font):
         self.font = font
@@ -115,6 +116,7 @@ class NametagGroup:
         tag.qtColor = self.qtColor
         tag.chatString = self.chatString
         tag.chatFlags = self.chatFlags
+        tag.avatar = self.avatar
 
         tag.update()
 

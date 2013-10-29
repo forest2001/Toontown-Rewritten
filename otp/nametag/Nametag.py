@@ -20,6 +20,7 @@ class Nametag(ClickablePopup):
         self.name = ''
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
+        self.avatar = None
 
         self.chatString = ''
         self.chatFlags = 0
@@ -27,6 +28,9 @@ class Nametag(ClickablePopup):
     def setContents(self, contents):
         self.contents = contents
         self.update()
+
+    def setAvatar(self, avatar):
+        self.avatar = avatar
 
     def update(self):
         self.innerNP.node().removeAllChildren()
