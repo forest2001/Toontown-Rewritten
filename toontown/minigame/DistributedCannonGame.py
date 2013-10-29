@@ -1,5 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
+from otp.nametag.NametagFloat3d import NametagFloat3d
+from otp.nametag.Nametag import Nametag
 from toontown.toonbase.ToonBaseGlobal import *
 from DistributedMinigame import *
 from direct.distributed.ClockDelta import *
@@ -348,7 +350,7 @@ class DistributedCannonGame(DistributedMinigame):
         tag.setBillboardOffset(0)
         tag.setAvatar(head)
         toon.nametag.addNametag(tag)
-        tagPath = head.attachNewNode(tag.upcastToPandaNode())
+        tagPath = head.attachNewNode(tag)
         tagPath.setPos(0, 0, 1)
         head.tag = tag
         self.__loadToonInCannon(avId)
