@@ -13,15 +13,24 @@ class Nametag3d(Nametag):
 
         self.contents = self.CName|self.CSpeech|self.CThought
 
+        self.bbOffset = self.BILLBOARD_OFFSET
+        self._doBillboard()
+
+        self.innerNP.setScale(self.CONTENTS_SCALE)
+
+    def _doBillboard(self):
         if self.SHOULD_BILLBOARD:
             self.innerNP.setEffect(BillboardEffect.make(
                 Vec3(0,0,1),
                 True,
                 False,
-                self.BILLBOARD_OFFSET,
+                self.bbOffset,
                 NametagGlobals.camera,
                 Point3(0,0,0)))
-        self.innerNP.setScale(self.CONTENTS_SCALE)
+
+    def setBillboardOffset(self, bbOffset):
+        self.bbOffset = bbOffset
+        self._doBillboard()
 
     def showSpeech(self):
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
