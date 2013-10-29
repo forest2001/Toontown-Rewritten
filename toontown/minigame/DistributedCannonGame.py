@@ -695,20 +695,13 @@ class DistributedCannonGame(DistributedMinigame):
          trajectory,
          towerList))
         timeOfImpact, hitWhat = self.__calcToonImpact(trajectory, towerList)
-        return {'startPos': startPos,
-         'startHpr': startHpr,
-         'startVel': startVel,
-         'trajectory': trajectory,
-         'timeOfImpact': timeOfImpact,
-         'hitWhat': hitWhat}
+        return startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat
 
     def __fireCannonTask(self, task):
         launchTime = task.fireTime
         avId = task.avId
         self.notify.debug('FIRING CANNON FOR AVATAR ' + str(avId))
-        flightResults = self.__calcFlightResults(avId, launchTime)
-        for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+        startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat = self.__calcFlightResults(avId, launchTime)
 
         self.notify.debug('start position: ' + str(startPos))
         self.notify.debug('start velocity: ' + str(startVel))
