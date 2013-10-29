@@ -14,7 +14,7 @@ class Nametag(ClickablePopup):
 
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
-        self.wordWrap = 10
+        self.wordWrap = 7.5
 
         self.font = None
         self.name = ''

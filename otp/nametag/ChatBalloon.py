@@ -4,12 +4,13 @@ class ChatBalloon:
     TEXT_SHIFT = (0.1, 0, 1.1)
     TEXT_SHIFT_PROP = 0.08
     NATIVE_WIDTH = 10.0
+    MIN_WIDTH = 2.5
     BUBBLE_PADDING = 0.3
     BUBBLE_PADDING_PROP = 0.05
 
     def __init__(self, model):
         self.model = model
-        self.wordWrap = 15.0
+        self.wordWrap = 10.0
 
     def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1)):
         root = NodePath('balloon')
@@ -37,6 +38,11 @@ class ChatBalloon:
         t.setPos(self.TEXT_SHIFT)
         t.setX(t, self.TEXT_SHIFT_PROP*width)
         t.setZ(t, height)
+
+        if width < self.MIN_WIDTH:
+            width = self.MIN_WIDTH
+            t.setX(t, width/2.0)
+            t.node().setAlign(TextNode.ACenter)
 
         # Set the balloon's size:
         width *= 1+self.BUBBLE_PADDING_PROP
