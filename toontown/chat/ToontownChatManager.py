@@ -56,6 +56,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.normalPos = Vec3(-1.083, 0, 0.804)
         self.whisperPos = Vec3(0.0, 0, 0.71)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
+        self.chatInputWhiteList = None
         #self.chatInputWhiteList = TTChatInputWhiteList()
         #if self.defaultToWhiteList:
         #    self.chatInputNormal = self.chatInputWhiteList
