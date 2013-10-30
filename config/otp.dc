@@ -214,6 +214,7 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   friendsNotify(int32, int8) ownrecv airecv clsend;
   checkAvOnShard(uint32) clsend airecv;
   confirmAvOnShard(uint32, int8);
+  setTalk(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) broadcast;
 };
 
 dclass DistributedPlayer : DistributedAvatar {
