@@ -11,6 +11,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          'Account sent chat without an avatar', message)
             return
 
+        self.air.writeServerEvent('chat-said', sender, message)
+
         # TODO: The above is probably a little too ugly for my taste... Maybe AIR
         # should be given an API for sending updates for unknown objects?
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
