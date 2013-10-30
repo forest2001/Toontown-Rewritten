@@ -43,3 +43,6 @@ class Nametag3d(Nametag):
         bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font,
                                                           balloonColor=color)
         bubble.reparentTo(self.innerNP)
+        
+    def setChatWordwrap(self, todo1):
+        pass
