@@ -5,6 +5,9 @@ model "phase_3.5/models/props/tunnel_sign_orange" [
 	store_node [ "sign" "tunnel_sign_orange" "g1" ]
 	]
 
+store_font [ "font" "mickey"
+             "phase_3/models/fonts/MickeyFont" ]
+
 store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
 store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
 store_suit_point [ 2, STREET_POINT, 55 15 -0.5 ]
@@ -26,6 +29,44 @@ group "toontownCentralTutorial" [
 	 code [ "tunnel_sign_orange" ]
      pos [ 0 0 -2.84 ]
      scale [ 1.5 1 1.5 ]
+	 baseline [
+      code [ "mickey" ]
+      color [ 0 0.501961 0.25098 1 ]
+      pos [ 0.09 0 -0.99 ]
+      scale [ 1.5 1 1.5 ]
+      width [ 38.4394 ]
+      height [ 38.4394 ]
+	  text [
+       letters [ "P" ]
+      ]
+      text [
+       letters [ "L" ]
+      ]
+      text [
+       letters [ "A" ]
+      ]
+      text [
+       letters [ "Y" ]
+      ]
+      text [
+       letters [ "G" ]
+      ]
+      text [
+       letters [ "R" ]
+      ]
+      text [
+       letters [ "O" ]
+      ]
+      text [
+       letters [ "U" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "D" ]
+      ]
+	 ]
 	]
    ]
   ]

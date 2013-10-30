@@ -1,7 +1,8 @@
 import ply.lex as lex
 import sys, collections
-from panda3d.core import PandaNode, NodePath, Filename, DecalEffect
+from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
 from direct.showbase import Loader
+import math
 tokens = [
   'FLOAT',
   'INTEGER',
@@ -29,6 +30,17 @@ reserved = {
   'model' : 'MODEL',
   'store_node' : 'STORE_NODE',
   'sign' : 'SIGN',
+  'baseline' : 'BASELINE',
+  'width' : 'WIDTH',
+  'height' : 'HEIGHT',
+  'stomp' : 'STOMP',
+  'stumble' : 'STUMBLE',
+  'indent' : 'INDENT',
+  'wiggle' : 'WIGGLE',
+  'kern' : 'KERN',
+  'text' : 'TEXT',
+  'letters' : 'LETTERS',
+  'store_font' : 'STORE_FONT',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -83,6 +95,7 @@ class DNAStorage:
         self.suitEdges = {}# stored as {startIndex : [edges]}
         self.battleCells = []
         self.nodes = {}
+        self.fonts = {}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -137,6 +150,14 @@ class DNAStorage:
         self.nodes = []
     def storeNode(self, node, code):
         self.nodes[code] = node
+    def findFont(self, code):
+        if code in self.fonts:
+            return self.fonts[code]
+        return None
+    def resetFonts(self):
+        self.fonts = {}
+    def storeFont(self, font, code):
+        self.fonts[code] = font
     def ls(self):
         print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
@@ -393,12 +414,117 @@ class DNASign(DNANode):
         node.setDepthWrite(False, 0)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
-
         for child in self.children:
             child.traverse(node, dnaStorage)
+        sgr = SceneGraphReducer()
+        sgr.flatten(node.getNode(0), -1)
 
 class DNASignBaseline(DNANode):
-    pass
+    def __init__(self):
+        DNANode.__init__(self, '')
+        self.code = ''
+        self.color = (1, 1, 1, 1)
+        self.font = None
+        self.height = 0.0
+        self.counter = 0
+        self.indent = 1.0
+        self.kern = 1.0
+        self.wiggle = 1.0
+        self.stumble = 1.0
+        self.stomp = 1.0
+        self.width = 0
+        self.height = 0
+        self.angle = 0
+        self.f104 = 0
+    def getNextPosHprScale(self, pos, hpr, scale):
+        wiggle = self.wiggle
+        stomp = self.stomp
+        if self.counter % 2 == 0:
+            wiggle *= -1
+            stomp *= -1
+        sx, sy, sz = scale
+        h, p, r = hpr
+        x, y, z = pos
+        sx *= self.scale[0]
+        sy *= self.scale[1] 
+        sz *= self.scale[2]
+        #someone else can figure this shit out
+        return ((x,y,z), (h,p,r), (sx, sy, sz))
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    def getCurrentKern(self):
+        return self.kern*self.counter
+    def getCurrentStomp(self):
+        return self.stomp*self.counter
+    def getCurrentStumble(self):
+        return self.stumble*self.counter
+    def getCurrentWiggle(self):
+        return self.wiggle*self.counter
+    def getFont(self):
+        return self.font
+    def getHeight(self):
+        return self.height
+    def getIndent(self):
+        return self.indent
+    def getKern(self):
+        return self.kern
+    def getStomp(self):
+        return self.stomp
+    def getStumble(self):
+        return self.stumble
+    def getWidth(self):
+        return self.width
+    def getWiggle(self):
+        return self.wiggle
+    def incCounter(self):
+        self.counter += 1
+    def reset(self):
+        self.counter = 0
+    def resetCounter(self):
+        self.counter = 0
+    def setFont(self, font):
+        self.font = font
+    def setHeight(self, height):
+        self.height = height
+    def setIndent(self, indent):
+        self.indent = indent
+    def setKern(self, kern):
+        self.kern = kern
+    def setStomp(self, stomp):
+        self.stomp = stomp
+    def setStumble(self, stumble):
+        self.stumble = stumble
+    def setWidth(self, width):
+        self.width = width
+    def setWiggle(self, wiggle):
+        self.wiggle = wiggle
+    def traverse(self, nodePath, dnaStorage):
+        nodePath = nodePath.attachNewNode('baseline', 0)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
+
+class DNASignText(DNANode):
+    def __init__(self):
+        DNANode.__init__(self, '')
+        self.letters = ''
+    def setLetters(self, letters):
+        self.letters = letters
+    def traverse(self, nodePath, dnaStorage):
+        tn = TextNode('sign')
+        tn.setText(self.letters)
+        baseline = self.getParent()
+        tn.setTextColor(baseline.getColor())
+        tn.setTextScale(baseline.getScale()[0])
+        tn.setFont(dnaStorage.findFont(baseline.getCode()))
+        nodePath = nodePath.attachNewNode(tn.generate(), 0)
+        pos, hpr, scale = baseline.getNextPosHprScale(self.pos, self.hpr, self.scale)
+        nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
 class DNALoader:
     def __init__(self):
@@ -422,7 +548,8 @@ def p_dna(p):
 def p_object(p):
     '''object : suitpoint
               | group
-              | model'''
+              | model
+              | font'''
     p[0] = p[1]
 
 def p_number(p):
@@ -492,7 +619,9 @@ def p_group(p):
 
 def p_dnanode(p):
     '''dnanode : prop
-               | sign'''
+               | sign
+               | signbaseline
+               | signtext'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -502,6 +631,16 @@ def p_sign(p):
 
 def p_prop(p):
     '''prop : propdef "[" subprop_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
+def p_signbaseline(p):
+    '''signbaseline : baselinedef "[" subbaseline_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
+def p_signtest(p):
+    '''signtext : signtextdef "[" subtext_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
@@ -517,6 +656,22 @@ def p_signdef(p):
     '''signdef : SIGN'''
     print 'New DNASign'
     p[0] = DNASign()
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_baselinedef(p):
+    '''baselinedef : BASELINE'''
+    print 'New DNASignBaseline'
+    p[0] = DNASignBaseline()
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_signtextdef(p):
+    '''signtextdef : TEXT'''
+    print 'New DNASignText'
+    p[0] = DNASignText()
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -578,6 +733,54 @@ def p_dnaprop_sub(p):
                    | color'''
     p[0] = p[1]
 
+def p_baseline_sub(p):
+    '''baseline_sub : code
+                | color
+                | width
+                | height
+                | indent
+                | kern
+                | stomp
+                | stumble
+                | wiggle'''
+    p[0] = p[1]
+
+def p_text_sub(p):
+    '''text_sub : letters'''
+    p[0] = p[1]
+
+def p_letters(p):
+    '''letters : LETTERS "[" string "]"'''
+    p.parser.parentGroup.setLetters(p[3])
+
+def p_width(p):
+    '''width : WIDTH "[" number "]"'''
+    p.parser.parentGroup.setWidth(p[3])
+
+def p_height(p):
+    '''height : HEIGHT "[" number "]"'''
+    p.parser.parentGroup.setHeight(p[3])
+
+def p_stomp(p):
+    '''stomp : STOMP "[" number "]"'''
+    p.parser.parentGroup.setStomp(p[3])
+
+def p_indent(p):
+    '''indent : INDENT "[" number "]"'''
+    p.parser.parentGroup.setIndent(p[3])
+
+def p_kern(p):
+    '''kern : KERN "[" number "]"'''
+    p.parser.parentGroup.setKern(p[3])
+
+def p_stumble(p):
+    '''stumble : STUMBLE "[" number "]"'''
+    p.parser.parentGroup.setStumble(p[3])
+
+def p_wiggle(p):
+    '''wiggle : WIGGLE "[" number "]"'''
+    p.parser.parentGroup.setWiggle(p[3])
+
 def p_code(p):
     '''code : CODE "[" string "]"'''
     p.parser.parentGroup.setCode(p[3])
@@ -589,6 +792,28 @@ def p_color(p):
 def p_subprop_list(p):
     '''subprop_list : subprop_list dnanode_sub
                     | subprop_list dnaprop_sub
+                    | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subbaseline_list(p):
+    '''subbaseline_list : subbaseline_list dnanode_sub
+                        | subbaseline_list baseline_sub
+                        | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subtext_list(p):
+    '''subtext_list : subtext_list dnanode_sub
+                    | subtext_list text_sub
                     | empty'''
     p[0] = p[1]
     if len(p) == 3:
@@ -622,3 +847,9 @@ def p_node(p):
     nodePath.setTag('DNACode', p[4])
     nodePath.setTag('DNARoot', p[3])
     p.parser.dnaStore.storeNode(nodePath, p[4])
+
+def p_font(p):
+    '''font : STORE_FONT "[" string string string "]"'''
+    filename = Filename(p[5])
+    filename.setExtension('bam')
+    p.parser.dnaStore.storeFont(FontPool.loadFont(filename.cStr()), p[4])
