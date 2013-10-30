@@ -814,6 +814,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('legs', '1000')
         self.removePart('legs', '500')
         self.removePart('legs', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'legs' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['legs']
         self.style.legs = legStyle
         self.generateToonLegs(copy)
         self.generateToonColor()
@@ -852,6 +855,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('torso', '1000')
         self.removePart('torso', '500')
         self.removePart('torso', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'torso' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['torso']
         self.style.torso = torsoStyle
         self.generateToonTorso(copy, genClothes)
         self.generateToonColor()
@@ -875,6 +881,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('head', '1000')
         self.removePart('head', '500')
         self.removePart('head', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'head' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['head']
         self.style.head = headStyle
         self.generateToonHead(copy)
         self.generateToonColor()
