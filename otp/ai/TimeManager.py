@@ -5,6 +5,7 @@ from direct.task import Task
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from otp.otpbase import OTPGlobals
+from otp.nametag.NametagConstants import *
 from direct.showbase import PythonUtil
 from direct.showbase import GarbageReport
 import base64
@@ -143,6 +144,10 @@ class TimeManager(DistributedObject.DistributedObject):
             base.localAvatar.setChatAbsolute('latency %0.0f ms, sync \xc2\xb1%0.0f ms' % (elapsed * 1000.0, globalClockDelta.getUncertainty() * 1000.0), CFSpeech | CFTimeout)
         self._gotFirstTimeSync = True
         messenger.send('gotTimeSync')
+
+        toontownTimeManager = getattr(base.cr, 'toontownTimeManager', None)
+        if toontownTimeManager:
+            toontownTimeManager.updateLoginTimes(timeOfDay, int(time.time()), globalClock.getRealTime())
 
     def setDisconnectReason(self, disconnectCode):
         self.notify.info('Client disconnect reason %s.' % disconnectCode)

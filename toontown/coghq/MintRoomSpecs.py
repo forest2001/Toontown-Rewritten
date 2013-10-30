@@ -17,6 +17,34 @@ from toontown.coghq import CashbotMintPaintMixerReward_Battle00_Cogs
 from toontown.coghq import CashbotMintPipeRoom_Battle00_Cogs
 from toontown.coghq import CashbotMintPipeRoom_Battle01_Cogs
 
+# Explicit imports for the below room modules:
+from toontown.coghq import CashbotMintEntrance_Action00
+from toontown.coghq import CashbotMintBoilerRoom_Action00
+from toontown.coghq import CashbotMintBoilerRoom_Battle00
+from toontown.coghq import CashbotMintDuctRoom_Action00
+from toontown.coghq import CashbotMintDuctRoom_Battle00
+from toontown.coghq import CashbotMintGearRoom_Action00
+from toontown.coghq import CashbotMintGearRoom_Battle00
+from toontown.coghq import CashbotMintLavaRoomFoyer_Action00
+from toontown.coghq import CashbotMintLavaRoomFoyer_Action01
+from toontown.coghq import CashbotMintLavaRoomFoyer_Battle00
+from toontown.coghq import CashbotMintLavaRoom_Action00
+from toontown.coghq import CashbotMintLobby_Action00
+from toontown.coghq import CashbotMintLobby_Battle00
+from toontown.coghq import CashbotMintPaintMixer_Action00
+from toontown.coghq import CashbotMintPipeRoom_Action00
+from toontown.coghq import CashbotMintPipeRoom_Battle00
+from toontown.coghq import CashbotMintStomperAlley_Action00
+from toontown.coghq import CashbotMintBoilerRoom_Battle01
+from toontown.coghq import CashbotMintControlRoom_Battle00
+from toontown.coghq import CashbotMintDuctRoom_Battle01
+from toontown.coghq import CashbotMintGearRoom_Battle01
+from toontown.coghq import CashbotMintLavaRoomFoyer_Battle01
+from toontown.coghq import CashbotMintOilRoom_Battle00
+from toontown.coghq import CashbotMintLobby_Battle01
+from toontown.coghq import CashbotMintPaintMixerReward_Battle00
+from toontown.coghq import CashbotMintPipeRoom_Battle01
+
 def getMintRoomSpecModule(roomId):
     return CashbotMintSpecModules[roomId]
 
@@ -62,12 +90,8 @@ CashbotMintMiddleRoomIDs = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1
 CashbotMintFinalRoomIDs = (17, 18, 19, 20, 21, 22, 23, 24, 25)
 CashbotMintConnectorRooms = ('phase_10/models/cashbotHQ/connector_7cubeL2', 'phase_10/models/cashbotHQ/connector_7cubeR2')
 CashbotMintSpecModules = {}
-if not isClient():
-    print 'EXECWARNING MintRoomSpecs: %s' % CashbotMintRoomName2RoomId
-    printStack()
 for roomName, roomId in CashbotMintRoomName2RoomId.items():
-    exec 'from toontown.coghq import %s' % roomName
-    CashbotMintSpecModules[roomId] = eval(roomName)
+    CashbotMintSpecModules[roomId] = locals()[roomName]
 
 CogSpecModules = {'CashbotMintBoilerRoom_Battle00': CashbotMintBoilerRoom_Battle00_Cogs,
  'CashbotMintBoilerRoom_Battle01': CashbotMintBoilerRoom_Battle01_Cogs,

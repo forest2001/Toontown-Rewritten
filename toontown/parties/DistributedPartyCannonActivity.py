@@ -2,7 +2,6 @@ import math
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from direct.showbase.PythonUtil import quantizeVec
 from direct.task.Task import Task
 from toontown.toontowngui import TTDialog
 from toontown.toonbase.ToonBaseGlobal import *
@@ -101,12 +100,12 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         self.splash = Splash.Splash(render)
         self.dustCloud = DustCloud.DustCloud(render)
         self.dustCloud.setBillboardPointEye()
-        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
-        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.mp3')
-        self.sndHitHouse = base.loadSfx('phase_5/audio/sfx/AA_drop_sandbag.mp3')
-        self.sndBounce1 = base.loadSfx('phase_13/audio/sfx/bounce1.mp3')
-        self.sndBounce2 = base.loadSfx('phase_13/audio/sfx/bounce2.mp3')
-        self.sndBounce3 = base.loadSfx('phase_13/audio/sfx/bounce3.mp3')
+        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
+        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.ogg')
+        self.sndHitHouse = base.loadSfx('phase_5/audio/sfx/AA_drop_sandbag.ogg')
+        self.sndBounce1 = base.loadSfx('phase_13/audio/sfx/bounce1.ogg')
+        self.sndBounce2 = base.loadSfx('phase_13/audio/sfx/bounce2.ogg')
+        self.sndBounce3 = base.loadSfx('phase_13/audio/sfx/bounce3.ogg')
         self.onstage()
         self.sign.reparentTo(hidden)
         self.sign.setPos(-6.0, 10.0, 0.0)
@@ -263,9 +262,6 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         if self.isLocalToonId(toonId):
             self.inWater = 0
             flightResults = self.__calcFlightResults(cannon, toonId, launchTime)
-            if not isClient():
-                print 'EXECWARNING DistributedPartyCannonActivity: %s' % flightResults
-                printStack()
             for key in flightResults:
                 exec "%s = flightResults['%s']" % (key, key)
 
@@ -369,6 +365,12 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         return Task.cont
 
     def __calcFlightResults(self, cannon, toonId, launchTime):
+        def quantizeVec(vec, divisor):
+            quantize = lambda value, divisor: float(int(value * int(divisor))) / int(divisor)
+            vec[0] = quantize(vec[0], divisor)
+            vec[1] = quantize(vec[1], divisor)
+            vec[2] = quantize(vec[2], divisor)
+
         startPos = cannon.getToonFirePos()
         startHpr = cannon.getToonFireHpr()
         startVel = cannon.getToonFireVel()

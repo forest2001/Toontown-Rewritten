@@ -59,8 +59,8 @@ class PairingGameCard(PlayingCardNodePath):
         self.setR(0)
         self.setScale(2.5)
         self.flipIval = None
-        self.turnUpSound = base.loadSfx('phase_4/audio/sfx/MG_pairing_card_flip_face_up.mp3')
-        self.turnDownSound = base.loadSfx('phase_4/audio/sfx/MG_pairing_card_flip_face_down.mp3')
+        self.turnUpSound = base.loadSfx('phase_4/audio/sfx/MG_pairing_card_flip_face_up.ogg')
+        self.turnDownSound = base.loadSfx('phase_4/audio/sfx/MG_pairing_card_flip_face_down.ogg')
         return
 
     def unload(self):

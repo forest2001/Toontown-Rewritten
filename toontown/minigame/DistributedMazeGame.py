@@ -530,7 +530,7 @@ class DistributedMazeGame(DistributedMinigame):
         model.removeNode()
         self.treasureModel.setScale(1.6)
         self.treasureModel.setP(-90)
-        self.music = base.loadMusic('phase_4/audio/bgm/MG_toontag.mid')
+        self.music = base.loadMusic('phase_4/audio/bgm/MG_toontag.ogg')
         self.toonHitTracks = {}
         self.scorePanels = []
 
@@ -579,12 +579,12 @@ class DistributedMazeGame(DistributedMinigame):
         self.sndTable = {'hitBySuit': [None] * self.numPlayers,
          'falling': [None] * self.numPlayers}
         for i in xrange(self.numPlayers):
-            self.sndTable['hitBySuit'][i] = base.loadSfx('phase_4/audio/sfx/MG_Tag_C.mp3')
-            self.sndTable['falling'][i] = base.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.mp3')
+            self.sndTable['hitBySuit'][i] = base.loadSfx('phase_4/audio/sfx/MG_Tag_C.ogg')
+            self.sndTable['falling'][i] = base.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.ogg')
 
         self.grabSounds = []
         for i in xrange(5):
-            self.grabSounds.append(base.loadSfx('phase_4/audio/sfx/MG_maze_pickup.mp3'))
+            self.grabSounds.append(base.loadSfx('phase_4/audio/sfx/MG_maze_pickup.ogg'))
 
         self.grabSoundIndex = 0
         for avId in self.avIdList:
@@ -694,7 +694,8 @@ class DistributedMazeGame(DistributedMinigame):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)
-            scorePanel.setPos(1.12, 0.0, 0.5 - 0.28 * i)
+            scorePanel.reparentTo(base.a2dTopRight)
+            scorePanel.setPos(-0.213, 0.0, -0.5 - 0.28 * i)
             self.scorePanels.append(scorePanel)
 
         self.goalBar.show()
@@ -1014,7 +1015,7 @@ class DistributedMazeGame(DistributedMinigame):
         for suit in self.suits:
             suit.destroy()
 
-        del self.suits
+        self.suits = []
 
     def __spawnUpdateSuitsTask(self):
         self.notify.debug('spawnUpdateSuitsTask')
@@ -1087,6 +1088,7 @@ class DistributedMazeGame(DistributedMinigame):
         for i in xrange(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
+            panel.wrtReparentTo(aspect2d)
             lerpTrack.append(Parallel(LerpPosInterval(panel, lerpDur, Point3(pos[0], 0, pos[1]), blendType='easeInOut'), LerpScaleInterval(panel, lerpDur, Vec3(panel.getScale()) * 2.0, blendType='easeInOut')))
 
         self.showScoreTrack = Parallel(lerpTrack, Sequence(Wait(MazeGameGlobals.SHOWSCORES_DURATION), Func(self.gameOver)))

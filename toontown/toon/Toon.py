@@ -4,7 +4,6 @@ import ToonDNA
 from direct.task.Task import Task
 from toontown.suit import SuitDNA
 from direct.actor import Actor
-import string
 from ToonHead import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -23,6 +22,7 @@ from otp.otpbase import OTPGlobals
 from toontown.effects import DustCloud
 from direct.showbase.PythonUtil import Functor
 from toontown.distributed import DelayDelete
+from otp.nametag.NametagConstants import *
 import AccessoryGlobals
 import types
 
@@ -335,7 +335,7 @@ def loadPhaseAnims(phaseStr = 'phase_3', loadFlag = 1):
                     base.localAvatar.unloadAnims([anim[0]], 'torso', None)
 
     for key in HeadDict.keys():
-        if string.find(key, 'd') >= 0:
+        if key.find('d') >= 0:
             for anim in animList:
                 if loadFlag:
                     pass
@@ -380,7 +380,7 @@ def compileGlobalAnimList():
                 TorsoAnimDict[key][anim[0]] = file
 
         for key in HeadDict.keys():
-            if string.find(key, 'd') >= 0:
+            if key.find('d') >= 0:
                 HeadAnimDict.setdefault(key, {})
                 for anim in animList:
                     file = phaseStr + HeadDict[key] + anim[1]
@@ -393,47 +393,47 @@ def loadDialog():
     DogDialogueFiles = ('AV_dog_short', 'AV_dog_med', 'AV_dog_long', 'AV_dog_question', 'AV_dog_exclaim', 'AV_dog_howl')
     global DogDialogueArray
     for file in DogDialogueFiles:
-        DogDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        DogDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     catDialogueFiles = ('AV_cat_short', 'AV_cat_med', 'AV_cat_long', 'AV_cat_question', 'AV_cat_exclaim', 'AV_cat_howl')
     global CatDialogueArray
     for file in catDialogueFiles:
-        CatDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        CatDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     horseDialogueFiles = ('AV_horse_short', 'AV_horse_med', 'AV_horse_long', 'AV_horse_question', 'AV_horse_exclaim', 'AV_horse_howl')
     global HorseDialogueArray
     for file in horseDialogueFiles:
-        HorseDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        HorseDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     rabbitDialogueFiles = ('AV_rabbit_short', 'AV_rabbit_med', 'AV_rabbit_long', 'AV_rabbit_question', 'AV_rabbit_exclaim', 'AV_rabbit_howl')
     global RabbitDialogueArray
     for file in rabbitDialogueFiles:
-        RabbitDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        RabbitDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     mouseDialogueFiles = ('AV_mouse_short', 'AV_mouse_med', 'AV_mouse_long', 'AV_mouse_question', 'AV_mouse_exclaim', 'AV_mouse_howl')
     global MouseDialogueArray
     for file in mouseDialogueFiles:
-        MouseDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        MouseDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     duckDialogueFiles = ('AV_duck_short', 'AV_duck_med', 'AV_duck_long', 'AV_duck_question', 'AV_duck_exclaim', 'AV_duck_howl')
     global DuckDialogueArray
     for file in duckDialogueFiles:
-        DuckDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        DuckDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     monkeyDialogueFiles = ('AV_monkey_short', 'AV_monkey_med', 'AV_monkey_long', 'AV_monkey_question', 'AV_monkey_exclaim', 'AV_monkey_howl')
     global MonkeyDialogueArray
     for file in monkeyDialogueFiles:
-        MonkeyDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        MonkeyDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     bearDialogueFiles = ('AV_bear_short', 'AV_bear_med', 'AV_bear_long', 'AV_bear_question', 'AV_bear_exclaim', 'AV_bear_howl')
     global BearDialogueArray
     for file in bearDialogueFiles:
-        BearDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        BearDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
     pigDialogueFiles = ('AV_pig_short', 'AV_pig_med', 'AV_pig_long', 'AV_pig_question', 'AV_pig_exclaim', 'AV_pig_howl')
     global PigDialogueArray
     for file in pigDialogueFiles:
-        PigDialogueArray.append(base.loadSfx(loadPath + file + '.mp3'))
+        PigDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
 
 def unloadDialog():
@@ -506,7 +506,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.jar = None
         self.setTag('pieCode', str(ToontownGlobals.PieCodeToon))
         self.setFont(ToontownGlobals.getToonFont())
-        self.soundChatBubble = base.loadSfx('phase_3/audio/sfx/GUI_balloon_popup.mp3')
+        self.soundChatBubble = base.loadSfx('phase_3/audio/sfx/GUI_balloon_popup.ogg')
         self.animFSM = ClassicFSM('Toon', [State('off', self.enterOff, self.exitOff),
          State('neutral', self.enterNeutral, self.exitNeutral),
          State('victory', self.enterVictory, self.exitVictory),
@@ -1755,7 +1755,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getSoundTeleport(self):
         if not self.soundTeleport:
-            self.soundTeleport = base.loadSfx('phase_3.5/audio/sfx/AV_teleport.mp3')
+            self.soundTeleport = base.loadSfx('phase_3.5/audio/sfx/AV_teleport.ogg')
         return self.soundTeleport
 
     def getTeleportOutTrack(self, autoFinishTrack = 1):
@@ -1868,7 +1868,7 @@ class Toon(Avatar.Avatar, ToonHead):
         pass
 
     def getDiedInterval(self, autoFinishTrack = 1):
-        sound = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.mp3')
+        sound = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
         if hasattr(self, 'uniqueName'):
             trackName = self.uniqueName('died')
         else:
@@ -2124,7 +2124,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def enterSquish(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
         Emote.globalEmote.disableAll(self)
-        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.mp3')
+        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg')
         lerpTime = 0.1
         node = self.getGeomNode().getChild(0)
         origScale = node.getScale()
@@ -2876,7 +2876,7 @@ class Toon(Avatar.Avatar, ToonHead):
         animPie = Sequence()
         if pieType == 'actor':
             animPie = ActorInterval(pie, pieName, startFrame=48)
-        sound = loader.loadSfx('phase_3.5/audio/sfx/AA_pie_throw_only.mp3')
+        sound = loader.loadSfx('phase_3.5/audio/sfx/AA_pie_throw_only.ogg')
         t = power / 100.0
         dist = 100 - 70 * t
         time = 1 + 0.5 * t
@@ -2904,10 +2904,10 @@ class Toon(Avatar.Avatar, ToonHead):
             splat.setColor(*color)
         vol = 1.0
         if pieName == 'lawbook':
-            sound = loader.loadSfx('phase_11/audio/sfx/LB_evidence_miss.mp3')
+            sound = loader.loadSfx('phase_11/audio/sfx/LB_evidence_miss.ogg')
             vol = 0.25
         else:
-            sound = loader.loadSfx('phase_4/audio/sfx/AA_wholepie_only.mp3')
+            sound = loader.loadSfx('phase_4/audio/sfx/AA_wholepie_only.ogg')
         ival = Parallel(Func(splat.reparentTo, render), Func(splat.setPos, x, y, z), SoundInterval(sound, node=splat, volume=vol), Sequence(ActorInterval(splat, splatName), Func(splat.detachNode)))
         return ival
 
@@ -2964,7 +2964,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def enterFlattened(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
         Emote.globalEmote.disableAll(self)
-        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.mp3')
+        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg')
         lerpTime = 0.1
         node = self.getGeomNode().getChild(0)
         self.origScale = node.getScale()

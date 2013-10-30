@@ -3,7 +3,6 @@ from direct.showbase import GarbageReport, ContainerReport, MessengerLeakDetecto
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.InputStateGlobal import inputState
-from direct.showbase.ObjectCount import ObjectCount
 from direct.task import Task
 from direct.task.TaskProfiler import TaskProfiler
 from otp.avatar import Avatar
@@ -146,7 +145,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         elif wordIs('~avId'):
             self.setMagicWordResponse(str(localAvatar.doId))
         elif wordIs('~doId'):
-            name = string.strip(word[6:])
+            name = word[6:].strip()
             objs = self.identifyDistributedObjects(name)
             if len(objs) == 0:
                 response = '%s is unknown.' % name
@@ -184,13 +183,13 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 self.setMagicWordResponse(response)
             else:
                 tm.extraSkew = 0.0
-                skew = string.strip(word[5:])
+                skew = word[5:].strip()
                 if skew != '':
                     tm.extraSkew = float(skew)
                 globalClockDelta.clear()
                 tm.handleHotkey()
         elif wordIs('~period'):
-            timeout = string.strip(word[7:])
+            timeout = word[7:].strip()
             if timeout != '':
                 seconds = int(timeout)
                 self.cr.stopPeriodTimer()
@@ -327,11 +326,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 self.baselineObjReport = report
             self.setMagicWordResponse('objects logged')
         elif wordIs('~objectcount'):
-
-            def handleObjectCountDone(objectCount):
-                self.setMagicWordResponse('object count logged')
-
-            oc = ObjectCount('~objectcount', doneCallback=handleObjectCountDone)
+            self.setMagicWordResponse('not supported')
         elif wordIs('~objecthg'):
             import gc
             objs = gc.get_objects()
@@ -618,7 +613,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 return
 
         nextWord = word[b + 1:]
-        name = string.strip(word[5:b])
+        name = word[5:b].strip()
         id = self.identifyAvatar(name)
         if id == None:
             self.setMagicWordResponse("Don't know who %s is." % name)
@@ -631,7 +626,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
     def identifyDistributedObjects(self, name):
         result = []
-        lowerName = string.lower(name)
+        lowerName = name.lower()
         for obj in self.cr.doId2do.values():
             className = obj.__class__.__name__
             try:
@@ -639,7 +634,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             except:
                 name = className
 
-            if string.lower(name) == lowerName or string.lower(className) == lowerName or string.lower(className) == 'distributed' + lowerName:
+            if name.lower() == lowerName or className.lower() == lowerName or className.lower() == 'distributed' + lowerName:
                 result.append((name, obj))
 
         return result
@@ -666,7 +661,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         return
 
     def getCSBitmask(self, str):
-        words = string.lower(str).split()
+        words = str.lower().split()
         if len(words) == 0:
             return None
         invalid = ''
@@ -717,7 +712,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         return None
 
     def showfont(self, fontname):
-        fontname = string.strip(string.lower(fontname))
+        fontname = fontname.lower().strip()
         font = self.getFontByName(fontname)
         if font == None:
             self.setMagicWordResponse('Unknown font: %s' % fontname)
@@ -842,9 +837,9 @@ class MagicWordManager(DistributedObject.DistributedObject):
             if isinstance(av, self.GameAvatarClass) and av.getName() == name:
                 return av.doId
 
-        lowerName = string.lower(name)
+        lowerName = name.lower()
         for av in Avatar.Avatar.ActiveAvatars:
-            if isinstance(av, self.GameAvatarClass) and string.strip(string.lower(av.getName())) == lowerName:
+            if isinstance(av, self.GameAvatarClass) and av.getName().lower().strip() == lowerName:
                 return av.doId
 
         try:

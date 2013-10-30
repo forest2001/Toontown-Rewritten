@@ -9,6 +9,21 @@ from toontown.coghq import NullCogs
 from toontown.coghq import BossbotCountryClubKartRoom_Battle00_Cogs
 from toontown.coghq import BossbotCountryClubPresidentRoom_Battle00_Cogs
 
+# Explicit imports...
+from toontown.coghq import BossbotCountryClubEntrance_Action00
+from toontown.coghq import BossbotCountryClubTeeOffRoom_Action00
+from toontown.coghq import BossbotCountryClubFairwayRoom_Battle00
+from toontown.coghq import BossbotCountryClubMazeRoom_Battle00
+from toontown.coghq import BossbotCountryClubMazeRoom_Battle01
+from toontown.coghq import BossbotCountryClubMazeRoom_Battle02
+from toontown.coghq import BossbotCountryClubGreenRoom_Action00
+from toontown.coghq import BossbotCountryClubKartRoom_Battle00
+from toontown.coghq import BossbotCountryClubPresidentRoom_Battle00
+from toontown.coghq import BossbotCountryClubTeeOffRoom_Action01
+from toontown.coghq import BossbotCountryClubTeeOffRoom_Action02
+from toontown.coghq import BossbotCountryClubGreenRoom_Action01
+from toontown.coghq import BossbotCountryClubGreenRoom_Action02
+
 def getCountryClubRoomSpecModule(roomId):
     return CashbotMintSpecModules[roomId]
 
@@ -41,12 +56,8 @@ BossbotCountryClubMiddleRoomIDs = (2, 5, 6)
 BossbotCountryClubFinalRoomIDs = (18,)
 BossbotCountryClubConnectorRooms = ('phase_12/models/bossbotHQ/Connector_Tunnel_A', 'phase_12/models/bossbotHQ/Connector_Tunnel_B')
 CashbotMintSpecModules = {}
-if not isClient():
-    print 'EXECWARNING CountryClubRoomSpecs: %s' % BossbotCountryClubRoomName2RoomId
-    printStack()
 for roomName, roomId in BossbotCountryClubRoomName2RoomId.items():
-    exec 'from toontown.coghq import %s' % roomName
-    CashbotMintSpecModules[roomId] = eval(roomName)
+    CashbotMintSpecModules[roomId] = locals()[roomName]
 
 CogSpecModules = {'BossbotCountryClubFairwayRoom_Battle00': BossbotCountryClubFairwayRoom_Battle00_Cogs,
  'BossbotCountryClubMazeRoom_Battle00': BossbotCountryClubMazeRoom_Battle00_Cogs,

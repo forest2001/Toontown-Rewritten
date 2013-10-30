@@ -202,18 +202,10 @@ class AvatarChoice(DirectButton):
             self.verifyDeleteWithPassword()
 
     def verifyDeleteWithPassword(self):
-        tt = base.cr.loginInterface
-        if tt.supportsAuthenticateDelete() and base.cr.productName not in ['DisneyOnline-UK',
-         'JP',
-         'FR',
-         'BR',
-         'DisneyOnline-AP']:
-            self.deleteWithPassword = 1
-            deleteText = TTLocalizer.AvatarChoiceDeletePasswordText % self.name
-        else:
-            self.deleteWithPassword = 0
-            deleteText = TTLocalizer.AvatarChoiceDeleteConfirmText % {'name': self.name,
-             'confirm': TTLocalizer.AvatarChoiceDeleteConfirmUserTypes}
+        self.deleteWithPassword = 0
+        deleteText = TTLocalizer.AvatarChoiceDeleteConfirmText % {
+            'name': self.name,
+            'confirm': TTLocalizer.AvatarChoiceDeleteConfirmUserTypes}
         if self.deleteWithPasswordFrame == None:
             buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
             nameBalloon = loader.loadModel('phase_3/models/props/chatbox_input')

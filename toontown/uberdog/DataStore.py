@@ -5,6 +5,7 @@ from string import maketrans
 import cPickle
 import os
 import sys
+import dumbdbm
 import anydbm
 import time
 

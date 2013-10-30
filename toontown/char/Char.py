@@ -397,7 +397,7 @@ class Char(Avatar.Avatar):
             chatterType = chatterTypes[categoryIndex]
             for fileIndex in audioIndexArray[categoryIndex]:
                 if fileIndex:
-                    self.chatterArray[categoryIndex].append(base.loadSfx('%s/CC_%s_chatter_%s%02d.mp3' % (loadPath,
+                    self.chatterArray[categoryIndex].append(base.loadSfx('%s/CC_%s_chatter_%s%02d.ogg' % (loadPath,
                      name,
                      chatterType,
                      fileIndex)))
@@ -532,12 +532,12 @@ class Char(Avatar.Avatar):
                       4])
                     self.loadChatterDialogue('donald', chatterIndexArray, 'phase_6/audio/dial', language)
         elif char == 'p' or char == 'wp':
-            dialogueFile = base.loadSfx('phase_3.5/audio/dial/AV_dog_med.mp3')
+            dialogueFile = base.loadSfx('phase_3.5/audio/dial/AV_dog_med.ogg')
             for i in range(0, 6):
                 self.dialogueArray.append(dialogueFile)
 
         elif char == 'cl':
-            dialogueFile = base.loadSfx('phase_3.5/audio/dial/AV_dog_med.mp3')
+            dialogueFile = base.loadSfx('phase_3.5/audio/dial/AV_dog_med.ogg')
             for i in range(0, 6):
                 self.dialogueArray.append(dialogueFile)
 

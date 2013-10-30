@@ -3,6 +3,7 @@ from otp.avatar import Avatar
 import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
+from otp.nametag.NametagGroup import NametagGroup
 from toontown.battle import SuitBattleGlobals
 from direct.task.Task import Task
 from toontown.battle import BattleProps
@@ -226,8 +227,8 @@ def cogExists(filePrefix):
 def loadSuitAnims(suit, flag = 1):
     if suit in SuitDNA.suitHeadTypes:
         try:
-            animList = eval(suit)
-        except NameError:
+            animList = locals()[suit]
+        except KeyError:
             animList = ()
 
     else:
@@ -254,7 +255,7 @@ def loadDialog(level):
          'COG_VO_statement',
          'COG_VO_question']
         for file in SuitDialogFiles:
-            SuitDialogArray.append(base.loadSfx(loadPath + file + '.mp3'))
+            SuitDialogArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
         SuitDialogArray.append(SuitDialogArray[2])
         SuitDialogArray.append(SuitDialogArray[2])
@@ -265,10 +266,10 @@ def loadSkelDialog():
     if len(SkelSuitDialogArray) > 0:
         return
     else:
-        grunt = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_grunt.mp3')
-        murmur = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_murmur.mp3')
-        statement = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_statement.mp3')
-        question = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_question.mp3')
+        grunt = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_grunt.ogg')
+        murmur = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_murmur.ogg')
+        statement = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_statement.ogg')
+        question = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_question.ogg')
         SkelSuitDialogArray = [grunt,
          murmur,
          statement,
@@ -661,8 +662,8 @@ class Suit(Avatar.Avatar):
                     animDict[anim[0]] = 'phase_12/models/char/suitC-' + anim[1]
 
         try:
-            animList = eval(self.style.name)
-        except NameError:
+            animList = locals()[self.style.name]
+        except KeyError:
             animList = ()
 
         for anim in animList:
@@ -927,7 +928,7 @@ class Suit(Avatar.Avatar):
                 else:
                     self.setSuitClothes(self.loseActor)
             else:
-                loseModel = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-lose-mod'
+                loseModel = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-lose-mod'
                 filePrefix, phase = TutorialModelDict[self.style.body]
                 loseAnim = 'phase_' + str(phase) + filePrefix + 'lose'
                 self.loseActor = Actor.Actor(loseModel, {'lose': loseAnim})
@@ -951,7 +952,7 @@ class Suit(Avatar.Avatar):
         return
 
     def makeSkeleton(self):
-        model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
+        model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
         dropShadow = self.dropShadow

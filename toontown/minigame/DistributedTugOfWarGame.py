@@ -23,9 +23,10 @@ from toontown.effects import Ripples
 from toontown.toonbase import TTLocalizer
 import MinigamePowerMeter
 from direct.task.Task import Task
+from otp.nametag import NametagGlobals
 
 class DistributedTugOfWarGame(DistributedMinigame):
-    bgm = 'phase_4/audio/bgm/MG_tug_o_war.mid'
+    bgm = 'phase_4/audio/bgm/MG_tug_o_war.ogg'
     toonAnimNames = ['neutral',
      'tug-o-war',
      'slip-forward',
@@ -123,8 +124,8 @@ class DistributedTugOfWarGame(DistributedMinigame):
         self.sky = loader.loadModel('phase_3.5/models/props/TT_sky')
         self.dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
         self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
-        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.mp3')
-        self.whistleSound = base.loadSfx('phase_4/audio/sfx/AA_sound_whistle.mp3')
+        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.ogg')
+        self.whistleSound = base.loadSfx('phase_4/audio/sfx/AA_sound_whistle.ogg')
         self.music = base.loadMusic(self.bgm)
         self.roundText = DirectLabel(text='     ', text_fg=(0, 1, 0, 1), frameColor=(1, 1, 1, 0), text_font=ToontownGlobals.getSignFont(), pos=(0.014, 0, -.84), scale=0.2)
         self.powerMeter = MinigamePowerMeter.MinigamePowerMeter(17)

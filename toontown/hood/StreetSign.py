@@ -20,7 +20,7 @@ class StreetSign(DistributedObject.DistributedObject):
         self.startDownload = datetime.datetime.now()
         self.endDownload = datetime.datetime.now()
         self.notify.info('Street sign url is %s' % self.StreetSignUrl)
-        self.redownloadStreetSign()
+        #self.redownloadStreetSign()
 
     def replaceTexture(self):
         searchPath = DSearchPath()

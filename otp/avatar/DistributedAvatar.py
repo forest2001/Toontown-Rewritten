@@ -1,11 +1,12 @@
 import time
 import string
 from pandac.PandaModules import *
+from otp.nametag.Nametag import Nametag
 from direct.distributed import DistributedNode
 from direct.actor.DistributedActor import DistributedActor
 from direct.task import Task
+from direct.interval.IntervalGlobal import *
 from direct.showbase import PythonUtil
-from libotp import Nametag
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from otp.speedchat import SCDecoders
@@ -203,8 +204,8 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Task.sequence(self.hpText.lerpPos(Point3(0, 0, self.height + 1.5), 1.0, blendType='easeOut'), Task.pause(0.85), self.hpText.lerpColor(Vec4(r, g, b, a), Vec4(r, g, b, 0), 0.1), Task.Task(self.hideHpTextTask))
-                taskMgr.add(seq, self.uniqueName('hpText'))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq.start()
 
     def showHpString(self, text, duration = 0.85, scale = 0.7):
         if self.HpTextEnabled and not self.ghostMode:
@@ -223,12 +224,8 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setScale(scale)
                 self.hpText.setBillboardAxis()
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Task.sequence(self.hpText.lerpPos(Point3(0, 0, self.height + 1.5), 1.0, blendType='easeOut'), Task.pause(duration), self.hpText.lerpColor(Vec4(r, g, b, a), Vec4(r, g, b, 0), 0.1), Task.Task(self.hideHpTextTask))
-                taskMgr.add(seq, self.uniqueName('hpText'))
-
-    def hideHpTextTask(self, task):
-        self.hideHpText()
-        return Task.done
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(duration), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq.start()
 
     def hideHpText(self):
         if self.hpText:

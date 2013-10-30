@@ -140,11 +140,15 @@ class PlayGame(StateData.StateData):
         pass
 
     def loadDnaStoreTutorial(self):
+        self.dnaStore = None
+        return # TODO: DNATODO
         self.dnaStore = DNAStorage()
         loader.loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_tutorial.dna')
         loader.loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
 
     def loadDnaStore(self):
+        self.dnaStore = None
+        return # TODO: DNATODO
         if not hasattr(self, 'dnaStore'):
             self.dnaStore = DNAStorage()
             loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.dna')
@@ -155,8 +159,8 @@ class PlayGame(StateData.StateData):
 
     def unloadDnaStore(self):
         if hasattr(self, 'dnaStore'):
-            self.dnaStore.resetNodes()
-            self.dnaStore.resetTextures()
+            #self.dnaStore.resetNodes()
+            #self.dnaStore.resetTextures()
             del self.dnaStore
             ModelPool.garbageCollect()
             TexturePool.garbageCollect()

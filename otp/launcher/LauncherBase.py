@@ -188,7 +188,7 @@ class LauncherBase(DirectObject):
             downloadServerString = self.getValue('DOWNLOAD_SERVER', '')
         self.notify.info('Download Server List %s' % downloadServerString)
         self.downloadServerList = []
-        for name in string.split(downloadServerString, ';'):
+        for name in downloadServerString.split(';'):
             url = URLSpec(name, 1)
             self.downloadServerList.append(url)
 
@@ -921,7 +921,7 @@ class LauncherBase(DirectObject):
             if self.linesInProgress[i].find(phase) > -1:
                 nameSizeTuple = self.linesInProgress[i].split()
                 numSize = nameSizeTuple[1].split('L')
-                sum += string.atoi(numSize[0])
+                sum += numSize[0].atoi()
 
         return sum
 

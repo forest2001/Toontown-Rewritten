@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from otp.avatar import Avatar
-from libotp import CFQuicktalker
+from otp.nametag.NametagConstants import CFQuicktalker
 from toontown.char import CharDNA
 from toontown.char import DistributedChar
 from direct.directnotify import DirectNotifyGlobal
@@ -179,7 +179,7 @@ class DistributedCCharBase(DistributedChar.DistributedChar):
             if '%' in str:
                 str = copy.deepcopy(str)
                 avName = avatar.getName()
-                str = string.replace(str, '%', avName)
+                str = str.replace('%', avName)
             track = Sequence()
             if category != CCharChatter.GOODBYE:
                 curHpr = self.getHpr()

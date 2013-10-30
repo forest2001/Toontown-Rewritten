@@ -490,14 +490,13 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             titleSeq = None
             if self.lastCamZone not in self.zonesEnteredList:
                 self.zonesEnteredList.append(self.lastCamZone)
-                titleSeq = Task.sequence(Task.Task(self.hideSmallTitleTextTask), Task.Task(self.showTitleTextTask), Task.pause(0.1), Task.pause(6.0), self.titleText.lerpColor(Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], self.titleColor[3]), Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0), 0.5))
-            smallTitleSeq = Task.sequence(Task.Task(self.hideTitleTextTask), Task.Task(self.showSmallTitleTask))
+                titleSeq = Sequence(Func(self.hideSmallTitleText), Func(self.showTitleText), Wait(0.1), Wait(6.0), self.titleText.colorInterval(0.5, Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0)))
+            smallTitleSeq = Sequence(Func(self.hideTitleText), Func(self.showSmallTitle))
             if titleSeq:
-                seq = Task.sequence(titleSeq, smallTitleSeq)
+                seq = Sequence(titleSeq, smallTitleSeq)
             else:
                 seq = smallTitleSeq
-            taskMgr.add(seq, self.uniqueName('titleText'))
-        return
+            seq.start()
 
     def showInfoText(self, text = 'hello world'):
         description = text
@@ -507,32 +506,8 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             self.titleText.setText(description)
             self.titleText.setColor(Vec4(*self.titleColor))
             self.titleText.setFg(self.titleColor)
-            titleSeq = None
-            titleSeq = Task.sequence(Task.Task(self.hideSmallTitleTextTask), Task.Task(self.showTitleTextTask), Task.pause(0.1), Task.pause(3.0), self.titleText.lerpColor(Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], self.titleColor[3]), Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0), 0.5))
-            if titleSeq:
-                seq = Task.sequence(titleSeq)
-            taskMgr.add(seq, self.uniqueName('titleText'))
-        return
-
-    def showTitleTextTask(self, task):
-        self.titleText.show()
-        return Task.done
-
-    def hideTitleTextTask(self, task):
-        if self.titleText:
-            self.titleText.hide()
-        return Task.done
-
-    def showSmallTitleTask(self, task):
-        if self.titleText:
-            self.titleText.hide()
-        self.smallTitleText.show()
-        return Task.done
-
-    def hideSmallTitleTextTask(self, task):
-        if self.smallTitleText:
-            self.smallTitleText.hide()
-        return Task.done
+            seq = Sequence(Func(self.hideSmallTitleText), Func(self.showTitleText), Wait(0.1), Wait(3.0), self.titleText.colorInterval(0.5, Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0)))
+            seq.start()
 
     def startOuch(self, ouchLevel, period = 2):
         self.notify.debug('startOuch %s' % ouchLevel)

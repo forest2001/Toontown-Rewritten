@@ -13,7 +13,6 @@ from toontown.cogdominium import CogdoEntityCreator
 import string
 
 class InGameEditorEntityBase(InGameEditorElement):
-
     def __init__(self):
         InGameEditorElement.__init__(self)
 

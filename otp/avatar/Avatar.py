@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
-from libotp import Nametag, NametagGroup
-from libotp import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
+from otp.nametag.Nametag import Nametag
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.NametagConstants import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from direct.actor.Actor import Actor

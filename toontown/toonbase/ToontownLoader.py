@@ -90,13 +90,3 @@ class ToontownLoader(Loader.Loader):
         ret = Loader.Loader.loadMusic(self, soundPath)
         self.tick()
         return ret
-
-    def loadDNAFileAI(self, dnaStore, dnaFile):
-        ret = loadDNAFileAI(dnaStore, dnaFile, CSDefault)
-        self.tick()
-        return ret
-
-    def loadDNAFile(self, dnaStore, dnaFile):
-        ret = loadDNAFile(dnaStore, dnaFile, CSDefault, 0)
-        self.tick()
-        return ret

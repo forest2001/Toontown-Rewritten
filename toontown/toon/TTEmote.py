@@ -6,6 +6,7 @@ from otp.otpbase import OTPLocalizer
 import types
 from direct.showbase import PythonUtil
 from pandac.PandaModules import *
+from otp.nametag.NametagConstants import *
 from otp.avatar import Emote
 from direct.directnotify import DirectNotifyGlobal
 EmoteSleepIndex = 4
@@ -13,7 +14,7 @@ EmoteClear = -1
 
 def doVictory(toon, volume = 1):
     duration = toon.getDuration('victory', 'legs')
-    sfx = base.loadSfx('phase_3.5/audio/sfx/ENC_Win.mp3')
+    sfx = base.loadSfx('phase_3.5/audio/sfx/ENC_Win.ogg')
     sfxDuration = duration - 1.0
     sfxTrack = SoundInterval(sfx, loop=1, duration=sfxDuration, node=toon, volume=volume)
     track = Sequence(Func(toon.play, 'victory'), sfxTrack, duration=0)
@@ -34,9 +35,9 @@ def doAnnoyed(toon, volume = 1):
     duration = toon.getDuration('angry', 'torso')
     sfx = None
     if toon.style.getAnimal() == 'bear':
-        sfx = base.loadSfx('phase_3.5/audio/dial/AV_bear_exclaim.mp3')
+        sfx = base.loadSfx('phase_3.5/audio/dial/AV_bear_exclaim.ogg')
     else:
-        sfx = base.loadSfx('phase_3.5/audio/sfx/avatar_emotion_angry.mp3')
+        sfx = base.loadSfx('phase_3.5/audio/sfx/avatar_emotion_angry.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
@@ -105,7 +106,7 @@ def doOk(toon, volume = 1):
 
 
 def doShrug(toon, volume = 1):
-    sfx = base.loadSfx('phase_3.5/audio/sfx/avatar_emotion_shrug.mp3')
+    sfx = base.loadSfx('phase_3.5/audio/sfx/avatar_emotion_shrug.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
@@ -122,7 +123,7 @@ def doWave(toon, volume = 1):
 
 
 def doApplause(toon, volume = 1):
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_applause.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_applause.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=1, node=toon)
@@ -133,7 +134,7 @@ def doApplause(toon, volume = 1):
 
 
 def doConfused(toon, volume = 1):
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_confused.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_confused.ogg')
 
     def playSfx():
         base.playSfx(sfx, node=toon, volume=volume)
@@ -144,7 +145,7 @@ def doConfused(toon, volume = 1):
 
 
 def doSlipForward(toon, volume = 1):
-    sfx = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
@@ -156,7 +157,7 @@ def doSlipForward(toon, volume = 1):
 
 
 def doBored(toon, volume = 1):
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_bored.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_bored.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
@@ -178,7 +179,7 @@ def doBow(toon, volume = 1):
 
 
 def doSlipBackward(toon, volume = 1):
-    sfx = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
 
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
@@ -216,7 +217,7 @@ def doNothing(toon, volume = 1):
 
 def doSurprise(toon, volume = 1):
     sfx = None
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_surprise.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_surprise.ogg')
 
     def playSfx(volume = 1):
         base.playSfx(sfx, volume=volume, node=toon)
@@ -237,7 +238,7 @@ def doSurprise(toon, volume = 1):
 
 def doUpset(toon, volume = 1):
     sfx = None
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_very_sad_1.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_very_sad_1.ogg')
 
     def playSfx(volume = 1):
         base.playSfx(sfx, volume=volume, node=toon)
@@ -258,7 +259,7 @@ def doUpset(toon, volume = 1):
 
 def doDelighted(toon, volume = 1):
     sfx = None
-    sfx = base.loadSfx('phase_4/audio/sfx/delighted_06.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/delighted_06.ogg')
 
     def playSfx(volume = 1):
         base.playSfx(sfx, volume=volume, node=toon)
@@ -280,7 +281,7 @@ def doDelighted(toon, volume = 1):
 def doFurious(toon, volume = 1):
     duration = toon.getDuration('angry', 'torso')
     sfx = None
-    sfx = base.loadSfx('phase_4/audio/sfx/furious_03.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/furious_03.ogg')
 
     def playSfx(volume = 1):
         base.playSfx(sfx, volume=volume, node=toon)
@@ -292,7 +293,7 @@ def doFurious(toon, volume = 1):
 
 def doLaugh(toon, volume = 1):
     sfx = None
-    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_laugh.mp3')
+    sfx = base.loadSfx('phase_4/audio/sfx/avatar_emotion_laugh.ogg')
 
     def playSfx(volume = 1):
         base.playSfx(sfx, volume=volume, node=toon)
@@ -313,7 +314,7 @@ def getSingingNote(toon, note, volume = 1):
     sfx = None
     filePath = 'phase_3.5/audio/dial/'
     filePrefix = 'tt_s_dlg_sng_'
-    fileSuffix = '.mp3'
+    fileSuffix = '.ogg'
     speciesName = ToonDNA.getSpeciesName(toon.style.head)
     sfx = base.loadSfx(filePath + filePrefix + speciesName + '_' + note + fileSuffix)
 

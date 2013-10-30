@@ -599,6 +599,7 @@ def firstRun(operation = 'read', newPlayer = None, newPlayerBool = [False]):
 
 
 def patcherVer(operation = 'read', url = None, patchfile = []):
+    return ['OFFLINE']
     if operation != 'read':
         if len(patchfile) != 0:
             patchfile.pop()

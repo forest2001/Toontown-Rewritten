@@ -8,6 +8,9 @@ import ToontownLoader
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
+from otp.nametag.ChatBalloon import ChatBalloon
+from otp.nametag import NametagGlobals
+from otp.margins.MarginManager import MarginManager
 import sys
 import os
 import math
@@ -20,40 +23,9 @@ class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):
-        if not config.GetInt('ignore-user-options', 0):
-            Settings.readSettings()
-            mode = not Settings.getWindowedMode()
-            music = Settings.getMusic()
-            sfx = Settings.getSfx()
-            toonChatSounds = Settings.getToonChatSounds()
-            musicVol = Settings.getMusicVolume()
-            sfxVol = Settings.getSfxVolume()
-            resList = [(640, 480),
-             (800, 600),
-             (1024, 768),
-             (1280, 1024),
-             (1600, 1200)]
-            res = resList[Settings.getResolution()]
-            if mode == None:
-                mode = 1
-            if res == None:
-                res = (800, 600)
-            loadPrcFileData('toonBase Settings Window Res', 'win-size %s %s' % (res[0], res[1]))
-            loadPrcFileData('toonBase Settings Window FullScreen', 'fullscreen %s' % mode)
-            loadPrcFileData('toonBase Settings Music Active', 'audio-music-active %s' % music)
-            loadPrcFileData('toonBase Settings Sound Active', 'audio-sfx-active %s' % sfx)
-            loadPrcFileData('toonBase Settings Music Volume', 'audio-master-music-volume %s' % musicVol)
-            loadPrcFileData('toonBase Settings Sfx Volume', 'audio-master-sfx-volume %s' % sfxVol)
-            loadPrcFileData('toonBase Settings Toon Chat Sounds', 'toon-chat-sounds %s' % toonChatSounds)
         OTPBase.OTPBase.__init__(self)
-        if not self.isMainWindowOpen():
-            try:
-                launcher.setPandaErrorCode(7)
-            except:
-                pass
-
-            sys.exit(1)
         self.disableShowbaseMouse()
+        self.addCullBins()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
         self.toonChatSounds = self.config.GetBool('toon-chat-sounds', 1)
         self.placeBeforeObjects = config.GetBool('place-before-objects', 1)
@@ -147,10 +119,10 @@ class ToonBase(OTPBase.OTPBase):
         self.canScreenShot = 1
         self.glitchCount = 0
         self.walking = 0
-        self.resetMusic = self.loadMusic('phase_3/audio/bgm/MIDI_Events_16channels.mid')
         self.oldX = max(1, base.win.getXSize())
         self.oldY = max(1, base.win.getYSize())
         self.aspectRatio = float(self.oldX) / self.oldY
+        self.localAvatarStyle = None
         return
 
     def windowEvent(self, win):
@@ -192,20 +164,27 @@ class ToonBase(OTPBase.OTPBase):
         self.oldX = newX
         self.oldY = newY
 
+    def addCullBins(self):
+        cbm = CullBinManager.getGlobalPtr()
+        cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
+        cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
+        cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
+
     def disableShowbaseMouse(self):
         self.useDrive()
         self.disableMouse()
-        if self.mouseInterface:
-            self.mouseInterface.reparentTo(self.dataUnused)
-        if base.mouse2cam:
-            self.mouse2cam.reparentTo(self.dataUnused)
+        if self.mouseInterface: self.mouseInterface.detachNode()
+        if self.mouse2cam: self.mouse2cam.detachNode()
 
     def __walking(self, pressed):
         self.walking = pressed
 
     def takeScreenShot(self):
-        namePrefix = 'screenshot'
-        namePrefix = launcher.logPrefix + namePrefix
+        if not os.path.exists('screenshots/'):
+            os.mkdir('screenshots/')
+            self.notify.info('Made new directory to save screenshots.')
+        
+        namePrefix = 'screenshots/' + launcher.logPrefix + 'screenshot'
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
         if self.glitchCount > 10 and self.walking:
             return
@@ -245,9 +224,9 @@ class ToonBase(OTPBase.OTPBase):
     def initNametagGlobals(self):
         arrow = loader.loadModel('phase_3/models/props/arrow')
         card = loader.loadModel('phase_3/models/props/panel')
-        speech3d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox'))
-        thought3d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox_thought_cutout'))
-        speech2d = ChatBalloon(loader.loadModelNode('phase_3/models/props/chatbox_noarrow'))
+        speech3d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox'))
+        thought3d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox_thought_cutout'))
+        speech2d = ChatBalloon(loader.loadModel('phase_3/models/props/chatbox_noarrow'))
         chatButtonGui = loader.loadModel('phase_3/models/gui/chat_button_gui')
         NametagGlobals.setCamera(self.cam)
         NametagGlobals.setArrowModel(arrow)
@@ -307,11 +286,12 @@ class ToonBase(OTPBase.OTPBase):
             self.notify.info('Using gameServer from launcher: %s ' % gameServer)
         else:
             gameServer = 'localhost'
-        serverPort = base.config.GetInt('server-port', 6667)
+        serverPort = base.config.GetInt('server-port', 7198)
         serverList = []
         for name in gameServer.split(';'):
             url = URLSpec(name, 1)
-            url.setScheme('s')
+            if base.config.GetBool('server-force-ssl', False):
+                url.setScheme('s')
             if not url.hasPort():
                 url.setPort(serverPort)
             serverList.append(url)
@@ -397,5 +377,4 @@ class ToonBase(OTPBase.OTPBase):
             return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP))
 
     def playMusic(self, music, looping = 0, interrupt = 1, volume = None, time = 0.0):
-        OTPBase.OTPBase.playMusic(self, self.resetMusic)
         OTPBase.OTPBase.playMusic(self, music, looping, interrupt, volume, time)

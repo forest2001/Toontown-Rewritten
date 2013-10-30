@@ -1,4 +1,10 @@
+from pandac.PandaModules import *
 import __builtin__
+
+if __debug__:
+    # __debug__ is only 1 in dev builds; Mirai's builder will set it to 0
+    # (and it will, in fact, remove entire if __debug__: sections)
+    loadPrcFile('config/dev.prc')
 
 class game:
     name = 'toontown'
@@ -14,11 +20,10 @@ import __builtin__
 try:
     launcher
 except:
-    from toontown.launcher.ToontownDummyLauncher import ToontownDummyLauncher
-    launcher = ToontownDummyLauncher()
+    from toontown.launcher.TTRLauncher import TTRLauncher
+    launcher = TTRLauncher()
     __builtin__.launcher = launcher
 
-launcher.setRegistry('EXIT_PAGE', 'normal')
 pollingDelay = 0.5
 print 'ToontownStart: Polling for game2 to finish...'
 while not launcher.getGame2Done():
@@ -26,12 +31,11 @@ while not launcher.getGame2Done():
 
 print 'ToontownStart: Game2 is finished.'
 print 'ToontownStart: Starting the game.'
-from pandac.PandaModules import *
 if launcher.isDummy():
     http = HTTPClient()
 else:
     http = launcher.http
-tempLoader = PandaLoader()
+tempLoader = Loader()
 backgroundNode = tempLoader.loadSync(Filename('phase_3/models/gui/loading-background'))
 from direct.gui import DirectGuiGlobals
 print 'ToontownStart: setting default font'
@@ -54,21 +58,21 @@ backgroundNodePath.setScale(render2d, VBase3(1))
 backgroundNodePath.find('**/fg').setBin('fixed', 20)
 backgroundNodePath.find('**/bg').setBin('fixed', 10)
 base.graphicsEngine.renderFrame()
-DirectGuiGlobals.setDefaultRolloverSound(base.loadSfx('phase_3/audio/sfx/GUI_rollover.mp3'))
-DirectGuiGlobals.setDefaultClickSound(base.loadSfx('phase_3/audio/sfx/GUI_create_toon_fwd.mp3'))
+DirectGuiGlobals.setDefaultRolloverSound(base.loadSfx('phase_3/audio/sfx/GUI_rollover.ogg'))
+DirectGuiGlobals.setDefaultClickSound(base.loadSfx('phase_3/audio/sfx/GUI_create_toon_fwd.ogg'))
 DirectGuiGlobals.setDefaultDialogGeom(loader.loadModel('phase_3/models/gui/dialog_box_gui'))
 import TTLocalizer
 from otp.otpbase import OTPGlobals
 OTPGlobals.setDefaultProductPrefix(TTLocalizer.ProductPrefix)
 if base.musicManagerIsValid:
-    music = base.musicManager.getSound('phase_3/audio/bgm/tt_theme.mid')
+    music = base.musicManager.getSound('phase_3/audio/bgm/ttr_theme.ogg')
     if music:
         music.setLoop(1)
         music.setVolume(0.9)
         music.play()
     print 'ToontownStart: Loading default gui sounds'
-    DirectGuiGlobals.setDefaultRolloverSound(base.loadSfx('phase_3/audio/sfx/GUI_rollover.mp3'))
-    DirectGuiGlobals.setDefaultClickSound(base.loadSfx('phase_3/audio/sfx/GUI_create_toon_fwd.mp3'))
+    DirectGuiGlobals.setDefaultRolloverSound(base.loadSfx('phase_3/audio/sfx/GUI_rollover.ogg'))
+    DirectGuiGlobals.setDefaultClickSound(base.loadSfx('phase_3/audio/sfx/GUI_create_toon_fwd.ogg'))
 else:
     music = None
 import ToontownLoader
@@ -103,7 +107,7 @@ del version
 base.loader = base.loader
 __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
-if autoRun and launcher.isDummy() and (not Thread.isTrueThreads() or __name__ == '__main__'):
+if autoRun:
     try:
         run()
     except SystemExit:

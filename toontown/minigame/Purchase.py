@@ -1,4 +1,6 @@
 from PurchaseBase import *
+from otp.nametag.NametagFloat2d import *
+from otp.nametag import NametagGlobals
 from direct.task.Task import Task
 from toontown.toon import ToonHead
 from toontown.toonbase import ToontownTimer
@@ -70,7 +72,7 @@ class Purchase(PurchaseBase):
          purchaseModels.find('**/PurchScrn_BTN_RLVR'),
          purchaseModels.find('**/PurchScrn_BTN_UP')), text=TTLocalizer.GagShopBackToPlayground, text_fg=(0, 0.1, 0.7, 1), text_scale=0.05, text_pos=(0, 0.015, 0), image3_color=Vec4(0.6, 0.6, 0.6, 1), text3_fg=Vec4(0, 0, 0.4, 1), command=self.__handleBackToPlayground)
         self.timer = ToontownTimer.ToontownTimer()
-        self.timer.reparentTo(self.frame)
+        self.timer.hide()
         self.timer.posInTopRightCorner()
         numAvs = 0
         count = 0
@@ -141,9 +143,9 @@ class Purchase(PurchaseBase):
         self.convertingVotesToBeansLabel.hide()
         self.rewardDoubledJellybeanLabel = DirectLabel(text=TTLocalizer.PartyRewardDoubledJellybean, text_fg=(1.0, 0.125, 0.125, 1.0), text_shadow=(0, 0, 0, 1), relief=None, pos=(0.0, 0, -0.67), scale=0.08)
         self.rewardDoubledJellybeanLabel.hide()
-        self.countSound = base.loadSfx('phase_3.5/audio/sfx/tick_counter.mp3')
-        self.overMaxSound = base.loadSfx('phase_3.5/audio/sfx/AV_collision.mp3')
-        self.celebrateSound = base.loadSfx('phase_4/audio/sfx/MG_win.mp3')
+        self.countSound = base.loadSfx('phase_3.5/audio/sfx/tick_counter.ogg')
+        self.overMaxSound = base.loadSfx('phase_3.5/audio/sfx/AV_collision.ogg')
+        self.celebrateSound = base.loadSfx('phase_4/audio/sfx/MG_win.ogg')
         return
 
     def unload(self):
@@ -163,6 +165,7 @@ class Purchase(PurchaseBase):
         self.backToPlayground.destroy()
         del self.backToPlayground
         self.timer.stop()
+        self.timer.destroy()
         del self.timer
         for counter in self.counters:
             counter.destroy()
@@ -426,7 +429,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, toonId in zip(self.counters, self.ids):
-            curCount = int(triglerp(0, counter.max, t))
+            curCount = int(t * counter.max)
             if curCount != counter.count:
                 self._changeCounterUp(task, counter, curCount, toonId)
 
@@ -475,7 +478,7 @@ class Purchase(PurchaseBase):
             return Task.done
         t = (now - startT) / task.duration
         for counter, total, toonId in zip(self.counters, self.totalCounters, self.ids):
-            curCount = int(triglerp(counter.max, 0, t))
+            curCount = int(counter.max * (1 - t))
             if curCount != counter.count:
                 self._changeCounterDown(task, counter, curCount, total, toonId)
 
@@ -618,6 +621,7 @@ class Purchase(PurchaseBase):
             return
         if not self.tutorialMode:
             if not config.GetBool('disable-purchase-timer', 0):
+                self.timer.show()
                 self.timer.countdown(self.remain, self.__timerExpired)
             if config.GetBool('metagame-disable-playAgain', 0):
                 if self.metagameRound > -1:
@@ -725,12 +729,12 @@ class PurchaseHeadFrame(DirectFrame):
         self.tag2Node = NametagFloat2d()
         self.tag2Node.setContents(Nametag.CName)
         self.av.nametag.addNametag(self.tag2Node)
-        self.tag2 = self.attachNewNode(self.tag2Node.upcastToPandaNode())
+        self.tag2 = self.attachNewNode(self.tag2Node)
         self.tag2.setPosHprScale(-0.22, 10.0, 0.12, 0, 0, 0, 0.046, 0.046, 0.046)
         self.tag1Node = NametagFloat2d()
         self.tag1Node.setContents(Nametag.CSpeech | Nametag.CThought)
         self.av.nametag.addNametag(self.tag1Node)
-        self.tag1 = self.attachNewNode(self.tag1Node.upcastToPandaNode())
+        self.tag1 = self.attachNewNode(self.tag1Node)
         self.tag1.setPosHprScale(-0.15, 0, -0.1, 0, 0, 0, 0.046, 0.046, 0.046)
         self.hide()
         return

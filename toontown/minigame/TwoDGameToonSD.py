@@ -64,7 +64,7 @@ class TwoDGameToonSD(StateData.StateData):
             self.toon.pose(anim, 0)
 
         self.battleMgr = TwoDBattleMgr.TwoDBattleMgr(self.game, self.toon)
-        self.squishSound = base.loadSfx('phase_3.5/audio/dial/AV_' + self.toon.style.getAnimal() + '_exclaim.mp3')
+        self.squishSound = base.loadSfx('phase_3.5/audio/dial/AV_' + self.toon.style.getAnimal() + '_exclaim.ogg')
 
     def destroy(self):
         if self.fallBackIval != None:
@@ -281,8 +281,8 @@ class TwoDGameToonSD(StateData.StateData):
             self.scoreText.setColor(r, g, b, a)
             self.scoreText.setDepthTest(0)
             self.scoreText.setDepthWrite(0)
-            seq = Task.sequence(self.scoreText.lerpPos(Point3(0, 0, self.toon.height + 2), 0.5, blendType='easeOut'), self.scoreText.lerpColor(Vec4(r, g, b, a), Vec4(r, g, b, 0), 0.25), Task(self.hideScoreTextTask))
-            taskMgr.add(seq, self.game.uniqueName('scoreText'))
+            seq = Sequence(self.scoreText.posInterval(0.5, Point3(0, 0, self.toon.height + 2), blendType='easeOut'), self.scoreText.colorInterval(0.25, Vec4(r, g, b, 0)), Task(self.hideScoreText))
+            seq.start()
 
     def hideScoreText(self):
         if self.scoreText:
@@ -290,7 +290,3 @@ class TwoDGameToonSD(StateData.StateData):
             self.scoreText.removeNode()
             self.scoreText = None
         return
-
-    def hideScoreTextTask(self, task):
-        self.hideScoreText()
-        return Task.done

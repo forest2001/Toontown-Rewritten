@@ -28,7 +28,7 @@ class DirectRegion(NodePath):
         pass
 
     def hide(self):
-        NodePath.NodePath.hide(self)
+        NodePath.hide(self)
 
     def load(self):
         if not hasattr(self, 'cRender'):
@@ -193,7 +193,7 @@ class SpecialsPhoto(NodePath):
             self.background.reparentTo(self.specialsFrame)
 
     def hide(self):
-        NodePath.NodePath.hide(self)
+        NodePath.hide(self)
         if hasattr(self, 'specialsDisplayRegion'):
             self.specialsDisplayRegion.unload()
         if hasattr(self, 'background'):

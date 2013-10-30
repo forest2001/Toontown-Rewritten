@@ -1,5 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
+from otp.nametag.NametagFloat3d import NametagFloat3d
+from otp.nametag.Nametag import Nametag
 from toontown.toonbase.ToonBaseGlobal import *
 from DistributedMinigame import *
 from direct.distributed.ClockDelta import *
@@ -109,17 +111,17 @@ class DistributedCannonGame(DistributedMinigame):
         purchaseModels = loader.loadModel('phase_4/models/gui/purchase_gui')
         self.jarImage = purchaseModels.find('**/Jar')
         self.jarImage.reparentTo(hidden)
-        self.rewardPanel = DirectLabel(parent=hidden, relief=None, pos=(1.16, 0.0, 0.45), scale=0.65, text='', text_scale=0.2, text_fg=(0.95, 0.95, 0, 1), text_pos=(0, -.13), text_font=ToontownGlobals.getSignFont(), image=self.jarImage)
+        self.rewardPanel = DirectLabel(parent=hidden, relief=None, pos=(-0.173, 0.0, -0.55), scale=0.65, text='', text_scale=0.2, text_fg=(0.95, 0.95, 0, 1), text_pos=(0, -.13), text_font=ToontownGlobals.getSignFont(), image=self.jarImage)
         self.rewardPanelTitle = DirectLabel(parent=self.rewardPanel, relief=None, pos=(0, 0, 0.06), scale=0.08, text=TTLocalizer.CannonGameReward, text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1))
-        self.music = base.loadMusic('phase_4/audio/bgm/MG_cannon_game.mid')
-        self.sndCannonMove = base.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.mp3')
-        self.sndCannonFire = base.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.mp3')
-        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
-        self.sndHitTower = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_tower.mp3')
-        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.mp3')
-        self.sndWhizz = base.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.mp3')
-        self.sndWin = base.loadSfx('phase_4/audio/sfx/MG_win.mp3')
-        self.sndRewardTick = base.loadSfx('phase_3.5/audio/sfx/tick_counter.mp3')
+        self.music = base.loadMusic('phase_4/audio/bgm/MG_cannon_game.ogg')
+        self.sndCannonMove = base.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.ogg')
+        self.sndCannonFire = base.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
+        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
+        self.sndHitTower = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_tower.ogg')
+        self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.ogg')
+        self.sndWhizz = base.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.ogg')
+        self.sndWin = base.loadSfx('phase_4/audio/sfx/MG_win.ogg')
+        self.sndRewardTick = base.loadSfx('phase_3.5/audio/sfx/tick_counter.ogg')
         guiModel = 'phase_4/models/gui/cannon_game_gui'
         cannonGui = loader.loadModel(guiModel)
         self.aimPad = DirectFrame(image=cannonGui.find('**/CannonFire_PAD'), relief=None, pos=(0.7, 0, -0.553333), scale=0.8)
@@ -348,7 +350,7 @@ class DistributedCannonGame(DistributedMinigame):
         tag.setBillboardOffset(0)
         tag.setAvatar(head)
         toon.nametag.addNametag(tag)
-        tagPath = head.attachNewNode(tag.upcastToPandaNode())
+        tagPath = head.attachNewNode(tag)
         tagPath.setPos(0, 0, 1)
         head.tag = tag
         self.__loadToonInCannon(avId)
@@ -365,7 +367,7 @@ class DistributedCannonGame(DistributedMinigame):
         if not base.config.GetBool('endless-cannon-game', 0):
             self.timer.show()
             self.timer.countdown(CannonGameGlobals.GameTime, self.__gameTimerExpired)
-        self.rewardPanel.reparentTo(aspect2d)
+        self.rewardPanel.reparentTo(base.a2dTopRight)
         self.scoreMult = MinigameGlobals.getScoreMult(self.cr.playGame.hood.id)
         self.__startRewardCountdown()
         self.airborneToons = 0
@@ -693,23 +695,13 @@ class DistributedCannonGame(DistributedMinigame):
          trajectory,
          towerList))
         timeOfImpact, hitWhat = self.__calcToonImpact(trajectory, towerList)
-        return {'startPos': startPos,
-         'startHpr': startHpr,
-         'startVel': startVel,
-         'trajectory': trajectory,
-         'timeOfImpact': timeOfImpact,
-         'hitWhat': hitWhat}
+        return startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat
 
     def __fireCannonTask(self, task):
         launchTime = task.fireTime
         avId = task.avId
         self.notify.debug('FIRING CANNON FOR AVATAR ' + str(avId))
-        flightResults = self.__calcFlightResults(avId, launchTime)
-        if not isClient():
-            print 'EXECWARNING DistributedCannonGame: %s' % flightResults
-            printStack()
-        for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+        startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat = self.__calcFlightResults(avId, launchTime)
 
         self.notify.debug('start position: ' + str(startPos))
         self.notify.debug('start velocity: ' + str(startVel))
@@ -918,6 +910,7 @@ class DistributedCannonGame(DistributedMinigame):
         self.T_LONGVIEW2TOONHEAD = 2
         self.T_TOONHEAD = 2
         self.T_TOONHEAD2CANNONBACK = 2
+        self.__introCameraInterval = None
         taskLookInWater = Task(self.__taskLookInWater)
         taskPullBackFromWater = Task(self.__taskPullBackFromWater)
         taskFlyUpToToon = Task(self.__flyUpToToon)
@@ -932,7 +925,8 @@ class DistributedCannonGame(DistributedMinigame):
 
     def __stopIntro(self):
         taskMgr.remove(self.INTRO_TASK_NAME)
-        taskMgr.remove(self.INTRO_TASK_NAME_CAMERA_LERP)
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
         camera.wrtReparentTo(render)
 
     def __spawnCameraLookAtLerp(self, targetPos, targetLookAt, duration):
@@ -943,7 +937,10 @@ class DistributedCannonGame(DistributedMinigame):
         targetHpr = camera.getHpr()
         camera.setPos(oldPos)
         camera.setHpr(oldHpr)
-        camera.lerpPosHpr(Point3(targetPos), targetHpr, duration, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
+        self.__introCameraInterval = camera.posHprInterval(duration, Point3(targetPos), targetHpr, blendType='easeInOut')
+        self.__introCameraInterval.start()
 
     def __taskLookInWater(self, task):
         task.data['cannonCenter'] = Point3(0, CANNON_Y, CANNON_Z)
@@ -988,6 +985,10 @@ class DistributedCannonGame(DistributedMinigame):
         camera.reparentTo(lerpNode)
         camera.setPos(relCamPos)
         camera.setHpr(relCamHpr)
-        lerpNode.lerpHpr(endRotation, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
-        camera.lerpPos(endPos, self.T_TOONHEAD2CANNONBACK, blendType='easeInOut', task=self.INTRO_TASK_NAME_CAMERA_LERP)
+        if self.__introCameraInterval:
+            self.__introCameraInterval.finish()
+        self.__introCameraInterval = Parallel(
+            lerpNode.hprInterval(self.T_TOONHEAD2CANNONBACK, endRotation, blendType='easeInOut'),
+            camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut'))
+        self.__introCameraInterval.start()
         return Task.done

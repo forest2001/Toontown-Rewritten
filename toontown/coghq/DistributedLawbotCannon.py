@@ -128,10 +128,10 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         self.cannon.reparentTo(self.nodePath)
         self.kartColNode = CollisionNode(self.uniqueName('KartColNode'))
         self.kartNode = self.nodePath.attachNewNode(self.kartColNode)
-        self.sndCannonMove = base.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.mp3')
-        self.sndCannonFire = base.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.mp3')
-        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.mp3')
-        self.sndHitChair = base.loadSfx('phase_11/audio/sfx/LB_toon_jury.mp3')
+        self.sndCannonMove = base.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.ogg')
+        self.sndCannonFire = base.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
+        self.sndHitGround = base.loadSfx('phase_4/audio/sfx/MG_cannon_hit_dirt.ogg')
+        self.sndHitChair = base.loadSfx('phase_11/audio/sfx/LB_toon_jury.ogg')
         self.cannon.hide()
         self.flashingLabel = None
         return
@@ -668,9 +668,6 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         if self.toonHead == None or not self.boss.state == 'BattleTwo':
             return Task.done
         flightResults = self.__calcFlightResults(avId, launchTime)
-        if not isClient():
-            print 'EXECWARNING DistributedLawbotCannon: %s' % flightResults
-            printStack()
         for key in flightResults:
             exec "%s = flightResults['%s']" % (key, key)
 

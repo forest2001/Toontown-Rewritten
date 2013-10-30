@@ -16,9 +16,21 @@ speedChatStyles = ((2000,
   (200 / 255.0, 60 / 255.0, 229 / 255.0),
   (200 / 255.0, 135 / 255.0, 255 / 255.0),
   (220 / 255.0, 195 / 255.0, 229 / 255.0)),
+ (2012,
+  (142 / 255.0, 151 / 255.0, 230 / 255.0),
+  (173 / 255.0, 180 / 255.0, 237 / 255.0),
+  (220 / 255.0, 195 / 255.0, 229 / 255.0)),
  (2001,
   (0 / 255.0, 0 / 255.0, 255 / 255.0),
   (140 / 255.0, 150 / 255.0, 235 / 255.0),
+  (201 / 255.0, 215 / 255.0, 255 / 255.0)),
+ (2010,
+  (0 / 255.0, 119 / 255.0, 190 / 255.0),
+  (53 / 255.0, 180 / 255.0, 255 / 255.0),
+  (201 / 255.0, 215 / 255.0, 255 / 255.0)),
+ (2014,
+  (0 / 255.0, 64 / 255.0, 128 / 255.0),
+  (0 / 255.0, 64 / 255.0, 128 / 255.0),
   (201 / 255.0, 215 / 255.0, 255 / 255.0)),
  (2002,
   (90 / 255.0, 175 / 255.0, 225 / 255.0),
@@ -32,6 +44,10 @@ speedChatStyles = ((2000,
   (0 / 255.0, 200 / 255.0, 70 / 255.0),
   (0 / 255.0, 200 / 255.0, 80 / 255.0),
   (204 / 255.0, 255 / 255.0, 204 / 255.0)),
+ (2015,
+  (13 / 255.0, 255 / 255.0, 100 / 255.0),
+  (64 / 255.0, 255 / 255.0, 131 / 255.0),
+  (204 / 255.0, 255 / 255.0, 204 / 255.0)),
  (2005,
   (235 / 255.0, 230 / 255.0, 0 / 255.0),
   (255 / 255.0, 250 / 255.0, 100 / 255.0),
@@ -40,9 +56,21 @@ speedChatStyles = ((2000,
   (255 / 255.0, 153 / 255.0, 0 / 255.0),
   (229 / 255.0, 147 / 255.0, 0 / 255.0),
   (255 / 255.0, 234 / 255.0, 204 / 255.0)),
+ (2011,
+  (255 / 255.0, 177 / 255.0, 62 / 255.0),
+  (255 / 255.0, 200 / 255.0, 117 / 255.0),
+  (255 / 255.0, 234 / 255.0, 204 / 255.0)),
  (2007,
   (255 / 255.0, 0 / 255.0, 50 / 255.0),
   (229 / 255.0, 0 / 255.0, 50 / 255.0),
+  (255 / 255.0, 204 / 255.0, 204 / 255.0)),
+ (2013,
+  (130 / 255.0, 0 / 255.0, 26 / 255.0),
+  (179 / 255.0, 0 / 255.0, 50 / 255.0),
+  (255 / 255.0, 204 / 255.0, 204 / 255.0)),
+ (2016,
+  (176 / 255.0, 35 / 255.0, 0 / 255.0),
+  (240 / 255.0, 48 / 255.0, 0 / 255.0),
   (255 / 255.0, 204 / 255.0, 204 / 255.0)),
  (2008,
   (255 / 255.0, 153 / 255.0, 193 / 255.0),
@@ -122,9 +150,6 @@ class OptionsTabPage(DirectFrame):
     DisplaySettingsDelay = 60
     ChangeDisplaySettings = base.config.GetBool('change-display-settings', 1)
     ChangeDisplayAPI = base.config.GetBool('change-display-api', 0)
-    DisplaySettingsApiMap = {'OpenGL': Settings.GL,
-     'DirectX7': Settings.DX7,
-     'DirectX8': Settings.DX8}
 
     def __init__(self, parent = aspect2d):
         self.parent = parent
@@ -215,8 +240,6 @@ class OptionsTabPage(DirectFrame):
     def exit(self):
         self.ignore('confirmDone')
         self.hide()
-        if self.settingsChanged != 0:
-            Settings.writeSettings()
         self.speedChatStyleText.exit()
         if self.displaySettingsChanged:
             taskMgr.doMethodLater(self.DisplaySettingsDelay, self.writeDisplaySettings, self.DisplaySettingsTaskName)
@@ -258,10 +281,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.musicActive:
             base.enableMusic(0)
-            Settings.setMusic(0)
         else:
             base.enableMusic(1)
-            Settings.setMusic(1)
         self.settingsChanged = 1
         self.__setMusicButton()
 
@@ -277,10 +298,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.sfxActive:
             base.enableSoundEffects(0)
-            Settings.setSfx(0)
         else:
             base.enableSoundEffects(1)
-            Settings.setSfx(1)
         self.settingsChanged = 1
         self.__setSoundFXButton()
 
@@ -288,10 +307,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.toonChatSounds:
             base.toonChatSounds = 0
-            Settings.setToonChatSounds(0)
         else:
             base.toonChatSounds = 1
-            Settings.setToonChatSounds(1)
         self.settingsChanged = 1
         self.__setToonChatSoundsButton()
 
@@ -322,10 +339,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNewFriends:
             base.localAvatar.acceptingNewFriends = 0
-            Settings.setAcceptingNewFriends(0)
         else:
             base.localAvatar.acceptingNewFriends = 1
-            Settings.setAcceptingNewFriends(1)
         self.settingsChanged = 1
         self.__setAcceptFriendsButton()
 
@@ -333,10 +348,8 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNonFriendWhispers:
             base.localAvatar.acceptingNonFriendWhispers = 0
-            Settings.setAcceptingNonFriendWhispers(0)
         else:
             base.localAvatar.acceptingNonFriendWhispers = 1
-            Settings.setAcceptingNonFriendWhispers(1)
         self.settingsChanged = 1
         self.__setAcceptWhispersButton()
 
@@ -438,17 +451,6 @@ class OptionsTabPage(DirectFrame):
          self.displaySettingsFullscreen,
          self.displaySettingsEmbedded,
          self.displaySettingsApi))
-        Settings.setResolutionDimensions(self.displaySettingsSize[0], self.displaySettingsSize[1])
-        Settings.setWindowedMode(not self.displaySettingsFullscreen)
-        Settings.setEmbeddedMode(self.displaySettingsEmbedded)
-        if self.displaySettingsApiChanged:
-            api = self.DisplaySettingsApiMap.get(self.displaySettingsApi)
-            if api == None:
-                self.notify.warning('Cannot save unknown display API: %s' % self.displaySettingsApi)
-            else:
-                Settings.setDisplayDriver(api)
-        Settings.writeSettings()
-        self.displaySettingsChanged = 0
         return Task.done
 
     def __handleExitShowWithConfirm(self):
@@ -490,8 +492,8 @@ class CodesTabPage(DirectFrame):
         self.resultPanelSuccessGui = cdrGui.find('**/tt_t_gui_sbk_cdrResultPanel_success')
         self.resultPanelFailureGui = cdrGui.find('**/tt_t_gui_sbk_cdrResultPanel_failure')
         self.resultPanelErrorGui = cdrGui.find('**/tt_t_gui_sbk_cdrResultPanel_error')
-        self.successSfx = base.loadSfx('phase_3.5/audio/sfx/tt_s_gui_sbk_cdrSuccess.mp3')
-        self.failureSfx = base.loadSfx('phase_3.5/audio/sfx/tt_s_gui_sbk_cdrFailure.mp3')
+        self.successSfx = base.loadSfx('phase_3.5/audio/sfx/tt_s_gui_sbk_cdrSuccess.ogg')
+        self.failureSfx = base.loadSfx('phase_3.5/audio/sfx/tt_s_gui_sbk_cdrFailure.ogg')
         self.instructionPanel = DirectFrame(parent=self, relief=None, image=instructionGui, image_scale=0.8, text=TTLocalizer.CdrInstructions, text_pos=TTLocalizer.OPCodesInstructionPanelTextPos, text_align=TextNode.ACenter, text_scale=TTLocalizer.OPCodesResultPanelTextScale, text_wordwrap=TTLocalizer.OPCodesInstructionPanelTextWordWrap, pos=(-0.429, 0, -0.05))
         self.codeBox = DirectFrame(parent=self, relief=None, image=codeBoxGui, pos=(0.433, 0, 0.35))
         self.flippyFrame = DirectFrame(parent=self, relief=None, image=flippyGui, pos=(0.44, 0, -0.353))

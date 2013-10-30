@@ -9,6 +9,7 @@ from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
 from otp.chat import TalkAssistant
+from otp.nametag.NametagConstants import *
 import Toon
 from direct.task.Task import Task
 from direct.distributed import DistributedSmoothNode
@@ -192,7 +193,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             soundSequence.finish()
 
         self.soundSequenceList = []
-        self._stopZombieCheck()
         if self.boardingParty:
             self.boardingParty.demandDrop()
             self.boardingParty = None
@@ -254,7 +254,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.announceGenerate(self)
         if self.animFSM.getCurrentState().getName() == 'off':
             self.setAnimState('neutral')
-        self._startZombieCheck()
 
     def _handleClientCleanup(self):
         if self.track != None:
@@ -2521,8 +2520,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Task.sequence(self.hpText.lerpPos(Point3(0, 0, self.height + 1.5), 1.0, blendType='easeOut'), Task.pause(0.85), self.hpText.lerpColor(Vec4(r, g, b, a), Vec4(r, g, b, 0), 0.1), Task(self.hideHpTextTask))
-                taskMgr.add(seq, self.uniqueName('hpText'))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq.start()
 
     def setName(self, name = 'unknownDistributedAvatar'):
         DistributedPlayer.DistributedPlayer.setName(self, name)
@@ -2587,28 +2586,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if hasattr(self, 'gmIcon') and self.gmIcon:
             self.gmIcon.detachNode()
             del self.gmIcon
-
-    def _startZombieCheck(self):
-        self._zombieCheckSerialGen = SerialNumGen(random.randrange(1 << 31))
-        taskMgr.doMethodLater(2.0 + 60.0 * random.random(), self._doZombieCheck, self._getZombieCheckTaskName())
-
-    def _stopZombieCheck(self):
-        taskMgr.remove(self._getZombieCheckTaskName())
-
-    def _getZombieCheckTaskName(self):
-        return self.uniqueName('zombieCheck')
-
-    def _doZombieCheck(self, task = None):
-        self._lastZombieContext = self._zombieCheckSerialGen.next()
-        self.cr.timeManager.checkAvOnDistrict(self, self._lastZombieContext)
-        taskMgr.doMethodLater(60.0, self._doZombieCheck, self._getZombieCheckTaskName())
-
-    def _zombieCheckResult(self, context, present):
-        if context == self._lastZombieContext:
-            print '_zombieCheckResult[%s]: %s' % (self.doId, present)
-            if not present:
-                self.notify.warning('hiding av %s because they are not on the district!' % self.doId)
-                self.setParent(OTPGlobals.SPHidden)
 
     def ping(self, val):
         module = ''

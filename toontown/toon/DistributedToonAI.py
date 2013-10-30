@@ -224,7 +224,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedPlayerAI.DistributedPlayerAI.announceGenerate(self)
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.announceGenerate(self)
         if self.isPlayerControlled():
-            self._doDbCheck()
             if self.WantOldGMNameBan:
                 self._checkOldGMName()
             messenger.send('avatarEntered', [self])
@@ -246,65 +245,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.b_setShoesList(self.shoesList)
                 self.b_setShoes(0, 0, 0)
         self.startPing()
-
-    def _doDbCheck(self, task = None):
-        self._dbCheckDoLater = None
-        self.air.sendQueryToonMaxHp(self.doId, self._handleDbCheckResult)
-        return Task.done
-
-    def _doDbCheckBan(self, desc):
-        if self.BanOnDbCheckFail:
-            self.ban(desc)
-        else:
-            self.air.writeServerEvent('suspicious', self.doId, desc)
-        self.requestDelete()
-
-    def _handleDbCheckResult(self, result):
-        if not self.isGenerated():
-            return
-        if result is None:
-            self._doDbCheckBan('toon %s not present in the database' % self.doId)
-        else:
-            self.air.securityMgr.getAccountId(self.doId, self._handleDbCheckGetAccountResult)
-        return
-
-    def _handleDbCheckGetAccountResult(self, accountId):
-        if not self.isGenerated():
-            return
-        if accountId is None:
-            self._renewDoLater()
-        else:
-            self.air.sendFieldQuery('AccountAI', 'ACCOUNT_AV_SET', accountId, self._handleDbCheckGetAvSetResult)
-            if DistributedToonAI.DbCheckAccountDateEnable:
-                self.air.sendFieldQuery('AccountAI', 'CREATED', accountId, self._handleDbCheckAccountCreatedResult)
-        return
-
-    def _handleDbCheckGetAvSetResult(self, avSet):
-        if not self.isGenerated():
-            return
-        renewDoLater = True
-        if avSet is None:
-            self._doDbCheckBan("toon %s's account has no ACCOUNT_AV_SET in the DB" % self.doId)
-            renewDoLater = False
-        elif self.doId not in avSet:
-            self._doDbCheckBan('toon %s not in ACCOUNT_AV_SET in the DB' % self.doId)
-            renewDoLater = False
-        self._renewDoLater(renewDoLater)
-        return
-
-    def _handleDbCheckAccountCreatedResult(self, created):
-        if not self.isGenerated():
-            return
-        if created is None:
-            self._doDbCheckBan("toon %s's account has no CREATED in the DB" % self.doId)
-        elif created >= DistributedToonAI.DbCheckAccountDateBegin:
-            msg = 'account created during invalid period (toon) %s' % created
-            if DistributedToonAI.DbCheckAccountDateDisconnect:
-                self.disconnect()
-                msg += ', disconnecting'
-            self.air.writeServerEvent('account', self.doId, msg)
-            self.notify.warning('%s ' % self.doId + msg)
-        return
 
     def _renewDoLater(self, renew = True):
         if renew:

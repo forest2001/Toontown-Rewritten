@@ -80,12 +80,12 @@ def getLineOfTokens(gen):
             nextNeg = 1
         elif token[0] == tokenize.NUMBER:
             if nextNeg:
-                tokens.append(-eval(token[1]))
+                tokens.append(-float(token[1]))
                 nextNeg = 0
             else:
-                tokens.append(eval(token[1]))
+                tokens.append(float(token[1]))
         elif token[0] == tokenize.STRING:
-            tokens.append(eval(token[1]))
+            tokens.append(token[1])
         elif token[0] == tokenize.NAME:
             tokens.append(token[1])
         else:
@@ -878,7 +878,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
     def parseAddInventory(self, line):
         token, track, level, number = line
         inventory = self.getVar('inventory')
-        countSound = base.loadSfx('phase_3.5/audio/sfx/tick_counter.mp3')
+        countSound = base.loadSfx('phase_3.5/audio/sfx/tick_counter.ogg')
         return Sequence(Func(base.playSfx, countSound), Func(inventory.buttonBoing, track, level), Func(inventory.addItems, track, level, number), Func(inventory.updateGUI, track, level))
 
     def parseSetInventory(self, line):
@@ -1067,13 +1067,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
 
 searchPath = DSearchPath()
-if AppRunnerGlobal.appRunner:
-    searchPath.appendDirectory(Filename.expandFrom('$TT_3_ROOT/phase_3/etc'))
-else:
-    searchPath.appendDirectory(Filename('phase_3/etc'))
-    searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TOONTOWN/src/quest')))
-    searchPath.appendDirectory(Filename.fromOsSpecific('toontown/src/quest'))
-    searchPath.appendDirectory(Filename('.'))
+if __debug__:
+    searchPath.appendDirectory(Filename('resources/phase_3/etc'))
+searchPath.appendDirectory(Filename('/phase_3/etc'))
 scriptFile = Filename('QuestScripts.txt')
 found = vfs.resolveFilename(scriptFile, searchPath)
 if not found:

@@ -107,7 +107,7 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
             if origAnimName in self.AnimsUsingWav:
                 theSound = loader.loadSfx(fullPath + '.wav')
             else:
-                theSound = loader.loadSfx(fullPath + '.mp3')
+                theSound = loader.loadSfx(fullPath + '.ogg')
             self.origAnimNameToSound[origAnimName] = theSound
         if theSound:
             soundDur = theSound.length()

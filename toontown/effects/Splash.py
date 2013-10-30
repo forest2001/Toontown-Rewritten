@@ -19,7 +19,7 @@ class Splash(NodePath):
         self.splashdown.setBin('fixed', 130, 1)
         self.ripples = Ripples(self)
         self.ripples.setBin('fixed', 120, 1)
-        self.wantParticles = wantParticles
+        self.wantParticles = 0 # TODO: PARTICLETODO
         if self.wantParticles:
             self.pSystem = BattleParticles.createParticleEffect('SplashLines')
             self.pSystem.setScale(0.4)

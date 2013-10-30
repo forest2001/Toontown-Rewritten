@@ -102,8 +102,8 @@ class PartyCog(FSM):
         self.splat = globalPropPool.getProp(splatName)
         self.splat.setBillboardPointEye()
         self.splatType = globalPropPool.getPropType(splatName)
-        self.pieHitSound = globalBattleSoundCache.getSound('AA_wholepie_only.mp3')
-        self.upSound = globalBattleSoundCache.getSound('AV_jump_to_side.mp3')
+        self.pieHitSound = globalBattleSoundCache.getSound('AA_wholepie_only.ogg')
+        self.upSound = globalBattleSoundCache.getSound('AV_jump_to_side.ogg')
         self.hole = loader.loadModel('phase_13/models/parties/cogPinataHole')
         self.hole.setTransparency(True)
         self.hole.setP(-90.0)
@@ -323,12 +323,8 @@ class PartyCog(FSM):
         self.hpText.setBillboardPointEye()
         self.hpText.setBin('fixed', 100)
         self.hpText.setPos(self.root, 0, 0, self.height / 2)
-        seq = Task.sequence(self.hpText.lerpPos(Point3(self.root.getX(render), self.root.getY(render), self.root.getZ(render) + self.height + 1.0), 0.25, blendType='easeOut'), Task.pause(0.25), self.hpText.lerpColor(Vec4(r, g, b, a), Vec4(r, g, b, 0), 0.1), Task.Task(self.__hideHitScoreTask))
-        taskMgr.add(seq, 'PartyCogHpText' + str(self.id))
-
-    def __hideHitScoreTask(self, task):
-        self.hideHitScore()
-        return Task.done
+        seq = Sequence(self.hpText.posInterval(0.25, Point3(self.root.getX(render), self.root.getY(render), self.root.getZ(render) + self.height + 1.0), blendType='easeOut'), Wait(0.25), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.__hideHitScore))
+        seq.start()
 
     def hideHitScore(self):
         if self.hpText:

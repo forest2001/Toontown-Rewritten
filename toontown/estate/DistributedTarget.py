@@ -51,7 +51,7 @@ class DistributedTarget(DistributedObject.DistributedObject):
         self.geom.setPos(0, 0, 40)
         self.geom.setScale(3)
         self.geom.stash()
-        self.hitSound = base.loadSfx('phase_4/audio/sfx/MG_Tag_A.mp3')
+        self.hitSound = base.loadSfx('phase_4/audio/sfx/MG_Tag_A.ogg')
         self.rewardSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
         self.scoreText = TextNode('scoreText')
         self.scoreText.setTextColor(1, 0, 0, 1)
@@ -97,9 +97,9 @@ class DistributedTarget(DistributedObject.DistributedObject):
             if self.fadeTrack:
                 self.fadeTrack.pause()
             if enabled:
-                self.fadeTrack = Sequence(Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameStart), Func(self.geom.unstash), Func(self.geom.lerpColorScale, Vec4(1.0, 1.0, 1.0, 0.0), Vec4(1.0, 1.0, 1.0, 1.0), 1.0), Wait(1), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameInst))
+                self.fadeTrack = Sequence(Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameStart), Func(self.geom.unstash), self.geom.colorScaleInterval(1.0, Vec4(1.0, 1.0, 1.0, 1.0)), Wait(1), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameInst))
             else:
-                self.fadeTrack = Sequence(Func(self.geom.lerpColorScale, Vec4(1.0, 1.0, 1.0, 1.0), Vec4(1.0, 1.0, 1.0, 0.0), 1.0), Func(self.geom.stash), Func(self.hideTimer), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameEnd))
+                self.fadeTrack = Sequence(self.geom.colorScaleInterval(1.0, Vec4(1.0, 1.0, 1.0, 0.0)), Func(self.geom.stash), Func(self.hideTimer), Func(base.localAvatar.setSystemMessage, 0, TTLocalizer.EstateTargetGameEnd))
             self.fadeTrack.start()
             self.enabled = enabled
         if score != self.score:

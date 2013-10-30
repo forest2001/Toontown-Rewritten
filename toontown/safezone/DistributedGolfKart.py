@@ -41,8 +41,8 @@ class DistributedGolfKart(DistributedObject.DistributedObject):
          State.State('waitCountdown', self.enterWaitCountdown, self.exitWaitCountdown, ['waitEmpty', 'leaving']),
          State.State('leaving', self.enterLeaving, self.exitLeaving, ['entering'])], 'off', 'off')
         self.fsm.enterInitialState()
-        self.trolleyAwaySfx = base.loadSfx('phase_4/audio/sfx/SZ_trolley_away.mp3')
-        self.trolleyBellSfx = base.loadSfx('phase_4/audio/sfx/SZ_trolley_bell.mp3')
+        self.trolleyAwaySfx = base.loadSfx('phase_4/audio/sfx/SZ_trolley_away.ogg')
+        self.trolleyBellSfx = base.loadSfx('phase_4/audio/sfx/SZ_trolley_bell.ogg')
         self.__toonTracks = {}
         self.avIds = [0,
          0,
