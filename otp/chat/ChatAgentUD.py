@@ -26,12 +26,16 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 
-        self.air.writeServerEvent('chat-said', sender, message)
+        cleanMessage = message
+        for modStart, modStop in modifications:
+            cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
+
+        self.air.writeServerEvent('chat-said', sender, message, cleanMessage)
 
         # TODO: The above is probably a little too ugly for my taste... Maybe AIR
         # should be given an API for sending updates for unknown objects?
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
         dg = DistributedAvatar.aiFormatUpdate('setTalk', sender, sender,
                                               self.air.ourChannel,
-                                              [0, 0, '', message, modifications, 0])
+                                              [0, 0, '', cleanMessage, modifications, 0])
         self.air.send(dg)
