@@ -442,6 +442,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
 
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
+        self.chatAgent = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         self.csm = None # To be set by subclass.
 
     def startLeakDetector(self):
