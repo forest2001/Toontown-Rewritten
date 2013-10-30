@@ -1397,20 +1397,20 @@ SpeedChatStaticTextToontown = {100: 'Hi!',
  5320: 'These fireworks are beautiful!',
  5321: 'Nice decorations.',
  5322: 'I wish I could eat this cake!',
- 5400: "Welcome to Toontown Rewritten!"
- 5401: "I'm glad Toontown is back."
- 5401: "Found any bugs yet?" 
- 5402: "How many times have you crashed?"
- 5403: "Have you voted for the next update yet?"
- 5404: "Do you have a Toonbook?"
- 5405: "Smile! I'm livestreaming!"
- 5406: "I think I found a bug."
- 5407: "I found a bug over here."
- 5408: "Be careful! That's buggy."
- 5409: "Sorry, my game crashed."
- 5410: "I hope they fix that soon!"
- 5411: "You stink, Shockley!"
- 5412: "Sir Max is the greatest! I absolutely love these chat phrases he wrote!"  
+ 5400: "Welcome to Toontown Rewritten!",
+ 5401: "I'm glad Toontown is back.",
+ 5401: "Found any bugs yet?", 
+ 5402: "How many times have you crashed?",
+ 5403: "Have you voted for the next update yet?",
+ 5404: "Do you have a Toonbook?",
+ 5405: "Smile! I'm livestreaming!",
+ 5406: "I think I found a bug.",
+ 5407: "I found a bug over here.",
+ 5408: "Be careful! That's buggy.",
+ 5409: "Sorry, my game crashed.",
+ 5410: "I hope they fix that soon!",
+ 5411: "You stink, Shockley!",
+ 5412: "Sir Max is the greatest! I absolutely love these chat phrases he wrote!",  
  10000: 'The choice is yours!',
  10001: 'Who are you voting for?',
  10002: "I'm pickin' Chicken!",
