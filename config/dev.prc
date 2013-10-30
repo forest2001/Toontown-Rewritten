@@ -1,5 +1,7 @@
 model-path resources
 
+window-title Toontown Rewritten [DEV BUILD]
+
 server-version dev
 # This is, oddly enough, in *reverse* order of their loading...
 dc-file config/toon.dc
