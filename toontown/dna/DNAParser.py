@@ -1,6 +1,6 @@
 import ply.lex as lex
 import sys, collections
-from panda3d.core import PandaNode, NodePath, Filename
+from panda3d.core import PandaNode, NodePath, Filename, DecalEffect
 from direct.showbase import Loader
 tokens = [
   'FLOAT',
@@ -28,6 +28,7 @@ reserved = {
   'color' : 'COLOR',
   'model' : 'MODEL',
   'store_node' : 'STORE_NODE',
+  'sign' : 'SIGN',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -328,7 +329,7 @@ class DNANode(DNAGroup):
         self.pos = pos
     def setHpr(self, hpr):
         self.hpr = hpr
-    def setScale(self, scape):
+    def setScale(self, scale):
         self.scale = scale
     def traverse(self, nodePath, dnaStorage):
         node = PandaNode(self.name)
@@ -354,9 +355,50 @@ class DNAProp(DNANode):
             raise NotImplemented
         node = dnaStorage.findNode(self.code)
         if not node is None:
-            nodePath = nodePath.attachNewNode(node.getNode(0), 0)
+            nodePath = node.copyTo(nodePath, 0)
             nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
             nodePath.setName(self.name)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
+
+class DNASign(DNANode):
+    def __init__(self):
+        DNANode.__init__(self, '')
+        self.code = ''
+        self.color = (0, 0, 0, 0)
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    def traverse(self, nodePath, dnaStorage):
+        decNode = nodePath.find('**/sign_decal')
+        if decNode.isEmpty():
+            decNode = nodePath.find('**/*_front')
+        if decNode.isEmpty():
+            decNode = nodePath.find('**/+GeomNode')
+        decEffect = DecalEffect.make()
+        decNode.setEffect(decEffect)
+        node = None
+        if self.code != '':
+            node = dnaStorage.findNode(self.code)
+            node = node.copyTo(decNode, 0)
+            node.setName('sign')
+        else:
+            node = ModelNode('sign')
+            node = decNode.attachNewNode(node, 0)
+        node.setDepthWrite(False, 0)
+        origin = nodePath.find('**/*sign_origin')
+        node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
+
+        for child in self.children:
+            child.traverse(node, dnaStorage)
+
+class DNASignBaseline(DNANode):
+    pass
 
 class DNALoader:
     def __init__(self):
@@ -449,8 +491,14 @@ def p_group(p):
     p[0] = p[1]
 
 def p_dnanode(p):
-    '''dnanode : prop'''
+    '''dnanode : prop
+               | sign'''
     p[0] = p[1]
+
+def p_sign(p):
+    '''sign : signdef "[" subprop_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
 
 def p_prop(p):
     '''prop : propdef "[" subprop_list "]"'''
@@ -461,6 +509,14 @@ def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
     p[0] = DNAProp(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_signdef(p):
+    '''signdef : SIGN'''
+    print 'New DNASign'
+    p[0] = DNASign()
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -556,8 +612,13 @@ def p_modelnode_list(p):
                       | empty'''
 
 def p_node(p):
-    '''node : STORE_NODE "[" string string "]"'''
-    nodePath = p.parser.nodePath.find('**/' + p[4])
+    '''node : STORE_NODE "[" string string "]"
+            | STORE_NODE "[" string string string "]"'''
+    nodePath = None
+    if len(p) == 6:
+        nodePath = p.parser.nodePath.find('**/' + p[4])
+    else:
+        nodePath = p.parser.nodePath.find('**/' + p[5])
     nodePath.setTag('DNACode', p[4])
     nodePath.setTag('DNARoot', p[3])
     p.parser.dnaStore.storeNode(nodePath, p[4])

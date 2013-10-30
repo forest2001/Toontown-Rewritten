@@ -1,6 +1,9 @@
 model "phase_3.5/models/modules/safe_zone_entrance_tunnel_TT" [
 	store_node [ "prop" "prop_safe_zone_entrance_tunnel" ]
         ]
+model "phase_3.5/models/props/tunnel_sign_orange" [
+	store_node [ "sign" "tunnel_sign_orange" "g1" ]
+	]
 
 store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
 store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
@@ -19,6 +22,11 @@ group "toontownCentralTutorial" [
 	code [ "prop_safe_zone_entrance_tunnel" ]
     pos [ 210 40 0 ]
     hpr [ -90 0 0 ]
+	sign [
+	 code [ "tunnel_sign_orange" ]
+     pos [ 0 0 -2.84 ]
+     scale [ 1.5 1 1.5 ]
+	]
    ]
   ]
  ]
