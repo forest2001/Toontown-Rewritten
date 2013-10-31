@@ -55,10 +55,14 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
     def __activateMinigame(self, task):
         players = [player for player in self.slots if player is not None]
 
-        mg = createMinigame(self.air, players, self.zoneId)
-        for player in players:
-            self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
-            self.removeFromTrolley(player)
+        if players:
+            # If all players disconnected while the trolley was departing, the
+            # players array would be empty. Therefore, we should only attempt
+            # to create a minigame if there are still players.
+            mg = createMinigame(self.air, players, self.zoneId)
+            for player in players:
+                self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
+                self.removeFromTrolley(player)
 
         self.b_setState('Entering')
         return task.done
