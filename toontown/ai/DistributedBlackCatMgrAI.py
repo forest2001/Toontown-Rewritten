@@ -16,6 +16,6 @@ class DistributedBlackCatMgrAI(DistributedObjectAI):
             newDNA.headColor = 0x1a
             newDNA.armColor = 0x1a
             newDNA.legColor = 0x1a
-            av.b_setDNAString(newDNA.makeNetString())
+            taskMgr.doMethodLater(1.0, lambda task: av.b_setDNAString(newDNA.makeNetString()), 'transform-%d' % avId)
 
         self.sendUpdate('doBlackCatTransformation', [avId])
