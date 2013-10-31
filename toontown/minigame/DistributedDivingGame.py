@@ -116,7 +116,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.music = base.loadMusic('phase_4/audio/bgm/MG_Target.ogg')
         self.addSound('dropGold', 'diving_treasure_drop_off.ogg', 'phase_4/audio/sfx/')
         self.addSound('getGold', 'diving_treasure_pick_up.ogg', 'phase_4/audio/sfx/')
-        self.swimSound = loader.loadSfx('phase_4/audio/sfx/diving_swim_loop.wav')
+        self.swimSound = loader.loadSfx('phase_4/audio/sfx/diving_swim_loop.ogg')
         self.swimSound.setVolume(0.0)
         self.swimSound.setPlayRate(1.0)
         self.swimSound.setLoop(True)

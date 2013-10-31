@@ -87,8 +87,8 @@ class DistributedPatternGame(DistributedMinigame):
         for soundName in self.ButtonSoundNames:
             self.buttonSounds.append(base.loadSfx(soundName))
 
-        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
-        self.incorrectSound = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.wav')
+        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.ogg')
+        self.incorrectSound = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.ogg')
         self.perfectSound = base.loadSfx('phase_4/audio/sfx/MG_win.ogg')
         self.fallSound = base.loadSfx('phase_4/audio/sfx/MG_Tag_A.ogg')
         self.music = base.loadMusic(self.bgm)

@@ -52,7 +52,7 @@ class DistributedTarget(DistributedObject.DistributedObject):
         self.geom.setScale(3)
         self.geom.stash()
         self.hitSound = base.loadSfx('phase_4/audio/sfx/MG_Tag_A.ogg')
-        self.rewardSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
+        self.rewardSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.ogg')
         self.scoreText = TextNode('scoreText')
         self.scoreText.setTextColor(1, 0, 0, 1)
         self.scoreText.setAlign(self.scoreText.ACenter)

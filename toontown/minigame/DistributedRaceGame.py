@@ -300,8 +300,8 @@ class DistributedRaceGame(DistributedMinigame):
          self.dice3,
          self.dice4]
         self.music = base.loadMusic('phase_4/audio/bgm/minigame_race.ogg')
-        self.posBuzzer = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
-        self.negBuzzer = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.wav')
+        self.posBuzzer = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.ogg')
+        self.negBuzzer = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.ogg')
         self.winSting = base.loadSfx('phase_4/audio/sfx/MG_win.ogg')
         self.loseSting = base.loadSfx('phase_4/audio/sfx/MG_lose.ogg')
         self.diceButtonList = []

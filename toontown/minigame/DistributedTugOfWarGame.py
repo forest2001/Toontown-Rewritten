@@ -123,7 +123,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
         ropeModel.removeNode()
         self.sky = loader.loadModel('phase_3.5/models/props/TT_sky')
         self.dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
-        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
+        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.ogg')
         self.sndHitWater = base.loadSfx('phase_4/audio/sfx/MG_cannon_splash.ogg')
         self.whistleSound = base.loadSfx('phase_4/audio/sfx/AA_sound_whistle.ogg')
         self.music = base.loadMusic(self.bgm)
