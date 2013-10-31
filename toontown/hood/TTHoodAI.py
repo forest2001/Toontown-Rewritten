@@ -1,6 +1,7 @@
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
 from toontown.toon.ToonDNA import ToonDNA
+from toontown.ai.DistributedBlackCatMgrAI import DistributedBlackCatMgrAI
 from HoodAI import HoodAI
 
 class TTHoodAI(HoodAI):
@@ -23,3 +24,6 @@ class TTHoodAI(HoodAI):
         npc.setMaxHp(15)
         npc.setPositionIndex(12)
         npc.generateWithRequired(self.SAFEZONE)
+
+        blackCatMgr = DistributedBlackCatMgrAI(self.air)
+        blackCatMgr.generateWithRequired(self.SAFEZONE)
