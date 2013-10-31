@@ -236,7 +236,7 @@ SCMenuResistance = 'UNITE!'
 SCMenuPets = 'PETS'
 SCMenuPetTricks = 'TRICKS'
 SCMenuCog = 'COG SPEAK'
-SCMenuAlpha = 'ALPHA'
+SCMenuTesting = 'TESTING'
 SCMenuBugs = 'BUGS'
 SCMenuHello = 'HELLO'
 SCMenuBye = 'GOODBYE'
@@ -1878,9 +1878,14 @@ SpeedChatStaticTextToontown = {100: 'Hi!',
  30223: 'Snowman heads are hot today!\nHappy Winter Holiday!',
  30224: "Toontown's merry, come what may!\nHappy Winter Holiday!",
  30225: 'Lure good cheer the Toontown way!\nHappy Winter Holiday!',
- 30250: 'Boo!',
- 30251: 'Happy Halloween!',
+ 30250: 'Happy Halloween!',
+ 30251: 'Boo!',
  30252: 'Spooky!',
+ 30253: 'OwoooOOo!'
+ 30254: 'Did I scare you?'
+ 30255: 'That blue dog turned me into a black cat!'
+ 30256: 'I heard that they are brainwashing toons behind that sign!'
+ 30257: 'Have you heard the story of the toons who were sent to endlessly test for bugs?'
  30275: 'Happy holidays!',
  30276: "Season's greetings!",
  30277: 'Have a Wonderful Winter!',
