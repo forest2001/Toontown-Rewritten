@@ -5,6 +5,7 @@ import random
 from toontown.launcher import DownloadForceAcknowledge
 from toontown.ai.DistributedBlackCatMgr import DistributedBlackCatMgr
 from otp.speedchat import SpeedChatGlobals
+from otp.nametag.NametagConstants import *
 
 class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
@@ -43,11 +44,18 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
                 messenger.send(DistributedBlackCatMgr.ActivateEvent)
         self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
+        def transformed():
+            for do in base.cr.doId2do.values():
+                if do.dclass.getName() == 'DistributedNPCToonBase':
+                    do.setChatAbsolute('Happy Halloween! Remember: Flip for Flippy!', CFTimeout|CFSpeech)
+        self.accept('blackcat-transformed', transformed)
+
         self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])
 
     def unload(self):
         del self.birdSound
         self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
+        self.ignore('blackcat-transformed')
         SafeZoneLoader.SafeZoneLoader.unload(self)
 
     def enter(self, requestStatus):

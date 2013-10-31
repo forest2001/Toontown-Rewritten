@@ -12,6 +12,7 @@ def getDustCloudIval(toon):
     if getattr(toon, 'laffMeter', None):
         toon.laffMeter.color = toon.style.getBlackColor()
     seq = Sequence(Wait(0.5), Func(dustCloud.reparentTo, toon), dustCloud.track, Func(dustCloud.destroy))
+    seq.append(Func(messenger.send, 'blackcat-transformed'))
     if getattr(toon, 'laffMeter', None):
         seq.append(Func(toon.laffMeter.adjustFace, toon.hp, toon.maxHp))
     return seq
