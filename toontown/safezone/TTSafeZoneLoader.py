@@ -36,7 +36,7 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
         # For the black cats:
         def phraseSaid(phraseId):
-            toontastic = 315
+            toontastic = 5700
             if phraseId == toontastic:
                 # Check distance...
                 if Vec3(base.localAvatar.getPos(npcOrigin)).length() > 5:
