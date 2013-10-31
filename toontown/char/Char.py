@@ -1,4 +1,5 @@
 from otp.avatar import Avatar
+from otp.nametag.NametagGroup import *
 from pandac.PandaModules import *
 from direct.task import Task
 import random
