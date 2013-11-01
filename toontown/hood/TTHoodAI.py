@@ -22,7 +22,7 @@ class TTHoodAI(HoodAI):
         fisherman = DistributedNPCFishermanAI(self.air, 9001)
         dna = ToonDNA()
         #dna.makeFromNetString('0f00740f02020101060106010111001111')
-        dna.newToonFromProperties('rss', 'l', 'l', 'm', 17, 0, 17, 17, 3, 3, 3, 3, 7, 2)
+        dna.newToonFromProperties('rss', 'ls', 'l', 'm', 17, 0, 17, 17, 1, 6, 1, 6, 1, 1)
         fisherman.setName('Fisherman Freddy')
         fisherman.setDNAString(dna.makeNetString())
         fisherman.setHp(15)
