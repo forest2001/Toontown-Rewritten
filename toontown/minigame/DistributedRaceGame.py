@@ -633,7 +633,9 @@ class DistributedRaceGame(DistributedMinigame):
     def showChanceCard(self, task):
         base.playSfx(task.cardSound)
         self.chanceCard.reparentTo(render)
-        self.chanceCard.posHprInterval(1.0, (19.62, 13.41, 13.14), (270, 0, -85.24), other=camera).start()
+        quat = Quat()
+        quat.setHpr((270, 0, -85.24))
+        self.chanceCard.posQuatInterval(1.0, (19.62, 13.41, 13.14), quat, other=camera).start()
         return Task.done
 
     def hideChanceMarker(self, task):
@@ -703,10 +705,11 @@ class DistributedRaceGame(DistributedMinigame):
         camera_lookat_idx = min(RaceGameGlobals.NumberToWin - 6, localToonPosition)
         posLookAt = self.posHprArray[self.localAvLane][camera_lookat_idx]
         camera.lookAt(posLookAt[0], posLookAt[1], posLookAt[2])
-        CamHpr = camera.getHpr()
+        CamQuat = Quat()
+        CamQuat.setHpr(camera.getHpr())
         camera.setPos(savedCamPos)
         camera.setHpr(savedCamHpr)
-        camera.posHprInterval(0.75, CamPos, CamHpr).start()
+        camera.posQuatInterval(0.75, CamPos, CamQuat).start()
 
     def getWalkDuration(self, squares_walked):
         walkDuration = abs(squares_walked / 1.2)
@@ -803,8 +806,10 @@ class DistributedRaceGame(DistributedMinigame):
             else:
                 avatar.setPosHpr(raceBoard, posH[0], posH[1], posH[2], posH[3], 0, 0)
 
+        posQuat = Quat()
+        posQuat.setHpr((posH[3], 0, 0))
         walkSeq = Sequence(Func(avatar.setAnimState, 'walk', 1),
-                           avatar.posHprInterval(time, posH[:3], (posH[3], 0, 0), other=self.raceBoard),
+                           avatar.posQuatInterval(time, posH[:3], posQuat, other=self.raceBoard),
                            Func(stopWalk))
         walkSeq.start()
 
@@ -819,10 +824,16 @@ class DistributedRaceGame(DistributedMinigame):
             avatar.setAnimState('neutral', 1)
             avatar.setPosHpr(raceBoard, pos3[0], pos3[1], pos3[2], pos3[3], 0, 0)
 
+        pos1Quat = Quat()
+        pos1Quat.setHpr((pos1[3], 0, 0))
+        pos2Quat = Quat()
+        pos2Quat.setHpr((pos1[3], 0, 0))
+        pos3Quat = Quat()
+        pos3Quat.setHpr((pos1[3], 0, 0))
         runSeq = Sequence(Func(avatar.setAnimState, 'run', 1),
-                          avatar.posHprInterval(time/3., pos1[:3], (pos1[3], 0, 0), other=self.raceBoard),
-                          avatar.posHprInterval(time/3., pos2[:3], (pos2[3], 0, 0), other=self.raceBoard),
-                          avatar.posHprInterval(time/3., pos3[:3], (pos3[3], 0, 0), other=self.raceBoard),
+                          avatar.posQuatInterval(time/3., pos1[:3], pos1Quat, other=self.raceBoard),
+                          avatar.posQuatInterval(time/3., pos2[:3], pos2Quat, other=self.raceBoard),
+                          avatar.posQuatInterval(time/3., pos3[:3], pos3Quat, other=self.raceBoard),
                           Func(stopRun))
         runSeq.start()
 
