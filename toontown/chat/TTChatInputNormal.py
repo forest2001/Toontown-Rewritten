@@ -35,13 +35,13 @@ class TTChatInputNormal(ChatInputNormal.ChatInputNormal):
         exec 'from toontown.toonbase.ToonBaseGlobal import *' in globals(), self.ExecNamespace
 
     def typeCallback(self, extraArgs):
-        if localAvatar.chatMgr.chatInputWhiteList.isActive():
+        if localAvatar.chatMgr.chatInputWhiteList and localAvatar.chatMgr.chatInputWhiteList.isActive():
             return
         else:
             messenger.send('enterNormalChat')
 
     def checkForOverRide(self):
         return False
-        if localAvatar.chatMgr.chatInputWhiteList.isActive():
+        if localAvatar.chatMgr.chatInputWhiteList and localAvatar.chatMgr.chatInputWhiteList.isActive():
             return True
         return False
