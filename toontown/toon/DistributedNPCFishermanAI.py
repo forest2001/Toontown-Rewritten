@@ -74,19 +74,18 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
             if av:
             
                 totalFish = av.fishCollection.__len__()
-                numTrophies = len(av.fishingTrophies)
+                trophies = int(totalFish / 10)
+                curTrophies = len(av.fishingTrophies)
                 result = False
-                if (int(totalFish / 10)) > numTrophies:
-                    newLaff = (int(totalFish / 10)) - numTrophies
-                    av.b_setMaxHp(av.getMaxHp() + newLaff)
+                if trophies > curTrophies:
+                    av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
                     av.b_setHp(av.getMaxHp())
-                    av.b_setFishingTrophies(range(int(totalFish / 10)))
-                    print totalFish / 10
+                    av.b_setFishingTrophies(range(trophies))
                     result = True
                 av.addMoney(av.fishTank.getTotalValue())
                 av.b_setFishTank([], [], [])
 
-            
+                #maybe: recreate Disney-style fishManager that does the above code?
                 #trophyResult = self.air.fishManager.creditFishTank(av)
                 #if trophyResult:
                 if result:
