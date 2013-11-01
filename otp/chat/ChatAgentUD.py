@@ -22,7 +22,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         words = message.split(' ')
         offset = 0
         for word in words:
-            if not self.whiteList.isWord(word):
+            if word and not self.whiteList.isWord(word):
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 
