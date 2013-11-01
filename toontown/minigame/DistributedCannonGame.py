@@ -934,12 +934,13 @@ class DistributedCannonGame(DistributedMinigame):
         oldHpr = camera.getHpr()
         camera.setPos(targetPos)
         camera.lookAt(targetLookAt)
-        targetHpr = camera.getHpr()
+        targetQuat = Quat()
+        targetQuat.setHpr(camera.getHpr())
         camera.setPos(oldPos)
         camera.setHpr(oldHpr)
         if self.__introCameraInterval:
             self.__introCameraInterval.finish()
-        self.__introCameraInterval = camera.posHprInterval(duration, Point3(targetPos), targetHpr, blendType='easeInOut')
+        self.__introCameraInterval = camera.posQuatInterval(duration, Point3(targetPos), targetQuat, blendType='easeInOut')
         self.__introCameraInterval.start()
 
     def __taskLookInWater(self, task):
