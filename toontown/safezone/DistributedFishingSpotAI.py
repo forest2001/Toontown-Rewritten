@@ -56,8 +56,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if self.avId != avId:
             self.air.writeServerEvent('suspicious', avId, 'Toon requested to exit a pier they\'re not on!')
             return
-        taskMgr.doMethodLater(1, DistributedFishingSpotAI.removeFromPier, 'Exit from %d' % self.doId, [self])
         self.ignore(self.air.getAvatarExitEvent(avId))
+        self.removeFromPierWithAnim()
 
     def setOccupied(self, avId):
         self.avId = avId
@@ -119,9 +119,9 @@ class DistributedFishingSpotAI(DistributedObjectAI):
 
     def removeFromPier(self):
         taskMgr.remove('timeOut%d' % self.doId)
-        taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])   
         self.cancelAnimation()
-        self.b_setOccupied(0)
+        self.d_setOccupied(0)
+        self.avId = None
         
     def removeFromPierWithAnim(self):
         taskMgr.remove('cancelAnimation%d' % self.doId)
