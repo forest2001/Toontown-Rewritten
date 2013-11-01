@@ -4,6 +4,7 @@ from direct.distributed.ClockDelta import *
 from toontown.fishing import FishingTargetGlobals
 from direct.task import Task
 import random
+import math
 
 class DistributedFishingTargetAI(DistributedNodeAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFishingTargetAI")
@@ -14,13 +15,15 @@ class DistributedFishingTargetAI(DistributedNodeAI):
         self.angle = 0
         self.targetRadius = 0
         self.time = 0
-        self.stateIndex = 0
+        self.centerPoint = [0, 0, 0]
     
     def generate(self):
         DistributedNodeAI.generate(self)
         self.updateState()
         pond = self.air.doId2do[self.pondId]
         pond.addTarget(self)
+        self.centerPoint = FishingTargetGlobals.getTargetCenter(pond.getArea())
+        
     def setPondDoId(self, pondId):
         self.pondId = pondId
         
@@ -33,14 +36,16 @@ class DistributedFishingTargetAI(DistributedNodeAI):
         self.time = time
         
     def getState(self):
-        return [self.stateIndex, self.angle, self.targetRadius, self.time, globalClockDelta.getRealNetworkTime()]
+        return [0, self.angle, self.targetRadius, self.time, globalClockDelta.getRealNetworkTime()]
         
     def updateState(self):
-        self.stateIndex += 1
+        self.b_setPosHpr(self.targetRadius * math.cos(self.angle) + self.centerPoint[0], self.targetRadius * math.sin(self.angle) + self.centerPoint[1], self.centerPoint[2], 0, 0, 0)
         self.angle = random.randrange(359)
         self.targetRadius = random.uniform(FishingTargetGlobals.getTargetRadius(self.air.doId2do[self.pondId].getArea()), 0)
         self.time = random.uniform(10.0, 5.0)
-        self.sendUpdate('setState', [self.stateIndex, self.angle, self.targetRadius, self.time, globalClockDelta.getRealNetworkTime()])
+        z = self.centerPoint[2]
+
+        self.sendUpdate('setState', [0, self.angle, self.targetRadius, self.time, globalClockDelta.getRealNetworkTime()])
         taskMgr.doMethodLater(self.time + random.uniform(5, 2.5), DistributedFishingTargetAI.updateState, 'updateFishingTarget', [self])
         
         
