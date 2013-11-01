@@ -72,7 +72,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
         if sell:
             av = simbase.air.doId2do.get(avId)
             if av:
-            
+
                 totalFish = av.fishCollection.__len__()
                 trophies = int(totalFish / 10)
                 curTrophies = len(av.fishingTrophies)

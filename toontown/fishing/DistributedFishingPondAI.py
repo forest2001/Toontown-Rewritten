@@ -9,7 +9,7 @@ class DistributedFishingPondAI(DistributedObjectAI):
         self.area = None
         self.targets = {}
         self.spots = {}
-        
+
     def hitTarget(self, target):
         avId = self.air.getAvatarIdFromSender()
         if self.targets[target] == None:
