@@ -281,7 +281,7 @@ class TwoDGameToonSD(StateData.StateData):
             self.scoreText.setColor(r, g, b, a)
             self.scoreText.setDepthTest(0)
             self.scoreText.setDepthWrite(0)
-            seq = Sequence(self.scoreText.posInterval(0.5, Point3(0, 0, self.toon.height + 2), blendType='easeOut'), self.scoreText.colorInterval(0.25, Vec4(r, g, b, 0)), Task(self.hideScoreText))
+            seq = Sequence(self.scoreText.posInterval(0.5, Point3(0, 0, self.toon.height + 2), blendType='easeOut'), self.scoreText.colorInterval(0.25, Vec4(r, g, b, 0)), Func(self.hideScoreText))
             seq.start()
 
     def hideScoreText(self):
