@@ -5,6 +5,7 @@ from otp.ai.TimeManagerAI import TimeManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
+from toontown.toon import NPCToons
 from toontown.hood.TTHoodAI import TTHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
@@ -18,6 +19,8 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
+
+        NPCToons.generateZone2NpcDict()
 
         self.hoods = []
         self.zoneDataStore = AIZoneDataStore()
