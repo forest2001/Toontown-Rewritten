@@ -24,6 +24,7 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
         self.centerPoint = (0, 0, 0)
         self.maxRadius = 1.0
         self.track = None
+        self.pondDoId = None
         return
 
     def generate(self):
@@ -46,6 +47,7 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
         del self.bubbles
         self.pond.removeTarget(self)
         self.pond = None
+        self.ignore('generate-%d' % self.pondDoId)
         DistributedNode.DistributedNode.disable(self)
         return
 
@@ -54,7 +56,14 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
         DistributedNode.DistributedNode.delete(self)
 
     def setPondDoId(self, pondDoId):
-        self.pond = base.cr.doId2do[pondDoId]
+        self.pondDoId = pondDoId
+        if pondDoId in self.cr.doId2do:
+            self.setPond(self.cr.doId2do[pondDoId])
+        else:
+            self.acceptOnce('generate-%d' % pondDoId, self.setPond)
+
+    def setPond(self, pond):
+        self.pond = pond
         self.pond.addTarget(self)
         self.centerPoint = FishingTargetGlobals.getTargetCenter(self.pond.getArea())
         self.maxRadius = FishingTargetGlobals.getTargetRadius(self.pond.getArea())
