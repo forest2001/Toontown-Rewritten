@@ -494,6 +494,7 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         for i in xrange(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
+            panel.wrtReparentTo(aspect2d)
             lerpTrack.append(Parallel(LerpPosInterval(panel, lerpDur, Point3(pos[0], 0, pos[1]), blendType='easeInOut'), LerpScaleInterval(panel, lerpDur, Vec3(panel.getScale()) * 2.0, blendType='easeInOut')))
 
         self.showScoreTrack = Parallel(lerpTrack, Sequence(Wait(IceGameGlobals.ShowScoresDuration), Func(self.gameOver)))
