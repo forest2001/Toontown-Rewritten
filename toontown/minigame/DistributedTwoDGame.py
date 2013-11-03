@@ -236,6 +236,7 @@ class DistributedTwoDGame(DistributedMinigame):
         for i in xrange(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
+            panel.wrtReparentTo(aspect2d)
             lerpTrack.append(Parallel(LerpPosInterval(panel, lerpDur, Point3(pos[0], 0, pos[1]), blendType='easeInOut'), LerpScaleInterval(panel, lerpDur, Vec3(panel.getScale()) * 1.5, blendType='easeInOut')))
 
         self.showScoreTrack = Parallel(lerpTrack, self.getElevatorCloseTrack(), Sequence(Wait(ToonBlitzGlobals.ShowScoresDuration), Func(self.gameOver)))
