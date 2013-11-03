@@ -84,7 +84,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if money < cost:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to cast without enough jellybeans!')
             return
-        if av.fishTank.__len__() >= av.getMaxFishTank():
+        if len(av.fishTank) >= av.getMaxFishTank():
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to cast with too many fish!')
             return
         av.takeMoney(cost, False)
@@ -104,7 +104,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to sell fish at a pier not in their estate!')
         av = self.air.doId2do[avId]
         result = self.air.fishManager.creditFishTank(av)
-        totalFish = av.fishCollection.__len__()
+        totalFish = len(av.fishCollection)
         self.sendUpdateToAvatarId(avId, 'sellFishComplete', [result, totalFish])
         taskMgr.remove('timeOut%d' % self.doId)
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])

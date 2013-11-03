@@ -5,7 +5,7 @@ import random
 class FishManagerAI:
         
     def creditFishTank(self, av):
-        totalFish = av.fishCollection.__len__()
+        totalFish = len(av.fishCollection)
         trophies = int(totalFish / 10)
         curTrophies = len(av.fishingTrophies)
         av.addMoney(av.fishTank.getTotalValue())
@@ -18,7 +18,7 @@ class FishManagerAI:
         return False
 
     def generateCatch(self, av, zoneId):
-        if av.fishTank.__len__() >= av.getMaxFishTank():
+        if len(av.fishTank) >= av.getMaxFishTank():
             return [FishGlobals.OverTankLimit, 0, 0, 0]
         rand = random.random() * 100.0
         for cutoff in FishGlobals.SortedProbabilityCutoffs:
