@@ -53,7 +53,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         ChatManager.ChatManager.__init__(self, cr, localAvatar)
         self.defaultToWhiteList = base.config.GetBool('white-list-is-default', 1)
         self.chatInputSpeedChat = TTChatInputSpeedChat(self)
-        self.normalPos = Vec3(-1.083, 0, 0.804)
+        self.normalPos = Vec3(0.25, 0, -0.196)
         self.whisperPos = Vec3(0.0, 0, 0.71)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
         self.chatInputWhiteList = TTChatInputWhiteList()
@@ -64,6 +64,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         else:
             self.chatInputNormal = TTChatInputNormal(self)
         self.chatInputWhiteList.setPos(self.speedChatPlusPos)
+        self.chatInputWhiteList.reparentTo(base.a2dTopLeft)
         self.chatInputWhiteList.desc = 'chatInputWhiteList'
         return
 
