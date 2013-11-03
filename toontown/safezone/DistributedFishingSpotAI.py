@@ -103,17 +103,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if self.air.doId2do[pondDoId].getArea() != ToontownGlobals.MyEstate:
             self.air.writeServerEvent('suspicioues', avId, 'Toon tried to sell fish at a pier not in their estate!')
         av = self.air.doId2do[avId]
+        result = self.air.fishManager.creditFishTank(av)
         totalFish = av.fishCollection.__len__()
-        trophies = int(totalFish / 10)
-        curTrophies = len(av.fishingTrophies)
-        result = False
-        if trophies > curTrophies:
-            av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
-            av.toonUp(av.getMaxHp())
-            av.b_setFishingTrophies(range(trophies))
-            result = True
-        av.addMoney(av.fishTank.getTotalValue())
-        av.b_setFishTank([], [], [])
         self.sendUpdateToAvatarId(avId, 'sellFishComplete', [result, totalFish])
         taskMgr.remove('timeOut%d' % self.doId)
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])
@@ -143,25 +134,10 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to fish without casting!')
             return
         av = self.air.doId2do[self.avId]
-        if av.fishTank.__len__() >= av.getMaxFishTank():
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to catch fish with too many fish, this shouldn\'t be possible!')
-            return
-        f = FishGlobals.getRandomFishVitals(self.air.doId2do[self.pondDoId].getArea(), av.getFishingRod())
-        fish = FishBase(f[1], f[2], f[3])
-        fishType = av.fishCollection.collectFish(fish)
-        if fishType == FishGlobals.COLLECT_NEW_ENTRY:
-            itemType = FishGlobals.FishItemNewEntry
-        elif fishType == FishGlobals.COLLECT_NEW_RECORD:
-            itemType = FishGlobals.FishItemNewRecord
-        else:
-            itemType = FishGlobals.FishItem
-        netlist = av.fishCollection.getNetLists()
-        av.d_setFishCollection(netlist[0], netlist[1], netlist[2])
-
-        av.fishTank.addFish(fish)
-        netlist = av.fishTank.getNetLists()
-        av.d_setFishTank(netlist[0], netlist[1], netlist[2])
-        self.d_setMovie(FishGlobals.PullInMovie, itemType, fish.getGenus(), fish.getSpecies(), fish.getWeight(), 0, 0)
+        
+        catch = self.air.fishManager.generateCatch(av, self.air.doId2do[self.pondDoId].getArea())
+        
+        self.d_setMovie(FishGlobals.PullInMovie, catch[0], catch[1], catch[2], catch[3], 0, 0)
         self.cast = False
 
 
