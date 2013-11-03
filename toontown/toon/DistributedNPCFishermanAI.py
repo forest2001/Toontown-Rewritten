@@ -79,7 +79,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
                 result = False
                 if trophies > curTrophies:
                     av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
-                    av.b_setHp(av.getMaxHp())
+                    av.toonUp(av.getMaxHp())
                     av.b_setFishingTrophies(range(trophies))
                     result = True
                 av.addMoney(av.fishTank.getTotalValue())

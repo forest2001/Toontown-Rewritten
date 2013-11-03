@@ -3,6 +3,8 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.fishing import FishGlobals
 from toontown.fishing.FishBase import FishBase
 from direct.task import Task
+from toontown.toonbase import ToontownGlobals
+
 
 
 class DistributedFishingSpotAI(DistributedObjectAI):
@@ -98,6 +100,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if self.avId != avId:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to sell fish at a pier they\'re not using!')
             return
+        if self.air.doId2do[pondDoId].getArea() != ToontownGlobals.MyEstate:
+            self.air.writeServerEvent('suspicioues', avId, 'Toon tried to sell fish at a pier not in their estate!')
         av = self.air.doId2do[avId]
         totalFish = av.fishCollection.__len__()
         trophies = int(totalFish / 10)
@@ -105,7 +109,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         result = False
         if trophies > curTrophies:
             av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
-            av.b_setHp(av.getMaxHp())
+            av.toonUp(av.getMaxHp())
             av.b_setFishingTrophies(range(trophies))
             result = True
         av.addMoney(av.fishTank.getTotalValue())
