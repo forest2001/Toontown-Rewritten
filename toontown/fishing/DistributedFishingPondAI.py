@@ -19,7 +19,7 @@ class DistributedFishingPondAI(DistributedObjectAI):
             if self.spots[spot].avId == avId:
                 self.spots[spot].rewardIfValid(target)
                 return
-
+        self.air.writeServerEvent('suspicious', avId, 'Toon tried to catch fish while not fishing!')
     def addTarget(self, target):
          self.targets[target.doId] = target
 
