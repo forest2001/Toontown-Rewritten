@@ -381,10 +381,10 @@ MinigameIDs = (RaceGameId,
  PhotoGameId,
  TravelGameId)
 MinigamePlayerMatrix = {
-    1: (CannonGameId, MazeGameId, RingGameId, TwoDGameId),
-    2: (CannonGameId, MazeGameId, PatternGameId, TagGameId, RingGameId, TwoDGameId),
-    3: (CannonGameId, MazeGameId, PatternGameId, RaceGameId, TagGameId, RingGameId, TwoDGameId),
-    4: (CannonGameId, MazeGameId, PatternGameId, RaceGameId, TagGameId, RingGameId, TwoDGameId),
+    1: (CannonGameId, MazeGameId, TugOfWarGameId, RingGameId, TwoDGameId),
+    2: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, TagGameId, RingGameId, TwoDGameId),
+    3: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, RaceGameId, TagGameId, RingGameId, TwoDGameId),
+    4: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, RaceGameId, TagGameId, RingGameId, TwoDGameId),
 }
 MinigameReleaseDates = {IceGameId: (2008, 8, 5),
  PhotoGameId: (2008, 8, 13),
