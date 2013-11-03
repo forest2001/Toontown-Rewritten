@@ -23,7 +23,7 @@ class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
         vfs = VirtualFileSystem.getGlobalPtr()
         filename = Filename('twhitelist.dat')
         searchPath = DSearchPath()
-        searchPath.appendDirectory(Filename('phase_4/etc'))
+        searchPath.appendDirectory(Filename('/phase_4/etc'))
         if __debug__:
             searchPath.appendDirectory(Filename('resources/phase_4/etc'))
         found = vfs.resolveFilename(filename, searchPath)
