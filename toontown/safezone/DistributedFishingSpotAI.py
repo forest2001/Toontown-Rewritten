@@ -82,6 +82,9 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if money < cost:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to cast without enough jellybeans!')
             return
+        if av.fishTank.__len__() >= av.getMaxFishTank():
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to cast with too many fish!')
+            return
         av.takeMoney(cost, False)
         self.d_setMovie(FishGlobals.CastMovie, 0, 0, 0, 0, p, h)
         taskMgr.remove('cancelAnimation%d' % self.doId)
@@ -136,6 +139,9 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to fish without casting!')
             return
         av = self.air.doId2do[self.avId]
+        if av.fishTank.__len__() >= av.getMaxFishTank():
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to catch fish with too many fish, this shouldn\'t be possible!')
+            return
         f = FishGlobals.getRandomFishVitals(self.air.doId2do[self.pondDoId].getArea(), av.getFishingRod())
         fish = FishBase(f[1], f[2], f[3])
         fishType = av.fishCollection.collectFish(fish)
