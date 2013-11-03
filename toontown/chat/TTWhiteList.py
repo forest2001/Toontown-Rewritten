@@ -35,10 +35,8 @@ class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
         if self.WhitelistOverHttp:
             self.redownloadWhitelist()
         self.defaultWord = TTLocalizer.ChatGarblerDefault[0]
-        self.accept('updateWhitelist', self.handleNewWhitelist)
 
     def unload(self):
-        self.ignore('updateWhitelist')
         self.removeDownloadingTextTask()
 
     def redownloadWhitelist(self):
