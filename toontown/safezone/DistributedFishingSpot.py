@@ -145,7 +145,14 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.accept(self.uniqueName('enterFishingSpotSphere'), self.__handleEnterSphere)
 
     def setPondDoId(self, pondDoId):
-        self.pond = base.cr.doId2do[pondDoId]
+        self.pondDoId = pondDoId
+        if pondDoId in self.cr.doId2do:
+            self.setPond(self.cr.doId2do[pondDoId])
+        else:
+            self.acceptOnce('generate-%d' % pondDoId, self.setPond)
+
+    def setPond(self, pond):
+        self.pond = pond
         self.area = self.pond.getArea()
         self.waterLevel = FishingTargetGlobals.getWaterLevel(self.area)
 
