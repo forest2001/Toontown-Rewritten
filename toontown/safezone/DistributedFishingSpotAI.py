@@ -13,6 +13,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         self.avId = None
         self.pondDoId = None
         self.posHpr = [None, None, None, None, None, None]
+        self.cast = False
 
     def generate(self):
         DistributedObjectAI.generate(self)
@@ -46,6 +47,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(2, DistributedFishingSpotAI.cancelAnimation, 'cancelAnimation%d' % self.doId, [self])
         taskMgr.remove('timeOut%d' % self.doId)
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])
+        self.cast = False
 
 
     def rejectEnter(self):
@@ -86,6 +88,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(2, DistributedFishingSpotAI.cancelAnimation, 'cancelAnimation%d' % self.doId, [self])
         taskMgr.remove('timeOut%d' % self.doId)
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])
+        self.cast = True
 
     def sellFish(self):
         avId = self.air.getAvatarIdFromSender()
@@ -129,6 +132,9 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(1, DistributedFishingSpotAI.removeFromPier, 'remove%d' % self.doId, [self])
 
     def rewardIfValid(self, target):
+        if not self.cast:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to fish without casting!')
+            return
         av = self.air.doId2do[self.avId]
         f = FishGlobals.getRandomFishVitals(self.air.doId2do[self.pondDoId].getArea(), av.getFishingRod())
         fish = FishBase(f[1], f[2], f[3])
@@ -146,6 +152,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         netlist = av.fishTank.getNetLists()
         av.d_setFishTank(netlist[0], netlist[1], netlist[2])
         self.d_setMovie(FishGlobals.PullInMovie, itemType, fish.getGenus(), fish.getSpecies(), fish.getWeight(), 0, 0)
+        self.cast = False
 
 
 
