@@ -141,7 +141,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.fsm.requestFinalState()
         if self.hasLocalToon():
             self.removeLocalToon()
-            base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+            base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.localToonFsm.request('WaitForServer')
         self.ignoreAll()
         for suit in self.suits:
@@ -1257,7 +1257,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         else:
             camera.wrtReparentTo(base.localAvatar)
             messenger.send('localToonLeftBattle')
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         return
 
     def enterNoLocalToon(self):

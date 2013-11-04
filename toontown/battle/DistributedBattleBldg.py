@@ -110,7 +110,7 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
         camTrack = Sequence()
 
         def setCamFov(fov):
-            base.camLens.setFov(fov)
+            base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
 
         camTrack.append(Func(camera.wrtReparentTo, suitLeader))
         camTrack.append(Func(setCamFov, self.camFOFov))
