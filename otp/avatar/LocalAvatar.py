@@ -841,7 +841,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         if abs(fov - oldFov) > 0.1:
 
             def setCamFov(fov):
-                base.camLens.setFov(fov)
+                base.camLens.setMinFov(fov/(4./3.))
 
             self.camLerpInterval = LerpFunctionInterval(setCamFov, fromData=oldFov, toData=fov, duration=time, name='cam-fov-lerp')
             self.camLerpInterval.start()
@@ -849,7 +849,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def setCameraFov(self, fov):
         self.fov = fov
         if not (self.isPageDown or self.isPageUp):
-            base.camLens.setFov(self.fov)
+            base.camLens.setMinFov(self.fov/(4./3.))
 
     def gotoNode(self, node, eyeHeight = 3):
         possiblePoints = (Point3(3, 6, 0),
