@@ -130,8 +130,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(1, DistributedFishingSpotAI.removeFromPier, 'remove%d' % self.doId, [self])
 
     def rewardIfValid(self, target):
-        if not self.cast:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to fish without casting!')
+        if self.cast != True:
+            self.air.writeServerEvent('suspicious', self.avId, 'Toon tried to fish without casting!')
             return
         av = self.air.doId2do[self.avId]
         
