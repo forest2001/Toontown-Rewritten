@@ -22,7 +22,7 @@ class TimeManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.updateFreq = base.config.GetFloat('time-manager-freq', 1800)
         self.minWait = base.config.GetFloat('time-manager-min-wait', 10)
-        self.maxUncertainty = base.config.GetFloat('time-manager-max-uncertainty', 1)
+        self.maxUncertainty = base.config.GetFloat('time-manager-max-uncertainty', 0.05)
         self.maxAttempts = base.config.GetInt('time-manager-max-attempts', 5)
         self.extraSkew = base.config.GetInt('time-manager-extra-skew', 0)
         if self.extraSkew != 0:
