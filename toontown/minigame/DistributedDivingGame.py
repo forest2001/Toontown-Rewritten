@@ -294,7 +294,7 @@ class DistributedDivingGame(DistributedMinigame):
             self.toonSDs[avId].exit()
 
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
         del self.arrowKeys

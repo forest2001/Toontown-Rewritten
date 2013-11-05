@@ -116,7 +116,7 @@ class MakeAToon(StateData.StateData):
             self.fsm.request('GenderShop')
 
     def exit(self):
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.guiTopBar.hide()
         self.guiBottomBar.hide()
         self.music.stop()

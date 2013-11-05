@@ -131,7 +131,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
 
     def rewardIfValid(self, target):
         if not self.cast:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to fish without casting!')
+            self.air.writeServerEvent('suspicious', self.avId, 'Toon tried to fish without casting!')
             return
         av = self.air.doId2do[self.avId]
         
