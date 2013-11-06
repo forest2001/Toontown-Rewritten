@@ -539,7 +539,7 @@ dclass DistributedToon : DistributedPlayer {
   setFishCollection(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
   setMaxFishTank(uint8 = 20) required ownrecv db;
   setFishTank(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
-  setFishingRod(uint8 = 0) required broadcast ownrecv db;
+  setFishingRod(uint8 = 1) required broadcast ownrecv db; // ALPHA ONLY: Set back to 0
   setFishingTrophies(uint8array = {}) required ownrecv db;
   setFlowerCollection(uint8array = {}, uint8array = {}) required ownrecv db;
   setFlowerBasket(uint8array = {}, uint8array = {}) required ownrecv db;
