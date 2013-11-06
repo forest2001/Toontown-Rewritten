@@ -939,8 +939,8 @@ class DistributedDivingGame(DistributedMinigame):
         self.cTrav2.traverse(render)
         self.__posBroadcast(dt)
         z = self.getAvatar(self.localAvId).getZ() + 3
-        if z < -25:
-            z = -25
+        camBottom = math.tan(base.camLens.getVfov()/2.0*math.pi/180)*54
+        z = max(z, -42+camBottom)
         camera.setZ(z)
         ambVolume = abs(z - 25.0) / 50.0 + 0.1
         if ambVolume < 0.0:
