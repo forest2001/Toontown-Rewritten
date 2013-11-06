@@ -271,13 +271,13 @@ class DistributedDivingGame(DistributedMinigame):
         self.boatTilt = Sequence(LerpFunc(self.boatModel.setR, duration=5, fromData=5, toData=-5, blendType='easeInOut', name='tilt'), LerpFunc(self.boatModel.setR, duration=5, fromData=-5, toData=5, blendType='easeInOut', name='tilt'))
         self.boatTilt.loop()
         self.mapScaleRatio = 40
-        self.mapModel.reparentTo(aspect2d)
+        self.mapModel.reparentTo(base.a2dTopRight)
         self.mapModel.setScale(1.0 / self.mapScaleRatio)
         self.mapModel.setTransparency(1)
-        self.mapModel.setPos(1.15, -0.5, -0.125)
+        self.mapModel.setPos(-0.22, 0.0, -1.30)
         self.mapModel.setColorScale(1, 1, 1, 0.7)
         self.mapModel.hide()
-        if None != self.sndAmbience:
+        if self.sndAmbience:
             self.sndAmbience.setLoop(True)
             self.sndAmbience.play()
             self.sndAmbience.setVolume(0.01)
@@ -527,7 +527,8 @@ class DistributedDivingGame(DistributedMinigame):
         DistributedMinigame.setGameStart(self, timestamp)
         self.notify.debug('setGameStart')
         self.treasurePanel = TreasureScorePanel.TreasureScorePanel()
-        self.treasurePanel.setPos(-1.19, 0, 0.75)
+        self.treasurePanel.setPos(0.145, 0, -0.27)
+        self.treasurePanel.reparentTo(base.a2dTopLeft)
         self.treasurePanel.makeTransparent(0.7)
         self.introMovie.finish()
         self.gameFSM.request('swim')
