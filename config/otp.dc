@@ -238,13 +238,13 @@ dclass DistributedPlayer : DistributedAvatar {
   WishNameState(string = "OPEN") db ram;
   setPreviousAccess(uint8 = 0) required db airecv;
   setAccess(uint8 = 2) broadcast ownrecv required ram airecv;
+  setAdminAccess(uint16 = 0) ownrecv required airecv;
   setAsGM(bool = 0) required ram broadcast ownrecv airecv;
 };
 
 dclass MagicWordManager : DistributedObject {
-  setMagicWord(string, uint32, uint32, string(0-256)) airecv clsend;
-  setMagicWordResponse(string) airecv;
-  setWho(uint32array) airecv clsend;
+  sendMagicWord(string, uint32) airecv clsend;
+  sendMagicWordResponse(string);
 };
 
 dclass OtpAvatarManager : DistributedObject {

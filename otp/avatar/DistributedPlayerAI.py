@@ -14,6 +14,7 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
         self.friendsList = []
         self.DISLname = ''
         self.DISLid = 0
+        self.adminAccess = 0
 
     if __dev__:
 
@@ -118,6 +119,12 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
 
     def getFriendsList(self):
         return self.friendsList
+
+    def setAdminAccess(self, access):
+        self.adminAccess = access
+
+    def getAdminAccess(self):
+        return self.adminAccess
 
     def extendFriendsList(self, friendId, friendCode):
         for i in range(len(self.friendsList)):
