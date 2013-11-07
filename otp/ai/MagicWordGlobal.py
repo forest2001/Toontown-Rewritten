@@ -76,6 +76,7 @@ class MagicWordCategory:
         self.defaultAccess = defaultAccess
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
+CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=200)
 
 
 class MagicWord:

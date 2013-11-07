@@ -4,6 +4,7 @@ import OTPRender
 import time
 import math
 import re
+from otp.ai.MagicWordGlobal import *
 
 class OTPBase(ShowBase):
 
@@ -247,3 +248,18 @@ class OTPBase(ShowBase):
             self.destroy()
             import traceback
             traceback.print_exc()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def oobe():
+    'Toggle "out of body experience" view.'
+    base.oobe()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def oobeCull():
+    'Toggle "out of body experience" view, with culling debugging.'
+    base.oobeCull()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def wire():
+    'Toggle wireframe view.'
+    base.toggleWireframe()
