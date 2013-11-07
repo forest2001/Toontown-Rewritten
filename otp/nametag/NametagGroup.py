@@ -30,6 +30,7 @@ class NametagGroup:
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
         self.avatar = None
+        self.active = True
 
         self.chatString = ''
         self.chatFlags = 0
@@ -65,8 +66,14 @@ class NametagGroup:
     def getUniqueId(self):
         return 'Nametag-%d' % id(self)
 
+    def hasButton(self):
+        return False # TODO: Support buttons
+
     def setActive(self, active):
-        pass
+        self.active = active
+
+    def isActive(self):
+        return self.active
 
     def setAvatar(self, avatar):
         self.avatar = avatar
