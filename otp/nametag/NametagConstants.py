@@ -7,3 +7,13 @@ CFSndOpenchat=128
 CFSpeech=1
 CFThought=2
 CFTimeout=8
+
+CCNormal = 0
+CCNoChat = 1
+CCNonPlayer = 2
+CCSuit = 3
+CCToonBuilding = 4
+CCSuitBuilding = 5
+CCHouseBuilding = 6
+CCSpeedChat = 7
+CCFreeChat = 8
