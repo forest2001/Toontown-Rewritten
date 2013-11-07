@@ -4,15 +4,15 @@ from Nametag3d import *
 from Nametag2d import *
 
 class NametagGroup:
-    CCNormal = 0
-    CCNoChat = 1
-    CCNonPlayer = 2
-    CCSuit = 3
-    CCToonBuilding = 4
-    CCSuitBuilding = 5
-    CCHouseBuilding = 6
-    CCSpeedChat = 7
-    CCFreeChat = 8
+    CCNormal = CCNormal
+    CCNoChat = CCNoChat
+    CCNonPlayer = CCNonPlayer
+    CCSuit = CCSuit
+    CCToonBuilding = CCToonBuilding
+    CCSuitBuilding = CCSuitBuilding
+    CCHouseBuilding = CCHouseBuilding
+    CCSpeedChat = CCSpeedChat
+    CCFreeChat = CCFreeChat
 
     CHAT_TIMEOUT_MAX = 12.0
     CHAT_TIMEOUT_MIN = 4.0
