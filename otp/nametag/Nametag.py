@@ -8,6 +8,8 @@ class Nametag(ClickablePopup):
     CSpeech = 2
     CThought = 4
 
+    NAME_PADDING = 0.2
+
     def __init__(self):
         ClickablePopup.__init__(self)
         self.contents = 0 # To be set by subclass.
@@ -68,4 +70,4 @@ class Nametag(ClickablePopup):
         panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP, 0)
         panel.setPos((t.node().getLeft()+t.node().getRight())/2.0, 0,
                      (t.node().getTop()+t.node().getBottom())/2.0)
-        panel.setScale(width, 1, height)
+        panel.setScale(width + self.NAME_PADDING, 1, height + self.NAME_PADDING)
