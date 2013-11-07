@@ -591,6 +591,11 @@ class Avatar(Actor, ShadowCaster):
 @magicWord(category=CATEGORY_GUI, types=[int])
 def clickNametag(avId):
     """Simulate a click on an avatar's nametag, given their ID."""
+    try:
+        base
+    except NameError:
+        return
+
     av = base.cr.doId2do.get(avId)
     if not av:
         return 'avId not found!'
