@@ -77,6 +77,7 @@ class MagicWordCategory:
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=200)
+CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=200)
 
 
 class MagicWord:
