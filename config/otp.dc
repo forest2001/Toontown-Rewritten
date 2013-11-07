@@ -51,6 +51,7 @@ dclass Account {
   string CREATED db;
   string LAST_LOGIN db;
   string ACCOUNT_ID db;
+  uint16 ADMIN_ACCESS db;
 };
 
 struct BarrierData {
