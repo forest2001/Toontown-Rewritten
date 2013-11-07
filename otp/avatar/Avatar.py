@@ -11,6 +11,7 @@ from otp.avatar.ShadowCaster import ShadowCaster
 import random
 from otp.otpbase import OTPRender
 from direct.showbase.PythonUtil import recordCreationStack
+from otp.ai.MagicWordGlobal import *
 teleportNotify = DirectNotifyGlobal.directNotify.newCategory('Teleport')
 teleportNotify.showTime = True
 if config.GetBool('want-teleport-debug', 1):
@@ -586,3 +587,13 @@ class Avatar(Actor, ShadowCaster):
 
     def loop(self, animName, restart = 1, partName = None, fromFrame = None, toFrame = None):
         return Actor.loop(self, animName, restart, partName, fromFrame, toFrame)
+
+@magicWord(category=CATEGORY_GUI, types=[int])
+def clickNametag(avId):
+    """Simulate a click on an avatar's nametag, given their ID."""
+    av = base.cr.doId2do.get(avId)
+    if not av:
+        return 'avId not found!'
+    if not isinstance(av, Avatar):
+        return 'ID not Avatar!'
+    av.clickedNametag()
