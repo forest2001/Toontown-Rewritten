@@ -51,7 +51,9 @@ class Spellbook:
             if self.getInvokerAccess() <= self.getTarget().getAdminAccess():
                 raise MagicError('Target must have lower access')
 
-        return str(word.run(args))
+        result = word.run(args)
+        if result is not None:
+            return str(result)
 
     def getInvoker(self):
         return self.currentInvoker
