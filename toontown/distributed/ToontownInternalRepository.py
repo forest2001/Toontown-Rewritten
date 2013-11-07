@@ -12,7 +12,7 @@ class ToontownInternalRepository(AstronInternalRepository):
         return (self.getMsgSender()>>32) & 0xFFFFFFFF
 
     def _isValidPlayerLocation(self, parentId, zoneId):
-        if zoneId < 1000:
+        if zoneId < 1000 and zoneId != 1:
             return False
 
         return True
