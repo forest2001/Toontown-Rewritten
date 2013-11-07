@@ -177,7 +177,7 @@ class OTPClientRepository(ClientRepositoryBase):
             self.notify.error('The required-login was not recognized.')
 
 
-        self.wantMagicWords = base.config.GetString('want-magic-words', '')
+        self.wantMagicWords = False
 
 
 

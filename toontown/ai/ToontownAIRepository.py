@@ -2,6 +2,7 @@ import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
+from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.ai.FishManagerAI import FishManagerAI
@@ -86,6 +87,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.newsManager = NewsManagerAI(self)
         self.newsManager.generateWithRequired(2)
+
+        self.magicWordManager = MagicWordManagerAI(self)
+        self.magicWordManager.generateWithRequired(2)
 
     def createZones(self):
         """

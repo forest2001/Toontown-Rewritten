@@ -25,6 +25,7 @@ from direct.controls.PhysicsWalker import PhysicsWalker
 from direct.controls.SwimWalker import SwimWalker
 from direct.controls.TwoDWalker import TwoDWalker
 from otp.nametag.Nametag import Nametag
+from otp.ai.MagicWordGlobal import *
 
 class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.DistributedSmoothNode):
     notify = DirectNotifyGlobal.directNotify.newCategory('LocalAvatar')
@@ -1213,3 +1214,22 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
 
     def canChat(self):
         return 0
+
+@magicWord(category=CATEGORY_MOBILITY)
+def run():
+    """Toggle "running", which makes you move much faster."""
+    inputState.set('debugRunning', inputState.isSet('debugRunning') != True)
+
+@magicWord(category=CATEGORY_MOBILITY)
+def collisionsOff():
+    """Turn off collisions. This allows you to run through things, and walk in air."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.collisionsOff()
+
+@magicWord(category=CATEGORY_MOBILITY)
+def collisionsOn():
+    """Re-enable collisions."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.collisionsOn()
