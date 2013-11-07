@@ -10,3 +10,9 @@ class ToontownInternalRepository(AstronInternalRepository):
 
     def getAccountIdFromSender(self):
         return (self.getMsgSender()>>32) & 0xFFFFFFFF
+
+    def _isValidPlayerLocation(self, parentId, zoneId):
+        if zoneId < 1000:
+            return False
+
+        return True
