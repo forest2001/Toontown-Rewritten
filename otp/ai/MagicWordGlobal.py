@@ -67,7 +67,13 @@ class Spellbook:
 spellbook = Spellbook()
 
 
+# CATEGORIES
+class MagicWordCategory:
+    def __init__(self, name, defaultAccess=500):
+        self.name = name
+        self.defaultAccess = defaultAccess
 
+CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 
 
 class MagicWord:
@@ -109,10 +115,14 @@ class MagicWordDecorator:
     object process the Magic Word's construction.
     """
 
-    def __init__(self, name=None, types=[str], access=500):
+    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN):
         self.name = name
         self.types = types
-        self.access = access
+        self.category = category
+        if access is not None:
+            self.access = access
+        else:
+            self.access = self.category.defaultAccess
 
     def __call__(self, mw):
         # This is the actual decoration routine. We add the function 'mw' as a
