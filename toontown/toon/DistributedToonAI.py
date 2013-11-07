@@ -245,6 +245,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.b_setShoesList(self.shoesList)
                 self.b_setShoes(0, 0, 0)
         self.startPing()
+        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+        if not isinstance(self, DistributedNPCToonBaseAI):
+            self.sendUpdate('setDefaultShard', [self.air.districtId])
+
+    def setLocation(self, parentId, zoneId):
+        DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
+
+        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+        if not isinstance(self, DistributedNPCToonBaseAI):
+            self.sendUpdate('setLastHood', [ZoneUtil.getHoodId(zoneId)])
 
     def _renewDoLater(self, renew = True):
         if renew:
