@@ -12,7 +12,7 @@ class DistributedFishingPondAI(DistributedObjectAI):
 
     def hitTarget(self, target):
         avId = self.air.getAvatarIdFromSender()
-        if self.targets[target] == None:
+        if self.targets.get(target) == None:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to hit nonexistent fishing target!')
             return
         for spot in self.spots:
