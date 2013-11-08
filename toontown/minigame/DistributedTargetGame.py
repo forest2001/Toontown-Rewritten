@@ -825,7 +825,7 @@ class DistributedTargetGame(DistributedMinigame):
                 ce = CompassEffect.make(NodePath(), CompassEffect.PRot)
                 closed.node().setEffect(ce)
                 closed.setHpr(0.0, 90.0, 35.0)
-                #umbrella.reparentTo(hand) WTF D:
+                umbrella.reparentTo(hand)
                 toon.startSmooth()
 
         self.remoteToons = {}
