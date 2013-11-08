@@ -8,6 +8,7 @@ import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.fishing import FishSellGUI
 from direct.task.Task import Task
+import time
 
 class DistributedNPCFisherman(DistributedNPCToonBase):
 
@@ -18,6 +19,7 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         self.button = None
         self.popupInfo = None
         self.fishGui = None
+        self.nextCollision = 0
         return
 
     def disable(self):
@@ -57,8 +59,13 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         return 1.0
 
     def handleCollisionSphereEnter(self, collEntry):
-        base.cr.playGame.getPlace().fsm.request('purchase')
-        self.sendUpdate('avatarEnter', [])
+        self.currentTime = time.time()
+        if self.nextCollision > self.currentTime:
+            self.nextCollision = self.currentTime + 2
+        else:
+            base.cr.playGame.getPlace().fsm.request('purchase')
+            self.sendUpdate('avatarEnter', [])
+            self.nextCollision = self.currentTime + 2
 
     def __handleUnexpectedExit(self):
         self.notify.warning('unexpected exit')
