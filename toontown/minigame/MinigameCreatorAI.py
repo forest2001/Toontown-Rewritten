@@ -21,6 +21,7 @@ import DistributedCogThiefGameAI
 import DistributedTwoDGameAI
 import DistributedTravelGameAI
 import TravelGameGlobals
+from otp.ai.MagicWordGlobal import *
 ALLOW_TEMP_MINIGAMES = simbase.config.GetBool('allow-temp-minigames', False)
 if ALLOW_TEMP_MINIGAMES:
     from toontown.minigame.TempMinigameAI import *
@@ -36,11 +37,11 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
     mgDiff = None
     mgSzId = None
     for avId in playerArray:
-        request = RequestMinigame.get(avId)
+        request = RequestMinigame.get('1') #can't grab avId, so use this temporarily.
         if request != None:
             mgId, mgKeep, mgDiff, mgSzId = request
             if not mgKeep:
-                del RequestMinigame[avId]
+                del RequestMinigame['1'] #can't grab avId, so use this temporarily.
             break
 
     if mgId != None:
@@ -185,3 +186,7 @@ def removeUnreleasedMinigames(startList, increaseChanceOfNewGames = 0):
             randomList += [gameId] * 4
 
     return randomList
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str])
+def requestMinigame(minigameName): #do not fetch other settings for now, due to a lack of avId
+    RequestMinigame['1'] = ToontownGlobals.MinigameNames[minigameName], False, 2000, 2000
