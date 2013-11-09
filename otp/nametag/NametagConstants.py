@@ -65,7 +65,20 @@ NAMETAG_COLORS = {
     # TODO: CCToonBuilding
     # TODO: CCSuitBuilding
     # TODO: CCHouseBuilding
-    # TODO: CCSpeedChat
+    CCSpeedChat: (
+        # Normal  FG                    BG
+        ((0.0, 0.6, 0.2, 1.0), (0.8, 0.8, 0.8, 0.5),  # Name
+         (0.0, 0.0, 0.0, 1.0), (1.0, 1.0, 1.0, 1.0)), # Chat
+        # Click   FG                    BG
+        ((0.2, 0.2, 0.5, 1.0), (0.2, 0.2, 0.2, 0.6),  # Name
+         (1.0, 0.5, 0.5, 1.0), (1.0, 1.0, 1.0, 1.0)), # Chat
+        # Hover   FG                    BG
+        ((0.5, 0.5, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0),  # Name
+         (0.0, 0.6, 0.6, 1.0), (1.0, 1.0, 1.0, 1.0)), # Chat
+        # Disable FG                    BG
+        ((0.0, 0.6, 0.2, 1.0), (0.8, 0.8, 0.8, 0.5),  # Name
+         (0.0, 0.0, 0.0, 1.0), (1.0, 1.0, 1.0, 1.0)), # Chat
+    ),
     CCFreeChat: (
         # Normal  FG                    BG
         ((0.3, 0.3, 0.7, 1.0), (0.8, 0.8, 0.8, 0.5),  # Name
