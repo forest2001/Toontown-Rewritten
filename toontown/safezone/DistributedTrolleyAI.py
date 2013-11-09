@@ -59,7 +59,10 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # If all players disconnected while the trolley was departing, the
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
-            mg = createMinigame(self.air, players, self.zoneId)
+            if len(players) > 1:
+                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
+            else:
+                mg = createMinigame(self.air, players, self.zoneId)
             for player in players:
                 self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
                 self.removeFromTrolley(player)
