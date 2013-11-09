@@ -4,3 +4,4 @@ class HolidayManagerAI:
         
     def isHolidayRunning(self, *args):
         return True
+        #TODO: this function needs to actually check holidays

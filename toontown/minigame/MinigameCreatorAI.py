@@ -37,11 +37,11 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
     mgDiff = None
     mgSzId = None
     for avId in playerArray:
-        request = RequestMinigame.get('1') #can't grab avId, so use this temporarily.
+        request = RequestMinigame.get('1') #TODO: use player avId instead of a temp value.
         if request != None:
             mgId, mgKeep, mgDiff, mgSzId = request
             if not mgKeep:
-                del RequestMinigame['1'] #can't grab avId, so use this temporarily.
+                del RequestMinigame['1'] #TODO: use player avId instead of a temp value.
             break
 
     if mgId != None:
@@ -188,5 +188,5 @@ def removeUnreleasedMinigames(startList, increaseChanceOfNewGames = 0):
     return randomList
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str])
-def requestMinigame(minigameName): #do not fetch other settings for now, due to a lack of avId
-    RequestMinigame['1'] = ToontownGlobals.MinigameNames[minigameName], False, 2000, 2000
+def requestMinigame(minigameName):
+    RequestMinigame['1'] = ToontownGlobals.MinigameNames[minigameName], False, 2000, 2000 #TODO: use player avId instead of a temp value and allow other settings to be changed

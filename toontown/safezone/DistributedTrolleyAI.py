@@ -60,7 +60,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
             if len(players) > 1:
-                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0)
+                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
             else:
                 mg = createMinigame(self.air, players, self.zoneId)
             for player in players:
