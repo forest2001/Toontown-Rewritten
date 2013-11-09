@@ -2,6 +2,7 @@ from toontown.safezone.DistributedTrolleyAI import DistributedTrolleyAI
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 
 class HoodAI:
@@ -31,6 +32,13 @@ class HoodAI:
         self.pond = DistributedFishingPondAI(self.air)
         self.pond.setArea(self.safezone)
         self.pond.generateWithRequired(self.safezone)
+        
+        bingoManager = DistributedPondBingoManagerAI(self.air)
+        bingoManager.setPondDoId(self.pond.getDoId())
+        bingoManager.generateWithRequired(self.safezone)
+        bingoManager.createGame()
+        
+        self.pond.bingoMgr = bingoManager
 
         for i in range(FishingTargetGlobals.getNumTargets(self.safezone)):
             target = DistributedFishingTargetAI(self.air)

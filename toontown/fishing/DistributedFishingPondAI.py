@@ -9,16 +9,17 @@ class DistributedFishingPondAI(DistributedObjectAI):
         self.area = None
         self.targets = {}
         self.spots = {}
+        self.bingoMgr = None
 
     def hitTarget(self, target):
         avId = self.air.getAvatarIdFromSender()
         if self.targets.get(target) == None:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to hit nonexistent fishing target!')
             return
-        for spot in self.spots:
-            if self.spots[spot].avId == avId:
-                self.spots[spot].rewardIfValid(target)
-                return
+        spot = self.hasToon(avId)
+        if spot:
+            spot.rewardIfValid(target)
+            return
         self.air.writeServerEvent('suspicious', avId, 'Toon tried to catch fish while not fishing!')
     def addTarget(self, target):
          self.targets[target.doId] = target
@@ -31,3 +32,9 @@ class DistributedFishingPondAI(DistributedObjectAI):
 
     def getArea(self):
         return self.area
+        
+    def hasToon(self, avId):
+        for spot in self.spots:
+            if self.spots[spot].avId == avId:
+                return self.spots[spot]
+        return

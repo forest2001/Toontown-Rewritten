@@ -16,6 +16,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         self.pondDoId = None
         self.posHpr = [None, None, None, None, None, None]
         self.cast = False
+        self.lastFish = [None, None, None]
 
     def generate(self):
         DistributedObjectAI.generate(self)
@@ -49,8 +50,10 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(2, DistributedFishingSpotAI.cancelAnimation, 'cancelAnimation%d' % self.doId, [self])
         taskMgr.remove('timeOut%d' % self.doId)
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])
+        self.lastFish = [None, None, None]
         self.cast = False
-
+        if self.air.doId2do[self.pondDoId].bingoMgr:
+            self.air.doId2do[self.pondDoId].bingoMgr.activateBingoForPlayer(avId)
 
     def rejectEnter(self):
         pass
@@ -136,6 +139,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         av = self.air.doId2do[self.avId]
         
         catch = self.air.fishManager.generateCatch(av, self.air.doId2do[self.pondDoId].getArea())
+        
+        self.lastFish = [catch[1], catch[2], catch[3]]
         
         self.d_setMovie(FishGlobals.PullInMovie, catch[0], catch[1], catch[2], catch[3], 0, 0)
         self.cast = False
