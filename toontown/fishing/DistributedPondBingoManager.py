@@ -170,7 +170,8 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
     def setJackpot(self, jackpot):
         self.jackpot = jackpot
 
-    def enterOff(self):
+    #todo: fix crash
+    def enterOff(self, args = None):
         self.notify.debug('enterOff: Enter Off State')
         del self.spot
         self.spot = None
