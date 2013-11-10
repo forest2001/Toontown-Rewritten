@@ -1233,3 +1233,40 @@ def collisionsOn():
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.collisionsOn()
+    
+@magicWord(category=CATEGORY_MOBILITY)
+def enableAFGravity():
+    """Turn on Estate April Fools gravity."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
+    
+@magicWord(category=CATEGORY_MOBILITY, types=[int, bool])
+def setGravity(gravityValue, overrideWarning=False):
+    """Set your gravity value!"""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    if gravityValue < 1 and not overrideWarning:
+        return 'A value lower than 1 may crash your client.'
+    base.localAvatar.controlManager.currentControls.setGravity(gravityValue)
+    
+@magicWord(category=CATEGORY_MOBILITY)
+def normalGravity():
+    """Turn off Estate April Fools gravity."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
+    
+@magicWord(category=CATEGORY_DEBUG)
+def getPos():
+    """Get current position of your toon."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    return base.localAvatar.getPos()
+    
+@magicWord(category=CATEGORY_DEBUG, types=[float, float, float])
+def setPos(toonX, toonY, toonZ):
+    """Set position of your toon."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.setPos(toonX, toonY, toonZ)

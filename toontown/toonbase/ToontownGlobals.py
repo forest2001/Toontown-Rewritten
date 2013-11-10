@@ -99,6 +99,7 @@ CEVirtual = 14
 MaxHpLimit = 137
 MaxCarryLimit = 80
 MaxQuestCarryLimit = 4
+GravityValue = 32.174
 MaxCogSuitLevel = 50 - 1
 CogSuitHPLevels = (15 - 1,
  20 - 1,
@@ -324,6 +325,11 @@ HoodsForTeleportAll = (DonaldsDock,
  CashbotHQ,
  LawbotHQ,
  GolfZone)
+BingoCardNames = {'normal': 0,
+'corners': 1,
+'diagonal': 2,
+'threeway': 3,
+'blockout': 4}
 NoPreviousGameId = 0
 RaceGameId = 1
 CannonGameId = 2
