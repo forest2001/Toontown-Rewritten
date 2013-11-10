@@ -325,6 +325,11 @@ HoodsForTeleportAll = (DonaldsDock,
  CashbotHQ,
  LawbotHQ,
  GolfZone)
+BingoCardNames = {'normal': 0,
+'corners': 1,
+'diagonal': 2,
+'threeway': 3,
+'blockout': 4}
 NoPreviousGameId = 0
 RaceGameId = 1
 CannonGameId = 2
