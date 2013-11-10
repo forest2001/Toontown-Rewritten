@@ -35,7 +35,10 @@ class DistributedCogThiefGame(DistributedMinigame):
         DistributedMinigame.__init__(self, cr)
         self.gameFSM = ClassicFSM.ClassicFSM('DistributedCogThiefGame', [State.State('off', self.enterOff, self.exitOff, ['play']), State.State('play', self.enterPlay, self.exitPlay, ['cleanup']), State.State('cleanup', self.enterCleanup, self.exitCleanup, [])], 'off', 'cleanup')
         self.addChildGameFSM(self.gameFSM)
-        self.cameraTopView = (0, 0, 55, 0, -90.0, 0)
+        toon = base.localAvatar
+        camera.reparentTo(toon)
+        camera.setPos(0,-15,5)
+        camera.setHpr(0, -5, 0)
         self.barrels = []
         self.cogInfo = {}
         self.lastTimeControlPressed = 0
@@ -166,7 +169,6 @@ class DistributedCogThiefGame(DistributedMinigame):
         lt.reparentTo(render)
         self.__placeToon(self.localAvId)
         lt.setSpeed(0, 0)
-        self.moveCameraToTop()
         toonSD = self.toonSDs[self.localAvId]
         toonSD.enter()
         toonSD.fsm.request('normal')
@@ -191,8 +193,6 @@ class DistributedCogThiefGame(DistributedMinigame):
             self.sndTable['falling'][i] = base.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.ogg')
 
         base.playMusic(self.music, looping=1, volume=0.8)
-        self.introTrack = self.getIntroTrack()
-        self.introTrack.start()
         return
 
     def offstage(self):
@@ -212,9 +212,6 @@ class DistributedCogThiefGame(DistributedMinigame):
 
         self.timer.reparentTo(hidden)
         self.rewardPanel.reparentTo(hidden)
-        if self.introTrack.isPlaying():
-            self.introTrack.finish()
-        del self.introTrack
         DistributedMinigame.offstage(self)
 
     def handleDisabledAvatar(self, avId):
@@ -255,8 +252,6 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.rewardPanel.reparentTo(aspect2d)
         self.scoreMult = MinigameGlobals.getScoreMult(self.cr.playGame.hood.id)
         self.__startRewardCountdown()
-        if self.introTrack.isPlaying():
-            self.introTrack.finish()
         self.gameFSM.request('play')
         return
 
