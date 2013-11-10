@@ -52,7 +52,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         taskMgr.doMethodLater(45, DistributedFishingSpotAI.removeFromPierWithAnim, 'timeOut%d' % self.doId, [self])
         self.lastFish = [None, None, None]
         self.cast = False
-        if self.air.doId2do[self.pondDoId].bingoMgr:
+        if self.air.doId2do[self.pondDoId].bingoMgr and self.air.doId2do[self.pondDoId].bingoMgr.state != 'Off':
             self.air.doId2do[self.pondDoId].bingoMgr.activateBingoForPlayer(avId)
 
     def rejectEnter(self):
