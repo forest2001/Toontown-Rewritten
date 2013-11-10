@@ -4412,3 +4412,8 @@ def setMaxFishTank(tankVal):
 def setName(nameStr):
     """Set target's name."""
     spellbook.getTarget().b_setName(nameStr)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def restockAllResistances():
+    """Restock all CFO phrases."""
+    spellbook.getTarget().restockAllResistanceMessages(1)
