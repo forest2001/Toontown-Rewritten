@@ -1,36 +1,42 @@
 from pandac.PandaModules import VBase3, BitMask32
 GameTime = 60
 NumBarrels = 4
-BarrelStartingPositions = (VBase3(4.3, 4, 0),
- VBase3(4.3, -4, 0),
- VBase3(-4.3, 4, 0),
- VBase3(-4.3, -4, 0))
+BarrelStartingPositions = (VBase3(11, -9, 0),
+ VBase3(11, 4, 0),
+ VBase3(-11, 9, 0),
+ VBase3(-11, -4, 0))
 ToonStartingPositions = (VBase3(0, 16, 0),
  VBase3(0, -16, 0),
  VBase3(-16, 0, 0),
  VBase3(16, 0, 0))
-CogStartingPositions = (VBase3(35, 18, 0),
- VBase3(35, 0, 0),
- VBase3(35, -18, 0),
- VBase3(-35, 18, 0),
- VBase3(-35, 0, 0),
- VBase3(-35, -18, 0),
- VBase3(0, 27, 0),
- VBase3(0, -27, 0),
- VBase3(35, 9, 0),
- VBase3(-35, 9, 0),
- VBase3(35, -9, 0),
- VBase3(-35, -9, 0))
-CogReturnPositions = (VBase3(-35, 28, 0),
- VBase3(-14, 28, 0),
- VBase3(14, 28, 0),
- VBase3(35, 28, 0),
- VBase3(35, 0, 0),
- VBase3(35, -28, 0),
- VBase3(-14, -28, 0),
- VBase3(14, -28, 0),
- VBase3(-35, -28, 0),
- VBase3(-35, 0, 0))
+ToonStartingRotations = (VBase3(180, 0, 0),
+ VBase3(0, 0, 0),
+ VBase3(90, 0, 0),
+ VBase3(-90, 0, 0))
+CogStartingPositions = (VBase3(62, 15, 0),
+ VBase3(33, 43, 0),
+ VBase3(-33, 43, 0),
+ VBase3(-51, -15, 0),
+ VBase3(51, -15, 0),
+ VBase3(62, 15, 0),
+ VBase3(-7, 65, 0),
+ VBase3(-60, 19, 0),
+ VBase3(-39, -50, 0),
+ VBase3(41, -55, 0),
+ VBase3(25, -40, 0),
+ VBase3(-25, 40, 0))
+CogReturnPositions = (VBase3(62, 15, 0),
+ VBase3(33, 43, 0),
+ VBase3(-33, 43, 0),
+ VBase3(-51, -15, 0),
+ VBase3(51, -15, 0),
+ VBase3(62, 15, 0),
+ VBase3(-7, 65, 0),
+ VBase3(-60, 19, 0),
+ VBase3(-39, -50, 0),
+ VBase3(41, -55, 0),
+ VBase3(25, -40, 0),
+ VBase3(-25, 40, 0))
 StageHalfWidth = 25
 StageHalfHeight = 18
 NoGoal = 0
@@ -46,8 +52,7 @@ GoalStr = {NoGoal: 'NoGoal',
 BarrelBitmask = BitMask32(512)
 BarrelOnGround = -1
 NoBarrelCarried = -1
-LyingDownDuration = 2.0
-MAX_SCORE = 20
+MAX_SCORE = 30
 MIN_SCORE = 3
 
 def calcScore(t):

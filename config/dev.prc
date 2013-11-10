@@ -14,6 +14,8 @@ account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
 
 default-model-extension .bam
 
+cog-thief-ortho 0
+
 show-total-population #t
 want-mat-all-tailors #t
 
