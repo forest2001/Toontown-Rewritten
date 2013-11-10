@@ -46,6 +46,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+from otp.ai.MagicWordGlobal import *
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -4352,3 +4353,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setCE(CEValue, CEHood=0, CEExpire=0):
+    """Set Cheesy Effect of the target."""
+    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxHP(hpVal):
+    """Set target's laff"""
+    if hpVal > 137 or hpVal < 15:
+        return 'Laff must be between 15 and 137!'
+    spellbook.getTarget().b_setMaxHp(hpVal)
+    spellbook.getTarget().toonUp(hpVal)
