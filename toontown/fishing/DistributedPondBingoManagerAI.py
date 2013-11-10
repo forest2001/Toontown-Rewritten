@@ -159,7 +159,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         if self.cardId > 65535:
             self.cardId = 0
         self.tileSeed = random.randrange(0, 65535)
-        self.typeId = random.randrange(0, 3)
+        self.typeId = random.randrange(0, 4)
         if self.typeId == BingoGlobals.NORMAL_CARD:
             self.bingoCard = NormalBingo()
         elif self.typeId == BingoGlobals.DIAGONAL_CARD:
