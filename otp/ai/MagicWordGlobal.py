@@ -26,10 +26,9 @@ class Spellbook:
     def addWord(self, word):
         self.words[word.name] = word
 
-    def process(self, invoker, targetId, target, incantation):
+    def process(self, invoker, target, incantation):
         self.currentInvoker = invoker
         self.currentTarget = target
-        self.targetId = targetId
         word, args = (incantation.split(' ', 1) + [''])[:2]
 
         try:

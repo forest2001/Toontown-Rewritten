@@ -30,7 +30,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         targetId = target.doId
         self.sendUpdate('sendMagicWord', [magicWord, targetId])
         if target == base.localAvatar:
-            response = spellbook.process(base.localAvatar, targetId, target, magicWord)
+            response = spellbook.process(base.localAvatar, target, magicWord)
             if response:
                 self.sendMagicWordResponse(response)
 
