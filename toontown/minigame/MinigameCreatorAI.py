@@ -189,4 +189,4 @@ def removeUnreleasedMinigames(startList, increaseChanceOfNewGames = 0):
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, bool, int, int])
 def requestMinigame(minigameName, minigameKeep=False, minigameDiff=1, minigamePG=2000):
-    RequestMinigame[spellbook.targetId] = ToontownGlobals.MinigameNames[minigameName], minigameKeep, minigameDiff, minigamePG
+    RequestMinigame[spellbook.getTarget().doId] = ToontownGlobals.MinigameNames[minigameName], minigameKeep, minigameDiff, minigamePG
