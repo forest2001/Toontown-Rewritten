@@ -9,6 +9,10 @@ ToonStartingPositions = (VBase3(0, 16, 0),
  VBase3(0, -16, 0),
  VBase3(-16, 0, 0),
  VBase3(16, 0, 0))
+ToonStartingRotations = (VBase3(180, 0, 0),
+ VBase3(0, 0, 0),
+ VBase3(90, 0, 0),
+ VBase3(-90, 0, 0))
 CogStartingPositions = (VBase3(62, 15, 0),
  VBase3(33, 43, 0),
  VBase3(-33, 43, 0),
@@ -48,7 +52,6 @@ GoalStr = {NoGoal: 'NoGoal',
 BarrelBitmask = BitMask32(512)
 BarrelOnGround = -1
 NoBarrelCarried = -1
-LyingDownDuration = 2.0
 MAX_SCORE = 30
 MIN_SCORE = 3
 

@@ -271,6 +271,8 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.startGameWalk()
         self.spawnUpdateSuitsTask()
         self.accept('delete', self.controlKeyPressed)
+        self.accept('insert', self.controlKeyPressed)
+        self.accept('alt', self.controlKeyPressed)
         self.pieHandler = CollisionHandlerEvent()
         self.pieHandler.setInPattern('pieHit-%fn')
 
@@ -313,7 +315,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         if toon:
             index = self.avIdList.index(avId)
             toon.setPos(CTGG.ToonStartingPositions[index])
-            toon.setHpr(0, 0, 0)
+            toon.setHpr(CTGG.ToonStartingRotations[index])
 
     def moveCameraToTop(self):
         camera.reparentTo(render)
@@ -428,7 +430,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         dropShadow.setScale(toon.dropShadow.getScale(render))
         trajectory = Trajectory.Trajectory(0, Point3(0, 0, 0), Point3(0, 0, 50), gravMult=1.0)
         oldFlyDur = trajectory.calcTimeOfImpactOnPlane(0.0)
-        trajectory = Trajectory.Trajectory(0, Point3(0, 0, 0), Point3(0, 0, 50), gravMult=0.55)
+        trajectory = Trajectory.Trajectory(0, Point3(0, 0, 0), Point3(0, 0, 40), gravMult=1.0)
         flyDur = trajectory.calcTimeOfImpactOnPlane(0.0)
         avIndex = self.avIdList.index(avId)
         endPos = CTGG.ToonStartingPositions[avIndex]
@@ -504,7 +506,7 @@ class DistributedCogThiefGame(DistributedMinigame):
                     toon.startSmooth()
 
         preFunc()
-        slipBack = Parallel(Sequence(ActorInterval(toon, 'slip-backward', endFrame=24), Wait(CTGG.LyingDownDuration - (flyDur - oldFlyDur)), ActorInterval(toon, 'slip-backward', startFrame=24)))
+        slipBack = Parallel(Sequence(ActorInterval(toon, 'slip-backward', endFrame=24), ActorInterval(toon, 'slip-backward', startFrame=24)))
         if toon.doId == self.localAvId:
             slipBack.append(SoundInterval(self.sndOof))
         hitTrack = Sequence(Parallel(flyTrack, spinHTrack, spinPTrack, soundTrack), slipBack, Func(postFunc), name=toon.uniqueName('hitBySuit'))
