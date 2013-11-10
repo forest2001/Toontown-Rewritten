@@ -1233,3 +1233,17 @@ def collisionsOn():
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.collisionsOn()
+    
+@magicWord(category=CATEGORY_MOBILITY)
+def enableAFGravity():
+    """Turn on Estate April Fools gravity."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.controlManager.currentControls.setGravity(32.174 * 0.75)
+    
+@magicWord(category=CATEGORY_MOBILITY)
+def disableAFGravity():
+    """Turn off Estate April Fools gravity."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.controlManager.currentControls.setGravity(32.174 * 2.0)
