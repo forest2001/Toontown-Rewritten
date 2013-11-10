@@ -91,30 +91,33 @@ class DistributedCogThiefGame(DistributedMinigame):
                 iconToHide.hide()
             self.barrels.append(barrel)
 
-        self.gameBoard = loader.loadModel('phase_4/models/minigames/cogthief_game')
-        self.gameBoard.find('**/floor_TT').hide()
-        self.gameBoard.find('**/floor_DD').hide()
-        self.gameBoard.find('**/floor_DG').hide()
-        self.gameBoard.find('**/floor_MM').hide()
-        self.gameBoard.find('**/floor_BR').hide()
-        self.gameBoard.find('**/floor_DL').hide()
-        zone = self.getSafezoneId()
-        if zone == ToontownGlobals.ToontownCentral:
-            self.gameBoard.find('**/floor_TT').show()
-        elif zone == ToontownGlobals.DonaldsDock:
-            self.gameBoard.find('**/floor_DD').show()
-        elif zone == ToontownGlobals.DaisyGardens:
-            self.gameBoard.find('**/floor_DG').show()
-        elif zone == ToontownGlobals.MinniesMelodyland:
-            self.gameBoard.find('**/floor_MM').show()
-        elif zone == ToontownGlobals.TheBrrrgh:
-            self.gameBoard.find('**/floor_BR').show()
-        elif zone == ToontownGlobals.DonaldsDreamland:
-            self.gameBoard.find('**/floor_DL').show()
-        else:
-            self.gameBoard.find('**/floor_TT').show()
+        self.gameBoard = loader.loadModel('phase_8/models/minigames/tag_arena_DG')
+        self.sky = loader.loadModel('phase_3.5/models/props/TT_sky')
+        #self.gameBoard.find('**/floor_TT').hide()
+        #self.gameBoard.find('**/floor_DD').hide()
+        #self.gameBoard.find('**/floor_DG').hide()
+        #self.gameBoard.find('**/floor_MM').hide()
+        #self.gameBoard.find('**/floor_BR').hide()
+        #self.gameBoard.find('**/floor_DL').hide()
+        #zone = self.getSafezoneId()
+        #if zone == ToontownGlobals.ToontownCentral:
+        #    self.gameBoard.find('**/floor_TT').show()
+        #elif zone == ToontownGlobals.DonaldsDock:
+        #    self.gameBoard.find('**/floor_DD').show()
+        #elif zone == ToontownGlobals.DaisyGardens:
+        #    self.gameBoard.find('**/floor_DG').show()
+        #elif zone == ToontownGlobals.MinniesMelodyland:
+        #    self.gameBoard.find('**/floor_MM').show()
+        #elif zone == ToontownGlobals.TheBrrrgh:
+        #    self.gameBoard.find('**/floor_BR').show()
+        #elif zone == ToontownGlobals.DonaldsDreamland:
+        #    self.gameBoard.find('**/floor_DL').show()
+        #else:
+        #    self.gameBoard.find('**/floor_TT').show()
         self.gameBoard.setPosHpr(0, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
+        self.sky.setPosHpr(0, 0, 0, 0, 0, 0)
+        self.sky.setScale(1.0)
         self.toonSDs = {}
         avId = self.localAvId
         toonSD = CogThiefGameToonSD.CogThiefGameToonSD(avId, self)
@@ -143,6 +146,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.removeChildGameFSM(self.gameFSM)
         del self.gameFSM
         self.gameBoard.removeNode()
+        self.sky.removeNode()
         del self.gameBoard
         for barrel in self.barrels:
             barrel.removeNode()
@@ -165,6 +169,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.notify.debug('onstage')
         DistributedMinigame.onstage(self)
         self.gameBoard.reparentTo(render)
+        self.sky.reparentTo(render)
         lt = base.localAvatar
         lt.reparentTo(render)
         self.__placeToon(self.localAvId)
@@ -265,7 +270,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.notify.debug('enterPlay')
         self.startGameWalk()
         self.spawnUpdateSuitsTask()
-        self.accept('control', self.controlKeyPressed)
+        self.accept('delete', self.controlKeyPressed)
         self.pieHandler = CollisionHandlerEvent()
         self.pieHandler.setInPattern('pieHit-%fn')
 
