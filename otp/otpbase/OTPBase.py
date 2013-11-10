@@ -265,7 +265,7 @@ def wire():
     'Toggle wireframe view.'
     base.toggleWireframe()
     
-@magicWord()
+@magicWord(category=CATEGORY_GUI)
 def nameTagShowAvId():
     'Show avId in Nametags.'
     messenger.send('nameTagShowAvId')
