@@ -29,7 +29,7 @@ class MagicWordManagerAI(DistributedObjectAI):
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing target'])
             return
 
-        response = spellbook.process(invoker, target, word)
+        response = spellbook.process(invoker, targetId, target, word)
         if response:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
 
