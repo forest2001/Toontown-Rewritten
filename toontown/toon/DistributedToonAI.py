@@ -4358,7 +4358,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 def setCE(CEValue, CEHood=0, CEExpire=0):
     """Set Cheesy Effect of the target."""
     spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
-    
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setHP(hpVal):
+    """Set target's current laff"""
+    if hpVal > 137 or hpVal < -1:
+        return 'Laff must be between -1 and 137!'
+    spellbook.getTarget().b_setHp(hpVal)
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxHP(hpVal):
     """Set target's laff"""
@@ -4366,3 +4373,42 @@ def setMaxHP(hpVal):
         return 'Laff must be between 15 and 137!'
     spellbook.getTarget().b_setMaxHp(hpVal)
     spellbook.getTarget().toonUp(hpVal)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])   
+def setTrackAccess(toonup, trap, lure, sound, throw, squirt, drop):
+    """Set target's gag track access."""
+    spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def adminGags():
+    """Give Invoker 7 maxed gag tracks and allow carrying upto 95 gags (to help with the extra track)"""
+    spellbook.getInvoker().b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
+    spellbook.getInvoker().b_setMaxCarry(95)
+    spellbook.getInvoker().b_setExperience('9999999999999999999')
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxMoney(moneyVal):
+    """Set target's money and maxMoney values."""
+    if moneyVal > 250 or moneyVal < 40:
+        return 'Money value must be between 40 and 250s.'
+    spellbook.getTarget().b_setMaxMoney(moneyVal)
+    spellbook.getTarget().b_setMoney(moneyVal)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])    
+def setFishingRod(rodVal):
+    """Set target's fishing rod value."""
+    if rodVal > 4 or rodVal < 0:
+        return 'Rod value must be between 0 and 4.'
+    spellbook.getTarget().b_setFishingRod(rodVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxFishTank(tankVal):
+    """Set target's max fish tank value."""
+    if tankVal > 99 or tankVal < 20:
+        return 'Max fish tank value must be between 20 and 99'
+    spellbook.getTarget().b_setMaxFishTank(tankVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def setName(nameStr):
+    """Set target's name."""
+    spellbook.getTarget().b_setName(nameStr)
