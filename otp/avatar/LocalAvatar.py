@@ -1239,7 +1239,7 @@ def enableAFGravity():
     """Turn on Estate April Fools gravity."""
     if not base.localAvatar:
         return 'No localAvatar!'
-    base.localAvatar.controlManager.currentControls.setGravity(32.174 * 0.75)
+    base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
     
 @magicWord(category=CATEGORY_MOBILITY, types=[int, bool])
 def setGravity(gravityValue, overrideWarning=False):
@@ -1255,7 +1255,7 @@ def normalGravity():
     """Turn off Estate April Fools gravity."""
     if not base.localAvatar:
         return 'No localAvatar!'
-    base.localAvatar.controlManager.currentControls.setGravity(32.174 * 2.0)
+    base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
     
 @magicWord(category=CATEGORY_DEBUG)
 def getPos():

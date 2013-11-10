@@ -99,6 +99,7 @@ CEVirtual = 14
 MaxHpLimit = 137
 MaxCarryLimit = 80
 MaxQuestCarryLimit = 4
+GravityValue = 32.174
 MaxCogSuitLevel = 50 - 1
 CogSuitHPLevels = (15 - 1,
  20 - 1,
