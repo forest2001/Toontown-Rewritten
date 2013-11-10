@@ -26,6 +26,7 @@ from direct.controls.SwimWalker import SwimWalker
 from direct.controls.TwoDWalker import TwoDWalker
 from otp.nametag.Nametag import Nametag
 from otp.ai.MagicWordGlobal import *
+from toontown.toonbase import ToontownGlobals
 
 class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.DistributedSmoothNode):
     notify = DirectNotifyGlobal.directNotify.newCategory('LocalAvatar')
