@@ -165,8 +165,8 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         else:
             self.bingoCard = FourCornerBingo()
         self.bingoCard.generateCard(self.tileSeed, self.pond.getArea())
+        self.sendCardStateUpdate()
         self.state = 'Playing'
         self.sendStateUpdate()
-        self.sendCardStateUpdate()
         self.b_setJackpot(BingoGlobals.getJackpot(self.typeId))
         taskMgr.doMethodLater(BingoGlobals.getGameTime(self.typeId), DistributedPondBingoManagerAI.finishGame, 'finishGame%d' % self.getDoId(), [self])
