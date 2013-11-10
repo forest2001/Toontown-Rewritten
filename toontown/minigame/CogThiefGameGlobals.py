@@ -52,6 +52,7 @@ GoalStr = {NoGoal: 'NoGoal',
 BarrelBitmask = BitMask32(512)
 BarrelOnGround = -1
 NoBarrelCarried = -1
+LyingDownDuration = 2.0
 MAX_SCORE = 30
 MIN_SCORE = 3
 
