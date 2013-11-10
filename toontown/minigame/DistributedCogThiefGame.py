@@ -25,7 +25,7 @@ class DistributedCogThiefGame(DistributedMinigame):
     ToonSpeed = CTGG.ToonSpeed
     StageHalfWidth = 200.0
     StageHalfHeight = 100.0
-    BarrelScale = 0.25
+    BarrelScale = 0.3
     TOON_Z = 0
     UPDATE_SUITS_TASK = 'CogThiefGameUpdateSuitsTask'
     REWARD_COUNTDOWN_TASK = 'cogThiefGameRewardCountdown'
