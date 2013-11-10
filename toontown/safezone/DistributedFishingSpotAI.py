@@ -16,7 +16,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         self.pondDoId = None
         self.posHpr = [None, None, None, None, None, None]
         self.cast = False
-        self.lastFish = [None, None, None]
+        self.lastFish = [None, None, None, None]
 
     def generate(self):
         DistributedObjectAI.generate(self)
@@ -140,7 +140,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         
         catch = self.air.fishManager.generateCatch(av, self.air.doId2do[self.pondDoId].getArea())
         
-        self.lastFish = [catch[1], catch[2], catch[3]]
+        self.lastFish = catch
         
         self.d_setMovie(FishGlobals.PullInMovie, catch[0], catch[1], catch[2], catch[3], 0, 0)
         self.cast = False

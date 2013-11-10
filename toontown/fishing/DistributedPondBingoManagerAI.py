@@ -47,7 +47,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo while not fishing!')
             return
         fishTuple = (genus, species)
-        if genus != (spot.lastFish[0] or species != spot.lastFish[1]) and (genus != FishGlobals.BingoBoot):
+        if (genus != spot.lastFish[1] or species != spot.lastFish[2]) and (spot.lastFish[0] != FishGlobals.BootItem):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to update bingo card with a fish they didn\'t catch!')
             return
         if cardId != self.cardId:
@@ -56,9 +56,11 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         if self.state != 'Playing':
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to update while the game is not running!')
             return
+        spot.lastFish = [None, None, None, None]
         result = self.bingoCard.cellUpdateCheck(cellId, genus, species)
         if result == BingoGlobals.WIN:
-            sendCanBingo()
+            self.canCall = True
+            self.sendCanBingo()
             self.sendCardStateUpdate()
         elif result == BingoGlobals.UPDATE:
             self.sendCardStateUpdate()
@@ -81,6 +83,8 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         if cardId != self.cardId:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo with an expired cardId!')
             return
+        av = self.air.doId2do[avId]
+        av.d_announceBingo()
         self.rewardAll()
 
     def setJackpot(self, jackpot):
@@ -119,7 +123,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
                 continue
             avId = self.pond.spots[spot].avId
-            self.sendUpdateToAvatarId(avId, 'enableBingo', [self.cardId, self.typeId, self.tileSeed, 0])
+            self.sendUpdateToAvatarId(avId, 'enableBingo', [])
             
     def rewardAll(self):
         self.state = 'Reward'
@@ -166,7 +170,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             self.bingoCard = FourCornerBingo()
         self.bingoCard.generateCard(self.tileSeed, self.pond.getArea())
         self.sendCardStateUpdate()
+        self.b_setJackpot(BingoGlobals.getJackpot(self.typeId))
         self.state = 'Playing'
         self.sendStateUpdate()
-        self.b_setJackpot(BingoGlobals.getJackpot(self.typeId))
         taskMgr.doMethodLater(BingoGlobals.getGameTime(self.typeId), DistributedPondBingoManagerAI.finishGame, 'finishGame%d' % self.getDoId(), [self])
