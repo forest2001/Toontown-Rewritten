@@ -266,6 +266,6 @@ def wire():
     base.toggleWireframe()
     
 @magicWord(category=CATEGORY_GUI)
-def showAvIds():
+def showAvIds(access=200):
     'Show avId in Nametags.'
     messenger.send('nameTagShowAvId')
