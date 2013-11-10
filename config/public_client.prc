@@ -11,6 +11,8 @@ server-version SERVER_VERSION_HERE
 
 default-model-extension .bam
 
+cog-thief-ortho 0
+
 show-total-population #t
 want-mat-all-tailors #t
 
