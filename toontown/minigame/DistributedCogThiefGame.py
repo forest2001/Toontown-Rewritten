@@ -40,7 +40,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.cogInfo = {}
         self.lastTimeControlPressed = 0
         self.stolenBarrels = []
-        self.useOrthoWalk = base.config.GetBool('cog-thief-ortho', 1)
+        self.useOrthoWalk = base.config.GetBool('cog-thief-ortho', 0)
         self.resultIval = None
         self.gameIsEnding = False
         self.__textGen = TextNode('cogThiefGame')
