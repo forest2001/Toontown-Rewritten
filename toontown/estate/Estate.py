@@ -140,11 +140,11 @@ class Estate(Place.Place):
 
     def startAprilFoolsControls(self):
         if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
-            base.localAvatar.controlManager.currentControls.setGravity(32.174 * 0.75)
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
 
     def stopAprilFoolsControls(self):
         if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
-            base.localAvatar.controlManager.currentControls.setGravity(32.174 * 2.0)
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
 
     def exit(self):
         base.localAvatar.stopChat()
