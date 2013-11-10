@@ -81,6 +81,7 @@ CATEGORY_GUI = MagicWordCategory('GUI debugging', defaultAccess=200)
 CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=200)
 CATEGORY_OVERRIDE = MagicWordCategory('Override cheats', defaultAccess=400)
 CATEGORY_CHARACTERSTATS = MagicWordCategory('Character-stats cheats', defaultAccess=400)
+CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300)
 
 
 class MagicWord:
