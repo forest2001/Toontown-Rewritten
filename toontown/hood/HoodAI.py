@@ -36,6 +36,7 @@ class HoodAI:
         bingoManager = DistributedPondBingoManagerAI(self.air)
         bingoManager.setPondDoId(self.pond.getDoId())
         bingoManager.generateWithRequired(self.safezone)
+        #temporary, until we have scheduled stuff
         bingoManager.createGame()
         
         self.pond.bingoMgr = bingoManager
