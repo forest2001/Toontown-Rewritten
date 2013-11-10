@@ -15,7 +15,7 @@ class MagicWordManagerAI(DistributedObjectAI):
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing invoker'])
             return
 
-        if invoker.getAdminAccess() <= MINIMUM_MAGICWORD_ACCESS:
+        if invoker.getAdminAccess() < MINIMUM_MAGICWORD_ACCESS:
             self.air.writeServerEvent('suspicious', invokerId, 'Attempted to issue magic word: %s' % word)
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(invokerId), self.air.ourChannel, CLIENTAGENT_EJECT)
