@@ -1256,3 +1256,17 @@ def normalGravity():
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.controlManager.currentControls.setGravity(32.174 * 2.0)
+    
+@magicWord(category=CATEGORY_DEBUG)
+def getPos():
+    """Get current position of your toon."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    return base.localAvatar.getPos()
+    
+@magicWord(category=CATEGORY_DEBUG, types=[float, float, float])
+def setPos(toonX, toonY, toonZ):
+    """Set position of your toon."""
+    if not base.localAvatar:
+        return 'No localAvatar!'
+    base.localAvatar.setPos(toonX, toonY, toonZ)
