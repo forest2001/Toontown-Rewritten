@@ -1241,11 +1241,13 @@ def enableAFGravity():
         return 'No localAvatar!'
     base.localAvatar.controlManager.currentControls.setGravity(32.174 * 0.75)
     
-@magicWord(category=CATEGORY_MOBILITY, types=[int])
-def setGravity(gravityValue):
+@magicWord(category=CATEGORY_MOBILITY, types=[int, bool])
+def setGravity(gravityValue, overrideWarning=False):
     """Set your gravity value!"""
     if not base.localAvatar:
         return 'No localAvatar!'
+    if gravityValue < 1 and not overrideWarning:
+        return 'A value lower than 1 may crash your client.'
     base.localAvatar.controlManager.currentControls.setGravity(gravityValue)
     
 @magicWord(category=CATEGORY_MOBILITY)
