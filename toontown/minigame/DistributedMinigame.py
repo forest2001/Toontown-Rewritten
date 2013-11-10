@@ -19,6 +19,7 @@ from direct.showbase import PythonUtil
 from toontown.toon import TTEmote
 from otp.avatar import Emote
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
+from otp.ai.MagicWordGlobal import *
 
 class DistributedMinigame(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMinigame')
@@ -442,3 +443,8 @@ class DistributedMinigame(DistributedObject.DistributedObject):
 
     def setMetagameRound(self, metagameRound):
         self.metagameRound = metagameRound
+        
+    @magicWord(category=CATEGORY_OVERRIDE)
+    def minigameAbort():
+        'Abort any minigame you are currently in'
+        messenger.send('minigameAbort')
