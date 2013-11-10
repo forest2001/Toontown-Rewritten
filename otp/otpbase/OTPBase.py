@@ -264,3 +264,8 @@ def oobeCull():
 def wire():
     'Toggle wireframe view.'
     base.toggleWireframe()
+    
+@magicWord()
+def nameTagShowAvId():
+    'Show avId in Nametags.'
+    messenger.send('nameTagShowAvId')
