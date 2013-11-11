@@ -66,9 +66,9 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         if result == BingoGlobals.WIN:
             self.canCall = True
             self.sendCanBingo()
-            self.sendCardStateUpdate()
+            self.sendGameStateUpdate(cellId)
         elif result == BingoGlobals.UPDATE:
-            self.sendCardStateUpdate()
+            self.sendGameStateUpdate(cellId)
 
     def enableBingo(self):
         createGame()
@@ -121,7 +121,13 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
                 continue
             avId = self.pond.spots[spot].avId
             self.sendUpdateToAvatarId(avId, 'setCardState', [self.cardId, self.typeId, self.tileSeed, self.bingoCard.getGameState()])
-
+            
+    def sendGameStateUpdate(self, cellId):
+        for spot in self.pond.spots:
+            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
+                continue
+            avId = self.pond.spots[spot].avId
+            self.sendUpdateToAvatarId(avId, 'updateGameState', [self.bingoCard.getGameState(), cellId])
     
     def sendCanBingo(self):
         for spot in self.pond.spots:
@@ -188,7 +194,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             self.cardId = 0
         if not self.tileSeed:
             self.tileSeed = random.randrange(0, 65535)
-        if not self.typeId:
+        if self.typeId == None:
             self.typeId = random.randrange(0, 4)
         if self.typeId == BingoGlobals.NORMAL_CARD:
             self.bingoCard = NormalBingo()
@@ -217,6 +223,7 @@ def startBingo():
     for hood in spellbook.getTarget().air.hoods:
         if hood.pond.bingoMgr.state == 'Off':
             hood.pond.bingoMgr.createGame()
+            hood.pond.bingoMgr.shouldStop = False
         
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, int])
 def requestBingoCard(typeId, seed = None):
