@@ -78,7 +78,13 @@ class Nametag(ClickablePopup):
 
         width, height = t.node().getWidth(), t.node().getHeight()
 
-        t.setDepthOffset(100)
+        # Put the actual written name a little in front of the nametag and
+        # disable depth write so the text appears nice and clear, free from
+        # z-fighting and bizarre artifacts. The text renders *after* the tag
+        # behind it, due to both being in the transparency bin,
+        # so there's really no problem with doing this.
+        t.setY(-0.01)
+        t.setAttrib(DepthWriteAttrib.make(0))
 
         # Apply panel behind the text:
         panel = NametagGlobals.nametagCardModel.copyTo(self.innerNP, 0)
