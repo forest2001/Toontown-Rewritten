@@ -4,6 +4,9 @@ from direct.fsm.FSM import FSM
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from TrolleyConstants import *
 from toontown.minigame.MinigameCreatorAI import *
+from otp.ai.MagicWordGlobal import *
+
+doesntWantTrolleyTracks = {}
 
 class DistributedTrolleyAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTrolleyAI")
@@ -59,7 +62,11 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # If all players disconnected while the trolley was departing, the
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
-            if len(players) > 1:
+            
+            for avId in players:
+                noTravel = doesntWantTrolleyTracks.get(avId)
+                
+            if len(players) > 0 and not noTravel:
                 mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
             else:
                 mg = createMinigame(self.air, players, self.zoneId)
@@ -147,3 +154,12 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
+
+    @magicWord(access=200)
+    def noTravel():
+        doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
+        
+    @magicWord(access=200)
+    def wantTravel():
+        if spellbook.getInvoker().doId in doesntWantTrolleyTracks:
+            del doesntWantTrolleyTracks[spellbook.getInvoker().doId]
