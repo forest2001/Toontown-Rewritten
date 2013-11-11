@@ -6,6 +6,7 @@ from otp.nametag.NametagConstants import *
 class MagicWordManager(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('MagicWordManager')
     neverDisable = 1
+    lastClickedNametag = None
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
@@ -21,7 +22,10 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         if magicWord.startswith('~~'):
             # TODO: Target selected avatar.
-            target = base.localAvatar
+            if lastClickedNametag == None:
+                target = base.localAvatar
+            else:
+                target = lastClickedNametag
             magicWord = magicWord[2:]
         if magicWord.startswith('~'):
             target = base.localAvatar

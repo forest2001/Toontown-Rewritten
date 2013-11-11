@@ -12,6 +12,7 @@ import random
 from otp.otpbase import OTPRender
 from direct.showbase.PythonUtil import recordCreationStack
 from otp.ai.MagicWordGlobal import *
+from otp.ai import MagicWordManager
 teleportNotify = DirectNotifyGlobal.directNotify.newCategory('Teleport')
 teleportNotify.showTime = True
 if config.GetBool('want-teleport-debug', 1):
@@ -405,6 +406,7 @@ class Avatar(Actor, ShadowCaster):
         self.nametag.setActive(flag)
 
     def clickedNametag(self):
+        MagicWordManager.lastClickedNametag = self
         if self.nametag.hasButton():
             self.advancePageNumber()
         elif self.nametag.isActive():

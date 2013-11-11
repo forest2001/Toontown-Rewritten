@@ -269,3 +269,7 @@ def wire():
 def showAvIds(access=200):
     'Show avId in Nametags.'
     messenger.send('nameTagShowAvId')
+    
+@magicWord(access=200)
+def showAccess():
+    return "Access level: ", spellbook.getTarget().getAdminAccess()
