@@ -82,6 +82,7 @@ CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=200)
 CATEGORY_OVERRIDE = MagicWordCategory('Override cheats', defaultAccess=400)
 CATEGORY_CHARACTERSTATS = MagicWordCategory('Character-stats cheats', defaultAccess=400)
 CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300)
+CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=200)
 
 
 class MagicWord:
