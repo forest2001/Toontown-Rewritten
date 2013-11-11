@@ -4417,3 +4417,23 @@ def setName(nameStr):
 def restockAllResistances():
     """Restock all CFO phrases."""
     spellbook.getTarget().restockAllResistanceMessages(1)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setHat(hatId=0, hatTex=0, hatCol=0):
+    """Set hat of target toon."""
+    spellbook.getTarget().b_setHat(hatId, hatTex, hatCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setGlasses(glassesId=0, glassesTex=0, glassesCol=0):
+    """Set glasses of target toon."""
+    spellbook.getTarget().b_setGlasses(glassesId, glassesTex, glassesCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setBackpack(bpId=0, bpTex=0, bpCol=0):
+    """Set backpack of target toon."""
+    spellbook.getTarget().b_setBackpack(bpId, bpTex, bpCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setShoes(shoesId=0, shoesTex=0, shoesCol=0):
+    """Set shoes of target toon."""
+    spellbook.getTarget().b_setShoes(shoesId, shoesTex, shoesCol)
