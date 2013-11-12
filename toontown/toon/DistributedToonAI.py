@@ -4459,3 +4459,37 @@ def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
         return "Are you sure you want to ban yourself? Use '~ban REASON True True' if you are."
     spellbook.getTarget().ban(reason)
 '''
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str], access=500)
+def ut(doField, doData=None):
+    """Update a toons field in the db."""
+    if doData:
+        theData = doData.split(',')
+        for cur in range(0, len(theData)):
+            try:
+                theData[cur] = int(theData[cur])
+            except:
+                pass
+        if len(theData)==1:
+            finalData = theData[0]
+        else:
+            finalData = theData
+        if hasattr(spellbook.getTarget(), 'b_'+doField):
+            getattr(spellbook.getTarget(), 'b_'+doField)(finalData)
+            print "attribute found, and ran successfully."
+        elif hasattr(spellbook.getTarget(), doField):
+            getattr(spellbook.getTarget(), doField)()
+            print "attribute found without b_"
+        else:
+            spellbook.getTarget().sendUpdate(doField, [finalData])
+            print "attribute not found, so sent update straight to Astron."
+    else:
+        if hasattr(spellbook.getTarget(), 'b_'+doField):
+            getattr(spellbook.getTarget(), 'b_'+doField)()
+            print "attribute found, and ran successfully."
+        elif hasattr(spellbook.getTarget(), doField):
+            getattr(spellbook.getTarget(), doField)()
+            print "attribute found without b_"
+        else:
+            spellbook.getTarget().sendUpdate(doField)
+            print "attribute not found, so sent update straight to Astron."
