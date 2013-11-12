@@ -4476,20 +4476,14 @@ def ut(doField, doData=None):
             finalData = theData
         if hasattr(spellbook.getTarget(), 'b_'+doField):
             getattr(spellbook.getTarget(), 'b_'+doField)(finalData)
-            print "attribute found, and ran successfully."
         elif hasattr(spellbook.getTarget(), doField):
             getattr(spellbook.getTarget(), doField)()
-            print "attribute found without b_"
         else:
             spellbook.getTarget().sendUpdate(doField, [finalData])
-            print "attribute not found, so sent update straight to Astron."
     else:
         if hasattr(spellbook.getTarget(), 'b_'+doField):
             getattr(spellbook.getTarget(), 'b_'+doField)()
-            print "attribute found, and ran successfully."
         elif hasattr(spellbook.getTarget(), doField):
             getattr(spellbook.getTarget(), doField)()
-            print "attribute found without b_"
         else:
             spellbook.getTarget().sendUpdate(doField)
-            print "attribute not found, so sent update straight to Astron."
