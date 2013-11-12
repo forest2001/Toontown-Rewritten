@@ -4369,9 +4369,12 @@ def setHP(hpVal):
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxHP(hpVal):
     """Set target's laff"""
-    if hpVal > 137 or hpVal < 15:
-        return 'Laff must be between 15 and 137!'
-    spellbook.getTarget().b_setMaxHp(hpVal)
+    if hpVal > 140 or hpVal < 15:
+        return 'Laff must be between 15 and 140!'
+    if spellbook.getTarget() == spellbook.getInvoker():
+        spellbook.getInvoker().sendUpdate('setMaxHp', [hpVal])
+    else:
+        spellbook.getTarget().b_setMaxHp(hpVal)
     spellbook.getTarget().toonUp(hpVal)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])   
@@ -4437,3 +4440,22 @@ def setBackpack(bpId=0, bpTex=0, bpCol=0):
 def setShoes(shoesId=0, shoesTex=0, shoesCol=0):
     """Set shoes of target toon."""
     spellbook.getTarget().b_setShoes(shoesId, shoesTex, shoesCol)
+    
+@magicWord(category=CATEGORY_MODERATION, types=[bool])
+def kick(overrideSelfKick=False):
+    """Kick the player from the game server."""
+    if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
+        return "Are you sure you want to kick yourself? Use '~kick True' if you are."
+    spellbook.getTarget().disconnect()
+
+'''
+Disabled until banManager is working.
+@magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400)
+def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
+    """Ban the player from the game server."""
+    if not confirmed:
+        return "Are you sure you want to ban this player? Use '~~ban REASON True' if you are."
+    if not overrideSelfBan and spellbook.getTarget() == spellbook.getInvoker():
+        return "Are you sure you want to ban yourself? Use '~ban REASON True True' if you are."
+    spellbook.getTarget().ban(reason)
+'''
