@@ -11,8 +11,8 @@ ToonStartingPositions = (VBase3(0, 16, 0),
  VBase3(16, 0, 0))
 ToonStartingRotations = (VBase3(180, 0, 0),
  VBase3(0, 0, 0),
- VBase3(90, 0, 0),
- VBase3(-90, 0, 0))
+ VBase3(-90, 0, 0),
+ VBase3(90, 0, 0))
 CogStartingPositions = (VBase3(62, 15, 0),
  VBase3(33, 43, 0),
  VBase3(-33, 43, 0),
@@ -23,8 +23,8 @@ CogStartingPositions = (VBase3(62, 15, 0),
  VBase3(-60, 19, 0),
  VBase3(-39, -50, 0),
  VBase3(41, -55, 0),
- VBase3(25, -40, 0),
- VBase3(-25, 40, 0))
+ VBase3(25, -50, 0),
+ VBase3(-25, 50, 0))
 CogReturnPositions = (VBase3(62, 15, 0),
  VBase3(33, 43, 0),
  VBase3(-33, 43, 0),
@@ -35,8 +35,8 @@ CogReturnPositions = (VBase3(62, 15, 0),
  VBase3(-60, 19, 0),
  VBase3(-39, -50, 0),
  VBase3(41, -55, 0),
- VBase3(25, -40, 0),
- VBase3(-25, 40, 0))
+ VBase3(25, -50, 0),
+ VBase3(-25, 50, 0))
 StageHalfWidth = 25
 StageHalfHeight = 18
 NoGoal = 0

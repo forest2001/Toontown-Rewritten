@@ -3,10 +3,11 @@ from direct.directnotify import DirectNotifyGlobal
 from otp.ai.MagicWordGlobal import *
 from otp.nametag.NametagConstants import *
 
+lastClickedNametag = None
+
 class MagicWordManager(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('MagicWordManager')
     neverDisable = 1
-    lastClickedNametag = None
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
