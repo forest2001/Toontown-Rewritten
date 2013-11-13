@@ -41,6 +41,7 @@ reserved = {
   'text' : 'TEXT',
   'letters' : 'LETTERS',
   'store_font' : 'STORE_FONT',
+  'flat_building' : 'FLAT_BUILDING',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -526,6 +527,19 @@ class DNASignText(DNANode):
         pos, hpr, scale = baseline.getNextPosHprScale(self.pos, self.hpr, self.scale)
         nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
+class DNAFlatBuilding(DNANode): #TODO: finish me
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+    def getWidth(self):
+        return self.width
+    def setWidth(self, width):
+        self.width = width
+    def traverse(self, nodePath, dnaStorage):
+        nodePath = nodePath.attachNewNode(self.name, 0)
+        nodePath.attachNewNode(self.name + '-internal', 0)
+        nodePath.setScale(self.scale)
+        nodePath.setPosHpr(self.pos, self.hpr)
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -621,7 +635,8 @@ def p_dnanode(p):
     '''dnanode : prop
                | sign
                | signbaseline
-               | signtext'''
+               | signtext
+               | flatbuilding'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -643,11 +658,24 @@ def p_signtest(p):
     '''signtext : signtextdef "[" subtext_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
+    
+def p_flatbuilding(p):
+    '''flatbuilding : flatbuildingdef "[" subflatbuilding_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
 
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
     p[0] = DNAProp(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_flatbuildingdef(p):
+    '''flatbuildingdef : FLAT_BUILDING string'''
+    print "New DNAFlatBuilding: ", p[2]
+    p[0] = DNAFlatBuilding(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -749,6 +777,10 @@ def p_text_sub(p):
     '''text_sub : letters'''
     p[0] = p[1]
 
+def p_flatbuilding_sub(p):
+    '''flatbuilding_sub : width'''
+    p[0] = p[1]
+
 def p_letters(p):
     '''letters : LETTERS "[" string "]"'''
     p.parser.parentGroup.setLetters(p[3])
@@ -815,6 +847,18 @@ def p_subtext_list(p):
     '''subtext_list : subtext_list dnanode_sub
                     | subtext_list text_sub
                     | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+
+def p_subflatbuilding_list(p):
+    '''subflatbuilding_list : subflatbuilding_list dnanode_sub
+                            | subflatbuilding_list flatbuilding_sub
+                            | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):

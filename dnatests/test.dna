@@ -69,6 +69,12 @@ group "toontownCentralTutorial" [
 	 ]
 	]
    ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ 105 -60 0 ]
+    hpr [ -180 0 0 ]
+    width [ 20 ]
+	]
+   ]
   ]
  ]
 ]
