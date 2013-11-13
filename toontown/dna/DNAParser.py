@@ -47,6 +47,10 @@ reserved = {
   'windows' : 'WINDOWS',
   'count' : 'COUNT',
   'cornice' : 'CORNICE',
+  'landmark_building' : 'LANDMARK_BUILDING',
+  'title' : 'TITLE',
+  'article' : 'ARTICLE',
+  'building_type' : 'BUILDING_TYPE',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -93,6 +97,9 @@ lexer = lex.lex()#TODO: set optimize=1 in preperation for mirai's shanenagens
 def wl(file, ilevel, string):
     file.write('\t'*ilevel + string + '\n')
 
+class DNAError(Exception):
+    pass
+
 class DNAStorage:
     def __init__(self):
         self.suitPoints = []
@@ -102,6 +109,9 @@ class DNAStorage:
         self.battleCells = []
         self.nodes = {}
         self.fonts = {}
+        self.blockTitles = {}
+        self.blockArticles = {}
+        self.blockBuildingTypes = {}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -164,6 +174,14 @@ class DNAStorage:
         self.fonts = {}
     def storeFont(self, font, code):
         self.fonts[code] = font
+    def getBlock(self, name):
+        return name[name.find(':')-1:name.find(':')]
+    def storeBlockTitle(self, index, title):
+        self.blockTitles[index] = title
+    def storeBlockArticle(self, index, article):
+        self.blockArticles[index] = article
+    def storeBlockBuildingType(self, index, type):
+        self.blockBuildingTypes[index] = type
     def ls(self):
         print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
@@ -663,6 +681,62 @@ class DNACornice(DNAGroup):
         nodePath.setPosHprScale(LVector3f(0,0,0), LVector3f(0,0,0), LVector3f(1, pparentXScale/parentZScale, pparentXScale/parentZScale))
         nodePath.setColor(self.color)
 
+class DNALandmarkBuilding(DNANode):
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+        self.code = ''
+        self.wallColor = LVector4f(1,1,1,1)
+        self.title = ''
+        self.article = ''
+        self.buildingType = ''
+    def getArticle(self):
+        return self.article
+    def getBuildingType(self):
+        return self.buildingType
+    def getTitle(self):
+        return self.title
+    def setCode(self, code):
+        self.code = code
+    def setWallColor(self, color):
+        self.wallColor = color
+    def getCode(self):
+        return self.code
+    def getWallColor(self):
+        return self.wallColor
+    def setArticle(self, article):
+        self.article = article
+    def setBuildingType(self, buildingType):
+        self.buildingType = buildingType
+    def setTitle(self, title):
+        self.title = title
+    def setupSuitBuildingOrigin(self, nodePathA, nodePathB):
+        if self.getName()[0:2] == 'tb' and self.getName()[3].isdigit() and self.getName().find(':') != -1:
+            name = self.getName()
+            name[0] = 's'
+            node = nodePathB.find('**/*suit_building_origin')
+            if node.isEmpty():
+                #there is a fallback in libtoontown but I am too lazy to implement
+                #TODO
+                raise DNAError('DNALandmarkBuilding ' + name + ' did not find **/*suit_building_origin')
+            node.wrtReparentTo(nodePathA, 0)
+            node.setName(name)
+    def traverse(self, nodePath, dnaStorage):
+        print 'traversing dnalandmarkbuilding'
+        node = dnaStorage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNALandmarkBuilding code ' + self.code + ' not found in DNAStorage')
+        npA = nodePath
+        nodePath = node.copyTo(nodePath, 0)
+        nodePath.setName(self.getName())
+        nodePath.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
+        dnaStorage.storeBlockTitle(int(dnaStorage.getBlock(self.getName())), self.title)
+        dnaStorage.storeBlockArticle(int(dnaStorage.getBlock(self.getName())), self.article)
+        dnaStorage.storeBlockBuildingType(int(dnaStorage.getBlock(self.getName())), self.buildingType)
+        self.setupSuitBuildingOrigin(npA, nodePath)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
+        nodePath.flattenStrong()
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -762,7 +836,8 @@ def p_dnanode(p):
                | signbaseline
                | signtext
                | flatbuilding
-               | wall'''
+               | wall
+               | landmarkbuilding'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -805,6 +880,11 @@ def p_cornice(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
+def p_landmarkbuilding(p):
+    '''landmarkbuilding : landmarkbuildingdef "[" sublandmarkbuilding_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
@@ -841,6 +921,14 @@ def p_cornicedef(p):
     '''cornicedef : CORNICE'''
     print 'New DNACornice'
     p[0] = DNACornice('')
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_landmarkbuildingdef(p):
+    '''landmarkbuildingdef : LANDMARK_BUILDING string'''
+    print 'New DNALandmarkBuilding:', p[2]
+    p[0] = DNALandmarkBuilding(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -963,6 +1051,30 @@ def p_cornice_sub(p):
                    | color'''
     p[0] = p[1]
 
+def p_landmarkbuilding_sub(p):
+    '''landmarkbuilding_sub : code
+                            | title
+                            | article
+                            | building_type
+                            | wall_color'''
+    p[0] = p[1]
+
+def p_title(p):
+    '''title : TITLE "[" string "]"'''
+    p.parser.parentGroup.setTitle(p[3])
+
+def p_article(p):
+    '''article : ARTICLE "[" string "]"'''
+    p.parser.parentGroup.setArticle(p[3])
+
+def p_building_type(p):
+    '''building_type : BUILDING_TYPE "[" string "]"'''
+    p.parser.parentGroup.setBuildingType(p[3])
+
+def p_wall_color(p):
+    '''wall_color : COLOR "[" number number number number "]"'''
+    p.parser.parentGroup.setWallColor((p[3],p[4],p[5],p[6]))
+
 def p_count(p):
     '''windowcount : COUNT "[" number "]"'''
     p.parser.parentGroup.setWindowCount(p[3])
@@ -1084,6 +1196,17 @@ def p_subcornice_list(p):
             p[0] += [p[2]]
     else:
         p[0] = []
+        
+def p_sublandmarkbuilding_list(p):
+    '''sublandmarkbuilding_list : sublandmarkbuilding_list dnanode_sub
+                                | sublandmarkbuilding_list landmarkbuilding_sub
+                                | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
 
 def p_modeldef(p):
     '''modeldef : MODEL string'''
@@ -1103,10 +1226,15 @@ def p_node(p):
     '''node : STORE_NODE "[" string string "]"
             | STORE_NODE "[" string string string "]"'''
     nodePath = None
+    search = ''
     if len(p) == 6:
-        nodePath = p.parser.nodePath.find('**/' + p[4])
+        search = p[4]
     else:
-        nodePath = p.parser.nodePath.find('**/' + p[5])
+        search = p[5]
+    if search != '':
+        nodePath = p.parser.nodePath.find('**/' + search)
+    else:
+        nodePath = p.parser.nodePath
     nodePath.setTag('DNACode', p[4])
     nodePath.setTag('DNARoot', p[3])
     p.parser.dnaStore.storeNode(nodePath, p[4])
