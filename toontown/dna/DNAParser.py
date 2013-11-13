@@ -46,6 +46,7 @@ reserved = {
   'wall' : 'WALL',
   'windows' : 'WINDOWS',
   'count' : 'COUNT',
+  'cornice' : 'CORNICE',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -638,6 +639,30 @@ class DNAWindows(DNAGroup):
             else:
                 raise NotImplementedError('Only one window per DNAWindows at this time')
 
+class DNACornice(DNAGroup):
+    def __init__(self, name):
+        DNAGroup.__init__(self, name)
+        self.code = ''
+        self.color = LVector4f(1,1,1,1)
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    def traverse(self, nodePath, dnaStorage):
+        parentZScale = nodePath.getScale().getZ()
+        pparentXScale = nodePath.getParent().getScale().getX()
+        node = dnaStorage.findNode(self.code)
+        if node is None:
+            raise KeyError('DNACornice code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
+        node = node.find('**/*_d')
+        nodePath = node.copyTo(nodePath, 0)
+        nodePath.setPosHprScale(LVector3f(0,0,0), LVector3f(0,0,0), LVector3f(1, pparentXScale/parentZScale, pparentXScale/parentZScale))
+        nodePath.setColor(self.color)
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -727,7 +752,8 @@ def p_group(p):
     '''group : dnagroup
              | visgroup
              | dnanode
-             | windows'''
+             | windows
+             | cornice'''
     p[0] = p[1]
 
 def p_dnanode(p):
@@ -774,6 +800,11 @@ def p_windows(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
+def p_cornice(p):
+    '''cornice : cornicedef "[" subcornice_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
@@ -802,6 +833,14 @@ def p_windowsdef(p):
     '''windowsdef : WINDOWS'''
     print 'New DNAWindows'
     p[0] = DNAWindows('')
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_cornicedef(p):
+    '''cornicedef : CORNICE'''
+    print 'New DNACornice'
+    p[0] = DNACornice('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -919,6 +958,11 @@ def p_windows_sub(p):
                    | windowcount'''
     p[0] = p[1]
 
+def p_cornice_sub(p):
+    '''cornice_sub : code
+                   | color'''
+    p[0] = p[1]
+
 def p_count(p):
     '''windowcount : COUNT "[" number "]"'''
     p.parser.parentGroup.setWindowCount(p[3])
@@ -1022,6 +1066,17 @@ def p_subwall_list(p):
 def p_subwindows_list(p):
     '''subwindows_list : subwindows_list dnanode_sub
                        | subwindows_list windows_sub
+                       | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subcornice_list(p):
+    '''subcornice_list : subcornice_list dnanode_sub
+                       | subcornice_list cornice_sub
                        | empty'''
     p[0] = p[1]
     if len(p) == 3:

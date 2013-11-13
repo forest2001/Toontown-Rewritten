@@ -122,6 +122,32 @@ model "phase_3.5/models/modules/windows" [
 	store_node [ "window" "window_sm_round_ul" ]
 	]
 
+model "phase_3.5/models/modules/cornices" [
+	store_node [ "cornice" "cornice_stone_ur" ]
+	store_node [ "cornice" "cornice_stone_ul" ]
+
+	store_node [ "cornice" "cornice_brick_ur" ]
+	store_node [ "cornice" "cornice_brick_ul" ]
+
+	store_node [ "cornice" "cornice_dental_ur" ]
+	store_node [ "cornice" "cornice_dental_ul" ]
+
+	store_node [ "cornice" "cornice_shingles_ur" ]
+	store_node [ "cornice" "cornice_shingles_ul" ]
+
+	store_node [ "cornice" "cornice_marble_ur" ]
+	store_node [ "cornice" "cornice_marble_ul" ]
+
+	store_node [ "cornice" "cornice_horizontal_ur" ]
+	store_node [ "cornice" "cornice_horizontal_ul" ]
+
+	store_node [ "cornice" "cornice_ice_ur" ]
+	store_node [ "cornice" "cornice_ice_ul" ]
+
+	store_node [ "cornice" "cornice_curved_ur" ]
+	store_node [ "cornice" "cornice_curved_ul" ]
+	]
+
 store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
 store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
 store_suit_point [ 2, STREET_POINT, 55 15 -0.5 ]
@@ -147,6 +173,10 @@ group "toontownCentralTutorial" [
       code [ "window_sm_round_ur" ]
       color [ 0.13 0.78 0.52 1 ]
       count [ 1 ]
+     ]
+	 cornice [
+      code [ "cornice_curved_ur" ]
+      color [ 0.27 0.77 0.42 1 ]
      ]
 	]
    ]
