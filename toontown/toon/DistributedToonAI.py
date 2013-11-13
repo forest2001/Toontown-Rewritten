@@ -47,6 +47,7 @@ from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
 from otp.ai.MagicWordGlobal import *
+import shlex
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -4460,33 +4461,55 @@ def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
     spellbook.getTarget().ban(reason)
 '''
 
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str], access=500)
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def ut(doField, doData=None):
     """Update a toons field in the db."""
+    
+    methodExists = hasattr(spellbook.getTarget(), doField)
+    b_methodExists = hasattr(spellbook.getTarget(), 'b_'+doField)
+    access = spellbook.getInvokerAccess()
     if doData:
-        theData = doData.split(',')
-        for cur in range(0, len(theData)):
-            try:
-                theData[cur] = int(theData[cur])
-            except:
-                pass
+        #There are arguments to be passed, lets find out how many.
+        theData = shlex.split(doData)
+        for count in range(0, len(theData)):
+            theData[count] = theData[count].split(',')
+            for cur in range(0, len(theData[count])):
+                try:
+                    theData[count][cur] = int(theData[count][cur])
+                except:
+                    #Could not convert to integer, pass.
+                    pass
+            if len(theData[count])==1:
+               theData[count] = theData[count][0]
         if len(theData)==1:
-            finalData = theData[0]
+            singleData = theData[0] #Only has 1 parameter
+            if b_methodExists:
+                getattr(spellbook.getTarget(), 'b_'+doField)(singleData)
+            elif methodExists:
+                getattr(spellbook.getTarget(), doField)(singleData)
+            elif access==500: #To prevent unexperienced admins from breaking toons.
+                spellbook.getTarget().sendUpdate(doField, [singleData])
+            else:
+                return "Unable to send to Astron. Access 500 required."
         else:
-            finalData = theData
-        if hasattr(spellbook.getTarget(), 'b_'+doField):
-            getattr(spellbook.getTarget(), 'b_'+doField)(finalData)
-        elif hasattr(spellbook.getTarget(), doField):
-            getattr(spellbook.getTarget(), doField)()
-        else:
-            spellbook.getTarget().sendUpdate(doField, [finalData])
+            if b_methodExists:
+                getattr(spellbook.getTarget(), 'b_'+doField)(*theData)
+            elif methodExists:
+                getattr(spellbook.getTarget(), doField)(*theData)
+            elif access==500:
+                spellbook.getTarget().sendUpdate(doField, theData)
+            else:
+                return "Unable to send to Astron. Access 500 required."
     else:
-        if hasattr(spellbook.getTarget(), 'b_'+doField):
+        #There are no arguments, we will simply call the function.
+        if b_methodExists:
             getattr(spellbook.getTarget(), 'b_'+doField)()
-        elif hasattr(spellbook.getTarget(), doField):
+        elif methodExists:
             getattr(spellbook.getTarget(), doField)()
-        else:
+        elif access==500:
             spellbook.getTarget().sendUpdate(doField)
+        else:
+            return "Unable to send to Astron. Access 500 required."
             
 @magicWord(category=CATEGORY_MODERATION)
 def togGM():
@@ -4499,3 +4522,13 @@ def togGM():
             spellbook.getInvoker().b_setGM(2)
         elif access>=200:
             spellbook.getInvoker().b_setGM(3)
+            
+@magicWord(category=CATEGORY_MODERATION)
+def ghostModeOn():
+    """Set toon to invisible."""
+    spellbook.getInvoker().b_setGhostMode(1)
+    
+@magicWord(category=CATEGORY_MODERATION)
+def ghostModeOff():
+    """Set toon to visible."""
+    spellbook.getInvoker().b_setGhostMode(0)
