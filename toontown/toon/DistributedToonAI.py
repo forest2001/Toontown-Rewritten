@@ -4487,3 +4487,15 @@ def ut(doField, doData=None):
             getattr(spellbook.getTarget(), doField)()
         else:
             spellbook.getTarget().sendUpdate(doField)
+            
+@magicWord(category=CATEGORY_MODERATION)
+def togGM():
+    """Toggle GM Icon for toon."""
+    access = spellbook.getInvokerAccess()
+    if spellbook.getInvoker().isGM():
+        spellbook.getInvoker().b_setGM(0)
+    else:
+        if access>=400:
+            spellbook.getInvoker().b_setGM(2)
+        elif access>=200:
+            spellbook.getInvoker().b_setGM(3)
