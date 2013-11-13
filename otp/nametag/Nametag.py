@@ -57,16 +57,16 @@ class Nametag(ClickablePopup):
         elif self.contents&self.CName and self.displayName:
             self.showName()
 
-    def showBalloon(self, balloon):
+    def showBalloon(self, balloon, text):
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        balloon = balloon.generate(self.chatString, self.font, balloonColor=color)
+        balloon = balloon.generate(text, self.font, balloonColor=color)
         balloon.reparentTo(self.innerNP)
 
     def showThought(self):
-        self.showBalloon(self.getThoughtBalloon())
+        self.showBalloon(self.getThoughtBalloon(), self.chatString)
 
     def showSpeech(self):
-        self.showBalloon(self.getSpeechBalloon())
+        self.showBalloon(self.getSpeechBalloon(), self.chatString)
 
     def showName(self):
         if not self.font:

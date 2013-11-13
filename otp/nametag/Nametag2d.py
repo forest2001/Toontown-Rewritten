@@ -9,6 +9,10 @@ class Nametag2d(Nametag, MarginPopup):
 
         self.contents = self.CName|self.CSpeech
 
+    def showBalloon(self, balloon, text):
+        text = '%s: %s' % (self.displayName, text)
+        Nametag.showBalloon(self, balloon, text)
+
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon2d
 
