@@ -137,6 +137,7 @@ class NametagGroup:
         tag.chatString = self.chatString
         tag.chatFlags = self.chatFlags
         tag.avatar = self.avatar
+        tag.icon = self.icon
 
         tag.update()
 
