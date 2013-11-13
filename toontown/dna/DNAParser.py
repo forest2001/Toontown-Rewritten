@@ -528,6 +528,7 @@ class DNASignText(DNANode):
         nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
 class DNAFlatBuilding(DNANode): #TODO: finish me
+    currentWallHeight = 0
     def __init__(self, name):
         DNANode.__init__(self, name)
     def getWidth(self):
@@ -535,10 +536,42 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
     def setWidth(self, width):
         self.width = width
     def traverse(self, nodePath, dnaStorage):
+        currentWallHeight = 0
         nodePath = nodePath.attachNewNode(self.name, 0)
         nodePath.attachNewNode(self.name + '-internal', 0)
         nodePath.setScale(self.scale)
         nodePath.setPosHpr(self.pos, self.hpr)
+
+class DNAWall(DNANode):
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+        self.code = ''
+        self.height = 10
+        self.color = (1,1,1,1)
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    def getHeight(self):
+        return self.height
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def setHeight(self, height):
+        self.height = height
+    def traverse(self, nodePath, dnaStorage):
+        node = dnaStorage.findNode(self.code)
+        if not node is None:
+            nodePath = node.copyTo(nodePath, 0)
+            self.pos[3] = DNAFlatBuilding.currentWallHeight
+            self.scale[3] = self.height
+            nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
+            nodePath.setColor(self.color)
+        else:
+            raise KeyError('DNAWall code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
 
 class DNALoader:
     def __init__(self):
