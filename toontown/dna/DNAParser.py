@@ -1,6 +1,7 @@
 import ply.lex as lex
 import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
+from panda3d.core import LVector3f, LVector4f
 from direct.showbase import Loader
 import math
 tokens = [
@@ -338,9 +339,9 @@ class DNAData(DNAGroup):
 class DNANode(DNAGroup):
     def __init__(self, name):
         DNAGroup.__init__(self, name)
-        self.pos = (0,0,0)
-        self.hpr = (0,0,0)
-        self.scale = (1,1,1)
+        self.pos = LVector3f()
+        self.hpr = LVector3f()
+        self.scale = LVector3f(1,1,1)
     def getPos(self):
         return self.pos
     def getHpr(self):
@@ -363,7 +364,7 @@ class DNAProp(DNANode):
     def __init__(self, name):
         DNANode.__init__(self, name)
         self.code = ''
-        self.color = (0, 0, 0, 0)
+        self.color = LVector4f(1, 1, 1, 1)
     def setCode(self, code):
         self.code = code
     def setColor(self, color):
@@ -387,7 +388,7 @@ class DNASign(DNANode):
     def __init__(self):
         DNANode.__init__(self, '')
         self.code = ''
-        self.color = (0, 0, 0, 0)
+        self.color = LVector4f(1, 1, 1, 1)
     def setCode(self, code):
         self.code = code
     def setColor(self, color):
@@ -424,7 +425,7 @@ class DNASignBaseline(DNANode):
     def __init__(self):
         DNANode.__init__(self, '')
         self.code = ''
-        self.color = (1, 1, 1, 1)
+        self.color = LVector4f(1, 1, 1, 1)
         self.font = None
         self.height = 0.0
         self.counter = 0
@@ -547,7 +548,7 @@ class DNAWall(DNANode):
         DNANode.__init__(self, name)
         self.code = ''
         self.height = 10
-        self.color = (1,1,1,1)
+        self.color = LVector4f(1, 1, 1, 1)
     def getCode(self):
         return self.code
     def getColor(self):
@@ -606,7 +607,7 @@ def p_number(p):
 
 def p_lpoint3f(p):
     '''lpoint3f : number number number'''
-    p[0] = (p[1], p[2], p[3])
+    p[0] = LVector3f(p[1], p[2], p[3])
 
 def p_suitpoint(p):
     '''suitpoint : STORE_SUIT_POINT "[" number "," suitpointtype "," lpoint3f "]"'''
