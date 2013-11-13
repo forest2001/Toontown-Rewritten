@@ -3,7 +3,7 @@ import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
 from panda3d.core import LVector3f, LVector4f
 from direct.showbase import Loader
-import math
+import math, random
 tokens = [
   'FLOAT',
   'INTEGER',
@@ -44,6 +44,8 @@ reserved = {
   'store_font' : 'STORE_FONT',
   'flat_building' : 'FLAT_BUILDING',
   'wall' : 'WALL',
+  'windows' : 'WINDOWS',
+  'count' : 'COUNT',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -530,13 +532,15 @@ class DNASignText(DNANode):
         nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
 class DNAFlatBuilding(DNANode): #TODO: finish me
-    currentWallHeight = 0
+    currentWallHeight = 0 #In the asm this is a global, we can refactor it later
     def __init__(self, name):
         DNANode.__init__(self, name)
     def getWidth(self):
         return self.width
     def setWidth(self, width):
         self.width = width
+    def getCurrentWallHeight(self): #this is never used in the asm, only exported. probably optimized out?
+        return DNAFlatBuilding.currentWallHeight
     def traverse(self, nodePath, dnaStorage):
         currentWallHeight = 0
         nodePath = nodePath.attachNewNode(self.name, 0)
@@ -576,6 +580,63 @@ class DNAWall(DNANode):
             raise KeyError('DNAWall code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
         for child in self.children:
             child.traverse(nodePath, dnaStorage)
+
+class DNAWindows(DNAGroup):
+    def __init__(self, name):
+        DNAGroup.__init__(self, name)
+        self.code = ''
+        self.color = LVector4f(1, 1, 1, 1)
+        self.windowCount = 1
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    def getWindowCount(self):
+        return self.windowCount
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def setWindowCount(self, count):
+        self.windowCount = count
+    def traverse(self, nodePath, dnaStorage):
+        if self.windowCount != 0:
+            #Do some crazy shit with the parent's scale here
+            parentX = nodePath.getParent().getX()
+            scale = random.randint(0, 0x7fff)
+            scale *= 0.000030517578125
+            scale *= 0.02500000037252903
+            scale -= 0.0125
+            if parentX <= 5.0:
+                scale += 1.0
+            elif parentX <= 10.0:
+                scale += 1.15
+            else:
+                scale -= 0.0125
+            scale = LVector3f(scale, scale, scale)
+            if self.windowCount == 1:
+                node = dnaStorage.findNode(self.code)
+                if not node is None:
+                    nodePath = node.copyTo(nodePath, 0)
+                    nodePath.setColor(self.color)
+                    nodePath.setScale(scale)
+                    float = random.randint(0, 0x7fff)
+                    float *= 0.000030517578125
+                    float *= 0.02500000037252903
+                    float -= 0.0125
+                    float += 0.5
+                    float2 = random.randint(0, 0x7fff)
+                    float2 *= 0.000030517578125
+                    float2 *= 0.02500000037252903
+                    float2 -= 0.0125
+                    float2 += 0.5
+                    nodePath.setPos(float2, 0, float)
+                    nodePath.setHpr(0, 0, random.randint(0, 0x7fff)*0.000030517578125*6.0-3.0)
+                    nodePath.setEffect(DecalEffect.make())
+                else:
+                    raise KeyError('DNAWindows code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
+            else:
+                raise NotImplementedError('Only one window per DNAWindows at this time')
 
 class DNALoader:
     def __init__(self):
@@ -665,7 +726,8 @@ def p_empty(p):
 def p_group(p):
     '''group : dnagroup
              | visgroup
-             | dnanode'''
+             | dnanode
+             | windows'''
     p[0] = p[1]
 
 def p_dnanode(p):
@@ -707,6 +769,11 @@ def p_wall(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
+def p_windows(p):
+    '''windows : windowsdef "[" subwindows_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
@@ -727,6 +794,14 @@ def p_walldef(p):
     '''walldef : WALL'''
     print 'New DNAWall'
     p[0] = DNAWall('')
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_windowsdef(p):
+    '''windowsdef : WINDOWS'''
+    print 'New DNAWindows'
+    p[0] = DNAWindows('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -838,6 +913,16 @@ def p_wall_sub(p):
                 | color'''
     p[0] = p[1]
 
+def p_windows_sub(p):
+    '''windows_sub : code
+                   | color
+                   | windowcount'''
+    p[0] = p[1]
+
+def p_count(p):
+    '''windowcount : COUNT "[" number "]"'''
+    p.parser.parentGroup.setWindowCount(p[3])
+
 def p_letters(p):
     '''letters : LETTERS "[" string "]"'''
     p.parser.parentGroup.setLetters(p[3])
@@ -927,6 +1012,17 @@ def p_subwall_list(p):
     '''subwall_list : subwall_list dnanode_sub
                     | subwall_list wall_sub
                     | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subwindows_list(p):
+    '''subwindows_list : subwindows_list dnanode_sub
+                       | subwindows_list windows_sub
+                       | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):
