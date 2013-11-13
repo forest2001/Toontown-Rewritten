@@ -8,6 +8,94 @@ model "phase_3.5/models/props/tunnel_sign_orange" [
 store_font [ "font" "mickey"
              "phase_3/models/fonts/MickeyFont" ]
 
+model "phase_3.5/models/modules/walls" [
+	store_node [ "wall_collide" "wall_collide" ]
+	store_node [ "wall_collide" "wall_camera_collide" ]
+	store_node [ "wall_collide" "wall_camera_barrier" ]
+
+	store_node [ "wall" "wall_lg_brick_ur" ]
+	store_node [ "wall" "wall_lg_brick_ul" ]
+	store_node [ "wall" "wall_lg_brick_dr" ]
+	store_node [ "wall" "wall_lg_brick_dl" ]
+
+	store_node [ "wall" "wall_lg_rock_ur" ]
+	store_node [ "wall" "wall_lg_rock_ul" ]
+	store_node [ "wall" "wall_lg_rock_dr" ]
+	store_node [ "wall" "wall_lg_rock_dl" ]
+
+	store_node [ "wall" "wall_md_board_ur" ]
+	store_node [ "wall" "wall_md_board_ul" ]
+	store_node [ "wall" "wall_md_board_dr" ]
+	store_node [ "wall" "wall_md_board_dl" ]
+
+	store_node [ "wall" "wall_md_bricks_ur" ]
+	store_node [ "wall" "wall_md_bricks_ul" ]
+	store_node [ "wall" "wall_md_bricks_dr" ]
+	store_node [ "wall" "wall_md_bricks_dl" ]
+
+	store_node [ "wall" "wall_md_dental_ur" ]
+	store_node [ "wall" "wall_md_dental_ul" ]
+	store_node [ "wall" "wall_md_dental_dr" ]
+	store_node [ "wall" "wall_md_dental_dl" ]
+
+	store_node [ "wall" "wall_md_pillars_ur" ]
+	store_node [ "wall" "wall_md_pillars_ul" ]
+	store_node [ "wall" "wall_md_pillars_dr" ]
+	store_node [ "wall" "wall_md_pillars_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_ur" ]
+	store_node [ "wall" "wall_sm_brick_ul" ]
+	store_node [ "wall" "wall_sm_brick_dr" ]
+	store_node [ "wall" "wall_sm_brick_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_pink_ur" ]
+	store_node [ "wall" "wall_sm_brick_pink_ul" ]
+	store_node [ "wall" "wall_sm_brick_pink_dr" ]
+	store_node [ "wall" "wall_sm_brick_pink_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_blue_ur" ]
+	store_node [ "wall" "wall_sm_brick_blue_ul" ]
+	store_node [ "wall" "wall_sm_brick_blue_dr" ]
+	store_node [ "wall" "wall_sm_brick_blue_dl" ]
+
+	store_node [ "wall" "wall_sm_cement_ur" ]
+	store_node [ "wall" "wall_sm_cement_ul" ]
+	store_node [ "wall" "wall_sm_cement_dr" ]
+	store_node [ "wall" "wall_sm_cement_dl" ]
+
+	store_node [ "wall" "wall_sm_cement_blue_ur" ]
+	store_node [ "wall" "wall_sm_cement_blue_ul" ]
+	store_node [ "wall" "wall_sm_cement_blue_dr" ]
+	store_node [ "wall" "wall_sm_cement_blue_dl" ]
+
+	store_node [ "wall" "wall_sm_wood_ur" ]
+	store_node [ "wall" "wall_sm_wood_ul" ]
+	store_node [ "wall" "wall_sm_wood_dr" ]
+	store_node [ "wall" "wall_sm_wood_dl" ]
+
+	store_node [ "wall" "wall_bricks_ur" ]
+	store_node [ "wall" "wall_bricks_ul" ]
+	store_node [ "wall" "wall_bricks_dr" ]
+	store_node [ "wall" "wall_bricks_dl" ]
+
+	store_node [ "wall" "wall_fence_wood_ur" ]
+	store_node [ "wall" "wall_fence_wood_ul" ]
+	store_node [ "wall" "wall_fence_wood_dr" ]
+	store_node [ "wall" "wall_fence_wood_dl" ]
+
+	store_node [ "wall" "wall_md_blank_ur" ]
+	store_node [ "wall" "wall_md_blank_ul" ]
+	store_node [ "wall" "wall_md_blank_dr" ]
+	store_node [ "wall" "wall_md_blank_dl" ]
+
+	store_node [ "wall" "wall_woodflower_fence_ur" ]
+	store_node [ "wall" "wall_woodflower_fence_ul" ]
+
+	store_node [ "wall" "wall_stone_fence_ur" ]
+	store_node [ "wall" "wall_stone_fence_ul" ]
+
+	]
+
 store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
 store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
 store_suit_point [ 2, STREET_POINT, 55 15 -0.5 ]
@@ -21,58 +109,15 @@ group "toontownCentralTutorial" [
   suit_edge [ 3 0 ]
   battle_cell [ 20 20 75 20 -0.5 ]
   group "tutorial" [
-   prop "linktunnel_tt_0_DNARoot" [
-	code [ "prop_safe_zone_entrance_tunnel" ]
-    pos [ 210 40 0 ]
-    hpr [ -90 0 0 ]
-	sign [
-	 code [ "tunnel_sign_orange" ]
-     pos [ 0 0 -2.84 ]
-     scale [ 1.5 1 1.5 ]
-	 baseline [
-      code [ "mickey" ]
-      color [ 0 0.501961 0.25098 1 ]
-      pos [ 0.09 0 -0.99 ]
-      scale [ 1.5 1 1.5 ]
-      width [ 38.4394 ]
-      height [ 38.4394 ]
-	  text [
-       letters [ "P" ]
-      ]
-      text [
-       letters [ "L" ]
-      ]
-      text [
-       letters [ "A" ]
-      ]
-      text [
-       letters [ "Y" ]
-      ]
-      text [
-       letters [ "G" ]
-      ]
-      text [
-       letters [ "R" ]
-      ]
-      text [
-       letters [ "O" ]
-      ]
-      text [
-       letters [ "U" ]
-      ]
-      text [
-       letters [ "N" ]
-      ]
-      text [
-       letters [ "D" ]
-      ]
-	 ]
-	]
-   ]
    flat_building "tb0:random_DNARoot" [
     pos [ 105 -60 0 ]
     hpr [ -180 0 0 ]
     width [ 20 ]
+	wall [
+     height [ 10 ]
+     code [ "wall_sm_brick_ur" ]
+     color [ 1 0.84 0.59 1 ]
+	]
    ]
   ]
  ]

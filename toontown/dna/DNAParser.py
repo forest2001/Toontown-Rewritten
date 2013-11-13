@@ -43,6 +43,7 @@ reserved = {
   'letters' : 'LETTERS',
   'store_font' : 'STORE_FONT',
   'flat_building' : 'FLAT_BUILDING',
+  'wall' : 'WALL',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -542,6 +543,8 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
         nodePath.attachNewNode(self.name + '-internal', 0)
         nodePath.setScale(self.scale)
         nodePath.setPosHpr(self.pos, self.hpr)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
 
 class DNAWall(DNANode):
     def __init__(self, name):
@@ -565,8 +568,8 @@ class DNAWall(DNANode):
         node = dnaStorage.findNode(self.code)
         if not node is None:
             nodePath = node.copyTo(nodePath, 0)
-            self.pos[3] = DNAFlatBuilding.currentWallHeight
-            self.scale[3] = self.height
+            self.pos.setZ(DNAFlatBuilding.currentWallHeight)
+            self.scale.setZ(self.height)
             nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
             nodePath.setColor(self.color)
         else:
@@ -670,7 +673,8 @@ def p_dnanode(p):
                | sign
                | signbaseline
                | signtext
-               | flatbuilding'''
+               | flatbuilding
+               | wall'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -698,6 +702,11 @@ def p_flatbuilding(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
+def p_wall(p):
+    '''wall : walldef "[" subwall_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
@@ -710,6 +719,14 @@ def p_flatbuildingdef(p):
     '''flatbuildingdef : FLAT_BUILDING string'''
     print "New DNAFlatBuilding: ", p[2]
     p[0] = DNAFlatBuilding(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_walldef(p):
+    '''walldef : WALL'''
+    print 'New DNAWall'
+    p[0] = DNAWall('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -815,6 +832,12 @@ def p_flatbuilding_sub(p):
     '''flatbuilding_sub : width'''
     p[0] = p[1]
 
+def p_wall_sub(p):
+    '''wall_sub : height
+                | code
+                | color'''
+    p[0] = p[1]
+
 def p_letters(p):
     '''letters : LETTERS "[" string "]"'''
     p.parser.parentGroup.setLetters(p[3])
@@ -893,6 +916,17 @@ def p_subflatbuilding_list(p):
     '''subflatbuilding_list : subflatbuilding_list dnanode_sub
                             | subflatbuilding_list flatbuilding_sub
                             | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subwall_list(p):
+    '''subwall_list : subwall_list dnanode_sub
+                    | subwall_list wall_sub
+                    | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):
