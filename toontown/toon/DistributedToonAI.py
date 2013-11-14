@@ -4434,6 +4434,7 @@ def setFishingRod(rodVal):
     if rodVal > 4 or rodVal < 0:
         return 'Rod value must be between 0 and 4.'
     spellbook.getTarget().b_setFishingRod(rodVal)
+    return 'Rod changed to ', rodVal
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxFishTank(tankVal):
@@ -4441,6 +4442,7 @@ def setMaxFishTank(tankVal):
     if tankVal > 99 or tankVal < 20:
         return 'Max fish tank value must be between 20 and 99'
     spellbook.getTarget().b_setMaxFishTank(tankVal)
+    return 'Max size of fish tank changed to ', tankVal
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
 def setName(nameStr):
@@ -4478,6 +4480,7 @@ def kick(overrideSelfKick=False):
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
     spellbook.getTarget().disconnect()
+    return "The player ", spellbook.getTarget().name, " was kicked."
 
 '''
 Disabled until banManager is working.
@@ -4517,29 +4520,34 @@ def ut(doField, doData=None):
                 getattr(spellbook.getTarget(), 'b_'+doField)(singleData)
             elif methodExists:
                 getattr(spellbook.getTarget(), doField)(singleData)
-            elif access==500: #To prevent unexperienced admins from breaking toons.
-                spellbook.getTarget().sendUpdate(doField, [singleData])
+            #elif access==500: #To prevent unexperienced admins from breaking toons.
             else:
-                return "Unable to send to Astron. Access 500 required."
+                spellbook.getTarget().sendUpdate(doField, [singleData])
+            #else:
+                #return "Unable to send to Astron. Access 500 required."
         else:
             if b_methodExists:
                 getattr(spellbook.getTarget(), 'b_'+doField)(*theData)
             elif methodExists:
                 getattr(spellbook.getTarget(), doField)(*theData)
-            elif access==500:
-                spellbook.getTarget().sendUpdate(doField, theData)
+            #elif access==500:
             else:
-                return "Unable to send to Astron. Access 500 required."
+                spellbook.getTarget().sendUpdate(doField, theData)
+            #else:
+                #return "Unable to send to Astron. Access 500 required."
     else:
         #There are no arguments, we will simply call the function.
         if b_methodExists:
             getattr(spellbook.getTarget(), 'b_'+doField)()
         elif methodExists:
             getattr(spellbook.getTarget(), doField)()
-        elif access==500:
-            spellbook.getTarget().sendUpdate(doField)
+        #elif access==500:
         else:
-            return "Unable to send to Astron. Access 500 required."
+            spellbook.getTarget().sendUpdate(doField)
+        #else:
+            #return "Unable to send to Astron. Access 500 required."
+           
+    return "Method ", doField, " was called on ", spellbook.getTarget().name, " successfully."
             
 @magicWord(category=CATEGORY_MODERATION)
 def togGM():

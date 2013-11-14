@@ -158,8 +158,10 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 @magicWord(access=200)
 def noTravel():
     doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
+    return "Disabled Trolley Tracks."
     
 @magicWord(access=200)
 def wantTravel():
     if spellbook.getInvoker().doId in doesntWantTrolleyTracks:
         del doesntWantTrolleyTracks[spellbook.getInvoker().doId]
+        return "Re-enabled Trolley Tracks."
