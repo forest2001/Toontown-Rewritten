@@ -166,7 +166,7 @@ class ToonBase(OTPBase.OTPBase):
 
     def addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
-        cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
+        cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
         cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
 
