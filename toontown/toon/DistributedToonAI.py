@@ -4419,14 +4419,16 @@ def adminGags():
     spellbook.getInvoker().b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
     spellbook.getInvoker().b_setMaxCarry(95)
     spellbook.getInvoker().b_setExperience('9999999999999999999')
+    return 'Harv smells aboose. C:'
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxMoney(moneyVal):
     """Set target's money and maxMoney values."""
     if moneyVal > 250 or moneyVal < 40:
-        return 'Money value must be between 40 and 250s.'
+        return 'Money value must be between 40 and 250.'
     spellbook.getTarget().b_setMaxMoney(moneyVal)
     spellbook.getTarget().b_setMoney(moneyVal)
+    return 'maxMoney set to ' + str(moneyVal)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])    
 def setFishingRod(rodVal):
@@ -4434,7 +4436,7 @@ def setFishingRod(rodVal):
     if rodVal > 4 or rodVal < 0:
         return 'Rod value must be between 0 and 4.'
     spellbook.getTarget().b_setFishingRod(rodVal)
-    return 'Rod changed to ', rodVal
+    return 'Rod changed to ' + str(rodVal)
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxFishTank(tankVal):
@@ -4442,7 +4444,7 @@ def setMaxFishTank(tankVal):
     if tankVal > 99 or tankVal < 20:
         return 'Max fish tank value must be between 20 and 99'
     spellbook.getTarget().b_setMaxFishTank(tankVal)
-    return 'Max size of fish tank changed to ', tankVal
+    return 'Max size of fish tank changed to ' + str(tankVal)
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
 def setName(nameStr):
@@ -4480,7 +4482,7 @@ def kick(overrideSelfKick=False):
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
     spellbook.getTarget().disconnect()
-    return "The player ", spellbook.getTarget().name, " was kicked."
+    return "The player " + spellbook.getTarget().name + " was kicked."
 
 '''
 Disabled until banManager is working.
@@ -4547,7 +4549,7 @@ def ut(doField, doData=None):
         #else:
             #return "Unable to send to Astron. Access 500 required."
            
-    return "Method ", doField, " was called on ", spellbook.getTarget().name, " successfully."
+    return "Method " + doField + " was called on " + spellbook.getTarget().name + " successfully."
             
 @magicWord(category=CATEGORY_MODERATION)
 def togGM():
