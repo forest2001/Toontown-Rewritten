@@ -229,7 +229,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.NUMTREASURES = numToons
         camera.reparentTo(render)
         camera.setZ(36)
-        camera.setH(0)
+        camera.setHpr(0,0,0)
         camera.setX(0)
         base.camLens.setFov(45)
         camera.setY(-54)
