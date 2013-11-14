@@ -8,6 +8,7 @@ import InventoryBase
 import Experience
 from otp.avatar import DistributedAvatarAI
 from otp.avatar import DistributedPlayerAI
+from otp.otpbase import OTPLocalizer
 from direct.distributed import DistributedSmoothNodeAI
 from toontown.toonbase import ToontownGlobals
 from toontown.quest import QuestRewardCounter
@@ -250,6 +251,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
+            self.applyAlphaModifications()
 
     def setLocation(self, parentId, zoneId):
         DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
@@ -4354,6 +4356,33 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
+
+    def applyAlphaModifications(self):
+        # Apply all of the temporary changes that we want the alpha testers to
+        # have:
+
+        # Their fishing rod should be level 2.
+        self.b_setFishingRod(2)
+
+        # They need bigger jellybean jars to hold all of their money:
+        self.b_setMaxMoney(120)
+
+        # Unlock all of the emotes they should have during alpha:
+        emotes = list(self.getEmoteAccess())
+        emotes += [0]*(len(OTPLocalizer.EmoteFuncDict)-len(emotes))
+
+        # Get this list out of OTPLocalizerEnglish.py
+        ALPHA_EMOTES = ['Dance', 'Think', 'Bored', 'Applause', 'Cringe',
+                        'Confused', 'Bow', 'Delighted']
+        for emote in ALPHA_EMOTES:
+            emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
+            if emoteId is None:
+                self.notify.warning('Invalid emote %s' % emote)
+                continue
+
+            emotes[emoteId] = 1
+
+        self.b_setEmoteAccess(emotes)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

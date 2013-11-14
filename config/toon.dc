@@ -445,7 +445,7 @@ dclass DistributedToon : DistributedPlayer {
   setGM(uint8 = 0) required broadcast ownrecv db;
   setMaxBankMoney(int16 = 1200) required broadcast ownrecv db;
   setBankMoney(int16 = 0) required broadcast ownrecv db;
-  setMaxMoney(int16 = 120) required broadcast ownrecv db; // ALPHA ONLY: Set back to 40
+  setMaxMoney(int16 = 40) required broadcast ownrecv db;
   setMoney(int16 = 0) required broadcast ownrecv db;
   setMaxHp(int16 = 15) required broadcast ownrecv db;
   setHp(int16 = 15) required broadcast ownrecv db;
@@ -486,7 +486,7 @@ dclass DistributedToon : DistributedPlayer {
   setTunnelOut(int16, int16/10, int16/10, int16/10, int16/10, int16/100, int32/100) ownsend broadcast;
   setAnimState(char [0-1024], int16/1000, int16) broadcast ram ownsend airecv;
   setEmoteState(int16, int16/1000, int16) broadcast ram ownsend;
-  setEmoteAccess(uint8array = {1,1,1,1,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,1,0,0}) required ownrecv db; //FIXME: Return to 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 after alpha
+  setEmoteAccess(uint8array = {1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}) required ownrecv db;
   setCustomMessages(uint16array = {}) required ownrecv db;
   setSleepAutoReply(uint32) broadcast clsend ownrecv;
   setResistanceMessages(pair16 [] = {}) required ownrecv db;
@@ -538,7 +538,7 @@ dclass DistributedToon : DistributedPlayer {
   setFishCollection(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
   setMaxFishTank(uint8 = 20) required ownrecv db;
   setFishTank(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
-  setFishingRod(uint8 = 2) required broadcast ownrecv db; // ALPHA ONLY: Set back to 0
+  setFishingRod(uint8 = 0) required broadcast ownrecv db;
   setFishingTrophies(uint8array = {}) required ownrecv db;
   setFlowerCollection(uint8array = {}, uint8array = {}) required ownrecv db;
   setFlowerBasket(uint8array = {}, uint8array = {}) required ownrecv db;
