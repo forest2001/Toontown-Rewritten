@@ -4373,7 +4373,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # Get this list out of OTPLocalizerEnglish.py
         ALPHA_EMOTES = ['Dance', 'Think', 'Bored', 'Applause', 'Cringe',
-                        'Confused', 'Bow', 'Delighted']
+                        'Confused', 'Bow', 'Delighted', 'Belly Flop', 'Banana Peel',
+                        'Laugh', 'Cry']
         for emote in ALPHA_EMOTES:
             emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
             if emoteId is None:
