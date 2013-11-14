@@ -52,6 +52,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.addChildGameFSM(self.gameFSM)
         self.iCount = 0
         self.reachedFlag = 0
+        self.grabbingTreasure = -1
         self.dead = 0
 
     def getTitle(self):
@@ -654,7 +655,8 @@ class DistributedDivingGame(DistributedMinigame):
         avId = int(collEntry.getFromNodePath().getName())
         chestId = int(collEntry.getIntoNodePath().getName())
         toonSD = self.toonSDs[avId]
-        if toonSD.status == 'normal':
+        if toonSD.status == 'normal' and self.grabbingTreasure == -1:
+            self.grabbingTreasure = chestId
             self.sendUpdate('pickupTreasure', [chestId])
 
     def setTreasureDropped(self, avId, timestamp):
@@ -778,6 +780,8 @@ class DistributedDivingGame(DistributedMinigame):
     def setTreasureGrabbed(self, avId, chestId):
         if not self.hasLocalToon:
             return
+        if self.grabbingTreasure == chestId:
+            self.grabbingTreasure = -1
         toonSD = self.toonSDs.get(avId)
         if toonSD and toonSD.status == 'normal':
             toonSD.fsm.request('treasure')
