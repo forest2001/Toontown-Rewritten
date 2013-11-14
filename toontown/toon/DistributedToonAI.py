@@ -4554,11 +4554,9 @@ def togGM():
             spellbook.getInvoker().b_setGM(3)
             
 @magicWord(category=CATEGORY_MODERATION)
-def ghostModeOn():
+def ghost():
     """Set toon to invisible."""
-    spellbook.getInvoker().b_setGhostMode(1)
-    
-@magicWord(category=CATEGORY_MODERATION)
-def ghostModeOff():
-    """Set toon to visible."""
-    spellbook.getInvoker().b_setGhostMode(0)
+    if spellbook.getInvoker().ghostMode == 0:
+        spellbook.getInvoker().b_setGhostMode(2)
+    else:
+        spellbook.getInvoker().b_setGhostMode(0)
