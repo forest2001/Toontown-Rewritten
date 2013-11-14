@@ -217,6 +217,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
 def stopBingo():
     for hood in spellbook.getTarget().air.hoods:
         hood.pond.bingoMgr.shouldStop = True
+    return "Stopped Fish Bingo for the current district."
 
 @magicWord(category=CATEGORY_OVERRIDE)
 def startBingo():
@@ -224,7 +225,9 @@ def startBingo():
         if hood.pond.bingoMgr.state == 'Off':
             hood.pond.bingoMgr.createGame()
             hood.pond.bingoMgr.shouldStop = False
+    return "Started Fish Bingo for the current district."
         
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, int])
-def requestBingoCard(typeId, seed = None):
-    RequestCard[spellbook.getTarget().doId] = ToontownGlobals.BingoCardNames[typeId], seed
+def requestBingoCard(cardName, seed = None):
+    RequestCard[spellbook.getTarget().doId] = ToontownGlobals.BingoCardNames[cardName], seed
+    return "Sent request for the bingo card " + cardName
