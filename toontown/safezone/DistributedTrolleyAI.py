@@ -154,14 +154,12 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
-
-@magicWord(access=200)
-def noTravel():
-    doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
-    return "Disabled Trolley Tracks."
     
 @magicWord(access=200)
-def wantTravel():
+def travel():
     if spellbook.getInvoker().doId in doesntWantTrolleyTracks:
         del doesntWantTrolleyTracks[spellbook.getInvoker().doId]
         return "Re-enabled Trolley Tracks."
+    else:
+        doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
+        return "Disabled Trolley Tracks."
