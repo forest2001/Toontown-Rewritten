@@ -305,8 +305,8 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
         self.hitBallSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Hit_Ball.ogg')
         self.holeInOneSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Hole_In_One.ogg')
         self.holeInTwoPlusSfx = loader.loadSfx('phase_4/audio/sfx/MG_sfx_vine_game_fall.ogg')
-        self.ballGoesInStartSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Ball_Goes_In_Start.wav')
-        self.ballGoesInLoopSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Ball_Goes_In_Loop.wav')
+        self.ballGoesInStartSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Ball_Goes_In_Start.ogg')
+        self.ballGoesInLoopSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Ball_Goes_In_Loop.ogg')
         self.ballGoesToRestSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Ball_Rest_In_Cup.ogg')
         self.kickedOutSfx = loader.loadSfx('phase_6/audio/sfx/Golf_Sad_Noise_Kicked_Off_Hole.ogg')
         self.crowdBuildupSfx = []

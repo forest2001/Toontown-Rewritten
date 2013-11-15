@@ -8,3 +8,6 @@ class WhisperPopup(MarginPopup, ClickablePopup):
     WTBattleSOS=3
     WTEmote=4
     WTToontownBoardingGroup=5
+
+    def __init__(self, text, font, whisperType):
+        pass

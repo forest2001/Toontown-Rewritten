@@ -4,15 +4,15 @@ from Nametag3d import *
 from Nametag2d import *
 
 class NametagGroup:
-    CCNormal = 0
-    CCNoChat = 1
-    CCNonPlayer = 2
-    CCSuit = 3
-    CCToonBuilding = 4
-    CCSuitBuilding = 5
-    CCHouseBuilding = 6
-    CCSpeedChat = 7
-    CCFreeChat = 8
+    CCNormal = CCNormal
+    CCNoChat = CCNoChat
+    CCNonPlayer = CCNonPlayer
+    CCSuit = CCSuit
+    CCToonBuilding = CCToonBuilding
+    CCSuitBuilding = CCSuitBuilding
+    CCHouseBuilding = CCHouseBuilding
+    CCSpeedChat = CCSpeedChat
+    CCFreeChat = CCFreeChat
 
     CHAT_TIMEOUT_MAX = 12.0
     CHAT_TIMEOUT_MIN = 4.0
@@ -29,7 +29,9 @@ class NametagGroup:
         self.name = ''
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
+        self.colorCode = CCNormal
         self.avatar = None
+        self.active = True
 
         self.chatString = ''
         self.chatFlags = 0
@@ -65,8 +67,14 @@ class NametagGroup:
     def getUniqueId(self):
         return 'Nametag-%d' % id(self)
 
+    def hasButton(self):
+        return False # TODO: Support buttons
+
     def setActive(self, active):
-        pass
+        self.active = active
+
+    def isActive(self):
+        return self.active
 
     def setAvatar(self, avatar):
         self.avatar = avatar
@@ -76,7 +84,8 @@ class NametagGroup:
         self.updateTags()
 
     def setColorCode(self, cc):
-        pass
+        self.colorCode = cc
+        self.updateTags()
 
     def setName(self, name):
         self.name = name
@@ -88,6 +97,7 @@ class NametagGroup:
 
     def setQtColor(self, color):
         self.qtColor = color
+        self.updateTags()
 
     def setChat(self, chatString, chatFlags):
         self.chatString = chatString
@@ -123,9 +133,11 @@ class NametagGroup:
         tag.name = self.name
         tag.displayName = self.displayName
         tag.qtColor = self.qtColor
+        tag.colorCode = self.colorCode
         tag.chatString = self.chatString
         tag.chatFlags = self.chatFlags
         tag.avatar = self.avatar
+        tag.icon = self.icon
 
         tag.update()
 

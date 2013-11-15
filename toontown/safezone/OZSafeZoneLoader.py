@@ -81,7 +81,7 @@ class OZSafeZoneLoader(SafeZoneLoader):
             self.geyserPlacer = geyserPlacer
             self.startGeyser()
             base.sfxPlayer.setCutoffDistance(160)
-            self.geyserPoolSfx = loader.loadSfx('phase_6/audio/sfx/OZ_Geyser_BuildUp_Loop.wav')
+            self.geyserPoolSfx = loader.loadSfx('phase_6/audio/sfx/OZ_Geyser_BuildUp_Loop.ogg')
             self.geyserPoolSoundInterval = SoundInterval(self.geyserPoolSfx, node=self.geyserPlacer, listenerNode=base.camera, seamlessLoop=True, volume=1.0, cutOff=120)
             self.geyserPoolSoundInterval.loop()
             self.bubbles = Bubbles.Bubbles(self.geyserPlacer, render)

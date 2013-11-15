@@ -29,7 +29,7 @@ def circleY(angle, radius, centerX, centerY):
 
 def getCirclePoints(segCount, centerX, centerY, radius, wideX = 1.0, wideY = 1.0):
     returnShape = []
-    for seg in range(0, segCount):
+    for seg in range(0, int(segCount)):
         coordX = wideX * circleX(pi * 2.0 * float(float(seg) / float(segCount)), radius, centerX, centerY)
         coordY = wideY * circleY(pi * 2.0 * float(float(seg) / float(segCount)), radius, centerX, centerY)
         returnShape.append((coordX, coordY, 1))
@@ -368,7 +368,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.addSound('impact', 'target_impact_grunt1.ogg', 'phase_4/audio/sfx/')
         self.addSound('umbrella', 'target_chute.ogg', 'phase_4/audio/sfx/')
         self.addSound('bounce', 'target_impact_only.ogg', 'phase_4/audio/sfx/')
-        self.flySound = loader.loadSfx('phase_4/audio/sfx/target_wind_fly_loop.wav')
+        self.flySound = loader.loadSfx('phase_4/audio/sfx/target_wind_fly_loop.ogg')
         self.flySound.setVolume(0.0)
         self.flySound.setPlayRate(1.0)
         self.flySound.setLoop(True)
@@ -378,7 +378,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.rubberSound.setPlayRate(1.0)
         self.rubberSound.setLoop(True)
         self.rubberSound.play()
-        self.flutterSound = loader.loadSfx('phase_4/audio/sfx/target_wind_float_clothloop.wav')
+        self.flutterSound = loader.loadSfx('phase_4/audio/sfx/target_wind_float_clothloop.ogg')
         self.flutterSound.setVolume(1.0)
         self.flutterSound.setPlayRate(1.0)
         self.flutterSound.setLoop(True)
@@ -704,7 +704,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.__removeAllToonDropShadows()
         render.clearFog()
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         camera.setHpr(0, 90, 0)
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
@@ -821,7 +821,8 @@ class DistributedTargetGame(DistributedMinigame):
                 open.setScale(1.5)
                 closed = umbrella.find('**/closed_umbrella')
                 closed.show()
-                hand = toon.find('**/joint_Rhold')
+                hands = toon.getRightHands()
+                hand = hands[0]
                 ce = CompassEffect.make(NodePath(), CompassEffect.PRot)
                 closed.node().setEffect(ce)
                 closed.setHpr(0.0, 90.0, 35.0)
@@ -927,7 +928,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.gravity = 4
         newHpr = Point3(0, -68, 0)
         newPos = Point3(0, self.CAMERA_Y + self.TOON_Y + 15, 15)
-        camera.lerpPosHpr(newPos, newHpr, 2.5, blendType='easeInOut', task=self.FLY2FALL_CAM_TASK)
+        camera.posHprInterval(2.5, newPos, newHpr, blendType='easeInOut').start()
         open = self.umbrella.find('**/open_umbrella')
         open.show()
         closed = self.umbrella.find('**/closed_umbrella')
@@ -1017,7 +1018,7 @@ class DistributedTargetGame(DistributedMinigame):
             self.localTrack.append(Parallel(Func(base.localAvatar.b_setAnimState, 'victory', 1.0), Func(self.playSound, 'score')))
         newHpr = Point3(180, 10, 0)
         newPos = Point3(0, -(self.CAMERA_Y + self.TOON_Y + 12), 1)
-        camera.lerpPosHpr(newPos, newHpr, 5.0, blendType='easeInOut', task=self.SCORE_CAM_TASK)
+        camera.posHprInterval(5.0, newPos, newHpr, blendType='easeInOut').start()
         self.help.hide()
         self.localTrack.start()
         return

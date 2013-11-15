@@ -1,5 +1,7 @@
 model-path resources
 
+window-title Toontown Rewritten [DEV BUILD]
+
 server-version dev
 # This is, oddly enough, in *reverse* order of their loading...
 dc-file config/toon.dc
@@ -11,6 +13,8 @@ accountdb-local-file databases/csm-cookies.db
 account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
 
 default-model-extension .bam
+
+cog-thief-ortho 0
 
 show-total-population #t
 want-mat-all-tailors #t

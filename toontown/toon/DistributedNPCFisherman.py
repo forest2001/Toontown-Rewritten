@@ -1,4 +1,6 @@
 from pandac.PandaModules import *
+from direct.interval.LerpInterval import LerpPosHprInterval
+from otp.nametag.NametagConstants import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -6,6 +8,7 @@ import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.fishing import FishSellGUI
 from direct.task.Task import Task
+import time
 
 class DistributedNPCFisherman(DistributedNPCToonBase):
 
@@ -16,6 +19,7 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         self.button = None
         self.popupInfo = None
         self.fishGui = None
+        self.nextCollision = 0
         return
 
     def disable(self):
@@ -55,8 +59,13 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         return 1.0
 
     def handleCollisionSphereEnter(self, collEntry):
-        base.cr.playGame.getPlace().fsm.request('purchase')
-        self.sendUpdate('avatarEnter', [])
+        self.currentTime = time.time()
+        if self.nextCollision > self.currentTime:
+            self.nextCollision = self.currentTime + 2
+        else:
+            base.cr.playGame.getPlace().fsm.request('purchase')
+            self.sendUpdate('avatarEnter', [])
+            self.nextCollision = self.currentTime + 2
 
     def __handleUnexpectedExit(self):
         self.notify.warning('unexpected exit')
@@ -113,7 +122,9 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
             self.setupAvatars(self.av)
             if self.isLocalToon:
                 camera.wrtReparentTo(render)
-                camera.lerpPosHpr(-5, 9, base.localAvatar.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+                quat = Quat()
+                quat.setHpr((-150, -2, 0))
+                camera.posQuatInterval(1, Point3(-5, 9, base.localAvatar.getHeight() - 0.5), quat, other=self, blendType='easeOut').start()
             if self.isLocalToon:
                 taskMgr.doMethodLater(1.0, self.popupFishGUI, self.uniqueName('popupFishGUI'))
         elif mode == NPCToons.SELL_MOVIE_COMPLETE:

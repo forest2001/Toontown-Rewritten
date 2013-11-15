@@ -18,6 +18,7 @@ from otp.avatar import PositionExaminer
 from otp.otpbase import OTPGlobals
 from otp.avatar import DistributedPlayer
 from otp.nametag.NametagConstants import *
+from otp.margins.WhisperPopup import *
 from toontown.shtiker import ShtikerBook
 from toontown.shtiker import InventoryPage
 from toontown.shtiker import MapPage
@@ -79,8 +80,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             chatMgr = ToontownChatManager.ToontownChatManager(cr, self)
             talkAssistant = TTTalkAssistant.TTTalkAssistant()
             LocalAvatar.LocalAvatar.__init__(self, cr, chatMgr, talkAssistant, passMessagesThrough=True)
-            self.soundRun = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_runloop.wav')
-            self.soundWalk = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_walkloop.wav')
+            self.soundRun = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_runloop.ogg')
+            self.soundWalk = base.loadSfx('phase_3.5/audio/sfx/AV_footstep_walkloop.ogg')
             self.soundWhisper = base.loadSfx('phase_3.5/audio/sfx/GUI_whisper_3.ogg')
             self.soundPhoneRing = base.loadSfx('phase_3.5/audio/sfx/telephone_ring.ogg')
             self.soundSystemMessage = base.loadSfx('phase_3/audio/sfx/clock03.ogg')

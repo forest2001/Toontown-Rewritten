@@ -116,7 +116,9 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         self.music = base.loadMusic('phase_4/audio/bgm/MG_IceGame.ogg')
         self.gameBoard = loader.loadModel('phase_4/models/minigames/ice_game_icerink')
         background = loader.loadModel('phase_4/models/minigames/ice_game_2d')
+        backgroundWide = loader.loadModel('phase_4/models/minigames/iceslide_ground')
         background.reparentTo(self.gameBoard)
+        backgroundWide.reparentTo(self.gameBoard)
         self.gameBoard.setPosHpr(0, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
         self.setupSimulation()
@@ -179,7 +181,7 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
              'wallHit': wallHit,
              'obstacleHit': obstacleHit})
 
-        self.arrowRotateSound = loader.loadSfx('phase_4/audio/sfx/MG_sfx_ice_force_rotate.wav')
+        self.arrowRotateSound = loader.loadSfx('phase_4/audio/sfx/MG_sfx_ice_force_rotate.ogg')
         self.arrowUpSound = loader.loadSfx('phase_4/audio/sfx/MG_sfx_ice_force_increase_3sec.ogg')
         self.arrowDownSound = loader.loadSfx('phase_4/audio/sfx/MG_sfx_ice_force_decrease_3sec.ogg')
         self.scoreCircleSound = loader.loadSfx('phase_4/audio/sfx/MG_sfx_ice_scoring_1.ogg')
@@ -284,7 +286,8 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)
             scorePanel.setScale(0.9)
-            scorePanel.setPos(0.75 - spacing * (self.numPlayers - 1 - i), 0.0, 0.875)
+            scorePanel.setPos(-0.583 - spacing * (self.numPlayers - 1 - i), 0.0, -0.15)
+            scorePanel.reparentTo(base.a2dTopRight)
             scorePanel.makeTransparent(0.75)
             self.scorePanels.append(scorePanel)
 
@@ -493,6 +496,7 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         for i in xrange(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
+            panel.wrtReparentTo(aspect2d)
             lerpTrack.append(Parallel(LerpPosInterval(panel, lerpDur, Point3(pos[0], 0, pos[1]), blendType='easeInOut'), LerpScaleInterval(panel, lerpDur, Vec3(panel.getScale()) * 2.0, blendType='easeInOut')))
 
         self.showScoreTrack = Parallel(lerpTrack, Sequence(Wait(IceGameGlobals.ShowScoresDuration), Func(self.gameOver)))

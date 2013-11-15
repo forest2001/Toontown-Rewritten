@@ -8,6 +8,7 @@ import InventoryBase
 import Experience
 from otp.avatar import DistributedAvatarAI
 from otp.avatar import DistributedPlayerAI
+from otp.otpbase import OTPLocalizer
 from direct.distributed import DistributedSmoothNodeAI
 from toontown.toonbase import ToontownGlobals
 from toontown.quest import QuestRewardCounter
@@ -46,6 +47,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+from otp.ai.MagicWordGlobal import *
+import shlex
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -245,6 +248,17 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.b_setShoesList(self.shoesList)
                 self.b_setShoes(0, 0, 0)
         self.startPing()
+        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+        if not isinstance(self, DistributedNPCToonBaseAI):
+            self.sendUpdate('setDefaultShard', [self.air.districtId])
+            self.applyAlphaModifications()
+
+    def setLocation(self, parentId, zoneId):
+        DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
+
+        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+        if not isinstance(self, DistributedNPCToonBaseAI):
+            self.sendUpdate('setLastHood', [ZoneUtil.getHoodId(zoneId)])
 
     def _renewDoLater(self, renew = True):
         if renew:
@@ -4065,7 +4079,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if self._gmType > MaxGMType:
                 self.notify.warning('toon %s has invalid GM type: %s' % (self.doId, self._gmType))
                 self._gmType = MaxGMType
-        self._updateGMName(formerType)
+        #self._updateGMName(formerType)
         return
 
     def isGM(self):
@@ -4099,7 +4113,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.WantOldGMNameBan:
             if self.isGenerated():
                 self._checkOldGMName()
-        self._updateGMName()
+        #self._updateGMName()
 
     def _checkOldGMName(self):
         if '$' in set(self.name):
@@ -4342,3 +4356,217 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
+
+    def applyAlphaModifications(self):
+        # Apply all of the temporary changes that we want the alpha testers to
+        # have:
+
+        # Their fishing rod should be level 2.
+        self.b_setFishingRod(2)
+
+        # They need bigger jellybean jars to hold all of their money:
+        self.b_setMaxMoney(120)
+
+        # Unlock all of the emotes they should have during alpha:
+        emotes = list(self.getEmoteAccess())
+        emotes += [0]*(len(OTPLocalizer.EmoteFuncDict)-len(emotes))
+
+        # Get this list out of OTPLocalizerEnglish.py
+        ALPHA_EMOTES = ['Dance', 'Think', 'Bored', 'Applause', 'Cringe',
+                        'Confused', 'Bow', 'Delighted', 'Belly Flop', 'Banana Peel',
+                        'Laugh', 'Cry']
+        for emote in ALPHA_EMOTES:
+            emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
+            if emoteId is None:
+                self.notify.warning('Invalid emote %s' % emote)
+                continue
+
+            emotes[emoteId] = 1
+
+        self.b_setEmoteAccess(emotes)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setCE(CEValue, CEHood=0, CEExpire=0):
+    """Set Cheesy Effect of the target."""
+    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setHP(hpVal):
+    """Set target's current laff"""
+    if hpVal > 137 or hpVal < -1:
+        return 'Laff must be between -1 and 137!'
+    spellbook.getTarget().b_setHp(hpVal)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxHP(hpVal):
+    """Set target's laff"""
+    if hpVal > 140 or hpVal < 15:
+        return 'Laff must be between 15 and 140!'
+    if spellbook.getTarget() == spellbook.getInvoker():
+        spellbook.getInvoker().sendUpdate('setMaxHp', [hpVal])
+    else:
+        spellbook.getTarget().b_setMaxHp(hpVal)
+    spellbook.getTarget().toonUp(hpVal)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])   
+def setTrackAccess(toonup, trap, lure, sound, throw, squirt, drop):
+    """Set target's gag track access."""
+    spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def adminGags():
+    """Give Invoker 7 maxed gag tracks and allow carrying upto 95 gags (to help with the extra track)"""
+    spellbook.getInvoker().b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
+    spellbook.getInvoker().b_setMaxCarry(95)
+    spellbook.getInvoker().b_setExperience('9999999999999999999')
+    return 'Harv smells aboose. C:'
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxMoney(moneyVal):
+    """Set target's money and maxMoney values."""
+    if moneyVal > 250 or moneyVal < 40:
+        return 'Money value must be between 40 and 250.'
+    spellbook.getTarget().b_setMaxMoney(moneyVal)
+    spellbook.getTarget().b_setMoney(moneyVal)
+    return 'maxMoney set to ' + str(moneyVal)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])    
+def setFishingRod(rodVal):
+    """Set target's fishing rod value."""
+    if rodVal > 4 or rodVal < 0:
+        return 'Rod value must be between 0 and 4.'
+    spellbook.getTarget().b_setFishingRod(rodVal)
+    return 'Rod changed to ' + str(rodVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setMaxFishTank(tankVal):
+    """Set target's max fish tank value."""
+    if tankVal > 99 or tankVal < 20:
+        return 'Max fish tank value must be between 20 and 99'
+    spellbook.getTarget().b_setMaxFishTank(tankVal)
+    return 'Max size of fish tank changed to ' + str(tankVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def setName(nameStr):
+    """Set target's name."""
+    spellbook.getTarget().b_setName(nameStr)
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def restockAllResistances():
+    """Restock all CFO phrases."""
+    spellbook.getTarget().restockAllResistanceMessages(1)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setHat(hatId=0, hatTex=0, hatCol=0):
+    """Set hat of target toon."""
+    spellbook.getTarget().b_setHat(hatId, hatTex, hatCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setGlasses(glassesId=0, glassesTex=0, glassesCol=0):
+    """Set glasses of target toon."""
+    spellbook.getTarget().b_setGlasses(glassesId, glassesTex, glassesCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setBackpack(bpId=0, bpTex=0, bpCol=0):
+    """Set backpack of target toon."""
+    spellbook.getTarget().b_setBackpack(bpId, bpTex, bpCol)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
+def setShoes(shoesId=0, shoesTex=0, shoesCol=0):
+    """Set shoes of target toon."""
+    spellbook.getTarget().b_setShoes(shoesId, shoesTex, shoesCol)
+    
+@magicWord(category=CATEGORY_MODERATION, types=[bool])
+def kick(overrideSelfKick=False):
+    """Kick the player from the game server."""
+    if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
+        return "Are you sure you want to kick yourself? Use '~kick True' if you are."
+    spellbook.getTarget().disconnect()
+    return "The player " + spellbook.getTarget().name + " was kicked."
+
+'''
+Disabled until banManager is working.
+@magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400)
+def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
+    """Ban the player from the game server."""
+    if not confirmed:
+        return "Are you sure you want to ban this player? Use '~~ban REASON True' if you are."
+    if not overrideSelfBan and spellbook.getTarget() == spellbook.getInvoker():
+        return "Are you sure you want to ban yourself? Use '~ban REASON True True' if you are."
+    spellbook.getTarget().ban(reason)
+'''
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
+def ut(doField, doData=None):
+    """Update a toons field in the db."""
+    
+    methodExists = hasattr(spellbook.getTarget(), doField)
+    b_methodExists = hasattr(spellbook.getTarget(), 'b_'+doField)
+    access = spellbook.getInvokerAccess()
+    if doData:
+        #There are arguments to be passed, lets find out how many.
+        theData = shlex.split(doData)
+        for count in range(0, len(theData)):
+            theData[count] = theData[count].split(',')
+            for cur in range(0, len(theData[count])):
+                try:
+                    theData[count][cur] = int(theData[count][cur])
+                except:
+                    #Could not convert to integer, pass.
+                    pass
+            if len(theData[count])==1:
+               theData[count] = theData[count][0]
+        if len(theData)==1:
+            singleData = theData[0] #Only has 1 parameter
+            if b_methodExists:
+                getattr(spellbook.getTarget(), 'b_'+doField)(singleData)
+            elif methodExists:
+                getattr(spellbook.getTarget(), doField)(singleData)
+            #elif access==500: #To prevent unexperienced admins from breaking toons.
+            else:
+                spellbook.getTarget().sendUpdate(doField, [singleData])
+            #else:
+                #return "Unable to send to Astron. Access 500 required."
+        else:
+            if b_methodExists:
+                getattr(spellbook.getTarget(), 'b_'+doField)(*theData)
+            elif methodExists:
+                getattr(spellbook.getTarget(), doField)(*theData)
+            #elif access==500:
+            else:
+                spellbook.getTarget().sendUpdate(doField, theData)
+            #else:
+                #return "Unable to send to Astron. Access 500 required."
+    else:
+        #There are no arguments, we will simply call the function.
+        if b_methodExists:
+            getattr(spellbook.getTarget(), 'b_'+doField)()
+        elif methodExists:
+            getattr(spellbook.getTarget(), doField)()
+        #elif access==500:
+        else:
+            spellbook.getTarget().sendUpdate(doField)
+        #else:
+            #return "Unable to send to Astron. Access 500 required."
+           
+    return "Method " + doField + " was called on " + spellbook.getTarget().name + " successfully."
+            
+@magicWord(category=CATEGORY_MODERATION)
+def togGM():
+    """Toggle GM Icon for toon."""
+    access = spellbook.getInvokerAccess()
+    if spellbook.getInvoker().isGM():
+        spellbook.getInvoker().b_setGM(0)
+    else:
+        if access>=400:
+            spellbook.getInvoker().b_setGM(2)
+        elif access>=200:
+            spellbook.getInvoker().b_setGM(3)
+            
+@magicWord(category=CATEGORY_MODERATION)
+def ghost():
+    """Set toon to invisible."""
+    if spellbook.getInvoker().ghostMode == 0:
+        spellbook.getInvoker().b_setGhostMode(2)
+    else:
+        spellbook.getInvoker().b_setGhostMode(0)

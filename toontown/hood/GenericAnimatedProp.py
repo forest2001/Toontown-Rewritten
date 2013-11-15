@@ -105,7 +105,7 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
             soundfile = origAnimName.replace('tt_a_ara', 'tt_s_ara')
             fullPath = self.soundPath + '/' + soundfile
             if origAnimName in self.AnimsUsingWav:
-                theSound = loader.loadSfx(fullPath + '.wav')
+                theSound = loader.loadSfx(fullPath + '.ogg')
             else:
                 theSound = loader.loadSfx(fullPath + '.ogg')
             self.origAnimNameToSound[origAnimName] = theSound

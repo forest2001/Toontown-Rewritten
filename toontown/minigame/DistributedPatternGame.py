@@ -16,6 +16,7 @@ import random
 from toontown.toonbase import ToontownGlobals
 import string
 from toontown.toonbase import TTLocalizer
+from otp.nametag.NametagConstants import *
 
 class DistributedPatternGame(DistributedMinigame):
     phase4snd = 'phase_4/audio/sfx/'
@@ -87,8 +88,8 @@ class DistributedPatternGame(DistributedMinigame):
         for soundName in self.ButtonSoundNames:
             self.buttonSounds.append(base.loadSfx(soundName))
 
-        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.wav')
-        self.incorrectSound = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.wav')
+        self.correctSound = base.loadSfx('phase_4/audio/sfx/MG_pos_buzzer.ogg')
+        self.incorrectSound = base.loadSfx('phase_4/audio/sfx/MG_neg_buzzer.ogg')
         self.perfectSound = base.loadSfx('phase_4/audio/sfx/MG_win.ogg')
         self.fallSound = base.loadSfx('phase_4/audio/sfx/MG_Tag_A.ogg')
         self.music = base.loadMusic(self.bgm)
@@ -277,7 +278,7 @@ class DistributedPatternGame(DistributedMinigame):
         self.notify.debug('offstage')
         DistributedMinigame.offstage(self)
         self.music.stop()
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         NametagGlobals.setGlobalNametagScale(1.0)
         self.arrowKeys.destroy()
         del self.arrowKeys

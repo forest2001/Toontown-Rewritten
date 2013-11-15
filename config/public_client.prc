@@ -3,11 +3,15 @@
 # Config.prc should be reproduced here.
 # Comments and empty lines are stripped by Mirai's builder.
 
+window-title Toontown Rewritten [ALPHA]
+
 # The server version is actually a placeholder; Mirai's builder fills it in.
 server-version SERVER_VERSION_HERE
 # DC files are NOT configured. They're wrapped up into the code automatically.
 
 default-model-extension .bam
+
+cog-thief-ortho 0
 
 show-total-population #t
 want-mat-all-tailors #t

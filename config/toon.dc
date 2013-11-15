@@ -70,7 +70,6 @@ from toontown.estate import DistributedHouse/AI
 from toontown.estate import DistributedHouseInterior/AI
 from toontown.estate import DistributedGarden/AI
 from toontown.shtiker import DeleteManager/AI
-from toontown.ai import ToontownMagicWordManager/AI
 from toontown.ai import NewsManager/AI
 from toontown.shtiker import PurchaseManager/AI
 from toontown.shtiker import NewbiePurchaseManager/AI
@@ -453,21 +452,21 @@ dclass DistributedToon : DistributedPlayer {
   toonUp(uint16) broadcast ownrecv;
   takeDamage(uint16) broadcast ownrecv;
   setBattleId(uint32 = 0) required broadcast ram;
-  setExperience(blob = {0*14}) required ownrecv db;
+  setExperience(blob = {0*14}) required broadcast db;
   setMaxCarry(uint8 = 20) required ownrecv db;
   setTrackAccess(uint16array = {0,0,0,0,1,1,0}) required broadcast ownrecv db;
   setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
   setTrackBonusLevel(int8array = {-1,-1,-1,-1,-1,-1,-1}) required broadcast ownrecv db;
-  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required ownrecv db;
+  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required broadcast db;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(uint32uint8array = {}) required ownrecv db;
-  setDefaultShard(uint32 = 0) required ownrecv db;
-  setDefaultZone(uint32 = 0) required ownrecv db;
+  setDefaultShard(uint32 = 0) required broadcast db;
+  setDefaultZone(uint32 = 0) required broadcast db;
   setShtickerBook(blob = {}) required ownrecv db;
   setZonesVisited(uint32array = { 2000 }) required ownrecv db;
   setHoodsVisited(uint32array = { 2000 }) required ownrecv db;
   setInterface(blob = {}) required ownrecv db;
-  setLastHood(uint32 = 0) required ownrecv db;
+  setLastHood(uint32 = 0) required broadcast db;
   setTutorialAck(uint8 = 1) required ownrecv db;
   setMaxClothes(uint32 = 10) required ownrecv db;
   setClothesTopsList(uint8array = {}) required ownrecv db;
@@ -1409,10 +1408,6 @@ dclass DistributedPartyTugOfWarActivity : DistributedPartyTeamActivity {
 
 dclass DeleteManager : DistributedObject {
   setInventory(blob) airecv clsend;
-};
-
-dclass ToontownMagicWordManager : MagicWordManager {
-  requestTeleport(string, string, uint32, uint32, uint32);
 };
 
 struct weeklyCalendarHoliday {

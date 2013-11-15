@@ -97,11 +97,13 @@ class FishPanel(DirectFrame):
             self.extraLabel.hide()
         elif code == FishGlobals.FishItemNewEntry:
             self.extraLabel.show()
+            self.extraLabel['text_fg'] = (0.2, 0.8, 0.4, 1)
             self.extraLabel['text'] = TTLocalizer.FishingNewEntry
             self.extraLabel['text_scale'] = TTLocalizer.FPnewEntry
             self.extraLabel.setPos(0, 0, 0.26)
         elif code == FishGlobals.FishItemNewRecord:
             self.extraLabel.show()
+            self.extraLabel['text_fg'] = (1, .5, 0, 1)
             self.extraLabel['text'] = TTLocalizer.FishingNewRecord
             self.extraLabel['text_scale'] = TTLocalizer.FPnewRecord
         self.photo.show()

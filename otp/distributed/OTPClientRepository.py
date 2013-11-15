@@ -45,6 +45,7 @@ class OTPClientRepository(ClientRepositoryBase):
      'PendingApproval',
      'Approved',
      'Rejected'])
+    whiteListChatEnabled = 1 # TODO: Have server set this on localAvatar on login.
 
     def __init__(self, serverVersion, launcher = None, playGame = None):
         ClientRepositoryBase.__init__(self)
@@ -176,7 +177,7 @@ class OTPClientRepository(ClientRepositoryBase):
             self.notify.error('The required-login was not recognized.')
 
 
-        self.wantMagicWords = base.config.GetString('want-magic-words', '')
+        self.wantMagicWords = False
 
 
 
@@ -441,6 +442,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
 
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
+        self.chatAgent = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         self.csm = None # To be set by subclass.
 
     def startLeakDetector(self):

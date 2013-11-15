@@ -108,6 +108,9 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.__unmakeGui()
         self.pond.stopCheckingTargets()
         self.pond = None
+        for event in self.getAllAccepting():
+            if event.startswith('generate-'):
+                self.ignore(event)
         DistributedObject.DistributedObject.disable(self)
         return
 
@@ -142,7 +145,14 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.accept(self.uniqueName('enterFishingSpotSphere'), self.__handleEnterSphere)
 
     def setPondDoId(self, pondDoId):
-        self.pond = base.cr.doId2do[pondDoId]
+        self.pondDoId = pondDoId
+        if pondDoId in self.cr.doId2do:
+            self.setPond(self.cr.doId2do[pondDoId])
+        else:
+            self.acceptOnce('generate-%d' % pondDoId, self.setPond)
+
+    def setPond(self, pond):
+        self.pond = pond
         self.area = self.pond.getArea()
         self.waterLevel = FishingTargetGlobals.getWaterLevel(self.area)
 
@@ -195,6 +205,14 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.angleNP.setH(render, self.nodePath.getH(render))
 
     def setOccupied(self, avId):
+        if avId and avId not in self.cr.doId2do:
+            def tryAgain(av):
+                def reposition(task):
+                    self.setOccupied(avId)
+                    return task.done
+                taskMgr.doMethodLater(0.1, reposition, self.uniqueName('reposition'))
+            self.acceptOnce('generate-%d' % avId, tryAgain)
+            return
         if self.av != None:
             if not self.av.isEmpty():
                 self.__dropPole()
@@ -223,19 +241,15 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
                 self.localToonFishing = 1
                 if base.wantBingo:
                     self.pond.setLocalToonSpot(self)
-            av = self.cr.doId2do.get(self.avId)
-            if av:
-                self.av = av
-                self.__loadStuff()
-                self.placedAvatar = 0
-                self.firstCast = 1
-                self.acceptOnce(self.av.uniqueName('disable'), self.__avatarGone)
-                self.av.stopSmooth()
-                self.av.wrtReparentTo(self.angleNP)
-                self.av.setAnimState('neutral', 1.0)
-                self.createCastTrack()
-            else:
-                self.notify.warning('Unknown avatar %d in fishing spot %d' % (self.avId, self.doId))
+            self.av = self.cr.doId2do.get(self.avId)
+            self.__loadStuff()
+            self.placedAvatar = 0
+            self.firstCast = 1
+            self.acceptOnce(self.av.uniqueName('disable'), self.__avatarGone)
+            self.av.stopSmooth()
+            self.av.wrtReparentTo(self.angleNP)
+            self.av.setAnimState('neutral', 1.0)
+            self.createCastTrack()
         if wasLocalToon and not self.localToonFishing:
             self.__hideCastGui()
             if base.wantBingo:
@@ -442,8 +456,10 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         if self.firstCast and len(self.av.fishCollection) == 0 and len(self.av.fishTank) == 0:
             self.__showHowTo(TTLocalizer.FishingHowToFirstTime)
         elif base.wantBingo and self.pond.hasPondBingoManager() and not self.av.bFishBingoTutorialDone:
-            self.__showHowTo(TTLocalizer.FishBingoHelpMain)
-            self.av.b_setFishBingoTutorialDone(True)
+            pass
+            #todo: fix b_setFishBingoTutorialDone crash
+            #self.__showHowTo(TTLocalizer.FishBingoHelpMain)
+            #self.av.b_setFishBingoTutorialDone(True)
 
     def __moneyChange(self, money):
         self.jar['text'] = str(money)

@@ -68,10 +68,10 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
      SFX_BaseDir + 'KART_Hitting_Wood_Fence_1.ogg',
      SFX_BaseDir + 'KART_Hitting_Metal_Fence.ogg',
      SFX_BaseDir + 'KART_Hitting_Wall.ogg']
-    SFX_SkidLoop_Grass = SFX_BaseDir + 'KART_Skidding_On_Grass.wav'
-    SFX_SkidLoop_Asphalt = SFX_BaseDir + 'KART_Skidding_On_Asphalt.wav'
+    SFX_SkidLoop_Grass = SFX_BaseDir + 'KART_Skidding_On_Grass.ogg'
+    SFX_SkidLoop_Asphalt = SFX_BaseDir + 'KART_Skidding_On_Asphalt.ogg'
     SFX_TurboStart = SFX_BaseDir + 'KART_turboStart.ogg'
-    SFX_TurboLoop = SFX_BaseDir + 'KART_turboLoop.wav'
+    SFX_TurboLoop = SFX_BaseDir + 'KART_turboLoop.ogg'
     AvId2kart = {}
 
     @classmethod

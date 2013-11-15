@@ -99,6 +99,7 @@ CEVirtual = 14
 MaxHpLimit = 137
 MaxCarryLimit = 80
 MaxQuestCarryLimit = 4
+GravityValue = 32.174
 MaxCogSuitLevel = 50 - 1
 CogSuitHPLevels = (15 - 1,
  20 - 1,
@@ -324,6 +325,11 @@ HoodsForTeleportAll = (DonaldsDock,
  CashbotHQ,
  LawbotHQ,
  GolfZone)
+BingoCardNames = {'normal': 0,
+'corners': 1,
+'diagonal': 2,
+'threeway': 3,
+'blockout': 4}
 NoPreviousGameId = 0
 RaceGameId = 1
 CannonGameId = 2
@@ -381,10 +387,10 @@ MinigameIDs = (RaceGameId,
  PhotoGameId,
  TravelGameId)
 MinigamePlayerMatrix = {
-    1: (CannonGameId, MazeGameId),
-    2: (CannonGameId, MazeGameId, TagGameId),
-    3: (CannonGameId, MazeGameId, TagGameId),
-    4: (CannonGameId, MazeGameId, TagGameId),
+    1: (CannonGameId, MazeGameId, TugOfWarGameId, RingGameId, VineGameId, CogThiefGameId, TwoDGameId, DivingGameId, PairingGameId, CatchGameId, TargetGameId),
+    2: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, TagGameId, RingGameId, VineGameId, IceGameId, CogThiefGameId, TwoDGameId, DivingGameId, PairingGameId, CatchGameId, TargetGameId),
+    3: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, RaceGameId, TagGameId, VineGameId, RingGameId, IceGameId, CogThiefGameId, TwoDGameId, DivingGameId, PairingGameId, CatchGameId, TargetGameId),
+    4: (CannonGameId, MazeGameId, TugOfWarGameId, PatternGameId, RaceGameId, TagGameId, VineGameId, RingGameId, IceGameId, CogThiefGameId, TwoDGameId, DivingGameId, PairingGameId, CatchGameId, TargetGameId),
 }
 MinigameReleaseDates = {IceGameId: (2008, 8, 5),
  PhotoGameId: (2008, 8, 13),

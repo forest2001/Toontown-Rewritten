@@ -4,6 +4,7 @@ import OTPRender
 import time
 import math
 import re
+from otp.ai.MagicWordGlobal import *
 
 class OTPBase(ShowBase):
 
@@ -227,3 +228,48 @@ class OTPBase(ShowBase):
             self.wantEnviroDR = not self.win.getGsg().isHardware() or config.GetBool('want-background-region', 1)
             self.backgroundDrawable = self.win
         return result
+
+    def run(self):
+        try:
+            taskMgr.run()
+        except SystemExit:
+            self.notify.info('Normal exit.')
+            self.destroy()
+            raise
+        except:
+            self.notify.warning('Handling Python exception.')
+            if getattr(self, 'cr', None):
+                if self.cr.timeManager:
+                    from otp.otpbase import OTPGlobals
+                    self.cr.timeManager.setDisconnectReason(OTPGlobals.DisconnectPythonError)
+                    self.cr.timeManager.setExceptionInfo()
+                self.cr.sendDisconnect()
+            self.notify.info('Exception exit.\n')
+            self.destroy()
+            import traceback
+            traceback.print_exc()
+
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def oobe():
+    'Toggle "out of body experience" view.'
+    base.oobe()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def oobeCull():
+    'Toggle "out of body experience" view, with culling debugging.'
+    base.oobeCull()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def wire():
+    'Toggle wireframe view.'
+    base.toggleWireframe()
+    
+@magicWord(category=CATEGORY_GUI)
+def showAvIds(access=200):
+    'Show avId in Nametags.'
+    messenger.send('nameTagShowAvId')
+    
+@magicWord(access=200)
+def showAccess():
+    return "Access level: ", spellbook.getTarget().getAdminAccess()

@@ -32,14 +32,11 @@ class Nametag3d(Nametag):
         self.bbOffset = bbOffset
         self._doBillboard()
 
-    def showSpeech(self):
-        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font,
-                                                         balloonColor=color)
-        bubble.reparentTo(self.innerNP)
+    def getSpeechBalloon(self):
+        return NametagGlobals.speechBalloon3d
 
-    def showThought(self):
-        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font,
-                                                          balloonColor=color)
-        bubble.reparentTo(self.innerNP)
+    def getThoughtBalloon(self):
+        return NametagGlobals.thoughtBalloon3d
+
+    def setChatWordwrap(self, todo1):
+        pass

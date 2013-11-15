@@ -4,6 +4,9 @@ from direct.fsm.FSM import FSM
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from TrolleyConstants import *
 from toontown.minigame.MinigameCreatorAI import *
+from otp.ai.MagicWordGlobal import *
+
+doesntWantTrolleyTracks = {}
 
 class DistributedTrolleyAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTrolleyAI")
@@ -55,10 +58,21 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
     def __activateMinigame(self, task):
         players = [player for player in self.slots if player is not None]
 
-        mg = createMinigame(self.air, players, self.zoneId)
-        for player in players:
-            self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
-            self.removeFromTrolley(player)
+        if players:
+            # If all players disconnected while the trolley was departing, the
+            # players array would be empty. Therefore, we should only attempt
+            # to create a minigame if there are still players.
+            
+            for avId in players:
+                noTravel = doesntWantTrolleyTracks.get(avId)
+                
+            if len(players) > 1 and not noTravel:
+                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
+            else:
+                mg = createMinigame(self.air, players, self.zoneId)
+            for player in players:
+                self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
+                self.removeFromTrolley(player)
 
         self.b_setState('Entering')
         return task.done
@@ -140,3 +154,12 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
+    
+@magicWord(access=200)
+def travel():
+    if spellbook.getInvoker().doId in doesntWantTrolleyTracks:
+        del doesntWantTrolleyTracks[spellbook.getInvoker().doId]
+        return "Re-enabled Trolley Tracks."
+    else:
+        doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
+        return "Disabled Trolley Tracks."

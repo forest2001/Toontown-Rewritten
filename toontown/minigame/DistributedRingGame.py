@@ -173,7 +173,6 @@ class DistributedRingGame(DistributedMinigame):
         self.__spawnUpdateEnvironTask()
         self.__spawnUpdateShadowsTask()
         self.__spawnUpdateLocalToonTask()
-        base.playMusic(self.music, looping=0, volume=0.8)
         if None != self.sndAmbience:
             base.playSfx(self.sndAmbience, looping=1, volume=0.8)
         return
@@ -191,7 +190,7 @@ class DistributedRingGame(DistributedMinigame):
         self.__removeAllToonDropShadows()
         render.clearFog()
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
         del self.arrowKeys
@@ -284,6 +283,7 @@ class DistributedRingGame(DistributedMinigame):
         self.notify.debug('setGameStart')
         DistributedMinigame.setGameStart(self, timestamp)
         self.gameFSM.request('swim')
+        base.playMusic(self.music, looping=0, volume=0.8)
 
     def enterOff(self):
         self.notify.debug('enterOff')
@@ -301,9 +301,9 @@ class DistributedRingGame(DistributedMinigame):
         self.__spawnCollisionDetectionTask()
         self.__ringTracks = []
         self.colorRing = self.ringModel.copyTo(hidden)
-        self.colorRing.reparentTo(aspect2d)
+        self.colorRing.reparentTo(base.a2dBottomRight)
         self.colorRing.setTwoSided(0)
-        self.colorRing.setPos(1.19, 10, -0.86)
+        self.colorRing.setPos(-0.143, 10, 0.14)
         self.colorRing.setScale(0.04)
         p = self.avIdList.index(self.localAvId)
         self.colorRing.setColor(RingGameGlobals.ringColors[self.colorIndices[p]][1])
@@ -336,14 +336,14 @@ class DistributedRingGame(DistributedMinigame):
         self.__deleteTallyMarker(index)
         self.__tallyTextNode.setText(chars[result])
         node = self.__tallyTextNode.generate()
-        tallyText = aspect2d.attachNewNode(node)
+        tallyText = base.a2dBottomLeft.attachNewNode(node)
         tallyText.setColor(colors[result])
         tallyText.setScale(0.1)
         zOffset = 0
         if result == self.RT_UNKNOWN:
             zOffset = 0.015
         xSpacing = 0.085
-        tallyText.setPos(-1.0 + xSpacing * index, 0, -.93 + zOffset)
+        tallyText.setPos(0.333 + xSpacing * index, 0, 0.07 + zOffset)
         self.tallyMarkers[index] = tallyText
 
     def __deleteTallyMarker(self, index):

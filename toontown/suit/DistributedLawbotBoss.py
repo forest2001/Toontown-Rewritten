@@ -95,7 +95,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.rampSlideSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_ramp_slide.ogg')
         self.evidenceHitSfx = loader.loadSfx('phase_11/audio/sfx/LB_evidence_hit.ogg')
         self.warningSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
-        self.juryMovesSfx = loader.loadSfx('phase_11/audio/sfx/LB_jury_moves.wav')
+        self.juryMovesSfx = loader.loadSfx('phase_11/audio/sfx/LB_jury_moves.ogg')
         self.toonUpSfx = loader.loadSfx('phase_11/audio/sfx/LB_toonup.ogg')
         self.strafeSfx = []
         for i in range(10):

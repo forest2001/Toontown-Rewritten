@@ -2,9 +2,12 @@ import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
+from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
+from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
+from toontown.toon import NPCToons
 from toontown.hood.TTHoodAI import TTHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
@@ -19,6 +22,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
 
+        NPCToons.generateZone2NpcDict()
+
         self.hoods = []
         self.zoneDataStore = AIZoneDataStore()
 
@@ -26,6 +31,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.doLiveUpdates = False
 
         self.holidayManager = HolidayManagerAI()
+        
+        self.fishManager = FishManagerAI()
 
     def getTrackClsends(self):
         return False
@@ -80,6 +87,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.newsManager = NewsManagerAI(self)
         self.newsManager.generateWithRequired(2)
+
+        self.magicWordManager = MagicWordManagerAI(self)
+        self.magicWordManager.generateWithRequired(2)
 
     def createZones(self):
         """

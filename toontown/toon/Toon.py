@@ -814,6 +814,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('legs', '1000')
         self.removePart('legs', '500')
         self.removePart('legs', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'legs' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['legs']
         self.style.legs = legStyle
         self.generateToonLegs(copy)
         self.generateToonColor()
@@ -852,6 +855,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('torso', '1000')
         self.removePart('torso', '500')
         self.removePart('torso', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'torso' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['torso']
         self.style.torso = torsoStyle
         self.generateToonTorso(copy, genClothes)
         self.generateToonColor()
@@ -875,6 +881,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.removePart('head', '1000')
         self.removePart('head', '500')
         self.removePart('head', '250')
+        # Bugfix: Until upstream Panda3D includes this, we have to do it here.
+        if 'head' in self._Actor__commonBundleHandles:
+            del self._Actor__commonBundleHandles['head']
         self.style.head = headStyle
         self.generateToonHead(copy)
         self.generateToonColor()
@@ -1656,17 +1665,18 @@ class Toon(Avatar.Avatar, ToonHead):
         Emote.globalEmote.releaseAll(self, 'exitSwim')
 
     def startBobSwimTask(self):
-        swimTaskName = self.taskName('swimBobTask')
-        taskMgr.remove('swimTask')
-        taskMgr.remove(swimTaskName)
+        swimBob = getattr(self, 'swimBob', None)
+        if swimBob:
+            swimBob.finish()
         self.getGeomNode().setZ(4.0)
         self.nametag3d.setZ(5.0)
-        newTask = Task.loop(self.getGeomNode().lerpPosXYZ(0, -3, 3, 1, blendType='easeInOut'), self.getGeomNode().lerpPosXYZ(0, -3, 4, 1, blendType='easeInOut'))
-        taskMgr.add(newTask, swimTaskName)
+        self.swimBob = Sequence(self.getGeomNode().posInterval(1, (0, -3, 3), blendType='easeInOut'), self.getGeomNode().posInterval(1, (0, -3, 4), blendType='easeInOut'))
+        self.swimBob.loop()
 
     def stopBobSwimTask(self):
-        swimTaskName = self.taskName('swimBobTask')
-        taskMgr.remove(swimTaskName)
+        swimBob = getattr(self, 'swimBob', None)
+        if swimBob:
+            swimBob.finish()
         self.getGeomNode().setPos(0, 0, 0)
         self.nametag3d.setZ(1.0)
 

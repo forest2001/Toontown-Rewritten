@@ -55,6 +55,7 @@ def loadParticleFile(name):
 
 
 def createParticleEffect(name = None, file = None, numParticles = None, color = None):
+    return ParticleEffect() # TODO: PARTICLETODO
     if not name:
         fileName = file + '.ptf'
         return loadParticleFile(fileName)

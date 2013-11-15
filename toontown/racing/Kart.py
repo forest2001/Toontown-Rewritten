@@ -22,7 +22,7 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
     ShadowScale = 2.5
     SFX_BaseDir = 'phase_6/audio/sfx/'
     SFX_KartStart = SFX_BaseDir + 'KART_Engine_start_%d.ogg'
-    SFX_KartLoop = SFX_BaseDir + 'KART_Engine_loop_%d.wav'
+    SFX_KartLoop = SFX_BaseDir + 'KART_Engine_loop_%d.ogg'
 
     def __init__(self):
         NodePath.__init__(self)
