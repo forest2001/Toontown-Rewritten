@@ -1,7 +1,7 @@
 import ply.lex as lex
 import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
-from panda3d.core import LVector3f, LVector4f
+from panda3d.core import LVector3f, LVector4f, BitMask32
 from direct.showbase import Loader
 import math, random
 tokens = [
@@ -51,6 +51,7 @@ reserved = {
   'title' : 'TITLE',
   'article' : 'ARTICLE',
   'building_type' : 'BUILDING_TYPE',
+  'door' : 'DOOR',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -737,6 +738,62 @@ class DNALandmarkBuilding(DNANode):
             child.traverse(nodePath, dnaStorage)
         nodePath.flattenStrong()
 
+class DNADoor(DNAGroup):
+    def __init__(self, name):
+        DNAGroup.__init__(self, name)
+        self.code = ''
+        self.color = LVector4f(1,1,1,1)
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.color
+    @staticmethod
+    def setupDoor(doorNodePath, parentNode, doorOrigin, dnaStore, block, color):
+        doorNodePath.setPosHprScale(doorOrigin, (0,0,0), (0,0,0), (1,1,1))
+        doorNodePath.setColor(color, 0)
+        leftHole = doorNodePath.find('door_*_hole_left')
+        leftHole.setName('doorFrameHoleLeft')
+        rightHole = doorNodePath.find('door_*_hole_right')
+        rightHole.setName('doorFrameHoleRight')
+        leftDoor = doorNodePath.find('door_*_left')
+        leftDoor.setName('rightDoor')
+        rightDoor = doorNodePath.find('door_*_right')
+        rightDoor.setName('leftDoor')
+        doorFlat = doorNodePath.find('door_*_flat')
+        leftHole.wrtReparentTo(doorFlat, 0)
+        rightHole.wrtReparentTo(doorFlat, 0)
+        doorFlat.setEffect(DecalEffect.make())
+        rightDoor.wrtReparentTo(parentNode, 0)
+        leftDoor.wrtReparentTo(parentNode, 0)
+        
+        rightDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
+        leftDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
+        leftHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
+        rightHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
+        
+        rightDoor.setColor(color, 0)
+        leftDoor.setColor(color, 0)
+        leftHole.setColor((0,0,0,1), 0)
+        rightHole.setColor((0,0,0,1), 0)
+        
+        doorTrigger = doorNodePath.find('door_*_trigger')
+        doorTrigger.wrtReparentTo(parentNode, 0)
+        doorTrigger.setName('door_trigger_' + block)
+    def traverse(self, nodePath, dnaStorage):
+        frontNode = nodePath.find('**/*_front').find('**/+GeomNode')
+        frontNode.setEffect(DecalEffect.make())
+        node = dnaStorage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNADoor code ' + self.code + ' not found in DNAStorage')
+        doorNode = node.copyTo(frontNode, 0)
+        DNADoor.setupDoor(doorNode, nodePath, nodePath.find('**/*door_origin'), dnaStorage,
+          dnaStorage.getBlock(nodePath.getName()), self.color)
+        #todo: setupDoor()
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -827,7 +884,8 @@ def p_group(p):
              | visgroup
              | dnanode
              | windows
-             | cornice'''
+             | cornice
+             | door'''
     p[0] = p[1]
 
 def p_dnanode(p):
@@ -885,6 +943,11 @@ def p_landmarkbuilding(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
+def p_door(p):
+    '''door : doordef "[" subdoor_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
 def p_propdef(p):
     '''propdef : PROP string'''
     print "New prop: ", p[2]
@@ -929,6 +992,14 @@ def p_landmarkbuildingdef(p):
     '''landmarkbuildingdef : LANDMARK_BUILDING string'''
     print 'New DNALandmarkBuilding:', p[2]
     p[0] = DNALandmarkBuilding(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_doordef(p):
+    '''doordef : DOOR'''
+    print 'New DNADoor'
+    p[0] = DNADoor('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -1057,6 +1128,11 @@ def p_landmarkbuilding_sub(p):
                             | article
                             | building_type
                             | wall_color'''
+    p[0] = p[1]
+
+def p_door_sub(p):
+    '''door_sub : code
+                | color'''
     p[0] = p[1]
 
 def p_title(p):
@@ -1201,6 +1277,17 @@ def p_sublandmarkbuilding_list(p):
     '''sublandmarkbuilding_list : sublandmarkbuilding_list dnanode_sub
                                 | sublandmarkbuilding_list landmarkbuilding_sub
                                 | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
+def p_subdoor_list(p):
+    '''subdoor_list : subdoor_list dnanode_sub
+                    | subdoor_list door_sub
+                    | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):
