@@ -1,33 +1,108 @@
-model "phase_3.5/models/modules/TT_A1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A1" "TT_A1"  ]
-	]
+model "phase_3.5/models/modules/walls" [
+	store_node [ "wall_collide" "wall_collide" ]
+	store_node [ "wall_collide" "wall_camera_collide" ]
+	store_node [ "wall_collide" "wall_camera_barrier" ]
 
-model "phase_3.5/models/modules/doors_practical" [
-	store_node [ "door_double" "door_double_pillars_ur"  ]
-	store_node [ "door_double" "door_double_pillars_ul"  ]
+	store_node [ "wall" "wall_lg_brick_ur" ]
+	store_node [ "wall" "wall_lg_brick_ul" ]
+	store_node [ "wall" "wall_lg_brick_dr" ]
+	store_node [ "wall" "wall_lg_brick_dl" ]
 
-	store_node [ "door_double" "door_double_curved_ur"  ]
-	store_node [ "door_double" "door_double_curved_ul"  ]
+	store_node [ "wall" "wall_lg_rock_ur" ]
+	store_node [ "wall" "wall_lg_rock_ul" ]
+	store_node [ "wall" "wall_lg_rock_dr" ]
+	store_node [ "wall" "wall_lg_rock_dl" ]
 
-	store_node [ "door_double" "door_double_square_ur"  ]
-	store_node [ "door_double" "door_double_square_ul"  ]
+	store_node [ "wall" "wall_md_board_ur" ]
+	store_node [ "wall" "wall_md_board_ul" ]
+	store_node [ "wall" "wall_md_board_dr" ]
+	store_node [ "wall" "wall_md_board_dl" ]
 
-	store_node [ "door_double" "door_double_round_ur"  ]
-	store_node [ "door_double" "door_double_round_ul"  ]
+	store_node [ "wall" "wall_md_bricks_ur" ]
+	store_node [ "wall" "wall_md_bricks_ul" ]
+	store_node [ "wall" "wall_md_bricks_dr" ]
+	store_node [ "wall" "wall_md_bricks_dl" ]
+
+	store_node [ "wall" "wall_md_dental_ur" ]
+	store_node [ "wall" "wall_md_dental_ul" ]
+	store_node [ "wall" "wall_md_dental_dr" ]
+	store_node [ "wall" "wall_md_dental_dl" ]
+
+	store_node [ "wall" "wall_md_pillars_ur" ]
+	store_node [ "wall" "wall_md_pillars_ul" ]
+	store_node [ "wall" "wall_md_pillars_dr" ]
+	store_node [ "wall" "wall_md_pillars_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_ur" ]
+	store_node [ "wall" "wall_sm_brick_ul" ]
+	store_node [ "wall" "wall_sm_brick_dr" ]
+	store_node [ "wall" "wall_sm_brick_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_pink_ur" ]
+	store_node [ "wall" "wall_sm_brick_pink_ul" ]
+	store_node [ "wall" "wall_sm_brick_pink_dr" ]
+	store_node [ "wall" "wall_sm_brick_pink_dl" ]
+
+	store_node [ "wall" "wall_sm_brick_blue_ur" ]
+	store_node [ "wall" "wall_sm_brick_blue_ul" ]
+	store_node [ "wall" "wall_sm_brick_blue_dr" ]
+	store_node [ "wall" "wall_sm_brick_blue_dl" ]
+
+	store_node [ "wall" "wall_sm_cement_ur" ]
+	store_node [ "wall" "wall_sm_cement_ul" ]
+	store_node [ "wall" "wall_sm_cement_dr" ]
+	store_node [ "wall" "wall_sm_cement_dl" ]
+
+	store_node [ "wall" "wall_sm_cement_blue_ur" ]
+	store_node [ "wall" "wall_sm_cement_blue_ul" ]
+	store_node [ "wall" "wall_sm_cement_blue_dr" ]
+	store_node [ "wall" "wall_sm_cement_blue_dl" ]
+
+	store_node [ "wall" "wall_sm_wood_ur" ]
+	store_node [ "wall" "wall_sm_wood_ul" ]
+	store_node [ "wall" "wall_sm_wood_dr" ]
+	store_node [ "wall" "wall_sm_wood_dl" ]
+
+	store_node [ "wall" "wall_bricks_ur" ]
+	store_node [ "wall" "wall_bricks_ul" ]
+	store_node [ "wall" "wall_bricks_dr" ]
+	store_node [ "wall" "wall_bricks_dl" ]
+
+	store_node [ "wall" "wall_fence_wood_ur" ]
+	store_node [ "wall" "wall_fence_wood_ul" ]
+	store_node [ "wall" "wall_fence_wood_dr" ]
+	store_node [ "wall" "wall_fence_wood_dl" ]
+
+	store_node [ "wall" "wall_md_blank_ur" ]
+	store_node [ "wall" "wall_md_blank_ul" ]
+	store_node [ "wall" "wall_md_blank_dr" ]
+	store_node [ "wall" "wall_md_blank_dl" ]
+
+	store_node [ "wall" "wall_woodflower_fence_ur" ]
+	store_node [ "wall" "wall_woodflower_fence_ul" ]
+
+	store_node [ "wall" "wall_stone_fence_ur" ]
+	store_node [ "wall" "wall_stone_fence_ul" ]
+
 	]
 
 group "toontownCentralTutorial" [
  visgroup "20001" [
   vis [   "20001"   ]
   group "tutorial" [
-	landmark_building "tb2:toon_landmark_TT_A1_DNARoot" [
-    code [ "toon_landmark_TT_A1" ]
-    title [ "" ]
-    pos [ 0 5 0 ]
-    hpr [ 90 0 0 ]
-    door [
-     code [ "door_double_round_ur" ]
-     color [ 1 0.87 0.38 1 ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ 105 -60 0 ]
+    hpr [ -180 0 0 ]
+    width [ 20 ]
+    wall [
+     height [ 10 ]
+     code [ "wall_sm_brick_ur" ]
+     color [ 1 0.84 0.59 1 ]
+     windows [
+      code [ "window_sm_pointed_ur" ]
+      color [ 0.88 0.44 0.15 1 ]
+      count [ 0 ]
+     ]
     ]
    ]
   ]

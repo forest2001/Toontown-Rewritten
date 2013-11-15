@@ -1,7 +1,7 @@
 import ply.lex as lex
 import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
-from panda3d.core import LVector3f, LVector4f, BitMask32
+from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool
 from direct.showbase import Loader
 import math, random
 tokens = [
@@ -52,6 +52,9 @@ reserved = {
   'article' : 'ARTICLE',
   'building_type' : 'BUILDING_TYPE',
   'door' : 'DOOR',
+  'store_texture' : 'STORE_TEXTURE',
+  'street' : 'STREET',
+  'texture' : 'TEXTURE',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -113,6 +116,7 @@ class DNAStorage:
         self.blockTitles = {}
         self.blockArticles = {}
         self.blockBuildingTypes = {}
+        self.textures = {}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -183,6 +187,12 @@ class DNAStorage:
         self.blockArticles[index] = article
     def storeBlockBuildingType(self, index, type):
         self.blockBuildingTypes[index] = type
+    def storeTexture(self, name, texture):
+        self.textures[name] = texture
+    def findTexture(self, name):
+        if name in self.textures:
+            return self.textures[name]
+        return None
     def ls(self):
         print 'DNASuitPoints:'
         for suitPoint in self.suitPoints:
@@ -375,6 +385,7 @@ class DNANode(DNAGroup):
         self.pos = pos
     def setHpr(self, hpr):
         self.hpr = hpr
+        self.hpr[0] *= -1
     def setScale(self, scale):
         self.scale = scale
     def traverse(self, nodePath, dnaStorage):
@@ -562,13 +573,56 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
     def getCurrentWallHeight(self): #this is never used in the asm, only exported. probably optimized out?
         return DNAFlatBuilding.currentWallHeight
     def traverse(self, nodePath, dnaStorage):
-        currentWallHeight = 0
-        nodePath = nodePath.attachNewNode(self.name, 0)
-        nodePath.attachNewNode(self.name + '-internal', 0)
-        nodePath.setScale(self.scale)
-        nodePath.setPosHpr(self.pos, self.hpr)
+        DNAFlatBuilding.currentWallHeight = 0
+        node = nodePath.attachNewNode(self.getName())
+        internalNode = node.attachNewNode(self.getName() + '-internal')
+        internalNode.setScale(self.getScale())
+        node.setPosHpr(self.getPos(), self.getHpr())
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            if isinstance(child, DNAWall):
+                child.traverse(internalNode, dnaStorage)
+            else:
+                child.traverse(node, dnaStorage)
+        DNAFlatBuilding.currentWallHeight = 1
+        if DNAFlatBuilding.currentWallHeight == 0:
+            print 'empty flat building with no walls'
+        else:
+            cameraBarrier = dnaStorage.findNode('wall_camera_barrier')
+            if cameraBarrier is None:
+                raise DNAError('DNAFlatBuilding requires that there is a wall_camera_barrier in storage')
+            cameraBarrier = cameraBarrier.copyTo(internalNode, 0)
+            scale = self.getScale()
+            scale.setZ(DNAFlatBuilding.currentWallHeight)
+            internalNode.setScale(scale)
+            #self.setupSuitFlatBuilding(nodePath, dnaStorage) #TODO
+            #self.setupCogdoFlatBuilding(nodePath, dnaStorage)
+            internalNode.flattenStrong()
+            collisionNode = node.find('**/door_*/+CollisionNode')
+            if not collisionNode.isEmpty():
+                collisionNode.setName('KnockKnockDoorSphere_' + dnaStorage.getBlock(self.getName()))
+            cameraBarrier.wrtReparentTo(nodePath, 0)
+            wallCollection = internalNode.findAllMatches('wall*')
+            wallHolder = node.attachNewNode('wall_holder')
+            wallDecal = node.attachNewNode('wall_decal')
+            windowCollection = internalNode.findAllMatches('**/window*')
+            doorCollection = internalNode.findAllMatches('**/door*')
+            corniceCollection = internalNode.findAllMatches('**/cornice*_d')
+            wallCollection.reparentTo(wallHolder)
+            windowCollection.reparentTo(wallDecal)
+            doorCollection.reparentTo(wallDecal)
+            corniceCollection.reparentTo(wallDecal)
+            for i in range(wallHolder.getNumChildren()):
+                iNode = wallHolder.getChild(i)
+                iNode.clearTag('DNACode')
+                iNode.clearTag('DNARoot')
+            wallHolder.flattenStrong()
+            wallDecal.flattenStrong()
+            holderChild0 = wallHolder.getChild(0)
+            wallDecal.getChildren().reparentTo(holderChild0)
+            holderChild0.reparentTo(internalNode)
+            holderChild0.setEffect(DecalEffect.make())
+            wallHolder.removeNode()
+            wallDecal.removeNode()
 
 class DNAWall(DNANode):
     def __init__(self, name):
@@ -634,6 +688,7 @@ class DNAWindows(DNAGroup):
             else:
                 scale -= 0.0125
             scale = LVector3f(scale, scale, scale)
+            self.windowCount = 1 #TODO: removeme
             if self.windowCount == 1:
                 node = dnaStorage.findNode(self.code)
                 if not node is None:
@@ -792,7 +847,94 @@ class DNADoor(DNAGroup):
         doorNode = node.copyTo(frontNode, 0)
         DNADoor.setupDoor(doorNode, nodePath, nodePath.find('**/*door_origin'), dnaStorage,
           dnaStorage.getBlock(nodePath.getName()), self.color)
-        #todo: setupDoor()
+
+class DNAStreet(DNANode):
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+        self.code = ''
+        self.streetTexture = ''
+        self.sideWalkTexture = ''
+        self.curbTexture = ''
+        self.streetColor = LVector4f(1,1,1,1)
+        self.sidewalkColor = LVector4f(1,1,1,1)
+        self.curbColor = LVector4f(1,1,1,1)
+        self.setTexCnt = 0
+        self.setColCnt = 0
+    def setCode(self, code):
+        self.code = code
+    def getCode(self):
+        return self.code
+    def getStreetTexture(self):
+        return self.streetTexture
+    def getSidewalkTexture(self):
+        return self.sidewalkTexture
+    def getCurbTexture(self):
+        return self.curbTexture
+    def getStreetColor(self):
+        return self.streetColor
+    def getSidewalkColor(self):
+        return self.sidewalkColor
+    def getCurbColor(self):
+        return self.curbColor
+    def setStreetTexture(self, texture):
+        self.streetTexture = texture
+    def setSidewalkTexture(self, texture):
+        self.sidewalkTexture = texture
+    def setCurbTexture(self, texture):
+        self.curbTexture = texture
+    def setStreetColor(self, color):
+        self.streetColor = color
+    def setSidewalkColor(self, color):
+        self.SidewalkColor = color
+    def setTextureColor(self, color):
+        self.Color = color
+    def setTexture(self, texture):
+        if self.setTexCnt == 0:
+            self.streetTexture = texture
+        if self.setTexCnt == 1:
+            self.sidewalkTexture = texture
+        if self.setTexCnt == 2:
+            self.curbTexture = texture
+        self.setTexCnt += 1
+    def setColor(self, color):
+        if self.setColCnt == 0:
+            self.streetColor = color
+        if self.setColCnt == 1:
+            self.sidewalkColor = color
+        if self.setColCnt == 2:
+            self.curbColor = color
+        self.setColCnt += 1
+    def traverse(self, nodePath, dnaStorage):
+        print self.name, 'traverse'
+        node = dnaStorage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNAStreet code ' + self.code + ' not found in DNAStorage')
+        nodePath = node.copyTo(nodePath, 0)
+        node.setName(self.getName())
+        streetTexture = dnaStorage.findTexture(self.streetTexture)
+        sidewalkTexture = dnaStorage.findTexture(self.sidewalkTexture)
+        curbTexture = dnaStorage.findTexture(self.curbTexture)
+        if streetTexture is None:
+            raise DNAError('street texture not found in DNAStorage : ' + self.streetTexture)
+        if sidewalkTexture is None:
+            raise DNAError('sidewalk texture not found in DNAStorage : ' + self.sidewalkTexture)
+        if curbTexture is None:
+            raise DNAError('curb texture not found in DNAStorage : ' + self.curbTexture)
+        streetNode = nodePath.find('**/*_street')
+        sidewalkNode = nodePath.find('**/*_sidewalk')
+        curbNode = nodePath.find('**/*_curb')
+
+        if not streetNode.isEmpty():
+            streetNode.setTexture(streetTexture, 1)
+            streetNode.setColorScale(self.streetColor, 0)
+        if not sidewalkNode.isEmpty():
+            sidewalkNode.setTexture(sidewalkTexture, 1)
+            sidewalkNode.setColorScale(self.sidewalkColor, 0)
+        if not curbNode.isEmpty():
+            curbNode.setTexture(curbTexture, 1)
+            curbNode.setColorScale(self.curbColor, 0)
+
+        nodePath.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
 
 class DNALoader:
     def __init__(self):
@@ -817,7 +959,8 @@ def p_object(p):
     '''object : suitpoint
               | group
               | model
-              | font'''
+              | font
+              | store_texture'''
     p[0] = p[1]
 
 def p_number(p):
@@ -895,7 +1038,8 @@ def p_dnanode(p):
                | signtext
                | flatbuilding
                | wall
-               | landmarkbuilding'''
+               | landmarkbuilding
+               | street'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -940,6 +1084,11 @@ def p_cornice(p):
 
 def p_landmarkbuilding(p):
     '''landmarkbuilding : landmarkbuildingdef "[" sublandmarkbuilding_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
+def p_street(p):
+    '''street : streetdef "[" substreet_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
@@ -1000,6 +1149,14 @@ def p_doordef(p):
     '''doordef : DOOR'''
     print 'New DNADoor'
     p[0] = DNADoor('')
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
+def p_streetdef(p):
+    '''streetdef : STREET string'''
+    print "New DNAStreet: ", p[2]
+    p[0] = DNAStreet(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
@@ -1134,6 +1291,16 @@ def p_door_sub(p):
     '''door_sub : code
                 | color'''
     p[0] = p[1]
+
+def p_street_sub(p):
+    '''street_sub : code
+                  | texture
+                  | color'''
+    p[0] = p[1]
+
+def p_texture(p):
+    '''texture : TEXTURE "[" string "]"'''
+    p.parser.parentGroup.setTexture(p[3])
 
 def p_title(p):
     '''title : TITLE "[" string "]"'''
@@ -1295,6 +1462,17 @@ def p_subdoor_list(p):
     else:
         p[0] = []
 
+def p_substreet_list(p):
+    '''substreet_list : substreet_list dnanode_sub
+                      | substreet_list street_sub
+                      | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
 def p_modeldef(p):
     '''modeldef : MODEL string'''
     filename = Filename(p[2])
@@ -1325,6 +1503,18 @@ def p_node(p):
     nodePath.setTag('DNACode', p[4])
     nodePath.setTag('DNARoot', p[3])
     p.parser.dnaStore.storeNode(nodePath, p[4])
+
+def p_store_texture(p):
+    '''store_texture : STORE_TEXTURE "[" string string "]"
+               | STORE_TEXTURE "[" string string string "]"'''
+    filename = p[4]
+    if len(p) == 7:
+        filename = p[5]
+    name = p[3]
+    if len(p) == 7:
+        name = p[4]
+    texture = TexturePool.loadTexture(Filename(filename))
+    p.parser.dnaStore.storeTexture(name, texture)
 
 def p_font(p):
     '''font : STORE_FONT "[" string string string "]"'''
