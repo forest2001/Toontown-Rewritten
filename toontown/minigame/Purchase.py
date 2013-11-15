@@ -120,16 +120,23 @@ class Purchase(PurchaseBase):
         self.foreground = loader.loadModel('phase_3.5/models/modules/TT_A1')
         self.foreground.setPos(12.5, -20, -5.5)
         self.foreground.setHpr(180, 0, 0)
-        self.backgroundL = loader.loadModel('phase_3.5/models/modules/TT_A1')
+        self.backgroundL = self.foreground.copyTo(hidden)
         self.backgroundL.setPos(-12.5, -25, -5)
         self.backgroundL.setHpr(180, 0, 0)
         self.backgroundR = self.backgroundL.copyTo(hidden)
-        self.backgroundR.setPos(20, -25, -5)
+        self.backgroundR.setPos(25, -25, -5)
+        self.backgroundR.setHpr(180, 0, 0)
         streets = loader.loadModel('phase_3.5/models/modules/street_modules')
         sidewalk = streets.find('**/street_sidewalk_40x40')
         self.sidewalk = sidewalk.copyTo(hidden)
+        self.sidewalkR = sidewalk.copyTo(hidden)
+        self.sidewalkL = sidewalk.copyTo(hidden)
         self.sidewalk.setPos(-20, -25, -5.5)
         self.sidewalk.setColor(0.9, 0.6, 0.4)
+        self.sidewalkL.setPos(-40, -25, -5.5)
+        self.sidewalkL.setColor(0.9, 0.6, 0.4)
+        self.sidewalkR.setPos(0, -25, -5.5)
+        self.sidewalkR.setColor(0.9, 0.6, 0.4)
         streets.removeNode()
         doors = loader.loadModel('phase_4/models/modules/doors')
         door = doors.find('**/door_single_square_ur_door')
@@ -195,7 +202,11 @@ class Purchase(PurchaseBase):
         self.backgroundR.removeNode()
         del self.backgroundR
         self.sidewalk.removeNode()
+        self.sidewalkL.removeNode()
+        self.sidewalkR.removeNode()
         del self.sidewalk
+        del self.sidewalkL
+        del self.sidewalkR
         self.door.removeNode()
         del self.door
         self.collisionFloor.removeNode()
@@ -280,15 +291,18 @@ class Purchase(PurchaseBase):
         self.counters = []
         self.totalCounters = []
         camera.reparentTo(render)
-        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         camera.setPos(0, 16.0, 2.0)
         camera.lookAt(0, 0, 0.75)
         base.transitions.irisIn(0.4)
+        base.camLens.setFov(60)
+        base.camLens.setFar(150)
         self.title.reparentTo(aspect2d)
         self.foreground.reparentTo(render)
         self.backgroundL.reparentTo(render)
         self.backgroundR.reparentTo(render)
         self.sidewalk.reparentTo(render)
+        self.sidewalkL.reparentTo(render)
+        self.sidewalkR.reparentTo(render)
         self.door.reparentTo(render)
         size = 20
         z = -2.5
@@ -587,6 +601,8 @@ class Purchase(PurchaseBase):
         self.backgroundL.reparentTo(hidden)
         self.backgroundR.reparentTo(hidden)
         self.sidewalk.reparentTo(hidden)
+        self.sidewalkL.reparentTo(hidden)
+        self.sidewalkR.reparentTo(hidden)
         self.door.reparentTo(hidden)
         self.title.reparentTo(self.frame)
         self.convertingVotesToBeansLabel.hide()
