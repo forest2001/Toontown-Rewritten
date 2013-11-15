@@ -385,7 +385,7 @@ class DNANode(DNAGroup):
         self.pos = pos
     def setHpr(self, hpr):
         self.hpr = hpr
-        self.hpr[0] *= -1
+        #self.hpr[0] *= -1
     def setScale(self, scale):
         self.scale = scale
     def traverse(self, nodePath, dnaStorage):
@@ -576,6 +576,8 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
         DNAFlatBuilding.currentWallHeight = 0
         node = nodePath.attachNewNode(self.getName())
         internalNode = node.attachNewNode(self.getName() + '-internal')
+        scale = self.getScale()
+        scale.setX(self.width)
         internalNode.setScale(self.getScale())
         node.setPosHpr(self.getPos(), self.getHpr())
         for child in self.children:
@@ -590,9 +592,7 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
             if cameraBarrier is None:
                 raise DNAError('DNAFlatBuilding requires that there is a wall_camera_barrier in storage')
             cameraBarrier = cameraBarrier.copyTo(internalNode, 0)
-            scale = self.getScale()
-            scale.setX(DNAFlatBuilding.currentWallHeight)
-            internalNode.setScale(scale)
+            cameraBarrier.setScale((1,1,DNAFlatBuilding.currentWallHeight))
             #self.setupSuitFlatBuilding(nodePath, dnaStorage) #TODO
             #self.setupCogdoFlatBuilding(nodePath, dnaStorage)
             internalNode.flattenStrong()
@@ -651,7 +651,7 @@ class DNAWall(DNANode):
         node.setPosHprScale(self.pos, self.hpr, self.scale)
         node.setColor(self.color)
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            child.traverse(node, dnaStorage)
         DNAFlatBuilding.currentWallHeight += self.height
 
 class DNAWindows(DNAGroup):
@@ -675,7 +675,7 @@ class DNAWindows(DNAGroup):
     def traverse(self, nodePath, dnaStorage):
         if self.windowCount != 0:
             #Do some crazy shit with the parent's scale here
-            parentX = nodePath.getParent().getX()
+            parentX = nodePath.getScale().getX()
             scale = random.randint(0, 0x7fff)
             scale *= 0.000030517578125
             scale *= 0.02500000037252903
@@ -686,14 +686,13 @@ class DNAWindows(DNAGroup):
                 scale += 1.15
             else:
                 scale -= 0.0125
-            scale = LVector3f(scale, scale, scale)
             self.windowCount = 1 #TODO: removeme
             if self.windowCount == 1:
                 node = dnaStorage.findNode(self.code)
                 if not node is None:
-                    nodePath = node.copyTo(nodePath, 0)
-                    nodePath.setColor(self.color)
-                    nodePath.setScale(scale)
+                    node = node.copyTo(nodePath, 0)
+                    node.setColor(self.color)
+                    node.setScale(NodePath(), scale)
                     float = random.randint(0, 0x7fff)
                     float *= 0.000030517578125
                     float *= 0.02500000037252903
@@ -704,9 +703,9 @@ class DNAWindows(DNAGroup):
                     float2 *= 0.02500000037252903
                     float2 -= 0.0125
                     float2 += 0.5
-                    nodePath.setPos(float2, 0, float)
-                    nodePath.setHpr(0, 0, random.randint(0, 0x7fff)*0.000030517578125*6.0-3.0)
-                    nodePath.setEffect(DecalEffect.make())
+                    print nodePath.getScale()
+                    node.setPos(float2, 0, float)
+                    node.setHpr(0, 0, 0)
                 else:
                     raise KeyError('DNAWindows code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
             else:
