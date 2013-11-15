@@ -295,7 +295,6 @@ class Purchase(PurchaseBase):
         camera.lookAt(0, 0, 0.75)
         base.transitions.irisIn(0.4)
         base.camLens.setFov(60)
-        base.camLens.setFar(150)
         self.title.reparentTo(aspect2d)
         self.foreground.reparentTo(render)
         self.backgroundL.reparentTo(render)
@@ -607,6 +606,7 @@ class Purchase(PurchaseBase):
         self.title.reparentTo(self.frame)
         self.convertingVotesToBeansLabel.hide()
         self.rewardDoubledJellybeanLabel.hide()
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         NametagGlobals.setOnscreenChatForced(0)
 
     def _handleClientCleanup(self):
