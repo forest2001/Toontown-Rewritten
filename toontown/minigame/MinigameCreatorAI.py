@@ -188,6 +188,10 @@ def removeUnreleasedMinigames(startList, increaseChanceOfNewGames = 0):
     return randomList
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, bool, int, int])
-def requestMinigame(minigameName, minigameKeep=False, minigameDiff=1, minigamePG=2000):
-    RequestMinigame[spellbook.getTarget().doId] = ToontownGlobals.MinigameNames[minigameName], minigameKeep, minigameDiff, minigamePG
-    return "Your request for " + minigameName + " was added."
+def requestMinigame(minigameName='remove', minigameKeep=False, minigameDiff=1, minigamePG=2000):
+    if minigameName=='remove':
+        del RequestMinigame[spellbook.getInvoker().doId]
+        return "Deleted trolley game request."
+    else:
+        RequestMinigame[spellbook.getTarget().doId] = ToontownGlobals.MinigameNames[minigameName], minigameKeep, minigameDiff, minigamePG
+        return "Your request for " + minigameName + " was added."
