@@ -55,6 +55,7 @@ reserved = {
   'store_texture' : 'STORE_TEXTURE',
   'street' : 'STREET',
   'texture' : 'TEXTURE',
+  'graphic' : 'GRAPHIC',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -934,6 +935,42 @@ class DNAStreet(DNANode):
 
         nodePath.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
 
+class DNASignGraphic(DNANode):
+    def __init__(self, name):
+        DNANode.__init__(self, name)
+        self.code = ''
+        self.color = LVector4f(1,1,1,1)
+        self.width = 0
+        self.height = 0
+        self.bDefaultColor = True
+    def getWidth(self):
+        return self.width
+    def getHeight(self):
+        return self.height
+    def getCode(self):
+        return self.code
+    def getColor(self):
+        return self.Color
+    def setWidth(self, width):
+        self.width = width
+    def setHeight(self, height):
+        self.height = height
+    def setCode(self, code):
+        self.code = code
+    def setColor(self, color):
+        self.color = color
+        self.bDefaultColor = False
+    def traverse(self, nodePath, dnaStorage):
+        nodePath.getNode(nodePath.getNumNodes()-1).setEffect(DecalEffect.make())
+        node = dnaStorage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNASignGraphic code ' + self.code + ' not found in storage')
+        node = node.copyTo(nodePath, 0)
+        pos, hpr, scale = self.getParent().getNextPosHprScale(self.pos, self.hpr, self.scale)
+        node.setPosHprScale(pos, hpr, scale)
+        for child in self.children:
+            child.traverse(node, dnaStorage)
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -1037,11 +1074,17 @@ def p_dnanode(p):
                | flatbuilding
                | wall
                | landmarkbuilding
-               | street'''
+               | street
+               | signgraphic'''
     p[0] = p[1]
 
 def p_sign(p):
     '''sign : signdef "[" subprop_list "]"'''
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+
+def p_signgraphic(p):
+    '''signgraphic : signgraphicdef "[" subsigngraphic_list "]"'''
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
 
@@ -1167,6 +1210,14 @@ def p_signdef(p):
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
 
+def p_signgraphicdef(p):
+    '''signgraphicdef : GRAPHIC'''
+    print 'New DNASignGraphic'
+    p[0] = DNASignGraphic('')
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
 def p_baselinedef(p):
     '''baselinedef : BASELINE'''
     print 'New DNASignBaseline'
@@ -1254,6 +1305,13 @@ def p_baseline_sub(p):
 
 def p_text_sub(p):
     '''text_sub : letters'''
+    p[0] = p[1]
+
+def p_signgraphic_sub(p):
+    '''signgraphic_sub : width
+                       | height
+                       | code
+                       | color'''
     p[0] = p[1]
 
 def p_flatbuilding_sub(p):
@@ -1393,6 +1451,16 @@ def p_subtext_list(p):
     else:
         p[0] = []
 
+def p_subsigngraphic_list(p):
+    '''subsigngraphic_list : subsigngraphic_list dnanode_sub
+                           | subsigngraphic_list signgraphic_sub
+                           | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
 
 def p_subflatbuilding_list(p):
     '''subflatbuilding_list : subflatbuilding_list dnanode_sub
