@@ -1,7 +1,7 @@
 import ply.lex as lex
 import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
-from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool
+from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool, ModelNode
 from direct.showbase import Loader
 import math, random
 tokens = [
@@ -56,6 +56,11 @@ reserved = {
   'street' : 'STREET',
   'texture' : 'TEXTURE',
   'graphic' : 'GRAPHIC',
+  'hood_model' : 'HOODMODEL',
+  'place_model' : 'PLACEMODEL',
+  'nhpr' : 'NHPR',
+  'flags' : 'FLAGS',
+  'node' : 'NODE',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -74,7 +79,7 @@ def t_QUOTED_STRING(t):
     return t
 
 def t_FLOAT(t):
-    r'[+-]?\d+[.]\d*'
+    r'[+-]?\d+[.]\d*([e][+-]\d+)?'
     t.value = float(t.value)
     return t
 
@@ -391,9 +396,10 @@ class DNANode(DNAGroup):
         self.scale = scale
     def traverse(self, nodePath, dnaStorage):
         node = PandaNode(self.name)
-        nodePath = nodePath.attachNewNode(node, 0).setPosHprScale(self.pos, self.hpr, self.scale)
+        node = nodePath.attachNewNode(node, 0)
+        node.setPosHprScale(self.pos, self.hpr, self.scale)
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            child.traverse(node, dnaStorage)
 
 class DNAProp(DNANode):
     def __init__(self, name):
@@ -410,14 +416,18 @@ class DNAProp(DNANode):
         return self.color
     def traverse(self, nodePath, dnaStorage):
         if self.code == 'DCS':
-            raise NotImplemented
-        node = dnaStorage.findNode(self.code)
-        if not node is None:
-            nodePath = node.copyTo(nodePath, 0)
-            nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
-            nodePath.setName(self.name)
+            node = ModelNode(self.name)
+            node = nodePath.attachNewNode(node)
+        else:  
+            node = dnaStorage.findNode(self.code)
+            if node is None:
+                return
+            node = node.copyTo(nodePath, 0)
+        node.setPosHprScale(self.pos, self.hpr, self.scale)
+        node.setName(self.name)
+        node.setColorScale(self.color, 0)
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            child.traverse(node, dnaStorage)
 
 class DNASign(DNANode):
     def __init__(self):
@@ -434,9 +444,9 @@ class DNASign(DNANode):
         return self.color
     def traverse(self, nodePath, dnaStorage):
         decNode = nodePath.find('**/sign_decal')
-        if decNode.isEmpty():
+        if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/*_front')
-        if decNode.isEmpty():
+        if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/+GeomNode')
         decEffect = DecalEffect.make()
         decNode.setEffect(decEffect)
@@ -462,6 +472,7 @@ class DNASignBaseline(DNANode):
         self.code = ''
         self.color = LVector4f(1, 1, 1, 1)
         self.font = None
+        self.flags = ''
         self.height = 0.0
         self.counter = 0
         self.indent = 1.0
@@ -541,6 +552,10 @@ class DNASignBaseline(DNANode):
         self.width = width
     def setWiggle(self, wiggle):
         self.wiggle = wiggle
+    def setFlags(self, flags):
+        self.flags = flags
+    def getFlags(self):
+        return self.flags
     def traverse(self, nodePath, dnaStorage):
         nodePath = nodePath.attachNewNode('baseline', 0)
         for child in self.children:
@@ -838,7 +853,9 @@ class DNADoor(DNAGroup):
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_' + block)
     def traverse(self, nodePath, dnaStorage):
-        frontNode = nodePath.find('**/*_front').find('**/+GeomNode')
+        frontNode = nodePath.find('**/*_front')
+        if not frontNode.getNode(0).isGeomNode():
+            frontNode = frontNode.find('**/+GeomNode')
         frontNode.setEffect(DecalEffect.make())
         node = dnaStorage.findNode(self.code)
         if node is None:
@@ -1032,6 +1049,14 @@ def p_dnagroupdef(p):
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
 
+def p_dnanodedef(p):
+    '''dnanodedef : NODE string'''
+    print "New DNANode: ", p[2]
+    p[0] = DNANode(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+
 def p_visgroupdef(p):
     '''visgroupdef : VISGROUP string'''
     print "New visgroup: ", p[2]
@@ -1075,7 +1100,8 @@ def p_dnanode(p):
                | wall
                | landmarkbuilding
                | street
-               | signgraphic'''
+               | signgraphic
+               | dnanodedef "[" subdnanode_list "]"'''
     p[0] = p[1]
 
 def p_sign(p):
@@ -1228,7 +1254,6 @@ def p_baselinedef(p):
 
 def p_signtextdef(p):
     '''signtextdef : TEXT'''
-    print 'New DNASignText'
     p[0] = DNASignText()
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1272,12 +1297,19 @@ def p_pos(p):
     p.parser.parentGroup.setPos(p[3])
 
 def p_hpr(p):
-    '''hpr : HPR "[" lpoint3f "]"'''
+    '''hpr : HPR "[" lpoint3f "]"
+           | NHPR "[" lpoint3f "]"'''
+    if p[1] == 'nphr':
+        p[3][0] *= -1
     p.parser.parentGroup.setHpr(p[3])
 
 def p_scale(p):
     '''scale : SCALE "[" lpoint3f "]"'''
     p.parser.parentGroup.setScale(p[3])
+
+def p_flags(p):
+    '''flags : FLAGS "[" string "]"'''
+    p.parser.parentGroup.setFlags(p[3])
 
 def p_dnanode_subs(p):
     '''dnanode_sub : group
@@ -1300,7 +1332,8 @@ def p_baseline_sub(p):
                 | kern
                 | stomp
                 | stumble
-                | wiggle'''
+                | wiggle
+                | flags'''
     p[0] = p[1]
 
 def p_text_sub(p):
@@ -1451,6 +1484,16 @@ def p_subtext_list(p):
     else:
         p[0] = []
 
+def p_subdnanode_list(p):
+    '''subdnanode_list : subtext_list dnanode_sub
+                       | empty'''
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+
 def p_subsigngraphic_list(p):
     '''subsigngraphic_list : subsigngraphic_list dnanode_sub
                            | subsigngraphic_list signgraphic_sub
@@ -1540,7 +1583,9 @@ def p_substreet_list(p):
         p[0] = []
 
 def p_modeldef(p):
-    '''modeldef : MODEL string'''
+    '''modeldef : MODEL string
+                | HOODMODEL string
+                | PLACEMODEL string'''
     filename = Filename(p[2])
     filename.setExtension('bam')
     loader = Loader.Loader(None)
@@ -1587,3 +1632,6 @@ def p_font(p):
     filename = Filename(p[5])
     filename.setExtension('bam')
     p.parser.dnaStore.storeFont(FontPool.loadFont(filename.cStr()), p[4])
+
+def p_error(p):
+    raise DNAError('Syntax error at line ' + str(p.lexer.lineno) + ' token=' + str(p))
