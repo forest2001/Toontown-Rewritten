@@ -583,7 +583,6 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
                 child.traverse(internalNode, dnaStorage)
             else:
                 child.traverse(node, dnaStorage)
-        DNAFlatBuilding.currentWallHeight = 1
         if DNAFlatBuilding.currentWallHeight == 0:
             print 'empty flat building with no walls'
         else:
@@ -592,7 +591,7 @@ class DNAFlatBuilding(DNANode): #TODO: finish me
                 raise DNAError('DNAFlatBuilding requires that there is a wall_camera_barrier in storage')
             cameraBarrier = cameraBarrier.copyTo(internalNode, 0)
             scale = self.getScale()
-            scale.setZ(DNAFlatBuilding.currentWallHeight)
+            scale.setX(DNAFlatBuilding.currentWallHeight)
             internalNode.setScale(scale)
             #self.setupSuitFlatBuilding(nodePath, dnaStorage) #TODO
             #self.setupCogdoFlatBuilding(nodePath, dnaStorage)
@@ -644,16 +643,16 @@ class DNAWall(DNANode):
         self.height = height
     def traverse(self, nodePath, dnaStorage):
         node = dnaStorage.findNode(self.code)
-        if not node is None:
-            nodePath = node.copyTo(nodePath, 0)
-            self.pos.setZ(DNAFlatBuilding.currentWallHeight)
-            self.scale.setZ(self.height)
-            nodePath.setPosHprScale(self.pos, self.hpr, self.scale)
-            nodePath.setColor(self.color)
-        else:
-            raise KeyError('DNAWall code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
+        if node is None:
+            raise DNAError('DNAWall code ' + self.code + ' not found in DNAStorage')#Should this be a keyerror or something else?
+        node = node.copyTo(nodePath, 0)
+        self.pos.setZ(DNAFlatBuilding.currentWallHeight)
+        self.scale.setZ(self.height)
+        node.setPosHprScale(self.pos, self.hpr, self.scale)
+        node.setColor(self.color)
         for child in self.children:
             child.traverse(nodePath, dnaStorage)
+        DNAFlatBuilding.currentWallHeight += self.height
 
 class DNAWindows(DNAGroup):
     def __init__(self, name):

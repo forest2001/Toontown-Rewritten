@@ -86,6 +86,32 @@ model "phase_3.5/models/modules/walls" [
 
 	]
 
+model "phase_3.5/models/modules/windows" [
+	store_node [ "window" "window_md_curtains_ur" ]
+	store_node [ "window" "window_md_curtains_ul" ]
+
+	store_node [ "window" "window_md_curved_ur" ]
+	store_node [ "window" "window_md_curved_ul" ]
+
+	store_node [ "window" "window_porthole_ur" ]
+	store_node [ "window" "window_porthole_ul" ]
+
+	store_node [ "window" "window_sm_square_ur" ]
+	store_node [ "window" "window_sm_square_ul" ]
+
+	store_node [ "window" "window_sm_shuttered_ur" ]
+	store_node [ "window" "window_sm_shuttered_ul" ]
+
+	store_node [ "window" "window_sm_pointed_ur" ]
+	store_node [ "window" "window_sm_pointed_ul" ]
+
+	store_node [ "window" "window_sm_curved_ur" ]
+	store_node [ "window" "window_sm_curved_ul" ]
+
+	store_node [ "window" "window_sm_round_ur" ]
+	store_node [ "window" "window_sm_round_ul" ]
+	]
+
 group "toontownCentralTutorial" [
  visgroup "20001" [
   vis [   "20001"   ]
@@ -104,6 +130,15 @@ group "toontownCentralTutorial" [
       count [ 0 ]
      ]
     ]
+	wall [
+     height [ 10 ]
+     code [ "wall_sm_brick_ur" ]
+     color [ 1 0.84 0.59 1 ]
+     windows [
+      code [ "window_sm_pointed_ur" ]
+      color [ 0.88 0.44 0.15 1 ]
+      count [ 1 ]
+     ]
    ]
   ]
  ]
