@@ -258,7 +258,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
-            self.sendUpdate('setLastHood', [ZoneUtil.getHoodId(zoneId)])
+            if zoneId < ToontownGlobals.DynamicZonesBegin:
+                self.sendUpdate('setLastHood', [ZoneUtil.getHoodId(zoneId)])
 
     def _renewDoLater(self, renew = True):
         if renew:
