@@ -65,8 +65,9 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             
             for avId in players:
                 noTravel = doesntWantTrolleyTracks.get(avId)
+                aiNoTravel = doesntWantTrolleyTracks.get('district')
                 
-            if len(players) > 1 and not noTravel:
+            if len(players) > 1 and not noTravel and not aiNoTravel:
                 mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
             else:
                 mg = createMinigame(self.air, players, self.zoneId)
@@ -155,11 +156,19 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
     
-@magicWord(access=200)
-def travel():
-    if spellbook.getInvoker().doId in doesntWantTrolleyTracks:
-        del doesntWantTrolleyTracks[spellbook.getInvoker().doId]
-        return "Re-enabled Trolley Tracks."
+@magicWord(category=CATEGORY_OVERRIDE, types=[str])
+def travel(target):
+    if target=='everyone':
+        if 'everyone' in doesntWantTrolleyTracks:
+            del doesntWantTrolleyTracks['everyone']
+            return "Re-enabled Trolley Tracks in the current district."
+        else:
+            doesntWantTrolleyTracks['everyone'] = True
+            return "Disabled Trolley Tracks in the current district."
     else:
-        doesntWantTrolleyTracks[spellbook.getInvoker().doId] = True
-        return "Disabled Trolley Tracks."
+        if spellbook.getTarget().doId in doesntWantTrolleyTracks:
+            del doesntWantTrolleyTracks[spellbook.getTarget().doId]
+            return "Re-enabled Trolley Tracks."
+        else:
+            doesntWantTrolleyTracks[spellbook.getTarget().doId] = True
+            return "Disabled Trolley Tracks."
