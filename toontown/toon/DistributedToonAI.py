@@ -4369,8 +4369,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.b_setMaxMoney(120)
 
         # Unlock all of the emotes they should have during alpha:
-        emotes = []
-        emotes += [0]*(len(OTPLocalizer.EmoteFuncDict))
+        emotes = list(self.getEmoteAccess())
 
         # Get this list out of OTPLocalizerEnglish.py
         ALPHA_EMOTES = ['Wave', 'Happy', 'Sad', 'Angry', 'Sleepy',
@@ -4381,6 +4380,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
             if emoteId is None:
                 self.notify.warning('Invalid emote %s' % emote)
+                continue
+
+            if emoteId >= len(emotes):
+                self.notify.warning('Emote %d out of range on Toon %d' % (emoteId, self.doId))
                 continue
 
             emotes[emoteId] = 1
