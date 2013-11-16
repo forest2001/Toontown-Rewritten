@@ -4368,11 +4368,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.b_setMaxMoney(120)
 
         # Unlock all of the emotes they should have during alpha:
-        emotes = list(self.getEmoteAccess())
-        emotes += [0]*(len(OTPLocalizer.EmoteFuncDict)-len(emotes))
+        emotes = []
+        emotes += [0]*(len(OTPLocalizer.EmoteFuncDict))
 
         # Get this list out of OTPLocalizerEnglish.py
-        ALPHA_EMOTES = ['Dance', 'Think', 'Bored', 'Applause', 'Cringe',
+        ALPHA_EMOTES = ['Wave', 'Happy', 'Sad', 'Angry', 'Sleepy',
+                        'Dance', 'Think', 'Bored', 'Applause', 'Cringe',
                         'Confused', 'Bow', 'Delighted', 'Belly Flop', 'Banana Peel',
                         'Laugh', 'Cry']
         for emote in ALPHA_EMOTES:
