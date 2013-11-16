@@ -107,7 +107,7 @@ def t_error(t):
     print 'Illegal character %s' % t.value[0]
     t.lexer.skip(1)
 
-lexer = lex.lex(optimize=1)#TODO: set optimize=1 in preperation for mirai's shanenagens
+lexer = lex.lex(optimize=0)
 
 def wl(file, ilevel, string):
     file.write('\t'*ilevel + string + '\n')
@@ -423,7 +423,7 @@ class DNAData(DNAGroup):
     def setDnaStorage(self, storage):
         self.dnaStorage = storage
     def read(self, stream):
-        parser = yacc.yacc(debug=0, optimize=1)#TODO: optimize->1 debug->0
+        parser = yacc.yacc(debug=0, optimize=0)
         parser.dnaData = self
         parser.parentGroup = parser.dnaData
         parser.dnaStore = self.getDnaStorage()
