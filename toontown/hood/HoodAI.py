@@ -3,6 +3,9 @@ from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
+from toontown.building.DistributedDoorAI import DistributedDoorAI
+from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
+from toontown.building import DoorTypes
 from toontown.fishing import FishingTargetGlobals
 
 class HoodAI:
@@ -27,6 +30,40 @@ class HoodAI:
     def createTrolley(self):
         self.trolley = DistributedTrolleyAI(self.air)
         self.trolley.generateWithRequired(self.safezone)
+
+    def createHQ(self, zone, block):
+        hqDoor = DistributedDoorAI(self.air)
+        hqDoor.setZoneIdAndBlock(self.safezone, block)
+        hqDoor.setDoorType(DoorTypes.EXT_HQ)
+        hqDoor.setSwing(3)
+        hqDoor.generateWithRequired(self.safezone)
+        
+        hqDoor2 = DistributedDoorAI(self.air)
+        hqDoor2.setZoneIdAndBlock(self.safezone, block)
+        hqDoor2.setDoorType(DoorTypes.EXT_HQ)
+        hqDoor2.setSwing(3)
+        hqDoor2.setDoorIndex(1)
+        hqDoor2.generateWithRequired(self.safezone)
+
+        hqDoorInt = DistributedDoorAI(self.air)
+        hqDoorInt.setZoneIdAndBlock(zone, 0)
+        hqDoorInt.setDoorType(DoorTypes.INT_HQ)
+        hqDoorInt.setOtherZoneIdAndDoId(self.safezone, hqDoor.getDoId())
+        hqDoorInt.generateWithRequired(zone)
+
+        hqDoorInt2 = DistributedDoorAI(self.air)
+        hqDoorInt2.setZoneIdAndBlock(zone, 0)
+        hqDoorInt2.setDoorType(DoorTypes.INT_HQ)
+        hqDoorInt2.setOtherZoneIdAndDoId(self.safezone, hqDoor2.getDoId())
+        hqDoorInt2.setDoorIndex(1)
+        hqDoorInt2.generateWithRequired(zone)
+
+        hqDoor.setOtherZoneIdAndDoId(zone, hqDoorInt.getDoId())
+        hqDoor2.setOtherZoneIdAndDoId(zone, hqDoorInt2.getDoId())
+
+        hqInterior = DistributedHQInteriorAI(self.air)
+        hqInterior.setZoneIdAndBlock(zone, 0)
+        hqInterior.generateWithRequired(zone)
 
     def createPond(self):
         self.pond = DistributedFishingPondAI(self.air)

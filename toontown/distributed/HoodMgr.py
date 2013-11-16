@@ -876,14 +876,11 @@ class HoodMgr(DirectObject.DirectObject):
         return ToontownGlobals.hoodNameMap[hoodId][-1]
 
     def addLinkTunnelHooks(self, hoodPart, nodeList, currentZoneId):
-        print 'ADDING LINK TUNNEL HOOKS', nodeList
         tunnelOriginList = []
         for i in nodeList:
-            print 'I', i
             linkTunnelNPC = i.findAllMatches('**/linktunnel*')
             for p in range(linkTunnelNPC.getNumPaths()):
                 linkTunnel = linkTunnelNPC.getPath(p)
-                print 'LINKTUNNEL', linkTunnel
                 name = linkTunnel.getName()
                 nameParts = name.split('_')
                 hoodStr = nameParts[1]

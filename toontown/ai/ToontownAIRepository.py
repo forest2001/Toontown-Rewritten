@@ -8,7 +8,7 @@ from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood.TTHoodAI import TTHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -96,4 +96,5 @@ class ToontownAIRepository(ToontownInternalRepository):
         Spawn safezone objects, streets, doors, NPCs, etc.
         """
 
-        self.hoods.append(TTHoodAI(self))
+        self.hoods.append(TTHoodAI.TTHoodAI(self))
+        self.hoods.append(DDHoodAI.DDHoodAI(self))

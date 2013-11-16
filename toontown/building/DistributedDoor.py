@@ -91,6 +91,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         return not ZoneUtil.isInterior(self.zoneId)
 
     def setupNametag(self):
+        return #TODO: FIXME
         if not self.wantsNametag():
             return
         if self.nametag == None:
@@ -186,9 +187,15 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-        self.doPostAnnounceGenerate()
+        if self.doorType == DoorTypes.INT_HQ:
+            messenger.accept('hqInternalDone', self, self.__doPostAnnounceGenerate)
+        else:
+            self.doPostAnnounceGenerate()
 
+    def __doPostAnnounceGenerate(self):
+        self.doPostAnnounceGenerate()
     def doPostAnnounceGenerate(self):
+        print 'door post gen'
         if self.doorType == DoorTypes.INT_STANDARD:
             self.bHasFlat = True
         else:

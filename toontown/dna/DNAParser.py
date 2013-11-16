@@ -131,6 +131,7 @@ class DNAStorage:
         self.blockArticles = {}
         self.blockBuildingTypes = {}
         self.textures = {}
+        self.catalogCodes = {}
     def storeSuitPoint(self, suitPoint):
         if not isinstance(suitPoint, DNASuitPoint):
             raise TypeError("suit_point must be an instance of DNASuitPoint")
@@ -216,7 +217,10 @@ class DNAStorage:
     def storeFont(self, font, code):
         self.fonts[code] = font
     def getBlock(self, name):
-        return name[name.find(':')-1:name.find(':')]
+        block = name[name.find(':')-2:name.find(':')]
+        if block[0] > '9' or block[0] < '0':
+            block = block[1:]
+        return block
     def storeBlockTitle(self, index, title):
         self.blockTitles[index] = title
     def storeBlockArticle(self, index, article):
@@ -233,6 +237,16 @@ class DNAStorage:
         return self.DNAVisGroups[i].getNumVisibles()
     def getVisibleName(self, i, j):
         return self.DNAVisGroups[i].getVisibleName(j)
+    def storeCatalogCode(self, category, code):
+        if not category in self.catalogCodes:
+            self.catalogCodes[category] = []
+        self.catalogCodes[category].append(code)
+    def getNumCatalogCodes(self, category):
+        if not category in self.catalogCodes:
+            return -1
+        return len(self.catalogCodes[category])
+    def getCatalogCode(self, category, index):
+        return self.catalogCodes[category][index]
     def findTexture(self, name):
         if name in self.textures:
             return self.textures[name]
@@ -377,7 +391,6 @@ class DNAVisGroup(DNAGroup):
     def getSuitEdge(self, index):
         return self.suitEdges[index]
     def getVisibleName(self, index):
-        print self.visibles
         return self.visibles[index]
     def removeBattleCell(self, cell):
         self.battleCells.remove(cell)
@@ -486,7 +499,7 @@ class DNASign(DNANode):
         return self.color
     def traverse(self, nodePath, dnaStorage):
         decNode = nodePath.find('**/sign_decal')
-        if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
+        if decNode.isEmpty():
             decNode = nodePath.find('**/*_front')
         if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/+GeomNode')
@@ -500,6 +513,7 @@ class DNASign(DNANode):
         else:
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
+        node.getNode(0).setEffect(DecalEffect.make())
         node.setDepthWrite(False, 0)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
@@ -609,7 +623,7 @@ class DNASignText(DNANode):
     def setLetters(self, letters):
         self.letters = letters
     def traverse(self, nodePath, dnaStorage):
-        nodePath.getNode(nodePath.getNumNodes()-1).setEffect(DecalEffect.make())
+        nodePath.getTop().getNode(0).setEffect(DecalEffect.make())
         tn = TextNode('sign')
         tn.setText(self.letters)
         baseline = self.getParent()
@@ -764,7 +778,6 @@ class DNAWindows(DNAGroup):
                     float2 *= 0.02500000037252903
                     float2 -= 0.0125
                     float2 += 0.5
-                    print nodePath.getScale()
                     node.setPos(float2, 0, float)
                     node.setHpr(0, 0, 0)
                 else:
@@ -837,7 +850,6 @@ class DNALandmarkBuilding(DNANode):
                 node.wrtReparentTo(nodePathA, 0)
                 node.setName(name)
     def traverse(self, nodePath, dnaStorage):
-        print 'traversing dnalandmarkbuilding'
         node = dnaStorage.findNode(self.code)
         if node is None:
             raise DNAError('DNALandmarkBuilding code ' + self.code + ' not found in DNAStorage')
@@ -967,7 +979,6 @@ class DNAStreet(DNANode):
             self.curbColor = color
         self.setColCnt += 1
     def traverse(self, nodePath, dnaStorage):
-        print self.name, 'traverse'
         node = dnaStorage.findNode(self.code)
         if node is None:
             raise DNAError('DNAStreet code ' + self.code + ' not found in DNAStorage')
@@ -1024,7 +1035,7 @@ class DNASignGraphic(DNANode):
         self.color = color
         self.bDefaultColor = False
     def traverse(self, nodePath, dnaStorage):
-        nodePath.getNode(nodePath.getNumNodes()-1).setEffect(DecalEffect.make())
+        nodePath.getTop().getNode(0).setEffect(DecalEffect.make())
         node = dnaStorage.findNode(self.code)
         if node is None:
             raise DNAError('DNASignGraphic code ' + self.code + ' not found in storage')
@@ -1038,7 +1049,7 @@ class DNAFlatDoor(DNADoor):
     def traverse(self, nodePath, dnaStorage):
         node = dnaStorage.findNode(self.getCode())
         node = node.copyTo(nodePath, 0)
-        node.setScale(1,1,1)
+        node.setScale(NodePath(), (1,1,1))
         node.setPosHpr((0.5, 0, 0), (0, 0, 0))
         node.setColor(self.getColor())
         node.getNode(0).setEffect(DecalEffect.make())
@@ -1131,7 +1142,6 @@ def p_lpoint3f(p):
 def p_suitpoint(p):
     '''suitpoint : STORE_SUIT_POINT "[" number "," suitpointtype "," lpoint3f "]"
                  | STORE_SUIT_POINT "[" number "," suitpointtype "," lpoint3f "," number "]"''' #last # is landmark building index
-    print 'storing suit point'
     p.parser.dnaStore.storeSuitPoint(DNASuitPoint(p[3], p[5], p[7]))
 
 def p_suitpointtype(p):
@@ -1149,7 +1159,6 @@ def p_string(p):
 
 def p_dnagroupdef(p):
     '''dnagroupdef : GROUP string'''
-    print "New group: ", p[2]
     p[0] = DNAGroup(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1157,7 +1166,6 @@ def p_dnagroupdef(p):
 
 def p_dnanodedef(p):
     '''dnanodedef : NODE string'''
-    print "New DNANode: ", p[2]
     p[0] = DNANode(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1165,7 +1173,6 @@ def p_dnanodedef(p):
 
 def p_visgroupdef(p):
     '''visgroupdef : VISGROUP string'''
-    print "New visgroup: ", p[2]
     p[0] = DNAVisGroup(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1286,7 +1293,6 @@ def p_door(p):
 
 def p_propdef(p):
     '''propdef : PROP string'''
-    print "New prop: ", p[2]
     p[0] = DNAProp(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1294,7 +1300,6 @@ def p_propdef(p):
 
 def p_animpropdef(p):
     '''animpropdef : ANIM_PROP string'''
-    print "New  animprop: ", p[2]
     p[0] = DNAAnimProp(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1302,7 +1307,6 @@ def p_animpropdef(p):
 
 def p_interactivepropdef(p):
     '''interactivepropdef : INTERACTIVE_PROP string'''
-    print "New interactiveprop: ", p[2]
     p[0] = DNAInteractiveProp(p[2])
     p[0] = DNAInteractiveProp(p[2])
     p.parser.parentGroup.add(p[0])
@@ -1311,7 +1315,6 @@ def p_interactivepropdef(p):
 
 def p_flatbuildingdef(p):
     '''flatbuildingdef : FLAT_BUILDING string'''
-    print "New DNAFlatBuilding: ", p[2]
     p[0] = DNAFlatBuilding(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1319,7 +1322,6 @@ def p_flatbuildingdef(p):
 
 def p_walldef(p):
     '''walldef : WALL'''
-    print 'New DNAWall'
     p[0] = DNAWall('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1327,7 +1329,6 @@ def p_walldef(p):
 
 def p_windowsdef(p):
     '''windowsdef : WINDOWS'''
-    print 'New DNAWindows'
     p[0] = DNAWindows('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1335,7 +1336,6 @@ def p_windowsdef(p):
 
 def p_cornicedef(p):
     '''cornicedef : CORNICE'''
-    print 'New DNACornice'
     p[0] = DNACornice('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1343,7 +1343,6 @@ def p_cornicedef(p):
 
 def p_landmarkbuildingdef(p):
     '''landmarkbuildingdef : LANDMARK_BUILDING string'''
-    print 'New DNALandmarkBuilding:', p[2]
     p[0] = DNALandmarkBuilding(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1351,7 +1350,6 @@ def p_landmarkbuildingdef(p):
 
 def p_doordef(p):
     '''doordef : DOOR'''
-    print 'New DNADoor'
     p[0] = DNADoor('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1359,7 +1357,6 @@ def p_doordef(p):
 
 def p_flatdoordef(p):
     '''flatdoordef : FLAT_DOOR'''
-    print 'New DNAFlatDoor'
     p[0] = DNAFlatDoor('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1367,7 +1364,6 @@ def p_flatdoordef(p):
 
 def p_streetdef(p):
     '''streetdef : STREET string'''
-    print "New DNAStreet: ", p[2]
     p[0] = DNAStreet(p[2])
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1375,7 +1371,6 @@ def p_streetdef(p):
 
 def p_signdef(p):
     '''signdef : SIGN'''
-    print 'New DNASign'
     p[0] = DNASign()
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1383,7 +1378,6 @@ def p_signdef(p):
 
 def p_signgraphicdef(p):
     '''signgraphicdef : GRAPHIC'''
-    print 'New DNASignGraphic'
     p[0] = DNASignGraphic('')
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1391,7 +1385,6 @@ def p_signgraphicdef(p):
 
 def p_baselinedef(p):
     '''baselinedef : BASELINE'''
-    print 'New DNASignBaseline'
     p[0] = DNASignBaseline()
     p.parser.parentGroup.add(p[0])
     p[0].setParent(p.parser.parentGroup)
@@ -1788,10 +1781,17 @@ def p_node(p):
             | STORE_NODE "[" string string string "]"'''
     nodePath = None
     search = ''
+    code = ''
+    root = ''
     if len(p) == 6:
         search = p[4]
+        code = search
+        root = p[3]
     else:
         search = p[5]
+        code = p[4]
+        root = p[3]
+        p.parser.dnaStore.storeCatalogCode(root, code)
     if search != '':
         nodePath = p.parser.nodePath.find('**/' + search)
     else:
@@ -1807,13 +1807,14 @@ def p_node(p):
 
 def p_store_texture(p):
     '''store_texture : STORE_TEXTURE "[" string string "]"
-               | STORE_TEXTURE "[" string string string "]"'''
+                     | STORE_TEXTURE "[" string string string "]"'''
     filename = p[4]
     if len(p) == 7:
         filename = p[5]
     name = p[3]
     if len(p) == 7:
         name = p[4]
+        p.parser.dnaStore.storeCatalogCode(p[3], name)
     texture = TexturePool.loadTexture(Filename(filename))
     p.parser.dnaStore.storeTexture(name, texture)
 
