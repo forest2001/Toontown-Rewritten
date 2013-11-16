@@ -116,7 +116,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         #    self.gameBoard.find('**/floor_TT').show()
         self.gameBoard.setPosHpr(0, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
-        self.sky.setPosHpr(0, 0, 0, 0, 0, 0)
+        self.sky.setPosHpr(0, 0, -47, 0, 0, 0)
         self.sky.setScale(1.0)
         self.toonSDs = {}
         avId = self.localAvId

@@ -155,6 +155,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.acceptedScreen = loader.loadModel('phase_3/models/gui/toon_council')
         self.acceptedScreen.setScale(0.667)
         self.acceptedScreen.reparentTo(aspect2d)
+        base.setBackgroundColor(Vec4(0.7647, 0.3529, 0.2352, 1))
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         self.acceptedBanner = DirectLabel(parent=self.acceptedScreen, relief=None, text=OTPLocalizer.CRNameCongratulations, text_scale=0.18, text_fg=Vec4(0.6, 0.1, 0.1, 1), text_pos=(0, 0.05), text_font=getMinnieFont())
         newName = avatarChoice.approvedName
@@ -173,6 +174,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         del self.okButton
         del self.acceptedText
         del self.acceptedBanner
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.csm.sendAcknowledgeAvatarName(
             avatarChoice.id,
             lambda: self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice]))

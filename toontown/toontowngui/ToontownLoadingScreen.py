@@ -29,9 +29,13 @@ class ToontownLoadingScreen:
         self.waitBar.destroy()
         #self.banner.removeNode()
         self.gui.removeNode()
+        self.resetBackground()
 
     def getTip(self, tipCategory):
         return TTLocalizer.TipTitle + '\n' + random.choice(TTLocalizer.TipDict.get(tipCategory))
+
+    def resetBackground(self):
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
 
     def begin(self, range, label, gui, tipCategory):
         self.waitBar['range'] = range
@@ -40,6 +44,7 @@ class ToontownLoadingScreen:
         self.__count = 0
         self.__expectedCount = range
         if gui:
+            base.setBackgroundColor(Vec4(0.952, 0.796, 0.317, 1))
             if base.localAvatarStyle:
                 from toontown.toon import ToonHead
                 self.head = ToonHead.ToonHead()
@@ -61,10 +66,12 @@ class ToontownLoadingScreen:
         self.waitBar.reparentTo(self.gui)
         self.title.reparentTo(self.gui)
         self.gui.reparentTo(hidden)
+        self.resetBackground()
         return (self.__expectedCount, self.__count)
 
     def abort(self):
         self.gui.reparentTo(hidden)
+        self.resetBackground()
 
     def tick(self):
         self.__count = self.__count + 1
