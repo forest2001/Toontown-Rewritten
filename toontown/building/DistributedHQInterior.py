@@ -8,6 +8,7 @@ from direct.directnotify import DirectNotifyGlobal
 import ToonInteriorColors
 import cPickle
 from toontown.toonbase import TTLocalizer
+from toontown.dna.DNAParser import DNADoor
 
 class DistributedHQInterior(DistributedObject.DistributedObject):
 
@@ -34,6 +35,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.interior.flattenMedium()
         emptyBoard = self.interior.find('**/empty_board')
         self.leaderBoard.reparentTo(emptyBoard.getChild(0))
+        messenger.send('hqInternalDone')
 
     def setTutorial(self, flag):
         if self.tutorial == flag:

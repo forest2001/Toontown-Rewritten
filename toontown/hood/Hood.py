@@ -13,6 +13,7 @@ import QuietZoneState
 import ZoneUtil
 from toontown.toonbase import TTLocalizer
 from toontown.toon.Toon import teleportDebug
+from toontown.dna.DNAParser import *
 
 class Hood(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('Hood')
@@ -74,15 +75,13 @@ class Hood(StateData.StateData):
 
     def load(self):
         if self.storageDNAFile:
-            pass # TODO: DNATODO
-            #loader.loadDNAFile(self.dnaStore, self.storageDNAFile)
+            loadDNAFile(self.dnaStore, self.storageDNAFile)
         newsManager = base.cr.newsManager
         if newsManager:
             holidayIds = base.cr.newsManager.getDecorationHolidayId()
             for holiday in holidayIds:
                 for storageFile in self.holidayStorageDNADict.get(holiday, []):
-                    pass # TODO: DNATODO
-                    #loader.loadDNAFile(self.dnaStore, storageFile)
+                    loadDNAFile(self.dnaStore, storageFile)
 
             if ToontownGlobals.HALLOWEEN_COSTUMES not in holidayIds and ToontownGlobals.SPOOKY_COSTUMES not in holidayIds or not self.spookySkyFile:
                 self.sky = loader.loadModel(self.skyFile)

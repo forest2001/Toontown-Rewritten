@@ -25,6 +25,7 @@ from toontown.hood import EstateHood
 from toontown.hood import PartyHood
 from toontown.toonbase import TTLocalizer
 from toontown.parties.PartyGlobals import GoToPartyStatus
+from toontown.dna.DNAParser import *
 
 class PlayGame(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('PlayGame')
@@ -140,22 +141,18 @@ class PlayGame(StateData.StateData):
         pass
 
     def loadDnaStoreTutorial(self):
-        self.dnaStore = None
-        return # TODO: DNATODO
         self.dnaStore = DNAStorage()
-        loader.loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_tutorial.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
+        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_tutorial.dna')
+        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
 
     def loadDnaStore(self):
-        self.dnaStore = None
-        return # TODO: DNATODO
         if not hasattr(self, 'dnaStore'):
             self.dnaStore = DNAStorage()
-            loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.dna')
+            loadDNAFile(self.dnaStore, 'phase_4/dna/storage.dna')
             self.dnaStore.storeFont('humanist', ToontownGlobals.getInterfaceFont())
             self.dnaStore.storeFont('mickey', ToontownGlobals.getSignFont())
             self.dnaStore.storeFont('suit', ToontownGlobals.getSuitFont())
-            loader.loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
+            loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
 
     def unloadDnaStore(self):
         if hasattr(self, 'dnaStore'):

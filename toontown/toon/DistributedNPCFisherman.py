@@ -48,6 +48,7 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
     def initToonState(self):
         self.setAnimState('neutral', 1.05, None, None)
         npcOrigin = self.cr.playGame.hood.loader.geom.find('**/npc_fisherman_origin_%s;+s' % self.posIndex)
+        print 'fisherman origin: ', npcOrigin
         if not npcOrigin.isEmpty():
             self.reparentTo(npcOrigin)
             self.clearMat()

@@ -16,6 +16,8 @@ from toontown.tutorial import TutorialForceAcknowledge
 from toontown.toonbase.ToontownGlobals import *
 from toontown.building import ToonInterior
 from toontown.hood import QuietZoneState
+from toontown.dna.DNAParser import *
+from direct.stdpy.file import *
 
 class SafeZoneLoader(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('SafeZoneLoader')
@@ -70,14 +72,13 @@ class SafeZoneLoader(StateData.StateData):
         self.fsm.request(stateName, [requestStatus])
 
     def createSafeZone(self, dnaFile):
-        self.geom = NodePath('')
+        '''self.geom = NodePath('')
         self.nodeList = []
         self.holidayPropTransforms = {}
-        self.animPropDict = {}
-        return # TODO: DNATODO
+        self.animPropDict = {}'''
         if self.safeZoneStorageDNAFile:
-            loader.loadDNAFile(self.hood.dnaStore, self.safeZoneStorageDNAFile)
-        node = loader.loadDNAFile(self.hood.dnaStore, dnaFile)
+            loadDNAFile(self.hood.dnaStore, self.safeZoneStorageDNAFile)
+        node = loadDNAFile(self.hood.dnaStore, dnaFile)
         if node.getNumParents() == 1:
             self.geom = NodePath(node.getParent(0))
             self.geom.reparentTo(hidden)
