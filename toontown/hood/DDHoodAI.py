@@ -24,3 +24,5 @@ class DDHoodAI(HoodAI):
 
         self.boat = DistributedBoatAI(self.air)
         self.boat.generateWithRequired(self.safezone)
+        
+        self.createHQ(1507, 7)
