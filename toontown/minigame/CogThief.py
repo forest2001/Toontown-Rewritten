@@ -49,7 +49,7 @@ class CogThief(DirectObject):
         self.cruiseDistance = 2 * self.bodyLength
         self.maxVelocity = self.cogSpeed
         self.maxAcceleration = 5.0
-        self.perceptionRange = 6
+        self.perceptionRange = 10
         self.notify.debug('cogSpeed=%s' % self.cogSpeed)
         self.kaboomSound = loader.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
         self.kaboom = loader.loadModel('phase_4/models/minigames/ice_game_kaboom')
