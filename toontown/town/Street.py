@@ -108,7 +108,7 @@ class Street(BattlePlace.BattlePlace):
         base.localAvatar.setGeom(self.loader.geom)
         base.localAvatar.setOnLevelGround(1)
         self._telemLimiter = TLGatherAllAvs('Street', RotationLimitToH)
-        NametagGlobals.setMasterArrowsOn(arrowsOn)
+        #NametagGlobals.setMasterArrowsOn(arrowsOn) #TODO: fix me cfsworks
 
         def __lightDecorationOn__():
             geom = base.cr.playGame.getPlace().loader.geom
@@ -152,7 +152,7 @@ class Street(BattlePlace.BattlePlace):
                 light.reparentTo(hidden)
 
         newsManager = base.cr.newsManager
-        NametagGlobals.setMasterArrowsOn(0)
+        #NametagGlobals.setMasterArrowsOn(0) #TODO: cfsworks fix me plx
         self.loader.hood.stopSky()
         self.loader.music.stop()
         base.localAvatar.setGeom(render)

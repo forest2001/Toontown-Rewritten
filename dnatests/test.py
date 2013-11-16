@@ -10,5 +10,7 @@ loader = DNAParser.DNALoader()
 loader.getData().read(open('dnatests/test.dna'))
 loader.getData().getDnaStorage().ls()
 graph = loader.buildGraph()
+import sys
+sys.stderr = open('test.out', 'w')
 graph.ls()
 graph.writeBamFile("test.bam")
