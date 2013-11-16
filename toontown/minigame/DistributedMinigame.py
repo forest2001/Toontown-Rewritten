@@ -445,6 +445,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         self.metagameRound = metagameRound
         
 @magicWord(category=CATEGORY_OVERRIDE)
-def minigameAbort():
-    'Abort any minigame you are currently in'
+def abortMinigame():
+    """Abort any minigame you are currently in"""
     messenger.send('minigameAbort')
