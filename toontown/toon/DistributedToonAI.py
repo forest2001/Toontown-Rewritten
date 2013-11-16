@@ -4572,3 +4572,14 @@ def ghost():
         spellbook.getInvoker().b_setGhostMode(2)
     else:
         spellbook.getInvoker().b_setGhostMode(0)
+        
+@magicWord(category=CATEGORY_MODERATION)
+def badName():
+    """Set target's name to the 'REJECTED' state and rename them to their <COLOR SPECIES> name."""
+    oldname = spellbook.getTarget().name
+    dna = spellbook.getTarget().dna
+    colorstring = TTLocalizer.NumToColor[dna.headColor]
+    animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
+    spellbook.getTarget().b_setName(colorstring + ' ' + animaltype)
+    spellbook.getTarget().sendUpdate('WishNameState', ['REJECTED'])
+    return "Revoked " + oldname + "'s name successfully. They have been renamed to " + colorstring + " " + animaltype + "."
