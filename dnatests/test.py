@@ -12,5 +12,5 @@ loader.getData().getDnaStorage().ls()
 graph = loader.buildGraph()
 import sys
 sys.stderr = open('test.out', 'w')
-graph.ls()
+#graph.ls()
 graph.writeBamFile("test.bam")
