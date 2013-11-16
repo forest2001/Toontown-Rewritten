@@ -596,6 +596,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.defaultZone = zone
         self.notify.debug('setting default zone to %s' % zone)
 
+    def b_setDefaultZone(self, zone):
+        self.sendUpdate('setDefaultZone', [zone])
+        self.setDefaultZone(zone)
+
     def getDefaultZone(self):
         return self.defaultZone
 

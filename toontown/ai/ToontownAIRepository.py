@@ -6,6 +6,7 @@ from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.ai.FishManagerAI import FishManagerAI
+from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI
@@ -90,6 +91,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.magicWordManager = MagicWordManagerAI(self)
         self.magicWordManager.generateWithRequired(2)
+
+        self.safeZoneManager = SafeZoneManagerAI(self)
+        self.safeZoneManager.generateWithRequired(2)
 
     def createZones(self):
         """
