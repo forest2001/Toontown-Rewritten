@@ -1,6 +1,6 @@
 from direct.showbase import PythonUtil
 
-MINIMUM_MAGICWORD_ACCESS = 200
+MINIMUM_MAGICWORD_ACCESS = 300
 
 class MagicError(Exception): pass
 
@@ -76,13 +76,13 @@ class MagicWordCategory:
         self.defaultAccess = defaultAccess
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
-CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=200)
-CATEGORY_GUI = MagicWordCategory('GUI debugging', defaultAccess=200)
-CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=200)
+CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300)
+CATEGORY_GUI = MagicWordCategory('GUI debugging', defaultAccess=300)
+CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=300)
 CATEGORY_OVERRIDE = MagicWordCategory('Override cheats', defaultAccess=400)
 CATEGORY_CHARACTERSTATS = MagicWordCategory('Character-stats cheats', defaultAccess=400)
 CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300)
-CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=200)
+CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=300)
 
 
 class MagicWord:
