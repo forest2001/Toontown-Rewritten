@@ -193,9 +193,9 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             self.doPostAnnounceGenerate()
 
     def __doPostAnnounceGenerate(self):
+        self.ignore('hqInternalDone')
         self.doPostAnnounceGenerate()
     def doPostAnnounceGenerate(self):
-        print 'door post gen'
         if self.doorType == DoorTypes.INT_STANDARD:
             self.bHasFlat = True
         else:

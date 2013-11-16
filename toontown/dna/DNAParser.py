@@ -908,6 +908,7 @@ class DNADoor(DNAGroup):
         rightHole.setColor((0,0,0,1), 0)
         
         doorTrigger = doorNodePath.find('door_*_trigger')
+        doorTrigger.setScale(2,2,2)
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_' + block)
     def traverse(self, nodePath, dnaStorage):
