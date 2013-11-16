@@ -4,3 +4,5 @@ from toontown.safezone.DistributedTreasureAI import DistributedTreasureAI
 class DistributedTTTreasureAI(DistributedTreasureAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTTTreasureAI")
 
+    def validAvatar(self, av):
+        return av.getHp() < av.getMaxHp()
