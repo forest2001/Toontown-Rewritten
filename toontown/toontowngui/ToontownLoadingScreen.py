@@ -29,6 +29,7 @@ class ToontownLoadingScreen:
         self.waitBar.destroy()
         #self.banner.removeNode()
         self.gui.removeNode()
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
 
     def getTip(self, tipCategory):
         return TTLocalizer.TipTitle + '\n' + random.choice(TTLocalizer.TipDict.get(tipCategory))
@@ -40,6 +41,7 @@ class ToontownLoadingScreen:
         self.__count = 0
         self.__expectedCount = range
         if gui:
+            base.setBackgroundColor(Vec4(0.952, 0.796, 0.317, 1))
             if base.localAvatarStyle:
                 from toontown.toon import ToonHead
                 self.head = ToonHead.ToonHead()
