@@ -119,6 +119,7 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         backgroundWide = loader.loadModel('phase_4/models/minigames/iceslide_ground')
         background.reparentTo(self.gameBoard)
         backgroundWide.reparentTo(self.gameBoard)
+        backgroundWide.setPos(0, -0.3, -0.5)
         self.gameBoard.setPosHpr(0, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
         self.setupSimulation()
