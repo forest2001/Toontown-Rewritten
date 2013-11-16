@@ -4379,6 +4379,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         ALPHA_EMOTES = ['Wave', 'Happy', 'Sad', 'Angry', 'Sleepy',
                         'Dance', 'Think', 'Bored', 'Applause', 'Cringe',
                         'Confused', 'Bow', 'Delighted', 'Belly Flop', 'Banana Peel',
+                        'Shrug', 'Surprise', 'Furious',
                         'Laugh', 'Cry']
         for emote in ALPHA_EMOTES:
             emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
