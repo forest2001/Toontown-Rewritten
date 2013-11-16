@@ -624,6 +624,7 @@ class DNASignText(DNANode):
         self.letters = letters
     def traverse(self, nodePath, dnaStorage):
         nodePath.getTop().getNode(0).setEffect(DecalEffect.make())
+        return
         tn = TextNode('sign')
         tn.setText(self.letters)
         baseline = self.getParent()
