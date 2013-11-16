@@ -3,6 +3,7 @@ import sys, collections
 from panda3d.core import PandaNode, NodePath, Filename, DecalEffect, TextNode, SceneGraphReducer, FontPool
 from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool, ModelNode, TextProperties
 from direct.showbase import Loader
+from direct.stdpy.file import *
 import math, random
 tokens = [
   'FLOAT',
