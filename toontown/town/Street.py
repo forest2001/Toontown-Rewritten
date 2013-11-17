@@ -98,6 +98,7 @@ class Street(BattlePlace.BattlePlace):
         self.halloweenLights = []
         self.visInterestHandle = None
         self.visZones = []
+        self.visInterestChanged = False
 
     def enter(self, requestStatus, visibilityFlag = 1, arrowsOn = 1):
         teleportDebug(requestStatus, 'Street.enter(%s)' % (requestStatus,))
@@ -328,23 +329,23 @@ class Street(BattlePlace.BattlePlace):
 
     def addVisInterest(self, zone):
         self.notify.debug('addVisInterest zone=%i'%zone)
-        if self.visInterestHandle is None:
-            self.visInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, zone, 'streetVis')
-            self.visZones = [zone]
-        else:
-            self.visZones.append(zone)
-            base.cr.alterInterest(self.visInterestHandle, base.localAvatar.defaultShard, self.visZones)
+        self.visZones.append(zone)
 
     def removeVisInterest(self, zone):
         self.notify.debug('removeVisInterest zone=%i'%zone)
-        if self.visInterestHandle is None:
-            self.notify.warning('Street.removeVisInterest called without a valid handle zone=%i' % zone)
-        else:
-            try:
-                self.visZones.remove(zone)
-            except ValueError: #item was not in the list
-                self.notify.warning('Street.removeVisInterest called on zone %i that isn\'t in interest' % zone)
-            base.cr.alterInterest(self.visInterestHandle, base.localAvatar.defaultShard, self.visZones)
+        try:
+            self.visZones.remove(zone)
+        except ValueError: #item was not in the list
+            self.notify.warning('Street.removeVisInterest called on zone %i that isn\'t in interest' % zone)
+    
+    def updateVisInterest(self):
+        if self.visInterestChanged:
+            self.visInterestChanged = False
+            if self.visInterestHandle is None:
+                if len(self.visZones) > 0:
+                    self.visInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, self.visZones, 'streetVis')
+            else:
+                base.cr.alterInterest(self.visInterestHandle, base.localAvatar.defaultShard, self.visZones)
 
     def doEnterZone(self, newZoneId):
         if self.zoneId != None:
@@ -391,7 +392,7 @@ class Street(BattlePlace.BattlePlace):
         self.halloweenLights += geom.findAllMatches('**/prop_snow_tree*')
         for light in self.halloweenLights:
             light.setColorScaleOff(1)
-
+        self.updateVisInterest()
         return
 
     def replaceStreetSignTextures(self):
