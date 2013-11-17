@@ -26,3 +26,5 @@ class DDHoodAI(HoodAI):
         self.boat.generateWithRequired(self.safezone)
         
         self.createHQ(1507, 7)
+
+        self.createTreasurePlanner()
