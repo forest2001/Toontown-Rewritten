@@ -475,6 +475,7 @@ class DNAProp(DNANode):
     def traverse(self, nodePath, dnaStorage):
         if self.code == 'DCS':
             node = ModelNode(self.name)
+            node.setPreserveTransform(ModelNode.PTNet)
             node = nodePath.attachNewNode(node)
         else:  
             node = dnaStorage.findNode(self.code)
@@ -1071,6 +1072,7 @@ class DNAAnimProp(DNAProp):
         node = None
         if self.getCode() == "DCS":
             node = ModelNode(self.getName())
+            node.setPreserveTransform(ModelNode.PTNet)
             node = nodePath.attachNewNode(node, 0)
         else:
             node = dnaStorage.findNode(self.getCode())
@@ -1095,6 +1097,7 @@ class DNAInteractiveProp(DNAAnimProp):
         node = None
         if self.getCode() == "DCS":
             node = ModelNode(self.getName())
+            node.setPreserveTransform(ModelNode.PTNet)
             node = nodePath.attachNewNode(node, 0)
         else:
             node = dnaStorage.findNode(self.getCode())
