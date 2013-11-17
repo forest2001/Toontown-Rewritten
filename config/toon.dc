@@ -2725,7 +2725,7 @@ dclass DistributedGagTree : DistributedPlantBase {
 dclass DistributedTravelGame : DistributedMinigame {
   setTimerStartTime(int16) broadcast;
   setAvatarChoice(uint16, uint8) airecv clsend;
-  resetAvatarsVotes(uint32) broadcast;
+  setAvatarVotes(uint32, uint16) broadcast;
   setAvatarChose(uint32) broadcast;
   setServerChoices(int16array, uint8array, uint8, uint8) broadcast;
   setMinigames(uint8array, uint8array) broadcast;
