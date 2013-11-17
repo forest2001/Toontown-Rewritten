@@ -1,0 +1,1 @@
+from toontown.toonbase import ToontownGlobalsfrom HoodAI import HoodAIclass DGHoodAI(HoodAI):    SAFEZONE = ToontownGlobals.DaisyGardens    def __init__(self, air):        HoodAI.__init__(self, air)        self.createTrolley()        self.createHQ(5502, 2)

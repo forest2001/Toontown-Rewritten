@@ -47,12 +47,14 @@ class HoodAI:
 
         hqDoorInt = DistributedDoorAI(self.air)
         hqDoorInt.setZoneIdAndBlock(zone, 0)
+        hqDoorInt.setSwing(3)
         hqDoorInt.setDoorType(DoorTypes.INT_HQ)
         hqDoorInt.setOtherZoneIdAndDoId(self.safezone, hqDoor.getDoId())
         hqDoorInt.generateWithRequired(zone)
 
         hqDoorInt2 = DistributedDoorAI(self.air)
         hqDoorInt2.setZoneIdAndBlock(zone, 0)
+        hqDoorInt2.setSwing(3)
         hqDoorInt2.setDoorType(DoorTypes.INT_HQ)
         hqDoorInt2.setOtherZoneIdAndDoId(self.safezone, hqDoor2.getDoId())
         hqDoorInt2.setDoorIndex(1)

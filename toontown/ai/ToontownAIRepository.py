@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood import TTHoodAI, DDHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -102,3 +102,4 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.hoods.append(TTHoodAI.TTHoodAI(self))
         self.hoods.append(DDHoodAI.DDHoodAI(self))
+        self.hoods.append(DGHoodAI.DGHoodAI(self))
