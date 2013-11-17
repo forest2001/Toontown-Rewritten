@@ -32,6 +32,7 @@ EXTRA_MODULES = (
   'toontown.hood.HQTelescopeAnimatedProp',
   'toontown.hood.MailboxTwoAnimatedProp',
   'toontown.hood.GenericAnimatedProp',
+  'toontown.hood.GenericAnimatedBuilding',
   'toontown.hood.FishAnimatedProp',
   'toontown.hood.HydrantOneAnimatedProp',
   'toontown.hood.TrashcanZeroAnimatedProp',
