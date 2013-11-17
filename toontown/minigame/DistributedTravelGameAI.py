@@ -323,5 +323,3 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
     def hasScoreMult(self):
         return 0
-    
-    @magicWord
