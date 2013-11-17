@@ -189,7 +189,6 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         DistributedObject.DistributedObject.announceGenerate(self)
         if self.doorType == DoorTypes.INT_HQ:
             if base.cr.hqLoaded is None or not base.cr.hqLoaded:
-                print 'door waiting for event'
                 messenger.accept('hqInternalDone', self, self.__doPostAnnounceGenerate)
             else:
                 self.doPostAnnounceGenerate()
