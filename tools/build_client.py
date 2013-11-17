@@ -21,25 +21,24 @@ EXTRA_MODULES = (
   '_strptime',
 
   # Animated props and things loaded through DNA...
-  'toontown.building.DistributedAnimatedProp'
-  'toontown.hood.MailboxZeroAnimatedProp'
-  'toontown.hood.PetShopFishAnimatedProp'
-  'toontown.hood.TrashcanOneAnimatedProp'
-  'toontown.hood.SleepingHydrantAnimatedProp'
-  'toontown.hood.HQPeriscopeAnimatedProp'
-  'toontown.hood.HydrantTwoAnimatedProp'
-  'toontown.hood.HydrantZeroAnimatedProp'
-  'toontown.hood.AnimatedProp'
-  'toontown.hood.HQTelescopeAnimatedProp'
-  'toontown.hood.MailboxTwoAnimatedProp'
-  'toontown.hood.GenericAnimatedProp'
-  'toontown.hood.FishAnimatedProp'
-  'toontown.hood.HydrantOneAnimatedProp'
-  'toontown.hood.TrashcanZeroAnimatedProp'
-  'toontown.hood.TrashcanTwoAnimatedProp'
-  'toontown.hood.InteractiveAnimatedProp'
-  'toontown.hood.MailboxOneAnimatedProp'
-  'toontown.hood.ZeroAnimatedProp'
+  'toontown.hood.MailboxZeroAnimatedProp',
+  'toontown.hood.PetShopFishAnimatedProp',
+  'toontown.hood.TrashcanOneAnimatedProp',
+  'toontown.hood.SleepingHydrantAnimatedProp',
+  'toontown.hood.HQPeriscopeAnimatedProp',
+  'toontown.hood.HydrantTwoAnimatedProp',
+  'toontown.hood.HydrantZeroAnimatedProp',
+  'toontown.hood.AnimatedProp',
+  'toontown.hood.HQTelescopeAnimatedProp',
+  'toontown.hood.MailboxTwoAnimatedProp',
+  'toontown.hood.GenericAnimatedProp',
+  'toontown.hood.FishAnimatedProp',
+  'toontown.hood.HydrantOneAnimatedProp',
+  'toontown.hood.TrashcanZeroAnimatedProp',
+  'toontown.hood.TrashcanTwoAnimatedProp',
+  'toontown.hood.InteractiveAnimatedProp',
+  'toontown.hood.MailboxOneAnimatedProp',
+  'toontown.hood.ZeroAnimatedProp',
 )
 
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
