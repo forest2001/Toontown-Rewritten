@@ -330,16 +330,19 @@ class Street(BattlePlace.BattlePlace):
     def addVisInterest(self, zone):
         self.notify.debug('addVisInterest zone=%i'%zone)
         self.visZones.append(zone)
+        self.visInterestChanged = True
 
     def removeVisInterest(self, zone):
         self.notify.debug('removeVisInterest zone=%i'%zone)
         try:
             self.visZones.remove(zone)
+            self.visInterestChanged = True
         except ValueError: #item was not in the list
             self.notify.warning('Street.removeVisInterest called on zone %i that isn\'t in interest' % zone)
     
     def updateVisInterest(self):
         if self.visInterestChanged:
+            self.notify.debug('updateVisInterest zones=' + str(self.visZones) + ' handle=' +str(self.visInterestHandle))
             self.visInterestChanged = False
             if self.visInterestHandle is None:
                 if len(self.visZones) > 0:
@@ -376,6 +379,7 @@ class Street(BattlePlace.BattlePlace):
                     i.unstash()
                     self.addVisInterest(self.loader.nodeToZone[i])
 
+        self.updateVisInterest()
         if newZoneId != self.zoneId:
             if visualizeZones:
                 if self.zoneId != None:
@@ -392,7 +396,6 @@ class Street(BattlePlace.BattlePlace):
         self.halloweenLights += geom.findAllMatches('**/prop_snow_tree*')
         for light in self.halloweenLights:
             light.setColorScaleOff(1)
-        self.updateVisInterest()
         return
 
     def replaceStreetSignTextures(self):
