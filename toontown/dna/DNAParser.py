@@ -67,6 +67,7 @@ reserved = {
   'cell_id' : 'CELL_ID',
   'anim_prop' : 'ANIM_PROP',
   'interactive_prop' : 'INTERACTIVE_PROP',
+  'anim_building' : 'ANIM_BUILDING',
 }
 tokens += reserved.values()
 t_ignore = ' \t'
@@ -1107,6 +1108,28 @@ class DNAInteractiveProp(DNAAnimProp):
         for child in self.children:
             child.traverse(node, dnaStorage)
 
+class DNAAnimBuilding(DNALandmarkBuilding):
+    def __init__(self, name):
+        DNALandmarkBuilding.__init__(self, name)
+        self.animName = ''
+    def setAnim(self, anim):
+        self.animName = anim
+    def getAnim(self):
+        return self.animName
+    def traverse(self, nodePath, dnaStorage):
+        node = dnaStorage.findNode(self.getCode())
+        if node is None:
+            raise DNAError('DNAAnimBuilding code ' + self.getCode() + ' not found in dnastore')
+        node = node.copyTo(nodePath, 0)
+        node.setName(self.getName())
+        node.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
+        node.setTag('DNAAnim', self.animName)
+        self.setupSuitBuildingOrigin(nodePath, node)
+        for child in self.children:
+            child.traverse(nodePath, dnaStorage)
+        nodePath.flattenStrong()
+        
+
 class DNALoader:
     def __init__(self):
         node = PandaNode('dna')
@@ -1117,7 +1140,7 @@ class DNALoader:
         self.data.traverse(self.nodePath, self.data.getDnaStorage())
         if self.nodePath.getChild(0).getNumChildren() == 0:
             return None
-        return self.nodePath.getChild(0).getChild(0)
+        return self.nodePath.getChild(0).getChild(0).getChild(0)
     def getData(self):
         return self.data    
 
@@ -1296,7 +1319,8 @@ p_cornice.__doc__ = '''cornice : cornicedef "[" subcornice_list "]"'''
 def p_landmarkbuilding(p):
     p[0] = p[1]
     p.parser.parentGroup = p[0].getParent()
-p_landmarkbuilding.__doc__ = '''landmarkbuilding : landmarkbuildingdef "[" sublandmarkbuilding_list "]"'''
+p_landmarkbuilding.__doc__ = '''landmarkbuilding : landmarkbuildingdef "[" sublandmarkbuilding_list "]"
+                                                 | animbuildingdef "[" subanimbuilding_list "]"'''
 
 def p_street(p):
     p[0] = p[1]
@@ -1366,6 +1390,13 @@ def p_landmarkbuildingdef(p):
     p[0].setParent(p.parser.parentGroup)
     p.parser.parentGroup = p[0]
 p_landmarkbuildingdef.__doc__ = '''landmarkbuildingdef : LANDMARK_BUILDING string'''
+
+def p_animbuildingdef(p):
+    p[0] = DNAAnimBuilding(p[2])
+    p.parser.parentGroup.add(p[0])
+    p[0].setParent(p.parser.parentGroup)
+    p.parser.parentGroup = p[0]
+p_animbuildingdef.__doc__ = '''animbuildingdef : ANIM_BUILDING string'''
 
 def p_doordef(p):
     p[0] = DNADoor('')
@@ -1557,6 +1588,11 @@ p_landmarkbuilding_sub.__doc__ = \
                             | article
                             | building_type
                             | wall_color'''
+
+def p_animbuilding_sub(p):
+    p[0] = p[1]
+p_animbuilding_sub.__doc__ = \
+    '''animbuilding_sub : anim'''
 
 def p_door_sub(p):
     p[0] = p[1]
@@ -1780,6 +1816,19 @@ p_sublandmarkbuilding_list.__doc__ = \
     '''sublandmarkbuilding_list : sublandmarkbuilding_list dnanode_sub
                                 | sublandmarkbuilding_list landmarkbuilding_sub
                                 | empty'''
+
+def p_subanimbuilding_list(p):
+    p[0] = p[1]
+    if len(p) == 3:
+        if isinstance(p[2], DNAGroup):
+            p[0] += [p[2]]
+    else:
+        p[0] = []
+p_subanimbuilding_list.__doc__ = \
+    '''subanimbuilding_list : subanimbuilding_list dnanode_sub
+                            | subanimbuilding_list landmarkbuilding_sub
+                            | subanimbuilding_list animbuilding_sub
+                            | empty'''
 
 def p_subdoor_list(p):
     p[0] = p[1]
