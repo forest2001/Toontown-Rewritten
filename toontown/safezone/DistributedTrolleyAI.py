@@ -157,7 +157,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             self.b_setState('WaitEmpty')
     
 @magicWord(category=CATEGORY_OVERRIDE, types=[str])
-def travel(target):
+def travel(target='self'):
     if target=='everyone':
         if 'everyone' in doesntWantTrolleyTracks:
             del doesntWantTrolleyTracks['everyone']
