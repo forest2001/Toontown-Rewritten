@@ -39,6 +39,9 @@ EXTRA_MODULES = (
   'toontown.hood.InteractiveAnimatedProp',
   'toontown.hood.MailboxOneAnimatedProp',
   'toontown.hood.ZeroAnimatedProp',
+  'toontown.hood.HydrantInteractiveProp',
+  'toontown.hood.MailboxInteractiveProp',
+  'toontown.hood.TrashcanInteractiveProp',
 )
 
 root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
