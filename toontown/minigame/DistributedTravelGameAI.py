@@ -176,6 +176,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
             self.notify.warning('currentVotes < 0  avId=%s, currentVotes=%s' % (avatarId, self.currentVotes[avatarId]))
             self.currentVotes[avatarId] = 0
             self.avatarChoices[avatarId] = (0, 0)
+            self.sendUpdate('setAvatarVotes', [avatarId, self.currentVotes[avatarId]])
         self.notify.debug('currentVotes = %s' % self.currentVotes)
         self.notify.debug('avatarChoices = %s' % self.avatarChoices)
         self.sendUpdate('setAvatarChose', [avatarId])

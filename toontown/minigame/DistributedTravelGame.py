@@ -802,6 +802,11 @@ class DistributedTravelGame(DistributedMinigame):
         if not self.hasLocalToon:
             return
         self.notify.debug('setAvatarChose: avatar: ' + str(avId) + ' choose a number')
+    
+    def setAvatarVotes(self, avId, votes):
+        if not self.hasLocalToon:
+            return
+        self.currentVotes[avId] = votes
 
     def handleInputChoice(self):
         numVotes = self.getAbsVoteChoice()
