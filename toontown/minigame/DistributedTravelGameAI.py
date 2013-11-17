@@ -19,6 +19,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
              State.State('cleanup', self.enterCleanup, self.exitCleanup, ['inactive'])], 'inactive', 'inactive')
             self.addChildGameFSM(self.gameFSM)
             self.currentVotes = {}
+            self.oldVotes = {}
             self.avatarChoices = {}
             self.currentSwitch = 0
             self.destSwitch = 0
@@ -171,9 +172,15 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         avatarId = self.air.getAvatarIdFromSender()
         self.notify.debug('setAvatarChoice: avatar: ' + str(avatarId) + ' votes: ' + str(votes) + ' direction: ' + str(direction))
         self.avatarChoices[avatarId] = self.checkChoice(avatarId, votes, direction)
+        self.oldVotes[avatarId] = self.currentVotes[avatarId]
         self.currentVotes[avatarId] -= self.avatarChoices[avatarId][0]
         if self.currentVotes[avatarId] < 0:
             self.notify.warning('currentVotes < 0  avId=%s, currentVotes=%s' % (avatarId, self.currentVotes[avatarId]))
+            if self.oldVotes[avatarId] < 0:
+                self.currentVotes[avatarId] = 0
+            else:
+                self.currentVotes[avatarId] = self.oldVotes[avatarId]
+            self.avatarChoices[avatarId] = (0, 0)
         self.notify.debug('currentVotes = %s' % self.currentVotes)
         self.notify.debug('avatarChoices = %s' % self.avatarChoices)
         self.sendUpdate('setAvatarChose', [avatarId])
