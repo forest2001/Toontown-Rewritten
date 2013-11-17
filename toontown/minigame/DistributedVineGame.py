@@ -140,7 +140,11 @@ class DistributedVineGame(DistributedMinigame):
         del self.music
         self.gameAssets.removeNode()
         self.gameBoard.removeNode()
+        self.gameBoardL.removeNode()
+        self.gameBoardR.removeNode()
         del self.gameBoard
+        del self.gameBoardL
+        del self.gameBoardR
         self.treasureModel.removeNode()
         del self.treasureModel
         for vine in self.vines:
