@@ -4,9 +4,10 @@ from direct.distributed import DistributedObjectAI
 
 class DistributedTreasureAI(DistributedObjectAI.DistributedObjectAI):
 
-    def __init__(self, air, treasurePlanner, x, y, z):
+    def __init__(self, air, treasurePlanner, treasureType, x, y, z):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.treasurePlanner = treasurePlanner
+        self.treasureType = treasureType
         self.pos = (x, y, z)
 
     def requestGrab(self):
@@ -15,6 +16,9 @@ class DistributedTreasureAI(DistributedObjectAI.DistributedObjectAI):
 
     def validAvatar(self, av):
         return 1
+
+    def getTreasureType(self):
+        return self.treasureType
 
     def d_setGrab(self, avId):
         self.sendUpdate('setGrab', [avId])

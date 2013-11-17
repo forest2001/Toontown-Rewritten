@@ -77,16 +77,6 @@ from toontown.safezone import SafeZoneManager/AI
 from toontown.tutorial import TutorialManager/AI
 from toontown.catalog import CatalogManager/AI
 from toontown.safezone import DistributedTreasure/AI
-from toontown.safezone import DistributedDDTreasure/AI
-from toontown.safezone import DistributedDGTreasure/AI
-from toontown.safezone import DistributedDLTreasure/AI
-from toontown.safezone import DistributedTTTreasure/AI
-from toontown.safezone import DistributedBRTreasure/AI
-from toontown.safezone import DistributedMMTreasure/AI
-from toontown.safezone import DistributedOZTreasure/AI
-from toontown.safezone import DistributedETreasure/AI
-from toontown.safezone import DistributedEFlyingTreasure/AI
-from toontown.minigame import DistributedTagTreasure/AI
 from toontown.coghq import DistributedCashbotBossTreasure/AI
 from toontown.building import DistributedTrophyMgr/AI
 from toontown.building import DistributedBuilding/AI
@@ -1510,40 +1500,11 @@ dclass DistributedMyTest : DistributedObject {
 };
 
 dclass DistributedTreasure : DistributedObject {
+  setTreasureType(uint16) required broadcast ram;
   setPosition(int16/10, int16/10, int16/10) required broadcast ram;
   requestGrab() airecv clsend;
   setGrab(uint32) broadcast ram;
   setReject() broadcast;
-};
-
-dclass DistributedDDTreasure : DistributedTreasure {
-};
-
-dclass DistributedDGTreasure : DistributedTreasure {
-};
-
-dclass DistributedDLTreasure : DistributedTreasure {
-};
-
-dclass DistributedTTTreasure : DistributedTreasure {
-};
-
-dclass DistributedBRTreasure : DistributedTreasure {
-};
-
-dclass DistributedMMTreasure : DistributedTreasure {
-};
-
-dclass DistributedOZTreasure : DistributedTreasure {
-};
-
-dclass DistributedETreasure : DistributedTreasure {
-};
-
-dclass DistributedEFlyingTreasure : DistributedTreasure {
-};
-
-dclass DistributedTagTreasure : DistributedTreasure {
 };
 
 dclass DistributedCashbotBossTreasure : DistributedTreasure {

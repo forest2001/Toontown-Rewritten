@@ -1,6 +1,5 @@
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
-from toontown.safezone.TTTreasurePlannerAI import TTTreasurePlannerAI
 from toontown.toon import NPCToons
 from HoodAI import HoodAI
 
@@ -24,5 +23,4 @@ class TTHoodAI(HoodAI):
 
         self.createHQ(2520, 20)
 
-        self.treasurePlanner = TTTreasurePlannerAI()
-        self.treasurePlanner.start()
+        self.createTreasurePlanner()

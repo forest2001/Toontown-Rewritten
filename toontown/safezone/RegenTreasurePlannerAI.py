@@ -8,8 +8,8 @@ import TreasurePlannerAI
 class RegenTreasurePlannerAI(TreasurePlannerAI.TreasurePlannerAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('RegenTreasurePlannerAI')
 
-    def __init__(self, zoneId, treasureConstructor, taskName, spawnInterval, maxTreasures, callback = None):
-        TreasurePlannerAI.TreasurePlannerAI.__init__(self, zoneId, treasureConstructor, callback)
+    def __init__(self, zoneId, treasureType, taskName, spawnInterval, maxTreasures, callback = None):
+        TreasurePlannerAI.TreasurePlannerAI.__init__(self, zoneId, treasureType, callback)
         self.taskName = '%s-%s' % (taskName, zoneId)
         self.spawnInterval = spawnInterval
         self.maxTreasures = maxTreasures

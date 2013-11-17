@@ -7,6 +7,8 @@ from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.building import DoorTypes
 from toontown.fishing import FishingTargetGlobals
+from toontown.safezone import TreasureGlobals
+from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 
 class HoodAI:
     """
@@ -30,6 +32,11 @@ class HoodAI:
     def createTrolley(self):
         self.trolley = DistributedTrolleyAI(self.air)
         self.trolley.generateWithRequired(self.safezone)
+
+    def createTreasurePlanner(self):
+        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[self.safezone]
+        self.treasurePlanner = SZTreasurePlannerAI(self.safezone, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
+        self.treasurePlanner.start()
 
     def createHQ(self, zone, block):
         hqDoor = DistributedDoorAI(self.air)
