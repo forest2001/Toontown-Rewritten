@@ -57,4 +57,4 @@ class DistributedDGFlower(DistributedObject.DistributedObject):
 
     def setHeight(self, newHeight):
         pos = self.bigFlower.getPos()
-        self.bigFlower.lerpPos(pos[0], pos[1], newHeight, 0.5, task=self.taskName('DG-flowerRaise'))
+        self.bigFlower.posInterval(0.5, (pos[0], pos[1], newHeight)).start()
