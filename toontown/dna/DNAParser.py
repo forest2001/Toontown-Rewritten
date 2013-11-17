@@ -1887,6 +1887,8 @@ def loadDNAFile(dnaStore, filename):
     dnaloader.getData().setDnaStorage(dnaStore)
     if __debug__:
         filename = 'resources/' + filename
+    else:
+        filename = '/' + filename
     dnaloader.getData().read(open(filename, 'r'))
     graph = dnaloader.buildGraph()
     if not graph is None:
