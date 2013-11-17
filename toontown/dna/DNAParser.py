@@ -1211,10 +1211,10 @@ p_string_opt_list.__doc__ = \
                        | empty'''
 
 def p_vis(p):
-    '''vis : VIS "[" string string_opt_list "]"'''
     p.parser.parentGroup.addVisible(p[3])
     for vis in p[4]:
         p.parser.parentGroup.addVisible(vis)
+p_vis.__doc__ = '''vis : VIS "[" string string_opt_list "]"'''
 
 def p_empty(p):
     pass
@@ -1687,15 +1687,16 @@ p_subbaseline_list.__doc__ = \
                         | empty'''
 
 def p_subtext_list(p):
-    '''subtext_list : subtext_list dnanode_sub
-                    | subtext_list text_sub
-                    | empty'''
     p[0] = p[1]
     if len(p) == 3:
         if isinstance(p[2], DNAGroup):
             p[0] += [p[2]]
     else:
         p[0] = []
+p_subtext_list.__doc__ = \
+    '''subtext_list : subtext_list dnanode_sub
+                    | subtext_list text_sub
+                    | empty'''
 
 def p_subdnanode_list(p):
     p[0] = p[1]
