@@ -3,10 +3,9 @@ from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
 from toontown.toonbase import ToontownGlobals
 from direct.task import Task
-SPIN_RATE = 1.25
+SPIN_RATE = 12.5
 
 class DistributedDGFlower(DistributedObject.DistributedObject):
-
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
 
@@ -46,7 +45,7 @@ class DistributedDGFlower(DistributedObject.DistributedObject):
         del self.flowerCollSphereNode
 
     def __flowerSpin(self, task):
-        self.bigFlower.setH(self.bigFlower.getH() + SPIN_RATE)
+        self.bigFlower.setH(self.bigFlower.getH() + SPIN_RATE*globalClock.getDt())
         return Task.cont
 
     def __flowerEnter(self, collisionEntry):
@@ -57,4 +56,4 @@ class DistributedDGFlower(DistributedObject.DistributedObject):
 
     def setHeight(self, newHeight):
         pos = self.bigFlower.getPos()
-        self.bigFlower.lerpPos(pos[0], pos[1], newHeight, 0.5, task=self.taskName('DG-flowerRaise'))
+        self.bigFlower.posInterval(0.5, (pos[0], pos[1], newHeight)).start()
