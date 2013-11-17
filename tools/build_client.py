@@ -17,6 +17,7 @@ import zipfile
 # These are to get the dependency walker to find and binarize them, as they would not be found by it normally
 EXTRA_MODULES = (
   'encodings.ascii',
+  'encodings.latin_1',
   '_strptime',
 )
 
