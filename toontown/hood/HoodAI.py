@@ -1,3 +1,4 @@
+from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedTrolleyAI import DistributedTrolleyAI
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
@@ -19,22 +20,37 @@ class HoodAI:
     ponds, and other safezone objects, etc.
     """
 
-    SAFEZONE = None
+    HOOD = None
 
     def __init__(self, air):
         self.air = air
 
-        self.safezone = self.SAFEZONE
+        self.safezone = self.HOOD
+        self.streets = {}
 
         self.trolley = None
         self.pond = None
+
+        self.createSafeZone()
+        self.createStreets()
+
+    def createSafeZone(self):
+        self.createTrolley()
+        self.createTreasurePlanner()
+
+    def createStreets(self):
+        branchIds = ToontownGlobals.HoodHierarchy[self.HOOD]
+        for branch in branchIds:
+            #street = StreetAI(self.air, branch)
+            street = None # Mav needs to activate the above and disable this.
+            self.streets[branch] = street
 
     def createTrolley(self):
         self.trolley = DistributedTrolleyAI(self.air)
         self.trolley.generateWithRequired(self.safezone)
 
     def createTreasurePlanner(self):
-        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[self.safezone]
+        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[self.HOOD]
         self.treasurePlanner = SZTreasurePlannerAI(self.safezone, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
         self.treasurePlanner.start()
 
