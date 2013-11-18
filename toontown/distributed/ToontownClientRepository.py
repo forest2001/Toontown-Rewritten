@@ -252,6 +252,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
                 self.betterlucknexttime(avList, index)
             else:
                 base.localAvatarStyle = dna
+                base.localAvatarName = av.name
                 self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice])
         elif done == 'nameIt':
             self.accept('downloadAck-response', self.__handleDownloadAck, [avList, index])
@@ -448,6 +449,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             del base.localAvatar
             del __builtins__['localAvatar']
         base.localAvatarStyle = None
+        base.localAvatarName = None
         loader.abortBulkLoad()
         base.transitions.noTransitions()
         if self._userLoggingOut:

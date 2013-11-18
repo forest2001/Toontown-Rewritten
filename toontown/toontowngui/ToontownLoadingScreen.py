@@ -52,7 +52,7 @@ class ToontownLoadingScreen:
             base.setBackgroundColor(Vec4(0.952, 0.796, 0.317, 1))
             if base.localAvatarStyle:
                 from toontown.toon import ToonHead
-                self.toon['text'] = base.localAvatar.getName()
+                self.toon['text'] = base.localAvatarName
                 self.starring['text'] = TTLocalizer.StarringIn                
                 self.head = ToonHead.ToonHead()
                 self.head.setupHead(base.localAvatarStyle, forGui=1)
