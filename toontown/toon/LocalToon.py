@@ -176,6 +176,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         base.localAvatarStyle = dna
         DistributedToon.DistributedToon.setDNA(self, dna)
 
+    def setName(self, name):
+        base.localAvatarName = name
+        DistributedToon.DistributedToon.setName(self, name)
+
     def wantLegacyLifter(self):
         return True
 
