@@ -6,3 +6,5 @@ class BRHoodAI(HoodAI):
 
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
+
+        self.createHQ(3508, 8)
