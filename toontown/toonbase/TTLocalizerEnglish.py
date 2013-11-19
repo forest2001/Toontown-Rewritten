@@ -5230,7 +5230,7 @@ GardenTutorialPage5 = "Statues can be purchased in Clarabelle's Cattlelog. Incre
 PlaygroundDeathAckMessage = TheCogs + ' took all your gags!\n\nYou are sad. You may not leave the playground until you are happy.'
 ForcedLeaveFactoryAckMsg = 'The ' + Foreman + ' was defeated before you could reach him. You did not recover any Cog parts.'
 ForcedLeaveMintAckMsg = 'The Mint Floor Supervisor was defeated before you could reach him. You did not recover any Cogbucks.'
-HeadingToFactoryTitle = 'Heading to %s...'
+HeadingToFactoryTitle = '%s'
 ForemanConfrontedMsg = '%s is battling the ' + Foreman + '!'
 MintBossConfrontedMsg = '%s is battling the Supervisor!'
 StageBossConfrontedMsg = '%s is battling the Clerk!'
@@ -5240,7 +5240,7 @@ MinigameWaitingForOtherPlayers = 'Waiting for other players to join...'
 MinigamePleaseWait = 'Please wait...'
 DefaultMinigameTitle = 'Minigame Title'
 DefaultMinigameInstructions = 'Minigame Instructions'
-HeadingToMinigameTitle = 'Heading to %s...'
+HeadingToMinigameTitle = '%s'
 MinigamePowerMeterLabel = 'Power Meter'
 MinigamePowerMeterTooSlow = 'Too\nslow'
 MinigamePowerMeterTooFast = 'Too\nfast'
@@ -8249,7 +8249,7 @@ FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Happy New Y
 FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
 FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
 BlockerTitle = 'LOADING TOONTOWN...'
-BlockerLoadingTexts = ['Rewritting history',
+BlockerLoadingTexts = ['Rewriting history',
  'Baking pie crusts',
  'Heating pie filling',
  'Loading Doodle chow',
