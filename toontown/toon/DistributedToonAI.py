@@ -217,6 +217,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.partyReplyInfoBases = []
         self.modulelist = ModuleListAI.ModuleList()
         self._dbCheckDoLater = None
+        self.teleportOverride = 0
         return
 
     def generate(self):
@@ -1947,11 +1948,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setTeleportAccess(self.teleportZoneArray)
 
     def checkTeleportAccess(self, zoneId):
-        if zoneId not in self.getTeleportAccess():
+        if zoneId not in self.getTeleportAccess() and self.teleportOverride != 1:
             simbase.air.writeServerEvent('suspicious', self.doId, 'Toon teleporting to zone %s they do not have access to.' % zoneId)
             if simbase.config.GetBool('want-ban-teleport', False):
                 commentStr = 'Toon %s teleporting to a zone %s they do not have access to' % (self.doId, zoneId)
                 simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
+                
+    def setTeleportOverride(self, flag):
+        self.teleportOverride = flag
+        self.b_setHoodsVisited([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
 
     def b_setQuestHistory(self, questList):
         self.setQuestHistory(questList)
