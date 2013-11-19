@@ -65,7 +65,7 @@ class DistributedPatternGame(DistributedMinigame):
         self.opaq = VBase4(1, 0, 0, 1)
         self.normalTextColor = VBase4(0.537, 0.84, 0.33, 1.0)
         self.__otherToonIndex = {}
-        self.totalColorBalls = 2 #Start at 2, as this the default starting amount.
+        self.totalColorBalls = 1 #Start at 1, index starts at 0.
         return
 
     def getTitle(self):
