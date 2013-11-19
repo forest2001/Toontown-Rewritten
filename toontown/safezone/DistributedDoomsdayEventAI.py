@@ -19,6 +19,12 @@ class DistributedDoomsdayEventAI(DistributedObjectAI, FSM):
     def enterIntro(self):
         pass
 
+    def enterFlippyRunning(self):
+        pass
+
+    def enterFlippyWaving(self):
+        pass
+
     def setState(self, state):
         self.demand(state)
 
