@@ -90,7 +90,7 @@ class Nametag(ClickablePopup):
         # z-fighting and bizarre artifacts. The text renders *after* the tag
         # behind it, due to both being in the transparency bin,
         # so there's really no problem with doing this.
-        t.setY(-0.01)
+        t.setY(-0.05)
         t.setAttrib(DepthWriteAttrib.make(0))
 
         # Apply panel behind the text:
