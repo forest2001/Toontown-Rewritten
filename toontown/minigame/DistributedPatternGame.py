@@ -65,6 +65,7 @@ class DistributedPatternGame(DistributedMinigame):
         self.opaq = VBase4(1, 0, 0, 1)
         self.normalTextColor = VBase4(0.537, 0.84, 0.33, 1.0)
         self.__otherToonIndex = {}
+        self.totalColorBalls = 2 #Start at 2, as this the default starting amount.
         return
 
     def getTitle(self):
@@ -492,10 +493,13 @@ class DistributedPatternGame(DistributedMinigame):
             sb[x].hide()
 
     def colorStatusBall(self, toonID, which, good):
-        if good:
-            self.arrowDict[toonID][2][which].setColor(0, 1, 0, 1)
+        if not which>self.totalColorBalls:
+            if good:
+                self.arrowDict[toonID][2][which].setColor(0, 1, 0, 1)
+            else:
+                self.arrowDict[toonID][2][which].setColor(1, 0, 0, 1)
         else:
-            self.arrowDict[toonID][2][which].setColor(1, 0, 0, 1)
+            self.notify.warning('toonID %s sent more colorStatusBall updates than he should have.' % toonID)
 
     def getDanceArrowSingleTrack(self, toonID, index, speedy):
         duration = self.getDanceStepDuration()
@@ -734,6 +738,7 @@ class DistributedPatternGame(DistributedMinigame):
 
     def enterPlayBackPatterns(self):
         self.notify.debug('enterPlayBackPatterns')
+        self.totalColorBalls = (self.round * 2) + 1
         if self.fastestAvId == self.localAvId:
             self.roundText.setScale(0.1)
             if self.numPlayers != 2:
