@@ -38,7 +38,7 @@ class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def enter(self, requestStatus):
         SafeZoneLoader.SafeZoneLoader.enter(self, requestStatus)
-        self.snow.start(camera, self.snowRender)
+        #self.snow.start(camera, self.snowRender)
         self.accept('enterigloo-interior', self.enterIgloo)
         self.accept('exitigloo-interior', self.exitIgloo)
 
