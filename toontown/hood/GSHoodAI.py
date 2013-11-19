@@ -9,7 +9,7 @@ from toontown.building import DoorTypes
 from toontown.racing import RaceGlobals
 
 class GSHoodAI(HoodAI.HoodAI):
-    SAFEZONE = 8000
+    HOOD = 8000
 
     def __init__(self, air):
         HoodAI.HoodAI.__init__(self, air)
@@ -69,13 +69,13 @@ class GSHoodAI(HoodAI.HoodAI):
             index = int(index)
             
             pad = DistributedRacePadAI(self.air)
-            pad.setArea(self.SAFEZONE)
+            pad.setArea(self.HOOD)
             nri = RaceGlobals.getNextRaceInfo(-1, dest, index)
             pad.setTrackInfo([nri[0], nri[1]])
-            pad.generateWithRequired(self.SAFEZONE)
+            pad.generateWithRequired(self.HOOD)
             self.racepads.append(pad)
             for i in range(group.getNumChildren()):
-                posSpot = group.getChild(i)
+                posSpot = group.at(i)
                 if posSpot.getName()[:14] == 'starting_block':
                     spotIndex = int(posSpot.getName()[15:])
                     x, y, z = posSpot.getPos()
@@ -84,7 +84,7 @@ class GSHoodAI(HoodAI.HoodAI):
                     startingBlock.setPosHpr(x, y, z, h, p, r)
                     startingBlock.setPadDoId(pad.getDoId())
                     startingBlock.setPadLocationId(index)
-                    startingBlock.generateWithRequired(self.SAFEZONE)
+                    startingBlock.generateWithRequired(self.HOOD)
                     pad.addStartingBlock(startingBlock)
         for i in range(group.getNumChildren()):
-            self.createObjects(group.getChild(i))
+            self.createObjects(group.at(i))
