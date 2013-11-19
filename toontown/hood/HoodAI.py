@@ -35,8 +35,9 @@ class HoodAI:
         self.createStreets()
 
     def createSafeZone(self):
-        self.createTrolley()
-        self.createTreasurePlanner()
+        if self.safezone != 8000:
+            self.createTrolley()
+            self.createTreasurePlanner()
 
     def createStreets(self):
         branchIds = ToontownGlobals.HoodHierarchy[self.HOOD]
