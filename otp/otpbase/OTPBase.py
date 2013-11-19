@@ -272,4 +272,4 @@ def showAvIds(access=200):
     
 @magicWord(access=200)
 def showAccess():
-    return "Access level: " + spellbook.getTarget().getAdminAccess()
+    return "Access level: " + str(spellbook.getTarget().getAdminAccess())
