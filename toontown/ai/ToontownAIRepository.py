@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, GSHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -37,6 +37,7 @@ class ToontownAIRepository(ToontownInternalRepository):
 
     def getTrackClsends(self):
         return False
+        
 
     def handleConnected(self):
         self.districtId = self.allocateChannel()
@@ -104,3 +105,4 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(DDHoodAI.DDHoodAI(self))
         self.hoods.append(DGHoodAI.DGHoodAI(self))
         self.hoods.append(BRHoodAI.BRHoodAI(self))
+        self.hoods.append(GSHoodAI.GSHoodAI(self))

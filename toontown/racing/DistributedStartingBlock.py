@@ -114,8 +114,13 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
                 self.__generateKartAppearTrack()
 
     def setPadDoId(self, padDoId):
-        self.notify.debugStateCall(self)
-        self.kartPad = base.cr.doId2do.get(padDoId)
+        if padDoId in self.cr.doId2do:
+            self.setPad(self.cr.doId2do[padDoId])
+        else:
+            self.acceptOnce('generate-%d' % padDoId, self.setPad)
+        
+    def setPad(self, pad):
+        self.kartPad = pad
         self.kartPad.addStartingBlock(self)
 
     def setPosHpr(self, x, y, z, h, p, r):
