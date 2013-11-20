@@ -37,6 +37,7 @@ from otp.uberdog import OtpAvatarManager
 from otp.distributed import OtpDoGlobals
 from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
+from direct.distributed.MsgTypes import *
 
 class OTPClientRepository(ClientRepositoryBase):
     notify = directNotify.newCategory('OTPClientRepository')
@@ -1791,7 +1792,7 @@ class OTPClientRepository(ClientRepositoryBase):
         if self.deferredGenerates:
             dg = Datagram(di.getDatagram())
             di = DatagramIterator(dg, di.getCurrentIndex())
-            self.deferredGenerates.append((CLIENT_DONE_INTEREST_RESP, (dg, di)))
+            self.deferredGenerates[-1].append((CLIENT_DONE_INTEREST_RESP, (dg, di)))
         else:
             self.handleInterestDoneMessage(di)
 
@@ -1858,7 +1859,7 @@ class OTPClientRepository(ClientRepositoryBase):
             dg, di = extra
             self.handleObjectLocation(di)
         else:
-            ClientRepositoryBase.replayDeferredGenerate(self, msgType, extra)
+            self.o_replayDeferredGenerate(msgType, extra)
 
     @exceptionLogged(append=False)
     def handleDatagram(self, di):
@@ -1938,9 +1939,29 @@ class OTPClientRepository(ClientRepositoryBase):
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
-        dclass.startGenerate()
-        distObj = self.generateWithRequiredFields(dclass, doId, di, parentId, zoneId)
-        dclass.stopGenerate()
+        deferFor = getattr(dclass.getClassDef(), 'deferFor', 0)
+        if not self.deferInterval or self.noDefer:
+            deferrable = False
+        if deferFor == 0:
+            dclass.startGenerate()
+            distObj = self.generateWithRequiredFields(dclass, doId, di, parentId, zoneId)
+            dclass.stopGenerate()
+        else:
+            if len(self.deferredGenerates) == 0:
+                taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
+            while len(self.deferredGenerates) < deferFor+1:
+                self.deferredGenerates.append([])
+            dg = PyDatagram(di.getRemainingBytes())
+            dg.addUint16(0)
+            di = PyDatagramIterator(dg)
+            self.deferredGenerates[deferFor].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+            self.deferredDoIds[doId] = ((parentId,
+              zoneId,
+              classId,
+              doId,
+              di),
+             dg,
+             [])
 
     def handleGenerateWithRequiredOther(self, di):
         doId = di.getUint32()
@@ -1950,29 +1971,25 @@ class OTPClientRepository(ClientRepositoryBase):
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
-        deferrable = getattr(dclass.getClassDef(), 'deferrable', False)
+        deferFor = getattr(dclass.getClassDef(), 'deferFor', 0)
         if not self.deferInterval or self.noDefer:
             deferrable = False
         now = globalClock.getFrameTime()
-        if self.deferredGenerates or deferrable:
-            if self.deferredGenerates or now - self.lastGenerate < self.deferInterval:
-                self.deferredGenerates.append((CLIENT_CREATE_OBJECT_REQUIRED_OTHER, doId))
-                dg = Datagram(di.getDatagram())
-                di = DatagramIterator(dg, di.getCurrentIndex())
-                self.deferredDoIds[doId] = ((parentId,
-                  zoneId,
-                  classId,
-                  doId,
-                  di),
-                 deferrable,
-                 dg,
-                 [])
-                if len(self.deferredGenerates) == 1:
-                    taskMgr.remove('deferredGenerate')
-                    taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
-            else:
-                self.lastGenerate = now
-                self.doGenerate(parentId, zoneId, classId, doId, di)
+        if self.deferredGenerates or deferFor != 0:
+            if len(self.deferredGenerates) == 0:
+                taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
+            while len(self.deferredGenerates) < deferFor+1:
+                self.deferredGenerates.append([])
+            self.deferredGenerates[deferFor].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+            dg = Datagram(di.getDatagram())
+            di = DatagramIterator(dg, di.getCurrentIndex())
+            self.deferredDoIds[doId] = ((parentId,
+              zoneId,
+              classId,
+              doId,
+              di),
+             dg,
+             [])
         else:
             self.doGenerate(parentId, zoneId, classId, doId, di)
 
@@ -2051,3 +2068,91 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def addTaggedInterest(self, parentId, zoneId, mainTag, desc, otherTags = [], event = None):
         return self.addInterest(parentId, zoneId, desc, event)
+
+    #The functions below have been moved from CRBase into OTPCr so we don't need to fuck with CRBase for deferred generated
+    #They should be moved back eventually
+    def disableDoId(self, doId, ownerView=False):
+        table, cache = self.getTables(ownerView)
+        # Make sure the object exists
+        if table.has_key(doId):
+            # Look up the object
+            distObj = table[doId]
+            # remove the object from the dictionary
+            del table[doId]
+
+            # Only cache the object if it is a "cacheable" type
+            # object; this way we don't clutter up the caches with
+            # trivial objects that don't benefit from caching.
+            # also don't try to cache an object that is delayDeleted
+            cached = False
+            if distObj.getCacheable() and distObj.getDelayDeleteCount() <= 0:
+                cached = cache.cache(distObj)
+            if not cached:
+                distObj.deleteOrDelay()
+                if distObj.getDelayDeleteCount() <= 0:
+                    # make sure we're not leaking
+                    distObj.detectLeaks()
+
+        elif self.deferredDoIds.has_key(doId):
+            # The object had been deferred.  Great; we don't even have
+            # to generate it now.
+            del self.deferredDoIds[doId]
+            for cycle, deferredGenerates in enumerate(self.deferredGenerates):
+                try:
+                    i = deferredGenerates.index((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+                    del self.deferredGenerates[cycle][i]
+                except:
+                    pass
+            
+        else:
+            self._logFailedDisable(doId, ownerView)
+
+    #This function has an extra o_ because it is also overridden by OTPCr
+    #when moving it back to CRBase, it needs the o_ removed, and the reference to it here needs to be changed
+    def o_replayDeferredGenerate(self, msgType, extra):
+        """ Override this to do something appropriate with deferred
+        "generate" messages when they are replayed().
+        """
+
+        if msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
+            # It's a generate message.
+            doId = extra
+            if doId in self.deferredDoIds:
+                args, dg, updates = self.deferredDoIds[doId]
+                del self.deferredDoIds[doId]
+                self.doGenerate(*args)
+
+                for dg, di in updates:
+                    # non-DC updates that need to be played back in-order are
+                    # stored as (msgType, (dg, di))
+                    if type(di) is types.TupleType:
+                        msgType = dg
+                        dg, di = di
+                        self.replayDeferredGenerate(msgType, (dg, di))
+                    else:
+                        # ovUpdated is set to True since its OV
+                        # is assumbed to have occured when the
+                        # deferred update was originally received
+                        self.__doUpdate(doId, di, True)
+        else:
+            self.notify.warning("Ignoring deferred message %s" % (msgType))
+
+    def doDeferredGenerate(self, task):
+        """ This is the task that generates an object on the deferred
+        queue. """
+        now = globalClock.getFrameTime()
+        if now - self.lastGenerate < self.deferInterval:
+            # Come back later.
+            return Task.again
+        self.lastGenerate = globalClock.getFrameTime()
+        
+        deferredGenerates = self.deferredGenerates.pop(0)
+        for deferredGenerate in deferredGenerates:
+            # Generate the next deferred object.
+            msgType, extra = deferredGenerate
+            self.replayDeferredGenerate(msgType, extra)
+
+        if len( self.deferredGenerates) == 0:
+            # All objects are generaetd.
+            return Task.done
+        return Task.again
