@@ -5,6 +5,7 @@ TreasureDD = 1
 TreasureDG = 2
 TreasureBR = 3
 TreasureMM = 4
+TreasureDL = 5
 
 TreasureModels = {
     TreasureTT: (
@@ -25,6 +26,10 @@ TreasureModels = {
     ),
     TreasureMM: (
         'phase_6/models/props/music_treasure',
+        'phase_4/audio/sfx/SZ_DD_treasure.ogg',
+    ),
+    TreasureDL: (
+        'phase_8/models/props/zzz_treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
 }
@@ -168,5 +173,32 @@ SafeZoneTreasureSpawns = {
         ],
         10, # Rate
         2 # Maximum
+    ),
+    ToontownGlobals.DonaldsDreamland: ( #TODO: cfsworks, add treasure spawn locations! I just stole MML locations so I could load AI.
+        TreasureDL, 12, # +12 laff
+        [
+            #THESE ARE INCORRECT
+            (118, -39, 3.3),
+            (118, 1, 3.3),
+            (112, -22, 0.8),
+            (108, -74, -4.5),
+            (110, -65, -4.5),
+            (102, 23.5, -4.5),
+            (60, -115, 6.5),
+            (-5, -115, 6.5),
+            (-64, -77, 6.5),
+            (-77, -44, 6.5),
+            (-76, 3, 6.5),
+            (44, 76, 6.5),
+            (136, -96, -13.5),
+            (85, -6.7, -13.5),
+            (60, -95, -14.5),
+            (72, 60, -13.5),
+            (-55, -23, -14.5),
+            (-21, 47, -14.5),
+            (-24, -75, -14.5),
+        ],
+        10, # Rate
+        2 #Maximum
     ),
 }
