@@ -2145,7 +2145,6 @@ class OTPClientRepository(ClientRepositoryBase):
             # Come back later.
             return Task.again
         self.lastGenerate = globalClock.getFrameTime()
-        
         deferredGenerates = self.deferredGenerates.pop(0)
         for deferredGenerate in deferredGenerates:
             # Generate the next deferred object.
@@ -2156,3 +2155,87 @@ class OTPClientRepository(ClientRepositoryBase):
             # All objects are generaetd.
             return Task.done
         return Task.again
+
+    def handleUpdateField(self, di):
+        """
+        This method is called when a CLIENT_OBJECT_UPDATE_FIELD
+        message is received; it decodes the update, unpacks the
+        arguments, and calls the corresponding method on the indicated
+        DistributedObject.
+
+        In fact, this method is exactly duplicated by the C++ method
+        cConnectionRepository::handle_update_field(), which was
+        written to optimize the message loop by handling all of the
+        CLIENT_OBJECT_UPDATE_FIELD messages in C++.  That means that
+        nowadays, this Python method will probably never be called,
+        since UPDATE_FIELD messages will not even be passed to the
+        Python message handlers.  But this method remains for
+        documentation purposes, and also as a "just in case" handler
+        in case we ever do come across a situation in the future in
+        which python might handle the UPDATE_FIELD message.
+        """
+        # Get the DO Id
+        doId = di.getUint32()
+
+        ovUpdated = self.__doUpdateOwner(doId, di)
+        
+        if doId in self.deferredDoIds:
+            # This object hasn't really been generated yet.  Sit on
+            # the update.
+            args, dg0, updates = self.deferredDoIds[doId]
+
+            # Keep a copy of the datagram, and move the di to the copy
+            dg = Datagram(di.getDatagram())
+            di = DatagramIterator(dg, di.getCurrentIndex())
+
+            updates.append((dg, di))
+        else:
+            # This object has been fully generated.  It's OK to update.
+            self.__doUpdate(doId, di, ovUpdated)
+
+    #The following two functions are unmodified, but are needed for the above to work
+    def __doUpdate(self, doId, di, ovUpdated):
+        # Find the DO
+        do = self.doId2do.get(doId)
+        if do is not None:
+            # Let the dclass finish the job
+            do.dclass.receiveUpdate(do, di)
+        elif not ovUpdated:
+            # this next bit is looking for avatar handles so that if you get an update 
+            # for an avatar that isn't in your doId2do table but there is a 
+            # avatar handle for that object then it's messages will be forwarded to that 
+            # object. We are currently using that for whisper echoing
+            # if you need a more general perpose system consider registering proxy objects on
+            # a dict and adding the avatar handles to that dict when they are created
+            # then change/remove the old method. I didn't do that because I couldn't think
+            # of a use for it. -JML
+            try :
+                handle = self.identifyAvatar(doId)
+                if handle:
+                    dclass = self.dclassesByName[handle.dclassName]
+                    dclass.receiveUpdate(handle, di)
+                    
+                else:
+                    self.notify.warning(
+                        "Asked to update non-existent DistObj " + str(doId))
+            except:
+                self.notify.warning(
+                        "Asked to update non-existent DistObj " + str(doId) + "and failed to find it")
+
+    def __doUpdateOwner(self, doId, di):
+        ovObj = self.doId2ownerView.get(doId)
+        if ovObj:
+            odg = Datagram(di.getDatagram())
+            odi = DatagramIterator(odg, di.getCurrentIndex())
+            ovObj.dclass.receiveUpdate(ovObj, odi)
+            return True
+        return False
+
+    def flushGenerates(self):
+        """ Forces all pending generates to be performed immediately. """
+        for deferredGenerates in self.deferredGenerates:
+            for deferredGenerate in deferredGenerates:
+                msgType, extra = self.deferredGenerate
+                self.replayDeferredGenerate(msgType, extra)
+        self.deferredGenerates = []
+        taskMgr.remove('deferredGenerate')
