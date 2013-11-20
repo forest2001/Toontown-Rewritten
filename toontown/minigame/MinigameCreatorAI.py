@@ -187,8 +187,8 @@ def removeUnreleasedMinigames(startList, increaseChanceOfNewGames = 0):
 
     return randomList
 
-@magicWord(category=CATEGORY_OVERRIDE, types=[str, bool, int, int])
-def requestMinigame(minigameName='remove', minigameKeep=False, minigameDiff=1, minigamePG=2000):
+@magicWord(category=CATEGORY_OVERRIDE, types=[str, int, int, int])
+def requestMinigame(minigameName='remove', minigameKeep=False, minigameDiff=None, minigamePG=None):
     if minigameName=='remove':
         if spellbook.getInvoker().doId in RequestMinigame:
             del RequestMinigame[spellbook.getInvoker().doId]
