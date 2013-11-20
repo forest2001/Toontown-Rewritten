@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.racing.KartShopGlobals import KartGlobals
+from toontown.racing import RaceGlobals
 
 class DistributedStartingBlockAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedStartingBlockAI")
@@ -33,7 +34,16 @@ class DistributedStartingBlockAI(DistributedObjectAI):
 
     def requestEnter(self, isPaid):
         avId = self.air.getAvatarIdFromSender()
-        #TODO: moar errors
+        av = self.air.doId2do[avId]
+        if not av.hasKart():
+            self.sendUpdateToAvatarId(avId, 'rejectEnter', [KartGlobals.ERROR_CODE.eNoKart])
+            return
+        if av.getTickets() < RaceGlobals.getEntryFee(self.pad.trackId, self.pad.trackType):
+            self.sendUpdateToAvatarId(avId, 'rejectEnter', [KartGlobals.ERROR_CODE.eTickets])
+            return        
+        if self.pad.state == 'AllAboard' or self.pad.state == 'WaitBoarding' :
+            self.sendUpdateToAvatarId(avId, 'rejectEnter', [KartGlobals.ERROR_CODE.eBoardOver])
+            return
         if self.avId != 0:
             if self.avId == avId:
                 self.air.writeServerEvent('suspicious', avId, 'Toon tried to board the same starting block twice!')

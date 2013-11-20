@@ -70,6 +70,8 @@ class GSHoodAI(HoodAI.HoodAI):
             
             pad = DistributedRacePadAI(self.air)
             pad.setArea(self.HOOD)
+            pad.nameType = dest
+            pad.index = index
             nri = RaceGlobals.getNextRaceInfo(-1, dest, index)
             pad.setTrackInfo([nri[0], nri[1]])
             pad.generateWithRequired(self.HOOD)

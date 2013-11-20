@@ -1,8 +1,11 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
+from toontown.racing.DistributedGagAI import DistributedGagAI
+from toontown.racing import RaceGlobals
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
+import random
 
 class DistributedRaceAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedRaceAI")
@@ -19,6 +22,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.startingPlaces = []
         self.avatarKarts = []
         self.lapCount = 1
+        self.gags = {}
     
     def generate(self):
         self.request('Join')
@@ -32,6 +36,10 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         
     def enterPrep(self):
         self.beginBarrier('waitingForReady', self.avatars, 60, self.readyBarrierCallback)
+        self.gagPoints = RaceGlobals.TrackDict[self.trackId][4]
+        for i in range(len(self.gagPoints)):
+            gagId = random.randint(0, 5)
+            self.b_genGag(i, 1, gagId)
         self.d_prepForRace()
         
     def exitPrep(self):
@@ -162,9 +170,16 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def goToSpeedway(self, todo0, todo1):
         pass
 
-    def genGag(self, todo0, todo1, todo2):
-        pass
-
+    def genGag(self, slot, number, type):
+        self.gags[slot] = [number, type]
+        
+    def d_genGag(self, slot, number, type):
+        self.sendUpdate('genGag', [slot, number, type])
+    
+    def b_genGag(self, slot, number, type):
+        self.genGag(slot, number, type)
+        self.d_genGag(slot, number, type)
+    
     def dropAnvilOn(self, todo0, todo1, todo2):
         pass
 
