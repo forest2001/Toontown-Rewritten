@@ -570,7 +570,7 @@ dclass DistributedToon : DistributedPlayer {
   setKartingTrophies(uint8 [33] = {0*33}) required ownrecv db;
   setKartingPersonalBest(uint32/1000 [6] = {0*6}) required ownrecv db;
   setKartingPersonalBest2(uint32/1000 [12] = {0*12}) required ownrecv db;
-  setKartAccessoriesOwned(int8 [16] = {0*16}) required broadcast ownrecv db;
+  setKartAccessoriesOwned(int8 [16] = {-1*16}) required broadcast ownrecv db;
   setCurrentKart(uint32) broadcast ownrecv ram;
   squish(uint8) ownsend airecv;
   announceBingo() broadcast ownrecv;
