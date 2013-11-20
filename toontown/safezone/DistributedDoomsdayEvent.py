@@ -21,7 +21,7 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
         self.flippy.reparentTo(self.stage)
 
     def delete(self):
-        self.demand('Off')
+        self.demand('Off', 0.)
 
         # Clean up everything...
         self.stage.removeNode()
