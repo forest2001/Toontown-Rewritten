@@ -4,7 +4,7 @@ from HoodAI import HoodAI
 class DLHoodAI(HoodAI):
     HOOD = ToontownGlobals.DonaldsDreamland
     
-    def createSelfZone(self):
-        HoodAI.createSelfZone(self)
+    def createSafeZone(self):
+        HoodAI.createSafeZone(self)
         
         self.createHQ(9505,5)
