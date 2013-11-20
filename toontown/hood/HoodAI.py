@@ -39,7 +39,7 @@ class HoodAI:
         self.createTreasurePlanner()
 
     def createStreets(self):
-        branchIds = ToontownGlobals.HoodHierarchy[self.HOOD]
+        branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])
         for branch in branchIds:
             #street = StreetAI(self.air, branch)
             street = None # Mav needs to activate the above and disable this.
