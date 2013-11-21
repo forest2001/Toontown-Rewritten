@@ -85,6 +85,7 @@ from ToonBaseGlobal import *
 from direct.showbase.MessengerGlobal import *
 from toontown.distributed import ToontownClientRepository
 cr = ToontownClientRepository.ToontownClientRepository(serverVersion, launcher)
+cr.setDeferInterval(1)
 cr.music = music
 del music
 base.initNametagGlobals()

@@ -4,6 +4,8 @@ TreasureTT = 0
 TreasureDD = 1
 TreasureDG = 2
 TreasureBR = 3
+TreasureMM = 4
+TreasureDL = 5
 
 TreasureModels = {
     TreasureTT: (
@@ -20,6 +22,14 @@ TreasureModels = {
     ),
     TreasureBR: (
         'phase_8/models/props/snowflake_treasure',
+        'phase_4/audio/sfx/SZ_DD_treasure.ogg',
+    ),
+    TreasureMM: (
+        'phase_6/models/props/music_treasure',
+        'phase_4/audio/sfx/SZ_DD_treasure.ogg',
+    ),
+    TreasureDL: (
+        'phase_8/models/props/zzz_treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
 }
@@ -137,5 +147,55 @@ SafeZoneTreasureSpawns = {
         ],
         10, # Rate
         2 # Maximum
+    ),
+    ToontownGlobals.MinniesMelodyland: (
+        TreasureMM, 10, # +10 laff
+        [
+            (118, -39, 3.3),
+            (118, 1, 3.3),
+            (112, -22, 0.8),
+            (108, -74, -4.5),
+            (110, -65, -4.5),
+            (102, 23.5, -4.5),
+            (60, -115, 6.5),
+            (-5, -115, 6.5),
+            (-64, -77, 6.5),
+            (-77, -44, 6.5),
+            (-76, 3, 6.5),
+            (44, 76, 6.5),
+            (136, -96, -13.5),
+            (85, -6.7, -13.5),
+            (60, -95, -14.5),
+            (72, 60, -13.5),
+            (-55, -23, -14.5),
+            (-21, 47, -14.5),
+            (-24, -75, -14.5),
+        ],
+        10, # Rate
+        2 # Maximum
+    ),
+    ToontownGlobals.DonaldsDreamland: (
+        TreasureDL, 12, # +12 laff
+        [
+            (86, 69, -17.4),
+            (34, -48, -16.4),
+            (87, -70, -17.5),
+            (-98, 99, 0.0),
+            (51, 100, 0.0),
+            (-45, -12, -15.0),
+            (9, 8, -15.0),
+            (-24, 64, -17.2),
+            (-100, -99, 0.0),
+            (21, -101, 0.0),
+            (88, -17, -15.0),
+            (32, 70, -17.4),
+            (53, 35, -15.8),
+            (2, -30, -15.5),
+            (-40, -56, -16.8),
+            (-28, 18, -15.0),
+            (-34, -88, 0.0),
+        ],
+        10, # Rate
+        2 #Maximum
     ),
 }

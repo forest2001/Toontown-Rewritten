@@ -2,6 +2,7 @@ from direct.particles.ParticleEffect import *
 import os
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
+import ParticleDefs
 notify = DirectNotifyGlobal.directNotify.newCategory('BattleParticles')
 TutorialParticleEffects = ('gearExplosionBig.ptf', 'gearExplosionSmall.ptf', 'gearExplosion.ptf')
 ParticleNames = ('audit-div', 'audit-five', 'audit-four', 'audit-minus', 'audit-mult', 'audit-one', 'audit-plus', 'audit-six', 'audit-three', 'audit-two', 'blah', 'brainstorm-box', 'brainstorm-env', 'brainstorm-track', 'buzzwords-crash', 'buzzwords-inc', 'buzzwords-main', 'buzzwords-over', 'buzzwords-syn', 'confetti', 'doubletalk-double', 'doubletalk-dup', 'doubletalk-good', 'filibuster-cut', 'filibuster-fiscal', 'filibuster-impeach', 'filibuster-inc', 'jargon-brow', 'jargon-deep', 'jargon-hoop', 'jargon-ipo', 'legalese-hc', 'legalese-qpq', 'legalese-vd', 'mumbojumbo-boiler', 'mumbojumbo-creative', 'mumbojumbo-deben', 'mumbojumbo-high', 'mumbojumbo-iron', 'poundsign', 'schmooze-genius', 'schmooze-instant', 'schmooze-master', 'schmooze-viz', 'roll-o-dex', 'rollodex-card', 'dagger', 'fire', 'snow-particle', 'raindrop', 'gear', 'checkmark', 'dollar-sign', 'spark')
@@ -35,27 +36,16 @@ def getParticle(name):
 
 
 def loadParticleFile(name):
-    global particleSearchPath
-    if particleSearchPath == None:
-        particleSearchPath = DSearchPath()
-        for phase in ['3.5', '4', '5', '8', '9']:
-            particleSearchPath.appendDirectory(Filename('phase_%s/etc' % phase))
-            if __debug__:
-                particleSearchPath.appendDirectory(Filename('resources/phase_%s/etc' % phase))
+    assert name.endswith('.ptf')
+    name = name[:-4] # Strip .ptf
+    particleFunc = ParticleDefs.ParticleTable[name]
 
-    pfile = Filename(name)
-    found = vfs.resolveFilename(pfile, particleSearchPath)
-    if not found:
-        notify.warning('loadParticleFile() - no path: %s' % name)
-        return
-    notify.debug('Loading particle file: %s' % pfile)
     effect = ParticleEffect()
-    effect.loadConfig(pfile)
+    particleFunc(effect)
     return effect
 
 
 def createParticleEffect(name = None, file = None, numParticles = None, color = None):
-    return ParticleEffect() # TODO: PARTICLETODO
     if not name:
         fileName = file + '.ptf'
         return loadParticleFile(fileName)

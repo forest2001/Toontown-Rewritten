@@ -499,6 +499,7 @@ dclass DistributedToon : DistributedPlayer {
   setTrophyScore(uint16) broadcast ownrecv ram;
   setTeleportAccess(uint32array = {}) required ownrecv db;
   checkTeleportAccess(uint16) airecv ownsend;
+  setTeleportOverride(uint8) clsend airecv;
   battleSOS(uint32) ownrecv clsend;
   teleportQuery(uint32) ownrecv clsend;
   teleportResponse(uint32, int8, uint32, uint32, uint32) ownrecv clsend;

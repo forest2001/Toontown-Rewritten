@@ -1143,7 +1143,7 @@ class DNALoader:
         self.data.traverse(self.nodePath, self.data.getDnaStorage())
         if self.nodePath.getChild(0).getNumChildren() == 0:
             return None
-        return self.nodePath.getChild(0).getChild(0).getChild(0)
+        return self.nodePath.getChild(0).getChild(0)
     def getData(self):
         return self.data    
 

@@ -59,6 +59,7 @@ if base.wantKarts:
     from toontown.racing.KartDNA import *
 if (__debug__):
     import pdb
+from otp.ai.MagicWordGlobal import *
 
 class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
@@ -2600,3 +2601,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             module += chr(ic)
 
         self.sendUpdate('pingresp', [module])
+   
+@magicWord(category=CATEGORY_MODERATION)
+def globaltp():
+    spellbook.getInvoker().sendUpdate('setTeleportOverride', [1])
+    base.localAvatar.setTeleportAccess([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
+    return "Global teleport activated for the current session."
