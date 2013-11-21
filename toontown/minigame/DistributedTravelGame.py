@@ -210,6 +210,14 @@ class DistributedTravelGame(DistributedMinigame):
         rootInfo = TravelGameGlobals.BoardLayouts[self.boardIndex][0]
         rootX, rootY, rootZ = rootInfo['pos']
         startX = rootX - TravelGameGlobals.xInc
+
+        tempModel = loader.loadModel('phase_4/models/minigames/trolley_game_turntable')
+        tunnel = tempModel.find('**/tunnel1')
+        tunnel.reparentTo(render)
+        tunnel.setH(180)
+        tunnel.setPos(startX, rootY, rootZ)
+        tempModel.removeNode()
+
         trainTrack = self.loadTrainTrack(startX, rootY, rootX, rootY)
         self.extraTrainTracks.append(trainTrack)
         tunnelX = None
