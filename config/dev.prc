@@ -24,3 +24,5 @@ want-pets #f
 want-news-page #f
 want-news-tab #f
 want-housing #f
+
+force-holiday 6
