@@ -4382,7 +4382,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.b_setFishingRod(2)
 
         # They need bigger jellybean jars to hold all of their money:
-        self.b_setMaxMoney(120)
+        if self.getMaxMoney()<120: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
+            self.b_setMaxMoney(120)
 
         # Unlock all of the emotes they should have during alpha:
         emotes = list(self.getEmoteAccess())
