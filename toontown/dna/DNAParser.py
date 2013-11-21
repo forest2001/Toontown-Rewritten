@@ -508,8 +508,6 @@ class DNASign(DNANode):
             decNode = nodePath.find('**/*_front')
         if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/+GeomNode')
-        decEffect = DecalEffect.make()
-        decNode.setEffect(decEffect)
         node = None
         if self.code != '':
             node = dnaStorage.findNode(self.code)
