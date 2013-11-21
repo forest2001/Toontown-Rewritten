@@ -519,7 +519,7 @@ class DNASign(DNANode):
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
         node.getNode(0).setEffect(DecalEffect.make())
-        node.setDepthWrite(False, 0)
+        node.setDepthOffset(50)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
         for child in self.children:
