@@ -903,11 +903,6 @@ class DNADoor(DNAGroup):
         rightDoor.wrtReparentTo(parentNode, 0)
         leftDoor.wrtReparentTo(parentNode, 0)
         
-        rightDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        rightHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        
         rightDoor.setColor(color, 0)
         leftDoor.setColor(color, 0)
         leftHole.setColor((0,0,0,1), 0)
