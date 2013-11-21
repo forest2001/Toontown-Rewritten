@@ -2421,6 +2421,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def b_setMaxMoney(self, maxMoney):
         self.d_setMaxMoney(maxMoney)
         self.setMaxMoney(maxMoney)
+        if self.getMoney() > maxMoney:
+            self.b_setBankMoney(self.bankMoney + (self.getMoney() - maxMoney))
+            self.b_setMoney(maxMoney)
 
     def d_setMaxMoney(self, maxMoney):
         self.sendUpdate('setMaxMoney', [maxMoney])
