@@ -233,6 +233,11 @@ class DistributedTravelGame(DistributedMinigame):
                 tunnel.wrtReparentTo(trainTrack)
                 self.tunnels[key] = tunnel
 
+        self.clipPlane = render.attachNewNode(PlaneNode('clipPlane'))
+        self.clipPlane.setR(-90)
+        self.clipPlane.setX(tunnelX)
+        self.trolleyCar.setClipPlane(self.clipPlane)
+
         turnTable.removeNode()
         self.loadGui()
         self.introMovie = self.getIntroMovie()
@@ -308,6 +313,8 @@ class DistributedTravelGame(DistributedMinigame):
         del self.gameBoard
         self.sky.removeNode()
         del self.sky
+        self.clipPlane.removeNode()
+        del self.clipPlane
         self.trolleyCar.removeNode()
         del self.trolleyCar
         for key in self.trainSwitches.keys():
