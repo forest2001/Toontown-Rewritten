@@ -4,7 +4,9 @@ from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
 from toontown.racing.DistributedGagAI import DistributedGagAI
 from toontown.racing import RaceGlobals
 from direct.distributed.ClockDelta import *
+from otp.ai.MagicWordGlobal import *
 from direct.fsm.FSM import FSM
+
 import random
 
 class DistributedRaceAI(DistributedObjectAI, FSM):
@@ -19,10 +21,12 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.raceType = 0
         self.circuitLoop = []
         self.avatars = []
+        self.finishedAvatars = []
         self.startingPlaces = []
         self.avatarKarts = []
         self.lapCount = 1
         self.gags = {}
+        self.avatarProgress = {}
     
     def generate(self):
         self.request('Join')
@@ -53,10 +57,12 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         pass
         
     def enterStart(self):
+        self.startTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime())
         self.d_startRace()
         for avatarKart in self.avatarKarts:
             kart = self.air.doId2do[avatarKart[1]]
             kart.sendUpdate('setInput', [1])
+            self.avatarProgress[avatarKart[0]] = 0
     
     def exitStart(self):
         pass
@@ -207,10 +213,96 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def racerLeft(self, todo0):
         pass
 
-    def heresMyT(self, todo0, todo1, todo2, todo3):
-        pass
+    def heresMyT(self, avId, laps, currentLapT, timestamp):
+        realAvId = self.air.getAvatarIdFromSender()
+        if not avId == realAvId:
+            self.air.writeServerEvent('suspicious', realAvId, 'Toon tried to send a message as another toon!')
+            return
+        if not avId in self.avatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon not in race tried to send update to race!')
+            return
+        if laps == self.lapCount:
+            self.avatarFinished(avId)
+            return
+        self.avatarProgress[avId] = laps + currentLapT
 
-    def requestThrow(self, todo0, todo1, todo2):
+    def avatarFinished(self, avId):
+        self.finishedAvatars.append(avId)
+        place = len(self.finishedAvatars) - 1
+        entryFee = RaceGlobals.getEntryFee(self.trackId, self.raceType)
+        bonus = 0
+        totalTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime()) - self.startTime
+        qualify = False
+        if totalTime < RaceGlobals.getQualifyingTime(self.trackId):
+            qualify = True
+        if self.raceType == Practice:
+            winnings = RaceGlobals.PracticeWinnings
+            trophies = []
+        else: 
+            winnings = entryFee*RaceGlobals.Winnings[place]
+            trophies = self.calculateTrophies(avId, place == 0, qualify, totalTime)
+        av.b_setTickets(av.getTickets() + winnings)
+        if av.getTickets() > RaceGlobals.MaxTickets:
+            av.b_setTickets(RaceGlobals.MaxTickets)
+        self.sendUpdate('setPlace', [avId, totalTime, place, entryFee, qualify, winnings, bonus, trophies, [], 0])
+    
+    def calculateTrophies(self, avId, won, qualify, time):
+        av = self.air.doId2do[avId]
+        kartingHistory = av.getKartingHistory()
+        avTrophies = av.getKartingTrophies()
+        numTrophies = 0
+        for i in range(30):
+            if avTrophies[i] != 0:
+                numTrophies += 1
+        oldLaffBoost = int(numTrophies/10)
+        genre = RaceGlobals.getTrackGenre(self.trackId)
+        trophies = []
+        if won:
+            kartingHistory[genre] += 1
+            kartingHistory[3] += 1
+            if kartingHistory[3] > RaceGlobals.TotalWonRaces:
+                avTrophies[RaceGlobals.TotalWins] = 1
+                trophies.append(RaceGlobals.TotalWins)
+            for i in range(3):
+                if kartingHistory[genre] >= RaceGlobals.WonRaces[i] and avTrophies[RaceGlobals.AllWinsList[genre][i]] != 1:
+                    avTrophies[RaceGlobals.AllWinsList[genre][i]] = 1
+                    trophies.append(RaceGlobals.AllWinsList[genre][i])
+        if qualify:
+            kartingHistory[genre + 4] += 1
+            kartingHistory[7] += 1
+            if kartingHistory[7] >= RaceGlobals.TotalQualifiedRaces and avTrophies[RaceGlobals.TotalQuals] != 1:
+                avTrophies[RaceGlobals.TotalQuals] = 1
+                trophies.append(RaceGlobals.TotalQuals)
+            for i in range(3):
+                if kartingHistory[genre + 4] >= RaceGlobals.QualifiedRaces[i] and avTrophies[RaceGlobals.AllQualsList[genre][i]] != 1:
+                    avTrophies[RaceGlobals.AllQualsList[genre][i]] = 1
+                    trophies.append(RaceGlobals.AllQualsList[genre][i])
+        pKartingBest = av.getKartingPersonalBestAll()
+        gTourTrophy = True
+        for bestTime in pKartingBest:
+            if not bestTime:
+                gTourTrophy = False
+        if gTourTrophy:
+            for bestTime in pKartingBest2:
+                if not bestTime:
+                    gTourTrophy = False
+            if gTourTrophy:
+                if avTrophies[RaceGlobals.GrandTouring] != 1:
+                    avTrophies[RaceGlobals.GrandTouring] = 1
+                    trophies.append(RaceGlobals.GrandTouring)
+        newLaffBoost = int((len(trophies) + numTrophies)/10)
+        if newLaffBoost - oldLaffBoost != 0:
+            for i in range(newLaffBoost):
+                if avTrophies[RaceGlobals.TrophyCups[i]] != 1:
+                    avTrophies[RaceGlobals.TrophyCups[i]] = 1
+                    trophies.append(RaceGlobals.TrophyCups[i])
+            av.b_setMaxHp(av.getMaxHp() + newLaffBoost - oldLaffBoost)
+            av.toonUp(av.getMaxHp())
+        av.b_setKartingTrophies(avTrophies)
+        return trophies
+
+    def requestThrow(self, x, y, z):
+        #TODO - perhaps check actual distance?
         pass
 
     def requestKart(self):
