@@ -26,7 +26,6 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         self.trackId, self.trackType = [None, None]
         self.lastTime = globalClockDelta.getRealNetworkTime()
         self.moviesPlaying = 0
-        self.startingBlocks = []
         self.index = -1
         self.nameType = 'urban'
         
@@ -109,15 +108,6 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
-
-        
-     
-    def addStartingBlock(self, block):
-        self.startingBlocks.append(block)
-        
-    def removeStartingBlock(self, block):
-        if self.startingBlocks.count(block):
-            self.startingBlocks.remove(block)
 
     def setState(self, state, timeStamp):
         self.lastTime = globalClockDelta.getRealNetworkTime()

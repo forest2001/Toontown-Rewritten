@@ -1,7 +1,8 @@
 from toontown.hood import HoodAI
 from toontown.dna.DNAParser import DNAData
 from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
-from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI
+from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
+from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI, DistributedViewingBlockAI
 from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopInteriorAI
 from toontown.toon import NPCToons
@@ -88,5 +89,23 @@ class GSHoodAI(HoodAI.HoodAI):
                     startingBlock.setPadLocationId(index)
                     startingBlock.generateWithRequired(self.HOOD)
                     pad.addStartingBlock(startingBlock)
+        elif group.getName()[:11] == 'viewing_pad':
+            pad = DistributedViewPadAI(self.air)
+            pad.setArea(self.HOOD)
+            pad.generateWithRequired(self.HOOD)
+            for i in range(group.getNumChildren()):
+                posSpot = group.at(i)
+                if posSpot.getName()[:14] == 'starting_block':
+                    spotIndex = int(posSpot.getName()[15:])
+                    x, y, z = posSpot.getPos()
+                    h, p, r = posSpot.getHpr()
+                    startingBlock = DistributedViewingBlockAI(self.air)
+                    startingBlock.setPosHpr(x, y, z, h, p, r)
+                    startingBlock.setPadDoId(pad.getDoId())
+                    startingBlock.setPadLocationId(0)
+                    #padLocationId is only used for racing pads... setting this like above causes the position to be wrong
+                    startingBlock.generateWithRequired(self.HOOD)
+                    pad.addStartingBlock(startingBlock)
+
         for i in range(group.getNumChildren()):
             self.createObjects(group.at(i))
