@@ -4411,12 +4411,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         self.b_setEmoteAccess(emotes)
         
-        if self.savedCheesyEffect != 16:
-            self.b_setCheesyEffect(16, 0, 0)
+        #if self.savedCheesyEffect != 16:
+            #self.b_setCheesyEffect(16, 0, 0)
         
         #For when we remove that stupid Roger Dog >:C
-        #if self.savedCheesyEffect == 16:
-            #self.b_setCheesyEffect(0, 0, 0)
+        if self.savedCheesyEffect == 16:
+            self.b_setCheesyEffect(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
