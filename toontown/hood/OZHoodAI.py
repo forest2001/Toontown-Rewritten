@@ -5,4 +5,4 @@ class OZHoodAI(HoodAI):
     HOOD = ToontownGlobals.OutdoorZone
     
     def createSafeZone(self):
-        HoodAI.createTreasurePlanner()
+        HoodAI.createTreasurePlanner(self)
