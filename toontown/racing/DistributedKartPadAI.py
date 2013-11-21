@@ -25,7 +25,10 @@ class DistributedKartPadAI(DistributedObjectAI):
 
     def addStartingBlock(self, block):
         self.startingBlocks.append(block)
-        
+    
+    def updateMovieState(self):
+        pass
+    
     def removeStartingBlock(self, block):
         if self.startingBlocks.count(block):
             self.startingBlocks.remove(block)

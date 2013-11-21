@@ -51,6 +51,7 @@ class DistributedStartingBlockAI(DistributedObjectAI):
             return
         self.b_setOccupied(avId)
         self.b_setMovie(KartGlobals.ENTER_MOVIE)
+        
     def rejectEnter(self, errCode):
         pass
 
@@ -72,6 +73,7 @@ class DistributedStartingBlockAI(DistributedObjectAI):
         self.d_setOccupied(avId)
         
     def setMovie(self, movie):
+        self.pad.updateMovieState()
         self.currentMovie = movie
     
     def d_setMovie(self, movie):

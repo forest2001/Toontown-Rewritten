@@ -25,7 +25,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         self.air = air
         self.trackId, self.trackType = [None, None]
         self.lastTime = globalClockDelta.getRealNetworkTime()
-        self.moviesPlaying = 0
+        self.shouldStart = False
         self.index = -1
         self.nameType = 'urban'
         
@@ -42,6 +42,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
     def enterWaitEmpty(self):
         for block in self.startingBlocks:
             block.b_setOccupied(0)
+        self.shouldStart = False
         taskMgr.doMethodLater(30, DistributedRacePadAI.changeTrack, 'changeTrack%i' % self.doId, [self])
     
     def exitWaitEmpty(self):
@@ -51,7 +52,8 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         taskMgr.doMethodLater(30, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
     
     def exitWaitCountdown(self):
-        taskMgr.remove('startRace%i' % self.doId)
+        if self.newState != 'WaitBoarding':
+            taskMgr.remove('startRace%i' % self.doId)
         
     def enterWaitBoarding(self):
         pass
@@ -82,13 +84,21 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
             self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
     
     def updateMovieState(self):
-        if self.getCurrentState() == 'WaitBoarding':
+        if self.state == 'WaitBoarding' and self.shouldStart:
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
                     return
+            self.request('WaitCountdown')
             self.startRace()
+        else:
+            for block in self.startingBlocks:
+                if block.currentMovie != 0:
+                    self.request('WaitBoarding')
+                    return
             
     def startRace(self):
+        if self.state != 'WaitCountdown':
+            self.shouldStart = True
         self.b_setState('AllAboard', globalClockDelta.getRealNetworkTime())
         
     def createRace(self):
@@ -108,6 +118,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
+        self.shouldStart = False
 
     def setState(self, state, timeStamp):
         self.lastTime = globalClockDelta.getRealNetworkTime()
