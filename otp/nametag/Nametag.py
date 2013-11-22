@@ -45,9 +45,6 @@ class Nametag(ClickablePopup):
     def tick(self):
         pass # Does nothing by default.
 
-    def isVisible3d(self):
-        return False # Only 3D nametags can be visible3d.
-
     def update(self):
         if self.colorCode in NAMETAG_COLORS:
             cc = self.colorCode
