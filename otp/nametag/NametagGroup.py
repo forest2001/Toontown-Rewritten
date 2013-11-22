@@ -40,6 +40,11 @@ class NametagGroup:
         self.addNametag(self.nametag2d)
         self.addNametag(self.nametag3d)
 
+        self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
+
+    def destroy(self):
+        taskMgr.remove(self.tickTask)
+
     def getNametag2d(self):
         return self.nametag2d
 
@@ -140,6 +145,9 @@ class NametagGroup:
         tag.icon = self.icon
 
         tag.update()
+
+    def __tickTask(self, task):
+        return task.cont
 
     def updateTags(self):
         for nametag in self.nametags:
