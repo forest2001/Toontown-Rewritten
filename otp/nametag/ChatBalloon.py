@@ -10,9 +10,9 @@ class ChatBalloon:
 
     def __init__(self, model):
         self.model = model
-        self.wordWrap = 10.0
 
-    def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1)):
+    def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1),
+                 wordWrap = 10.0):
         root = NodePath('balloon')
 
         # Add balloon geometry:
@@ -28,7 +28,7 @@ class ChatBalloon:
         # Render the text into a TextNode, using the font:
         t = root.attachNewNode(TextNode('text'))
         t.node().setFont(font)
-        t.node().setWordwrap(self.wordWrap)
+        t.node().setWordwrap(wordWrap)
         t.node().setText(text)
         t.node().setTextColor(textColor)
 

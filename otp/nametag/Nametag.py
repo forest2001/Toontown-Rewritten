@@ -17,6 +17,7 @@ class Nametag(ClickablePopup):
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
         self.wordWrap = 7.5
+        self.chatWordWrap = 10.0
 
         self.font = None
         self.name = ''
@@ -65,7 +66,7 @@ class Nametag(ClickablePopup):
 
     def showBalloon(self, balloon, text):
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        balloon = balloon.generate(text, self.font, balloonColor=color)
+        balloon = balloon.generate(text, self.font, balloonColor=color, wordWrap=self.chatWordWrap)
         balloon.reparentTo(self.innerNP)
 
     def showThought(self):

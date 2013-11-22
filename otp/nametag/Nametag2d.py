@@ -11,6 +11,8 @@ class Nametag2d(Nametag, MarginPopup):
 
         self.contents = self.CName|self.CSpeech
 
+        self.chatWordWrap = 7.5
+
         self.innerNP.setScale(self.SCALE_2D)
 
     def showBalloon(self, balloon, text):
