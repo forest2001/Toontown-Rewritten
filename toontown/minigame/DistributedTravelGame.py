@@ -212,10 +212,10 @@ class DistributedTravelGame(DistributedMinigame):
         startX = rootX - TravelGameGlobals.xInc
 
         tempModel = loader.loadModel('phase_4/models/minigames/trolley_game_turntable')
-        tunnel = tempModel.find('**/tunnel1')
-        tunnel.reparentTo(render)
-        tunnel.setH(180)
-        tunnel.setPos(startX, rootY, rootZ)
+        self.entryTunnel = tempModel.find('**/tunnel1')
+        self.entryTunnel.reparentTo(render)
+        self.entryTunnel.setH(180)
+        self.entryTunnel.setPos(startX, rootY, rootZ)
         tempModel.removeNode()
 
         trainTrack = self.loadTrainTrack(startX, rootY, rootX, rootY)
@@ -323,6 +323,8 @@ class DistributedTravelGame(DistributedMinigame):
         del self.sky
         self.clipPlane.removeNode()
         del self.clipPlane
+        self.entryTunnel.removeNode()
+        del self.entryTunnel
         self.trolleyCar.removeNode()
         del self.trolleyCar
         for key in self.trainSwitches.keys():
