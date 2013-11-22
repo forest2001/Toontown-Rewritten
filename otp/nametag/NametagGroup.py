@@ -36,16 +36,20 @@ class NametagGroup:
         self.chatString = ''
         self.chatFlags = 0
 
+        self.manager = None
+
         self.nametags = []
         self.addNametag(self.nametag2d)
         self.addNametag(self.nametag3d)
 
-        self.visible3d = False # Is a 3D nametag visible, or do we need a 2D popup?
+        self.visible3d = True # Is a 3D nametag visible, or do we need a 2D popup?
 
         self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
 
     def destroy(self):
         taskMgr.remove(self.tickTask)
+        if self.manager is not None:
+            self.unmanage(self.manager)
 
     def getNametag2d(self):
         return self.nametag2d
@@ -160,7 +164,7 @@ class NametagGroup:
             self.visible3d = visible3d
             for nametag in self.nametags:
                 if isinstance(nametag, MarginPopup):
-                    nametag.setVisible(True)
+                    nametag.setVisible(not visible3d)
 
         return task.cont
 
@@ -171,12 +175,22 @@ class NametagGroup:
     def addNametag(self, nametag):
         self.nametags.append(nametag)
         self.updateNametag(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.manage(manager)
 
     def removeNametag(self, nametag):
         self.nametags.remove(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.unmanage(manager)
 
     def manage(self, manager):
-        pass
+        self.manager = manager
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.manage(manager)
 
     def unmanage(self, manager):
-        pass
+        self.manager = None
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.unmanage(manager)
