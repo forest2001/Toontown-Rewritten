@@ -46,11 +46,6 @@ class Nametag3d(Nametag):
 
         self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
 
-    def isVisible3d(self):
-        pos = self.innerNP.getPos(NametagGlobals.camera)
-
-        return NametagGlobals.camera.node().getLens().project(pos, Point2())
-
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d
 

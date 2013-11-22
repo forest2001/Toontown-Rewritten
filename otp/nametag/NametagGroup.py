@@ -153,12 +153,12 @@ class NametagGroup:
         tag.update()
 
     def __tickTask(self, task):
-        visible3d = False
-
         for nametag in self.nametags:
             nametag.tick()
-            if not visible3d and nametag.isVisible3d():
-                visible3d = True
+
+        if self.avatar is None: return
+        pos = self.avatar.getPos(NametagGlobals.camera)
+        visible3d = NametagGlobals.camera.node().getLens().project(pos, Point2())
 
         if visible3d ^ self.visible3d:
             self.visible3d = visible3d
