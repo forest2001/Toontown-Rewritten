@@ -36,10 +36,15 @@ class Nametag3d(Nametag):
 
     def tick(self):
         # Attempt to maintain the same on-screen size.
-        distance = self.innerNP.getPos(base.cam).length()
+        distance = self.innerNP.getPos(NametagGlobals.camera).length()
         distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
 
         self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
+
+    def isVisible3d(self):
+        pos = self.innerNP.getPos(NametagGlobals.camera)
+
+        return NametagGlobals.camera.node().getLens().project(pos, Point2())
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d
