@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 
 class ChatBalloon:
-    TEXT_SHIFT = (0.1, 0., 1.1)
+    TEXT_SHIFT = (0.1, -0.05, 1.1)
     TEXT_SHIFT_PROP = 0.08
     NATIVE_WIDTH = 10.0
     MIN_WIDTH = 2.5
@@ -38,8 +38,6 @@ class ChatBalloon:
         # held by the chat bubble anyway, and the text renders after the bubble
         # so there's no risk of the bubble overwriting the text's pixels.
         t.setAttrib(DepthWriteAttrib.make(0))
-        t.setBin('fixed', 0)
-        t.setDepthOffset(100)
         t.setPos(self.TEXT_SHIFT)
         t.setX(t, self.TEXT_SHIFT_PROP*width)
         t.setZ(t, height)
