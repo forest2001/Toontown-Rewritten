@@ -2,9 +2,10 @@ from Nametag import *
 import NametagGlobals
 from NametagConstants import *
 from pandac.PandaModules import *
+import math
 
 class Nametag3d(Nametag):
-    SCALING_FACTOR = 0.02
+    SCALING_FACTOR = 0.05
     SCALING_MINDIST = 1
     SCALING_MAXDIST = 50
 
@@ -38,7 +39,7 @@ class Nametag3d(Nametag):
         distance = self.innerNP.getPos(base.cam).length()
         distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
 
-        self.innerNP.setScale(distance*self.SCALING_FACTOR)
+        self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d
