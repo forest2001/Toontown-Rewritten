@@ -204,7 +204,7 @@ class DistributedTravelGame(DistributedMinigame):
                 trainTrack = self.loadTrainTrack(x1, y1, x2, y2, depthOffset)
                 trainTrack.reparentTo(hidden)
                 self.trainTracks[linkKey] = trainTrack
-                depthOffset += 1
+                depthOffset += 3
             switchModel.setDepthOffset(depthOffset)
 
         rootInfo = TravelGameGlobals.BoardLayouts[self.boardIndex][0]
