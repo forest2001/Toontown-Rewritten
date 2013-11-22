@@ -227,6 +227,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.avatarProgress[avId] = laps + currentLapT
 
     def avatarFinished(self, avId):
+        av = self.air.doId2do.get(avId)
         self.finishedAvatars.append(avId)
         place = len(self.finishedAvatars) - 1
         entryFee = RaceGlobals.getEntryFee(self.trackId, self.raceType)
@@ -235,9 +236,10 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         qualify = False
         if totalTime < RaceGlobals.getQualifyingTime(self.trackId):
             qualify = True
-        if self.raceType == Practice:
+        if self.raceType == 'Practice':
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
+            print "was a practice race!"
         else: 
             winnings = entryFee*RaceGlobals.Winnings[place]
             trophies = self.calculateTrophies(avId, place == 0, qualify, totalTime)
