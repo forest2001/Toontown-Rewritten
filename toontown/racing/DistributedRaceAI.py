@@ -239,7 +239,6 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         if self.raceType == 'Practice':
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
-            print "was a practice race!"
         else: 
             winnings = entryFee*RaceGlobals.Winnings[place]
             trophies = self.calculateTrophies(avId, place == 0, qualify, totalTime)
