@@ -40,6 +40,8 @@ class NametagGroup:
         self.addNametag(self.nametag2d)
         self.addNametag(self.nametag3d)
 
+        self.visible3d = False # Is a 3D nametag visible, or do we need a 2D popup?
+
         self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
 
     def destroy(self):
@@ -147,6 +149,19 @@ class NametagGroup:
         tag.update()
 
     def __tickTask(self, task):
+        visible3d = False
+
+        for nametag in self.nametags:
+            nametag.tick()
+            if not visible3d and nametag.isVisible3d():
+                visible3d = True
+
+        if visible3d ^ self.visible3d:
+            self.visible3d = visible3d
+            for nametag in self.nametags:
+                if isinstance(nametag, MarginPopup):
+                    nametag.setVisible(True)
+
         return task.cont
 
     def updateTags(self):

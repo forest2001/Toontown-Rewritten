@@ -4,7 +4,10 @@ from NametagConstants import *
 from pandac.PandaModules import *
 
 class Nametag3d(Nametag):
-    CONTENTS_SCALE = 0.17
+    SCALING_FACTOR = 0.02
+    SCALING_MINDIST = 1
+    SCALING_MAXDIST = 50
+
     BILLBOARD_OFFSET = 3.0
     SHOULD_BILLBOARD = True
 
@@ -15,8 +18,6 @@ class Nametag3d(Nametag):
 
         self.bbOffset = self.BILLBOARD_OFFSET
         self._doBillboard()
-
-        self.innerNP.setScale(self.CONTENTS_SCALE)
 
     def _doBillboard(self):
         if self.SHOULD_BILLBOARD:
@@ -31,6 +32,13 @@ class Nametag3d(Nametag):
     def setBillboardOffset(self, bbOffset):
         self.bbOffset = bbOffset
         self._doBillboard()
+
+    def tick(self):
+        # Attempt to maintain the same on-screen size.
+        distance = self.innerNP.getPos(base.cam).length()
+        distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
+
+        self.innerNP.setScale(distance*self.SCALING_FACTOR)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d
