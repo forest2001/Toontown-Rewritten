@@ -20,6 +20,9 @@ class GSHoodAI(HoodAI.HoodAI):
         
         self.createObjects(self.dnaData)
         self.createKartShop()
+        
+    def createSafeZone(self):
+        pass #overwrite createSafeZone in HoodAI to prevent 'normal' playground objects from being created.
     
     def createKartShop(self):
         ksInterior = DistributedKartShopInteriorAI(self.air)
