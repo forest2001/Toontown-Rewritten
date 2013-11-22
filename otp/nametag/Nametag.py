@@ -87,9 +87,9 @@ class Nametag(ClickablePopup):
 
         # Disable depth write so the text appears nice and clear, free from
         # z-fighting and bizarre artifacts. The text renders *after* the tag
-        # behind it, due to it being moved to a much later bin, so there's really
+        # behind it, due to it being moved to the fixed bin, so there's really
         # no problem with doing this.
-        t.setBin('gui-popup', 100)
+        t.setBin('fixed', 0)
         t.setDepthOffset(100)
         t.setAttrib(DepthWriteAttrib.make(0))
 
