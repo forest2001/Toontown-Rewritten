@@ -4,7 +4,7 @@ from pandac.PandaModules import *
 
 class Nametag2d(Nametag, MarginPopup):
     SCALE_2D = 0.3
-    TRANSPARENCY = 0.5
+    CHAT_ALPHA = 0.5
 
     def __init__(self):
         Nametag.__init__(self)
@@ -32,10 +32,6 @@ class Nametag2d(Nametag, MarginPopup):
 
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
-
-        # Also, the balloon should be transparent...
-        balloon.setColorScale(1, 1, 1, self.TRANSPARENCY)
-        balloon.setTransparency(1)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon2d
