@@ -114,6 +114,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.nametag != None:
             self.nametag.unmanage(base.marginManager)
             self.nametag.setAvatar(NodePath())
+            self.nametag.destroy()
             self.nametag = None
         return
 

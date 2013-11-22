@@ -93,6 +93,7 @@ class Avatar(Actor, ShadowCaster):
             del self.__font
             del self.style
             del self.soundChatBubble
+            self.nametag.destroy()
             del self.nametag
             self.nametag3d.removeNode()
             ShadowCaster.delete(self)
