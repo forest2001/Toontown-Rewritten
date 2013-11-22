@@ -36,6 +36,8 @@ class NametagGroup:
         self.chatString = ''
         self.chatFlags = 0
 
+        self.objectCode = None
+
         self.manager = None
 
         self.nametags = []
@@ -119,6 +121,18 @@ class NametagGroup:
         if chatFlags&CFTimeout:
             self._startChatTimeout()
 
+    def setContents(self, contents):
+        # This function is a little unique, it's meant to override contents on
+        # EXISTING nametags only:
+        for tag in self.nametags:
+            tag.setContents(contents)
+
+    def setObjectCode(self, objectCode):
+        self.objectCode = objectCode
+
+    def getObjectCode(self):
+        return self.objectCode
+
     def _startChatTimeout(self):
         length = len(self.chatString)
         timeout = min(max(length*self.CHAT_TIMEOUT_PROP, self.CHAT_TIMEOUT_MIN), self.CHAT_TIMEOUT_MAX)
@@ -142,7 +156,7 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
-        tag.displayName = self.displayName
+        tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
         tag.chatString = self.chatString
