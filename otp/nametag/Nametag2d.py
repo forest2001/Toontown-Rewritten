@@ -4,6 +4,7 @@ from pandac.PandaModules import *
 
 class Nametag2d(Nametag, MarginPopup):
     SCALE_2D = 0.3
+    TRANSPARENCY = 0.5
 
     def __init__(self):
         Nametag.__init__(self)
@@ -18,6 +19,23 @@ class Nametag2d(Nametag, MarginPopup):
     def showBalloon(self, balloon, text):
         text = '%s: %s' % (self.displayName, text)
         Nametag.showBalloon(self, balloon, text)
+
+        # Next, center the balloon in the cell:
+        balloon = NodePath.anyPath(self).find('*/balloon')
+
+        # Calculate the center of the TextNode.
+        text = balloon.find('**/+TextNode')
+        t = text.node()
+        left, right, bottom, top = t.getLeft(), t.getRight(), t.getBottom(), t.getTop()
+        center = self.innerNP.getRelativePoint(text,
+                                               ((left+right)/2., 0, (bottom+top)/2.))
+
+        # Next translate the balloon along the inverse.
+        balloon.setPos(balloon, -center)
+
+        # Also, the balloon should be transparent...
+        balloon.setColorScale(1, 1, 1, self.TRANSPARENCY)
+        balloon.setTransparency(1)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon2d
