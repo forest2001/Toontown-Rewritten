@@ -1,5 +1,6 @@
 from Nametag3d import *
 
 class NametagFloat3d(Nametag3d):
-    CONTENTS_SCALE = 1.0
+    WANT_DYNAMIC_SCALING = False
+    SCALING_FACTOR = 1.0
     SHOULD_BILLBOARD = True

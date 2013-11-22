@@ -5,6 +5,7 @@ from pandac.PandaModules import *
 import math
 
 class Nametag3d(Nametag):
+    WANT_DYNAMIC_SCALING = True
     SCALING_FACTOR = 0.05
     SCALING_MINDIST = 1
     SCALING_MAXDIST = 50
@@ -35,6 +36,10 @@ class Nametag3d(Nametag):
         self._doBillboard()
 
     def tick(self):
+        if not self.WANT_DYNAMIC_SCALING:
+            self.innerNP.setScale(self.SCALING_FACTOR)
+            return
+
         # Attempt to maintain the same on-screen size.
         distance = self.innerNP.getPos(NametagGlobals.camera).length()
         distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
