@@ -465,7 +465,8 @@ class RaceGUI:
             racer.update(finished=True)
             racer.disable()
             self.endPanel.displayRacer(place, entryFee, qualify, winnings, trackId, bonus, trophies, racer.face, base.cr.doId2do[avId].getName(), totalTime, circuitPoints, circuitTime)
-            self.directObjList.remove(racer.face)
+            if racer.face in self.directObjList:
+                self.directObjList.remove(racer.face)
             if avId == localAvatar.doId:
                 self.disableRaceMode()
                 self.enableResultMode()
