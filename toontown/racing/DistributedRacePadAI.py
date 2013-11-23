@@ -49,7 +49,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         taskMgr.remove('changeTrack%i' % self.doId)
         
     def enterWaitCountdown(self):
-        taskMgr.doMethodLater(2, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
+        taskMgr.doMethodLater(30, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
     
     def exitWaitCountdown(self):
         if self.newState != 'WaitBoarding':
@@ -115,7 +115,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setCircuitLoop([])
         race.setAvatars(avatars)
         race.setStartingPlaces(range(len(avatars)))
-        race.setLapCount(1)
+        race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
 
