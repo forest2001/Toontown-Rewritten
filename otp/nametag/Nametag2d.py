@@ -1,18 +1,21 @@
 from Nametag import *
 from otp.margins.MarginPopup import *
 from pandac.PandaModules import *
+import math
 
 class Nametag2d(Nametag, MarginPopup):
     SCALE_2D = 0.25
     CHAT_ALPHA = 0.5
+    ARROW_OFFSET = -1.0
 
     def __init__(self):
         Nametag.__init__(self)
         MarginPopup.__init__(self)
 
         self.contents = self.CName|self.CSpeech
-
         self.chatWordWrap = 7.5
+
+        self.arrow = None
 
         self.innerNP.setScale(self.SCALE_2D)
 
@@ -37,11 +40,46 @@ class Nametag2d(Nametag, MarginPopup):
         # popup system:
         self.setPriority(1)
 
+        # Remove our pointer arrow:
+        if self.arrow is not None:
+            self.arrow.removeNode()
+        self.arrow = None
+
     def showName(self):
         Nametag.showName(self)
 
         # Revert our priority back to basic:
         self.setPriority(0)
+
+        # Tack on an arrow:
+        t = self.innerNP.find('**/+TextNode')
+        arrowZ = self.ARROW_OFFSET + t.node().getBottom()
+
+        self.arrow = NametagGlobals.arrowModel.copyTo(self.innerNP)
+        self.arrow.setZ(arrowZ)
+
+    def tick(self):
+        # Update the arrow's pointing.
+        if not self.isDisplayed() or self.arrow is None:
+            return # No arrow or not onscreen.
+
+        if self.avatar is None:
+            return # No avatar, can't be done.
+
+        # Get points needed in calculation:
+        cam = NametagGlobals.camera or base.cam
+        toon = NametagGlobals.toon or cam
+
+        # libotp calculates this using the offset from localToon->avatar, but
+        # the orientation from cam. Therefore, we duplicate it like so:
+        location = self.avatar.getPos(toon)
+        rotation = toon.getQuat(cam)
+
+        camSpacePos = rotation.xform(location)
+        arrowRadians = math.atan2(camSpacePos[0], camSpacePos[1])
+        arrowDegrees = arrowRadians/math.pi*180
+
+        self.arrow.setR(arrowDegrees - 90)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon2d

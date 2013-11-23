@@ -31,6 +31,9 @@ class MarginPopup:
         if self.__manager is not None:
             self.__manager.reorganize()
 
+    def isDisplayed(self):
+        return self._assignedCell is not None
+
     def manage(self, manager):
         self.unmanage(self.__manager)
         self.__manager = manager
