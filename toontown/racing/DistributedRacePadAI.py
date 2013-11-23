@@ -88,17 +88,17 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
                     return
-            self.request('WaitCountdown')
-            self.startRace()
+            self.startRace(True)
         else:
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
                     self.request('WaitBoarding')
                     return
             
-    def startRace(self):
-        if self.state != 'WaitCountdown':
+    def startRace(self, ignore = False):
+        if self.state != 'WaitCountdown' and not ignore:
             self.shouldStart = True
+            return
         self.b_setState('AllAboard', globalClockDelta.getRealNetworkTime())
         
     def createRace(self):
@@ -115,10 +115,9 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setCircuitLoop([])
         race.setAvatars(avatars)
         race.setStartingPlaces(range(len(avatars)))
-        race.setLapCount(3)
+        race.setLapCount(1)
         race.generateWithRequired(self.raceZone)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
-        self.shouldStart = False
 
     def setState(self, state, timeStamp):
         self.lastTime = globalClockDelta.getRealNetworkTime()

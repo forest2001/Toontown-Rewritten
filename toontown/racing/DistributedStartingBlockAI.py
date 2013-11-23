@@ -73,8 +73,8 @@ class DistributedStartingBlockAI(DistributedObjectAI):
         self.d_setOccupied(avId)
         
     def setMovie(self, movie):
-        self.pad.updateMovieState()
         self.currentMovie = movie
+        self.pad.updateMovieState()
     
     def d_setMovie(self, movie):
         self.sendUpdate('setMovie', [movie])
