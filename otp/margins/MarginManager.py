@@ -54,7 +54,7 @@ class MarginManager(PandaNode):
 
         # Next, get all visible popups, sorted by priority:
         popups = list(self.visiblePopups)
-        popups.sort(key=lambda x: x.getPriority())
+        popups.sort(key=lambda x: -x.getPriority())
 
         # We can only display so many popups, so truncate to the number of active
         # margin cells:
