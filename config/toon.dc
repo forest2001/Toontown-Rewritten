@@ -2494,7 +2494,7 @@ dclass DistributedRace : DistributedObject {
 
 dclass DistributedGag : DistributedObject {
   setInitTime(int16) required broadcast ram;
-  setActivateTime(uint16) required broadcast ram;
+  setActivateTime(int16) required broadcast ram;
   setPos(int32/1000, int32/1000, int32/1000) required broadcast ram;
   setRace(uint32) required broadcast ram;
   setOwnerId(uint32) required broadcast ram;
