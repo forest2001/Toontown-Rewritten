@@ -3,7 +3,7 @@ from otp.margins.MarginPopup import *
 from pandac.PandaModules import *
 
 class Nametag2d(Nametag, MarginPopup):
-    SCALE_2D = 0.3
+    SCALE_2D = 0.25
     CHAT_ALPHA = 0.5
 
     def __init__(self):
