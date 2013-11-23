@@ -4,6 +4,7 @@ from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
 from toontown.racing.DistributedGagAI import DistributedGagAI
 from toontown.racing import RaceGlobals
 from direct.distributed.ClockDelta import *
+from toontown.toonbase import TTLocalizer
 from direct.fsm.FSM import FSM
 from direct.task import Task
 
@@ -194,6 +195,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.avatarGags[avatarKart[0]] = 0
             self.currentlyAffectedByAnvil[avatarKart[0]]  = False
 
+
     def b_startRace(self, timeUntilStart):
         self.startRace(timeUntilStart)
         self.d_startRace(timeUntilStart)
@@ -341,18 +343,18 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                     avTrophies[RaceGlobals.AllQualsList[genre][i]] = 1
                     trophies.append(RaceGlobals.AllQualsList[genre][i])
         pKartingBest = av.getKartingPersonalBestAll()
+        trackIndex = TTLocalizer.KartRace_TrackNames.keys().index(self.trackId)
+        if pKartingBest[trackIndex] > time or not pKartingBest[trackIndex]:
+            pKartingBest[trackIndex] = time
+            av.b_setKartingPersonalBest(pKartingBest)
         gTourTrophy = True
         for bestTime in pKartingBest:
             if not bestTime:
                 gTourTrophy = False
         if gTourTrophy:
-            for bestTime in pKartingBest2:
-                if not bestTime:
-                    gTourTrophy = False
-            if gTourTrophy:
-                if avTrophies[RaceGlobals.GrandTouring] != 1:
-                    avTrophies[RaceGlobals.GrandTouring] = 1
-                    trophies.append(RaceGlobals.GrandTouring)
+            if avTrophies[RaceGlobals.GrandTouring] != 1:
+                avTrophies[RaceGlobals.GrandTouring] = 1
+                trophies.append(RaceGlobals.GrandTouring)
         newLaffBoost = int((len(trophies) + numTrophies)/10)
         if newLaffBoost - oldLaffBoost != 0:
             for i in range(newLaffBoost):
