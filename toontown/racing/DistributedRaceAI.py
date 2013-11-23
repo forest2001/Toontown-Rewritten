@@ -369,7 +369,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def requestThrow(self, x, y, z):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to throw a gag in a race they\re not in!')
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to throw a gag in a race they\'re not in!')
         if self.avatarGags[avId] == RaceGlobals.BANANA:
             gag = DistributedGagAI(self.air)
             gag.setRace(self.doId)
