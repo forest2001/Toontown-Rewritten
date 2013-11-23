@@ -5,6 +5,7 @@ from toontown.racing import RaceGlobals
 from direct.fsm.FSM import FSM
 from direct.distributed.ClockDelta import *
 from direct.task import *
+from toontown.racing.KartShopGlobals import KartGlobals
 
 #TODO - change race type
 
