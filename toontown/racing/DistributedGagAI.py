@@ -44,6 +44,6 @@ class DistributedGagAI(DistributedObjectAI):
     def getType(self):
         return self.type
 
-    def hitSomebody(self, todo0, todo1):
-        pass
+    def hitSomebody(self, avId, timestamp):
+        self.requestDelete()
 

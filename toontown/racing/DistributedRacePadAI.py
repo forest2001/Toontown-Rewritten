@@ -49,7 +49,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         taskMgr.remove('changeTrack%i' % self.doId)
         
     def enterWaitCountdown(self):
-        taskMgr.doMethodLater(30, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
+        taskMgr.doMethodLater(2, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
     
     def exitWaitCountdown(self):
         if self.newState != 'WaitBoarding':

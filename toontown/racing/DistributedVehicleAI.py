@@ -105,7 +105,7 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
         #probably should not be kept for any longer than it needs to
         dg = PyDatagram()
         dg.addServerHeader(self.doId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
-        dg.addUint64(accId<<32 | avId)
+        dg.addUint64(accId << 32 | avId)
         self.air.send(dg)
         self.d_setState('C', self.driverId)
 

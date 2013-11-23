@@ -4,13 +4,15 @@ from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
 from toontown.racing.DistributedGagAI import DistributedGagAI
 from toontown.racing import RaceGlobals
 from direct.distributed.ClockDelta import *
-from otp.ai.MagicWordGlobal import *
 from direct.fsm.FSM import FSM
+from direct.task import Task
+
 
 import random
 
 class DistributedRaceAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedRaceAI")
+    AnvilSquishLength = 3 #pulled from client at 2 AM, might be wrong
     
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
@@ -26,10 +28,24 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.avatarKarts = []
         self.lapCount = 1
         self.gags = {}
+        self.avatarGags = {}
+        self.livingGags = []
+        self.currentlyAffectedByAnvil = {}
         self.avatarProgress = {}
     
     def generate(self):
+        for avatar in self.avatars:
+            self.acceptOnce(self.air.getAvatarExitEvent(avatar), self.playerLeave, [avatar])
         self.request('Join')
+        
+    def delete(self):
+        for aK in self.avatarKarts:
+            kart = self.air.doId2do[aK[1]]
+            kart.requestDelete()
+        for gag in self.livingGags:
+            gag.requestDelete()
+        self.air.deallocateZone(self.zoneId)
+        DistributedObjectAI.delete(self)
         
     def enterJoin(self):
         self.beginBarrier('waitingForJoin', self.avatars, 60, self.joinBarrierCallback)
@@ -63,6 +79,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             kart = self.air.doId2do[avatarKart[1]]
             kart.sendUpdate('setInput', [1])
             self.avatarProgress[avatarKart[0]] = 0
+            self.avatarGags[avatarKart[0]] = 0
+            self.currentlyAffectedByAnvil[avatarKart[0]]  = False
     
     def exitStart(self):
         pass
@@ -74,7 +92,9 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.request('Start')
     
     def joinBarrierCallback(self, avatars):
-        self.avatars = avatars
+        for av in self.avatars:
+            if not av in avatars:
+                self.playerLeave(av)
         for av in avatars:
             kart = DistributedVehicleAI(self.air, av)
             kart.generateWithRequired(self.zoneId)
@@ -207,11 +227,37 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def setRaceZone(self, todo0, todo1):
         pass
 
-    def hasGag(self, todo0, todo1, todo2):
-        pass
+    def hasGag(self, slot, requestedGag, index):
+        avId = self.air.getAvatarIdFromSender()
+        if not avId in self.avatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to get gag in a race they\'re not in!')
+            return
+        places = sorted(self.avatarProgress, key=self.avatarProgress.get)
+        avPlace = places.index(avId)
+        gag = self.gags[slot]
+        if not gag[0]:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to pick up a gag that doesn\'t exist!')
+            return
+        gagIndex = gag[1]
+        realGag = RaceGlobals.GagFreq[avPlace][gagIndex]
+        if realGag != requestedGag:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to get the wrong gag!')
+            return
+        self.gags[slot] = [0, 0]
+        self.avatarGags[avId] = requestedGag
 
-    def racerLeft(self, todo0):
-        pass
+    def racerLeft(self, avId):
+        #harv will hate this
+        realAvId = self.air.getAvatarIdFromSender()
+        if realAvId != avId:
+            self.air.writeServerEvent('suspicious', realAvId, 'Toon tried to make another quit race!')
+            return
+        if not avId in self.avatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to leave race they\'re not in!')
+            return
+        self.avatars.remove(avId)
+        if set(self.finishedAvatars) == set(self.avatars) or len(self.avatars) == 0:
+            self.requestDelete()
 
     def heresMyT(self, avId, laps, currentLapT, timestamp):
         realAvId = self.air.getAvatarIdFromSender()
@@ -223,7 +269,6 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             return
         if laps == self.lapCount:
             self.avatarFinished(avId)
-            return
         self.avatarProgress[avId] = laps + currentLapT
 
     def avatarFinished(self, avId):
@@ -246,7 +291,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         if av.getTickets() > RaceGlobals.MaxTickets:
             av.b_setTickets(RaceGlobals.MaxTickets)
         self.sendUpdate('setPlace', [avId, totalTime, place, entryFee, qualify, winnings, bonus, trophies, [], 0])
-    
+
+        
     def calculateTrophies(self, avId, won, qualify, time):
         av = self.air.doId2do[avId]
         kartingHistory = av.getKartingHistory()
@@ -303,8 +349,56 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         return trophies
 
     def requestThrow(self, x, y, z):
-        #TODO - perhaps check actual distance?
-        pass
+        avId = self.air.getAvatarIdFromSender()
+        if not avId in self.avatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to throw a gag in a race they\re not in!')
+        if self.avatarGags[avId] == RaceGlobals.BANANA:
+            gag = DistributedGagAI(self.air)
+            gag.setRace(self.doId)
+            gag.setOwnerId(avId)
+            gag.setPos(x, y, z)
+            gag.setType(0)
+            gag.setInitTime(globalClockDelta.getRealNetworkTime())
+            gag.setActivateTime(globalClockDelta.getRealNetworkTime())
+            gag.generateWithRequired(self.zoneId)
+            self.livingGags.append(gag)
+        elif self.avatarGags[avId] == RaceGlobals.TURBO:
+            pass
+        elif self.avatarGags[avId] == RaceGlobals.ANVIL:
+            places = sorted(self.avatarProgress, key=self.avatarProgress.get)
+            for i in places:
+                if not i in self.finishedAvatars and not self.currentlyAffectedByAnvil[i]:
+                    currAvatar = i
+                    break
+            self.currentlyAffectedByAnvil[avId] = True
+            taskMgr.doMethodLater(AnivilSquishLength, unsquish, 'unsquish-%i' % currAvatar, [self, currAvatar])
+            self.sendUpdate('dropAnvilOn', [avId, currAvatar, globalClockDelta.getRealNetworkTime()])
+        elif self.avatarGags[avId] == RaceGlobals.PIE:
+            places = sorted(self.avatarProgress, key=self.avatarProgress.get)
+            avPlace = places.index(avId)
+            if avPlace + 1 == len(places):
+                target = 0
+            else:
+                target = places[avPlace + 1]
+            self.sendUpdate('shootPiejectile', [avId, target, 0])
+        else:
+            self.air.writeServerEvent('suspicious', avId, 'Toon use race gag while not having one!')
+        self.avatarGags[avId] = 0
+    
+    def unsquish(avId):
+        self.currentlyAffectedByAnvil[avId] = False
+        
+    def playerLeave(self, avId):
+        self.sendUpdate('racerDisconnected', [avId])
+        if avId in self.avatars:
+            self.avatars.remove(avId)
+        for aK in self.avatarKarts:
+            if aK[0] == avId:
+                self.air.doId2do[self.avatarKarts[avId]].__handleUnexpectedExit()
+                del self.avatarKarts[avId]
+                break
+        if len(self.avatars) == 0:
+            self.requestDelete()
 
     def requestKart(self):
         pass
@@ -313,6 +407,6 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         if not avId in self.avatars:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to request kart in race they\'re not in!')
             return
-        for i in range(len(self.avatarKarts)):
-            if self.avatarKarts[i][0] == avId:
-                self.air.doId2do[self.avatarKarts[i][1]].request('Controlled', avId, accId)
+        for aK in self.avatarKarts:
+            if ak[0] == avId:
+                self.air.doId2do[ak[1]].request('Controlled', avId, accId)
