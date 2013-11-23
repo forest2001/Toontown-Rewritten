@@ -99,7 +99,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         if self.runningMovie:
             self.request('WaitBoarding')
             return
-        if self.raceType != RaceGlobals.Practice
+        if self.raceType != RaceGlobals.Practice:
             count = 0
             for block in self.startingBlocks:
                 if block.avId != 0:
