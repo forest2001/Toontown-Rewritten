@@ -4,6 +4,7 @@ from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
 from toontown.racing.DistributedGagAI import DistributedGagAI
 from toontown.racing import RaceGlobals
 from direct.distributed.ClockDelta import *
+from toontown.toonbase import TTLocalizer
 from direct.fsm.FSM import FSM
 from direct.task import Task
 
@@ -76,14 +77,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         pass
         
     def enterStart(self):
-        self.startTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime())
-        self.d_startRace()
-        for avatarKart in self.avatarKarts:
-            kart = self.air.doId2do[avatarKart[1]]
-            kart.sendUpdate('setInput', [1])
-            self.avatarProgress[avatarKart[0]] = 0
-            self.avatarGags[avatarKart[0]] = 0
-            self.currentlyAffectedByAnvil[avatarKart[0]]  = False
+        self.startTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime()) + 3
+        self.b_startRace(4)
     
     def exitStart(self):
         pass
@@ -189,12 +184,24 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.startTutorial()
         self.d_startTutorial()
 
-    def startRace(self, startTime):
-        pass
+    def startRace(self, timeUntilStart):
+        taskMgr.doMethodLater(timeUntilStart, DistributedRaceAI.startKarts, 'startKarts%i' % self.doId, [self])
+        
+    def startKarts(self):
+        for avatarKart in self.avatarKarts:
+            kart = self.air.doId2do[avatarKart[1]]
+            kart.sendUpdate('setInput', [1])
+            self.avatarProgress[avatarKart[0]] = 0
+            self.avatarGags[avatarKart[0]] = 0
+            self.currentlyAffectedByAnvil[avatarKart[0]]  = False
+
+
+    def b_startRace(self, timeUntilStart):
+        self.startRace(timeUntilStart)
+        self.d_startRace(timeUntilStart)
     
-    
-    def d_startRace(self):
-        self.sendUpdate('startRace', [globalClockDelta.getRealNetworkTime()])
+    def d_startRace(self, timeUntilStart):
+        self.sendUpdate('startRace', [globalClockDelta.localToNetworkTime(globalClockDelta.globalClock.getRealTime() + timeUntilStart)])
     
     def goToSpeedway(self, todo0, todo1):
         pass
@@ -336,18 +343,18 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                     avTrophies[RaceGlobals.AllQualsList[genre][i]] = 1
                     trophies.append(RaceGlobals.AllQualsList[genre][i])
         pKartingBest = av.getKartingPersonalBestAll()
+        trackIndex = TTLocalizer.KartRace_TrackNames.keys().index(self.trackId)
+        if pKartingBest[trackIndex] > time or not pKartingBest[trackIndex]:
+            pKartingBest[trackIndex] = time
+            av.b_setKartingPersonalBest(pKartingBest)
         gTourTrophy = True
         for bestTime in pKartingBest:
             if not bestTime:
                 gTourTrophy = False
         if gTourTrophy:
-            for bestTime in pKartingBest2:
-                if not bestTime:
-                    gTourTrophy = False
-            if gTourTrophy:
-                if avTrophies[RaceGlobals.GrandTouring] != 1:
-                    avTrophies[RaceGlobals.GrandTouring] = 1
-                    trophies.append(RaceGlobals.GrandTouring)
+            if avTrophies[RaceGlobals.GrandTouring] != 1:
+                avTrophies[RaceGlobals.GrandTouring] = 1
+                trophies.append(RaceGlobals.GrandTouring)
         newLaffBoost = int((len(trophies) + numTrophies)/10)
         if newLaffBoost - oldLaffBoost != 0:
             for i in range(newLaffBoost):
@@ -423,3 +430,5 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         for aK in self.avatarKarts:
             if aK[0] == avId:
                 self.air.doId2do[aK[1]].request('Controlled', avId, accId)
+                self.air.doId2do[aK[1]].sendUpdate('setInput', [0])
+
