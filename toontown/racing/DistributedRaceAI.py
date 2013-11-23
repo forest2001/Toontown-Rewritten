@@ -403,11 +403,13 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.sendUpdate('racerDisconnected', [avId])
         if avId in self.avatars:
             self.avatars.remove(avId)
+        count = 0
         for aK in self.avatarKarts:
             if aK[0] == avId:
-                self.air.doId2do[aK[1]].__handleUnexpectedExit()
-                del self.avatarKarts[avId]
+                self.air.doId2do[aK[1]].handleUnexpectedExit()
+                del self.avatarKarts[count]
                 break
+            count += 1
         if len(self.avatars) == 0:
             self.requestDelete()
 
