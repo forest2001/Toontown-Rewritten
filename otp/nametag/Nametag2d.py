@@ -33,6 +33,16 @@ class Nametag2d(Nametag, MarginPopup):
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
 
+        # When a balloon is active, we need to be somewhat higher-priority in the
+        # popup system:
+        self.setPriority(1)
+
+    def showName(self):
+        Nametag.showName(self)
+
+        # Revert our priority back to basic:
+        self.setPriority(0)
+
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon2d
 

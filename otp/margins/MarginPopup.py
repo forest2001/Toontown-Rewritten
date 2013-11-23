@@ -5,6 +5,8 @@ class MarginPopup:
         self.__manager = None
         self.__visible = False
 
+        self.__priority = 0
+
         # The margin management system uses these:
         self._assignedCell = None
         self._lastCell = None
@@ -22,7 +24,12 @@ class MarginPopup:
                 self.__manager.removeVisiblePopup(self)
 
     def getPriority(self):
-        return 0
+        return self.__priority
+
+    def setPriority(self, priority):
+        self.__priority = priority
+        if self.__manager is not None:
+            self.__manager.reorganize()
 
     def manage(self, manager):
         self.unmanage(self.__manager)
