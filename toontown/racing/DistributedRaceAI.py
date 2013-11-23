@@ -45,6 +45,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         for gag in self.livingGags:
             gag.requestDelete()
         self.air.deallocateZone(self.zoneId)
+        for i in range(len(self.gags)):
+            taskMgr.remove('regenGag%i-%i' % (i, self.doId))
         DistributedObjectAI.delete(self)
         
     def enterJoin(self):
@@ -57,9 +59,10 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def enterPrep(self):
         self.beginBarrier('waitingForReady', self.avatars, 60, self.readyBarrierCallback)
         self.gagPoints = RaceGlobals.TrackDict[self.trackId][4]
-        for i in range(len(self.gagPoints)):
-            gagId = random.randint(0, 5)
-            self.b_genGag(i, 1, gagId)
+        if self.raceType != RaceGlobals.Practice:
+            for i in range(len(self.gagPoints)):
+                gagId = random.randint(0, 5)
+                self.b_genGag(i, 1, gagId)
         self.d_prepForRace()
         
     def exitPrep(self):
@@ -232,6 +235,9 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         if not avId in self.avatars:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to get gag in a race they\'re not in!')
             return
+        if self.raceType == RaceGlobals.Practice:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to gain gag in a practice race!')
+            return
         places = sorted(self.avatarProgress, key=self.avatarProgress.get)
         avPlace = places.index(avId)
         gag = self.gags[slot]
@@ -245,6 +251,11 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             return
         self.gags[slot] = [0, 0]
         self.avatarGags[avId] = requestedGag
+        taskMgr.doMethodLater(5, DistributedRaceAI.__regenGag, 'regenGag%i-%i' % (slot, self.doId), [self, slot])
+
+    def __regenGag(self, index):
+        gagId = random.randint(0, 5)
+        self.b_genGag(index, 1, gagId)
 
     def racerLeft(self, avId):
         #harv will hate this
@@ -394,7 +405,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.avatars.remove(avId)
         for aK in self.avatarKarts:
             if aK[0] == avId:
-                self.air.doId2do[self.avatarKarts[avId]].__handleUnexpectedExit()
+                self.air.doId2do[aK[1]].__handleUnexpectedExit()
                 del self.avatarKarts[avId]
                 break
         if len(self.avatars) == 0:
@@ -408,5 +419,5 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to request kart in race they\'re not in!')
             return
         for aK in self.avatarKarts:
-            if ak[0] == avId:
-                self.air.doId2do[ak[1]].request('Controlled', avId, accId)
+            if aK[0] == avId:
+                self.air.doId2do[aK[1]].request('Controlled', avId, accId)

@@ -52,8 +52,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         taskMgr.doMethodLater(30, DistributedRacePadAI.startRace, 'startRace%i' % self.doId, [self])
     
     def exitWaitCountdown(self):
-        if self.newState != 'WaitBoarding':
-            taskMgr.remove('startRace%i' % self.doId)
+        taskMgr.remove('startRace%i' % self.doId)
         
     def enterWaitBoarding(self):
         pass
@@ -84,20 +83,32 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
             self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
     
     def updateMovieState(self):
-        if self.state == 'WaitBoarding' and self.shouldStart:
+        if self.state == 'WaitBoarding':
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
                     return
+            self.runningMovie = False
             self.startRace(True)
         else:
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
-                    self.request('WaitBoarding')
+                    self.runningMovie = True
                     return
-            
-    def startRace(self, ignore = False):
-        if self.state != 'WaitCountdown' and not ignore:
-            self.shouldStart = True
+                self.runningMovie = False
+    def startRace(self):
+        if self.runningMovie:
+            self.request('WaitBoarding')
+            return
+        if self.raceType != RaceGlobals.Practice
+            count = 0
+            for block in self.startingBlocks:
+                if block.avId != 0:
+                    count += 1
+            if count < 2:
+                for block in self.startingBlocks:
+                    if block.avId != 0:
+                        block.b_setMovie(KartGlobals.EXIT_MOVIE)
+            self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
             return
         self.b_setState('AllAboard', globalClockDelta.getRealNetworkTime())
         
@@ -117,6 +128,14 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setStartingPlaces(range(len(avatars)))
         race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
+        for avId in avatars:
+            av = self.air.doId2do[avId]
+            entryFee = RaceGlobals.getEntryFee(self.trackId, self.trackType)
+            if av.getTickets() < entryFee:
+                self.air.writeServerEvent('suspicious', avId, 'Toon somehow lost tickets between entering a race and it leaving!')
+                av.b_setTickets(0)
+            else:
+                av.b_setTickets(av.getTickets() - entryFee)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
 
     def setState(self, state, timeStamp):
