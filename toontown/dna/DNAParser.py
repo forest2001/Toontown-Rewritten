@@ -508,8 +508,6 @@ class DNASign(DNANode):
             decNode = nodePath.find('**/*_front')
         if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/+GeomNode')
-        decEffect = DecalEffect.make()
-        decNode.setEffect(decEffect)
         node = None
         if self.code != '':
             node = dnaStorage.findNode(self.code)
@@ -519,7 +517,7 @@ class DNASign(DNANode):
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
         node.getNode(0).setEffect(DecalEffect.make())
-        node.setDepthWrite(False, 0)
+        node.setDepthOffset(50)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
         for child in self.children:
@@ -902,11 +900,6 @@ class DNADoor(DNAGroup):
         doorFlat.setEffect(DecalEffect.make())
         rightDoor.wrtReparentTo(parentNode, 0)
         leftDoor.wrtReparentTo(parentNode, 0)
-        
-        rightDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        rightHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
         
         rightDoor.setColor(color, 0)
         leftDoor.setColor(color, 0)

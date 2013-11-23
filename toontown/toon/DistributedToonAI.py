@@ -2421,6 +2421,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def b_setMaxMoney(self, maxMoney):
         self.d_setMaxMoney(maxMoney)
         self.setMaxMoney(maxMoney)
+        if self.getMoney() > maxMoney:
+            self.b_setBankMoney(self.bankMoney + (self.getMoney() - maxMoney))
+            self.b_setMoney(maxMoney)
 
     def d_setMaxMoney(self, maxMoney):
         self.sendUpdate('setMaxMoney', [maxMoney])
@@ -4382,7 +4385,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.b_setFishingRod(2)
 
         # They need bigger jellybean jars to hold all of their money:
-        self.b_setMaxMoney(120)
+        if self.getMaxMoney()<120: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
+            self.b_setMaxMoney(120)
 
         # Unlock all of the emotes they should have during alpha:
         emotes = list(self.getEmoteAccess())
@@ -4406,6 +4410,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emotes[emoteId] = 1
 
         self.b_setEmoteAccess(emotes)
+        
+        #if self.savedCheesyEffect != 16:
+            #self.b_setCheesyEffect(16, 0, 0)
+        
+        #For when we remove that stupid Roger Dog >:C
+        if self.savedCheesyEffect == 16:
+            self.b_setCheesyEffect(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

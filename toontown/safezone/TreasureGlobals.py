@@ -6,6 +6,7 @@ TreasureDG = 2
 TreasureBR = 3
 TreasureMM = 4
 TreasureDL = 5
+TreasureOZ = 6
 
 TreasureModels = {
     TreasureTT: (
@@ -30,6 +31,10 @@ TreasureModels = {
     ),
     TreasureDL: (
         'phase_8/models/props/zzz_treasure',
+        'phase_4/audio/sfx/SZ_DD_treasure.ogg',
+    ),
+    TreasureOZ: (
+        'phase_6/models/props/acorn_treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
 }
@@ -197,5 +202,27 @@ SafeZoneTreasureSpawns = {
         ],
         10, # Rate
         2 #Maximum
+    ),
+    ToontownGlobals.OutdoorZone: (
+        TreasureOZ, 3, # +3 laff
+        [
+            (-156.9, -118.9, 0.025),
+            (-35.6, 86.0, 1.25),
+            (116.8, 10.8, 0.104),
+            (-35, 145.7, 0.025),
+            (-198.8, -45.1, 0.025),
+            (-47.1, -25.5, 0.809),
+            (59.15, 34.8, 1.767),
+            (-81.02, -72.2, 0.026),
+            (-167.9, 124.5, 0.025),
+            (-226.7, -27.6, 0.025),
+            (-16.0, -108.9, 0.025),
+            (18.0, 58.5, 5.919),
+            (91.4, 127.8, 0.025),
+            (-86.5, -75.9, 0.025),
+            (-48.751, -32.3, 1.143),
+        ],
+        10, # Rate
+        5 # Maximum
     ),
 }
