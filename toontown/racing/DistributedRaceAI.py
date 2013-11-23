@@ -300,7 +300,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.finishedAvatars.append(avId)
 
         av = self.air.doId2do.get(avId)
-        place = len(self.finishedAvatars) - 1
+        place = len(self.finishedAvatars)
         entryFee = RaceGlobals.getEntryFee(self.trackId, self.raceType)
         bonus = 0
         totalTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime()) - self.startTime
@@ -311,8 +311,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
         else: 
-            winnings = entryFee*RaceGlobals.Winnings[place]
-            trophies = self.calculateTrophies(avId, place == 0, qualify, totalTime)
+            winnings = entryFee*RaceGlobals.Winnings[place - 1]
+            trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime)
         av.b_setTickets(av.getTickets() + winnings)
         if av.getTickets() > RaceGlobals.MaxTickets:
             av.b_setTickets(RaceGlobals.MaxTickets)
