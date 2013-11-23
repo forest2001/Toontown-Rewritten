@@ -290,8 +290,16 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.avatarProgress[avId] = laps + currentLapT
 
     def avatarFinished(self, avId):
-        av = self.air.doId2do.get(avId)
+        if not avId in self.avatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to finish in a race they\'re not in!')
+            return
+
+        if avId in self.finishedAvatars:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to finish in a race twice!')
+            return
         self.finishedAvatars.append(avId)
+
+        av = self.air.doId2do.get(avId)
         place = len(self.finishedAvatars) - 1
         entryFee = RaceGlobals.getEntryFee(self.trackId, self.raceType)
         bonus = 0
