@@ -605,9 +605,9 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         if not self.speedometer:
             cm = CardMaker('speed')
             cm.setFrame(-0.5, 0.5, -0.5, 0.5)
-            self.speedometerImages = aspect2d.attachNewNode('SpeedometerImages')
+            self.speedometerImages = base.a2dBottomRight.attachNewNode('SpeedometerImages')
             self.speedometerImages.setTransparency(True)
-            self.speedometerImages.setPos(1.24, 0.0, -0.98)
+            self.speedometerImages.setPos(-0.1, 0.0, 0.03)
             self.speedometerImages.setScale(0.75)
             m = loader.loadModel('phase_6/models/karting/speedometer')
             if self.getBodyColor() == InvalidEntry:
@@ -631,7 +631,8 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             c = (bodyColor + Vec4(1, 1, 1, 1)) / 2.0
             c.setW(1.0)
             self.speedometerImages.attachNewNode(m.find('**/*ring').node()).setColorScale(c)
-            self.speedometer = DirectLabel(relief=None, pos=(1.24, 0.0, -0.98), text=str(0), text_scale=0.18, text_fg=bodyColor, text_pos=(-0.04, 0.02, 0), text_font=ToontownGlobals.getSignFont())
+            self.speedometer = DirectLabel(relief=None, pos=(-0.1, 0.0, 0.03), text=str(0), text_scale=0.18, text_fg=bodyColor, text_pos=(-0.04, 0.02, 0), text_font=ToontownGlobals.getSignFont())
+            self.speedometer.reparentTo(base.a2dBottomRight)
         else:
             self.showSpeedometer()
         self.arrowVert = 0
