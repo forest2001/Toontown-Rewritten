@@ -174,6 +174,9 @@ class NametagGroup:
         pos = self.avatar.getPos(NametagGlobals.camera)
         visible3d = NametagGlobals.camera.node().getLens().project(pos, Point2())
 
+        if self.avatar.isHidden():
+            visible3d = False
+
         if NametagGlobals.onscreenChatForced and self.chatFlags & CFSpeech:
             visible3d = False
 
