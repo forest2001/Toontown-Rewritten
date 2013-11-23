@@ -88,7 +88,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
                 if block.currentMovie != 0:
                     return
             self.runningMovie = False
-            self.startRace(True)
+            self.startRace()
         else:
             for block in self.startingBlocks:
                 if block.currentMovie != 0:
@@ -99,7 +99,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         if self.runningMovie:
             self.request('WaitBoarding')
             return
-        if self.raceType != RaceGlobals.Practice:
+        if self.trackType != RaceGlobals.Practice:
             count = 0
             for block in self.startingBlocks:
                 if block.avId != 0:
@@ -108,8 +108,8 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
                 for block in self.startingBlocks:
                     if block.avId != 0:
                         block.b_setMovie(KartGlobals.EXIT_MOVIE)
-            self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
-            return
+                self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
+                return
         self.b_setState('AllAboard', globalClockDelta.getRealNetworkTime())
         
     def createRace(self):

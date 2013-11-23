@@ -112,7 +112,7 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
     def exitControlled(self):
         pass
 
-    def __handleUnexpectedExit(self):
+    def handleUnexpectedExit(self):
         self.notify.warning('toon: %d exited unexpectedly, resetting vehicle %d' % (self.driverId, self.doId))
         self.request('Parked')
         self.requestDelete()
