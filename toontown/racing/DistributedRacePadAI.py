@@ -130,13 +130,14 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
         for avId in avatars:
-            av = self.air.doId2do[avId]
-            entryFee = RaceGlobals.getEntryFee(self.trackId, self.trackType)
-            if av.getTickets() < entryFee:
-                self.air.writeServerEvent('suspicious', avId, 'Toon somehow lost tickets between entering a race and it leaving!')
-                av.b_setTickets(0)
-            else:
-                av.b_setTickets(av.getTickets() - entryFee)
+            if avId in self.air.doId2do:
+                av = self.air.doId2do[avId]
+                entryFee = RaceGlobals.getEntryFee(self.trackId, self.trackType)
+                if av.getTickets() < entryFee:
+                    self.air.writeServerEvent('suspicious', avId, 'Toon somehow lost tickets between entering a race and it leaving!')
+                    av.b_setTickets(0)
+                else:
+                    av.b_setTickets(av.getTickets() - entryFee)
         self.b_setState('WaitEmpty', globalClockDelta.getRealNetworkTime())
 
     def setState(self, state, timeStamp):
