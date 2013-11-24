@@ -420,7 +420,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.avatars.remove(avId)
         count = 0
         for aK in self.avatarKarts:
-            if aK[0] == avId:
+            if aK[0] == avId and aK[1] in self.air.doId2do:
                 self.air.doId2do[aK[1]].handleUnexpectedExit()
                 del self.avatarKarts[count]
                 break
