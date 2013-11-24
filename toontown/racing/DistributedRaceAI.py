@@ -86,7 +86,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.demand('Tutorial')
         
     def readRulesCallback(self, avatars):
-        self.request('Start')
+        self.demand('Start')
     
     def joinBarrierCallback(self, avatars):
         for av in self.avatars:
