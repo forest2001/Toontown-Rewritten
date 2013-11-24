@@ -268,6 +268,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
+                    
+                if zoneId == ToontownGlobals.GoofySpeedway:
+                    tpAccess = self.getTeleportAccess()
+                    if not ToontownGlobals.GoofySpeedway in tpAccess:
+                        tpAccess.append(ToontownGlobals.GoofySpeedway)
+                        self.b_setTeleportAccess(tpAccess)
 
     def _renewDoLater(self, renew = True):
         if renew:
