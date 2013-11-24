@@ -133,7 +133,7 @@ class RaceGUI:
         self.faceEndPos = Vec3(0.8, 0, 0.93)
         self.placeLabelNum = DirectLabel(relief=None, pos=TTLocalizer.RGUIplaceLabelNumPos, text='1', text_scale=0.35, text_fg=(0.95, 0.95, 0, 1), text_font=ToontownGlobals.getSignFont())
         self.placeLabelNum.reparentTo(base.a2dBottomLeft)
-        self.directObjList.append(base.a2dBottomLeft)
+        self.directObjList.append(self.placeLabelNum)
         self.placeLabelStr = DirectLabel(relief=None, pos=TTLocalizer.RGUIplaceLabelStrPos, text=TTLocalizer.KartRace_FirstSuffix, text_scale=0.1, text_fg=(0.95, 0.95, 0, 1), text_font=ToontownGlobals.getSignFont())
         self.placeLabelStr.reparentTo(base.a2dBottomLeft)
         self.directObjList.append(self.placeLabelStr)
