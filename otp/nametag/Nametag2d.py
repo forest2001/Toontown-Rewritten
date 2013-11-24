@@ -30,7 +30,7 @@ class Nametag2d(Nametag, MarginPopup):
         # Calculate the center of the TextNode.
         text = balloon.find('**/+TextNode')
         t = text.node()
-        left, right, bottom, top = t.getLeft(), t.getRight(), t.getBottom(), t.getTop()
+        left, right, bottom, top = t.getFrameActual()
         center = self.innerNP.getRelativePoint(text,
                                                ((left+right)/2., 0, (bottom+top)/2.))
 
