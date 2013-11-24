@@ -59,6 +59,7 @@ class Nametag2d(Nametag, MarginPopup):
         self.arrow = NametagGlobals.arrowModel.copyTo(self.innerNP)
         self.arrow.setZ(arrowZ)
         self.arrow.setScale(self.ARROW_SCALE)
+        self.arrow.setColor(self.nameFg)
 
     def tick(self):
         # Update the arrow's pointing.

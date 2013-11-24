@@ -6,7 +6,7 @@ import math
 
 class Nametag3d(Nametag):
     WANT_DYNAMIC_SCALING = True
-    SCALING_FACTOR = 0.05
+    SCALING_FACTOR = 0.055
     SCALING_MINDIST = 1
     SCALING_MAXDIST = 50
 
