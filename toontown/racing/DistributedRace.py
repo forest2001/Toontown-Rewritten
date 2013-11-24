@@ -1212,6 +1212,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         self.musicTrack.start()
 
     def changeMusicTempo(self, newPR):
+        return # TODO: Reenable when we have music change support.
         if self.musicTrack:
             self.musicTrack.finish()
         curPR = self.raceMusic.getPlayRate()
