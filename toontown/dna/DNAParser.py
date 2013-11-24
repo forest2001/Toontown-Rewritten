@@ -225,6 +225,8 @@ class DNAStorage:
         if block[0] > '9' or block[0] < '0':
             block = block[1:]
         return block
+    def getTitleFromBlockNumber(self, index):
+        return self.blockTitles[index]
     def storeBlockTitle(self, index, title):
         self.blockTitles[index] = title
     def storeBlockArticle(self, index, article):

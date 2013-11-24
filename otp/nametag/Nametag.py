@@ -9,6 +9,7 @@ class Nametag(ClickablePopup):
     CThought = 4
 
     NAME_PADDING = 0.2
+    CHAT_ALPHA = 1.0
 
     def __init__(self):
         ClickablePopup.__init__(self)
@@ -17,6 +18,7 @@ class Nametag(ClickablePopup):
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
         self.wordWrap = 7.5
+        self.chatWordWrap = 10.0
 
         self.font = None
         self.name = ''
@@ -41,6 +43,9 @@ class Nametag(ClickablePopup):
     def setAvatar(self, avatar):
         self.avatar = avatar
 
+    def tick(self):
+        pass # Does nothing by default.
+
     def update(self):
         if self.colorCode in NAMETAG_COLORS:
             cc = self.colorCode
@@ -58,8 +63,11 @@ class Nametag(ClickablePopup):
             self.showName()
 
     def showBalloon(self, balloon, text):
-        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        balloon = balloon.generate(text, self.font, balloonColor=color)
+        color = self.qtColor if (self.chatFlags&CFQuicktalker) else self.chatBg
+        if color[3] > self.CHAT_ALPHA:
+            color = (color[0], color[1], color[2], self.CHAT_ALPHA)
+        balloon = balloon.generate(text, self.font, textColor=self.chatFg,
+                                   balloonColor=color, wordWrap=self.chatWordWrap)
         balloon.reparentTo(self.innerNP)
 
     def showThought(self):

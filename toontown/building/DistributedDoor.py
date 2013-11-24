@@ -1,5 +1,7 @@
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
@@ -92,7 +94,6 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         return not ZoneUtil.isInterior(self.zoneId)
 
     def setupNametag(self):
-        return #TODO: FIXME
         if not self.wantsNametag():
             return
         if self.nametag == None:
@@ -114,6 +115,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.nametag != None:
             self.nametag.unmanage(base.marginManager)
             self.nametag.setAvatar(NodePath())
+            self.nametag.destroy()
             self.nametag = None
         return
 

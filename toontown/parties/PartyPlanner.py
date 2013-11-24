@@ -309,6 +309,7 @@ class PartyPlanner(DirectFrame, FSM):
             del self.nametagNode
             del self.chatNode
             self.nametagGroup.setAvatar(NodePath())
+            self.nametagGroup.destroy()
             self.nametagGroup = None
         return
 

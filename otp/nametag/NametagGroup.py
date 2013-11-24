@@ -36,9 +36,22 @@ class NametagGroup:
         self.chatString = ''
         self.chatFlags = 0
 
+        self.objectCode = None
+
+        self.manager = None
+
         self.nametags = []
         self.addNametag(self.nametag2d)
         self.addNametag(self.nametag3d)
+
+        self.visible3d = True # Is a 3D nametag visible, or do we need a 2D popup?
+
+        self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
+
+    def destroy(self):
+        taskMgr.remove(self.tickTask)
+        if self.manager is not None:
+            self.unmanage(self.manager)
 
     def getNametag2d(self):
         return self.nametag2d
@@ -108,6 +121,18 @@ class NametagGroup:
         if chatFlags&CFTimeout:
             self._startChatTimeout()
 
+    def setContents(self, contents):
+        # This function is a little unique, it's meant to override contents on
+        # EXISTING nametags only:
+        for tag in self.nametags:
+            tag.setContents(contents)
+
+    def setObjectCode(self, objectCode):
+        self.objectCode = objectCode
+
+    def getObjectCode(self):
+        return self.objectCode
+
     def _startChatTimeout(self):
         length = len(self.chatString)
         timeout = min(max(length*self.CHAT_TIMEOUT_PROP, self.CHAT_TIMEOUT_MIN), self.CHAT_TIMEOUT_MAX)
@@ -131,7 +156,7 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
-        tag.displayName = self.displayName
+        tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
         tag.chatString = self.chatString
@@ -141,6 +166,28 @@ class NametagGroup:
 
         tag.update()
 
+    def __tickTask(self, task):
+        for nametag in self.nametags:
+            nametag.tick()
+
+        if self.avatar is None: return
+        pos = self.avatar.getPos(NametagGlobals.camera)
+        visible3d = NametagGlobals.camera.node().getLens().project(pos, Point2())
+
+        if self.avatar.isHidden():
+            visible3d = False
+
+        if NametagGlobals.onscreenChatForced and self.chatFlags & CFSpeech:
+            visible3d = False
+
+        if visible3d ^ self.visible3d:
+            self.visible3d = visible3d
+            for nametag in self.nametags:
+                if isinstance(nametag, MarginPopup):
+                    nametag.setVisible(not visible3d)
+
+        return task.cont
+
     def updateTags(self):
         for nametag in self.nametags:
             self.updateNametag(nametag)
@@ -148,12 +195,22 @@ class NametagGroup:
     def addNametag(self, nametag):
         self.nametags.append(nametag)
         self.updateNametag(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.manage(manager)
 
     def removeNametag(self, nametag):
         self.nametags.remove(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.unmanage(manager)
 
     def manage(self, manager):
-        pass
+        self.manager = manager
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.manage(manager)
 
     def unmanage(self, manager):
-        pass
+        self.manager = None
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.unmanage(manager)
