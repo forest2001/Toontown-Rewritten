@@ -36,7 +36,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
     def generate(self):
         for avatar in self.avatars:
             self.acceptOnce(self.air.getAvatarExitEvent(avatar), self.playerLeave, [avatar])
-        self.request('Join')
+        self.demand('Join')
         
     def delete(self):
         for aK in self.avatarKarts:
@@ -83,7 +83,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         pass
     
     def readyBarrierCallback(self, avatars):
-        self.request('Tutorial')
+        self.demand('Tutorial')
         
     def readRulesCallback(self, avatars):
         self.request('Start')
@@ -100,7 +100,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.sendUpdate('setEnteredRacers', [self.avatarKarts])
         
     def prepBarrierCallback(self, avatars):
-        self.request('Prep')
+        self.demand('Prep')
 
     
     def setZoneId(self, zoneId):
