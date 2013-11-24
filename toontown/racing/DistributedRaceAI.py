@@ -390,7 +390,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         elif self.avatarGags[avId] == RaceGlobals.TURBO:
             pass
         elif self.avatarGags[avId] == RaceGlobals.ANVIL:
-            places = sorted(self.avatarProgress, key=self.avatarProgress.get)
+            places = sorted(self.avatarProgress, key=self.avatarProgress.get, reverse=True)
             for i in places:
                 if not i in self.finishedAvatars and not self.currentlyAffectedByAnvil[i]:
                     currAvatar = i
