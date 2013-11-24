@@ -184,7 +184,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.d_startTutorial()
 
     def startRace(self, timeUntilStart):
-        taskMgr.doMethodLater(timeUntilStart, DistributedRaceAI.startKarts, 'startKarts%i' % self.doId, [self])
+        taskMgr.doMethodLater(timeUntilStart, self.startKarts, 'startKarts%i' % self.doId, [])
         
     def startKarts(self):
         for avatarKart in self.avatarKarts:
@@ -257,7 +257,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             return
         self.gags[slot] = [0, 0]
         self.avatarGags[avId] = requestedGag
-        taskMgr.doMethodLater(5, DistributedRaceAI.__regenGag, 'regenGag%i-%i' % (slot, self.doId), [self, slot])
+        taskMgr.doMethodLater(5, self.__regenGag, 'regenGag%i-%i' % (slot, self.doId), [slot])
 
     def __regenGag(self, index):
         gagId = random.randint(0, 5)
@@ -396,7 +396,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                     currAvatar = i
                     break
             self.currentlyAffectedByAnvil[avId] = True
-            taskMgr.doMethodLater(RaceGlobals.AnvilSquishDuration, unsquish, 'unsquish-%i' % currAvatar, [self, currAvatar])
+            taskMgr.doMethodLater(RaceGlobals.AnvilSquishDuration, self.unsquish, 'unsquish-%i' % currAvatar, [currAvatar])
             self.sendUpdate('dropAnvilOn', [avId, currAvatar, globalClockDelta.getRealNetworkTime()])
         elif self.avatarGags[avId] == RaceGlobals.PIE:
             places = sorted(self.avatarProgress, key=self.avatarProgress.get)
@@ -410,7 +410,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.air.writeServerEvent('suspicious', avId, 'Toon use race gag while not having one!')
         self.avatarGags[avId] = 0
     
-    def unsquish(avId):
+    def unsquish(self, avId):
         self.currentlyAffectedByAnvil[avId] = False
         
     def playerLeave(self, avId):
