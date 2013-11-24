@@ -607,3 +607,8 @@ def clickNametag(avId):
     if str(avId)[:2] == "40": #This implies AI object, since toons start with '1'
         return '%s is an NPC!' % av.getName()
     av.clickedNametag()
+
+@magicWord(category=CATEGORY_MODERATION)
+def showTarget():
+    """Show the moderators current Magic Word target."""
+    return 'Your current target is: %s [avId: %s]' % (spellbook.getTarget().getName(), spellbook.getTarget().doId)
