@@ -900,7 +900,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         return
 
     def displayWhisper(self, fromId, chatString, whisperType):
-        return #TODO: This currently causes a crash. Disable until WhisperPopup is implemented.
         sender = None
         sfx = self.soundWhisper
         if fromId == TTLocalizer.Clarabelle:

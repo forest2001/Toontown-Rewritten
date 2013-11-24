@@ -146,3 +146,28 @@ NAMETAG_COLORS = {
          (0.0, 0.0, 0.0, 1.0), (1.0, 1.0, 1.0, 1.0)), # Chat
     ),
 }
+
+WTNormal = 0
+WTQuickTalker = 1
+WTSystem = 2
+WTBattleSOS = 3
+WTEmote = 4
+WTToontownBoardingGroup = 5
+
+WHISPER_COLORS = {
+    # TODO: WTNormal
+    # TODO: WTQuickTalker
+    WTSystem: (
+        # Normal  FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.8, 0.3, 0.6, 0.6)),
+        # Click   FG                    BG
+        ((1.0, 0.5, 0.5, 1.0), (1.0, 1.0, 1.0, 1.0)),
+        # Hover   FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.8, 0.4, 1.0, 1.0)),
+        # Disable FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.8, 0.3, 0.6, 0.6)),
+    ),
+    # TODO: WTBattleSOS
+    # TODO: WTEmote
+    # TODO: WTToontownBoardingGroup
+}
