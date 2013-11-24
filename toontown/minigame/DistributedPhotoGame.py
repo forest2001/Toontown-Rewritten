@@ -19,6 +19,7 @@ from toontown.golf import BuildGeometry
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from toontown.dna.DNAParser import *
+from otp.nametag import NametagGroup
 from direct.interval.IntervalGlobal import *
 import random
 from direct.showbase import PythonUtil
@@ -741,8 +742,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
             subject.setName(namegen.randomNameMoreinfo(boy=boy, girl=girl)[-1])
             self.nameCounter += 1
             subject.setPickable(0)
-            #Causes a crash, disabling has seemingly no bad effect.
-            #subject.setPlayerType(NametagGroup.CCNonPlayer)
+            subject.setPlayerType(NametagGroup.CCSpeedChat)
             dna = ToonDNA.ToonDNA()
             dna.newToonRandom(seed, gender, 1)
             subject.setDNAString(dna.makeNetString())
