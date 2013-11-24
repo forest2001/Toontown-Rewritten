@@ -309,9 +309,13 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         if self.raceType == RaceGlobals.Practice:
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
-        else: 
-            winnings = entryFee*RaceGlobals.Winnings[place - 1]
+        elif qualify:
+            offset = 4 - len(self.avatarProgress)
+            winnings = entryFee*RaceGlobals.Winnings[place - 1 + offset] + entryFee
             trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime)
+        else:
+            winnings = 0
+            trophies = []
         av.b_setTickets(av.getTickets() + winnings)
         if av.getTickets() > RaceGlobals.MaxTickets:
             av.b_setTickets(RaceGlobals.MaxTickets)
@@ -390,7 +394,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         elif self.avatarGags[avId] == RaceGlobals.TURBO:
             pass
         elif self.avatarGags[avId] == RaceGlobals.ANVIL:
-            places = sorted(self.avatarProgress, key=self.avatarProgress.get)
+            places = sorted(self.avatarProgress, key=self.avatarProgress.get, reverse=True)
             for i in places:
                 if not i in self.finishedAvatars and not self.currentlyAffectedByAnvil[i]:
                     currAvatar = i
