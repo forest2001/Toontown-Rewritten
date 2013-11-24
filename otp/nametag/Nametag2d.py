@@ -7,6 +7,7 @@ class Nametag2d(Nametag, MarginPopup):
     SCALE_2D = 0.25
     CHAT_ALPHA = 0.5
     ARROW_OFFSET = -1.0
+    ARROW_SCALE = 1.5
 
     def __init__(self):
         Nametag.__init__(self)
@@ -57,6 +58,8 @@ class Nametag2d(Nametag, MarginPopup):
 
         self.arrow = NametagGlobals.arrowModel.copyTo(self.innerNP)
         self.arrow.setZ(arrowZ)
+        self.arrow.setScale(self.ARROW_SCALE)
+        self.arrow.setColor(self.nameFg)
 
     def tick(self):
         # Update the arrow's pointing.
