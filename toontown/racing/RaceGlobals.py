@@ -523,6 +523,9 @@ GagFreq = [[PIE,
   TURBO,
   ANVIL,
   PIE]]
+
+AnvilSquishDuration = 3
+
 CircuitLoops = [[RT_Speedway_1, RT_Rural_1, RT_Urban_1],
  [RT_Speedway_1_rev, RT_Rural_1_rev, RT_Urban_1_rev],
  [RT_Speedway_2, RT_Rural_2, RT_Urban_2],

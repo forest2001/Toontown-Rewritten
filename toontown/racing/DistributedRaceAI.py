@@ -13,7 +13,6 @@ import random
 
 class DistributedRaceAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedRaceAI")
-    AnvilSquishLength = 3 #pulled from client at 2 AM, might be wrong
     
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
@@ -397,7 +396,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                     currAvatar = i
                     break
             self.currentlyAffectedByAnvil[avId] = True
-            taskMgr.doMethodLater(AnivilSquishLength, unsquish, 'unsquish-%i' % currAvatar, [self, currAvatar])
+            taskMgr.doMethodLater(RaceGlobals.AnvilSquishDuration, unsquish, 'unsquish-%i' % currAvatar, [self, currAvatar])
             self.sendUpdate('dropAnvilOn', [avId, currAvatar, globalClockDelta.getRealNetworkTime()])
         elif self.avatarGags[avId] == RaceGlobals.PIE:
             places = sorted(self.avatarProgress, key=self.avatarProgress.get)
