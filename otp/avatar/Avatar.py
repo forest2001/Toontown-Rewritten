@@ -604,4 +604,6 @@ def clickNametag(avId):
         return 'avId not found!'
     if not isinstance(av, Avatar):
         return 'ID not Avatar!'
+    if str(avId)[:2] == "40": #This implies AI object, since toons start with '1'
+        return '%s is an NPC!' % av.getName()
     av.clickedNametag()
