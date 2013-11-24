@@ -1262,7 +1262,12 @@ p_dnanode.__doc__ = \
                | landmarkbuilding
                | street
                | signgraphic
-               | dnanodedef "[" subdnanode_list "]"'''
+               | dnanode_grp'''
+
+def p_dnanode_grp(p):
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+p_dnanode_grp.__doc__ = '''dnanode_grp : dnanodedef "[" subdnanode_list "]"'''
 
 def p_sign(p):
     p[0] = p[1]
@@ -1496,9 +1501,9 @@ def p_flags(p):
     p.parser.parentGroup.setFlags(p[3])
 p_flags.__doc__ = '''flags : FLAGS "[" string "]"'''
 
-def p_dnanode_subs(p):
+def p_dnanode_sub(p):
     p[0] = p[1]
-p_dnanode_subs.__doc__ = \
+p_dnanode_sub.__doc__ = \
     '''dnanode_sub : group
                    | pos
                    | hpr
@@ -1738,7 +1743,7 @@ def p_subdnanode_list(p):
     else:
         p[0] = []
 p_subdnanode_list.__doc__ = \
-    '''subdnanode_list : subtext_list dnanode_sub
+    '''subdnanode_list : subdnanode_list dnanode_sub
                        | empty'''
 
 def p_subsigngraphic_list(p):
