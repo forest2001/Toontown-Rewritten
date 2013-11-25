@@ -28,6 +28,7 @@ from toontown.racing import Piejectile
 from toontown.racing import EffectManager
 from toontown.racing import PiejectileManager
 from toontown.dna.DNAParser import *
+from otp.ai.MagicWordGlobals import *
 
 class DistributedRace(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRace')
@@ -1235,3 +1236,8 @@ class DistributedRace(DistributedObject.DistributedObject):
          'reason': RaceGlobals.Exit_UserReq}
         base.cr.playGame.hood.loader.fsm.request('quietZone', [out])
         return
+        
+@magicWord(category=CATEGORY_OVERRIDE)
+def leaveRace():
+    """Leave the current race you are in."""
+    messenger.send('leaveRace')
