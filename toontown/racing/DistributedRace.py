@@ -28,7 +28,7 @@ from toontown.racing import Piejectile
 from toontown.racing import EffectManager
 from toontown.racing import PiejectileManager
 from toontown.dna.DNAParser import *
-from otp.ai.MagicWordGlobals import *
+from otp.ai.MagicWordGlobal import *
 
 class DistributedRace(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRace')
