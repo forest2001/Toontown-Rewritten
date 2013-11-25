@@ -4417,34 +4417,33 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         self.b_setEmoteAccess(emotes)
         
-        #if self.savedCheesyEffect != 16:
-            #self.b_setCheesyEffect(16, 0, 0)
-        
-        #For when we remove that stupid Roger Dog >:C
-        if self.savedCheesyEffect == 16:
+        #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
+        if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
     """Set Cheesy Effect of the target."""
-    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
+    CEHood = CEHood * 1000 #So the invoker only has to use '1' for DonaldsDock, '2' for TTC etc.
+    if not 0 <= CEValue <= 18:
+        return 'Invalid value %s specified for Cheesy Effect.' % CEValue
+    if CEHood != 0 and not 100 < CEHood*1000 < ToontownGlobals.DynamicZonesBegin:
+        return 'Invalid zoneId specified.'
+    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood*1000, CEExpire)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
-def setHP(hpVal):
+def setHp(hpVal):
     """Set target's current laff"""
-    if hpVal > 137 or hpVal < -1:
+    if not -1 <= hpVal <= 137:
         return 'Laff must be between -1 and 137!'
     spellbook.getTarget().b_setHp(hpVal)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
-def setMaxHP(hpVal):
+def setMaxHp(hpVal):
     """Set target's laff"""
-    if hpVal > 140 or hpVal < 15:
-        return 'Laff must be between 15 and 140!'
-    if spellbook.getTarget() == spellbook.getInvoker():
-        spellbook.getInvoker().sendUpdate('setMaxHp', [hpVal])
-    else:
-        spellbook.getTarget().b_setMaxHp(hpVal)
+    if not 15 <= hpVal <= 137:
+        return 'Laff must be between 15 and 137!'
+    spellbook.getTarget().b_setMaxHp(hpVal)
     spellbook.getTarget().toonUp(hpVal)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])   
@@ -4463,16 +4462,16 @@ def adminGags():
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxMoney(moneyVal):
     """Set target's money and maxMoney values."""
-    if moneyVal > 250 or moneyVal < 40:
+    if not 40 <= moneyVal <= 250:
         return 'Money value must be between 40 and 250.'
     spellbook.getTarget().b_setMaxMoney(moneyVal)
     spellbook.getTarget().b_setMoney(moneyVal)
-    return 'maxMoney set to ' + str(moneyVal)
+    return 'maxMoney set to %s' % moneyVal
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])    
 def setFishingRod(rodVal):
     """Set target's fishing rod value."""
-    if rodVal > 4 or rodVal < 0:
+    if not 0 <= rodVal <= 4:
         return 'Rod value must be between 0 and 4.'
     spellbook.getTarget().b_setFishingRod(rodVal)
     return 'Rod changed to ' + str(rodVal)
@@ -4480,7 +4479,7 @@ def setFishingRod(rodVal):
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxFishTank(tankVal):
     """Set target's max fish tank value."""
-    if tankVal > 99 or tankVal < 20:
+    if not 20 <= tankVal <= 99:
         return 'Max fish tank value must be between 20 and 99'
     spellbook.getTarget().b_setMaxFishTank(tankVal)
     return 'Max size of fish tank changed to ' + str(tankVal)
@@ -4489,31 +4488,50 @@ def setMaxFishTank(tankVal):
 def setName(nameStr):
     """Set target's name."""
     spellbook.getTarget().b_setName(nameStr)
+    return "Changed avId %s's name to %s" % (spellbook.getTarget().doId, nameStr)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS)
 def restockAllResistances():
     """Restock all CFO phrases."""
+    return 'This magic word is currently disabled, as unites are broken with Mirai.'
     spellbook.getTarget().restockAllResistanceMessages(1)
+    return 'Gave %s all CFO unites.' % spellbook.getTarget().getName()
     
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
-def setHat(hatId=0, hatTex=0, hatCol=0):
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
+def setHat(hatId, hatTex=0):
     """Set hat of target toon."""
-    spellbook.getTarget().b_setHat(hatId, hatTex, hatCol)
+    if not 0 <= hatId <= 56:
+        return 'Invalid hat specified.'
+    if not 0 <= hatTex <= 19:
+        return 'Invalid hat texture specified.'
+    spellbook.getTarget().b_setHat(hatId, hatTex, 0)
     
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
-def setGlasses(glassesId=0, glassesTex=0, glassesCol=0):
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
+def setGlasses(glassesId, glassesTex=0):
     """Set glasses of target toon."""
-    spellbook.getTarget().b_setGlasses(glassesId, glassesTex, glassesCol)
+    if not 0 <= glassesId <= 21:
+        return 'Invalid glasses specified.'
+    if not 0 <= glassesTex <= 4:
+        return 'Invalid glasses texture specified.'
+    spellbook.getTarget().b_setGlasses(glassesId, glassesTex, 0)
     
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
-def setBackpack(bpId=0, bpTex=0, bpCol=0):
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
+def setBackpack(bpId, bpTex=0):
     """Set backpack of target toon."""
-    spellbook.getTarget().b_setBackpack(bpId, bpTex, bpCol)
+    if not 0 <= bpId <= 24:
+        return 'Invalid backpack specified.'
+    if not 0 <= bpTex <= 6:
+        return 'Invalid backpack texture specified.'
+    spellbook.getTarget().b_setBackpack(bpId, bpTex, 0)
     
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
-def setShoes(shoesId=0, shoesTex=0, shoesCol=0):
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
+def setShoes(shoesId, shoesTex=0):
     """Set shoes of target toon."""
-    spellbook.getTarget().b_setShoes(shoesId, shoesTex, shoesCol)
+    if not 0 <= shoesId <= 3:
+        return 'Invalid shoe type specified.'
+    if not 0 <= shoesTex <= 48:
+        return 'Invalid shoe specified.'
+    spellbook.getTarget().b_setShoes(shoesId, shoesTex, 0)
     
 @magicWord(category=CATEGORY_MODERATION, types=[bool])
 def kick(overrideSelfKick=False):
@@ -4521,19 +4539,17 @@ def kick(overrideSelfKick=False):
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
     spellbook.getTarget().disconnect()
-    return "The player " + spellbook.getTarget().name + " was kicked."
+    return "The player %s was kicked." % spellbook.getTarget().name
 
-'''
-Disabled until banManager is working.
-@magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400)
+@magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
     """Ban the player from the game server."""
+    return 'banManager is not currently implemented!' # Disabled until we have a working banManager.
     if not confirmed:
         return "Are you sure you want to ban this player? Use '~~ban REASON True' if you are."
     if not overrideSelfBan and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to ban yourself? Use '~ban REASON True True' if you are."
     spellbook.getTarget().ban(reason)
-'''
 
 #This command has been disabled due to many breakingnessings. GG developers, you suck at sanity >:C
 '''
@@ -4599,17 +4615,20 @@ def togGM():
     access = spellbook.getInvokerAccess()
     if spellbook.getInvoker().isGM():
         spellbook.getInvoker().b_setGM(0)
+        return 'You have disabled your GM icon.'
     else:
         if access>=400:
             spellbook.getInvoker().b_setGM(2)
         elif access>=200:
             spellbook.getInvoker().b_setGM(3)
+        return 'You have enabled your GM icon.'
             
 @magicWord(category=CATEGORY_MODERATION)
 def ghost():
     """Set toon to invisible."""
     if spellbook.getInvoker().ghostMode == 0:
         spellbook.getInvoker().b_setGhostMode(2)
+        return 'Time to ninja!'
     else:
         spellbook.getInvoker().b_setGhostMode(0)
         
@@ -4622,4 +4641,24 @@ def badName():
     animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
     spellbook.getTarget().b_setName(colorstring + ' ' + animaltype)
     spellbook.getTarget().sendUpdate('WishNameState', ['REJECTED'])
-    return "Revoked " + oldname + "'s name successfully. They have been renamed to " + colorstring + " " + animaltype + "."
+    return "Revoked %s's name successfully. They have been renamed to %s." % (oldname, spellbook.getTarget().getName())
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setGM(gmId):
+    """Set the target's GM level (used for icon)."""
+    if gmId == 1:
+        return 'You cannot set a toon to TOON COUNCIL.'
+    if not 0 <= gmId <= 4:
+        return 'Invalid GM type specified.'
+    if spellbook.getTarget().isGM() and gmId != 0: # This is because if you change from 1 GM level to another (excluding 0), it won't update in-game.
+        spellbook.getTarget().b_setGM(0)
+    spellbook.getTarget().b_setGM(gmId)
+    return 'You have set %s to GM type %s' % (spellbook.getTarget().getName(), gmId)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def setTickets(tixVal):
+    """Set the target's racing ticket's value."""
+    if not 0 <= tixVal <= 99999:
+        return 'Ticket value out of range (0-99999)'
+    spellbook.getTarget().b_setTickets(tixVal)
+    return "%s's tickets were set to %s." % (spellbook.getTarget().getName(), tixVal)
