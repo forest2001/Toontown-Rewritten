@@ -4485,8 +4485,11 @@ def maxToon(hasConfirmed='UNCONFIRMED'):
     toon.b_setHoodsVisited([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
     toon.b_setTeleportAccess([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
     
-    # Carry 4 (max) tasks
+    # General end game settings
     toon.b_setQuestCarryLimit(4)
+    toon.b_setMaxMoney(250)
+    toon.b_setMoney(toon.getMaxMoney())
+    toon.b_setBankMoney(ToontownGlobals.DefaultMaxBankMoney)
     
     return 'By the power invested in me, I, McQuack, max your toon.'
 
