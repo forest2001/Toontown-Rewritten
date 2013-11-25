@@ -4535,6 +4535,8 @@ def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
     spellbook.getTarget().ban(reason)
 '''
 
+#This command has been disabled due to many breakingnessings. GG developers, you suck at sanity >:C
+'''
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def ut(doField, doData=None):
     """Update a toons field in the db."""
@@ -4589,6 +4591,7 @@ def ut(doField, doData=None):
             #return "Unable to send to Astron. Access 500 required."
            
     return "Method " + doField + " was called on " + spellbook.getTarget().name + " successfully."
+'''
             
 @magicWord(category=CATEGORY_MODERATION)
 def togGM():
