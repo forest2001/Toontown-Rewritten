@@ -4451,13 +4451,44 @@ def setTrackAccess(toonup, trap, lure, sound, throw, squirt, drop):
     """Set target's gag track access."""
     spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
     
-@magicWord(category=CATEGORY_CHARACTERSTATS)
-def adminGags():
-    """Give Invoker 7 maxed gag tracks and allow carrying upto 95 gags (to help with the extra track)"""
-    spellbook.getInvoker().b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
-    spellbook.getInvoker().b_setMaxCarry(95)
-    spellbook.getInvoker().b_setExperience('9999999999999999999')
-    return 'Harv smells aboose. C:'
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def maxToon(hasConfirmed='UNCONFIRMED'):
+    """Max out the toons stats, for end-level gameplay. Should only be (and is restricted to) casting on Administrators only."""
+    toon = spellbook.getInvoker()
+    
+    if hasConfirmed != 'CONFIRM':
+        return 'Are you sure you want to max out %s? This process is irreversible. Use "~maxToon CONFIRM" to confirm.' % toon.getName()
+    
+    # Max out gag tracks (all 7 tracks)
+    toon.b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
+    toon.b_setMaxCarry(95) # Compensate for the extra gag track.
+    toon.b_setExperience('99999999999999') # Idk what to put here for valid exp...? Someone feel free to change.
+    
+    # Max out laff
+    toon.b_setMaxHp(137)
+    toon.toonUp(spellbook.getInvoker().getMaxHp() - spellbook.getInvoker().hp)
+    
+    # Max out cog suits (ORDER: Bossbot, Lawbot, Cashbot, Sellbot)
+    toon.b_setCogParts([
+        CogDisguiseGlobals.PartsPerSuitBitmasks[0], # Bossbot
+        CogDisguiseGlobals.PartsPerSuitBitmasks[1], # Lawbot
+        CogDisguiseGlobals.PartsPerSuitBitmasks[2], # Cashbot
+        CogDisguiseGlobals.PartsPerSuitBitmasks[3]  # Sellbot
+    ])
+    toon.b_setCogLevels([49, 49, 49, 49])
+    toon.b_setCogTypes([7, 7, 7, 7])
+    
+    # Max racing tickets
+    toon.b_setTickets(99999)
+    
+    # Teleport access everywhere (Including CogHQ, excluding Funny Farm.)
+    toon.b_setHoodsVisited([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
+    toon.b_setTeleportAccess([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
+    
+    # Carry 4 (max) tasks
+    toon.b_setQuestCarryLimit(4)
+    
+    return 'By the power invested in me, I, McQuack, max your toon.'
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxMoney(moneyVal):
