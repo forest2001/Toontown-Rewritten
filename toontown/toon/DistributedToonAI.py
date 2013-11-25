@@ -4427,9 +4427,9 @@ def setCE(CEValue, CEHood=0, CEExpire=0):
     CEHood = CEHood * 1000 #So the invoker only has to use '1' for DonaldsDock, '2' for TTC etc.
     if not 0 <= CEValue <= 18:
         return 'Invalid value %s specified for Cheesy Effect.' % CEValue
-    if CEHood != 0 and not 100 < CEHood*1000 < ToontownGlobals.DynamicZonesBegin:
+    if CEHood != 0 and not 100 < CEHood < ToontownGlobals.DynamicZonesBegin:
         return 'Invalid zoneId specified.'
-    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood*1000, CEExpire)
+    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setHp(hpVal):
