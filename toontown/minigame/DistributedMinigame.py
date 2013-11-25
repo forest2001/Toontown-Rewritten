@@ -448,3 +448,9 @@ class DistributedMinigame(DistributedObject.DistributedObject):
 def abortMinigame():
     """Abort any minigame you are currently in"""
     messenger.send('minigameAbort')
+
+@magicWord(category=CATEGORY_OVERRIDE)
+def winMinigame():
+    """Win the current minigame you are in."""
+    messenger.send('minigameVictory')
+    
