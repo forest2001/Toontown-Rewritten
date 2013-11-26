@@ -2,7 +2,6 @@ from toontown.hood.HoodAI import *
 from toontown.dna.DNAParser import DNAData
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedGolfKartAI import DistributedGolfKartAI
-#from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI #oh disney...
 from toontown.golf import GolfGlobals
 
 class GZHoodAI(HoodAI):
@@ -41,6 +40,7 @@ class GZHoodAI(HoodAI):
                     x, y, z = posSpot.getPos()
                     h, p, r = posSpot.getHpr()
                     kart.setPosHpr(x, y, z, h, p, r)
+                    kart.setColor(GolfGlobals.KartColors[index][0][1], GolfGlobals.KartColors[index][1][1], GolfGlobals.KartColors[index][2][1])
                     kart.generateWithRequired(self.HOOD)
                     self.golfKarts.append(kart)
         for i in range(group.getNumChildren()):

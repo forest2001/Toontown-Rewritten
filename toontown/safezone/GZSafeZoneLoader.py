@@ -41,12 +41,12 @@ class GZSafeZoneLoader(SafeZoneLoader):
         self.playgroundClass = GZPlayground
         SafeZoneLoader.enterPlayground(self, requestStatus)
         top = self.geom.find('**/linktunnel_bosshq_10000_DNARoot')
-        sign = top.find('**/Sign_5')
-        sign.node().setEffect(DecalEffect.make())
-        locator = top.find('**/sign_origin')
-        signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.BossbotHQ[-1]), font=ToontownGlobals.getSuitFont(), scale=TTLocalizer.GZSZLsignText, fg=(0, 0, 0, 1), mayChange=False, parent=sign)
-        signText.setPosHpr(locator, 0, 0, -0.3, 0, 0, 0)
-        signText.setDepthWrite(0)
+        #sign = top.find('**/Sign_5')
+        #sign.node().setEffect(DecalEffect.make())
+        #locator = top.find('**/sign_origin')
+        #signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.BossbotHQ[-1]), font=ToontownGlobals.getSuitFont(), scale=TTLocalizer.GZSZLsignText, fg=(0, 0, 0, 1), mayChange=False, parent=sign)
+        #signText.setPosHpr(locator, 0, 0, -0.3, 0, 0, 0)
+        #signText.setDepthWrite(0)
 
     def exitPlayground(self):
         taskMgr.remove('titleText')
