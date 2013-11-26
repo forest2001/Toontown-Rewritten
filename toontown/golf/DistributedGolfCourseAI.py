@@ -17,8 +17,16 @@ class DistributedGolfCourseAI(DistributedObjectAI):
     
     def generate(self):
         self.cInfo = GolfGlobals.CourseInfo[self.courseId]
-        #while len(self.holeIds) != cInfo['numHoles']:
-        #    newHole = random.choice(cInfo[
+        while len(self.holeIds) != cInfo['numHoles']:
+            try:
+                cInfo['holeIds'][i] = int(cInfo['holeIds'][i])
+            except:
+                cInfo['holeIds'][i] = int(cInfo['holeId'][i][0])
+                
+            if cInfo['holeIds'][i] not in self.holeIds:
+                self.holeIds.append(cInfo['holeIds'][i])
+            
+            #newHole = random.choice(cInfo[
 
     def setGolferIds(self, avIds):
         self.avatars = avIds
