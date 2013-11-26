@@ -4528,7 +4528,7 @@ def setName(nameStr):
 def gibunites():
     """Restock all CFO phrases."""
     spellbook.getTarget().restockAllResistanceMessages(99)
-    return 'Gave %s all CFO unites.' % spellbook.getTarget().getName()
+    return 'i gib %s all dem unitez' % spellbook.getTarget().getName()
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setHat(hatId, hatTex=0):
