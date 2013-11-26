@@ -4525,10 +4525,9 @@ def setName(nameStr):
     return "Changed avId %s's name to %s" % (spellbook.getTarget().doId, nameStr)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS)
-def restockAllResistances():
+def gibunites():
     """Restock all CFO phrases."""
-    return 'This magic word is currently disabled, as unites are broken with Mirai.'
-    spellbook.getTarget().restockAllResistanceMessages(1)
+    spellbook.getTarget().restockAllResistanceMessages(99)
     return 'Gave %s all CFO unites.' % spellbook.getTarget().getName()
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
