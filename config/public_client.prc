@@ -22,6 +22,8 @@ want-news-page #f
 want-news-tab #f
 want-housing #f
 
+force-holiday 6
+
 model-path /
 model-cache-models #f
 model-cache-textures #f
