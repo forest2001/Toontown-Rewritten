@@ -59,6 +59,7 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         if set(self.readyAvatars) == set(self.avatars):
             self.curGolfer = self.avatars[0]
             self.sendUpdate('golferChooseTee', [self.curGolfer])
+            self.avatarSwings[self.avatars[0]] += 1
 
     def setGolfCourseDoId(self, gcDoId):
         self.gcDoId = gcDoId
@@ -87,23 +88,26 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         if len(self.avatars) == 1:
             self.__newGolfer(avId)
             return
-        while avIndex != len(self.avatars) - 1:
-            avIndex += 1
-            if self.avatars[avIndex] not in self.finishedAvatars:
-                self.__newGolfer(self.avatars[avIndex])
-                return
-        for i in range(len(self.avatars)):
-            if self.avatars[i] not in self.finishedAvatars:
-                self.__newGolfer(self.avatars[i])
-                return
+        #while avIndex != len(self.avatars) - 1:
+        avIndex += 1
+        if avIndex > len(self.avatars)-1:
+            avIndex = 0
+        if self.avatars[avIndex] not in self.finishedAvatars:
+            self.__newGolfer(self.avatars[avIndex])
+            return
+        #for i in range(len(self.avatars)):
+            #if self.avatars[i] not in self.finishedAvatars:
+                #self.__newGolfer(self.avatars[i])
+                #return
 
     def __newGolfer(self, avId):
         self.curGolfer = avId
+        print "it is %s's turn!!!!!!!!!" % self.air.doId2do.get(avId).getName()
+        self.sendUpdate('golfersTurn', [avId])
         if self.avatarSwings[avId] == 0:
-            self.sendUpdate('golferChooseTee', [self.curGolfer])
-        else:
-            self.sendUpdate('golfersTurn', [avId])
+            self.sendUpdate('golferChooseTee', [avId])
         self.avatarSwings[avId] += 1
+    
     def ballInHole(self):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
