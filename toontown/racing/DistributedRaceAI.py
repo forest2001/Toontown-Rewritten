@@ -310,8 +310,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
         elif qualify:
-            offset = 4 - len(self.avatarProgress)
-            winnings = entryFee*RaceGlobals.Winnings[place - 1 + offset] + entryFee
+            offset = 4 - len(self.avatars)
+            winnings = entryFee * RaceGlobals.Winnings[(place+offset)-1]
             trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime)
         else:
             winnings = 0
