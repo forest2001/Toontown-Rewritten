@@ -1192,6 +1192,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             desc = 'tried to set invalid animState: %s' % (animName,)
             if config.GetBool('want-ban-animstate', 1):
                 #simbase.air.banManager.ban(self.doId, self.DISLid, desc)
+                pass
             else:
                 self.air.writeServerEvent('suspicious', self.doId, desc)
             return
@@ -2481,6 +2482,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             dislId = self.DISLid
             if simbase.config.GetBool('want-ban-negative-money', False):
                 #simbase.air.banManager.ban(self.doId, dislId, commentStr)
+                pass
         self.money = money
 
     def getMoney(self):
