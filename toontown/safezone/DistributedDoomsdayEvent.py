@@ -18,7 +18,11 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
         rope.reparentTo(self.stage)
 
         self.flippy = NPCToons.createLocalNPC(2001)
+        self.alec = NPCToons.createLocalNPC(2022)        
+        self.slappy = NPCToons.createLocalNPC(2021)
         self.flippy.reparentTo(self.stage)
+        self.slappy.reparentTo(self.stage)
+        self.alec.reparentTo(self.stage)
 
     def delete(self):
         self.demand('Off', 0.)
@@ -43,7 +47,7 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:
         self.flippy.setPos(0, -10, 0)
-        self.flippy.setHpr(0, 0, 0)
+        self.flippy.setHpr(0, 0, 0)           
 
         self.interval = Sequence(
             # Flippy runs toward the bank:
@@ -91,10 +95,20 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
 
     def enterFlippyWaving(self, offset):
         self.flippy.loop('wave')
-        self.flippy.setPos(-10, 0, 0)
+        self.flippy.setPos(0, -10, 0)
         self.flippy.setHpr(90, 0, 0)
+        self.slappy.loop('bow')
+        self.slappy.setPos(0, 10, 0)
+        self.slappy.setHpr(90, 0, 0)
+        self.alec.setPos(-5, 0, 0)
+        self.alec.setHpr(90, 0, 0) 
 
     def exitFlippyWaving(self):
         self.flippy.loop('neutral')
-        self.flippy.setPos(0, 0, 0)
-        self.flippy.setHpr(0, 0, 0)
+        self.flippy.setPos(0, -10, 0)
+        self.flippy.setHpr(90, 0, 0)
+        self.slappy.loop('neutral')
+        self.flippy.setPos(0, 10, 0)
+        self.flippy.setHpr(90, 0, 0)
+        self.alec.setPos(-5, 0, 0)
+        self.alec.setHpr(90, 0, 0)         
