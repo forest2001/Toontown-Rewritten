@@ -4702,6 +4702,6 @@ def setTickets(tixVal):
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def setCogIndex(indexVal):
     """Transform into a cog/suit. THIS SHOULD ONLY BE USED WHERE NEEDED, E.G. ELECTIONS"""
-    if not 0 <= indexVal <= 3:
+    if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
