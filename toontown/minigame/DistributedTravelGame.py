@@ -195,20 +195,29 @@ class DistributedTravelGame(DistributedMinigame):
             switchModel.setPos(*info['pos'])
             switchModel.reparentTo(hidden)
             self.trainSwitches[key] = switchModel
-            zAdj = 0
+            depthOffset = 0
             for otherSwitch in info['links']:
                 info2 = TravelGameGlobals.BoardLayouts[self.boardIndex][otherSwitch]
                 x1, y1, z1 = info['pos']
                 x2, y2, z2 = info2['pos']
                 linkKey = (key, otherSwitch)
-                trainTrack = self.loadTrainTrack(x1, y1, x2, y2, zAdj)
+                trainTrack = self.loadTrainTrack(x1, y1, x2, y2, depthOffset)
                 trainTrack.reparentTo(hidden)
                 self.trainTracks[linkKey] = trainTrack
-                zAdj += 0.005
+                depthOffset += 3
+            switchModel.setDepthOffset(depthOffset)
 
         rootInfo = TravelGameGlobals.BoardLayouts[self.boardIndex][0]
         rootX, rootY, rootZ = rootInfo['pos']
         startX = rootX - TravelGameGlobals.xInc
+
+        tempModel = loader.loadModel('phase_4/models/minigames/trolley_game_turntable')
+        self.entryTunnel = tempModel.find('**/tunnel1')
+        self.entryTunnel.reparentTo(render)
+        self.entryTunnel.setH(180)
+        self.entryTunnel.setPos(startX, rootY, rootZ)
+        tempModel.removeNode()
+
         trainTrack = self.loadTrainTrack(startX, rootY, rootX, rootY)
         self.extraTrainTracks.append(trainTrack)
         tunnelX = None
@@ -232,6 +241,11 @@ class DistributedTravelGame(DistributedMinigame):
                 tunnel.wrtReparentTo(trainTrack)
                 self.tunnels[key] = tunnel
 
+        self.clipPlane = render.attachNewNode(PlaneNode('clipPlane'))
+        self.clipPlane.setR(-90)
+        self.clipPlane.setX(tunnelX)
+        self.trolleyCar.setClipPlane(self.clipPlane)
+
         turnTable.removeNode()
         self.loadGui()
         self.introMovie = self.getIntroMovie()
@@ -239,7 +253,7 @@ class DistributedTravelGame(DistributedMinigame):
         self.flashWinningBeansTrack = None
         return
 
-    def loadTrainTrack(self, x1, y1, x2, y2, zAdj = 0):
+    def loadTrainTrack(self, x1, y1, x2, y2, depthOffset = 0):
         turnTable = loader.loadModel('phase_4/models/minigames/trolley_game_turntable')
         trainPart = turnTable.find('**/track_a2')
         trackHeight = 0.03
@@ -265,7 +279,8 @@ class DistributedTravelGame(DistributedMinigame):
         trainTrack.setH(angle)
         newX = x1 + (x2 - x1) / 2.0
         newY = y1 + (y2 - y1) / 2.0
-        trainTrack.setPos(x1, y1, trackHeight + zAdj)
+        trainTrack.setPos(x1, y1, trackHeight)
+        trainTrack.setDepthOffset(depthOffset)
         turnTable.removeNode()
         return trainTrack
 
@@ -306,6 +321,10 @@ class DistributedTravelGame(DistributedMinigame):
         del self.gameBoard
         self.sky.removeNode()
         del self.sky
+        self.clipPlane.removeNode()
+        del self.clipPlane
+        self.entryTunnel.removeNode()
+        del self.entryTunnel
         self.trolleyCar.removeNode()
         del self.trolleyCar
         for key in self.trainSwitches.keys():

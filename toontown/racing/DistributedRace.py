@@ -27,6 +27,8 @@ from toontown.minigame import MinigameRulesPanel
 from toontown.racing import Piejectile
 from toontown.racing import EffectManager
 from toontown.racing import PiejectileManager
+from toontown.dna.DNAParser import *
+from otp.ai.MagicWordGlobal import *
 
 class DistributedRace(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRace')
@@ -720,6 +722,8 @@ class DistributedRace(DistributedObject.DistributedObject):
         loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_TT_town.dna')
         loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR.dna')
         loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR_town.dna')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL.dna')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL_town.dna')
         dnaFile = 'phase_6/dna/urban_track_town.dna'
         if self.trackId in (RaceGlobals.RT_Urban_2, RaceGlobals.RT_Urban_2_rev):
             dnaFile = 'phase_6/dna/urban_track_town_B.dna'
@@ -965,7 +969,7 @@ class DistributedRace(DistributedObject.DistributedObject):
     def precomputeSideStreets(self):
         farDist = base.camLens.getFar() + 300
         farDistSquared = farDist * farDist
-        for i in range(self.barricadeSegments):
+        for i in range(int(self.barricadeSegments)):
             testPoint = Point3(0, 0, 0)
             self.curve.getPoint(i / self.barricadeSegments * (self.curve.getMaxT() - 1e-11), testPoint)
             for side in ('innersidest', 'outersidest'):
@@ -1211,6 +1215,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         self.musicTrack.start()
 
     def changeMusicTempo(self, newPR):
+        return # TODO: Reenable when we have music change support.
         if self.musicTrack:
             self.musicTrack.finish()
         curPR = self.raceMusic.getPlayRate()
@@ -1233,3 +1238,8 @@ class DistributedRace(DistributedObject.DistributedObject):
          'reason': RaceGlobals.Exit_UserReq}
         base.cr.playGame.hood.loader.fsm.request('quietZone', [out])
         return
+        
+@magicWord(category=CATEGORY_OVERRIDE)
+def leaveRace():
+    """Leave the current race you are in."""
+    messenger.send('leaveRace')

@@ -266,9 +266,14 @@ def wire():
     base.toggleWireframe()
     
 @magicWord(category=CATEGORY_GUI)
-def showAvIds(access=200):
+def showAvIds():
     'Show avId in Nametags.'
     messenger.send('nameTagShowAvId')
+
+@magicWord(category=CATEGORY_GUI)
+def showNames():
+    'Remove avIds in Nametags.'
+    messenger.send('nameTagShowName')
     
 @magicWord(access=200)
 def showAccess():

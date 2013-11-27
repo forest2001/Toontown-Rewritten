@@ -93,6 +93,7 @@ class Avatar(Actor, ShadowCaster):
             del self.__font
             del self.style
             del self.soundChatBubble
+            self.nametag.destroy()
             del self.nametag
             self.nametag3d.removeNode()
             ShadowCaster.delete(self)
@@ -603,4 +604,11 @@ def clickNametag(avId):
         return 'avId not found!'
     if not isinstance(av, Avatar):
         return 'ID not Avatar!'
+    if str(avId)[:2] == "40": #This implies AI object, since toons start with '1'
+        return '%s is an NPC!' % av.getName()
     av.clickedNametag()
+
+@magicWord(category=CATEGORY_MODERATION)
+def showTarget():
+    """Show the moderators current Magic Word target."""
+    return 'Your current target is: %s [avId: %s]' % (spellbook.getTarget().getName(), spellbook.getTarget().doId)

@@ -206,7 +206,7 @@ CRServerDateTryAgain = 'Could not get server date from %s. Try again?'
 AfkForceAcknowledgeMessage = 'Your toon got sleepy and went to bed.'
 PeriodTimerWarning = 'Your available time is almost over!'
 PeriodForceAcknowledgeMessage = 'Sorry, you have used up all of your available time. Please exit to purchase more.'
-CREnteringToontown = 'ToonTown Rewritten'
+CREnteringToontown = 'Toontown Rewritten'
 DownloadWatcherUpdate = 'Downloading %s'
 DownloadWatcherInitializing = 'Download Initializing...'
 LoginScreenUserName = 'Account Name'
@@ -230,7 +230,7 @@ DialogLength3 = 20
 GlobalSpeedChatName = 'SpeedChat'
 SCMenuPromotion = 'PROMOTIONAL'
 SCMenuElection = 'ELECTION'
-SCMenuEmotions = 'EMOTIONS'
+SCMenuEmotions = 'ANIMATIONS'
 SCMenuCustom = 'MY PHRASES'
 SCMenuResistance = 'UNITE!'
 SCMenuPets = 'PETS'
@@ -300,6 +300,7 @@ SCMenuWinter = 'WINTER'
 SCMenuSellbotInvasion = 'SELLBOT INVASION'
 SCMenuFieldOffice = 'FIELD OFFICES'
 SCMenuIdesOfMarch = 'GREEN'
+SCMenuRogerDog = 'roger dog'
 FriendSecretNeedsPasswordWarningTitle = 'Parental Controls'
 FriendSecretNeedsParentLoginWarning = 'To get or enter a True Friend Code, log in with the Parent Account.  You can disable this prompt by changing your True Friend options.'
 FriendSecretNeedsPasswordWarning = 'To get or enter a True Friend Code, you must enter the Parent Account Password.  You can disable this prompt by changing your True Friends options.'
@@ -1487,6 +1488,13 @@ SpeedChatStaticTextToontown = {100: 'Hi!',
  10005: 'Be a honey! Vote Bear!',
  10006: 'Think big! Vote Pig!',
  10007: "Vote Goat - and that's all she wrote!",
+ 11000: "hi im roger dog",
+ 11001: "no im roger dog",
+ 11002: "i might be roger dog",
+ 11003: "im the real roger dog", 
+ 11004: "this is my friend roger dog",
+ 11005: "have you seen my friend roger dog",   
+ 11006: "you can call me roger dog for short",
  20000: SuitBrushOffs[None][0],
  20001: SuitBrushOffs[None][1],
  20002: SuitBrushOffs[None][2],

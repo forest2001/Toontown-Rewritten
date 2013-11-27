@@ -22,6 +22,10 @@ class TelemetryLimiter(DirectObject):
         self._objs[id] = obj
         self.accept(self._getDummyEventName(obj), self._dummyEventHandler)
 
+    def hasObj(self, obj):
+        id = obj.getTelemetryLimiterId()
+        return id in self._objs
+
     def _getDummyEventName(self, obj):
         return '%s-%s-%s-%s' % (self.LeakDetectEventName,
          obj.getTelemetryLimiterId(),
@@ -95,7 +99,7 @@ class TLGatherAllAvs(DirectObject):
             base.cr.telemetryLimiter.addObj(av)
 
     def _handlePlayerLeave(self, av):
-        if av is not localAvatar:
+        if av is not localAvatar and base.cr.telemetryLimiter.hasObj(av):
             base.cr.telemetryLimiter.removeObj(av)
             for limit in self._avId2limits[av.doId]:
                 av.removeTelemetryLimit(limit)

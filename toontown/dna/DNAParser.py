@@ -225,6 +225,8 @@ class DNAStorage:
         if block[0] > '9' or block[0] < '0':
             block = block[1:]
         return block
+    def getTitleFromBlockNumber(self, index):
+        return self.blockTitles[index]
     def storeBlockTitle(self, index, title):
         self.blockTitles[index] = title
     def storeBlockArticle(self, index, article):
@@ -508,8 +510,6 @@ class DNASign(DNANode):
             decNode = nodePath.find('**/*_front')
         if decNode.isEmpty() or not decNode.getNode(0).isGeomNode():
             decNode = nodePath.find('**/+GeomNode')
-        decEffect = DecalEffect.make()
-        decNode.setEffect(decEffect)
         node = None
         if self.code != '':
             node = dnaStorage.findNode(self.code)
@@ -519,7 +519,7 @@ class DNASign(DNANode):
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
         node.getNode(0).setEffect(DecalEffect.make())
-        node.setDepthWrite(False, 0)
+        node.setDepthOffset(50)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
         for child in self.children:
@@ -903,11 +903,6 @@ class DNADoor(DNAGroup):
         rightDoor.wrtReparentTo(parentNode, 0)
         leftDoor.wrtReparentTo(parentNode, 0)
         
-        rightDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftDoor.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        leftHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        rightHole.getNode(0).adjustDrawMask(PandaNode.getOverallBit(), BitMask32.allOff(), BitMask32.allOff())
-        
         rightDoor.setColor(color, 0)
         leftDoor.setColor(color, 0)
         leftHole.setColor((0,0,0,1), 0)
@@ -1143,7 +1138,7 @@ class DNALoader:
         self.data.traverse(self.nodePath, self.data.getDnaStorage())
         if self.nodePath.getChild(0).getNumChildren() == 0:
             return None
-        return self.nodePath.getChild(0).getChild(0).getChild(0)
+        return self.nodePath.getChild(0).getChild(0)
     def getData(self):
         return self.data    
 
@@ -1269,7 +1264,12 @@ p_dnanode.__doc__ = \
                | landmarkbuilding
                | street
                | signgraphic
-               | dnanodedef "[" subdnanode_list "]"'''
+               | dnanode_grp'''
+
+def p_dnanode_grp(p):
+    p[0] = p[1]
+    p.parser.parentGroup = p[0].getParent()
+p_dnanode_grp.__doc__ = '''dnanode_grp : dnanodedef "[" subdnanode_list "]"'''
 
 def p_sign(p):
     p[0] = p[1]
@@ -1503,9 +1503,9 @@ def p_flags(p):
     p.parser.parentGroup.setFlags(p[3])
 p_flags.__doc__ = '''flags : FLAGS "[" string "]"'''
 
-def p_dnanode_subs(p):
+def p_dnanode_sub(p):
     p[0] = p[1]
-p_dnanode_subs.__doc__ = \
+p_dnanode_sub.__doc__ = \
     '''dnanode_sub : group
                    | pos
                    | hpr
@@ -1745,7 +1745,7 @@ def p_subdnanode_list(p):
     else:
         p[0] = []
 p_subdnanode_list.__doc__ = \
-    '''subdnanode_list : subtext_list dnanode_sub
+    '''subdnanode_list : subdnanode_list dnanode_sub
                        | empty'''
 
 def p_subsigngraphic_list(p):

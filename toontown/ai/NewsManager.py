@@ -33,7 +33,11 @@ class NewsManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.population = 0
         self.invading = 0
-        self.decorationHolidayIds = []
+        forcedHoliday = base.config.GetInt('force-holiday', -1)
+        if forcedHoliday != -1:
+            self.decorationHolidayIds = [decorationHolidays[forcedHoliday]]
+        else:
+            self.decorationHolidayIds = []
         self.holidayDecorator = None
         self.holidayIdList = []
         base.cr.newsManager = self

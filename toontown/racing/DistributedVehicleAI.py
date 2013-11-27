@@ -5,6 +5,10 @@ from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedSmoothNodeAI
 from direct.fsm import FSM
 from direct.task import Task
+
+from direct.distributed.PyDatagram import *
+
+
 if (__debug__):
     import pdb
 
@@ -46,8 +50,9 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
 
     def requestControl(self):
         avId = self.air.getAvatarIdFromSender()
+        accId = self.air.getAccountIdFromSender()
         if self.driverId == 0:
-            self.request('Controlled', avId)
+            self.request('Controlled', avId, accId)
 
     def requestParked(self):
         avId = self.air.getAvatarIdFromSender()
@@ -71,7 +76,7 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
     def exitParked(self):
         return None
 
-    def enterControlled(self, avId):
+    def enterControlled(self, avId, accId):
         self.driverId = avId
         fieldList = ['setComponentL',
          'setComponentX',
@@ -95,13 +100,19 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
          'clearSmoothing',
          'suggestResync',
          'returnResync']
-        self.air.setAllowClientSend(avId, self, fieldNameList=fieldList)
+        #self.air.setAllowClientSend(avId, self, fieldList, accId)
+        #hack until CLIENTAGENT_SET_FIELDS_SENDABLE works
+        #probably should not be kept for any longer than it needs to
+        dg = PyDatagram()
+        dg.addServerHeader(self.doId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
+        dg.addUint64(accId << 32 | avId)
+        self.air.send(dg)
         self.d_setState('C', self.driverId)
 
     def exitControlled(self):
         pass
 
-    def __handleUnexpectedExit(self):
+    def handleUnexpectedExit(self):
         self.notify.warning('toon: %d exited unexpectedly, resetting vehicle %d' % (self.driverId, self.doId))
         self.request('Parked')
         self.requestDelete()

@@ -41,5 +41,4 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
     def sendMagicWordResponse(self, response):
         self.notify.info(response)
-        base.localAvatar.setChatAbsolute(response, CFSpeech | CFTimeout)
-        base.talkAssistant.receiveDeveloperMessage(response)
+        base.localAvatar.setSystemMessage(0, 'Spellbook: ' + str(response))
