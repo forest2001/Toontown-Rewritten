@@ -210,7 +210,8 @@ class InventoryBase(DirectObject.DirectObject):
                     commentStr = "Player %s trying to purchase gag they don't have track access to. track: %s level: %s" % (self.toon.doId, track, level)
                     dislId = self.toon.DISLid
                     if simbase.config.GetBool('want-ban-gagtrack', False):
-                        simbase.air.banManager.ban(self.toon.doId, dislId, commentStr)
+                        #simbase.air.banManager.ban(self.toon.doId, dislId, commentStr)
+                        pass
                     return 0
                 if level > LAST_REGULAR_GAG_LEVEL and tempInv[track][level] > self.inventory[track][level] or allowUber:
                     return 0
