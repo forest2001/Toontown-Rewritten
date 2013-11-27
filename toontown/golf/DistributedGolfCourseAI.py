@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.golf.DistributedGolfHoleAI import DistributedGolfHoleAI
 from toontown.golf import GolfGlobals
 import random
 
@@ -14,19 +15,20 @@ class DistributedGolfCourseAI(DistributedObjectAI):
         self.holeIds = []
         self.courseId = 0
         self.chDoId = 0
+        self.chIndex = -1
     
     def generate(self):
         self.cInfo = GolfGlobals.CourseInfo[self.courseId]
-        while len(self.holeIds) != cInfo['numHoles']:
+        while len(self.holeIds) != self.cInfo['numHoles']:
+            i = random.randint(0, len(self.cInfo['holeIds']) - 1)
             try:
-                cInfo['holeIds'][i] = int(cInfo['holeIds'][i])
+                holeId = int(self.cInfo['holeIds'][i])
             except:
-                cInfo['holeIds'][i] = int(cInfo['holeId'][i][0])
+                holeId = int(self.cInfo['holeIds'][i][0])
                 
-            if cInfo['holeIds'][i] not in self.holeIds:
-                self.holeIds.append(cInfo['holeIds'][i])
-            
-            #newHole = random.choice(cInfo[
+            if holeId not in self.holeIds:
+                self.holeIds.append(holeId)
+        
 
     def setGolferIds(self, avIds):
         self.avatars = avIds
@@ -64,8 +66,22 @@ class DistributedGolfCourseAI(DistributedObjectAI):
             return
         self.joinedAvatars.append(avId)
         if set(self.avatars) == set(self.joinedAvatars):
-            pass
+            self.sendUpdate('setCourseReady', [len(self.holeIds), self.holeIds, self.calcCoursePar()])
+            self.createNextHole()
 
+    def createNextHole(self):
+        self.b_setCurHoleIndex(self.chIndex + 1)
+        hole = DistributedGolfHoleAI(self.air)
+        hole.setHoleId(self.holeIds[self.chIndex])
+        hole.setTimingCycleLength(45)
+        hole.setGolfCourseDoId(self.doId)
+        hole.setGolferIds(self.avatars)
+        hole.generateWithRequired(self.zone)
+        
+        self.b_setCurHoleDoId(hole.doId)
+        self.sendUpdate('setPlayHole', [])
+        
+        
     def setAvatarReadyCourse(self):
         pass
 
@@ -82,7 +98,7 @@ class DistributedGolfCourseAI(DistributedObjectAI):
         self.sendUpdate('setCurHoleIndex', [chIndex])
         
     def b_setCurHoleIndex(self, chIndex):
-        self.setCureHoleIndex(chIndex)
+        self.setCurHoleIndex(chIndex)
         self.d_setCurHoleIndex(chIndex)
         
     def getCurHoleIndex(self):
@@ -138,3 +154,6 @@ class DistributedGolfCourseAI(DistributedObjectAI):
             retval += holeInfo['par']
 
         return retval
+        
+    def __finishGolfHole(self):
+        pass

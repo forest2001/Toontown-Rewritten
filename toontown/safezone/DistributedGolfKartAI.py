@@ -206,6 +206,7 @@ class DistributedGolfKartAI(DistributedObjectAI, FSM):
         course.setGolferIds(players)
         course.setCourseId(self.index)
         course.setCurHoleIndex(1)
+        course.zone = gameZone
         course.generateWithRequired(gameZone)
         
                 
