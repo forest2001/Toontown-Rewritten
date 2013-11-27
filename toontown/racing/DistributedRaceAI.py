@@ -77,7 +77,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         
     def enterStart(self):
         self.startTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime()) + 3
-        self.b_startRace(4)
+        self.b_startRace(3)
     
     def exitStart(self):
         pass
@@ -264,7 +264,6 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.b_genGag(index, 1, gagId)
 
     def racerLeft(self, avId):
-        #harv will hate this
         realAvId = self.air.getAvatarIdFromSender()
         if realAvId != avId:
             self.air.writeServerEvent('suspicious', realAvId, 'Toon tried to make another quit race!')
@@ -310,7 +309,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
         elif qualify:
-            offset = 4 - len(self.avatars)
+            offset = 4 - len(self.avatarProgress) # self.avatarProgress contains the amount of STARTING players.
             winnings = entryFee * RaceGlobals.Winnings[(place+offset)-1]
             trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime)
         else:
