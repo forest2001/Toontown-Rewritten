@@ -4,12 +4,12 @@ from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 
-class DistributedDoomsdayEventAI(DistributedObjectAI, FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedDoomsdayEventAI")
+class DistributedElectionEventAI(DistributedObjectAI, FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
 
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
-        FSM.__init__(self, 'DoomsdayFSM')
+        FSM.__init__(self, 'ElectionFSM')
 
         self.stateTime = globalClockDelta.getRealNetworkTime()
 
@@ -42,13 +42,13 @@ class DistributedDoomsdayEventAI(DistributedObjectAI, FSM):
 
 @magicWord()
 def doomsday(state):
-    event = simbase.air.doFind('DoomsdayEvent')
+    event = simbase.air.doFind('ElectionEvent')
     if event is None:
-        return 'No Doomsday event created'
+        return 'No Election event created'
 
     if not hasattr(event, 'enter'+state):
         return 'Invalid state'
 
     event.b_setState(state)
 
-    return 'Doomsday event now in %r state' % state
+    return 'Election event now in %r state' % state

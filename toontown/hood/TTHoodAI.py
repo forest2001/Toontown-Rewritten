@@ -1,6 +1,6 @@
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
-from toontown.safezone.DistributedDoomsdayEventAI import DistributedDoomsdayEventAI
+from toontown.safezone.DistributedElectionEventAI import DistributedElectionEventAI
 from toontown.toon import NPCToons
 from HoodAI import HoodAI
 
@@ -22,5 +22,5 @@ class TTHoodAI(HoodAI):
 
         self.createHQ(2520, 20)
 
-        self.doomsday = DistributedDoomsdayEventAI(self.air)
-        self.doomsday.generateWithRequired(self.safezone)
+        self.election = DistributedElectionEventAI(self.air)
+        self.election.generateWithRequired(self.safezone)

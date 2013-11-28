@@ -8,10 +8,10 @@ from toontown.toon import NPCToons
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 
-class DistributedDoomsdayEvent(DistributedObject, FSM):
+class DistributedElectionEvent(DistributedObject, FSM):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
-        FSM.__init__(self, 'DoomsdayFSM')
+        FSM.__init__(self, 'ElectionFSM')
 
         self.stage = NodePath('stage')
         self.stage.setPos(64, 0, 4)
