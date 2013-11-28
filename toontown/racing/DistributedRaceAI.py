@@ -318,7 +318,7 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         av.b_setTickets(av.getTickets() + winnings)
         if av.getTickets() > RaceGlobals.MaxTickets:
             av.b_setTickets(RaceGlobals.MaxTickets)
-        self.sendUpdate('setPlace', [avId, totalTime, place, entryFee, qualify, winnings, bonus, trophies, [], 0])
+        self.sendUpdate('setPlace', [avId, totalTime, place, entryFee, qualify, (winnings-entryFee), bonus, trophies, [], 0])
 
         
     def calculateTrophies(self, avId, won, qualify, time):
