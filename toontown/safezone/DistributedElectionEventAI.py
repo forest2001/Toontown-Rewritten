@@ -41,7 +41,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
 
 @magicWord()
-def doomsday(state):
+def election(state):
     event = simbase.air.doFind('ElectionEvent')
     if event is None:
         return 'No Election event created'
