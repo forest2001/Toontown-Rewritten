@@ -5,6 +5,8 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
 from toontown.toon import NPCToons
+from toontown.suit import Suit
+from toontown.suit import SuitDNA
 
 class DistributedDoomsdayEvent(DistributedObject, FSM):
     def __init__(self, cr):
@@ -23,6 +25,12 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
         self.flippy.reparentTo(self.stage)
         self.slappy.reparentTo(self.stage)
         self.alec.reparentTo(self.stage)
+        
+        self.suit = Suit.Suit()
+        cogDNA = SuitDNA.SuitDNA()
+        cogDNA.newSuit('ym')
+        self.suit.setDNA(cogDNA)
+        self.suit.reparentTo(self.stage)
 
     def delete(self):
         self.demand('Off', 0.)
@@ -101,7 +109,10 @@ class DistributedDoomsdayEvent(DistributedObject, FSM):
         self.slappy.setPos(0, 10, 0)
         self.slappy.setHpr(90, 0, 0)
         self.alec.setPos(-5, 0, 0)
-        self.alec.setHpr(90, 0, 0) 
+        self.alec.setHpr(90, 0, 0)
+        self.suit.loop('neutral')
+        self.suit.setPos(5, 0, 0)
+        self.suit.setHpr(90, 0, 0)
 
     def exitFlippyWaving(self):
         self.flippy.loop('neutral')
