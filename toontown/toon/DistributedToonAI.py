@@ -4419,7 +4419,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emotes[emoteId] = 1
 
         self.b_setEmoteAccess(emotes)
-        
+        self.b_setHat(30, 0, 0)        
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
         if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
