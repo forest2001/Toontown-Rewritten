@@ -215,16 +215,16 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
 
 @magicWord(category=CATEGORY_OVERRIDE)
 def stopBingo():
-    for hood in spellbook.getTarget().air.hoods:
-        hood.pond.bingoMgr.shouldStop = True
+    for pond in simbase.air.fishManager.ponds.values():
+        pond.bingoMgr.shouldStop = True
     return "Stopped Fish Bingo for the current district."
 
 @magicWord(category=CATEGORY_OVERRIDE)
 def startBingo():
-    for hood in spellbook.getTarget().air.hoods:
-        if hood.pond.bingoMgr.state == 'Off':
-            hood.pond.bingoMgr.createGame()
-            hood.pond.bingoMgr.shouldStop = False
+    for pond in simbase.air.fishManager.ponds.values():
+        if pond.bingoMgr.state == 'Off':
+            pond.bingoMgr.createGame()
+        pond.bingoMgr.shouldStop = False
     return "Started Fish Bingo for the current district."
         
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, int])
