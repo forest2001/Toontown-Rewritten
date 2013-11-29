@@ -352,12 +352,16 @@ class DNAGroup:
         self.name = name
         self.children = []
         self.parent = None
+        self.visGroup = None
     def add(self, child):
         self.children += [child]
     def at(self, index):
         return self.children[index]
     def clearParent(self):
         self.parent = None
+        self.visGroup = None
+    def getVisGroup(self):
+        return self.visGroup
     def getNumChildren(self):
         return len(self.children)
     def getParent(self):
@@ -366,6 +370,7 @@ class DNAGroup:
         self.children.remove(child)
     def setParent(self, parent):
         self.parent = parent
+        self.visGroup = parent.getVisGroup()
     def getName(self):
         return self.name
     def traverse(self, nodePath, dnaStorage):
@@ -380,6 +385,8 @@ class DNAVisGroup(DNAGroup):
         self.visibles = []
         self.suitEdges = []
         self.battleCells = []
+    def getVisGroup(self):
+        return self
     def addBattleCell(self, cell):
         self.battleCells += [cell]
     def addSuitEdge(self, edge):
@@ -1947,3 +1954,11 @@ def loadDNAFile(dnaStore, filename):
     if not graph is None:
         return graph.getNode(0)
     return None
+
+def loadDNAFileAI(dnaStore, filename):
+    print 'AI: Reading DNA file... ', filename
+    dnaloader = DNALoader()
+    dnaloader.getData().setDnaStorage(dnaStore)
+    filename = 'resources/' + filename
+    dnaloader.getData().read(open(filename, 'r'))
+    return dnaloader.getData()

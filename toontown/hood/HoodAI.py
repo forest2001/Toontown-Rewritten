@@ -9,6 +9,7 @@ from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.building import DoorTypes
 from toontown.fishing import FishingTargetGlobals
 from toontown.safezone import TreasureGlobals
+from toontown.town.StreetAI import StreetAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 
 class HoodAI:
@@ -27,7 +28,7 @@ class HoodAI:
 
         self.safezone = self.HOOD
         self.streets = {}
-
+        
         self.trolley = None
         self.pond = None
 
@@ -41,8 +42,7 @@ class HoodAI:
     def createStreets(self):
         branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])
         for branch in branchIds:
-            #street = StreetAI(self.air, branch)
-            street = None # Mav needs to activate the above and disable this.
+            street = StreetAI(self.air, branch)
             self.streets[branch] = street
 
     def createTrolley(self):
@@ -90,23 +90,30 @@ class HoodAI:
         hqInterior.setZoneIdAndBlock(zone, 0)
         hqInterior.generateWithRequired(zone)
 
-    def createPond(self):
-        self.pond = DistributedFishingPondAI(self.air)
-        self.pond.setArea(self.safezone)
-        self.pond.generateWithRequired(self.safezone)
-        
-        bingoManager = DistributedPondBingoManagerAI(self.air)
-        bingoManager.setPondDoId(self.pond.getDoId())
-        bingoManager.generateWithRequired(self.safezone)
-        #temporary, until we have scheduled stuff
-        bingoManager.createGame()
-        
-        self.pond.bingoMgr = bingoManager
-
-        for i in range(FishingTargetGlobals.getNumTargets(self.safezone)):
-            target = DistributedFishingTargetAI(self.air)
-            target.setPondDoId(self.pond.getDoId())
-            target.generateWithRequired(self.safezone)
+    def createPond(self, group):
+        if group.getName()[:12] == 'fishing_pond':
+            self.pond = DistributedFishingPondAI(self.air)
+            self.pond.setArea(self.safezone)
+            self.pond.generateWithRequired(self.safezone)
+            for i in range(group.getNumChildren()):
+                posSpot = group.at(i)
+                if posSpot.getName()[:12] == 'fishing_spot':
+                    x, y, z = posSpot.getPos()
+                    h, p, r = posSpot.getHpr()
+                    self.createSpot(x, y, z, h, p, r)
+            bingoManager = DistributedPondBingoManagerAI(self.air)
+            bingoManager.setPondDoId(self.pond.getDoId())
+            bingoManager.generateWithRequired(self.safezone)
+            #temporary, until we have scheduled stuff
+            bingoManager.createGame()   
+            self.pond.bingoMgr = bingoManager
+            self.air.fishManager.ponds[self.safezone] = self.pond
+            for i in range(FishingTargetGlobals.getNumTargets(self.safezone)):
+                target = DistributedFishingTargetAI(self.air)
+                target.setPondDoId(self.pond.getDoId())
+                target.generateWithRequired(self.safezone)
+        for i in range(group.getNumChildren()):
+            self.createPond(group.at(i))
 
     def createSpot(self, x, y, z, h, p, r):
         spot = DistributedFishingSpotAI(self.air)

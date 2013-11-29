@@ -3,6 +3,9 @@ from toontown.fishing.FishBase import FishBase
 import random
 
 class FishManagerAI:
+
+    def __init__(self):
+        self.ponds = {}
         
     def creditFishTank(self, av):
         totalFish = len(av.fishCollection)
