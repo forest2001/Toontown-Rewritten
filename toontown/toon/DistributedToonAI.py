@@ -4390,12 +4390,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
 
-        # Their fishing rod should be level 2.
-        self.b_setFishingRod(2)
+        # Their fishing rod should be level 3.
+        self.b_setFishingRod(3)
 
         # They need bigger jellybean jars to hold all of their money:
-        if self.getMaxMoney()<120: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
-            self.b_setMaxMoney(120)
+        if self.getMaxMoney()<250: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
+            self.b_setMaxMoney(250)
 
         # Unlock all of the emotes they should have during alpha:
         emotes = list(self.getEmoteAccess())
@@ -4419,6 +4419,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emotes[emoteId] = 1
 
         self.b_setEmoteAccess(emotes)
+        #Remove Hat after Thanksgiving
         self.b_setHat(0, 0, 0)        
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
         if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
