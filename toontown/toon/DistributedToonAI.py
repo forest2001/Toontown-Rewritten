@@ -4390,8 +4390,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
 
-        # Their fishing rod should be level 3.
-        self.b_setFishingRod(3)
+        # Their fishing rod should be level 4.
+        self.b_setFishingRod(4)
 
         # They need bigger jellybean jars to hold all of their money:
         if self.getMaxMoney()<250: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
