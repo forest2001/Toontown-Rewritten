@@ -37,6 +37,6 @@ class TTHoodAI(HoodAI):
         for area in range(ButterflyGlobals.NUM_BUTTERFLY_AREAS[playground]):
             for b in range(ButterflyGlobals.NUM_BUTTERFLIES[playground]):
                 butterfly = DistributedButterflyAI(self.air)
-                butterfly.setArea(0, area)
+                butterfly.setArea(playground, area)
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
