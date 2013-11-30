@@ -32,7 +32,8 @@ class TTHoodAI(HoodAI):
             self.streets[branch] = street
             
     def createButterflies(self):
-        for i in range(1, 20):
+        for i in range(20):
             butterfly = DistributedButterflyAI(self.air)
-            butterfly.setArea(self.HOOD, self.HOOD)
-            butterfly.setState(1, 1, 1, 1, 1)
+            butterfly.setArea(0, 0)
+            butterfly.setState(0, 0, 0, 1, 1)
+            butterfly.generateWithRequired(self.HOOD)

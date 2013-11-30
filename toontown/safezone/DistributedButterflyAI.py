@@ -42,6 +42,9 @@ class DistributedButterflyAI(DistributedObjectAI):
     def b_setState(self, stateIndex, curIndex, destIndex, time, timestamp):
         self.setState(stateIndex, curIndex, destIndex, time, timestamp)
         self.d_setState(stateIndex, curIndex, destIndex, time, timestamp)
+        
+    def getState(self):
+        return [self.stateIndex, self.curIndex, self.destIndex, self.time, self.timestamp]
 
     def avatarEnter(self):
         pass
