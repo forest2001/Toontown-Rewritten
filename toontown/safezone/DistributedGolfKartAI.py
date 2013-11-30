@@ -43,6 +43,12 @@ class DistributedGolfKartAI(DistributedObjectAI, FSM):
     def requestBoard(self): #stolen from trolley, clean it
         avId = self.air.getAvatarIdFromSender()
 
+        #TEMPORARY
+        for slot in self.slots:
+            if slot:
+                self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
+                return
+        
         if avId in self.slots:
             self.air.writeServerEvent('suspicious', avId, 'Toon requested to board a trolley twice!')
             self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
@@ -205,7 +211,6 @@ class DistributedGolfKartAI(DistributedObjectAI, FSM):
         course = DistributedGolfCourseAI(self.air)
         course.setGolferIds(players)
         course.setCourseId(self.index)
-        course.setCurHoleIndex(1)
         course.zone = gameZone
         course.generateWithRequired(gameZone)
         

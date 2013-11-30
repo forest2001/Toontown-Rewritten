@@ -19,7 +19,8 @@ class DistributedGolfCourseAI(DistributedObjectAI):
     
     def generate(self):
         self.cInfo = GolfGlobals.CourseInfo[self.courseId]
-        while len(self.holeIds) != self.cInfo['numHoles']:
+        #while len(self.holeIds) != self.cInfo['numHoles']:
+        while len(self.holeIds) != 1:
             i = random.randint(0, len(self.cInfo['holeIds']) - 1)
             try:
                 holeId = int(self.cInfo['holeIds'][i])
@@ -70,10 +71,10 @@ class DistributedGolfCourseAI(DistributedObjectAI):
             self.createNextHole()
 
     def createNextHole(self):
-        self.b_setCurHoleIndex(self.chIndex + 1)
+        self.chIndex += 1
         hole = DistributedGolfHoleAI(self.air)
         hole.setHoleId(self.holeIds[self.chIndex])
-        hole.setTimingCycleLength(45)
+        hole.setTimingCycleLength(10)
         hole.setGolfCourseDoId(self.doId)
         hole.setGolferIds(self.avatars)
         hole.generateWithRequired(self.zone)

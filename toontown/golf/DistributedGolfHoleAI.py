@@ -17,6 +17,7 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         self.curGolfer = 0
         
     def generate(self):
+        self.setupSimulation()
         for av in self.avatars:
             self.avatarSwings[av] = 0
 
@@ -57,9 +58,7 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
             return
         self.readyAvatars.append(avId)
         if set(self.readyAvatars) == set(self.avatars):
-            self.curGolfer = self.avatars[0]
-            self.sendUpdate('golferChooseTee', [self.curGolfer])
-            self.avatarSwings[self.avatars[0]] += 1
+            self.__newGolfer(self.avatars[0])
 
     def setGolfCourseDoId(self, gcDoId):
         self.gcDoId = gcDoId
@@ -83,7 +82,11 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to end someone else\'s turn in a game of golf!')
             return
         avIndex = self.avatars.index(avId)
-        if set(self.avatars) == self.finishedAvatars:
+        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
+        if set(self.avatars) == set(self.finishedAvatars):
+            self.air.doId2do[self.gcDoId].sendUpdate('setCourseAbort', [avId])
+            self.requestDelete()
+            self.air.doId2do[self.gcDoId].requestDelete()
             return
         if len(self.avatars) == 1:
             self.__newGolfer(avId)
@@ -102,13 +105,16 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
 
     def __newGolfer(self, avId):
         self.curGolfer = avId
-        print "it is %s's turn!!!!!!!!!" % self.air.doId2do.get(avId).getName()
-        self.sendUpdate('golfersTurn', [avId])
         if self.avatarSwings[avId] == 0:
             self.sendUpdate('golferChooseTee', [avId])
+        else:
+            self.sendUpdate('golfersTurn', [avId])
         self.avatarSwings[avId] += 1
+        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
     
     def ballInHole(self):
+        #GOD DAMN IT
+        #THIS FUNCTION IS NEVER CALLED BY THE DISNEY CLIENT
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to get a hole in a golf game they\'re not playing in!')
@@ -178,8 +184,17 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
 
     def ballMovie2AI(self, cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD):
         #who needs security?
-        self.sendUpdate('ballMovie2Client', [cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD])
-        pass
+        sender = self.air.getAvatarIdFromSender()
+        if sender != avId:
+            return
+        if sender != self.curGolfer:
+            return
+        if ballInHoleFrame != 0:
+            self.finishedAvatars.append(avId)
+        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
+        for avatar in self.avatars:
+            if avatar != avId:
+                self.sendUpdateToAvatarId(avatar, 'ballMovie2Client', [cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD])
 
     def ballMovie2Client(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7):
         pass
