@@ -4,11 +4,11 @@ from toontown.toon import NPCToons
 from toontown.dna.DNAParser import DNAStorage
 from toontown.town.TTStreetAI import TTStreetAI
 from HoodAI import HoodAI
+from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 
 class TTHoodAI(HoodAI):
     HOOD = ToontownGlobals.ToontownCentral
     
-
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
         
@@ -22,9 +22,17 @@ class TTHoodAI(HoodAI):
         NPCToons.createNPC(self.air, 2012, NPCToons.NPCToonDict.get(2012), 2000, posIndex=0)
 
         self.createHQ(2520, 20)
+        
+        self.createButterflies()
 
     def createStreets(self):
         branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])
         for branch in branchIds:
             street = TTStreetAI(self.air, branch)
             self.streets[branch] = street
+            
+    def createButterflies(self):
+        for i in range(1, 20):
+            butterfly = DistributedButterflyAI(self.air)
+            butterfly.setArea(self.HOOD, self.HOOD)
+            butterfly.setState(1, 1, 1, 1, 1)
