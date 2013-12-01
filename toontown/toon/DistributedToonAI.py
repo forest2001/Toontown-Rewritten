@@ -4432,7 +4432,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
         if self._gmType != 2:
-            self.b_setBackpacks(0, 0, 0)
+            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
