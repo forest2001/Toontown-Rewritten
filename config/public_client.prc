@@ -22,6 +22,7 @@ want-news-page #f
 want-news-tab #f
 want-housing #f
 
+want-karts #t
 force-holiday 6
 
 model-path /
@@ -43,3 +44,7 @@ vfs-mount phase_13.mf /
 
 audio-library-name p3openal_audio
 
+# Should these be stored in the root or a phase file?
+# For now, store them in phase_3/etc/
+cursor-filename phase_3/etc/toonmono.cur
+icon-filename phase_3/etc/icon.ico
