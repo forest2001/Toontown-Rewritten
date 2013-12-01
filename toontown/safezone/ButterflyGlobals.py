@@ -6,7 +6,7 @@ LANDED = 2
 states = {OFF: 'off',
  FLYING: 'Flying',
  LANDED: 'Landed'}
-NUM_BUTTERFLIES = (45, 108, 5) # 6, 36, 5
+NUM_BUTTERFLIES = (6, 36, 5) # gg spawning too many butterflies causes Astron to kick some people.
 NUM_BUTTERFLY_AREAS = (4, 1, 4)
 BUTTERFLY_SPEED = 2.0
 BUTTERFLY_HEIGHT = (2.2, 3.2, 2.2)
