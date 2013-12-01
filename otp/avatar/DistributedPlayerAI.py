@@ -154,10 +154,3 @@ def gwhis(text):
             do = simbase.air.doId2do.get(doId)
             if isinstance(do, DistributedPlayerAI): # Toon?
                 do.d_setSystemMessage(0, text)
-
-# Uncomment this command if you need it in your development server.
-'''@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int]) 
-def access(value): # This command is used for testing in development servers.
-    """Set your access to the specified level. Setting yourself below 400 means you cannot cast this command!"""
-    spellbook.getTarget().setAdminAccess(value)
-    return "Set %s's access to %s" % (spellbook.getTarget().getName(), str(value))'''
