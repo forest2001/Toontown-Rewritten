@@ -4427,7 +4427,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
         if not self.isGM():
             self.b_setCheesyEffect(0, 0, 0)
-            self.b_setHat(0, 0, 0)
+            #self.b_setHat(0, 0, 0)
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
@@ -4548,7 +4548,7 @@ def setHat(hatId, hatTex=0):
     """Set hat of target toon."""
     if not 0 <= hatId <= 56:
         return 'Invalid hat specified.'
-    if not 0 <= hatTex <= 19:
+    if not 0 <= hatTex <= 20:
         return 'Invalid hat texture specified.'
     spellbook.getTarget().b_setHat(hatId, hatTex, 0)
     
