@@ -9,11 +9,10 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
-from toontown.dna.DNAParser import loadDNAFileAI
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -110,6 +109,4 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(DLHoodAI.DLHoodAI(self))
         self.hoods.append(GSHoodAI.GSHoodAI(self))
         self.hoods.append(OZHoodAI.OZHoodAI(self))
-
-    def loadDNAFileAI(self, dnastore, filename):
-        return loadDNAFileAI(dnastore, filename)
+        self.hoods.append(GZHoodAI.GZHoodAI(self))

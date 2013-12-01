@@ -208,8 +208,8 @@ class GolfHoleBase:
         frameCount = 0
         lift = 0
         startTime = GolfGlobals.BALL_CONTACT_FRAME / 24
-        startFrame = startTime * self.FPS
-        for frame in range(startFrame):
+        startFrame = int(startTime * self.FPS)
+        for frame in range(int(startFrame)):
             self.simulate()
             self.setTimeIntoCycle(self.swingTime + float(frameCount) * self.DTAStep)
             frameCount += 1
