@@ -4,6 +4,7 @@ from otp.avatar import DistributedAvatarAI
 from otp.avatar import PlayerBase
 from otp.distributed.ClsendTracker import ClsendTracker
 from otp.otpbase import OTPGlobals
+from otp.ai.MagicWordGlobal import *
 
 class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.PlayerBase, ClsendTracker):
 
@@ -134,3 +135,12 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
                 return
 
         self.friendsList.append((friendId, friendCode))
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str]) # This needs a better category. 
+def smsg(text):
+    """Send a whisper to the whole district (system), un-prefixed."""
+    for doId in simbase.air.doId2do:
+        if str(doId)[:2] == '10': # Non-NPC?
+            do = simbase.air.doId2do.get(doId)
+            if isinstance(do, DistributedPlayerAI): # Toon?
+                do.d_setSystemMessage(0, text)
