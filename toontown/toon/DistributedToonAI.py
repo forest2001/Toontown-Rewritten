@@ -4708,7 +4708,7 @@ def setCogIndex(indexVal):
     spellbook.getTarget().b_setCogIndex(indexVal)
  
 @magicWord(category=CATEGORY_OVERRIDE, types=[str]) # This needs a better category. 
-def announce(text): # This should probably be put in DistributedPlayerAI, but we will keep it here for now.
+def smsg(text): # This should probably be put in DistributedPlayerAI, but we will keep it here for now.
     for doId in simbase.air.doId2do:
         if str(doId)[:2] == '10': # Toon?
             do = simbase.air.doId2do.get(doId)
