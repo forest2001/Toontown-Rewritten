@@ -307,13 +307,10 @@ class DistributedGolfCourse(DistributedObject.DistributedObject, FSM, DelayDelet
         return retval
 
     def setScores(self, scoreList):
-        scoreList.reverse()
-        for avId in self.avIdList:
-            avScores = []
-            for holeIndex in range(self.numHoles):
-                avScores.append(scoreList.pop())
-
-            self.scores[avId] = avScores
+        for i in range(len(self.avIdList)):
+            start = i*len(self.avIdList)
+            avScores = scoreList[start:start+self.numHoles]
+            self.scores[self.avIdList[i]] = avScores
 
         self.notify.debug('self.scores=%s' % self.scores)
 
