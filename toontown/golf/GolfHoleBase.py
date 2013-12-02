@@ -351,6 +351,10 @@ class GolfHoleBase:
         skyRayHitPos = None
         ballRayHitPos = None
         bp = self.curGolfBall().getPosition()
+        try: # eww
+            self.colCount = int(self.colCount)
+        except:
+            self.colCount = 1
         for count in range(self.colCount):
             c0, c1 = self.getOrderedContacts(count)
             x = self.space.getContactData(count * 3 + 0)
