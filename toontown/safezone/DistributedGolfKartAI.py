@@ -44,10 +44,10 @@ class DistributedGolfKartAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
 
         #TEMPORARY
-        for slot in self.slots:
-            if slot:
-                self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
-                return
+        #for slot in self.slots:
+        #    if slot:
+        #        self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
+        #        return
         
         if avId in self.slots:
             self.air.writeServerEvent('suspicious', avId, 'Toon requested to board a trolley twice!')

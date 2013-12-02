@@ -15,12 +15,16 @@ class DistributedGolfCourseAI(DistributedObjectAI):
         self.holeIds = []
         self.courseId = 0
         self.chDoId = 0
+        self.scores = []
+        self.zone = 0
         self.chIndex = -1
     
     def generate(self):
         self.cInfo = GolfGlobals.CourseInfo[self.courseId]
+        self.scores = [0] * len(self.avatars) * self.cInfo['numHoles']
+        self.d_setScores(self.scores)
         #while len(self.holeIds) != self.cInfo['numHoles']:
-        while len(self.holeIds) != 1:
+        while len(self.holeIds) != self.cInfo['numHoles']:
             i = random.randint(0, len(self.cInfo['holeIds']) - 1)
             try:
                 holeId = int(self.cInfo['holeIds'][i])
@@ -29,7 +33,7 @@ class DistributedGolfCourseAI(DistributedObjectAI):
                 
             if holeId not in self.holeIds:
                 self.holeIds.append(holeId)
-        
+
 
     def setGolferIds(self, avIds):
         self.avatars = avIds
@@ -65,13 +69,21 @@ class DistributedGolfCourseAI(DistributedObjectAI):
         if avId in self.joinedAvatars:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to join a golf course twice!')
             return
+        self.acceptOnce(self.air.getAvatarExitEvent(avId), self.forceExit)
         self.joinedAvatars.append(avId)
         if set(self.avatars) == set(self.joinedAvatars):
             self.sendUpdate('setCourseReady', [len(self.holeIds), self.holeIds, self.calcCoursePar()])
             self.createNextHole()
+            self.sendUpdate('setPlayHole', [])
 
     def createNextHole(self):
+        if self.chDoId:
+            self.air.doId2do[self.chDoId].requestDelete()
         self.chIndex += 1
+        if self.chIndex == self.cInfo['numHoles']:
+            self.forceExit()
+            #self.calculateTrophies()
+            return
         hole = DistributedGolfHoleAI(self.air)
         hole.setHoleId(self.holeIds[self.chIndex])
         hole.setTimingCycleLength(10)
@@ -79,10 +91,31 @@ class DistributedGolfCourseAI(DistributedObjectAI):
         hole.setGolferIds(self.avatars)
         hole.generateWithRequired(self.zone)
         
+        self.b_setCurHoleIndex(self.chIndex)
         self.b_setCurHoleDoId(hole.doId)
-        self.sendUpdate('setPlayHole', [])
-        
-        
+    
+    def forceExit(self):
+        for avId in self.avatars:
+            self.sendUpdate('setCourseAbort', [avId])
+            self.ignore(self.air.getAvatarExitEvent(avId))
+        if self.chDoId:
+            self.air.doId2do[self.chDoId].requestDelete()
+        self.air.deallocateZone(self.zone)
+        self.requestDelete()
+    
+    def calculateTrophies(self):
+        #for avId in self.avatars:
+        #    av = self.air.doId2do[avId]
+        #    history = av.getGolfHistory()
+        #    
+        #trophiesList = []
+        #rankingsList = []
+        #holeBestList = []
+        #cupList = []
+        #tieBreakWinner = []
+        #self.sendUpdate('setReward', [trophiesList, rankingsList, holeBestList, courseBestList, cupList, tieBreakWinner, aim0, aim1, aim2, aim3])
+        pass
+     
     def setAvatarReadyCourse(self):
         pass
 
@@ -121,7 +154,7 @@ class DistributedGolfCourseAI(DistributedObjectAI):
     def setDoneReward(self):
         pass
 
-    def setReward(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7, todo8, todo9):
+    def setReward(self, trophiesList, rankingsList, holeBestList, courseBestList, cupList, tieBreakWinner, aim0, aim1, aim2, aim3):
         pass
 
     def setCourseReady(self, todo0, todo1, todo2):
@@ -142,8 +175,18 @@ class DistributedGolfCourseAI(DistributedObjectAI):
     def avExited(self, todo0):
         pass
 
-    def setScores(self, todo0):
-        pass
+    def setScores(self, scores):
+        self.scores = scores
+    
+    def d_setScores(self, scores):
+        self.sendUpdate('setScores', [scores])
+        
+    def b_setScores(self, scores):
+        self.setScores(scores)
+        self.d_setScores(scores)
+        
+    def getScores(self):
+        return self.scores
 
     def changeDrivePermission(self, todo0, todo1):
         pass

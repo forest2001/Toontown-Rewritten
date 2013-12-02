@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.golf.DistributedPhysicsWorldAI import DistributedPhysicsWorldAI
+import random
 
 class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedGolfHoleAI")
@@ -15,9 +16,10 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         self.finishedAvatars = []
         self.avatarSwings = {}
         self.curGolfer = 0
+        self.assignedAvatar = 0
         
     def generate(self):
-        self.setupSimulation()
+        DistributedPhysicsWorldAI.generate(self)
         for av in self.avatars:
             self.avatarSwings[av] = 0
 
@@ -82,11 +84,8 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to end someone else\'s turn in a game of golf!')
             return
         avIndex = self.avatars.index(avId)
-        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
         if set(self.avatars) == set(self.finishedAvatars):
-            self.air.doId2do[self.gcDoId].sendUpdate('setCourseAbort', [avId])
-            self.requestDelete()
-            self.air.doId2do[self.gcDoId].requestDelete()
+            self.air.doId2do[self.gcDoId].createNextHole()
             return
         if len(self.avatars) == 1:
             self.__newGolfer(avId)
@@ -95,9 +94,9 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         avIndex += 1
         if avIndex > len(self.avatars)-1:
             avIndex = 0
-        if self.avatars[avIndex] not in self.finishedAvatars:
-            self.__newGolfer(self.avatars[avIndex])
-            return
+        while self.avatars[avIndex] in self.finishedAvatars:
+            avIndex += 1
+        self.__newGolfer(self.avatars[avIndex])
         #for i in range(len(self.avatars)):
             #if self.avatars[i] not in self.finishedAvatars:
                 #self.__newGolfer(self.avatars[i])
@@ -110,7 +109,6 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         else:
             self.sendUpdate('golfersTurn', [avId])
         self.avatarSwings[avId] += 1
-        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
     
     def ballInHole(self):
         #GOD DAMN IT
@@ -168,7 +166,7 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
 
     def postSwing(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6):
         pass
-
+        
     def postSwingState(self, cycleTime, power, bX, bY, bZ, x, y, aimTime, cod):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
@@ -177,24 +175,29 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         if avId != self.curGolfer:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to golf outside of their turn!')
             return
-        self.sendUpdateToAvatarId(avId, 'assignRecordSwing', [avId, cycleTime, power, bX, bY, bZ, x, y, cod])
+        if len(self.avatars) == 1:
+            self.assignedAvatar = self.avatars[0]
+        else:
+            while self.assignedAvatar == self.curGolfer or self.assignedAvatar == 0:
+                self.assignedAvatar = random.choice(self.avatars)
+        course = self.air.doId2do[self.gcDoId]
+        scoreList = course.scores
+        scoreList[self.avatars.index(avId) * len(self.avatars) + course.chIndex] = self.avatarSwings[avId]
+        course.b_setScores(scoreList)
+        self.sendUpdateToAvatarId(self.assignedAvatar, 'assignRecordSwing', [avId, cycleTime, power, bX, bY, bZ, x, y, cod])
 
     def swing(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6):
         pass
 
     def ballMovie2AI(self, cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD):
-        #who needs security?
         sender = self.air.getAvatarIdFromSender()
-        if sender != avId:
-            return
-        if sender != self.curGolfer:
+        if sender != self.assignedAvatar:
+            self.air.writeServerEvent('suspicious', sender, 'Toon tried to send ball movie with no assigned sender!')
             return
         if ballInHoleFrame != 0:
             self.finishedAvatars.append(avId)
-        self.air.doId2do[self.gcDoId].sendUpdate('setScores', [[self.avatarSwings[avId]]])
-        for avatar in self.avatars:
-            if avatar != avId:
-                self.sendUpdateToAvatarId(avatar, 'ballMovie2Client', [cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD])
+        self.assignedAvatar = 0
+        self.sendUpdate('ballMovie2Client', [cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD])
 
     def ballMovie2Client(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7):
         pass
