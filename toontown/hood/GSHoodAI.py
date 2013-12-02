@@ -8,13 +8,15 @@ from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopI
 from toontown.toon import NPCToons
 from toontown.building import DoorTypes
 from toontown.racing import RaceGlobals
+from otp.ai.MagicWordGlobal import *
 
 class GSHoodAI(HoodAI.HoodAI):
     HOOD = 8000
 
     def __init__(self, air):
         HoodAI.HoodAI.__init__(self, air)
-        self.racepads = []        
+        self.racepads = []
+        self.viewpads = []
         self.dnaData = DNAData('gs_data')
         self.dnaData.read(open('resources/phase_6/dna/goofy_speedway_sz.dna'))
         
@@ -96,6 +98,7 @@ class GSHoodAI(HoodAI.HoodAI):
             pad = DistributedViewPadAI(self.air)
             pad.setArea(self.HOOD)
             pad.generateWithRequired(self.HOOD)
+            self.viewpads.append(pad)
             for i in range(group.getNumChildren()):
                 posSpot = group.at(i)
                 if posSpot.getName()[:14] == 'starting_block':
@@ -112,3 +115,22 @@ class GSHoodAI(HoodAI.HoodAI):
 
         for i in range(group.getNumChildren()):
             self.createObjects(group.at(i))
+            
+@magicWord(category=CATEGORY_OVERRIDE)
+def resetPads():
+    GSW = simbase.air.hoods[6] # Hood 6 in the list in AIR :)
+    RacingPads = GSW.racepads
+    ViewingPads = GSW.viewpads
+    
+    for RacePadDO in RacingPads:
+        RacePadDO.requestDelete()
+        
+    for ViewPadDO in ViewingPads:
+        ViewPadDO.requestDelete()
+        
+    GSW.racepads = []
+    GSW.viewpads = []
+    
+    GSW.createObjects(GSW.dnaData)
+    
+    return "Respawned the Race Pads at Goofy's Speedway."
