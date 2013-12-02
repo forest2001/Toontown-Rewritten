@@ -133,4 +133,4 @@ def resetPads():
     
     GSW.createObjects(GSW.dnaData)
     
-    return "Respawned the Race Pads at Goofy's Speedway."
+    return "Respawned the Race Pads at Goofy Speedway."
