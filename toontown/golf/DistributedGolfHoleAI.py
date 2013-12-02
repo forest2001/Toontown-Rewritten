@@ -96,6 +96,8 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
             avIndex = 0
         while self.avatars[avIndex] in self.finishedAvatars:
             avIndex += 1
+            if avIndex > len(self.avatars)-1:
+                avIndex = 0
         self.__newGolfer(self.avatars[avIndex])
         #for i in range(len(self.avatars)):
             #if self.avatars[i] not in self.finishedAvatars:
