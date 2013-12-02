@@ -1466,14 +1466,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.d_setCogIndex(index)
 
     def setCogIndex(self, index):
-        if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
+        '''if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
             if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s setCogIndex invalid: %s' % (self.doId, index))
                 if simbase.config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s trying to set cog index to %s in Zone: %s' % (self.doId, index, self.zoneId)
                     #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
-        else:
-            self.cogIndex = index
+        else:'''
+        self.cogIndex = index
 
     def d_setCogIndex(self, index):
         self.sendUpdate('setCogIndex', [index])
