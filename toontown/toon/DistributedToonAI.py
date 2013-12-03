@@ -369,7 +369,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.cogIndex != -1 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId):
             if simbase.config.GetBool('cogsuit-hack-prevent', False):
                 self.b_setCogIndex(-1)
-            '''if not simbase.air.cogSuitMessageSent:
+            if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s handleLogicalZoneChange as a suit: %s' % (self.doId, self.cogIndex))
                 self.air.writeServerEvent('suspicious', self.doId, 'Toon wearing a cog suit with index: %s in a zone they are not allowed to in. Zone: %s' % (self.cogIndex, newZoneId))
                 simbase.air.cogSuitMessageSent = True
@@ -1466,14 +1466,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.d_setCogIndex(index)
 
     def setCogIndex(self, index):
-        '''if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
+        if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
             if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s setCogIndex invalid: %s' % (self.doId, index))
                 if simbase.config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s trying to set cog index to %s in Zone: %s' % (self.doId, index, self.zoneId)
                     #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
-        else:'''
-        self.cogIndex = index
+        else:
+            self.cogIndex = index
 
     def d_setCogIndex(self, index):
         self.sendUpdate('setCogIndex', [index])
