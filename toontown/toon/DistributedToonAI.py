@@ -4427,7 +4427,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
         if not self.isGM():
             self.b_setCheesyEffect(0, 0, 0)
-            self.b_setHat(0, 0, 0)
+            if self.getName() != 'Roger Dog': # hi my name is roger dog
+                self.b_setHat(0, 0, 0)
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
