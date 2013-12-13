@@ -25,7 +25,7 @@ class TTHoodAI(HoodAI):
         # Black Cat Flippy!
         self.createFlippy()
         blackCatMgr = DistributedBlackCatMgrAI(self.air)
-        blackCatMgr.generateWithRequired(self.SAFEZONE)
+        blackCatMgr.generateWithRequired(self.HOOD)
 
         # Create Fisherman Freddy: 
         NPCToons.createNPC(self.air, 2012, NPCToons.NPCToonDict.get(2012), 2000, posIndex=0)
@@ -50,6 +50,7 @@ class TTHoodAI(HoodAI):
                 butterfly.generateWithRequired(self.HOOD)
                 
     def createFlippy(self):
+        # NPCToons requires questManager for Flippy, so do this instead :D.
         npc = DistributedNPCToonBaseAI(self.air, 9001)
         dna = ToonDNA()
         dna.newToonFromProperties('dss', 'ms', 'm', 'm', 17, 0, 17, 17, 3, 3, 3, 3, 7, 2)
