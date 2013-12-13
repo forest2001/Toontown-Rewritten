@@ -59,4 +59,4 @@ class TTHoodAI(HoodAI):
         npc.setHp(15)
         npc.setMaxHp(15)
         npc.setPositionIndex(12)
-        npc.generateWithRequired(self.SAFEZONE)
+        npc.generateWithRequired(self.HOOD)
