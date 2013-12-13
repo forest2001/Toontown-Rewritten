@@ -49,7 +49,7 @@ class TTHoodAI(HoodAI):
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
                 
-        def createFlippy(self):
+    def createFlippy(self):
         npc = DistributedNPCToonBaseAI(self.air, 9001)
         dna = ToonDNA()
         dna.newToonFromProperties('dss', 'ms', 'm', 'm', 17, 0, 17, 17, 3, 3, 3, 3, 7, 2)
