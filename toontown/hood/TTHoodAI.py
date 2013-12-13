@@ -6,6 +6,9 @@ from toontown.town.TTStreetAI import TTStreetAI
 from HoodAI import HoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
+from toontown.ai.DistributedPolarBearMgrAI import DistributedPolarBearMgrAI
+from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+from toontown.toon.ToonDNA import ToonDNA
 
 class TTHoodAI(HoodAI):
     HOOD = ToontownGlobals.ToontownCentral
@@ -18,6 +21,11 @@ class TTHoodAI(HoodAI):
 
         #this is messier than it needs to be
         self.createPond(self.dnaData)
+        
+        # Polar Bear Flippy!
+        self.createFlippy()
+        polarBearMgr = DistributedPolarBearMgrAI(self.air)
+        polarBearMgr.generateWithRequired(self.HOOD)
 
         # Create Fisherman Freddy: 
         NPCToons.createNPC(self.air, 2012, NPCToons.NPCToonDict.get(2012), 2000, posIndex=0)
@@ -40,3 +48,15 @@ class TTHoodAI(HoodAI):
                 butterfly.setArea(playground, area)
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
+                
+    def createFlippy(self):
+        # NPCToons requires questManager for Flippy, so do this instead :D.
+        npc = DistributedNPCToonBaseAI(self.air, 9001)
+        dna = ToonDNA()
+        dna.newToonFromProperties('dss', 'ms', 'm', 'm', 17, 0, 17, 17, 3, 3, 3, 3, 7, 2)
+        npc.setName('Flippy')
+        npc.setDNAString(dna.makeNetString())
+        npc.setHp(15)
+        npc.setMaxHp(15)
+        npc.setPositionIndex(12)
+        npc.generateWithRequired(self.HOOD)
