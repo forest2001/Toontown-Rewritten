@@ -47,7 +47,7 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         def transformed():
             for do in base.cr.doId2do.values():
                 if do.dclass.getName() == 'DistributedNPCToonBase':
-                    do.setChatAbsolute('Owooo! Spooky! Remember: Flip for Flippy at the elections!', CFTimeout|CFSpeech)
+                    do.setChatAbsolute('Merry Christmas, toons! Remember: Slap for Slappy at the elections!', CFTimeout|CFSpeech) # Lmfao... I have no idea what to put here, but this definitely needs changing.
         self.accept('polarbear-transformed', transformed)
 
         self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])

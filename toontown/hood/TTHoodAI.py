@@ -22,8 +22,8 @@ class TTHoodAI(HoodAI):
         #this is messier than it needs to be
         self.createPond(self.dnaData)
         
-        # Polar Bear Flippy!
-        self.createFlippy()
+        # Polar Bear Slappy!
+        self.createSlappy()
         polarBearMgr = DistributedPolarBearMgrAI(self.air)
         polarBearMgr.generateWithRequired(self.HOOD)
 
@@ -49,12 +49,11 @@ class TTHoodAI(HoodAI):
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
                 
-    def createFlippy(self):
-        # NPCToons requires questManager for Flippy, so do this instead :D.
+    def createSlappy(self):
         npc = DistributedNPCToonBaseAI(self.air, 9001)
         dna = ToonDNA()
-        dna.newToonFromProperties('dss', 'ms', 'm', 'm', 17, 0, 17, 17, 3, 3, 3, 3, 7, 2)
-        npc.setName('Flippy')
+        dna.newToonFromProperties('fls', 'ms', 'l', 'm', 14, 0, 14, 14, 1, 4, 1, 4, 7, 4)
+        npc.setName('Slappy')
         npc.setDNAString(dna.makeNetString())
         npc.setHp(15)
         npc.setMaxHp(15)
