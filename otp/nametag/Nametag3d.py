@@ -2,9 +2,14 @@ from Nametag import *
 import NametagGlobals
 from NametagConstants import *
 from pandac.PandaModules import *
+import math
 
 class Nametag3d(Nametag):
-    CONTENTS_SCALE = 0.17
+    WANT_DYNAMIC_SCALING = True
+    SCALING_FACTOR = 0.055
+    SCALING_MINDIST = 1
+    SCALING_MAXDIST = 50
+
     BILLBOARD_OFFSET = 3.0
     SHOULD_BILLBOARD = True
 
@@ -15,8 +20,6 @@ class Nametag3d(Nametag):
 
         self.bbOffset = self.BILLBOARD_OFFSET
         self._doBillboard()
-
-        self.innerNP.setScale(self.CONTENTS_SCALE)
 
     def _doBillboard(self):
         if self.SHOULD_BILLBOARD:
@@ -32,17 +35,22 @@ class Nametag3d(Nametag):
         self.bbOffset = bbOffset
         self._doBillboard()
 
-    def showSpeech(self):
-        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        bubble = NametagGlobals.speechBalloon3d.generate(self.chatString, self.font,
-                                                         balloonColor=color)
-        bubble.reparentTo(self.innerNP)
+    def tick(self):
+        if not self.WANT_DYNAMIC_SCALING:
+            self.innerNP.setScale(self.SCALING_FACTOR)
+            return
 
-    def showThought(self):
-        color = self.qtColor if (self.chatFlags&CFQuicktalker) else VBase4(1,1,1,1)
-        bubble = NametagGlobals.thoughtBalloon3d.generate(self.chatString, self.font,
-                                                          balloonColor=color)
-        bubble.reparentTo(self.innerNP)
-        
+        # Attempt to maintain the same on-screen size.
+        distance = self.innerNP.getPos(NametagGlobals.camera).length()
+        distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
+
+        self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
+
+    def getSpeechBalloon(self):
+        return NametagGlobals.speechBalloon3d
+
+    def getThoughtBalloon(self):
+        return NametagGlobals.thoughtBalloon3d
+
     def setChatWordwrap(self, todo1):
         pass

@@ -2,14 +2,15 @@ from direct.distributed.ClockDelta import *
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
+from DistributedTreasureAI import DistributedTreasureAI
 import random
 
 class TreasurePlannerAI(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TreasurePlannerAI')
 
-    def __init__(self, zoneId, treasureConstructor, callback = None):
+    def __init__(self, zoneId, treasureType, callback = None):
         self.zoneId = zoneId
-        self.treasureConstructor = treasureConstructor
+        self.treasureType = treasureType
         self.callback = callback
         self.initSpawnPoints()
         self.treasures = []
@@ -72,9 +73,12 @@ class TreasurePlannerAI(DirectObject.DirectObject):
 
     def placeTreasure(self, index):
         spawnPoint = self.spawnPoints[index]
-        treasure = self.treasureConstructor(simbase.air, self, spawnPoint[0], spawnPoint[1], spawnPoint[2])
+        treasure = DistributedTreasureAI(simbase.air, self, self.treasureType, spawnPoint[0], spawnPoint[1], spawnPoint[2])
         treasure.generateWithRequired(self.zoneId)
         self.treasures[index] = treasure
+
+    def validAvatar(self, treasure, av):
+        return treasure.validAvatar(av)
 
     def grabAttempt(self, avId, treasureId):
         if self.lastRequestId == avId:
@@ -102,7 +106,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
                 self.notify.warning('avid: %s does not exist' % avId)
             else:
                 treasure = self.treasures[index]
-                if treasure.validAvatar(av):
+                if self.validAvatar(treasure, av):
                     self.treasures[index] = None
                     if self.callback:
                         self.callback(avId)

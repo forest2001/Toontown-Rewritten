@@ -2076,7 +2076,8 @@ HatTextures = [None,
  'phase_4/maps/tt_t_chr_avt_acc_hat_ribbonPinkDots.jpg',
  'phase_4/maps/tt_t_chr_avt_acc_hat_baseballPurple.jpg',
  'phase_4/maps/tt_t_chr_avt_acc_hat_ribbonCheckerGreen.jpg',
- 'phase_4/maps/tt_t_chr_avt_acc_hat_partyToon.jpg']
+ 'phase_4/maps/tt_t_chr_avt_acc_hat_partyToon.jpg',
+ 'phase_4/maps/tt_t_chr_avt_acc_hat_bowlerRoger.jpg']
 GlassesModels = [None,
  'phase_4/models/accessories/tt_m_chr_avt_acc_msk_roundGlasses',
  'phase_4/models/accessories/tt_m_chr_avt_acc_msk_miniblinds',

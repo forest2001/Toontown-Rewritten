@@ -11,7 +11,7 @@ class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
     RedownloadTaskName = 'RedownloadWhitelistTask'
     WhitelistBaseDir = config.GetString('whitelist-base-dir', '')
     WhitelistStageDir = config.GetString('whitelist-stage-dir', 'whitelist')
-    WhitelistOverHttp = config.GetBool('whitelist-over-http', True)
+    WhitelistOverHttp = config.GetBool('whitelist-over-http', False)
     WhitelistFileName = config.GetString('whitelist-filename', 'twhitelist.dat')
 
     def __init__(self):
@@ -23,26 +23,20 @@ class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
         vfs = VirtualFileSystem.getGlobalPtr()
         filename = Filename('twhitelist.dat')
         searchPath = DSearchPath()
-        if AppRunnerGlobal.appRunner:
-            searchPath.appendDirectory(Filename.expandFrom('$TT_3_ROOT/phase_3/etc'))
-        else:
-            searchPath.appendDirectory(Filename('.'))
-            searchPath.appendDirectory(Filename('etc'))
-            searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TOONTOWN/src/chat')))
-            searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('toontown/src/chat')))
-            searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('toontown/chat')))
+        searchPath.appendDirectory(Filename('/phase_4/etc'))
+        if __debug__:
+            searchPath.appendDirectory(Filename('resources/phase_4/etc'))
         found = vfs.resolveFilename(filename, searchPath)
         if not found:
             self.notify.info("Couldn't find whitelist data file!")
         data = vfs.readFile(filename, 1)
         lines = data.split('\n')
         WhiteList.__init__(self, lines)
-        self.redownloadWhitelist()
+        if self.WhitelistOverHttp:
+            self.redownloadWhitelist()
         self.defaultWord = TTLocalizer.ChatGarblerDefault[0]
-        self.accept('updateWhitelist', self.handleNewWhitelist)
 
     def unload(self):
-        self.ignore('updateWhitelist')
         self.removeDownloadingTextTask()
 
     def redownloadWhitelist(self):

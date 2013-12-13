@@ -41,8 +41,8 @@ class ChatInputNormal(DirectObject.DirectObject):
     def activateByData(self, whisperAvatarId = None, toPlayer = 0):
         self.toPlayer = toPlayer
         self.whisperAvatarId = whisperAvatarId
-        self.whisperAvatarName = base.talkAssistant.findName(self.whisperAvatarId, self.toPlayer)
         if self.whisperAvatarId:
+            self.whisperAvatarName = base.talkAssistant.findName(self.whisperAvatarId, self.toPlayer)
             self.chatFrame.setPos(self.whisperPos)
             self.whisperLabel['text'] = OTPLocalizer.ChatInputWhisperLabel % self.whisperAvatarName
             self.whisperLabel.show()
@@ -54,6 +54,7 @@ class ChatInputNormal(DirectObject.DirectObject):
         if self.wantHistory:
             self.accept('arrow_up-up', self.getPrevHistory)
             self.accept('arrow_down-up', self.getNextHistory)
+        return True
 
     def deactivate(self):
         self.chatEntry.set('')

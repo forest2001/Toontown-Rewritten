@@ -3,6 +3,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
+from toontown.safezone import TreasureGlobals
 
 class DistributedTreasure(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTreasure')
@@ -11,11 +12,8 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.av = None
         self.treasureFlyTrack = None
-        self.modelPath = None
         self.nodePath = None
         self.dropShadow = None
-        self.modelFindString = None
-        self.grabSoundPath = None
         self.rejectSoundPath = 'phase_4/audio/sfx/ring_miss.ogg'
         self.playSoundForRemoteToons = 1
         self.scale = 1.0
@@ -23,6 +21,7 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         self.fly = 1
         self.zOffset = 0.0
         self.billboard = 0
+        self.treasureType = None
         return
 
     def disable(self):
@@ -40,7 +39,7 @@ class DistributedTreasure(DistributedObject.DistributedObject):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-        self.loadModel(self.modelPath, self.modelFindString)
+        self.loadModel()
         self.startAnimation()
         self.nodePath.wrtReparentTo(render)
         self.accept(self.uniqueName('entertreasureSphere'), self.handleEnterSphere)
@@ -57,16 +56,16 @@ class DistributedTreasure(DistributedObject.DistributedObject):
     def getSphereRadius(self):
         return 2.0
 
-    def loadModel(self, modelPath, modelFindString = None):
-        self.grabSound = base.loadSfx(self.grabSoundPath)
+    def loadModel(self):
+        modelPath, grabSoundPath = TreasureGlobals.TreasureModels[self.treasureType]
+
+        self.grabSound = base.loadSfx(grabSoundPath)
         self.rejectSound = base.loadSfx(self.rejectSoundPath)
         if self.nodePath == None:
             self.makeNodePath()
         else:
             self.treasure.getChildren().detach()
         model = loader.loadModel(modelPath)
-        if modelFindString != None:
-            model = model.find('**/' + modelFindString)
         model.instanceTo(self.treasure)
         return
 
@@ -94,6 +93,9 @@ class DistributedTreasure(DistributedObject.DistributedObject):
 
     def getParentNodePath(self):
         return render
+
+    def setTreasureType(self, treasureType):
+        self.treasureType = treasureType
 
     def setPosition(self, x, y, z):
         if not self.nodePath:

@@ -9,4 +9,3 @@ class SafeZoneManagerAI(DistributedObjectAI):
 
     def exitSafeZone(self):
         pass
-

@@ -20,15 +20,15 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
 
-        self.geom = loader.loadModel('phase_4/models/neighborhoods/toontown_central_full')
+        #self.geom = loader.loadModel('phase_4/models/neighborhoods/toontown_central_full')
 
         # Drop "under construction" signs in front of the tunnels so the
         # alpha testers don't complain.
-        sign = loader.loadModel('phase_4/models/props/construction_sign')
+        '''sign = loader.loadModel('phase_4/models/props/construction_sign')
         sign.setH(180)
         sign.setY(-4)
         for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
-            sign.instanceTo(tunnel)
+            sign.instanceTo(tunnel)'''
 
         # For the Flippy NPC:
         npcOrigin = self.geom.attachNewNode('npc_origin_12')

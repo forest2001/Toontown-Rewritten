@@ -70,7 +70,6 @@ from toontown.estate import DistributedHouse/AI
 from toontown.estate import DistributedHouseInterior/AI
 from toontown.estate import DistributedGarden/AI
 from toontown.shtiker import DeleteManager/AI
-from toontown.ai import ToontownMagicWordManager/AI
 from toontown.ai import NewsManager/AI
 from toontown.shtiker import PurchaseManager/AI
 from toontown.shtiker import NewbiePurchaseManager/AI
@@ -78,16 +77,6 @@ from toontown.safezone import SafeZoneManager/AI
 from toontown.tutorial import TutorialManager/AI
 from toontown.catalog import CatalogManager/AI
 from toontown.safezone import DistributedTreasure/AI
-from toontown.safezone import DistributedDDTreasure/AI
-from toontown.safezone import DistributedDGTreasure/AI
-from toontown.safezone import DistributedDLTreasure/AI
-from toontown.safezone import DistributedTTTreasure/AI
-from toontown.safezone import DistributedBRTreasure/AI
-from toontown.safezone import DistributedMMTreasure/AI
-from toontown.safezone import DistributedOZTreasure/AI
-from toontown.safezone import DistributedETreasure/AI
-from toontown.safezone import DistributedEFlyingTreasure/AI
-from toontown.minigame import DistributedTagTreasure/AI
 from toontown.coghq import DistributedCashbotBossTreasure/AI
 from toontown.building import DistributedTrophyMgr/AI
 from toontown.building import DistributedBuilding/AI
@@ -453,21 +442,21 @@ dclass DistributedToon : DistributedPlayer {
   toonUp(uint16) broadcast ownrecv;
   takeDamage(uint16) broadcast ownrecv;
   setBattleId(uint32 = 0) required broadcast ram;
-  setExperience(blob = {0*14}) required ownrecv db;
+  setExperience(blob = {0*14}) required broadcast db;
   setMaxCarry(uint8 = 20) required ownrecv db;
   setTrackAccess(uint16array = {0,0,0,0,1,1,0}) required broadcast ownrecv db;
   setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
   setTrackBonusLevel(int8array = {-1,-1,-1,-1,-1,-1,-1}) required broadcast ownrecv db;
-  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required ownrecv db;
+  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required broadcast db;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(uint32uint8array = {}) required ownrecv db;
-  setDefaultShard(uint32 = 0) required ownrecv db;
-  setDefaultZone(uint32 = 0) required ownrecv db;
+  setDefaultShard(uint32 = 0) required ownrecv broadcast db;
+  setDefaultZone(uint32 = 0) required ownrecv broadcast db;
   setShtickerBook(blob = {}) required ownrecv db;
   setZonesVisited(uint32array = { 2000 }) required ownrecv db;
   setHoodsVisited(uint32array = { 2000 }) required ownrecv db;
   setInterface(blob = {}) required ownrecv db;
-  setLastHood(uint32 = 0) required ownrecv db;
+  setLastHood(uint32 = 0) required ownrecv broadcast db;
   setTutorialAck(uint8 = 1) required ownrecv db;
   setMaxClothes(uint32 = 10) required ownrecv db;
   setClothesTopsList(uint8array = {}) required ownrecv db;
@@ -510,6 +499,7 @@ dclass DistributedToon : DistributedPlayer {
   setTrophyScore(uint16) broadcast ownrecv ram;
   setTeleportAccess(uint32array = {}) required ownrecv db;
   checkTeleportAccess(uint16) airecv ownsend;
+  setTeleportOverride(uint8) clsend airecv;
   battleSOS(uint32) ownrecv clsend;
   teleportQuery(uint32) ownrecv clsend;
   teleportResponse(uint32, int8, uint32, uint32, uint32) ownrecv clsend;
@@ -581,7 +571,7 @@ dclass DistributedToon : DistributedPlayer {
   setKartingTrophies(uint8 [33] = {0*33}) required ownrecv db;
   setKartingPersonalBest(uint32/1000 [6] = {0*6}) required ownrecv db;
   setKartingPersonalBest2(uint32/1000 [12] = {0*12}) required ownrecv db;
-  setKartAccessoriesOwned(int8 [16] = {0*16}) required broadcast ownrecv db;
+  setKartAccessoriesOwned(int8 [16] = {-1*16}) required broadcast ownrecv db;
   setCurrentKart(uint32) broadcast ownrecv ram;
   squish(uint8) ownsend airecv;
   announceBingo() broadcast ownrecv;
@@ -1411,10 +1401,6 @@ dclass DeleteManager : DistributedObject {
   setInventory(blob) airecv clsend;
 };
 
-dclass ToontownMagicWordManager : MagicWordManager {
-  requestTeleport(string, string, uint32, uint32, uint32);
-};
-
 struct weeklyCalendarHoliday {
   uint8 holidayId;
   uint8 dayOfTheWeek;
@@ -1515,40 +1501,11 @@ dclass DistributedMyTest : DistributedObject {
 };
 
 dclass DistributedTreasure : DistributedObject {
+  setTreasureType(uint16) required broadcast ram;
   setPosition(int16/10, int16/10, int16/10) required broadcast ram;
   requestGrab() airecv clsend;
   setGrab(uint32) broadcast ram;
   setReject() broadcast;
-};
-
-dclass DistributedDDTreasure : DistributedTreasure {
-};
-
-dclass DistributedDGTreasure : DistributedTreasure {
-};
-
-dclass DistributedDLTreasure : DistributedTreasure {
-};
-
-dclass DistributedTTTreasure : DistributedTreasure {
-};
-
-dclass DistributedBRTreasure : DistributedTreasure {
-};
-
-dclass DistributedMMTreasure : DistributedTreasure {
-};
-
-dclass DistributedOZTreasure : DistributedTreasure {
-};
-
-dclass DistributedETreasure : DistributedTreasure {
-};
-
-dclass DistributedEFlyingTreasure : DistributedTreasure {
-};
-
-dclass DistributedTagTreasure : DistributedTreasure {
 };
 
 dclass DistributedCashbotBossTreasure : DistributedTreasure {
@@ -2537,7 +2494,7 @@ dclass DistributedRace : DistributedObject {
 
 dclass DistributedGag : DistributedObject {
   setInitTime(int16) required broadcast ram;
-  setActivateTime(uint16) required broadcast ram;
+  setActivateTime(int16) required broadcast ram;
   setPos(int32/1000, int32/1000, int32/1000) required broadcast ram;
   setRace(uint32) required broadcast ram;
   setOwnerId(uint32) required broadcast ram;
@@ -2730,6 +2687,7 @@ dclass DistributedGagTree : DistributedPlantBase {
 dclass DistributedTravelGame : DistributedMinigame {
   setTimerStartTime(int16) broadcast;
   setAvatarChoice(uint16, uint8) airecv clsend;
+  setAvatarVotes(uint32, uint16) broadcast;
   setAvatarChose(uint32) broadcast;
   setServerChoices(int16array, uint8array, uint8, uint8) broadcast;
   setMinigames(uint8array, uint8array) broadcast;

@@ -128,7 +128,7 @@ class TalkAssistant(DirectObject.DirectObject):
         return 0
 
     def addToHistoryDISLId(self, message, dISLId, scrubbed = 0):
-        if message.getTalkType() == TALK_ACCOUNT and dISLId != base.cr.accountDetailRecord.playerAccountId:
+        if message.getTalkType() == TALK_ACCOUNT:
             self.lastWhisperPlayerId = dISLId
             self.lastWhisper = self.lastWhisperPlayerId
         if not self.historyByDISLId.has_key(dISLId):
@@ -619,12 +619,7 @@ class TalkAssistant(DirectObject.DirectObject):
             chatFlags = CFSpeech | CFTimeout
             if self.isThought(message):
                 chatFlags = CFThought
-            base.localAvatar.sendUpdate('setTalk', [0,
-             0,
-             '',
-             message,
-             [],
-             0])
+            base.cr.chatAgent.sendChatMessage(message)
             messenger.send('chatUpdate', [message, chatFlags])
         return error
 
@@ -704,7 +699,6 @@ class TalkAssistant(DirectObject.DirectObject):
             newMessage = TalkMessage(self.countMessage(), self.stampTime(), message, localAvatar.doId, localAvatar.getName(), localAvatar.DISLid, localAvatar.DISLname, receiverId, avatarName, None, None, TALK_WHISPER, None)
             self.historyComplete.append(newMessage)
             self.addToHistoryDoId(newMessage, localAvatar.doId)
-            self.addToHistoryDISLId(newMessage, base.cr.accountDetailRecord.playerAccountId)
             messenger.send('NewOpenMessage', [newMessage])
         return error
 
@@ -725,7 +719,6 @@ class TalkAssistant(DirectObject.DirectObject):
             newMessage = TalkMessage(self.countMessage(), self.stampTime(), message, localAvatar.doId, localAvatar.getName(), localAvatar.DISLid, localAvatar.DISLname, None, None, receiverId, receiverName, TALK_ACCOUNT, None)
             self.historyComplete.append(newMessage)
             self.addToHistoryDoId(newMessage, localAvatar.doId)
-            self.addToHistoryDISLId(newMessage, base.cr.accountDetailRecord.playerAccountId)
             messenger.send('NewOpenMessage', [newMessage])
         return error
 

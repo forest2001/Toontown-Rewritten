@@ -38,12 +38,14 @@ class LocalAccountDB:
             # Return it w/ account ID!
             callback({'success': True,
                       'accountId': int(self.dbm[cookie]),
-                      'databaseId': cookie})
+                      'databaseId': cookie,
+                      'adminAccess': 500})
         else:
             # Nope, let's return w/o account ID:
             callback({'success': True,
                       'accountId': 0,
-                      'databaseId': cookie})
+                      'databaseId': cookie,
+                      'adminAccess': 500})
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
@@ -68,7 +70,8 @@ class RemoteAccountDB:
                 gsUserId = 0
             callback({'success': True,
                       'databaseId': response['user_id'],
-                      'accountId': gsUserId})
+                      'accountId': gsUserId,
+                      'adminAccess': response['adminAccess']})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
         if (not response.get('success')):
@@ -134,6 +137,7 @@ class LoginAccountFSM(OperationFSM):
 
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
+        self.adminAccess = result.get('adminAccess', 0)
         if accountId:
             self.accountId = accountId
             self.demand('RetrieveAccount')
@@ -160,7 +164,8 @@ class LoginAccountFSM(OperationFSM):
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime(),
-                        'ACCOUNT_ID': str(self.databaseId)}
+                        'ACCOUNT_ID': str(self.databaseId),
+                        'ADMIN_ACCESS': self.adminAccess}
 
         self.csm.air.dbInterface.createObject(
             self.csm.air.dbId,
@@ -226,7 +231,8 @@ class LoginAccountFSM(OperationFSM):
             self.accountId,
             self.csm.air.dclassesByName['AccountUD'],
             {'LAST_LOGIN': time.ctime(),
-             'ACCOUNT_ID': str(self.databaseId)})
+             'ACCOUNT_ID': str(self.databaseId),
+             'ADMIN_ACCESS': self.adminAccess})
 
         # We're done.
         self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.databaseId)
@@ -646,12 +652,9 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.csm.air.send(dg)
 
         # Activate the avatar on the DBSS:
-        dg = PyDatagram()
-        dg.addServerHeader(self.avId, self.csm.air.ourChannel, DBSS_OBJECT_ACTIVATE_WITH_DEFAULTS)
-        dg.addUint32(self.avId)
-        dg.addUint32(0)
-        dg.addUint32(0)
-        self.csm.air.send(dg)
+        self.csm.air.sendActivate(self.avId, 0, 0,
+                                  self.csm.air.dclassesByName['DistributedToonUD'],
+                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)]})
 
         # Next, add them to the avatar channel:
         dg = PyDatagram()

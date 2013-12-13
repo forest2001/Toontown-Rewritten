@@ -173,7 +173,6 @@ class DistributedRingGame(DistributedMinigame):
         self.__spawnUpdateEnvironTask()
         self.__spawnUpdateShadowsTask()
         self.__spawnUpdateLocalToonTask()
-        base.playMusic(self.music, looping=0, volume=0.8)
         if None != self.sndAmbience:
             base.playSfx(self.sndAmbience, looping=1, volume=0.8)
         return
@@ -191,7 +190,7 @@ class DistributedRingGame(DistributedMinigame):
         self.__removeAllToonDropShadows()
         render.clearFog()
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
         del self.arrowKeys
@@ -284,6 +283,7 @@ class DistributedRingGame(DistributedMinigame):
         self.notify.debug('setGameStart')
         DistributedMinigame.setGameStart(self, timestamp)
         self.gameFSM.request('swim')
+        base.playMusic(self.music, looping=0, volume=0.8)
 
     def enterOff(self):
         self.notify.debug('enterOff')

@@ -385,10 +385,10 @@ PeriodDict = {Daily: 10,
 PeriodIds = PeriodDict.keys()
 NumRecordPeriods = len(PeriodIds)
 NumRecordsPerPeriod = 10
-Winnings = [3.0,
- 1.0,
- 0.5,
- 0.15]
+Winnings = [4.0,
+ 2.0,
+ 1.5,
+ 1.15]
 PracticeWinnings = 20
 SpeedwayQuals = 0
 RuralQuals = 1
@@ -523,6 +523,9 @@ GagFreq = [[PIE,
   TURBO,
   ANVIL,
   PIE]]
+
+AnvilSquishDuration = 3
+
 CircuitLoops = [[RT_Speedway_1, RT_Rural_1, RT_Urban_1],
  [RT_Speedway_1_rev, RT_Rural_1_rev, RT_Urban_1_rev],
  [RT_Speedway_2, RT_Rural_2, RT_Urban_2],

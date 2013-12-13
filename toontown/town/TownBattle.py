@@ -193,8 +193,9 @@ class TownBattle(StateData.StateData):
         self.chooseCogPanel.load()
         self.chooseToonPanel.load()
         self.SOSPanel.load()
-        self.SOSPetSearchPanel.load()
-        self.SOSPetInfoPanel.load()
+        if hasattr(base, 'wantPets') and base.wantPets:
+            self.SOSPetSearchPanel.load()
+            self.SOSPetInfoPanel.load()
         self.isLoaded = 1
 
     def unload(self):
@@ -206,8 +207,9 @@ class TownBattle(StateData.StateData):
         self.chooseToonPanel.unload()
         self.FireCogPanel.unload()
         self.SOSPanel.unload()
-        self.SOSPetSearchPanel.unload()
-        self.SOSPetInfoPanel.unload()
+        if hasattr(base, 'wantPets') and base.wantPets:
+            self.SOSPetSearchPanel.unload()
+            self.SOSPetInfoPanel.unload()
         self.isLoaded = 0
 
     def setState(self, state):

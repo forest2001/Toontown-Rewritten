@@ -33,7 +33,7 @@ class ToonBase(OTPBase.OTPBase):
         self.wantDynamicShadows = 0
         self.exitErrorCode = 0
         camera.setPosHpr(0, 0, 0, 0, 0, 0)
-        self.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        self.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
         self.musicManager.setVolume(0.65)
         self.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
@@ -166,7 +166,7 @@ class ToonBase(OTPBase.OTPBase):
 
     def addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
-        cbm.addBin('ground', CullBinManager.BTStateSorted, 18)
+        cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
         cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
 

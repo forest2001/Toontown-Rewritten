@@ -52,6 +52,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.addChildGameFSM(self.gameFSM)
         self.iCount = 0
         self.reachedFlag = 0
+        self.grabbingTreasure = -1
         self.dead = 0
 
     def getTitle(self):
@@ -228,7 +229,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.NUMTREASURES = numToons
         camera.reparentTo(render)
         camera.setZ(36)
-        camera.setH(0)
+        camera.setHpr(0,0,0)
         camera.setX(0)
         base.camLens.setFov(45)
         camera.setY(-54)
@@ -271,13 +272,13 @@ class DistributedDivingGame(DistributedMinigame):
         self.boatTilt = Sequence(LerpFunc(self.boatModel.setR, duration=5, fromData=5, toData=-5, blendType='easeInOut', name='tilt'), LerpFunc(self.boatModel.setR, duration=5, fromData=-5, toData=5, blendType='easeInOut', name='tilt'))
         self.boatTilt.loop()
         self.mapScaleRatio = 40
-        self.mapModel.reparentTo(aspect2d)
+        self.mapModel.reparentTo(base.a2dTopRight)
         self.mapModel.setScale(1.0 / self.mapScaleRatio)
         self.mapModel.setTransparency(1)
-        self.mapModel.setPos(1.15, -0.5, -0.125)
+        self.mapModel.setPos(-0.22, 0.0, -1.30)
         self.mapModel.setColorScale(1, 1, 1, 0.7)
         self.mapModel.hide()
-        if None != self.sndAmbience:
+        if self.sndAmbience:
             self.sndAmbience.setLoop(True)
             self.sndAmbience.play()
             self.sndAmbience.setVolume(0.01)
@@ -294,7 +295,7 @@ class DistributedDivingGame(DistributedMinigame):
             self.toonSDs[avId].exit()
 
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
-        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
         del self.arrowKeys
@@ -527,7 +528,8 @@ class DistributedDivingGame(DistributedMinigame):
         DistributedMinigame.setGameStart(self, timestamp)
         self.notify.debug('setGameStart')
         self.treasurePanel = TreasureScorePanel.TreasureScorePanel()
-        self.treasurePanel.setPos(-1.19, 0, 0.75)
+        self.treasurePanel.setPos(0.145, 0, -0.27)
+        self.treasurePanel.reparentTo(base.a2dTopLeft)
         self.treasurePanel.makeTransparent(0.7)
         self.introMovie.finish()
         self.gameFSM.request('swim')
@@ -653,7 +655,8 @@ class DistributedDivingGame(DistributedMinigame):
         avId = int(collEntry.getFromNodePath().getName())
         chestId = int(collEntry.getIntoNodePath().getName())
         toonSD = self.toonSDs[avId]
-        if toonSD.status == 'normal':
+        if toonSD.status == 'normal' and self.grabbingTreasure == -1:
+            self.grabbingTreasure = chestId
             self.sendUpdate('pickupTreasure', [chestId])
 
     def setTreasureDropped(self, avId, timestamp):
@@ -777,6 +780,8 @@ class DistributedDivingGame(DistributedMinigame):
     def setTreasureGrabbed(self, avId, chestId):
         if not self.hasLocalToon:
             return
+        if self.grabbingTreasure == chestId:
+            self.grabbingTreasure = -1
         toonSD = self.toonSDs.get(avId)
         if toonSD and toonSD.status == 'normal':
             toonSD.fsm.request('treasure')
@@ -938,8 +943,8 @@ class DistributedDivingGame(DistributedMinigame):
         self.cTrav2.traverse(render)
         self.__posBroadcast(dt)
         z = self.getAvatar(self.localAvId).getZ() + 3
-        if z < -25:
-            z = -25
+        camBottom = math.tan(base.camLens.getVfov()/2.0*math.pi/180)*54
+        z = max(z, -42+camBottom)
         camera.setZ(z)
         ambVolume = abs(z - 25.0) / 50.0 + 0.1
         if ambVolume < 0.0:

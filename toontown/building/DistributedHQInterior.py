@@ -8,6 +8,7 @@ from direct.directnotify import DirectNotifyGlobal
 import ToonInteriorColors
 import cPickle
 from toontown.toonbase import TTLocalizer
+from toontown.dna.DNAParser import DNADoor
 
 class DistributedHQInterior(DistributedObject.DistributedObject):
 
@@ -34,6 +35,8 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.interior.flattenMedium()
         emptyBoard = self.interior.find('**/empty_board')
         self.leaderBoard.reparentTo(emptyBoard.getChild(0))
+        base.cr.hqLoaded = True #hack while a real fix is in the work
+        messenger.send('hqInternalDone')
 
     def setTutorial(self, flag):
         if self.tutorial == flag:
@@ -129,7 +132,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.updateLeaderBoard()
 
     def chooseDoor(self):
-        doorModelName = 'door_double_round_ul'
+        doorModelName = 'door_double_round_ur'
         if doorModelName[-1:] == 'r':
             doorModelName = doorModelName[:-1] + 'l'
         else:
@@ -171,6 +174,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         del self.nameTextNodes
         del self.scoreTextNodes
         del self.trophyStars
+        del base.cr.hqLoaded
         taskMgr.remove(self.uniqueName('starSpinHQ'))
         DistributedObject.DistributedObject.disable(self)
 

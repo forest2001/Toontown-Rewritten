@@ -61,6 +61,10 @@ class PhysicsWorldBase:
         self.DTAStep = 1.0 / self.FPS
         self.refCon = 1.2
 
+        self.collisionEventName = 'ode-collision-%d' % id(self)
+        self.space.setCollisionEvent(self.collisionEventName)
+        self.accept(self.collisionEventName, self.__collisionHandler)
+
     def delete(self):
         self.notify.debug('Max Collision Count was %s' % self.maxColCount)
         self.stopSim()
@@ -106,7 +110,8 @@ class PhysicsWorldBase:
         self.space.destroy()
         self.world = None
         self.space = None
-        return
+
+        self.ignore(self.collisionEventName)
 
     def setupSimulation(self):
         self.world.setAutoDisableFlag(0)
@@ -194,8 +199,15 @@ class PhysicsWorldBase:
             endTime = globalClock.getRealTime() - startTime
         return task.cont
 
+    def __collisionHandler(self, entry):
+        self.colEntries.append(entry)
+
     def simulate(self):
-        self.colCount = self.space.autoCollide()
+        self.colEntries = []
+        self.space.autoCollide()
+        # We need the callbacks processed now, before we try to look at colEntries, so:
+        eventMgr.doEvents()
+        self.colCount = len(self.colEntries)
         if self.maxColCount < self.colCount:
             self.maxColCount = self.colCount
             self.notify.debug('New Max Collision Count %s' % self.maxColCount)

@@ -4,6 +4,9 @@ from direct.fsm.FSM import FSM
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from TrolleyConstants import *
 from toontown.minigame.MinigameCreatorAI import *
+from otp.ai.MagicWordGlobal import *
+
+doesntWantTrolleyTracks = {}
 
 class DistributedTrolleyAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTrolleyAI")
@@ -59,7 +62,15 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # If all players disconnected while the trolley was departing, the
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
-            mg = createMinigame(self.air, players, self.zoneId)
+            
+            for avId in players:
+                noTravel = doesntWantTrolleyTracks.get(avId)
+                aiNoTravel = doesntWantTrolleyTracks.get('district')
+                
+            if len(players) > 1 and not noTravel and not aiNoTravel:
+                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
+            else:
+                mg = createMinigame(self.air, players, self.zoneId)
             for player in players:
                 self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
                 self.removeFromTrolley(player)
@@ -144,3 +155,20 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[str])
+def travel(target='self'):
+    if target=='everyone':
+        if 'everyone' in doesntWantTrolleyTracks:
+            del doesntWantTrolleyTracks['everyone']
+            return "Re-enabled Trolley Tracks in the current district."
+        else:
+            doesntWantTrolleyTracks['everyone'] = True
+            return "Disabled Trolley Tracks in the current district."
+    else:
+        if spellbook.getTarget().doId in doesntWantTrolleyTracks:
+            del doesntWantTrolleyTracks[spellbook.getTarget().doId]
+            return "Re-enabled Trolley Tracks."
+        else:
+            doesntWantTrolleyTracks[spellbook.getTarget().doId] = True
+            return "Disabled Trolley Tracks."

@@ -3,6 +3,8 @@ from pandac.PandaModules import *
 import ToonHead
 from toontown.distributed import DelayDelete
 from toontown.toonbase import ToontownGlobals
+from otp.nametag.Nametag import Nametag
+from otp.nametag.NametagFloat2d import NametagFloat2d
 
 class ToonHeadFrame(DirectFrame):
 
@@ -20,12 +22,12 @@ class ToonHeadFrame(DirectFrame):
         self.tag1Node = NametagFloat2d()
         self.tag1Node.setContents(Nametag.CSpeech | Nametag.CThought)
         self.av.nametag.addNametag(self.tag1Node)
-        self.tag1 = self.attachNewNode(self.tag1Node.upcastToPandaNode())
+        self.tag1 = self.attachNewNode(self.tag1Node)
         self.tag1.setPosHprScale(-0.16, 0, -0.09, 0, 0, 0, 0.055, 0.055, 0.055)
         self.tag2Node = NametagFloat2d()
         self.tag2Node.setContents(Nametag.CName)
         self.av.nametag.addNametag(self.tag2Node)
-        self.tag2 = self.attachNewNode(self.tag2Node.upcastToPandaNode())
+        self.tag2 = self.attachNewNode(self.tag2Node)
         self.tag2.setPosHprScale(-0.27, 10.0, 0.16, 0, 0, 0, 0.05, 0.05, 0.05)
         self.extraData = DirectLabel(parent=self, relief=None, pos=(0.0, 0.0, 0.06), scale=1.0, text='', text0_fg=(0.3, 0.2, 1, 1), text_scale=(0.14, 0.06), text_pos=(0, -0.01))
         self.extraData.hide()

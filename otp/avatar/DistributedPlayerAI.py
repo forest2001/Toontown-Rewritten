@@ -4,6 +4,7 @@ from otp.avatar import DistributedAvatarAI
 from otp.avatar import PlayerBase
 from otp.distributed.ClsendTracker import ClsendTracker
 from otp.otpbase import OTPGlobals
+from otp.ai.MagicWordGlobal import *
 
 class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.PlayerBase, ClsendTracker):
 
@@ -14,6 +15,7 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
         self.friendsList = []
         self.DISLname = ''
         self.DISLid = 0
+        self.adminAccess = 0
 
     if __dev__:
 
@@ -119,6 +121,12 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
     def getFriendsList(self):
         return self.friendsList
 
+    def setAdminAccess(self, access):
+        self.adminAccess = access
+
+    def getAdminAccess(self):
+        return self.adminAccess
+
     def extendFriendsList(self, friendId, friendCode):
         for i in range(len(self.friendsList)):
             friendPair = self.friendsList[i]
@@ -127,3 +135,22 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.Pl
                 return
 
         self.friendsList.append((friendId, friendCode))
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str]) # This needs a better category. 
+def smsg(text):
+    """Send a whisper to the whole district (system), un-prefixed."""
+    for doId in simbase.air.doId2do:
+        if str(doId)[:2] == '10': # Non-NPC?
+            do = simbase.air.doId2do.get(doId)
+            if isinstance(do, DistributedPlayerAI): # Toon?
+                do.d_setSystemMessage(0, text)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str]) # This needs a better category. 
+def gwhis(text):
+    """Send a whisper to the whole district, prefixed with 'ADMIN Name:'."""
+    text = 'ADMIN ' + spellbook.getInvoker().getName() + ': ' + text # Prepend text with Invoker's toon name.
+    for doId in simbase.air.doId2do:
+        if str(doId)[:2] == '10': # Non-NPC?
+            do = simbase.air.doId2do.get(doId)
+            if isinstance(do, DistributedPlayerAI): # Toon?
+                do.d_setSystemMessage(0, text)

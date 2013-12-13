@@ -72,6 +72,8 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
         if sell:
             av = simbase.air.doId2do.get(avId)
             if av:
+
+                #maybe: recreate Disney-style fishManager that does the above code?
                 trophyResult = self.air.fishManager.creditFishTank(av)
                 if trophyResult:
                     movieType = NPCToons.SELL_MOVIE_TROPHY

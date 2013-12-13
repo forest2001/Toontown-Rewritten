@@ -57,6 +57,7 @@ class AvatarChooser(StateData.StateData):
             self.logoutButton.show()
         self.pickAToonBG.setBin('background', 1)
         self.pickAToonBG.reparentTo(aspect2d)
+        base.setBackgroundColor(Vec4(0.145, 0.368, 0.78, 1))
         choice = base.config.GetInt('auto-avatar-choice', -1)
         for panel in self.panelList:
             panel.show()
@@ -75,6 +76,7 @@ class AvatarChooser(StateData.StateData):
         self.quitButton.hide()
         self.logoutButton.hide()
         self.pickAToonBG.reparentTo(hidden)
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         return None
 
     def load(self, isPaid):
@@ -222,6 +224,7 @@ class AvatarChooser(StateData.StateData):
         self.isLoaded = 0
         ModelPool.garbageCollect()
         TexturePool.garbageCollect()
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         return None
 
     def __handlePanelDone(self, panelDoneStatus, panelChoice = 0):

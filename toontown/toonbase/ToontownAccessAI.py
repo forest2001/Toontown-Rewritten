@@ -12,7 +12,7 @@ def canAccess(avatarId, zoneId, function = ''):
         if simbase.config.GetBool('want-ban-ispaid', True):
             commentStr = 'User with rights: %s tried to gain access zone %s from function %s, an area they were not allowed to using TTInjector Hack' % (avatar.getGameAccess(), zoneId, function)
             dislId = avatar.DISLid
-            simbase.air.banManager.ban(avatarId, dislId, commentStr)
+            #simbase.air.banManager.ban(avatarId, dislId, commentStr)
         return False
     else:
         return True

@@ -1,4 +1,5 @@
 from pandac.PandaModules import *
+from direct.showbase import PythonUtil
 
 import argparse
 
@@ -39,4 +40,11 @@ if ':' in host:
     port = int(port)
 simbase.air.connect(host, port)
 
-run()
+try:
+    run()
+except SystemExit:
+    raise
+except Exception:
+    info = PythonUtil.describeException()
+    simbase.air.writeServerEvent('uberdog-exception', simbase.air.getAvatarIdFromSender(), simbase.air.getAccountIdFromSender(), info)
+    raise

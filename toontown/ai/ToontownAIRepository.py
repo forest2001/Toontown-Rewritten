@@ -2,13 +2,18 @@ import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
 from otp.ai.TimeManagerAI import TimeManagerAI
+from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
+from toontown.ai.FishManagerAI import FishManagerAI
+from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
-from toontown.hood.TTHoodAI import TTHoodAI
+from toontown.toon import NPCToons
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
+from toontown.dna.DNAParser import loadDNAFileAI 
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -19,6 +24,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
 
+        NPCToons.generateZone2NpcDict()
+
         self.hoods = []
         self.zoneDataStore = AIZoneDataStore()
 
@@ -26,9 +33,12 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.doLiveUpdates = False
 
         self.holidayManager = HolidayManagerAI()
+        
+        self.fishManager = FishManagerAI()
 
     def getTrackClsends(self):
         return False
+        
 
     def handleConnected(self):
         self.districtId = self.allocateChannel()
@@ -81,9 +91,26 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.newsManager = NewsManagerAI(self)
         self.newsManager.generateWithRequired(2)
 
+        self.magicWordManager = MagicWordManagerAI(self)
+        self.magicWordManager.generateWithRequired(2)
+
+        self.safeZoneManager = SafeZoneManagerAI(self)
+        self.safeZoneManager.generateWithRequired(2)
+
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
         """
 
-        self.hoods.append(TTHoodAI(self))
+        self.hoods.append(TTHoodAI.TTHoodAI(self))
+        self.hoods.append(DDHoodAI.DDHoodAI(self))
+        self.hoods.append(DGHoodAI.DGHoodAI(self))
+        self.hoods.append(BRHoodAI.BRHoodAI(self))
+        self.hoods.append(MMHoodAI.MMHoodAI(self))
+        self.hoods.append(DLHoodAI.DLHoodAI(self))
+        self.hoods.append(GSHoodAI.GSHoodAI(self))
+        self.hoods.append(OZHoodAI.OZHoodAI(self))
+        self.hoods.append(GZHoodAI.GZHoodAI(self))
+
+    def loadDNAFileAI(self, dnastore, filename):
+        return loadDNAFileAI(dnastore, filename)

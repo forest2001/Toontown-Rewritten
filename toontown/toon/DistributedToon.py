@@ -10,6 +10,7 @@ from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
 from otp.chat import TalkAssistant
 from otp.nametag.NametagConstants import *
+from otp.margins.WhisperPopup import *
 import Toon
 from direct.task.Task import Task
 from direct.distributed import DistributedSmoothNode
@@ -58,6 +59,7 @@ if base.wantKarts:
     from toontown.racing.KartDNA import *
 if (__debug__):
     import pdb
+from otp.ai.MagicWordGlobal import *
 
 class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
@@ -2431,7 +2433,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             elif word[0] == '\x07' or len(word) > 1 and word[0] == '.' and word[1] == '\x07':
                 newwords.append('\x01WLDisplay\x01' + self.chatGarbler.garbleSingle(self, word) + '\x02')
                 scrubbed = 1
-            elif base.whiteList.isWord(word):
+            elif not self.whiteListEnabled or base.whiteList.isWord(word):
                 newwords.append(word)
             else:
                 flag = 0
@@ -2456,7 +2458,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 newwords.append(word)
             elif word[0] == '\x07':
                 newwords.append('\x01WLRed\x01' + self.chatGarbler.garbleSingle(self, word) + '\x02')
-            elif base.whiteList.isWord(word):
+            elif not self.whiteListEnabled or base.whiteList.isWord(word):
                 newwords.append(word)
             else:
                 newwords.append('\x01WLRed\x01' + word + '\x02')
@@ -2554,7 +2556,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         icons = loader.loadModel(modelName)
         self.gmIcon = icons.find(searchString)
         self.gmIcon.setScale(scale)
-        self.gmIcon.reparentTo(self.nametag.getNameIcon())
+        np = NodePath(self.nametag.getNameIcon())
+        self.gmIcon.reparentTo(np)
         self.setTrophyScore(self.trophyScore)
         self.gmIcon.setZ(-2.5)
         self.gmIcon.setY(0.0)
@@ -2598,3 +2601,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             module += chr(ic)
 
         self.sendUpdate('pingresp', [module])
+   
+@magicWord(category=CATEGORY_MODERATION)
+def globaltp():
+    spellbook.getInvoker().sendUpdate('setTeleportOverride', [1])
+    base.localAvatar.setTeleportAccess([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
+    return "Global teleport activated for the current session."

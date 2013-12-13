@@ -1,5 +1,5 @@
 import os, sys, socket, random
-from urllib import quote_plus
+#from urllib import quote_plus
 from pandac.PandaModules import HTTPClient
 from pandac.PandaModules import HTTPCookie
 from pandac.PandaModules import URLSpec
@@ -319,7 +319,7 @@ def logSubmit(setHostID, setMileStone):
     if __dev__:
         return
     trackItem = UserFunnel()
-    trackItem.setmilestone(quote_plus(setMileStone))
+    trackItem.setmilestone(setMileStone)
     trackItem.setHost(setHostID)
     trackItem.prerun()
     trackItem.run()

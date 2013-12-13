@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 
 class ChatBalloon:
-    TEXT_SHIFT = (0.1, 0, 1.1)
+    TEXT_SHIFT = (0.1, -0.05, 1.1)
     TEXT_SHIFT_PROP = 0.08
     NATIVE_WIDTH = 10.0
     MIN_WIDTH = 2.5
@@ -10,9 +10,9 @@ class ChatBalloon:
 
     def __init__(self, model):
         self.model = model
-        self.wordWrap = 10.0
 
-    def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1)):
+    def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1),
+                 wordWrap = 10.0):
         root = NodePath('balloon')
 
         # Add balloon geometry:
@@ -28,13 +28,16 @@ class ChatBalloon:
         # Render the text into a TextNode, using the font:
         t = root.attachNewNode(TextNode('text'))
         t.node().setFont(font)
-        t.node().setWordwrap(self.wordWrap)
+        t.node().setWordwrap(wordWrap)
         t.node().setText(text)
         t.node().setTextColor(textColor)
 
         width, height = t.node().getWidth(), t.node().getHeight()
 
-        t.setDepthOffset(1)
+        # Turn off depth write for the text: The place in the depth buffer is
+        # held by the chat bubble anyway, and the text renders after the bubble
+        # so there's no risk of the bubble overwriting the text's pixels.
+        t.setAttrib(DepthWriteAttrib.make(0))
         t.setPos(self.TEXT_SHIFT)
         t.setX(t, self.TEXT_SHIFT_PROP*width)
         t.setZ(t, height)
@@ -51,5 +54,4 @@ class ChatBalloon:
         middle.setSz(height)
         top.setZ(top, height-1)
 
-        root.flattenStrong()
         return root

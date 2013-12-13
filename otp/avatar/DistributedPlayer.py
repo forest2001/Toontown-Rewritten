@@ -14,6 +14,7 @@ from otp.chat import TalkAssistant
 from otp.otpbase import OTPGlobals
 from otp.avatar.Avatar import teleportNotify
 from otp.distributed.TelemetryLimited import TelemetryLimited
+from otp.ai.MagicWordGlobal import *
 if base.config.GetBool('want-chatfilter-hacks', 0):
     from otp.switchboard import badwordpy
     import os
@@ -42,6 +43,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
             self._districtWeAreGeneratedOn = None
             self.DISLname = ''
             self.DISLid = 0
+            self.adminAccess = 0
             self.autoRun = 0
             self.whiteListEnabled = base.config.GetBool('whitelist-chat-enabled', 1)
 
@@ -447,6 +449,14 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
 
     def setDISLid(self, id):
         self.DISLid = id
+
+    def setAdminAccess(self, access):
+        self.adminAccess = access
+        if self.isLocal():
+            self.cr.wantMagicWords = self.adminAccess >= MINIMUM_MAGICWORD_ACCESS
+
+    def getAdminAccess(self):
+        return self.adminAccess
 
     def setAutoRun(self, value):
         self.autoRun = value

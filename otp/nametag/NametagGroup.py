@@ -4,15 +4,15 @@ from Nametag3d import *
 from Nametag2d import *
 
 class NametagGroup:
-    CCNormal = 0
-    CCNoChat = 1
-    CCNonPlayer = 2
-    CCSuit = 3
-    CCToonBuilding = 4
-    CCSuitBuilding = 5
-    CCHouseBuilding = 6
-    CCSpeedChat = 7
-    CCFreeChat = 8
+    CCNormal = CCNormal
+    CCNoChat = CCNoChat
+    CCNonPlayer = CCNonPlayer
+    CCSuit = CCSuit
+    CCToonBuilding = CCToonBuilding
+    CCSuitBuilding = CCSuitBuilding
+    CCHouseBuilding = CCHouseBuilding
+    CCSpeedChat = CCSpeedChat
+    CCFreeChat = CCFreeChat
 
     CHAT_TIMEOUT_MAX = 12.0
     CHAT_TIMEOUT_MIN = 4.0
@@ -29,14 +29,29 @@ class NametagGroup:
         self.name = ''
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
+        self.colorCode = CCNormal
         self.avatar = None
+        self.active = True
 
         self.chatString = ''
         self.chatFlags = 0
 
+        self.objectCode = None
+
+        self.manager = None
+
         self.nametags = []
         self.addNametag(self.nametag2d)
         self.addNametag(self.nametag3d)
+
+        self.visible3d = True # Is a 3D nametag visible, or do we need a 2D popup?
+
+        self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
+
+    def destroy(self):
+        taskMgr.remove(self.tickTask)
+        if self.manager is not None:
+            self.unmanage(self.manager)
 
     def getNametag2d(self):
         return self.nametag2d
@@ -65,8 +80,14 @@ class NametagGroup:
     def getUniqueId(self):
         return 'Nametag-%d' % id(self)
 
+    def hasButton(self):
+        return False # TODO: Support buttons
+
     def setActive(self, active):
-        pass
+        self.active = active
+
+    def isActive(self):
+        return self.active
 
     def setAvatar(self, avatar):
         self.avatar = avatar
@@ -76,7 +97,8 @@ class NametagGroup:
         self.updateTags()
 
     def setColorCode(self, cc):
-        pass
+        self.colorCode = cc
+        self.updateTags()
 
     def setName(self, name):
         self.name = name
@@ -88,6 +110,7 @@ class NametagGroup:
 
     def setQtColor(self, color):
         self.qtColor = color
+        self.updateTags()
 
     def setChat(self, chatString, chatFlags):
         self.chatString = chatString
@@ -97,6 +120,18 @@ class NametagGroup:
         self._stopChatTimeout()
         if chatFlags&CFTimeout:
             self._startChatTimeout()
+
+    def setContents(self, contents):
+        # This function is a little unique, it's meant to override contents on
+        # EXISTING nametags only:
+        for tag in self.nametags:
+            tag.setContents(contents)
+
+    def setObjectCode(self, objectCode):
+        self.objectCode = objectCode
+
+    def getObjectCode(self):
+        return self.objectCode
 
     def _startChatTimeout(self):
         length = len(self.chatString)
@@ -121,13 +156,37 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
-        tag.displayName = self.displayName
+        tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
+        tag.colorCode = self.colorCode
         tag.chatString = self.chatString
         tag.chatFlags = self.chatFlags
         tag.avatar = self.avatar
+        tag.icon = self.icon
 
         tag.update()
+
+    def __tickTask(self, task):
+        for nametag in self.nametags:
+            nametag.tick()
+
+        if self.avatar is None: return
+        pos = self.avatar.getPos(NametagGlobals.camera)
+        visible3d = NametagGlobals.camera.node().getLens().project(pos, Point2())
+
+        if self.avatar.isHidden():
+            visible3d = False
+
+        if NametagGlobals.onscreenChatForced and self.chatFlags & CFSpeech:
+            visible3d = False
+
+        if visible3d ^ self.visible3d:
+            self.visible3d = visible3d
+            for nametag in self.nametags:
+                if isinstance(nametag, MarginPopup):
+                    nametag.setVisible(not visible3d)
+
+        return task.cont
 
     def updateTags(self):
         for nametag in self.nametags:
@@ -136,12 +195,25 @@ class NametagGroup:
     def addNametag(self, nametag):
         self.nametags.append(nametag)
         self.updateNametag(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.manage(manager)
 
     def removeNametag(self, nametag):
         self.nametags.remove(nametag)
+        if self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.unmanage(manager)
 
     def manage(self, manager):
-        pass
+        self.manager = manager
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.manage(manager)
 
     def unmanage(self, manager):
+        self.manager = None
+        for tag in self.nametags:
+            if isinstance(tag, MarginPopup):
+                tag.unmanage(manager)
+                
+    def setNameWordwrap(self, wrap):
         pass

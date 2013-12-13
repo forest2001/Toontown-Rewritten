@@ -3,4 +3,7 @@
 *.dll
 *.dis
 *.log
+parser.out
+parsetab.py
 *.jpg
+ply

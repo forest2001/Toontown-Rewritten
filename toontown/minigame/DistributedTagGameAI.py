@@ -60,7 +60,7 @@ class DistributedTagGameAI(DistributedMinigameAI):
         self.notify.debug('enterPlay')
         self.b_setIt(random.choice(self.avIdList))
         taskMgr.doMethodLater(self.DURATION, self.timerExpired, self.taskName('gameTimer'))
-        self.tagTreasurePlanner = TagTreasurePlannerAI(self.zoneId, self.treasureGrabCallback)
+        self.tagTreasurePlanner = TagTreasurePlannerAI(self.zoneId, self, self.treasureGrabCallback)
         self.tagTreasurePlanner.placeRandomTreasure()
         self.tagTreasurePlanner.placeRandomTreasure()
         self.tagTreasurePlanner.placeRandomTreasure()

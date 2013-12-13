@@ -155,6 +155,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.acceptedScreen = loader.loadModel('phase_3/models/gui/toon_council')
         self.acceptedScreen.setScale(0.667)
         self.acceptedScreen.reparentTo(aspect2d)
+        base.setBackgroundColor(Vec4(0.7647, 0.3529, 0.2352, 1))
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         self.acceptedBanner = DirectLabel(parent=self.acceptedScreen, relief=None, text=OTPLocalizer.CRNameCongratulations, text_scale=0.18, text_fg=Vec4(0.6, 0.1, 0.1, 1), text_pos=(0, 0.05), text_font=getMinnieFont())
         newName = avatarChoice.approvedName
@@ -173,6 +174,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         del self.okButton
         del self.acceptedText
         del self.acceptedBanner
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.csm.sendAcknowledgeAvatarName(
             avatarChoice.id,
             lambda: self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice]))
@@ -250,6 +252,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
                 self.betterlucknexttime(avList, index)
             else:
                 base.localAvatarStyle = dna
+                base.localAvatarName = avatarChoice.name
                 self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice])
         elif done == 'nameIt':
             self.accept('downloadAck-response', self.__handleDownloadAck, [avList, index])
@@ -360,12 +363,16 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.loginFSM.request('playingGame')
 
     def getAvatarDetails(self, avatar, func, *args):
+        avId = avatar.doId
+        if avId in self.doId2do:
+            func(1, self.doId2do[avId], *args)
+            return
+
         pad = ScratchPad()
         pad.func = func
         pad.args = args
         pad.avatar = avatar
         pad.delayDelete = DelayDelete.DelayDelete(avatar, 'getAvatarDetails')
-        avId = avatar.doId
         self.__queryAvatarMap[avId] = pad
         self.__sendGetAvatarDetails(avId)
 
@@ -442,6 +449,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             del base.localAvatar
             del __builtins__['localAvatar']
         base.localAvatarStyle = None
+        base.localAvatarName = None
         loader.abortBulkLoad()
         base.transitions.noTransitions()
         if self._userLoggingOut:

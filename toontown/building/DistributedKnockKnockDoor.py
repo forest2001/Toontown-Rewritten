@@ -108,6 +108,7 @@ class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp)
         if self.nametag:
             self.nametag.unmanage(base.marginManager)
             self.nametagNP.removeNode()
+            self.nametag.destroy()
         self.nametag = None
         self.nametagNP = None
         return
