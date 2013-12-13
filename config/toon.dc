@@ -2407,8 +2407,8 @@ dclass DistributedPetProxy : DistributedPet {
 };
 
 dclass DistributedBlackCatMgr : DistributedObject {
-  setAvId(uint32) required broadcast ram;
-  doBlackCatTransformation() airecv clsend;
+  doBlackCatTransformation(uint32 avId) broadcast;
+  requestBlackCatTransformation() airecv clsend;
 };
 
 dclass DistributedPolarPlaceEffectMgr : DistributedObject {
