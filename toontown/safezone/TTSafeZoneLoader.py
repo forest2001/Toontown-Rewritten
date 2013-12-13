@@ -32,7 +32,7 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
             
         # For the Flippy NPC:
         npcOrigin = self.geom.attachNewNode('npc_origin_12')
-        npcOrigin.setPosHpr(100, -8.4, 4.025, 27, 0, 0)
+        npcOrigin.setPosHpr(100, 9.952, 4.025, -201.762, 0, 0)
 
         # For the Polar Bear:
         def phraseSaid(phraseId):
