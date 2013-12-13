@@ -4435,7 +4435,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self._gmType != 2:
             self.b_setBackpack(0, 0, 0)
         # Remove the Golf Hats from everyone, ID 11.
-        if self.getHat[0] == 11:
+        if self.getHat()[0] == 11:
             self.b_setHat(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
