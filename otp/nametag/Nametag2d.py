@@ -61,6 +61,18 @@ class Nametag2d(Nametag, MarginPopup):
         self.arrow.setScale(self.ARROW_SCALE)
         self.arrow.setColor(self.nameFg)
 
+    def update(self):
+        Nametag.update(self)
+        self.considerUpdateClickRegion()
+
+    def marginVisibilityChanged(self):
+        self.considerUpdateClickRegion()
+
+    def considerUpdateClickRegion(self):
+        # If we are onscreen, we update our click region:
+        if self.isDisplayed():
+            self.updateClickRegion(-1,1,-1,1)
+
     def tick(self):
         # Update the arrow's pointing.
         if not self.isDisplayed() or self.arrow is None:
