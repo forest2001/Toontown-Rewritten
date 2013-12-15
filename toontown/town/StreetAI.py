@@ -54,7 +54,7 @@ class StreetAI:
                     intDoor.generateWithRequired(interiorZone)
                     
                     extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
-                    intDoor.setOtherZoneIdAndDoId(self.zoneId, extDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(buildingZone, extDoor.getDoId())
                     
                     interior = DistributedToonInteriorAI(self.air)
                     interior.setZoneIdAndBlock(interiorZone, 0)
