@@ -4,10 +4,12 @@ from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
+from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.building import DoorTypes
 from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.toon import NPCToons
+from toontown.hood import ZoneUtil
 
 class StreetAI:
     """
@@ -23,10 +25,11 @@ class StreetAI:
         self.zoneId = zoneId
         self.ponds = {}
         self.pondNpcs = {}
+        self.spawnInteriorsIn = [2000]
     
     def createObjects(self, group):
         if isinstance(group, DNALandmarkBuilding):
-            if group.getName()[:2] == 'tb':
+            if group.getName()[:2] == 'tb' and ZoneUtil.getCanonicalHoodId(self.zoneId) in self.spawnInteriorsIn:
                 visGroup = group.getVisGroup()
                 buildingZone = 0
                 if visGroup is None:
