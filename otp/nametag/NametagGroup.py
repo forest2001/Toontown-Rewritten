@@ -177,9 +177,26 @@ class NametagGroup:
         for nametag in self.nametags:
             nametag.tick()
 
-        if self.avatar is None: return
-        pos = self.avatar.getPos(NametagGlobals.camera)
-        visible3d = NametagGlobals.camera.node().getLens().project(pos, Point2())
+        if self.avatar is None: return task.cont
+
+        # Get avatar bounds. These have the local transform of the node applied,
+        # therefore they are in the coordinate space of self.avatar.getParent().
+        minCorner = Point3()
+        maxCorner = Point3()
+        self.avatar.calcTightBounds(minCorner, maxCorner)
+        avatarBounds = BoundingBox(minCorner, maxCorner)
+
+        # Get the bounds of the camera's lens. These have no transform applied,
+        # so are in the coordinate system of NametagGlobals.camera.
+        cameraBounds = NametagGlobals.camera.node().getLens().makeBounds()
+
+        # Transform cameraBounds to the same coordinate space as avatarBounds:
+        mat = NametagGlobals.camera.getMat(self.avatar.getParent())
+        cameraBounds.xform(mat)
+
+        # Now check for bounding intersection (i.e. cull) to see if self.avatar
+        # is visible:
+        visible3d = bool(cameraBounds.contains(avatarBounds) & BoundingVolume.IFSome)
 
         if self.avatar.isHidden():
             visible3d = False
