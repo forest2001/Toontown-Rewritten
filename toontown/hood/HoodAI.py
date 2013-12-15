@@ -12,6 +12,11 @@ from toontown.safezone import TreasureGlobals
 from toontown.town.StreetAI import StreetAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 
+from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
+from toontown.building.DistributedGagshopInteriorAI import DistributedGagshopInteriorAI
+from toontown.building.DistributedPetshopInteriorAI import DistributedPetshopInteriorAI
+from toontown.dna.DNAParser import DNALandmarkBuilding
+
 class HoodAI:
     """
     AI-side representation of everything in a single neighborhood.
@@ -89,6 +94,116 @@ class HoodAI:
         hqInterior = DistributedHQInteriorAI(self.air)
         hqInterior.setZoneIdAndBlock(zone, 0)
         hqInterior.generateWithRequired(zone)
+        
+    def createObjects(self, group):
+        if isinstance(group, DNALandmarkBuilding):
+            if group.getName()[:2] == 'tb' or group.getName()[:2] == 'sz':
+                index = int(group.getName()[2:].split(':')[0])
+                interiorZone = self.safezone + 500 + index
+                type = group.getBuildingType()
+                if type == 'hq':
+                    pass
+                elif type == 'clotheshop':                       
+                    extDoor = DistributedDoorAI(self.air)
+                    extDoor.setZoneIdAndBlock(self.safezone, index)
+                    extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                    extDoor.setSwing(3)
+                    extDoor.setDoorIndex(1)
+                    extDoor.generateWithRequired(self.safezone)
+                   
+                    intDoor = DistributedDoorAI(self.air)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
+                    intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                    intDoor.setSwing(3)
+                    intDoor.setDoorIndex(0)
+                    intDoor.generateWithRequired(interiorZone)
+                   
+                    extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(self.safezone, extDoor.getDoId())
+                    
+                    interior = DistributedToonInteriorAI(self.air)
+                    interior.setZoneIdAndBlock(interiorZone, 0)
+                    interior.setState('toon')
+                    interior.generateWithRequired(interiorZone)
+
+
+                elif type == 'petshop':                   
+                    extDoor = DistributedDoorAI(self.air)
+                    extDoor.setZoneIdAndBlock(self.safezone, index)
+                    extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                    extDoor.setSwing(3)
+                    extDoor.setDoorIndex(1)
+                    extDoor.generateWithRequired(self.safezone)
+                   
+                    intDoor = DistributedDoorAI(self.air)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
+                    intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                    intDoor.setSwing(3)
+                    intDoor.setDoorIndex(0)
+                    intDoor.generateWithRequired(interiorZone)
+                   
+                    extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(self.safezone, extDoor.getDoId())
+                   
+                    interior = DistributedPetshopInteriorAI(self.air)
+                    interior.setZoneIdAndBlock(interiorZone, 0)
+                    interior.generateWithRequired(interiorZone)
+                   
+                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+ 
+                elif type == 'gagshop':                   
+                    extDoor = DistributedDoorAI(self.air)
+                    extDoor.setZoneIdAndBlock(self.safezone, index)
+                    extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                    extDoor.setSwing(3)
+                    extDoor.setDoorIndex(1)
+                    extDoor.generateWithRequired(self.safezone)
+                   
+                    intDoor = DistributedDoorAI(self.air)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
+                    intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                    intDoor.setSwing(3)
+                    intDoor.setDoorIndex(0)
+                    intDoor.generateWithRequired(interiorZone)
+                   
+                    extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(self.safezone, extDoor.getDoId())
+                   
+                    interior = DistributedGagshopInteriorAI(self.air)
+                    interior.setZoneIdAndBlock(interiorZone, 0)
+                    interior.generateWithRequired(interiorZone)
+                   
+                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+                else:
+                    if group.getName() == 'sz13:toon_landmark_TT_toonhall_DNARoot':
+                        pass
+                    else:                       
+                        extDoor = DistributedDoorAI(self.air)
+                        extDoor.setZoneIdAndBlock(self.safezone, index)
+                        extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                        extDoor.setSwing(3)
+                        extDoor.setDoorIndex(1)
+                        extDoor.generateWithRequired(self.safezone)
+                       
+                        intDoor = DistributedDoorAI(self.air)
+                        intDoor.setZoneIdAndBlock(interiorZone, 0)
+                        intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                        intDoor.setSwing(3)
+                        intDoor.setDoorIndex(0)
+                        intDoor.generateWithRequired(interiorZone)
+                       
+                        extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                        intDoor.setOtherZoneIdAndDoId(self.safezone, extDoor.getDoId())
+                        
+                        interior = DistributedToonInteriorAI(self.air)
+                        interior.setZoneIdAndBlock(interiorZone, 0)
+                        interior.setState('toon')
+                        interior.generateWithRequired(interiorZone)
+
+                   
+                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+        for i in range(group.getNumChildren()):
+            self.createObjects(group.at(i))
 
     def createPond(self, group):
         if group.getName()[:12] == 'fishing_pond':

@@ -229,7 +229,7 @@ class DNAStorage:
     def getTitleFromBlockNumber(self, index):
         return self.blockTitles[index]
     def getDoorPosHprFromBlockNumber(self, index):
-        return self.blockDoors[index]
+        return self.blockDoors[str(index)]
     def storeBlockDoor(self, index, door):
         self.blockDoors[index] = door
     def storeBlockTitle(self, index, title):
@@ -926,9 +926,9 @@ class DNADoor(DNAGroup):
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_' + block)
         
-        store = NodePath('door-%i' % int(block))
+        store = NodePath('door-%s' % block)
         store.setPosHprScale(doorNodePath, (0,0,0), (0,0,0), (1,1,1))
-        dnaStore.storeBlockDoor(int(block), store)
+        dnaStore.storeBlockDoor(block, store)
     def traverse(self, nodePath, dnaStorage):
         frontNode = nodePath.find('**/*_front')
         if not frontNode.getNode(0).isGeomNode():
