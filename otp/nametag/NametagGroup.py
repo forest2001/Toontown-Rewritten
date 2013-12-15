@@ -52,6 +52,8 @@ class NametagGroup:
         taskMgr.remove(self.tickTask)
         if self.manager is not None:
             self.unmanage(self.manager)
+        for nametag in list(self.nametags):
+            self.removeNametag(nametag)
 
     def getNametag2d(self):
         return self.nametag2d
@@ -164,6 +166,11 @@ class NametagGroup:
         tag.avatar = self.avatar
         tag.icon = self.icon
 
+        if self.active:
+            tag.setClickRegionEvent(self.getUniqueId())
+        else:
+            tag.setClickRegionEvent(None)
+
         tag.update()
 
     def __tickTask(self, task):
@@ -202,6 +209,7 @@ class NametagGroup:
         self.nametags.remove(nametag)
         if self.manager is not None and isinstance(nametag, MarginPopup):
             nametag.unmanage(manager)
+        nametag.destroy()
 
     def manage(self, manager):
         self.manager = manager
