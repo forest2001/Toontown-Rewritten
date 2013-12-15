@@ -134,6 +134,7 @@ class DNAStorage:
         self.blockTitles = {}
         self.blockArticles = {}
         self.blockBuildingTypes = {}
+        self.blockDoors = {}
         self.textures = {}
         self.catalogCodes = {}
     def storeSuitPoint(self, suitPoint):
@@ -227,6 +228,10 @@ class DNAStorage:
         return block
     def getTitleFromBlockNumber(self, index):
         return self.blockTitles[index]
+    def getDoorPosHprFromBlockNumber(self, index):
+        return self.blockDoors[str(index)]
+    def storeBlockDoor(self, index, door):
+        self.blockDoors[index] = door
     def storeBlockTitle(self, index, title):
         self.blockTitles[index] = title
     def storeBlockArticle(self, index, article):
@@ -830,6 +835,7 @@ class DNALandmarkBuilding(DNANode):
         self.title = ''
         self.article = ''
         self.buildingType = ''
+        self.door = None
     def getArticle(self):
         return self.article
     def getBuildingType(self):
@@ -919,6 +925,10 @@ class DNADoor(DNAGroup):
         doorTrigger.setScale(2,2,2)
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_' + block)
+        
+        store = NodePath('door-%s' % block)
+        store.setPosHprScale(doorNodePath, (0,0,0), (0,0,0), (1,1,1))
+        dnaStore.storeBlockDoor(block, store)
     def traverse(self, nodePath, dnaStorage):
         frontNode = nodePath.find('**/*_front')
         if not frontNode.getNode(0).isGeomNode():

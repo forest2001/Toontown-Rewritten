@@ -26,8 +26,9 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
     def avatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         self.notify.debug('avatar enter ' + str(avId))
-        self.air.questManager.requestInteract(avId, self)
-        DistributedNPCToonBaseAI.avatarEnter(self)
+        #self.air.questManager.requestInteract(avId, self)
+        #DistributedNPCToonBaseAI.avatarEnter(self)
+        self.rejectAvatar(avId)
 
     def chooseQuest(self, questId):
         avId = self.air.getAvatarIdFromSender()

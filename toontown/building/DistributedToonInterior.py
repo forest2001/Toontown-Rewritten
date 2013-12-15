@@ -11,6 +11,7 @@ from direct.distributed import DistributedObject
 from direct.fsm import State
 import random
 import ToonInteriorColors
+from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.toon import ToonDNA
 from toontown.toon import ToonHead
@@ -106,9 +107,10 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
             signOrigin = self.interior.find('**/sign_origin;+s')
             newSignNP = sign.copyTo(signOrigin)
             newSignNP.setDepthWrite(1, 1)
-            mat = self.dnaStore.getSignTransformFromBlockNumber(int(self.block))
+            #TODO: getSignTransform
+            #mat = self.dnaStore.getSignTransformFromBlockNumber(int(self.block))
             inv = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-            inv.invertFrom(mat)
+            #inv.invertFrom(mat)
             newSignNP.setMat(inv)
             newSignNP.flattenLight()
             ll = Point3()

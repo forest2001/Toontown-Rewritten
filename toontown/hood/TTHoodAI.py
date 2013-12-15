@@ -30,6 +30,7 @@ class TTHoodAI(HoodAI):
         # Create Fisherman Freddy: 
         NPCToons.createNPC(self.air, 2012, NPCToons.NPCToonDict.get(2012), 2000, posIndex=0)
 
+        self.createObjects(self.dnaData)
         self.createHQ(2520, 20)
         
         self.createButterflies()

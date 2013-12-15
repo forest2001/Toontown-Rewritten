@@ -1,10 +1,15 @@
-from toontown.dna.DNAParser import DNAVisGroup
+from toontown.dna.DNAParser import DNAVisGroup, DNALandmarkBuilding
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
+from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
+from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.fishing import FishingTargetGlobals
+from toontown.building import DoorTypes
+from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.toon import NPCToons
+from toontown.hood import ZoneUtil
 
 class StreetAI:
     """
@@ -20,8 +25,47 @@ class StreetAI:
         self.zoneId = zoneId
         self.ponds = {}
         self.pondNpcs = {}
+        self.spawnInteriorsIn = [2000]
     
     def createObjects(self, group):
+        if isinstance(group, DNALandmarkBuilding):
+            if group.getName()[:2] == 'tb' and ZoneUtil.getCanonicalHoodId(self.zoneId) in self.spawnInteriorsIn:
+                visGroup = group.getVisGroup()
+                buildingZone = 0
+                if visGroup is None:
+                    buildingZone = self.zoneId
+                else:
+                    buildingZone = int(visGroup.getName())
+                index = int(group.getName()[2:].split(':')[0])
+                interiorZone = self.zoneId + 500 + index
+                type = group.getBuildingType()
+                if type == 'hq':
+                    pass
+                else:                    
+                    extDoor = DistributedDoorAI(self.air)
+                    extDoor.setZoneIdAndBlock(buildingZone, index)
+                    extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                    extDoor.setSwing(3)
+                    extDoor.setDoorIndex(1)
+                    extDoor.generateWithRequired(buildingZone)
+                    
+                    intDoor = DistributedDoorAI(self.air)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
+                    intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                    intDoor.setSwing(3)
+                    intDoor.setDoorIndex(1)
+                    intDoor.generateWithRequired(interiorZone)
+                    
+                    extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(buildingZone, extDoor.getDoId())
+                    
+                    interior = DistributedToonInteriorAI(self.air)
+                    interior.setZoneIdAndBlock(interiorZone, 0)
+                    interior.setState('toon')
+                    interior.generateWithRequired(interiorZone)
+                    
+                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+
         if group.getName()[:13] == 'fishing_pond_':
             visGroup = group.getVisGroup()
             pondZone = 0
@@ -60,6 +104,5 @@ class StreetAI:
                     spot.generateWithRequired(pondZone)
                 elif posSpot.getName()[:21] == 'npc_fisherman_origin_':
                     NPCToons.createNPC(self.air, self.pondNpcs[self.zoneId], NPCToons.NPCToonDict.get(self.pondNpcs[self.zoneId]), pondZone, posIndex=int(posSpot.getName()[21:]))
-            return
         for i in range(group.getNumChildren()):
             self.createObjects(group.at(i))
