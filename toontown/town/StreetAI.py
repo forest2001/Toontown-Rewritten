@@ -38,12 +38,7 @@ class StreetAI:
                 type = group.getBuildingType()
                 if type == 'hq':
                     pass
-                else:
-                    interior = DistributedToonInteriorAI(self.air)
-                    interior.setZoneIdAndBlock(interiorZone, 0)
-                    interior.setState('toon')
-                    interior.generateWithRequired(interiorZone)
-                    
+                else:                    
                     extDoor = DistributedDoorAI(self.air)
                     extDoor.setZoneIdAndBlock(buildingZone, index)
                     extDoor.setDoorType(DoorTypes.EXT_STANDARD)
@@ -52,14 +47,19 @@ class StreetAI:
                     extDoor.generateWithRequired(buildingZone)
                     
                     intDoor = DistributedDoorAI(self.air)
-                    intDoor.setZoneIdAndBlock(interiorZone, 1)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
                     intDoor.setDoorType(DoorTypes.INT_STANDARD)
                     intDoor.setSwing(3)
                     intDoor.setDoorIndex(1)
-                    intDoor.setOtherZoneIdAndDoId(self.zoneId, extDoor.getDoId())
                     intDoor.generateWithRequired(interiorZone)
                     
                     extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                    intDoor.setOtherZoneIdAndDoId(buildingZone, extDoor.getDoId())
+                    
+                    interior = DistributedToonInteriorAI(self.air)
+                    interior.setZoneIdAndBlock(interiorZone, 0)
+                    interior.setState('toon')
+                    interior.generateWithRequired(interiorZone)
                     
                     NPCToons.createNpcsInZone(self.air, interiorZone)
 
