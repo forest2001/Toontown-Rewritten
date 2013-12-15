@@ -64,7 +64,7 @@ class StreetAI:
                     interior.setState('toon')
                     interior.generateWithRequired(interiorZone)
                     
-                    NPCToons.createNpcsInZone(self.air, interiorZone)
+                    #NPCToons.createNpcsInZone(self.air, interiorZone)
 
         if group.getName()[:13] == 'fishing_pond_':
             visGroup = group.getVisGroup()
