@@ -33,9 +33,6 @@ class ClickablePopup(PandaNode, DirectObject):
         self.__mwn.removeRegion(self.__region)
         self.ignoreAll()
 
-    def setClickable(self, *args):
-        pass # TODO: No clue what the args are or what they do.
-
     def getClickState(self):
         return self.__clickState
 

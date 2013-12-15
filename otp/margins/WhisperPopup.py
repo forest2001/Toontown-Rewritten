@@ -53,6 +53,9 @@ class WhisperPopup(MarginPopup, ClickablePopup):
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
 
+    def setClickable(self, senderName, fromId, todo=0):
+        pass
+
     def manage(self, manager):
         MarginPopup.manage(self, manager)
 
