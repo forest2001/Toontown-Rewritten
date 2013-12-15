@@ -34,6 +34,9 @@ class MarginPopup:
     def isDisplayed(self):
         return self._assignedCell is not None
 
+    def marginVisibilityChanged(self):
+        pass # Fired externally when the result of isDisplayed changes. For subclasses.
+
     def manage(self, manager):
         self.unmanage(self.__manager)
         self.__manager = manager
