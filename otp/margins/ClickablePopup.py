@@ -134,5 +134,10 @@ class ClickablePopup(PandaNode, DirectObject):
         sLeft, sTop = sTopLeft
         sRight, sBottom = sBottomRight
 
+        # The sort value is essentially the screen-space depth. We can approximate
+        # this using the camera-space corner points:
+        depth = (cTopLeft[1] + cBottomRight[1]) / 2.0
+
+        self.__region.setSort(-int(depth*1000))
         self.__region.setFrame(sLeft, sRight, sBottom, sTop)
         self.__region.setActive(True)
