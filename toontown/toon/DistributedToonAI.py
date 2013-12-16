@@ -4730,26 +4730,30 @@ def dna(part, value):
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(av.getDNAString())
     
+    def checkValidColor(colorIndex):
+        if not 0 <= colorIndex <= 26: # This could actually be selected from ToonDNA, but I prefer this :D
+            return "DNA: Color index out of range."
+        if colorIndex == 0 and av.dna.getAnimal() != 'bear':
+            return "DNA: White color is reserved for Polar Bears."
+        if colorIndex == 26 and av.dna.getAnimal() != 'cat':
+            return "DNA: Black color is reserved for Black Cats."
+    
     # Body Part Colors
     if part=='headColor':
         value = int(value)
-        if not 0 <= value <= 26:
-            return "DNA: Head color out of color index range."
+        checkValidColor(value)
         dna.headColor = value
     elif part=='armColor':
         value = int(value)
-        if not 0 <= value <= 26:
-            return "DNA: Arm color out of color index range."
+        checkValidColor(value)
         dna.armColor = value
     elif part=='legColor':
         value = int(value)
-        if not 0 <= value <= 26:
-            return "DNA: Leg color out of color index range."
+        checkValidColor(value)
         dna.legColor = value
     elif part=='color':
         value = int(value)
-        if not 0 <= value <= 26:
-            return "DNA: Color index out of range."
+        checkValidColor(value)
         dna.headColor = value
         dna.armColor = value
         dna.legColor = value
@@ -4760,7 +4764,7 @@ def dna(part, value):
         # are made.
         value = int(value)
         if not 0 <= value <= 26:
-            return "DNA: Glove color out of color index range."
+            return "DNA: Color index out of range."
         dna.gloveColor = value
         
     # Body Sizes, Species & Gender (y u want to change gender pls)
