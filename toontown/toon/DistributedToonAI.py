@@ -4730,30 +4730,35 @@ def dna(part, value):
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(av.getDNAString())
     
-    def checkValidColor(colorIndex):
+    def isValidColor(colorIndex):
         if not 0 <= colorIndex <= 26: # This could actually be selected from ToonDNA, but I prefer this :D
-            return "DNA: Color index out of range."
-        if colorIndex == 0 and av.dna.getAnimal() != 'bear':
-            return "DNA: White color is reserved for Polar Bears."
-        if colorIndex == 26 and av.dna.getAnimal() != 'cat':
-            return "DNA: Black color is reserved for Black Cats."
+            return False
+        if colorIndex == 0 and dna.getAnimal() != 'bear':
+            return False
+        if colorIndex == 26 and dna.getAnimal() != 'cat':
+            return False
+        return True
     
     # Body Part Colors
     if part=='headColor':
         value = int(value)
-        checkValidColor(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for head."
         dna.headColor = value
     elif part=='armColor':
         value = int(value)
-        checkValidColor(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for arms."
         dna.armColor = value
     elif part=='legColor':
         value = int(value)
-        checkValidColor(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for legs."
         dna.legColor = value
     elif part=='color':
         value = int(value)
-        checkValidColor(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for toon."
         dna.headColor = value
         dna.armColor = value
         dna.legColor = value
@@ -4775,19 +4780,40 @@ def dna(part, value):
             dna.gender = 'f'
         else:
             return "DNA: Invalid gender. Stick to 'male' or 'female'."
-    elif part=='head' or part=='species':
-        return "unimplemented. harv is lazy."
-        # *sigh*... I'll do this later.
+    elif part=='species':
+        species = ['dog', 'cat', 'horse', 'mouse', 'rabbit', 'duck', 'monkey', 'bear', 'pig']
+        if value not in species:
+            return "DNA: Invalid head type specified."
+        if dna.headColor == 0x1a and value != 'cat':
+            return "DNA: Cannot have a black toon (non-cat)!"
+        if dna.headColor == 0 and value != 'bear':
+            return "DNA: Cannot have a white toon (non-bear)!"
+        species = dict(map(None, species, ToonDNA.toonSpeciesTypes))
+        headSize = dna.head[1:3]
+        dna.head = (species.get(value) + headSize)
+    elif part=='headSize':
+        sizes = ['ls', 'ss', 'sl', 'll']
+        value = int(value)
+        if not 0 <= value <= 3:
+            return "DNA: Invalid head size index."
+        species = dna.head[:0]
+        dna.head = (species + sizes[value])
     elif part=='torso':
         value = int(value)
-        if not 0 <= value <= 2:
-            return "DNA: Torso index out of range."
-        dna.torsoIndex = value
+        if dna.gender == 'm':
+            if not 0 <= value <= 2:
+                return "DNA: Male torso index out of range (0-2)."
+        elif dna.gender == 'f':
+            if not 3 <= value <= 8:
+                return "DNA: Female torso index out of range (3-8)."
+        else:
+            return "DNA: Unable to determine gender. Aborting DNA change."
+        dna.torso = ToonDNA.toonTorsoTypes[value]
     elif part=='legs':
         value = int(value)
         if not 0 <= value <= 2:
             return "DNA: Legs index out of range."
-        dna.legsIndex = value
+        dna.legs = ToonDNA.toonLegTypes[value]
         
     # Don't allow them to submit any changes if they don't enter a valid DNA part.
     else:
