@@ -4730,20 +4730,64 @@ def dna(part, value):
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(av.getDNAString())
     
+    # Body Part Colors
     if part=='headColor':
-        if 0 <= value <= 26: return "DNA: Head color out of color index."
-        dna.headColor = int(value)
-    if part=='armColor':
-        if 0 <= value <= 26: return "DNA: Arm color out of color index."
-        dna.armColor = int(value)
-    if part=='legColor':
-        if 0 <= value <= 26: return "DNA: Leg color out of color index."
-        dna.legColor = int(value)
-    if part=='color':
-        if 0 <= value <= 26: return "DNA: Color out of color index."
-        dna.headColor = int(value)
-        dna.armColor = int(value)
-        dna.legColor = int(value)
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Head color out of color index range."
+        dna.headColor = value
+    elif part=='armColor':
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Arm color out of color index range."
+        dna.armColor = value
+    elif part=='legColor':
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Leg color out of color index range."
+        dna.legColor = value
+    elif part=='color':
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Color index out of range."
+        dna.headColor = value
+        dna.armColor = value
+        dna.legColor = value
+    elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
+        return "DNA: Change of glove colors are not allowed."
+        # If you ever want to be able to edit gloves, feel free to comment out this return.
+        # However, since DToonAI checks ToonDNA, this would be impossible unless changes
+        # are made.
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Glove color out of color index range."
+        dna.gloveColor = value
+        
+    # Body Sizes, Species & Gender (y u want to change gender pls)
+    elif part=='gender':
+        if value=='male':
+            dna.gender = 'm'
+        elif value=='female':
+            dna.gender = 'f'
+        else:
+            return "DNA: Invalid gender. Stick to 'male' or 'female'."
+    elif part=='head' or part=='species':
+        return "unimplemented. harv is lazy."
+        # *sigh*... I'll do this later.
+    elif part=='torso':
+        value = int(value)
+        if not 0 <= value <= 2:
+            return "DNA: Torso index out of range."
+        dna.torsoIndex = value
+    elif part=='legs':
+        value = int(value)
+        if not 0 <= value <= 2:
+            return "DNA: Legs index out of range."
+        dna.legsIndex = value
+        
+    # Don't allow them to submit any changes if they don't enter a valid DNA part.
+    else:
+        return "DNA: Invalid part specified."
         
     av.b_setDNAString(dna.makeNetString())
     return "Completed DNA change successfully."
