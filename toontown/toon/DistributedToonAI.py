@@ -4719,3 +4719,31 @@ def setCogIndex(indexVal):
     if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
+def dna(part, value):
+    # This is where the fun begins, woo!
+    """Set a specific part of DNA for the target toon. Be careful, you don't want to break anyone!"""
+    
+    av = spellbook.getTarget()
+    
+    dna = ToonDNA.ToonDNA()
+    dna.makeFromNetString(av.getDNAString())
+    
+    if part=='headColor':
+        if 0 <= value <= 26: return "DNA: Head color out of color index."
+        dna.headColor = int(value)
+    if part=='armColor':
+        if 0 <= value <= 26: return "DNA: Arm color out of color index."
+        dna.armColor = int(value)
+    if part=='legColor':
+        if 0 <= value <= 26: return "DNA: Leg color out of color index."
+        dna.legColor = int(value)
+    if part=='color':
+        if 0 <= value <= 26: return "DNA: Color out of color index."
+        dna.headColor = int(value)
+        dna.armColor = int(value)
+        dna.legColor = int(value)
+        
+    av.b_setDNAString(dna.makeNetString())
+    return "Completed DNA change successfully."
