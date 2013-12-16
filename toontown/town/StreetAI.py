@@ -26,6 +26,7 @@ class StreetAI:
         self.ponds = {}
         self.pondNpcs = {}
         self.spawnInteriorsIn = [1000, 2000]
+        self.spawnNpcsIn = [2000]
     
     def createObjects(self, group):
         if isinstance(group, DNALandmarkBuilding):
@@ -64,7 +65,8 @@ class StreetAI:
                     interior.setState('toon')
                     interior.generateWithRequired(interiorZone)
                     
-                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+                    if ZoneUtil.getCanonicalHoodId(interiorZone) in self.spawnNpcsIn:
+                        NPCToons.createNpcsInZone(self.air, interiorZone)
 
         if group.getName()[:13] == 'fishing_pond_':
             visGroup = group.getVisGroup()

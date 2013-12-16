@@ -16,6 +16,7 @@ from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorA
 from toontown.building.DistributedGagshopInteriorAI import DistributedGagshopInteriorAI
 from toontown.building.DistributedPetshopInteriorAI import DistributedPetshopInteriorAI
 from toontown.dna.DNAParser import DNALandmarkBuilding
+from toontown.toon import NPCToons
 
 class HoodAI:
     """
@@ -30,6 +31,8 @@ class HoodAI:
 
     def __init__(self, air):
         self.air = air
+        
+        self.spawnNpcsIn = [2000]
 
         self.safezone = self.HOOD
         self.streets = {}
@@ -125,6 +128,9 @@ class HoodAI:
                     interior.setZoneIdAndBlock(interiorZone, 0)
                     interior.setState('toon')
                     interior.generateWithRequired(interiorZone)
+                    
+                    #if self.safezone in self.spawnNpcsIn:
+                        #NPCToons.createNpcsInZone(self.air, interiorZone)
 
 
                 elif type == 'petshop':                   
@@ -149,7 +155,8 @@ class HoodAI:
                     interior.setZoneIdAndBlock(interiorZone, 0)
                     interior.generateWithRequired(interiorZone)
                    
-                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+                    #if self.safezone in self.spawnNpcsIn:
+                        #NPCToons.createNpcsInZone(self.air, interiorZone)
  
                 elif type == 'gagshop':                   
                     extDoor = DistributedDoorAI(self.air)
@@ -173,7 +180,8 @@ class HoodAI:
                     interior.setZoneIdAndBlock(interiorZone, 0)
                     interior.generateWithRequired(interiorZone)
                    
-                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+                    #if self.safezone in self.spawnNpcsIn:
+                        #NPCToons.createNpcsInZone(self.air, interiorZone)
                 else:
                     if group.getName() == 'sz13:toon_landmark_TT_toonhall_DNARoot':
                         pass
@@ -199,9 +207,9 @@ class HoodAI:
                         interior.setZoneIdAndBlock(interiorZone, 0)
                         interior.setState('toon')
                         interior.generateWithRequired(interiorZone)
-
                    
-                    #NPCToons.createNpcsInZone(self.air, interiorZone)
+                    if self.safezone in self.spawnNpcsIn:
+                        NPCToons.createNpcsInZone(self.air, interiorZone)
         for i in range(group.getNumChildren()):
             self.createObjects(group.at(i))
 
