@@ -12,13 +12,9 @@ class GZHoodAI(HoodAI):
         
         self.golfKarts = []
         
-        self.dnaData = DNAData('gz_data')
-        self.dnaData.read(open('resources/phase_6/dna/golf_zone_sz.dna'))
-        
-        self.createObjects(self.dnaData)
-        
     def createSafeZone(self):
-        pass
+        return False # Golf is currently broken. :)
+        HoodAI.spawnObjects(self, 'phase_6/dna/golf_zone_sz.dna')
         
     def createObjects(self, group):
         if group.getName()[:9] == 'golf_kart':

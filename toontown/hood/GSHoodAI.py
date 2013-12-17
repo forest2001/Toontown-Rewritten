@@ -17,14 +17,9 @@ class GSHoodAI(HoodAI.HoodAI):
         HoodAI.HoodAI.__init__(self, air)
         self.racepads = []
         self.viewpads = []
-        self.dnaData = DNAData('gs_data')
-        self.dnaData.read(open('resources/phase_6/dna/goofy_speedway_sz.dna'))
-        
-        self.createObjects(self.dnaData)
-        self.createKartShop()
         
     def createSafeZone(self):
-        pass #overwrite createSafeZone in HoodAI to prevent 'normal' playground objects from being created.
+        HoodAI.spawnObjects(self, 'phase_6/dna/goofy_speedway_sz.dna')
     
     def createKartShop(self):
         ksInterior = DistributedKartShopInteriorAI(self.air)
