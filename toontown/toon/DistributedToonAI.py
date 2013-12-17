@@ -89,6 +89,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             PetLookerAI.PetLookerAI.__init__(self)
         self.air = air
         self.dna = ToonDNA.ToonDNA()
+        self.mwDNABackup = {}
         self.inventory = None
         self.fishCollection = None
         self.fishTank = None
@@ -4796,7 +4797,7 @@ def dna(part, value):
         value = int(value)
         if not 0 <= value <= 3:
             return "DNA: Invalid head size index."
-        species = dna.head[:0]
+        species = dna.head[0]
         dna.head = (species + sizes[value])
     elif part=='torso':
         value = int(value)
@@ -4814,10 +4815,24 @@ def dna(part, value):
         if not 0 <= value <= 2:
             return "DNA: Legs index out of range."
         dna.legs = ToonDNA.toonLegTypes[value]
+    
+    # Allow Admins to back up a toons current DNA before making changes.
+    elif part=='save':
+        av.mwDNABackup[str(spellbook.getInvoker().doId)] = av.getDNAString()
         
+    # Restore from a previous back up of DNA.
+    elif part=='restore':
+        if av.mwDNABackup.has_key(str(spellbook.getInvoker().doId)):
+            dna.makeFromNetString(av.mwDNABackup.get(str(spellbook.getInvoker().doId)))
+        else:
+            return "DNA: There are no backups available."
+    
     # Don't allow them to submit any changes if they don't enter a valid DNA part.
     else:
         return "DNA: Invalid part specified."
         
-    av.b_setDNAString(dna.makeNetString())
-    return "Completed DNA change successfully."
+    if part=='save':
+        return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
+    else:
+        av.b_setDNAString(dna.makeNetString())
+        return "Completed DNA change successfully."
