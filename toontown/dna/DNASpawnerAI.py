@@ -30,7 +30,6 @@ class DNASpawnerAI:
     def spawnObjects(self, filename, baseZone):
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
-        NPCToons.createNpcsInZone(simbase.air, baseZone)
         self._createObjects(dnaData, baseZone)
         
     def _createObjects(self, group, zone):
