@@ -22,12 +22,18 @@ from toontown.fishing import FishingTargetGlobals
 
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 
-
 from toontown.toon import NPCToons
+
+#alfa only
+from toontown.hood import ZoneUtil
 
 class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
+        # This is strictly for buildings during alpha release
+        self.spawnInteriorsIn = [1000, 2000]
+        self.spawnNPCsIn = [2000]
+        
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
@@ -64,7 +70,8 @@ class DNASpawnerAI:
                 target.setPondDoId(pond.getDoId())
                 target.generateWithRequired(pondZone)
             NPCToons.createNpcsInZone(simbase.air, pondZone)
-        elif isinstance(group, DNALandmarkBuilding):
+        
+        elif isinstance(group, DNALandmarkBuilding) and ZoneUtil.getCanonicalHoodId(zone) in self.spawnInteriorsIn:
             if group.getName()[:2] == 'tb' or group.getName()[:2] == 'sz':
                 visGroup = group.getVisGroup()
                 buildingZone = 0
@@ -224,7 +231,9 @@ class DNASpawnerAI:
                         
                         extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
                         
-                        NPCToons.createNpcsInZone(simbase.air, interiorZone)
+                        if ZoneUtil.getCanonicalHoodId(zone) in self.spawnNPCsIn:
+                            NPCToons.createNpcsInZone(simbase.air, interiorZone)
+        
         elif group.getName()[:10] == 'racing_pad':
             index, dest = group.getName()[11:].split('_', 2)
             index = int(index)
