@@ -13,6 +13,8 @@ class Nametag3d(Nametag):
     BILLBOARD_OFFSET = 3.0
     SHOULD_BILLBOARD = True
 
+    IS_3D = True
+
     def __init__(self):
         Nametag.__init__(self)
 
@@ -45,6 +47,10 @@ class Nametag3d(Nametag):
         distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
 
         self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
+
+        # As 3D nametags can move around on their own, we need to update the
+        # click frame constantly:
+        self.updateClickRegion(-1,1,-1,1)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d

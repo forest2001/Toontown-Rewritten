@@ -19,6 +19,7 @@ class DDHoodAI(HoodAI):
 
         NPCToons.createNPC(self.air, 1008, NPCToons.NPCToonDict.get(1008), 1000, posIndex=0)
 
+        self.createObjects(self.dnaData)
         self.createHQ(1507, 7)
 
         self.boat = DistributedBoatAI(self.air)

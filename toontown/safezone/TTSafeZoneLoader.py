@@ -30,26 +30,6 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
             sign.instanceTo(tunnel)'''
 
-        # For the Flippy NPC:
-        npcOrigin = self.geom.attachNewNode('npc_origin_12')
-        npcOrigin.setPosHpr(100, -8.4, 4.025, 27, 0, 0)
-
-        # For the black cats:
-        def phraseSaid(phraseId):
-            toontastic = 5700
-            if phraseId == toontastic:
-                # Check distance...
-                if Vec3(base.localAvatar.getPos(npcOrigin)).length() > 5:
-                    return
-                messenger.send(DistributedBlackCatMgr.ActivateEvent)
-        self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
-
-        def transformed():
-            for do in base.cr.doId2do.values():
-                if do.dclass.getName() == 'DistributedNPCToonBase':
-                    do.setChatAbsolute('Owooo! Spooky! Remember: Flip for Flippy at the elections!', CFTimeout|CFSpeech)
-        self.accept('blackcat-transformed', transformed)
-
         self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])
 
     def unload(self):

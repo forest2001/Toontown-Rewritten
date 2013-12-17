@@ -26,11 +26,13 @@ class MarginCell(NodePath):
         if self.content:
             self.content._assignedCell = None
             self.contentNP.removeNode()
+            self.content.marginVisibilityChanged()
 
         if content:
             content._assignedCell = self
             content._lastCell = self
             self.contentNP = self.attachNewNode(content)
+            content.marginVisibilityChanged()
 
         self.content = content
 
