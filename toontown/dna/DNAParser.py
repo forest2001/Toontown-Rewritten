@@ -1877,8 +1877,7 @@ p_substreet_list.__doc__ = \
 def p_modeldef(p):
     filename = Filename(p[2])
     filename.setExtension('bam')
-    loader = Loader.Loader(None)
-    p.parser.nodePath = loader.loadModel(filename)
+    p.parser.nodePath = base.loader.loadModel(filename)
     p.parser.modelType = p[1]
 p_modeldef.__doc__ = \
     '''modeldef : MODEL string
