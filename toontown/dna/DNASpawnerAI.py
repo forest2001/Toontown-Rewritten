@@ -34,7 +34,7 @@ class DNASpawnerAI:
         self._createObjects(dnaData, baseZone)
         
     def _createObjects(self, group, zone):
-        if group.getName()[:12] == 'fishing_pond'
+        if group.getName()[:12] == 'fishing_pond':
             visGroup = group.getVisGroup()
             pondZone = 0
             if visGroup is None:
