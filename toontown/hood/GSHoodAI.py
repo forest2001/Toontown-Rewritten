@@ -19,7 +19,7 @@ class GSHoodAI(HoodAI.HoodAI):
         self.viewpads = []
         
     def createSafeZone(self):
-        HoodAI.spawnObjects(self, 'phase_6/dna/goofy_speedway_sz.dna')
+        HoodAI.HoodAI.spawnObjects(self, 'phase_6/dna/goofy_speedway_sz.dna')
     
     def createKartShop(self):
         ksInterior = DistributedKartShopInteriorAI(self.air)
