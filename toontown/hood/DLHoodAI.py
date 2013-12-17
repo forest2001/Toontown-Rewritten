@@ -9,16 +9,8 @@ class DLHoodAI(HoodAI):
     
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
-
-        self.dnaStore = DNAStorage()
-        self.dnaData = simbase.air.loadDNAFileAI(self.dnaStore, 'phase_8/dna/donalds_dreamland_sz.dna')
         
-        self.createPond(self.dnaData)
-        
-        NPCToons.createNPC(self.air, 9011, NPCToons.NPCToonDict.get(9011), self.HOOD, posIndex=0)
-        
-        self.createHQ(9505,5)
-
+        HoodAI.spawnObjects(self, 'phase_8/dna/donalds_dreamland_sz.dna')
         
     def createStreets(self):
         branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])

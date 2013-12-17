@@ -12,15 +12,7 @@ class DDHoodAI(HoodAI):
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
 
-        self.dnaStore = DNAStorage()
-        self.dnaData = simbase.air.loadDNAFileAI(self.dnaStore, 'phase_6/dna/donalds_dock_sz.dna')
-
-        self.createPond(self.dnaData)
-
-        NPCToons.createNPC(self.air, 1008, NPCToons.NPCToonDict.get(1008), 1000, posIndex=0)
-
-        self.createObjects(self.dnaData)
-        self.createHQ(1507, 7)
+        HoodAI.spawnObjects(self, 'phase_6/dna/donalds_dock_sz.dna')
 
         self.boat = DistributedBoatAI(self.air)
         self.boat.generateWithRequired(self.safezone)

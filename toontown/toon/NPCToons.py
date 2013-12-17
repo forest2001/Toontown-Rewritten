@@ -86,26 +86,34 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     elif type == NPC_HQ:
+        return False
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback, hq=1)
     elif type == NPC_CLERK:
+        return False
         npc = DistributedNPCClerkAI.DistributedNPCClerkAI(air, npcId)
     elif type == NPC_TAILOR:
+        return False
         npc = DistributedNPCTailorAI.DistributedNPCTailorAI(air, npcId)
     elif type == NPC_BLOCKER:
         npc = DistributedNPCBlockerAI.DistributedNPCBlockerAI(air, npcId)
     elif type == NPC_FISHERMAN:
         npc = DistributedNPCFishermanAI.DistributedNPCFishermanAI(air, npcId)
     elif type == NPC_PETCLERK:
+        return False
         npc = DistributedNPCPetclerkAI.DistributedNPCPetclerkAI(air, npcId)
     elif type == NPC_KARTCLERK:
         npc = DistributedNPCKartClerkAI.DistributedNPCKartClerkAI(air, npcId)
     elif type == NPC_PARTYPERSON:
+        return False
         npc = DistributedNPCPartyPersonAI.DistributedNPCPartyPersonAI(air, npcId)
     elif type == NPC_SPECIALQUESTGIVER:
+        return False 
         npc = DistributedNPCSpecialQuestGiverAI.DistributedNPCSpecialQuestGiverAI(air, npcId)
     elif type == NPC_FLIPPYTOONHALL:
+        return False
         npc = DistributedNPCFlippyInToonHallAI.DistributedNPCFlippyInToonHallAI(air, npcId)
     elif type == NPC_SCIENTIST:
+        return False
         npc = DistributedNPCScientistAI.DistributedNPCScientistAI(air, npcId)
     else:
         print 'createNPC() error!!!'
