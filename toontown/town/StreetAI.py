@@ -25,7 +25,7 @@ class StreetAI:
         self.zoneId = zoneId
         self.ponds = {}
         self.pondNpcs = {}
-        self.spawnInteriorsIn = [1000, 2000, 3000]
+        self.spawnInteriorsIn = [1000, 2000, 5000]
         self.spawnNpcsIn = [1000, 2000]
     
     def createObjects(self, group):
