@@ -18,6 +18,8 @@ from toontown.building.DistributedPetshopInteriorAI import DistributedPetshopInt
 from toontown.dna.DNAParser import DNALandmarkBuilding
 from toontown.toon import NPCToons
 
+from toontown.dna.DNASpawnerAI import DNASpawnerAI
+
 class HoodAI:
     """
     AI-side representation of everything in a single neighborhood.
@@ -62,6 +64,9 @@ class HoodAI:
         self.treasurePlanner = SZTreasurePlannerAI(self.safezone, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
         self.treasurePlanner.start()
 
+    def spawnObjects(self, filename):
+        DNASpawnerAI().spawnObjects(filename, self.safezone)
+    
     def createHQ(self, zone, block):
         hqDoor = DistributedDoorAI(self.air)
         hqDoor.setZoneIdAndBlock(self.safezone, block)
