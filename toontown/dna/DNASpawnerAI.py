@@ -31,7 +31,7 @@ class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
         # This is strictly for buildings during alpha release
-        self.spawnInteriorsIn = [1000, 2000]
+        self.spawnInteriorsIn = [1000, 2000, 8000] # 8000 = GSW... and kart shop was already open ;D
         self.spawnNPCsIn = [2000]
         
         dnaStore = DNAStorage()
