@@ -28,6 +28,7 @@ from toontown.toon import NPCToons
 class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
+        print "AI: Spawning all DNA objects in... %s" % filename
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
