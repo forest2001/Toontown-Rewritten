@@ -28,7 +28,6 @@ from toontown.toon import NPCToons
 class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
-        print "AI: Spawning all DNA objects in... %s" % filename
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
@@ -200,29 +199,32 @@ class DNASpawnerAI:
                     
                     NPCToons.createNpcsInZone(simbase.air, interiorZone)
                 else:
-                    interior = DistributedToonInteriorAI(simbase.air)
-                    interior.setZoneIdAndBlock(interiorZone, 0)
-                    interior.setState('toon')
-                    interior.generateWithRequired(interiorZone)
-                    
-                    extDoor = DistributedDoorAI(simbase.air)
-                    extDoor.setZoneIdAndBlock(buildingZone, index)
-                    extDoor.setDoorType(DoorTypes.EXT_STANDARD)
-                    extDoor.setSwing(3)
-                    extDoor.setDoorIndex(1)
-                    extDoor.generateWithRequired(buildingZone)
-                    
-                    intDoor = DistributedDoorAI(simbase.air)
-                    intDoor.setZoneIdAndBlock(interiorZone, 0)
-                    intDoor.setDoorType(DoorTypes.INT_STANDARD)
-                    intDoor.setSwing(3)
-                    intDoor.setDoorIndex(0)
-                    intDoor.setOtherZoneIdAndDoId(zone, extDoor.getDoId())
-                    intDoor.generateWithRequired(interiorZone)
-                    
-                    extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
-                    
-                    NPCToons.createNpcsInZone(simbase.air, interiorZone)
+                    if group.getName() == 'sz13:toon_landmark_TT_toonhall_DNARoot':
+                        pass # We don't want Toon Hall just yet.
+                    else:
+                        interior = DistributedToonInteriorAI(simbase.air)
+                        interior.setZoneIdAndBlock(interiorZone, 0)
+                        interior.setState('toon')
+                        interior.generateWithRequired(interiorZone)
+                        
+                        extDoor = DistributedDoorAI(simbase.air)
+                        extDoor.setZoneIdAndBlock(buildingZone, index)
+                        extDoor.setDoorType(DoorTypes.EXT_STANDARD)
+                        extDoor.setSwing(3)
+                        extDoor.setDoorIndex(1)
+                        extDoor.generateWithRequired(buildingZone)
+                        
+                        intDoor = DistributedDoorAI(simbase.air)
+                        intDoor.setZoneIdAndBlock(interiorZone, 0)
+                        intDoor.setDoorType(DoorTypes.INT_STANDARD)
+                        intDoor.setSwing(3)
+                        intDoor.setDoorIndex(0)
+                        intDoor.setOtherZoneIdAndDoId(zone, extDoor.getDoId())
+                        intDoor.generateWithRequired(interiorZone)
+                        
+                        extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
+                        
+                        NPCToons.createNpcsInZone(simbase.air, interiorZone)
         elif group.getName()[:10] == 'racing_pad':
             index, dest = group.getName()[11:].split('_', 2)
             index = int(index)
