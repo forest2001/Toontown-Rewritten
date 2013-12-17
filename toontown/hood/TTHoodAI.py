@@ -1,11 +1,5 @@
 from toontown.toonbase import ToontownGlobals
-from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
-from toontown.toon import NPCToons
-from toontown.dna.DNAParser import DNAStorage
 from toontown.town.TTStreetAI import TTStreetAI
-from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
-from toontown.toon.ToonDNA import ToonDNA
-from toontown.ai.DistributedBlackCatMgrAI import DistributedBlackCatMgrAI
 from HoodAI import HoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
@@ -15,19 +9,7 @@ class TTHoodAI(HoodAI):
     
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
-        
-        self.dnaStore = DNAStorage()
-        self.dnaData = simbase.air.loadDNAFileAI(self.dnaStore, 'phase_4/dna/toontown_central_sz.dna')
-
-        #this is messier than it needs to be
-        self.createPond(self.dnaData)
-
-        # Create Fisherman Freddy: 
-        NPCToons.createNPC(self.air, 2012, NPCToons.NPCToonDict.get(2012), 2000, posIndex=0)
-
-        self.createObjects(self.dnaData)
-        self.createHQ(2520, 20)
-        
+        HoodAI.spawnObjects(self, 'phase_4/dna/toontown_central_sz.dna')
         self.createButterflies()
 
     def createStreets(self):
