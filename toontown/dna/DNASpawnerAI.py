@@ -1,5 +1,7 @@
+# For DNAParsing
 from DNAParser import DNAVisGroup, DNALandmarkBuilding, DNAStorage
 
+# For buildings/interiors.
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
@@ -8,31 +10,43 @@ from toontown.building.DistributedGagshopInteriorAI import DistributedGagshopInt
 from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopInteriorAI
 from toontown.building import DoorTypes
 
+# For GSW playground
 from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
 from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
 from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI, DistributedViewingBlockAI
 from toontown.racing import RaceGlobals
 
-
+# For fishing
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
-
 from toontown.fishing import FishingTargetGlobals
-
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 
+# For spawning NPCs in zones
 from toontown.toon import NPCToons
 
 #alfa only
 from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 
 class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
         # This is strictly for buildings during alpha release
-        self.spawnInteriorsIn = [1000, 2000, 5000, 8000] # 8000 = GSW... and kart shop was already open ;D
-        self.spawnNPCsIn = [1000, 2000] # GSW works differently to normal buildings.
+        self.spawnInteriorsIn = [
+            ToontownGlobals.DonaldsDock,
+            ToontownGlobals.ToontownCentral,
+            ToontownGlobals.DaisyGardens,
+            
+            # GSW's Kart Shop needs to exist for people to be able to race.
+            ToontownGlobals.GoofySpeedway,
+        ]
+        
+        self.spawnNPCsIn = [
+            ToontownGlobals.DonaldsDock,
+            ToontownGlobals.ToontownCentral,
+        ]
         
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
