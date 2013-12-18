@@ -1,6 +1,5 @@
 from StreetAI import StreetAI
 from toontown.toonbase import ToontownGlobals
-from toontown.dna.DNAParser import DNAStorage
 
 class TTStreetAI(StreetAI):
     def __init__(self, air, zoneId):
