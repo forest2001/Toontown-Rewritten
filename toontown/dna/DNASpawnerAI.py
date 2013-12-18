@@ -90,6 +90,8 @@ class DNASpawnerAI:
                 interiorZone = zone + 500 + index
                 type = group.getBuildingType()
                 if type == 'hq':
+                    if buildingZone not in self.spawnInteriorsIn:
+                        return False # Some bug with HQ DDoors on streets which I'm too lazy to fix right now.
                     hqDoor = DistributedDoorAI(simbase.air)
                     hqDoor.setZoneIdAndBlock(buildingZone, index)
                     hqDoor.setDoorType(DoorTypes.EXT_HQ)
