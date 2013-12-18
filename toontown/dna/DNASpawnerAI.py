@@ -39,36 +39,43 @@ class DNASpawnerAI:
         self._createObjects(dnaData, baseZone)
         
     def _createObjects(self, group, zone):
-        if group.getName()[:12] == 'fishing_pond':
+        if group.getName()[:13] == 'fishing_pond_':
             visGroup = group.getVisGroup()
             pondZone = 0
             if visGroup is None:
                 pondZone = zone
             else:
                 pondZone = int(visGroup.getName().split(':')[0])
+
+            pondIndex = int(group.getName()[13:])
             pond = DistributedFishingPondAI(simbase.air)
-            pond.setArea(pondZone)
+            pond.setArea(zone)
             pond.generateWithRequired(pondZone)
-            for i in range(group.getNumChildren()):
-                posSpot = group.at(i)
-                if posSpot.getName()[:12] == 'fishing_spot':
-                    x, y, z = posSpot.getPos()
-                    h, p, r = posSpot.getHpr()
-                    spot = DistributedFishingSpotAI(simbase.air)
-                    spot.setPondDoId(pond.getDoId())
-                    spot.setPosHpr(x, y, z, h, p, r)
-                    spot.generateWithRequired(pondZone)
+            #self.ponds[pondIndex] = pond
+            
             bingoManager = DistributedPondBingoManagerAI(simbase.air)
             bingoManager.setPondDoId(pond.getDoId())
             bingoManager.generateWithRequired(pondZone)
             #temporary, until we have scheduled stuff
-            bingoManager.createGame()   
+            bingoManager.createGame()
             pond.bingoMgr = bingoManager
-            simbase.air.fishManager.ponds[pondZone] = pond
-            for i in range(FishingTargetGlobals.getNumTargets(pondZone)):
+            simbase.air.fishManager.ponds[zone] = pond
+
+            for i in range(FishingTargetGlobals.getNumTargets(zone)):
                 target = DistributedFishingTargetAI(simbase.air)
                 target.setPondDoId(pond.getDoId())
                 target.generateWithRequired(pondZone)
+
+            for i in range(group.getNumChildren()):
+                posSpot = group.at(i)
+                if posSpot.getName()[:13] == 'fishing_spot_':
+                    spot = DistributedFishingSpotAI(simbase.air)
+                    spot.setPondDoId(pond.getDoId())
+                    x, y, z = posSpot.getPos()
+                    h, p, r = posSpot.getHpr()
+                    spot.setPosHpr(x, y, z, h, p, r)
+                    spot.generateWithRequired(pondZone)
+                    
             NPCToons.createNpcsInZone(simbase.air, pondZone)
         
         elif isinstance(group, DNALandmarkBuilding) and ZoneUtil.getCanonicalHoodId(zone) in self.spawnInteriorsIn:
