@@ -1,5 +1,7 @@
+# For DNAParsing
 from DNAParser import DNAVisGroup, DNALandmarkBuilding, DNAStorage
 
+# For buildings/interiors.
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
@@ -8,67 +10,88 @@ from toontown.building.DistributedGagshopInteriorAI import DistributedGagshopInt
 from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopInteriorAI
 from toontown.building import DoorTypes
 
+# For GSW playground
 from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
 from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
 from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI, DistributedViewingBlockAI
 from toontown.racing import RaceGlobals
 
-
+# For fishing
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
-
 from toontown.fishing import FishingTargetGlobals
-
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 
+# For spawning NPCs in zones
 from toontown.toon import NPCToons
 
 #alfa only
 from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 
 class DNASpawnerAI:
         
     def spawnObjects(self, filename, baseZone):
         # This is strictly for buildings during alpha release
-        self.spawnInteriorsIn = [1000, 2000, 5000, 8000] # 8000 = GSW... and kart shop was already open ;D
-        self.spawnNPCsIn = [1000, 2000] # GSW works differently to normal buildings.
+        self.spawnInteriorsIn = [
+            ToontownGlobals.DonaldsDock,
+            ToontownGlobals.ToontownCentral,
+            ToontownGlobals.DaisyGardens,
+            ToontownGlobals.TheBrrrgh,            
+            
+            # GSW's Kart Shop needs to exist for people to be able to race.
+            ToontownGlobals.GoofySpeedway,
+        ]
+        
+        self.spawnNPCsIn = [
+            ToontownGlobals.DonaldsDock,
+            ToontownGlobals.ToontownCentral,
+            ToontownGlobals.DaisyGardens,            
+        ]
         
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
         
     def _createObjects(self, group, zone):
-        if group.getName()[:12] == 'fishing_pond':
+        if group.getName()[:13] == 'fishing_pond_':
             visGroup = group.getVisGroup()
             pondZone = 0
             if visGroup is None:
                 pondZone = zone
             else:
                 pondZone = int(visGroup.getName().split(':')[0])
+
+            pondIndex = int(group.getName()[13:])
             pond = DistributedFishingPondAI(simbase.air)
-            pond.setArea(pondZone)
+            pond.setArea(zone)
             pond.generateWithRequired(pondZone)
-            for i in range(group.getNumChildren()):
-                posSpot = group.at(i)
-                if posSpot.getName()[:12] == 'fishing_spot':
-                    x, y, z = posSpot.getPos()
-                    h, p, r = posSpot.getHpr()
-                    spot = DistributedFishingSpotAI(simbase.air)
-                    spot.setPondDoId(pond.getDoId())
-                    spot.setPosHpr(x, y, z, h, p, r)
-                    spot.generateWithRequired(pondZone)
+            #self.ponds[pondIndex] = pond
+            
             bingoManager = DistributedPondBingoManagerAI(simbase.air)
             bingoManager.setPondDoId(pond.getDoId())
             bingoManager.generateWithRequired(pondZone)
             #temporary, until we have scheduled stuff
-            bingoManager.createGame()   
+            bingoManager.createGame()
             pond.bingoMgr = bingoManager
-            simbase.air.fishManager.ponds[pondZone] = pond
-            for i in range(FishingTargetGlobals.getNumTargets(pondZone)):
+            simbase.air.fishManager.ponds[zone] = pond
+
+            for i in range(FishingTargetGlobals.getNumTargets(zone)):
                 target = DistributedFishingTargetAI(simbase.air)
                 target.setPondDoId(pond.getDoId())
                 target.generateWithRequired(pondZone)
+
+            for i in range(group.getNumChildren()):
+                posSpot = group.at(i)
+                if posSpot.getName()[:13] == 'fishing_spot_':
+                    spot = DistributedFishingSpotAI(simbase.air)
+                    spot.setPondDoId(pond.getDoId())
+                    x, y, z = posSpot.getPos()
+                    h, p, r = posSpot.getHpr()
+                    spot.setPosHpr(x, y, z, h, p, r)
+                    spot.generateWithRequired(pondZone)
+                    
             NPCToons.createNpcsInZone(simbase.air, pondZone)
         
         elif isinstance(group, DNALandmarkBuilding) and ZoneUtil.getCanonicalHoodId(zone) in self.spawnInteriorsIn:
@@ -83,6 +106,8 @@ class DNASpawnerAI:
                 interiorZone = zone + 500 + index
                 type = group.getBuildingType()
                 if type == 'hq':
+                    if buildingZone not in self.spawnInteriorsIn:
+                        return False # Some bug with HQ DDoors on streets which I'm too lazy to fix right now.
                     hqDoor = DistributedDoorAI(simbase.air)
                     hqDoor.setZoneIdAndBlock(buildingZone, index)
                     hqDoor.setDoorType(DoorTypes.EXT_HQ)
