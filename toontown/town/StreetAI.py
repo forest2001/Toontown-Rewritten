@@ -11,6 +11,8 @@ from toontown.building.DistributedDoorAI import DistributedDoorAI
 from toontown.toon import NPCToons
 from toontown.hood import ZoneUtil
 
+from toontown.dna.DNASpawnerAI import DNASpawnerAI
+
 class StreetAI:
     """
     AI-side representation of everything in a single street.
@@ -27,6 +29,9 @@ class StreetAI:
         self.pondNpcs = {}
         self.spawnInteriorsIn = [1000, 2000, 5000]
         self.spawnNpcsIn = [1000, 2000]
+    
+    def spawnObjects(self, filename):
+        DNASpawnerAI().spawnObjects(filename, self.zoneId)
     
     def createObjects(self, group):
         if isinstance(group, DNALandmarkBuilding):
