@@ -251,7 +251,7 @@ class DNASpawnerAI:
                         intDoor.setDoorType(DoorTypes.INT_STANDARD)
                         intDoor.setSwing(3)
                         intDoor.setDoorIndex(0)
-                        intDoor.setOtherZoneIdAndDoId(zone, extDoor.getDoId())
+                        intDoor.setOtherZoneIdAndDoId(buildingZone, extDoor.getDoId())
                         intDoor.generateWithRequired(interiorZone)
                         
                         extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
