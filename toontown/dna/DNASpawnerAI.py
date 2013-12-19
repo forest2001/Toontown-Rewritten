@@ -38,7 +38,8 @@ class DNASpawnerAI:
             ToontownGlobals.DonaldsDock,
             ToontownGlobals.ToontownCentral,
             ToontownGlobals.DaisyGardens,
-            ToontownGlobals.TheBrrrgh,            
+            ToontownGlobals.TheBrrrgh,
+            ToontownGlobals.MinniesMelodyland,
             
             # GSW's Kart Shop needs to exist for people to be able to race.
             ToontownGlobals.GoofySpeedway,
@@ -47,7 +48,8 @@ class DNASpawnerAI:
         self.spawnNPCsIn = [
             ToontownGlobals.DonaldsDock,
             ToontownGlobals.ToontownCentral,
-            ToontownGlobals.DaisyGardens,            
+            ToontownGlobals.DaisyGardens,
+            ToontownGlobals.TheBrrrgh,
         ]
         
         dnaStore = DNAStorage()
