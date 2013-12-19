@@ -48,3 +48,6 @@ audio-library-name p3openal_audio
 # For now, store them in phase_3/etc/
 cursor-filename phase_3/etc/toonmono.cur
 icon-filename phase_3/etc/icon.ico
+
+#TODO: FIX NEW FIREWORKS!
+want-old-fireworks #t

@@ -31,3 +31,7 @@ want-news-tab #f
 want-housing #f
 
 force-holiday 6
+
+
+#TODO: FIX NEW FIREWORKS!
+want-old-fireworks #t
