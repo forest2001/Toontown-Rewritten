@@ -36,13 +36,13 @@ class DistributedFireworkShowAI(DistributedObjectAI):
 
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str])
-def fireworks(showName='july'):
+def fireworks(showName='july4'):
     if showName == 'july4':
         showType = ToontownGlobals.JULY4_FIREWORKS
     elif showName == 'newyears':
         showType = ToontownGlobals.NEWYEARS_FIREWORKS
     else:
-        return 'Invalid fireworks show type!'
+        return 'Invalid firework show type!'
     numShows = len(FireworkShows.shows.get(showType, []))
     showIndex = random.randint(0, numShows - 1)
     for hood in simbase.air.hoods:
