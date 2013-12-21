@@ -55,6 +55,15 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             5710, # DG, Maple Street, Tuft Guy Gym
         ]
         
+        snowmanNPCWhispers = {
+            snowmanHeadInteriors[0] : 'Smokey Joe',
+            snowmanHeadInteriors[1] : 'Patty Pause',
+            snowmanHeadInteriors[2] : '',
+            snowmanHeadInteriors[3] : '',
+            snowmanHeadInteriors[4] : '',
+            snowmanHeadInteriors[5] : '',
+        }
+        
         if self.zoneId in snowmanHeadInteriors:
             if not hasattr(self.air, 'snowmanProgress'):
                 self.air.snowmanProgress = {}
@@ -62,15 +71,19 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             if str(avId) in self.air.snowmanProgress:
                 avProg = self.air.snowmanProgress.get(str(avId))
                 if avProg == snowmanHeadInteriors[-1]:
+                    av.setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
                     return False # They have already completed the quest.
                     
                 avNextProg = snowmanHeadInteriors[snowmanHeadInteriors.index(avProg) + 1]
                 
                 if avNextProg == self.zoneId:
                     self.air.snowmanProgress[str(avId)] = avNextProg
+                    shopsLeft = len(snowmanHeadInteriors) - (snowmanHeadInteriors.index(avNextProg) + 1)
+                    av.setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
                     
                 if avNextProg == snowmanHeadInteriors[-1]:
-                    av.b_setCheesyEffect(14, 0, 0)  
+                    av.b_setCheesyEffect(14, 0, 0)
+                    av.setSystemMessage(0, 'McQuack: Congratulations on finding all the buildings. Enjoy your snowman head!')
             else:
                 # start of quest
                 self.air.snowmanProgress[str(avId)] = snowmanHeadInteriors[0]
