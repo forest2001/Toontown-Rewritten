@@ -89,3 +89,5 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             else:
                 # start of quest
                 self.air.snowmanProgress[str(avId)] = snowmanHeadInteriors[0]
+                shopsLeft = len(snowmanHeadInteriors) - 1
+                av.d_setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
