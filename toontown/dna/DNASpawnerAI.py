@@ -200,7 +200,7 @@ class DNASpawnerAI:
                     extDoor.generateWithRequired(buildingZone)
                     
                     intDoor = DistributedDoorAI(simbase.air)
-                    intDoor.setZoneIdAndBlock(interiorZone, index)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
                     intDoor.setDoorType(DoorTypes.INT_STANDARD)
                     intDoor.setSwing(3)
                     intDoor.setDoorIndex(0)
