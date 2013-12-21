@@ -144,7 +144,7 @@ class DNASpawnerAI:
                     hqDoor2.setOtherZoneIdAndDoId(interiorZone, hqDoorInt2.getDoId())
 
                     hqInterior = DistributedHQInteriorAI(simbase.air)
-                    hqInterior.setZoneIdAndBlock(interiorZone, index)
+                    hqInterior.setZoneIdAndBlock(interiorZone, 0)
                     hqInterior.generateWithRequired(interiorZone)
                 elif type == 'kartshop':
                     ksInterior = DistributedKartShopInteriorAI(simbase.air)
