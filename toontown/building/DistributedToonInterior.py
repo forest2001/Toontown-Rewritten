@@ -160,7 +160,6 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
                 phraseNeeded = 5700 # Until winter menu is activated.
 
                 if phraseId == phraseNeeded:
-                    base.localAvatar.setSystemMessage(0, '%s: Merry Christmas, %s!' % (snowmanNPCWhispers.get(self.zoneId), base.localAvatar.getName()))
                     self.sendUpdate('nextSnowmanHeadPart', [])
             self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
