@@ -40,10 +40,12 @@ class DistributedToonInteriorAI(DistributedObjectAI):
     def nextSnowmanHeadPart(self):
         avId = self.air.getAvatarIdFromSender()
         if avId not in self.air.doId2do:
+            self.notify.warning('avId %d does not exist as an object in the AIRepo.' % avId)
             return False # Avatar does not even exist, water you doin'.
         
         av = self.air.doId2do.get(avId)
         if av.savedCheesyEffect == 14:
+            av.setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
             return False # Avatar already has a snowman head.
             
         snowmanHeadInteriors = [
@@ -71,7 +73,7 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             if str(avId) in self.air.snowmanProgress:
                 avProg = self.air.snowmanProgress.get(str(avId))
                 if avProg == snowmanHeadInteriors[-1]:
-                    av.setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
+                    av.d_setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
                     return False # They have already completed the quest.
                     
                 avNextProg = snowmanHeadInteriors[snowmanHeadInteriors.index(avProg) + 1]
@@ -79,11 +81,11 @@ class DistributedToonInteriorAI(DistributedObjectAI):
                 if avNextProg == self.zoneId:
                     self.air.snowmanProgress[str(avId)] = avNextProg
                     shopsLeft = len(snowmanHeadInteriors) - (snowmanHeadInteriors.index(avNextProg) + 1)
-                    av.setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
+                    av.d_setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
                     
                 if avNextProg == snowmanHeadInteriors[-1]:
                     av.b_setCheesyEffect(14, 0, 0)
-                    av.setSystemMessage(0, 'McQuack: Congratulations on finding all the buildings. Enjoy your snowman head!')
+                    av.d_setSystemMessage(0, 'McQuack: Congratulations on finding all the buildings. Enjoy your snowman head!')
             else:
                 # start of quest
                 self.air.snowmanProgress[str(avId)] = snowmanHeadInteriors[0]
