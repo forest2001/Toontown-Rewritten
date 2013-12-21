@@ -1568,6 +1568,7 @@ dclass DistributedToonInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
   setToonData(blob) required broadcast ram;
   setState(string, int16) required broadcast ram;
+  nextSnowmanHeadPart() clsend airecv;
 };
 
 dclass DistributedToonHallInterior : DistributedToonInterior {
