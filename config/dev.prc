@@ -30,4 +30,4 @@ want-news-page #f
 want-news-tab #f
 want-housing #f
 
-force-holiday 1
+force-holiday-decorations 6,1
