@@ -52,6 +52,7 @@ class DNASpawnerAI:
             ToontownGlobals.DaisyGardens,
             ToontownGlobals.TheBrrrgh,
             ToontownGlobals.MinniesMelodyland,
+            ToontownGlobals.DonaldsDreamland,
         ]
         
         dnaStore = DNAStorage()
