@@ -60,10 +60,10 @@ class DistributedToonInteriorAI(DistributedObjectAI):
         snowmanNPCWhispers = {
             snowmanHeadInteriors[0] : 'Smokey Joe',
             snowmanHeadInteriors[1] : 'Patty Pause',
-            snowmanHeadInteriors[2] : '',
-            snowmanHeadInteriors[3] : '',
-            snowmanHeadInteriors[4] : '',
-            snowmanHeadInteriors[5] : '',
+            snowmanHeadInteriors[2] : 'Kathy Nip',
+            snowmanHeadInteriors[3] : 'Henry the Hazard',
+            snowmanHeadInteriors[4] : 'Dinah Down',
+            snowmanHeadInteriors[5] : 'Lars Bicep',
         }
         
         if self.zoneId in snowmanHeadInteriors:
