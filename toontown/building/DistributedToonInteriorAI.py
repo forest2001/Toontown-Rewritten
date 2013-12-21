@@ -45,7 +45,7 @@ class DistributedToonInteriorAI(DistributedObjectAI):
         
         av = self.air.doId2do.get(avId)
         if av.savedCheesyEffect == 14:
-            av.setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
+            #av.setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
             return False # Avatar already has a snowman head.
             
         snowmanHeadInteriors = [
@@ -73,7 +73,7 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             if str(avId) in self.air.snowmanProgress:
                 avProg = self.air.snowmanProgress.get(str(avId))
                 if avProg == snowmanHeadInteriors[-1]:
-                    av.d_setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
+                    #av.d_setSystemMessage(0, 'McQuack: You have already completed the snowman head quest!')
                     return False # They have already completed the quest.
                     
                 avNextProg = snowmanHeadInteriors[snowmanHeadInteriors.index(avProg) + 1]
