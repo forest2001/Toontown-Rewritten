@@ -81,7 +81,12 @@ class DistributedToonInteriorAI(DistributedObjectAI):
                 if avNextProg == self.zoneId:
                     self.air.snowmanProgress[str(avId)] = avNextProg
                     shopsLeft = len(snowmanHeadInteriors) - (snowmanHeadInteriors.index(avNextProg) + 1)
-                    av.d_setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
+                    if shopsLeft > 1:
+                        av.d_setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shops left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
+                    elif shopsLeft == 1:
+                        av.d_setSystemMessage(0, '%s: Merry Christmas, %s! You have %s shop left.' % (snowmanNPCWhispers.get(self.zoneId), av.getName(), str(shopsLeft)))
+                    else:
+                        av.d_setSystemMessage(0, '%s: Merry Christmas, %s!' % (snowmanNPCWhispers.get(self.zoneId), av.getName()))
                     
                 if avNextProg == snowmanHeadInteriors[-1]:
                     av.b_setCheesyEffect(14, 0, 0)
