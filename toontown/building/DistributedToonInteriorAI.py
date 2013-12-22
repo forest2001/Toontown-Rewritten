@@ -61,9 +61,9 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             snowmanHeadInteriors[0] : 'Smokey Joe',
             snowmanHeadInteriors[1] : 'Patty Pause',
             snowmanHeadInteriors[2] : 'Kathy Nip',
-            snowmanHeadInteriors[3] : 'Henry the Hazard',
+            snowmanHeadInteriors[3] : 'Lars Bicep',
             snowmanHeadInteriors[4] : 'Dinah Down',
-            snowmanHeadInteriors[5] : 'Lars Bicep',
+            snowmanHeadInteriors[5] : 'Henry the Hazard',
         }
         
         if self.zoneId in snowmanHeadInteriors:
