@@ -142,22 +142,21 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
             2740, # TTC, Loopy Lane, Used Firecrackers
             4652, # MML, Alto Avenue, Full Stop Shop
             9608, # DDL, non-HQ street, Cat Nip For Cat Naps
-            3620, # TB, Walrus Way, Skiing Clinic
-            1711, # DD, Seaweed Street, Deep-Sea Diner
             5710, # DG, Maple Street, Tuft Guy Gym
+            1711, # DD, Seaweed Street, Deep-Sea Diner
+            3620, # TB, Walrus Way, Skiing Clinic
         ]
         snowmanInteriorPhrase = {
-            snowmanHeadInteriors[0] : 30220,
-            snowmanHeadInteriors[1] : 30221,
-            snowmanHeadInteriors[2] : 30222,
-            snowmanHeadInteriors[3] : 30223,
-            snowmanHeadInteriors[4] : 30224,
-            snowmanHeadInteriors[5] : 30226,
+            snowmanHeadInteriors[0] : 30225,
+            snowmanHeadInteriors[1] : 30224,
+            snowmanHeadInteriors[2] : 30221,
+            snowmanHeadInteriors[3] : 30220,
+            snowmanHeadInteriors[4] : 30222,
+            snowmanHeadInteriors[5] : 30223,
         }
         if self.zoneId in snowmanHeadInteriors:
             def phraseSaid(phraseId):
                 phraseNeeded = snowmanInteriorPhrase.get(self.zoneId)
-                phraseNeeded = 5700 # Until winter menu is activated.
 
                 if phraseId == phraseNeeded:
                     self.sendUpdate('nextSnowmanHeadPart', [])
