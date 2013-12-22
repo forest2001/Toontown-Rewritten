@@ -52,9 +52,9 @@ class DistributedToonInteriorAI(DistributedObjectAI):
             2740, # TTC, Loopy Lane, Used Firecrackers
             4652, # MML, Alto Avenue, Full Stop Shop
             9608, # DDL, non-HQ street, Cat Nip For Cat Naps
-            3620, # TB, Walrus Way, Skiing Clinic
-            1711, # DD, Seaweed Street, Deep-Sea Diner
             5710, # DG, Maple Street, Tuft Guy Gym
+            1711, # DD, Seaweed Street, Deep-Sea Diner
+            3620, # TB, Walrus Way, Skiing Clinic
         ]
         
         snowmanNPCWhispers = {
