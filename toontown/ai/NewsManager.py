@@ -50,7 +50,6 @@ class NewsManager(DistributedObject.DistributedObject):
         base.cr.newsManager = self
         base.localAvatar.inventory.setInvasionCreditMultiplier(1)
         self.weeklyCalendarHolidays = []
-        base.localAvatar.chatMgr.chatInputSpeedChat.addCarolMenu()
         return
 
     def delete(self):
