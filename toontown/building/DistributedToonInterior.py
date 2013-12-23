@@ -147,12 +147,12 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
             3620, # TB, Walrus Way, Skiing Clinic
         ]
         snowmanInteriorPhrase = {
-            snowmanHeadInteriors[0] : 30205,
-            snowmanHeadInteriors[1] : 30204,
-            snowmanHeadInteriors[2] : 30201,
-            snowmanHeadInteriors[3] : 30200,
-            snowmanHeadInteriors[4] : 30202,
-            snowmanHeadInteriors[5] : 30203,
+            snowmanHeadInteriors[0] : 30225,
+            snowmanHeadInteriors[1] : 30224,
+            snowmanHeadInteriors[2] : 30221,
+            snowmanHeadInteriors[3] : 30220,
+            snowmanHeadInteriors[4] : 30222,
+            snowmanHeadInteriors[5] : 30223,
         }
         if self.zoneId in snowmanHeadInteriors:
             def phraseSaid(phraseId):
