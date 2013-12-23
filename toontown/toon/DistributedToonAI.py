@@ -4427,18 +4427,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setCheesyEffect(0, 0, 0)
             
         # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
-        if not self.isGM():
-            self.b_setCheesyEffect(0, 0, 0)
-            if self.getName() != 'Roger Dog': # hi my name is roger dog
-                self.b_setHat(0, 0, 0)
-            self.b_setGlasses(0, 0, 0)
-            self.b_setShoes(0, 0, 0)
+#        if not self.isGM():
+#            self.b_setCheesyEffect(0, 0, 0)
+#            if self.getName() != 'Roger Dog': # hi my name is roger dog
+#                self.b_setHat(0, 0, 0)
+#            self.b_setGlasses(0, 0, 0)
+#            self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
-        if self._gmType != 2:
-            self.b_setBackpack(0, 0, 0)
-        # Remove the Golf Hats from everyone, ID 11.
-        if self.getHat()[0] == 11:
-            self.b_setHat(0, 0, 0)
+#        if self._gmType != 2:
+#            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
