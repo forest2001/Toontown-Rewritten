@@ -36,8 +36,8 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
         # For the Polar Bear:
         def phraseSaid(phraseId):
-            toontastic = 5700
-            if phraseId == toontastic:
+            pbActivatePhrases = [30275, 30276, 30277]
+            if phraseId in pbActivatePhrases:
                 # Check distance...
                 if Vec3(base.localAvatar.getPos(npcOrigin)).length() > 5:
                     return
