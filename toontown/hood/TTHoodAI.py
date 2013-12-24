@@ -39,7 +39,7 @@ class TTHoodAI(HoodAI):
     def createSlappy(self):
         npc = DistributedNPCToonBaseAI(self.air, 9001)
         dna = ToonDNA()
-        dna.newToonFromProperties('fls', 'ms', 'l', 'm', 14, 0, 14, 14, 1, 4, 1, 4, 7, 4)
+        dna.newToonFromProperties('fls', 'ms', 'l', 'm', 14, 0, 14, 14, 152, 27, 139, 27, 59, 27)
         npc.setName('Slappy')
         npc.setDNAString(dna.makeNetString())
         npc.setHp(15)
