@@ -278,3 +278,10 @@ def showNames():
 @magicWord(access=200)
 def showAccess():
     return "Access level: " + str(spellbook.getTarget().getAdminAccess())
+    
+@magicWord(category=CATEGORY_GUI)
+def toga2d():
+    if aspect2d.isHidden():
+        aspect2d.show()
+    else:
+        aspect2d.hide()
