@@ -3,7 +3,17 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
 class DistributedPetshopInteriorAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPetshopInteriorAI")
-
-    def setZoneIdAndBlock(self, todo0, todo1):
-        pass
+    
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        self.air = air
+        self.zoneId = 0
+        self.block = 0
+    
+    def setZoneIdAndBlock(self, zoneId, block):
+        self.zoneId = zoneId
+        self.block = block
+    
+    def getZoneIdAndBlock(self):
+        return [self.zoneId, self.block]
 

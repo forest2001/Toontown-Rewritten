@@ -89,6 +89,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             PetLookerAI.PetLookerAI.__init__(self)
         self.air = air
         self.dna = ToonDNA.ToonDNA()
+        self.mwDNABackup = {}
         self.inventory = None
         self.fishCollection = None
         self.fishTank = None
@@ -1748,9 +1749,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('setCheesyEffect', [effect, hoodId, expireTime])
 
     def setCheesyEffect(self, effect, hoodId, expireTime):
-        if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
-            self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
-            return
+        # We don't yet have a working holidayManager, and we want to keep snowman heads.
+        #if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
+            #self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
+            #return
         self.savedCheesyEffect = effect
         self.savedCheesyHoodId = hoodId
         self.savedCheesyExpireTime = expireTime
@@ -4425,18 +4427,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setCheesyEffect(0, 0, 0)
             
         # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
-        if not self.isGM():
-            self.b_setCheesyEffect(0, 0, 0)
-            if self.getName() != 'Roger Dog': # hi my name is roger dog
-                self.b_setHat(0, 0, 0)
-            self.b_setGlasses(0, 0, 0)
-            self.b_setShoes(0, 0, 0)
+#        if not self.isGM():
+#            self.b_setCheesyEffect(0, 0, 0)
+#            if self.getName() != 'Roger Dog': # hi my name is roger dog
+#                self.b_setHat(0, 0, 0)
+#            self.b_setGlasses(0, 0, 0)
+#            self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
-        if self._gmType != 2:
-            self.b_setBackpack(0, 0, 0)
-        # Remove the Golf Hats from everyone, ID 11.
-        if self.getHat()[0] == 11:
-            self.b_setHat(0, 0, 0)
+#        if self._gmType != 2:
+#            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -4719,3 +4718,118 @@ def setCogIndex(indexVal):
     if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
+def dna(part, value):
+    # This is where the fun begins, woo!
+    """Set a specific part of DNA for the target toon. Be careful, you don't want to break anyone!"""
+    
+    av = spellbook.getTarget()
+    
+    dna = ToonDNA.ToonDNA()
+    dna.makeFromNetString(av.getDNAString())
+    
+    def isValidColor(colorIndex):
+        if not 0 <= colorIndex <= 26: # This could actually be selected from ToonDNA, but I prefer this :D
+            return False
+        if colorIndex == 0 and dna.getAnimal() != 'bear':
+            return False
+        if colorIndex == 26 and dna.getAnimal() != 'cat':
+            return False
+        return True
+    
+    # Body Part Colors
+    if part=='headColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for head."
+        dna.headColor = value
+    elif part=='armColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for arms."
+        dna.armColor = value
+    elif part=='legColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for legs."
+        dna.legColor = value
+    elif part=='color':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for toon."
+        dna.headColor = value
+        dna.armColor = value
+        dna.legColor = value
+    elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
+        return "DNA: Change of glove colors are not allowed."
+        # If you ever want to be able to edit gloves, feel free to comment out this return.
+        # However, since DToonAI checks ToonDNA, this would be impossible unless changes
+        # are made.
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Color index out of range."
+        dna.gloveColor = value
+        
+    # Body Sizes, Species & Gender (y u want to change gender pls)
+    elif part=='gender':
+        if value=='male':
+            dna.gender = 'm'
+        elif value=='female':
+            dna.gender = 'f'
+        else:
+            return "DNA: Invalid gender. Stick to 'male' or 'female'."
+    elif part=='species':
+        species = ['dog', 'cat', 'horse', 'mouse', 'rabbit', 'duck', 'monkey', 'bear', 'pig']
+        if value not in species:
+            return "DNA: Invalid head type specified."
+        if dna.headColor == 0x1a and value != 'cat':
+            return "DNA: Cannot have a black toon (non-cat)!"
+        if dna.headColor == 0 and value != 'bear':
+            return "DNA: Cannot have a white toon (non-bear)!"
+        species = dict(map(None, species, ToonDNA.toonSpeciesTypes))
+        headSize = dna.head[1:3]
+        dna.head = (species.get(value) + headSize)
+    elif part=='headSize':
+        sizes = ['ls', 'ss', 'sl', 'll']
+        value = int(value)
+        if not 0 <= value <= 3:
+            return "DNA: Invalid head size index."
+        species = dna.head[0]
+        dna.head = (species + sizes[value])
+    elif part=='torso':
+        value = int(value)
+        if dna.gender == 'm':
+            if not 0 <= value <= 2:
+                return "DNA: Male torso index out of range (0-2)."
+        elif dna.gender == 'f':
+            if not 3 <= value <= 8:
+                return "DNA: Female torso index out of range (3-8)."
+        else:
+            return "DNA: Unable to determine gender. Aborting DNA change."
+        dna.torso = ToonDNA.toonTorsoTypes[value]
+    elif part=='legs':
+        value = int(value)
+        if not 0 <= value <= 2:
+            return "DNA: Legs index out of range."
+        dna.legs = ToonDNA.toonLegTypes[value]
+    
+    # Allow Admins to back up a toons current DNA before making changes.
+    elif part=='save':
+        av.mwDNABackup[str(spellbook.getInvoker().doId)] = av.getDNAString()
+        return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
+        
+    # Restore from a previous back up of DNA.
+    elif part=='restore':
+        if av.mwDNABackup.has_key(str(spellbook.getInvoker().doId)):
+            dna.makeFromNetString(av.mwDNABackup.get(str(spellbook.getInvoker().doId)))
+            return "Restored %s's DNA to last save." % av.getName()
+        else:
+            return "DNA: There are no backups available."
+    
+    # Don't allow them to submit any changes if they don't enter a valid DNA part.
+    else:
+        return "DNA: Invalid part specified."
+    
+    av.b_setDNAString(dna.makeNetString())
+    return "Completed DNA change successfully."

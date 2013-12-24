@@ -33,11 +33,18 @@ class NewsManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.population = 0
         self.invading = 0
-        forcedHoliday = base.config.GetInt('force-holiday', -1)
-        if forcedHoliday != -1:
-            self.decorationHolidayIds = [decorationHolidays[forcedHoliday]]
-        else:
-            self.decorationHolidayIds = []
+        
+        forcedHolidayDecorations = base.config.GetString('force-holiday-decorations', '')
+        self.decorationHolidayIds = []
+        
+        if forcedHolidayDecorations != '':
+            forcedHolidayDecorations = forcedHolidayDecorations.split(',')
+            for HID in forcedHolidayDecorations:
+                try:
+                    self.decorationHolidayIds.append(decorationHolidays[int(HID)])
+                except:
+                    print 'holidayId value error: "%s"... skipping' %HID
+                    
         self.holidayDecorator = None
         self.holidayIdList = []
         base.cr.newsManager = self

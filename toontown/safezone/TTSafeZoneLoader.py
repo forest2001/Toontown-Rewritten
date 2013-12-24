@@ -54,6 +54,8 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def unload(self):
         del self.birdSound
+        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
+        self.ignore('blackcat-transformed')
         SafeZoneLoader.SafeZoneLoader.unload(self)
 
     def enter(self, requestStatus):

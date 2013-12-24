@@ -70,6 +70,10 @@ class ToonBase(OTPBase.OTPBase):
         if self.inactivityTimeout:
             self.notify.debug('Enabling Panda timeout: %s' % self.inactivityTimeout)
             self.mouseWatcherNode.setInactivityTimeout(self.inactivityTimeout)
+        self.mouseWatcherNode.setEnterPattern('mouse-enter-%r')
+        self.mouseWatcherNode.setLeavePattern('mouse-leave-%r')
+        self.mouseWatcherNode.setButtonDownPattern('button-down-%r')
+        self.mouseWatcherNode.setButtonUpPattern('button-up-%r')
         self.randomMinigameAbort = self.config.GetBool('random-minigame-abort', 0)
         self.randomMinigameDisconnect = self.config.GetBool('random-minigame-disconnect', 0)
         self.randomMinigameNetworkPlugPull = self.config.GetBool('random-minigame-netplugpull', 0)

@@ -21,8 +21,9 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         modifications = []
         words = message.split(' ')
         offset = 0
+        WantWhitelist = self.air.config.GetBool('want-whitelist', True)
         for word in words:
-            if word and not self.whiteList.isWord(word):
+            if word and not self.whiteList.isWord(word) and WantWhitelist:
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 

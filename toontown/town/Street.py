@@ -95,7 +95,7 @@ class Street(BattlePlace.BattlePlace):
         self.parentFSM = parentFSM
         self.tunnelOriginList = []
         self.elevatorDoneEvent = 'elevatorDone'
-        self.halloweenLights = []
+        self.eventLights = []
         self.visInterestHandle = None
         self.visZones = []
         self.visInterestChanged = False
@@ -115,18 +115,36 @@ class Street(BattlePlace.BattlePlace):
 
         def __lightDecorationOn__():
             geom = base.cr.playGame.getPlace().loader.geom
-            self.halloweenLights = geom.findAllMatches('**/*light*')
-            self.halloweenLights += geom.findAllMatches('**/*lamp*')
-            self.halloweenLights += geom.findAllMatches('**/prop_snow_tree*')
-            for light in self.halloweenLights:
+            self.loader.hood.eventLights = geom.findAllMatches('**/*light*')
+            self.loader.hood.eventLights += geom.findAllMatches('**/*lamp*')
+            self.loader.hood.eventLights += geom.findAllMatches('**/prop_snow_tree*')
+            self.loader.hood.eventLights += geom.findAllMatches('**/prop_tree*')
+            self.loader.hood.eventLights += geom.findAllMatches('**/*christmas*')
+            for light in self.loader.hood.eventLights:
                 light.setColorScaleOff(1)
 
         newsManager = base.cr.newsManager
         if newsManager:
             holidayIds = base.cr.newsManager.getDecorationHolidayId()
+            #Halloween Event
             if (ToontownGlobals.HALLOWEEN_COSTUMES in holidayIds or ToontownGlobals.SPOOKY_COSTUMES in holidayIds) and self.loader.hood.spookySkyFile:
                 lightsOff = Sequence(LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.55, 0.55, 0.65, 1)), Func(self.loader.hood.startSpookySky))
                 lightsOff.start()
+            else:
+                self.loader.hood.startSky()
+                lightsOn = LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(1, 1, 1, 1))
+                lightsOn.start()
+            #Christmas Event
+            if (ToontownGlobals.WINTER_DECORATIONS in holidayIds or ToontownGlobals.WACKY_WINTER_DECORATIONS in holidayIds) and self.loader.hood.snowySkyFile:
+                lightsOff = Sequence(LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.7, 0.7, 0.8, 1)), Func(self.loader.hood.startSnowySky), Func(__lightDecorationOn__))
+                lightsOff.start()
+                self.snowEvent = BattleParticles.loadParticleFile('snowdisk.ptf')
+                self.snowEvent.setPos(0, 30, 10)
+                self.snowEventRender = base.cr.playGame.hood.loader.geom.attachNewNode('snowRender')
+                self.snowEventRender.setDepthWrite(2)
+                self.snowEventRender.setBin('fixed', 1)
+                self.snowEventFade = None
+                self.snowEvent.start(camera, self.snowEventRender)
             else:
                 self.loader.hood.startSky()
                 lightsOn = LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(1, 1, 1, 1))
@@ -151,7 +169,7 @@ class Street(BattlePlace.BattlePlace):
         del self._telemLimiter
 
         def __lightDecorationOff__():
-            for light in self.halloweenLights:
+            for light in self.eventLights:
                 light.reparentTo(hidden)
 
         newsManager = base.cr.newsManager
@@ -391,10 +409,12 @@ class Street(BattlePlace.BattlePlace):
                 self.notify.debug('Entering Zone %d' % newZoneId)
             self.zoneId = newZoneId
         geom = base.cr.playGame.getPlace().loader.geom
-        self.halloweenLights = geom.findAllMatches('**/*light*')
-        self.halloweenLights += geom.findAllMatches('**/*lamp*')
-        self.halloweenLights += geom.findAllMatches('**/prop_snow_tree*')
-        for light in self.halloweenLights:
+        self.eventLights = geom.findAllMatches('**/*light*')
+        self.eventLights += geom.findAllMatches('**/*lamp*')
+        self.eventLights += geom.findAllMatches('**/prop_snow_tree*')
+        self.eventLights += geom.findAllMatches('**/prop_tree*')
+        self.eventLights += geom.findAllMatches('**/*christmas*')
+        for light in self.eventLights:
             light.setColorScaleOff(1)
         return
 

@@ -1569,6 +1569,7 @@ dclass DistributedToonInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
   setToonData(blob) required broadcast ram;
   setState(string, int16) required broadcast ram;
+  nextSnowmanHeadPart() clsend airecv;
 };
 
 dclass DistributedToonHallInterior : DistributedToonInterior {
@@ -2408,8 +2409,8 @@ dclass DistributedPetProxy : DistributedPet {
 };
 
 dclass DistributedBlackCatMgr : DistributedObject {
-  setAvId(uint32) required broadcast ram;
-  doBlackCatTransformation() airecv clsend;
+  doBlackCatTransformation(uint32 avId) broadcast;
+  requestBlackCatTransformation() airecv clsend;
 };
 
 dclass DistributedPolarBearMgr : DistributedObject {
