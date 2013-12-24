@@ -519,17 +519,24 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             allowedColors = []
             if self.dna.gender == 'm':
-                allowedColors = [0] + ToonDNA.defaultBoyColorList + [26]
+                allowedColors = ToonDNA.defaultBoyColorList
             else:
-                allowedColors = [0] + ToonDNA.defaultGirlColorList + [26]
+                allowedColors = ToonDNA.defaultGirlColorList
+            
+            # No idea why this wasn't done by disney, but add sanity checks for black (and now white) toons.
+            if dna.getAnimal() == 'bear':
+                allowedColors = [0] + allowedColors
+            if dna.getAnimal() == 'cat':
+                allowedColors = allowedColors + [26]
+                
             if self.dna.legColor not in allowedColors:
-                self.dna.legColor = allowedColors[1]
+                self.dna.legColor = allowedColors[0]
                 changed = True
             if self.dna.armColor not in allowedColors:
-                self.dna.armColor = allowedColors[1]
+                self.dna.armColor = allowedColors[0]
                 changed = True
             if self.dna.headColor not in allowedColors:
-                self.dna.headColor = allowedColors[1]
+                self.dna.headColor = allowedColors[0]
                 changed = True
             if changed:
                 self.d_setDNAString(self.dna.makeNetString())
