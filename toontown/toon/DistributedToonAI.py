@@ -4823,13 +4823,14 @@ def dna(part, value):
     
     # Allow Admins to back up a toons current DNA before making changes.
     elif part=='save':
-        av.mwDNABackup[str(spellbook.getInvoker().doId)] = av.getDNAString()
+        av.mwDNABackup[spellbook.getInvoker().doId] = av.getDNAString()
         return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
         
     # Restore from a previous back up of DNA.
     elif part=='restore':
-        if av.mwDNABackup.has_key(str(spellbook.getInvoker().doId)):
-            dna.makeFromNetString(av.mwDNABackup.get(str(spellbook.getInvoker().doId)))
+        if spellbook.getInvoker().doId in av.mwDNABackup:
+            dna.makeFromNetString(av.mwDNABackup.get(spellbook.getInvoker().doId))
+            av.b_setDNAString(dna.makeNetString())
             return "Restored %s's DNA to last save." % av.getName()
         else:
             return "DNA: There are no backups available."
