@@ -525,7 +525,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             
             # No idea why this wasn't done by disney, but add sanity checks for black (and now white) toons.
             if self.dna.getAnimal() == 'bear':
-                allowedColors = [0] + allowedColors
+                allowedColors = allowedColors + [0]
             if self.dna.getAnimal() == 'cat':
                 allowedColors = allowedColors + [26]
                 
