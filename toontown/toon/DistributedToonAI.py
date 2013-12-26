@@ -4844,3 +4844,10 @@ def dna(part, value):
     
     av.b_setDNAString(dna.makeNetString())
     return "Completed DNA change successfully."
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def setTrophyScore(value):
+    """Set the trophy score of target"""
+    if value < 0:
+        return "Cannot have a trophy score below 0."
+    spellbook.getTarget().d_setTrophyScore(value)

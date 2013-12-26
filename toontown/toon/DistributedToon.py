@@ -1520,7 +1520,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return
         if self.trophyScore >= ToontownGlobals.TrophyStarLevels[4]:
             self.trophyStar = loader.loadModel('phase_3.5/models/gui/name_star')
-            self.trophyStar.reparentTo(self.nametag.getNameIcon())
+            np = NodePath(self.nametag.getNameIcon())
+            self.trophyStar.reparentTo(np)
             self.trophyStar.setScale(2)
             self.trophyStar.setZ(2)
             self.trophyStar.setColor(ToontownGlobals.TrophyStarColors[4])
@@ -1529,7 +1530,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 taskMgr.add(self.__starSpin, self.uniqueName('starSpin'))
         elif self.trophyScore >= ToontownGlobals.TrophyStarLevels[2]:
             self.trophyStar = loader.loadModel('phase_3.5/models/gui/name_star')
-            self.trophyStar.reparentTo(self.nametag.getNameIcon())
+            np = NodePath(self.nametag.getNameIcon())
+            self.trophyStar.reparentTo(np)
             self.trophyStar.setScale(1.5)
             self.trophyStar.setZ(1.6)
             self.trophyStar.setColor(ToontownGlobals.TrophyStarColors[2])
@@ -1538,7 +1540,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 taskMgr.add(self.__starSpin, self.uniqueName('starSpin'))
         elif self.trophyScore >= ToontownGlobals.TrophyStarLevels[0]:
             self.trophyStar = loader.loadModel('phase_3.5/models/gui/name_star')
-            self.trophyStar.reparentTo(self.nametag.getNameIcon())
+            np = NodePath(self.nametag.getNameIcon())
+            self.trophyStar.reparentTo(np)
             self.trophyStar.setScale(1.5)
             self.trophyStar.setZ(1.6)
             self.trophyStar.setColor(ToontownGlobals.TrophyStarColors[0])
