@@ -4851,3 +4851,17 @@ def setTrophyScore(value):
     if value < 0:
         return "Cannot have a trophy score below 0."
     spellbook.getTarget().d_setTrophyScore(value)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
+def givePies(pieType, numPies=0):
+    """Give target Y number of X pies."""
+    if pieType == -1:
+        av.b_setNumPies(0)
+        return "Removed %s's pies." % spellbook.getTarget().getName()
+    if not 0 <= pieType <= 7:
+        return "pieType value out of range (0-7)"
+    if not 0 <= numPies <= 99:
+        return "numPies value out of range (0-99)"
+    av = spellbook.getTarget()
+    av.b_setPieType(pieType)
+    av.b_setNumPies(numPies)
