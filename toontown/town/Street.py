@@ -140,11 +140,19 @@ class Street(BattlePlace.BattlePlace):
                 lightsOff.start()
                 self.snowEvent = BattleParticles.loadParticleFile('snowdisk.ptf')
                 self.snowEvent.setPos(0, 30, 10)
+                #2 and 3 are only for the blizzard event and should be removed
+                self.snowEvent2 = BattleParticles.loadParticleFile('snowdisk.ptf')
+                self.snowEvent2.setPos(0, 10, 10)
+                self.snowEvent3 = BattleParticles.loadParticleFile('snowdisk.ptf')
+                self.snowEvent3.setPos(0, 20, 5)
                 self.snowEventRender = base.cr.playGame.hood.loader.geom.attachNewNode('snowRender')
                 self.snowEventRender.setDepthWrite(2)
                 self.snowEventRender.setBin('fixed', 1)
                 self.snowEventFade = None
                 self.snowEvent.start(camera, self.snowEventRender)
+                #2 and 3 are only for the blizzard event and should be removed
+                self.snowEvent2.start(camera, self.snowEventRender)
+                self.snowEvent3.start(camera, self.snowEventRender)
             else:
                 self.loader.hood.startSky()
                 lightsOn = LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(1, 1, 1, 1))
