@@ -1802,7 +1802,7 @@ dclass DistributedNPCToon : DistributedNPCToonBase {
 };
 
 dclass DistributedNPCSnowballGiver : DistributedNPCToonBase {
-  gaveSnowballs(uint32, uint32) broadcast ram;
+  gaveSnowballs(uint32, uint32, uint8) broadcast ram;
 };
 
 dclass DistributedNPCSpecialQuestGiver : DistributedNPCToonBase {

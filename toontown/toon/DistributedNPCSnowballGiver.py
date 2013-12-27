@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 from otp.nametag.NametagConstants import *
-ChoiceTimeout = 20
 
 class DistributedNPCSnowballGiver(DistributedNPCToonBase):
 
@@ -23,9 +22,13 @@ class DistributedNPCSnowballGiver(DistributedNPCToonBase):
         if sbCount <= 0: # Incase they somehow go negative...
             self.sendUpdate('avatarEnter', [])
         
-    def gaveSnowballs(self, npcId, avId):
+    def gaveSnowballs(self, npcId, avId, sbPhraseId):
         if avId in base.cr.doId2do:
             av = base.cr.doId2do.get(avId)
+            chatPhrases = [
+                'Go get \'em, %s!' % av.getName(),
+                'You can do it, %s!' % av.getName(),
+            ]
+            self.setChatAbsolute(self.chatPhrases[sbPhraseId], CFSpeech | CFTimeout)
         else:
-            return
-        self.setChatAbsolute('Go get \'em, %s!' % av.getName(), CFSpeech | CFTimeout)
+            self.setChatAbsolute('Go get \'em!', CFSpeech | CFTimeout)
