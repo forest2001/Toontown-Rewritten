@@ -19,7 +19,9 @@ class DistributedNPCSnowballGiver(DistributedNPCToonBase):
         DistributedNPCToonBase.disable(self)
 
     def handleCollisionSphereEnter(self, collEntry):
-        self.sendUpdate('avatarEnter', [])
+        sbCount = base.localAvatar.numPies
+        if sbCount <= 0: # Incase they somehow go negative...
+            self.sendUpdate('avatarEnter', [])
         
     def gaveSnowballs(self, npcId, avId):
         if avId in base.cr.doId2do:
