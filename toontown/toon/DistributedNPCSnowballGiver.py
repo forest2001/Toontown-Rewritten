@@ -28,6 +28,8 @@ class DistributedNPCSnowballGiver(DistributedNPCToonBase):
             chatPhrases = [
                 'Go get \'em, %s!' % avName,
                 'You can do it, %s!' % avName,
+                'Remember the technique!',
+                'Good thing I\'m wearing gloves. Have some snowballs!',
             ]
             self.setChatAbsolute(chatPhrases[sbPhraseId], CFSpeech | CFTimeout)
         else:

@@ -17,4 +17,4 @@ class DistributedNPCSnowballGiverAI(DistributedNPCToonBaseAI):
         self.notify.debug('avatar enter ' + str(avId))
         av.b_setPieType(1)
         av.b_setNumPies(25)
-        self.sendUpdate('gaveSnowballs', [self.npcId, avId, randrange(1)])
+        self.sendUpdate('gaveSnowballs', [self.npcId, avId, randrange(3)])
