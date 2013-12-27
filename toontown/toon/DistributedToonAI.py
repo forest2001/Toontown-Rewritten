@@ -47,8 +47,13 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+
+# Magic Word imports
 from otp.ai.MagicWordGlobal import *
+from direct.distributed.PyDatagram import PyDatagram
+from direct.distributed.MsgTypes import *
 import shlex
+
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -4597,8 +4602,13 @@ def kick(overrideSelfKick=False):
     """Kick the player from the game server."""
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
-    spellbook.getTarget().disconnect()
-    return "The player %s was kicked." % spellbook.getTarget().name
+    #spellbook.getTarget().disconnect()
+    dg = PyDatagram()
+    dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
+    dg.addUint16(155)
+    dg.addString('You were kicked by a moderator!')
+    simbase.air.send(dg)
+    return "The player %s was kicked." % spellbook.getTarget().getName()
 
 @magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
