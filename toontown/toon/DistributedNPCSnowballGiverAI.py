@@ -14,12 +14,6 @@ class DistributedNPCSnowballGiverAI(DistributedNPCToonBaseAI):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId)
         self.notify.debug('avatar enter ' + str(avId))
-        #av.d_setSystemMessage(0, 'avatar entered, gib snowballs pls')
         av.b_setPieType(1)
-        av.b_setNumPies(10)
-        
+        av.b_setNumPies(25)
         self.sendUpdate('gaveSnowballs', [self.npcId, avId])
-        
-        #self.air.questManager.requestInteract(avId, self)
-        #DistributedNPCToonBaseAI.avatarEnter(self)
-        #self.rejectAvatar(avId)
