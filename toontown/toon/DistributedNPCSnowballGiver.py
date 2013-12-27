@@ -24,11 +24,11 @@ class DistributedNPCSnowballGiver(DistributedNPCToonBase):
         
     def gaveSnowballs(self, npcId, avId, sbPhraseId):
         if avId in base.cr.doId2do:
-            av = base.cr.doId2do.get(avId)
+            avName = base.cr.doId2do.get(avId).getName()
             chatPhrases = [
-                'Go get \'em, %s!' % av.getName(),
-                'You can do it, %s!' % av.getName(),
+                'Go get \'em, %s!' % avName,
+                'You can do it, %s!' % avName,
             ]
-            self.setChatAbsolute(self.chatPhrases[sbPhraseId], CFSpeech | CFTimeout)
+            self.setChatAbsolute(chatPhrases[sbPhraseId], CFSpeech | CFTimeout)
         else:
             self.setChatAbsolute('Go get \'em!', CFSpeech | CFTimeout)
