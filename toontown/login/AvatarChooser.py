@@ -85,7 +85,7 @@ class AvatarChooser(StateData.StateData):
         self.isPaid = isPaid
         gui = loader.loadModel('phase_3/models/gui/pick_a_toon_gui')
         gui2 = loader.loadModel('phase_3/models/gui/quit_button')
-        newGui = loader.loadModel('phase_3/models/gui/tt_m_gui_pat_mainGui')
+        newGui = loader.loadModel('phase_3/models/gui/tt_m_gui_pat_mainGui_christmas')
         self.pickAToonBG = newGui.find('**/tt_t_gui_pat_background')
         self.pickAToonBG.reparentTo(hidden)
         self.pickAToonBG.setPos(0.0, 2.73, 0.0)

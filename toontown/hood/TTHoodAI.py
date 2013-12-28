@@ -10,6 +10,7 @@ class TTHoodAI(HoodAI):
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
         HoodAI.spawnObjects(self, 'phase_4/dna/toontown_central_sz.dna')
+        
         self.createButterflies()
 
     def createStreets(self):

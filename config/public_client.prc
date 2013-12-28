@@ -23,7 +23,7 @@ want-news-tab #f
 want-housing #f
 
 want-karts #t
-force-holiday 6
+force-holiday-decorations 6,1
 
 model-path /
 model-cache-models #f

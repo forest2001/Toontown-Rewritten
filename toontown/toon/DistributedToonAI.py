@@ -47,8 +47,13 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+
+# Magic Word imports
 from otp.ai.MagicWordGlobal import *
+from direct.distributed.PyDatagram import PyDatagram
+from direct.distributed.MsgTypes import *
 import shlex
+
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -519,9 +524,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             allowedColors = []
             if self.dna.gender == 'm':
-                allowedColors = ToonDNA.defaultBoyColorList + [26]
+                allowedColors = ToonDNA.defaultBoyColorList
             else:
-                allowedColors = ToonDNA.defaultGirlColorList + [26]
+                allowedColors = ToonDNA.defaultGirlColorList
+            
+            # No idea why this wasn't done by disney, but add sanity checks for black (and now white) toons.
+            if self.dna.getAnimal() == 'bear':
+                allowedColors = allowedColors + [0]
+            if self.dna.getAnimal() == 'cat':
+                allowedColors = allowedColors + [26]
+                
             if self.dna.legColor not in allowedColors:
                 self.dna.legColor = allowedColors[0]
                 changed = True
@@ -1749,9 +1761,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('setCheesyEffect', [effect, hoodId, expireTime])
 
     def setCheesyEffect(self, effect, hoodId, expireTime):
-        if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
-            self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
-            return
+        # We don't yet have a working holidayManager, and we want to keep snowman heads.
+        #if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
+            #self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
+            #return
         self.savedCheesyEffect = effect
         self.savedCheesyHoodId = hoodId
         self.savedCheesyExpireTime = expireTime
@@ -4420,24 +4433,24 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emotes[emoteId] = 1
 
         self.b_setEmoteAccess(emotes)
+        self.b_setHoodsVisited([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000])
+        self.b_setTeleportAccess([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000])
+
 
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
         if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
             
         # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
-        if not self.isGM():
-            self.b_setCheesyEffect(0, 0, 0)
-            if self.getName() != 'Roger Dog': # hi my name is roger dog
-                self.b_setHat(0, 0, 0)
-            self.b_setGlasses(0, 0, 0)
-            self.b_setShoes(0, 0, 0)
+#        if not self.isGM():
+#            self.b_setCheesyEffect(0, 0, 0)
+#            if self.getName() != 'Roger Dog': # hi my name is roger dog
+#                self.b_setHat(0, 0, 0)
+#            self.b_setGlasses(0, 0, 0)
+#            self.b_setShoes(0, 0, 0)
         # Joey doesn't want backpacks.
-        if self._gmType != 2:
-            self.b_setBackpack(0, 0, 0)
-        # Remove the Golf Hats from everyone, ID 11.
-        if self.getHat()[0] == 11:
-            self.b_setHat(0, 0, 0)
+#        if self._gmType != 2:
+#            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -4589,8 +4602,13 @@ def kick(overrideSelfKick=False):
     """Kick the player from the game server."""
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
-    spellbook.getTarget().disconnect()
-    return "The player %s was kicked." % spellbook.getTarget().name
+    #spellbook.getTarget().disconnect()
+    dg = PyDatagram()
+    dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
+    dg.addUint16(155)
+    dg.addString('You were kicked by a moderator!')
+    simbase.air.send(dg)
+    return "The player %s was kicked." % spellbook.getTarget().getName()
 
 @magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
@@ -4818,13 +4836,14 @@ def dna(part, value):
     
     # Allow Admins to back up a toons current DNA before making changes.
     elif part=='save':
-        av.mwDNABackup[str(spellbook.getInvoker().doId)] = av.getDNAString()
+        av.mwDNABackup[spellbook.getInvoker().doId] = av.getDNAString()
         return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
         
     # Restore from a previous back up of DNA.
     elif part=='restore':
-        if av.mwDNABackup.has_key(str(spellbook.getInvoker().doId)):
-            dna.makeFromNetString(av.mwDNABackup.get(str(spellbook.getInvoker().doId)))
+        if spellbook.getInvoker().doId in av.mwDNABackup:
+            dna.makeFromNetString(av.mwDNABackup.get(spellbook.getInvoker().doId))
+            av.b_setDNAString(dna.makeNetString())
             return "Restored %s's DNA to last save." % av.getName()
         else:
             return "DNA: There are no backups available."
@@ -4835,3 +4854,24 @@ def dna(part, value):
     
     av.b_setDNAString(dna.makeNetString())
     return "Completed DNA change successfully."
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def setTrophyScore(value):
+    """Set the trophy score of target"""
+    if value < 0:
+        return "Cannot have a trophy score below 0."
+    spellbook.getTarget().d_setTrophyScore(value)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
+def givePies(pieType, numPies=0):
+    """Give target Y number of X pies."""
+    if pieType == -1:
+        av.b_setNumPies(0)
+        return "Removed %s's pies." % spellbook.getTarget().getName()
+    if not 0 <= pieType <= 7:
+        return "pieType value out of range (0-7)"
+    if not 0 <= numPies <= 99:
+        return "numPies value out of range (0-99)"
+    av = spellbook.getTarget()
+    av.b_setPieType(pieType)
+    av.b_setNumPies(numPies)

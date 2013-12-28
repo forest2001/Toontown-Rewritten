@@ -38,7 +38,9 @@ class DNASpawnerAI:
             ToontownGlobals.DonaldsDock,
             ToontownGlobals.ToontownCentral,
             ToontownGlobals.DaisyGardens,
-            ToontownGlobals.TheBrrrgh,            
+            ToontownGlobals.TheBrrrgh,
+            ToontownGlobals.MinniesMelodyland,
+            ToontownGlobals.DonaldsDreamland,
             
             # GSW's Kart Shop needs to exist for people to be able to race.
             ToontownGlobals.GoofySpeedway,
@@ -47,7 +49,10 @@ class DNASpawnerAI:
         self.spawnNPCsIn = [
             ToontownGlobals.DonaldsDock,
             ToontownGlobals.ToontownCentral,
-            ToontownGlobals.DaisyGardens,            
+            ToontownGlobals.DaisyGardens,
+            ToontownGlobals.TheBrrrgh,
+            ToontownGlobals.MinniesMelodyland,
+            ToontownGlobals.DonaldsDreamland,
         ]
         
         dnaStore = DNAStorage()
@@ -140,7 +145,7 @@ class DNASpawnerAI:
                     hqDoor2.setOtherZoneIdAndDoId(interiorZone, hqDoorInt2.getDoId())
 
                     hqInterior = DistributedHQInteriorAI(simbase.air)
-                    hqInterior.setZoneIdAndBlock(interiorZone, index)
+                    hqInterior.setZoneIdAndBlock(interiorZone, 0)
                     hqInterior.generateWithRequired(interiorZone)
                 elif type == 'kartshop':
                     ksInterior = DistributedKartShopInteriorAI(simbase.air)
@@ -196,7 +201,7 @@ class DNASpawnerAI:
                     extDoor.generateWithRequired(buildingZone)
                     
                     intDoor = DistributedDoorAI(simbase.air)
-                    intDoor.setZoneIdAndBlock(interiorZone, index)
+                    intDoor.setZoneIdAndBlock(interiorZone, 0)
                     intDoor.setDoorType(DoorTypes.INT_STANDARD)
                     intDoor.setSwing(3)
                     intDoor.setDoorIndex(0)
@@ -251,7 +256,7 @@ class DNASpawnerAI:
                         intDoor.setDoorType(DoorTypes.INT_STANDARD)
                         intDoor.setSwing(3)
                         intDoor.setDoorIndex(0)
-                        intDoor.setOtherZoneIdAndDoId(zone, extDoor.getDoId())
+                        intDoor.setOtherZoneIdAndDoId(buildingZone, extDoor.getDoId())
                         intDoor.generateWithRequired(interiorZone)
                         
                         extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())

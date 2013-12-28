@@ -95,6 +95,7 @@ from toontown.coghq import DistributedCogHQDoor/AI
 from toontown.coghq import DistributedSellbotHQDoor/AI
 from toontown.toon import DistributedNPCToonBase/AI
 from toontown.toon import DistributedNPCToon/AI
+from toontown.toon import DistributedNPCSnowballGiver/AI
 from toontown.toon import DistributedNPCSpecialQuestGiver/AI
 from toontown.toon import DistributedNPCFlippyInToonHall/AI
 from toontown.toon import DistributedNPCScientist/AI
@@ -167,6 +168,7 @@ from toontown.suit import DistributedGoon/AI
 from toontown.suit import DistributedGridGoon/AI
 from toontown.coghq import BattleBlocker/AI
 from toontown.ai import DistributedBlackCatMgr/AI
+from toontown.ai import DistributedPolarBearMgr/AI
 from toontown.ai import DistributedPolarPlaceEffectMgr/AI
 from toontown.ai import DistributedGreenToonEffectMgr/AI
 from toontown.ai import DistributedResistanceEmoteMgr/AI
@@ -1568,6 +1570,7 @@ dclass DistributedToonInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
   setToonData(blob) required broadcast ram;
   setState(string, int16) required broadcast ram;
+  nextSnowmanHeadPart() clsend airecv;
 };
 
 dclass DistributedToonHallInterior : DistributedToonInterior {
@@ -1796,6 +1799,10 @@ dclass DistributedNPCToon : DistributedNPCToonBase {
   setMovieDone() airecv clsend;
   chooseQuest(uint16) airecv clsend;
   chooseTrack(int8) airecv clsend;
+};
+
+dclass DistributedNPCSnowballGiver : DistributedNPCToonBase {
+  gaveSnowballs(uint32, uint32, uint8) broadcast ram;
 };
 
 dclass DistributedNPCSpecialQuestGiver : DistributedNPCToonBase {
@@ -2409,6 +2416,11 @@ dclass DistributedPetProxy : DistributedPet {
 dclass DistributedBlackCatMgr : DistributedObject {
   doBlackCatTransformation(uint32 avId) broadcast;
   requestBlackCatTransformation() airecv clsend;
+};
+
+dclass DistributedPolarBearMgr : DistributedObject {
+  doPolarBearTransformation(uint32 avId) broadcast;
+  requestPolarBearTransformation() airecv clsend;
 };
 
 dclass DistributedPolarPlaceEffectMgr : DistributedObject {

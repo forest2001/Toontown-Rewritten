@@ -326,7 +326,8 @@ Shirts = ['phase_3/maps/desat_shirt_1.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_saveBuilding4.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_saveBuilding05.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_anniversary.jpg',
- 'phase_4/maps/tt_t_chr_avt_shirt_sora.jpg']
+ 'phase_4/maps/tt_t_chr_avt_shirt_sora.jpg',
+ 'phase_4/maps/tt_t_chr_avt_shirt_slappy.jpg']
 BoyShirts = [(0, 0),
  (1, 1),
  (2, 2),
@@ -512,7 +513,8 @@ Sleeves = ['phase_3/maps/desat_sleeve_1.jpg',
  'phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding4.jpg',
  'phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding05.jpg',
  'phase_4/maps/tt_t_chr_avt_shirtSleeve_anniversary.jpg',
- 'phase_4/maps/tt_t_chr_avt_shirtSleeve_sora.jpg']
+ 'phase_4/maps/tt_t_chr_avt_shirtSleeve_sora.jpg',
+ 'phase_4/maps/tt_t_chr_avt_shirtSleeve_slappy.jpg']
 BoyShorts = ['phase_3/maps/desat_shorts_1.jpg',
  'phase_3/maps/desat_shorts_2.jpg',
  'phase_3/maps/desat_shorts_4.jpg',
@@ -571,7 +573,8 @@ BoyShorts = ['phase_3/maps/desat_shorts_1.jpg',
  'phase_4/maps/tt_t_chr_avt_shorts_golf05.jpg',
  'phase_4/maps/tt_t_chr_avt_shorts_racing04.jpg',
  'phase_4/maps/tt_t_chr_avt_shorts_racing05.jpg',
- 'phase_4/maps/tt_t_chr_avt_shorts_sora.jpg']
+ 'phase_4/maps/tt_t_chr_avt_shorts_sora.jpg',
+ 'phase_4/maps/tt_t_chr_avt_shorts_slappy.jpg']
 SHORTS = 0
 SKIRT = 1
 GirlBottoms = [('phase_3/maps/desat_skirt_1.jpg', SKIRT),
@@ -1999,7 +2002,7 @@ defaultGirlColorList = [1,
  23,
  24]
 allColorsListApproximations = map(lambda x: VBase4(round(x[0], 3), round(x[1], 3), round(x[2], 3), round(x[3], 3)), allColorsList)
-allowedColors = set(map(lambda x: allColorsListApproximations[x], set(defaultBoyColorList + defaultGirlColorList + [26])))
+allowedColors = set(map(lambda x: allColorsListApproximations[x], set([0] + defaultBoyColorList + defaultGirlColorList + [26])))
 HatModels = [None,
  'phase_4/models/accessories/tt_m_chr_avt_acc_hat_baseball',
  'phase_4/models/accessories/tt_m_chr_avt_acc_hat_safari',
@@ -2841,6 +2844,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             return allColorsList[26]
         except:
             return allColorsList[0]
+            
+    def getWhiteColor(self):
+        return allColorsList[0]
 
     def setTemporary(self, newHead, newArmColor, newLegColor, newHeadColor):
         if not self.cache and self.getArmColor != newArmColor:

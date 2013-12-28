@@ -65,7 +65,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             
             for avId in players:
                 noTravel = doesntWantTrolleyTracks.get(avId)
-                aiNoTravel = doesntWantTrolleyTracks.get('district')
+                aiNoTravel = doesntWantTrolleyTracks.get('everyone')
                 
             if len(players) > 1 and not noTravel and not aiNoTravel:
                 mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit

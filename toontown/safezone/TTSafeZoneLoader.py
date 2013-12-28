@@ -3,8 +3,6 @@ import SafeZoneLoader
 import TTPlayground
 import random
 from toontown.launcher import DownloadForceAcknowledge
-from toontown.ai.DistributedBlackCatMgr import DistributedBlackCatMgr
-from otp.speedchat import SpeedChatGlobals
 from otp.nametag.NametagConstants import *
 
 class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
@@ -29,13 +27,14 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         sign.setY(-4)
         for tunnel in self.geom.findAllMatches('**/tunnel_origin'):
             sign.instanceTo(tunnel)'''
+            
+        npcOrigin = self.geom.attachNewNode('npc_origin_3')	 
+        npcOrigin.setPosHpr(100, 9.952, 4.025, -201.762, 0, 0)
 
         self.birdSound = map(base.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])
 
     def unload(self):
         del self.birdSound
-        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
-        self.ignore('blackcat-transformed')
         SafeZoneLoader.SafeZoneLoader.unload(self)
 
     def enter(self, requestStatus):

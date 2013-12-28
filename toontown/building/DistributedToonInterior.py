@@ -15,6 +15,8 @@ from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.toon import ToonDNA
 from toontown.toon import ToonHead
+from otp.speedchat import SpeedChatGlobals
+
 SIGN_LEFT = -4
 SIGN_RIGHT = 4
 SIGN_BOTTOM = -3.5
@@ -38,10 +40,12 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def disable(self):
         self.interior.removeNode()
         del self.interior
+        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
         DistributedObject.DistributedObject.disable(self)
 
     def delete(self):
         del self.fsm
+        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
         DistributedObject.DistributedObject.delete(self)
 
     def randomDNAItem(self, category, findFunc):
@@ -133,6 +137,30 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         del self.dnaStore
         del self.randomGenerator
         self.interior.flattenMedium()
+        
+        snowmanHeadInteriors = [
+            2740, # TTC, Loopy Lane, Used Firecrackers
+            4652, # MML, Alto Avenue, Full Stop Shop
+            9608, # DDL, non-HQ street, Cat Nip For Cat Naps
+            5710, # DG, Maple Street, Tuft Guy Gym
+            1711, # DD, Seaweed Street, Deep-Sea Diner
+            3620, # TB, Walrus Way, Skiing Clinic
+        ]
+        snowmanInteriorPhrase = {
+            snowmanHeadInteriors[0] : 30225,
+            snowmanHeadInteriors[1] : 30224,
+            snowmanHeadInteriors[2] : 30221,
+            snowmanHeadInteriors[3] : 30220,
+            snowmanHeadInteriors[4] : 30222,
+            snowmanHeadInteriors[5] : 30223,
+        }
+        if self.zoneId in snowmanHeadInteriors:
+            def phraseSaid(phraseId):
+                phraseNeeded = snowmanInteriorPhrase.get(self.zoneId)
+
+                if phraseId == phraseNeeded:
+                    self.sendUpdate('nextSnowmanHeadPart', [])
+            self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
     def setZoneIdAndBlock(self, zoneId, block):
         self.zoneId = zoneId
