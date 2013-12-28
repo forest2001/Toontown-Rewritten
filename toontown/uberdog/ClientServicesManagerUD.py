@@ -539,6 +539,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
         # Render pattern into a string:
         parts = []
         for p,f in self.pattern:
+            if p==213: p=212 # Don't allow the name Slappy if they try to add it back in NameMasterEnglish (it will generate a blank name)
             part = self.csm.nameGenerator.nameDictionary.get(p, ('',''))[1]
             if f: part = part[:1].upper() + part[1:]
             else: part = part.lower()
