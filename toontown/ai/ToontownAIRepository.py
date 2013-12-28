@@ -137,7 +137,7 @@ class ToontownAIRepository(ToontownInternalRepository):
            
         # Calculate time until next hour.
         thetime = time.time() % 3600
-        if thetime == 0: # This would be very rare, but lets not exclude it!
+        if thetime < 60: # If the AI was started less than a minute after the previous full hour.
             self.startFireworks()
         else:
             taskMgr.doMethodLater(3600-thetime, self.startFireworks, 'fireworks-taskmgr-hourly')
