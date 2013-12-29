@@ -30,5 +30,5 @@ want-news-page #f
 want-news-tab #f
 want-housing #f
 
-force-holiday-decorations 6,1
+force-holiday-decorations 6
 want-old-fireworks #t
