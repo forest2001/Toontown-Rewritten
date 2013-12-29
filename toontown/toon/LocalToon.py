@@ -884,9 +884,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 gui = None
                 pieGui = (inv.invModels[ToontownBattleGlobals.THROW_TRACK][self.pieType],)
                 pieScale = 0.85
-            #Remove image for snowballs
-            #self.__pieButton = DirectButton(image=(inv.upButton, inv.downButton, inv.rolloverButton), geom=pieGui, text='50', text_scale=0.04, text_align=TextNode.ARight, geom_scale=pieScale, geom_pos=(-0.01, 0, 0), text_fg=Vec4(1, 1, 1, 1), text_pos=(0.07, -0.04), relief=None, image_color=(0, 0.6, 1, 1), pos=(0, 0.1, 0.9))
-            self.__pieButton = DirectButton(image=(inv.upButton, inv.downButton, inv.rolloverButton), text='50', text_scale=0.11, text_align=TextNode.ARight, text_fg=Vec4(1, 1, 1, 1), text_pos=(0.06, -0.03), relief=None, image_color=(0, 0.6, 1, 1), pos=(0, 0.1, 0.9))
+            self.__pieButton = DirectButton(image=(inv.upButton, inv.downButton, inv.rolloverButton), geom=pieGui, text='50', text_scale=0.04, text_align=TextNode.ARight, geom_scale=pieScale, geom_pos=(-0.01, 0, 0), text_fg=Vec4(1, 1, 1, 1), text_pos=(0.07, -0.04), relief=None, image_color=(0, 0.6, 1, 1), pos=(0, 0.1, 0.9))
             self.__pieButton.bind(DGG.B1PRESS, self.__beginTossPieMouse)
             self.__pieButton.bind(DGG.B1RELEASE, self.__endTossPieMouse)
             self.__pieButtonType = self.pieType
