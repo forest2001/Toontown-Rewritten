@@ -13,7 +13,17 @@ from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHo
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
-from toontown.dna.DNAParser import loadDNAFileAI 
+from toontown.dna.DNAParser import loadDNAFileAI
+
+# All imports needed for fireworks
+from direct.task import Task
+from toontown.toonbase import ToontownGlobals
+from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
+from toontown.effects import FireworkShows
+import random
+from direct.distributed.ClockDelta import *
+import time
+from otp.ai.MagicWordGlobal import *
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -96,7 +106,20 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.safeZoneManager = SafeZoneManagerAI(self)
         self.safeZoneManager.generateWithRequired(2)
-
+    
+    def startFireworks(self, task):
+        fwType = ToontownGlobals.NEWYEARS_FIREWORKS
+        numShows = len(FireworkShows.shows.get(fwType, []))
+        showIndex = random.randint(0, numShows-1)
+        for hood in self.hoods:
+            if hood.safezone == ToontownGlobals.GolfZone:
+                continue
+            fwShow = DistributedFireworkShowAI(self)
+            fwShow.generateWithRequired(hood.safezone)
+            fwShow.b_startShow(fwType, showIndex, globalClockDelta.getRealNetworkTime())
+        task.delayTime = 3600
+        return task.again
+    
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
@@ -111,6 +134,17 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(GSHoodAI.GSHoodAI(self))
         self.hoods.append(OZHoodAI.OZHoodAI(self))
         self.hoods.append(GZHoodAI.GZHoodAI(self))
+           
+        # Calculate time until next hour.
+        thetime = time.time() % 3600
+        if thetime < 60: # If the AI was started less than a minute after the previous full hour.
+            self.startFireworks()
+        else:
+            taskMgr.doMethodLater(3600-thetime, self.startFireworks, 'fireworks-taskmgr-hourly')
 
     def loadDNAFileAI(self, dnastore, filename):
         return loadDNAFileAI(dnastore, filename)
+        
+@magicWord(access=200)
+def nextfwtime():
+    return "Fireworks to start in %d minutes." % int((3600-(time.time()%3600))/60)

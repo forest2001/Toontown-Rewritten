@@ -31,3 +31,4 @@ want-news-tab #f
 want-housing #f
 
 force-holiday-decorations 6,1
+want-old-fireworks #t
