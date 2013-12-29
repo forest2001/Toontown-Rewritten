@@ -138,7 +138,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         del self.randomGenerator
         self.interior.flattenMedium()
         
-        snowmanHeadInteriors = [
+        '''snowmanHeadInteriors = [
             2740, # TTC, Loopy Lane, Used Firecrackers
             4652, # MML, Alto Avenue, Full Stop Shop
             9608, # DDL, non-HQ street, Cat Nip For Cat Naps
@@ -160,7 +160,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
 
                 if phraseId == phraseNeeded:
                     self.sendUpdate('nextSnowmanHeadPart', [])
-            self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
+            self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)'''
 
     def setZoneIdAndBlock(self, zoneId, block):
         self.zoneId = zoneId
