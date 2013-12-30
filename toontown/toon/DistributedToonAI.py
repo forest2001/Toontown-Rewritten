@@ -4440,17 +4440,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
         if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
-            
-        # Too many alpha testers complained. Remove all effects/accessories from non-GMs.
-#        if not self.isGM():
-#            self.b_setCheesyEffect(0, 0, 0)
-#            if self.getName() != 'Roger Dog': # hi my name is roger dog
-#                self.b_setHat(0, 0, 0)
-#            self.b_setGlasses(0, 0, 0)
-#            self.b_setShoes(0, 0, 0)
-        # Joey doesn't want backpacks.
-#        if self._gmType != 2:
-#            self.b_setBackpack(0, 0, 0)
+        
+        # Remove effects and accessories from non-admins.
+        # This decision was made after so many toons complained about how it is unfair
+        # that some toons are allowed accessories/effects and they aren't.
+        if self.getAdminAccess() < 400:
+            self.b_setCheesyEffect(0, 0, 0)
+            self.b_setHat(0, 0, 0)
+            self.b_setGlasses(0, 0, 0)
+            self.b_setShoes(0, 0, 0)
+            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
