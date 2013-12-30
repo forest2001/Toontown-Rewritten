@@ -24,6 +24,7 @@ import random
 from direct.distributed.ClockDelta import *
 import time
 from otp.ai.MagicWordGlobal import *
+from toontown.parties import PartyGlobals
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -108,7 +109,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.safeZoneManager.generateWithRequired(2)
     
     def startFireworks(self, task):
-        fwType = ToontownGlobals.NEWYEARS_FIREWORKS
+        allFwTypes = [ToontownGlobals.NEWYEARS_FIREWORKS, PartyGlobals.FireworkShows.Summer]
+        fwType = allFwTypes[random.randint(0, len(allFwTypes)-1)]
         numShows = len(FireworkShows.shows.get(fwType, []))
         showIndex = random.randint(0, numShows-1)
         for hood in self.hoods:
