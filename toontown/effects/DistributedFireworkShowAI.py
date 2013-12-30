@@ -23,7 +23,7 @@ class DistributedFireworkShowAI(DistributedObjectAI):
         taskMgr.doMethodLater(FireworkShows.getShowDuration(eventId, style), self.requestDelete, 'delete%i' % self.doId, [])
         
     def d_startShow(self, eventId, style, timeStamp):
-        self.sendUpdate('startShow', [eventId, style, timeStamp])
+        self.sendUpdate('startShow', [eventId, style, random.randint(0,1), timeStamp])
     
     def b_startShow(self, eventId, style, timeStamp):
         self.startShow(eventId, style, timeStamp)
