@@ -58,7 +58,7 @@ class AvatarChoice(DirectButton):
         self.position = position
         self.doneEvent = 'avChoicePanel-' + str(self.position)
         self.deleteWithPasswordFrame = None
-        self.pickAToonGui = loader.loadModel('phase_3/models/gui/tt_m_gui_pat_mainGui_christmas')
+        self.pickAToonGui = loader.loadModel('phase_3/models/gui/tt_m_gui_pat_mainGui')
         self.buttonBgs = []
         self.buttonBgs.append(self.pickAToonGui.find('**/tt_t_gui_pat_squareRed'))
         self.buttonBgs.append(self.pickAToonGui.find('**/tt_t_gui_pat_squareGreen'))
