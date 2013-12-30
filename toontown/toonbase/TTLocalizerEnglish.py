@@ -4579,7 +4579,7 @@ DanceAnimLeft = 'Left'
 PartyCannonActivityTitle = 'Party Cannons'
 PartyCannonActivityInstructions = 'Hit the clouds to change their color and bounce in the air! While IN THE AIR, you can USE THE ARROW KEYS to GLIDE.'
 PartyCannonResults = 'You collected %d jelly beans!\n\nNumber of Clouds Hit: %d'
-FireworksActivityInstructions = 'Hit the "Page Up" key to see better.'
+FireworksActivityInstructions = 'Look up using the "Page Up" key to see better.'
 FireworksActivityBeginning = 'Party fireworks are about to start! Enjoy the show!'
 FireworksActivityEnding = 'Hope you enjoyed the show!'
 PartyFireworksAlreadyActive = 'The fireworks show has already started.'
@@ -8230,12 +8230,12 @@ PetTrait2descriptions = {'hungerThreshold': ('Always Hungry',
                         'Sometimes Affectionate',
                         'Often Affectionate',
                         'Always Affectionate')}
-FireworksInstructions = lToonHQ + ': Hit the "Page Up" key to see the show!'
+FireworksInstructions = lToonHQ + ': Look up using the "Page Up" key to see the show!'
 startFireworksResponse = "Usage: startFireworksShow ['num']\n                                         'num' = %s - New Years\n                                         %s - Party Summer \n                                         %s - 4th of July"
 FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
 FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
-FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show!'
-FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Happy New Year!'
+FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
+FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
 FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
 FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
 BlockerTitle = 'LOADING TOONTOWN...'
