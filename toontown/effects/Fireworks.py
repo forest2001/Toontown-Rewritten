@@ -86,6 +86,7 @@ def shootFireworkRing(x, y, z, color1, color2, amp):
     f.setPos(x, y, z)
     f.setHpr(0, random.random() * 180, random.random() * 180)
     sfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_03.ogg')
+    sfx.setVolume(0.7)
     t = Sequence(Func(f.start, render, render), Func(sfx.play), Wait(0.5), Func(p0.setBirthRate, 3), Wait(1.5), Func(f.cleanup), name=getNextSequenceName('shootFireworkRing'))
     t.start()
 
@@ -126,6 +127,7 @@ def shootFireworkRocket(x, y, z, color1, color2, amp):
     f.setPos(x, y, z)
     sfxName = random.choice(('phase_4/audio/sfx/firework_whistle_01.ogg', 'phase_4/audio/sfx/firework_whistle_02.ogg'))
     sfx = loader.loadSfx(sfxName)
+    sfx.setVolume(0.4)
     t = Sequence(Func(f.start, render, render), Func(sfx.play), LerpPosInterval(f, 2.0, Vec3(x, y, z + 20 * amp), blendType='easeInOut'), Func(p0.setBirthRate, 3), Wait(0.5), Func(f.cleanup), name=getNextSequenceName('shootFirework'))
     t.start()
 
@@ -182,6 +184,7 @@ def shootFireworkCircleGeneric(x, y, z, color1, color2, amp, poolSize):
     f.setPos(x, y, z)
     sfxName = random.choice(('phase_4/audio/sfx/firework_explosion_01.ogg', 'phase_4/audio/sfx/firework_explosion_02.ogg', 'phase_4/audio/sfx/firework_explosion_03.ogg'))
     sfx = loader.loadSfx(sfxName)
+    sfx.setVolume(0.7)
     t = Sequence(Func(f.start, render, render), Func(sfx.play), Wait(0.5), Func(p0.setBirthRate, 3), Wait(0.5), Func(p0.renderer.setCenterColor, color2), Func(p0.renderer.setEdgeColor, color2), Wait(1.5), Func(f.cleanup), name=getNextSequenceName('shootFireworkCircle'))
     t.start()
 
@@ -222,6 +225,7 @@ def shootFireworkCircleSprite(x, y, z, color, texture, amp):
     f.setPos(x, y, z)
     sfxName = random.choice(('phase_4/audio/sfx/firework_explosion_01.ogg', 'phase_4/audio/sfx/firework_explosion_02.ogg', 'phase_4/audio/sfx/firework_explosion_03.ogg'))
     sfx = loader.loadSfx(sfxName)
+    sfx.setVolume(0.7)
     t = Sequence(Func(f.start, render, render), Func(sfx.play), Wait(0.5), Func(p0.setBirthRate, 3), Wait(2.0), Func(f.cleanup), name=getNextSequenceName('shootFireworkSprite'))
     t.start()
 

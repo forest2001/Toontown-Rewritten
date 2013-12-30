@@ -50,7 +50,7 @@ class FireworkShowMixin:
         if self.timestamp:
             self.getLoader().music.stop()
             t = globalClockDelta.localElapsedTime(self.timestamp) - self.startDelay
-            base.playMusic(self.showMusic, 0, 1, 0.8, max(0, t))
+            base.playMusic(self.showMusic, 0, 1, 1, max(0, t))
 
     def shootFirework(self, x, y, z, style, color1, color2):
         amp = 5
