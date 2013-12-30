@@ -105,7 +105,6 @@ class FireworkShowMixin:
             FireworkShowMixin.notify.warning('Invalid fireworks event ID: %d' % eventId)
             return None
         self.showMusic = loader.loadMusic(musicFile)
-        print "playing song: %s" % str(musicFile)
         self.showMusic.setVolume(1)
 
         def __lightDecorationOn__():
