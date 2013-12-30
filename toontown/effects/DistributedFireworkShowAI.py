@@ -7,6 +7,7 @@ from direct.task import Task
 from otp.ai.MagicWordGlobal import *
 
 from toontown.toonbase import ToontownGlobals
+from toontown.parties import PartyGlobals
 
 import FireworkShows
 import random
@@ -41,6 +42,8 @@ def fireworks(showName='july4'):
         showType = ToontownGlobals.JULY4_FIREWORKS
     elif showName == 'newyears':
         showType = ToontownGlobals.NEWYEARS_FIREWORKS
+    elif showName == 'summer':
+        showType = PartyGlobals.FireworkShows.Summer
     else:
         return 'Invalid firework show type!'
     numShows = len(FireworkShows.shows.get(showType, []))
