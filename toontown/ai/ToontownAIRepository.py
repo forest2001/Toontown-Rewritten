@@ -109,7 +109,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.safeZoneManager.generateWithRequired(2)
     
     def startFireworks(self, task):
-        allFwTypes = [ToontownGlobals.NEWYEARS_FIREWORKS, PartyGlobals.FireworkShows.Summer]
+        allFwTypes = [ToontownGlobals.NEWYEARS_FIREWORKS, PartyGlobals.FireworkShows.Summer, ToontownGlobals.JULY4_FIREWORKS]
         fwType = allFwTypes[random.randint(0, len(allFwTypes)-1)]
         numShows = len(FireworkShows.shows.get(fwType, []))
         showIndex = random.randint(0, numShows-1)
