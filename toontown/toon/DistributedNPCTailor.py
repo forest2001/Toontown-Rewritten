@@ -8,6 +8,7 @@ import TailorClothesGUI
 from toontown.toonbase import TTLocalizer
 import ToonDNA
 from toontown.estate import ClosetGlobals
+from otp.nametag.NametagConstants import CFSpeech, CFTimeout
 
 class DistributedNPCTailor(DistributedNPCToonBase):
 
@@ -26,7 +27,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
     def disable(self):
         self.ignoreAll()
         taskMgr.remove(self.uniqueName('popupPurchaseGUI'))
-        taskMgr.remove(self.uniqueName('lerpCamera'))
+        #taskMgr.remove(self.uniqueName('lerpCamera'))
         if self.clothesGUI:
             self.clothesGUI.exit()
             self.clothesGUI.unload()
@@ -61,7 +62,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
     def resetTailor(self):
         self.ignoreAll()
         taskMgr.remove(self.uniqueName('popupPurchaseGUI'))
-        taskMgr.remove(self.uniqueName('lerpCamera'))
+        #taskMgr.remove(self.uniqueName('lerpCamera'))
         if self.clothesGUI:
             self.clothesGUI.hideButtons()
             self.clothesGUI.exit()
@@ -91,7 +92,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         if mode == NPCToons.PURCHASE_MOVIE_CLEAR:
             return
         if mode == NPCToons.PURCHASE_MOVIE_TIMEOUT:
-            taskMgr.remove(self.uniqueName('lerpCamera'))
+            #taskMgr.remove(self.uniqueName('lerpCamera'))
             if self.isLocalToon:
                 self.ignore(self.purchaseDoneEvent)
                 self.ignore(self.swapEvent)
@@ -122,9 +123,9 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             self.oldStyle = ToonDNA.ToonDNA()
             self.oldStyle.makeFromNetString(style.makeNetString())
             self.setupAvatars(self.av)
-            if self.isLocalToon:
-                camera.wrtReparentTo(render)
-                camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+            #if self.isLocalToon:
+                #camera.wrtReparentTo(render)
+                #camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
             if self.browsing == 0:
                 if self.roomAvailable == 0:
                     self.setChatAbsolute(TTLocalizer.STOREOWNER_NOROOM, CFSpeech | CFTimeout)
