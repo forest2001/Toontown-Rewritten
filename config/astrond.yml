@@ -71,4 +71,4 @@ roles:
 
     - type: eventlogger
       bind: 127.0.0.1:7197
-      output: ../events-%y%m%d_%H%M%S.log
+      output: ../logs/events-%y%m%d_%H%M%S.log
