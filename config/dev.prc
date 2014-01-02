@@ -23,6 +23,7 @@ cog-thief-ortho 0
 
 show-total-population #t
 want-mat-all-tailors #t
+free-clothes 1
 
 want-karts #t
 want-pets #f
