@@ -103,11 +103,11 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 self.__handlePurchaseDone(timeout=1)
             self.setChatAbsolute(TTLocalizer.STOREOWNER_TOOKTOOLONG, CFSpeech | CFTimeout)
             self.resetTailor()
-        elif mode == NPCToons.PURCHASE_MOVIE_START or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_NOROOM:
+        elif mode == NPCToons.PURCHASE_MOVIE_START or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_NOROOM or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
             if mode == NPCToons.PURCHASE_MOVIE_START:
                 self.browsing = 0
                 self.roomAvailable = 1
-            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE:
+            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
                 self.browsing = 1
                 self.roomAvailable = 1
             elif mode == NPCToons.PURCHASE_MOVIE_START_NOROOM:
@@ -131,6 +131,8 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                     self.setChatAbsolute(TTLocalizer.STOREOWNER_NOROOM, CFSpeech | CFTimeout)
                 else:
                     self.setChatAbsolute(TTLocalizer.STOREOWNER_GREETING, CFSpeech | CFTimeout)
+            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
+                self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING_JBS, CFSpeech | CFTimeout)
             else:
                 self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING, CFSpeech | CFTimeout)
             if self.isLocalToon:
