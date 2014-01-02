@@ -17,7 +17,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         self.givesQuests = 0
         self.customerDNA = None
         self.customerId = None
-        self.jbCost = 200
+        self.jbCost = 150
         
         if self.freeClothes:
             self.useJellybeans = False
@@ -77,7 +77,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         return 0
         
     def hasEnoughJbs(self, av):
-        if av.getMoney() >= self.jbCost:
+        if av.getTotalMoney() >= self.jbCost:
             return True
         return False
 
@@ -140,7 +140,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         if self.air.doId2do.has_key(avId):
             av = self.air.doId2do[avId]
             if finished == 2 and which > 0:
-                if self.freeClothes or av.takeMoney(self.jbCost, bUseBank = False):#self.hasEnoughJbs(av): # self.air.questManager.removeClothingTicket(av, self) == 1
+                if self.freeClothes or av.takeMoney(self.jbCost, bUseBank = True):#self.hasEnoughJbs(av): # self.air.questManager.removeClothingTicket(av, self) == 1
                     av.b_setDNAString(blob)
                     if which & ClosetGlobals.SHIRT:
                         if av.addToClothesTopsList(self.customerDNA.topTex, self.customerDNA.topTexColor, self.customerDNA.sleeveTex, self.customerDNA.sleeveTexColor) == 1:
