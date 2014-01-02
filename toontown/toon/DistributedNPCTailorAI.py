@@ -20,7 +20,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         self.jbCost = 200
         
         if self.freeClothes:
-            self.useJellbeans = False
+            self.useJellybeans = False
         
         return
 
