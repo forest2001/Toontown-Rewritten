@@ -117,6 +117,8 @@ class NametagGroup:
     def setChat(self, chatString, chatFlags):
         self.chatString = chatString
         self.chatFlags = chatFlags
+        if self.chatString == '':
+            self.chatFlags = 0
         self.updateTags()
 
         self._stopChatTimeout()

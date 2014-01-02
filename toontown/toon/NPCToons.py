@@ -22,6 +22,7 @@ QUEST_MOVIE_TIER_NOT_DONE = 11
 PURCHASE_MOVIE_CLEAR = 0
 PURCHASE_MOVIE_START = 1
 PURCHASE_MOVIE_START_BROWSE = 9
+PURCHASE_MOVIE_START_BROWSE_JBS = 11
 PURCHASE_MOVIE_COMPLETE = 2
 PURCHASE_MOVIE_NO_MONEY = 3
 PURCHASE_MOVIE_TIMEOUT = 8
@@ -94,7 +95,7 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
         return False
         npc = DistributedNPCClerkAI.DistributedNPCClerkAI(air, npcId)
     elif type == NPC_TAILOR:
-        return False
+        #return False
         npc = DistributedNPCTailorAI.DistributedNPCTailorAI(air, npcId)
     elif type == NPC_BLOCKER:
         npc = DistributedNPCBlockerAI.DistributedNPCBlockerAI(air, npcId)

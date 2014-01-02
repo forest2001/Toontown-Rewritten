@@ -186,8 +186,6 @@ class DNASpawnerAI:
                     ksDoor2.setOtherZoneIdAndDoId(interiorZone, ksDoorInt2.getDoId())
                     
                     NPCToons.createNpcsInZone(simbase.air, interiorZone)
-                elif type == 'clotheshop':
-                    pass
                 elif type == 'petshop':
                     interior = DistributedPetshopInteriorAI(simbase.air)
                     interior.setZoneIdAndBlock(interiorZone, 0)
