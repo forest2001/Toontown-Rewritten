@@ -4,13 +4,18 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 class DistributedPartyManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyManagerAI")
 
+    def announceGenerate(self):
+        DistributedObjectAI.announceGenerate(self)
+
+        self.sendUpdate('partyManagerAIStartingUp', [simbase.air.districtId, 0]) # the 0 is a uint32
+
     def addParty(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7, todo8, todo9):
         pass
 
     def addPartyRequest(self, hostId, startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         pass
 
-    def addPartyResponse(self, todo0, todo1):
+    def addPartyResponse(self, hostId, errorCode):
         pass
 
     def addPartyResponseUdToAi(self, todo0, todo1, todo2):
@@ -62,6 +67,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         pass
 
     def getPartyZone(self, avId, zoneId, isAvAboutToPlanParty):
+        # Does the client really need a zone to plan a party? It doesn't exist yet soo..
         pass
 
     def receivePartyZone(self, todo0, todo1, todo2):
