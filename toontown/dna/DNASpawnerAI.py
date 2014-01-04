@@ -32,29 +32,7 @@ from toontown.toonbase import ToontownGlobals
 
 class DNASpawnerAI:
         
-    def spawnObjects(self, filename, baseZone):
-        # This is strictly for buildings during alpha release
-        self.spawnInteriorsIn = [
-            ToontownGlobals.DonaldsDock,
-            ToontownGlobals.ToontownCentral,
-            ToontownGlobals.DaisyGardens,
-            ToontownGlobals.TheBrrrgh,
-            ToontownGlobals.MinniesMelodyland,
-            ToontownGlobals.DonaldsDreamland,
-            
-            # GSW's Kart Shop needs to exist for people to be able to race.
-            ToontownGlobals.GoofySpeedway,
-        ]
-        
-        self.spawnNPCsIn = [
-            ToontownGlobals.DonaldsDock,
-            ToontownGlobals.ToontownCentral,
-            ToontownGlobals.DaisyGardens,
-            ToontownGlobals.TheBrrrgh,
-            ToontownGlobals.MinniesMelodyland,
-            ToontownGlobals.DonaldsDreamland,
-        ]
-        
+    def spawnObjects(self, filename, baseZone):       
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
@@ -99,7 +77,7 @@ class DNASpawnerAI:
                     
             NPCToons.createNpcsInZone(simbase.air, pondZone)
         
-        elif isinstance(group, DNALandmarkBuilding) and ZoneUtil.getCanonicalHoodId(zone) in self.spawnInteriorsIn:
+        elif isinstance(group, DNALandmarkBuilding):
             if group.getName()[:2] == 'tb' or group.getName()[:2] == 'sz':
                 visGroup = group.getVisGroup()
                 buildingZone = 0
@@ -111,8 +89,8 @@ class DNASpawnerAI:
                 interiorZone = zone + 500 + index
                 type = group.getBuildingType()
                 if type == 'hq':
-                    if buildingZone not in self.spawnInteriorsIn:
-                        return False # Some bug with HQ DDoors on streets which I'm too lazy to fix right now.
+                    if buildingZone % 1000 != 0:
+                        return # Some bug with HQ DDoors on streets which I'm too lazy to fix right now.
                     hqDoor = DistributedDoorAI(simbase.air)
                     hqDoor.setZoneIdAndBlock(buildingZone, index)
                     hqDoor.setDoorType(DoorTypes.EXT_HQ)
@@ -259,8 +237,7 @@ class DNASpawnerAI:
                         
                         extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
                         
-                        if ZoneUtil.getCanonicalHoodId(zone) in self.spawnNPCsIn:
-                            NPCToons.createNpcsInZone(simbase.air, interiorZone)
+                        NPCToons.createNpcsInZone(simbase.air, interiorZone)
         
         elif group.getName()[:10] == 'racing_pad':
             index, dest = group.getName()[11:].split('_', 2)
