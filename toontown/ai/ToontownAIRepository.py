@@ -125,7 +125,3 @@ class ToontownAIRepository(ToontownInternalRepository):
 
     def loadDNAFileAI(self, dnastore, filename):
         return loadDNAFileAI(dnastore, filename)
-        
-@magicWord(access=200)
-def nextfwtime():
-    return "Fireworks to start in %d minutes." % int((3600-(time.time()%3600))/60)
