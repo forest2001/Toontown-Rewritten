@@ -15,6 +15,9 @@ from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna.DNAParser import loadDNAFileAI
 
+#friends!
+from otp.friends.FriendManagerAI import FriendManagerAI
+
 # All imports needed for fireworks
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
@@ -107,6 +110,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.safeZoneManager = SafeZoneManagerAI(self)
         self.safeZoneManager.generateWithRequired(2)
+        
+        self.friendManager = FriendManagerAI(self)
+        self.friendManager.generateWithRequired(2)
     
     def createZones(self):
         """
