@@ -250,6 +250,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.nametag.manage(base.marginManager)
         DistributedToon.DistributedToon.announceGenerate(self)
         from otp.friends import FriendInfo
+        if self.adminAccess >= 300:
+            self.seeGhosts = 1
 
     def disable(self):
         self.laffMeter.destroy()
