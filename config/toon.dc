@@ -248,6 +248,7 @@ from toontown.parties import DistributedPartyJukebox40Activity/AI
 from toontown.parties import DistributedPartyValentineJukeboxActivity/AI
 from toontown.parties import DistributedPartyValentineJukebox40Activity/AI
 from toontown.friends import TTPlayerFriendsManager/UD
+from toontown.friends import TTRFriendsManager/UD
 from toontown.uberdog import TTSpeedchatRelay/UD
 from toontown.safezone import DistributedGolfKart/AI
 from toontown.safezone import DistributedPicnicBasket/AI
@@ -3252,6 +3253,16 @@ dclass DistributedWhitelistMgr : DistributedObjectGlobal {
   whitelistMgrAIStartingUp(uint32, uint32);
   newListUDtoAI() airecv;
 };
+
+dclass TTRFriendsManager : DistributedObjectGlobal {
+  removeFriend(uint32) clsend;
+  requestAvatarInfo(uint32array) clsend;
+  
+  requestFriendsList() clsend;
+  
+  friendDetails(uint32, string, string, uint32);
+};
+
 
 dclass DistributedPhaseEventMgr : DistributedObject {
   setNumPhases(uint8) required broadcast ram;
