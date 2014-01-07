@@ -105,6 +105,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
     
     def toonOffline(self, doId):
+        if doId not in self.onlineToons:
+            return
         def handleToon(dclass, fields):
             if dclass != self.air.dclassesByName['DistributedToonUD']:
                 return
