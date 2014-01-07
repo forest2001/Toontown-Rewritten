@@ -96,13 +96,13 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleAv)
         
     def toonOnline(self, doId, fields):
+        self.onlineToons.append(doId)
         friendsList = fields['setFriendsList'][0]
         for friend in friendsList:
             friendId = friend[0]
             if friend[0] in self.onlineToons:
                 self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
             self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
-        self.onlineToons.append(doId)
     
     def toonOffline(self, doId):
         def handleToon(dclass, fields):
