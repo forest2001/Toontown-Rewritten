@@ -16,10 +16,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
                 return
             friendsList = fields['setFriendsList'][0]
             newList = []
-            print type(newList).__name__
             for i in range(len(friendsList)):
                 if friendsList[i][0] == friendId:
-                    print type(friendsList[i]).__name__
                     continue
                 newList.append(friendsList[i])
             # We don't need to send the update to the DB interface - the DBSS should be listening for updates to this object no matter what as *somebody* had to be online for the request to happen.
