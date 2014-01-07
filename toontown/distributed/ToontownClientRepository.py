@@ -749,7 +749,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return 1
 
     def removeFriend(self, avatarId):
-        base.localAvatar.sendUpdate('friendsNotify', [base.localAvatar.doId, 1], sendToId=avatarId)
+        #base.localAvatar.sendUpdate('friendsNotify', [base.localAvatar.doId, 1], sendToId=avatarId)
         self.ttrFriendsManager.d_removeFriend(avatarId)
 
     def clearFriendState(self):
@@ -843,14 +843,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         if avatarHandleList:
             messenger.send('gotExtraFriendHandles', [avatarHandleList])
 
-    def handleFriendOnline(self, di):
-        doId = di.getUint32()
-        commonChatFlags = 0
-        whitelistChatFlags = 0
-        if di.getRemainingSize() > 0:
-            commonChatFlags = di.getUint8()
-        if di.getRemainingSize() > 0:
-            whitelistChatFlags = di.getUint8()
+    def handleFriendOnline(self, doId, commonChatFlags, whitelistChatFlags):
         self.notify.debug('Friend %d now online. common=%d whitelist=%d' % (doId, commonChatFlags, whitelistChatFlags))
         if not self.friendsOnline.has_key(doId):
             self.friendsOnline[doId] = self.identifyFriend(doId)
@@ -858,8 +851,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             if not self.friendsOnline[doId]:
                 self.friendPendingChatSettings[doId] = (commonChatFlags, whitelistChatFlags)
 
-    def handleFriendOffline(self, di):
-        doId = di.getUint32()
+    def handleFriendOffline(self, doId):
         self.notify.debug('Friend %d now offline.' % doId)
         try:
             del self.friendsOnline[doId]

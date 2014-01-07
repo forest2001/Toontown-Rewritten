@@ -450,7 +450,8 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
-
+        
+        self.csm.air.friendsManager.clearList(self.avId) #RIP friends list
         self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
         self.demand('QueryAvatars')
 
@@ -689,6 +690,9 @@ class UnloadAvatarFSM(OperationFSM):
 
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
+        
+        # Tell TTRFriendsManager somebody is logging off:
+        self.csm.air.friendsManager.toonOffline(self.target)
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()

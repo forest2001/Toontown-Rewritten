@@ -3269,7 +3269,10 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   requestFriendsList() clsend;
   
   friendDetails(Friend);
-  friendList(Friend []); 
+  friendList(Friend []);
+  
+  friendOnline(uint32, uint8, uint8);
+  friendOffline(uint32);
 };
 
 
