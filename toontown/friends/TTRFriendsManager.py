@@ -23,3 +23,6 @@ class TTRFriendsManager(DistributedObjectGlobal):
         
     def friendOffline(self, id):
         base.cr.handleFriendOffline(id)
+        
+    def d_imGoingOffline(self):
+        self.sendUpdate('imGoingOffline', [])

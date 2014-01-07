@@ -125,3 +125,6 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
                 self.__removeFromFriendsList(doId, friend[0])
                 self.__removeFromFriendsList(friend[0], doId, True)
         self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
+        
+    def goingOffline(self):
+        self.toonOffline(self.air.getAvatarIdFromSender())

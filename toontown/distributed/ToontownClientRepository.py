@@ -427,6 +427,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return
 
     def exitPlayingGame(self):
+        self.ttrFriendsManager.d_goingOffline()
         ivalMgr.interrupt()
         if self.objectManager != None:
             self.objectManager.destroy()
