@@ -42,6 +42,10 @@ class FriendManagerAI(DistributedObjectAI):
         if self.requests[context][1] != 'friendQuery':
             self.air.writeServerEvent('suspicious', avId, 'Player tried to reconsider friend request!')
             return
+        if yesNo == 6:
+            self.sendUpdateToAvatarId(self.requests[context][0][0], 'friendConsidering', [yesNo, context])
+            del self.requests[context]
+            return
         if yesNo != 1:
             del self.requests[context]
             return
