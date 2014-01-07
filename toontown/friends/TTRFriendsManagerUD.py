@@ -85,7 +85,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
                 return
             if not avId in self.onlineToons:
                 self.onlineToons.append(avId)
-                self.toonOnline(avId, fields)
+                self.toonOnline(avId)
             friendsList = fields['setFriendsList'][0]
             self.numFriends = len(friendsList)
             for friend in friendsList:
@@ -95,13 +95,18 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleAv)
         
-    def toonOnline(self, doId, fields):
-        friendsList = fields['setFriendsList'][0]
-        for friend in friendsList:
-            friendId = friend[0]
-            if friend[0] in self.onlineToons:
-                self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
-            self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
+    def toonOnline(self, doId):
+        def handleToon(dclass, fields):
+            if dclass != self.air.dclassesByName['DistributedToonUD']:
+                return
+            friendsList = fields['setFriendsList'][0]
+            for friend in friendsList:
+                friendId = friend[0]
+                if friend[0] in self.onlineToons:
+                    self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
+                self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
+            self.onlineToons.append(doId)
+        self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
     
     def toonOffline(self, doId):
         def handleToon(dclass, fields):

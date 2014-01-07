@@ -675,6 +675,9 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
         dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
         self.csm.air.send(dg)
+        
+        # Tell TTRFriendsManager somebody is logging in:
+        self.csm.air.friendsManager.toonOnline(self.target)
 
         self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
         self.demand('Off')
