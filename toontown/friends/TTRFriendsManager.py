@@ -11,5 +11,8 @@ class TTRFriendsManager(DistributedObjectGlobal):
     def d_requestFriendsList(self):
         self.sendUpdate('requestFriendsList', [])
     
-    def friendDetails(self, avId, name, dnaString, petId):
-        return
+    def friendDetails(self, resp):
+        base.cr.handleGetFriendsListExtended(resp)
+        
+    def friendList(self, resp):
+        base.cr.handleGetFriendsList(resp)

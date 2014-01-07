@@ -3254,13 +3254,22 @@ dclass DistributedWhitelistMgr : DistributedObjectGlobal {
   newListUDtoAI() airecv;
 };
 
+struct Friend
+{
+uint32 doId;
+string name;
+blob dna;
+uint32 petId;
+};
+
 dclass TTRFriendsManager : DistributedObjectGlobal {
   removeFriend(uint32) clsend;
   requestAvatarInfo(uint32array) clsend;
   
   requestFriendsList() clsend;
   
-  friendDetails(uint32, string, string, uint32);
+  friendDetails(Friend);
+  friendList(Friend []); 
 };
 
 

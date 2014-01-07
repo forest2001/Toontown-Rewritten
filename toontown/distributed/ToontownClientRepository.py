@@ -759,9 +759,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.friendsListError = 0
 
     def sendGetFriendsListRequest(self):
-        self.notify.warning('sendGetFriendsListRequest: TODO!')
-        self.friendsMapPending = 0
-        messenger.send('friendsMapComplete')
+        self.friendsMapPending = 1
+        self.friendsListError = 0
+        self.ttrFriendsManager.d_requestFriendsList()
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -794,62 +794,51 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
         PetDetail.PetDetail(doId, petDetailsCallback)
 
-    def handleGetFriendsList(self, di):
-        error = di.getUint8()
-        if error:
-            self.notify.warning('Got error return from friends list.')
-            self.friendsListError = 1
-        else:
-            count = di.getUint16()
-            for i in range(0, count):
-                doId = di.getUint32()
-                name = di.getString()
-                dnaString = di.getString()
-                dna = ToonDNA.ToonDNA()
-                dna.makeFromNetString(dnaString)
-                petId = di.getUint32()
-                handle = FriendHandle.FriendHandle(doId, name, dna, petId)
-                self.friendsMap[doId] = handle
-                if self.friendsOnline.has_key(doId):
-                    self.friendsOnline[doId] = handle
-                if self.friendPendingChatSettings.has_key(doId):
-                    self.notify.debug('calling setCommonAndWL %s' % str(self.friendPendingChatSettings[doId]))
-                    handle.setCommonAndWhitelistChatFlags(*self.friendPendingChatSettings[doId])
+    def handleGetFriendsList(self, resp):
+        print len(resp)
+        for toon in resp:
+            doId = toon[0]
+            name = toon[1]
+            dnaString = toon[2]
+            dna = ToonDNA.ToonDNA()
+            dna.makeFromNetString(dnaString)
+            petId = toon[3]
+            handle = FriendHandle.FriendHandle(doId, name, dna, petId)
+            self.friendsMap[doId] = handle
+            if self.friendsOnline.has_key(doId):
+                self.friendsOnline[doId] = handle
+            if self.friendPendingChatSettings.has_key(doId):
+                self.notify.debug('calling setCommonAndWL %s' % str(self.friendPendingChatSettings[doId]))
+                handle.setCommonAndWhitelistChatFlags(*self.friendPendingChatSettings[doId])
 
-            if base.wantPets and base.localAvatar.hasPet():
+        if base.wantPets and base.localAvatar.hasPet():
 
-                def handleAddedPet():
-                    self.friendsMapPending = 0
-                    messenger.send('friendsMapComplete')
+            def handleAddedPet():
+                self.friendsMapPending = 0
+                messenger.send('friendsMapComplete')
 
-                self.addPetToFriendsMap(handleAddedPet)
-                return
+            self.addPetToFriendsMap(handleAddedPet)
+            return
         self.friendsMapPending = 0
         messenger.send('friendsMapComplete')
 
-    def handleGetFriendsListExtended(self, di):
-        avatarHandleList = []
-        error = di.getUint8()
-        if error:
-            self.notify.warning('Got error return from friends list extended.')
-        else:
-            count = di.getUint16()
-            for i in range(0, count):
-                abort = 0
-                doId = di.getUint32()
-                name = di.getString()
-                if name == '':
-                    abort = 1
-                dnaString = di.getString()
-                if dnaString == '':
-                    abort = 1
-                else:
-                    dna = ToonDNA.ToonDNA()
-                    dna.makeFromNetString(dnaString)
-                petId = di.getUint32()
-                if not abort:
-                    handle = FriendHandle.FriendHandle(doId, name, dna, petId)
-                    avatarHandleList.append(handle)
+    def handleGetFriendsListExtended(self, resp):
+        for toon in resp:
+            abort = 0
+            doId = toon[0]
+            name = toon[1]
+            if name == '':
+                abort = 1
+            dnaString = toon[2]
+            if dnaString == '':
+                abort = 1
+            else:
+                dna = ToonDNA.ToonDNA()
+                dna.makeFromNetString(dnaString)
+            petId = toon[3]
+            if not abort:
+                handle = FriendHandle.FriendHandle(doId, name, dna, petId)
+                avatarHandleList.append(handle)
 
         if avatarHandleList:
             messenger.send('gotExtraFriendHandles', [avatarHandleList])
@@ -1060,7 +1049,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return 0
 
     def requestAvatarInfo(self, avId):
-        self.notify.warning('requestAvatarInfo: TODO!')
+        if avId == 0:
+            return
+        self.ttrFriendsManager.d_requestAvatarInfo([avId])
 
     def queueRequestAvatarInfo(self, avId):
         removeTask = 0
@@ -1073,4 +1064,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         taskMgr.doMethodLater(0.1, self.sendAvatarInfoRequests, 'avatarRequestQueueTask')
 
     def sendAvatarInfoRequests(self, task = None):
-        self.notify.warning('sendAvatarInfoRequests: TODO!')
+        if not hasattr(self, 'avatarInfoRequests'):
+            return
+        if len(self.avatarInfoRequests) == 0:
+            return
+        self.ttrFriendsManager.d_requestAvatarInfo(self.avatarInfoRequests)
