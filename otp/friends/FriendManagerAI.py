@@ -44,6 +44,7 @@ class FriendManagerAI(DistributedObjectAI):
             return
         if yesNo != 1:
             del self.requests[context]
+            return
         self.requests[context][1] = 'friendConsidering'
         self.sendUpdateToAvatarId(self.requests[context][0][0], 'friendConsidering', [yesNo, context])
 
