@@ -18,7 +18,6 @@ class TTRFriendsManager(DistributedObjectGlobal):
         base.cr.handleGetFriendsList(resp)
 
     def friendOnline(self, id, commonChatFlags, whitelistChatFlags):
-        print 'a friends is online!'
         base.cr.handleFriendOnline(id, commonChatFlags, whitelistChatFlags)
         
     def friendOffline(self, id):

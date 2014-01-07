@@ -10,6 +10,7 @@ class FriendManager(DistributedObject.DistributedObject):
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.__available = 0
+        self.otherToon = 0
         self.gameSpecificFunction = None
         return
 
@@ -47,6 +48,7 @@ class FriendManager(DistributedObject.DistributedObject):
         return
 
     def up_friendQuery(self, inviteeId):
+        self.otherToon = inviteeId
         self.sendUpdate('friendQuery', [inviteeId])
         self.notify.debug('Client: friendQuery(%d)' % inviteeId)
 
@@ -59,6 +61,8 @@ class FriendManager(DistributedObject.DistributedObject):
         self.notify.debug('Client: inviteeFriendConsidering(%d, %d)' % (yesNo, context))
 
     def up_inviteeFriendResponse(self, yesNoMaybe, context):
+        if yesNoMaybe == 1:
+            base.cr.ttrFriendsManager.friendOnline(self.otherToon, 0, 0)
         self.sendUpdate('inviteeFriendResponse', [yesNoMaybe, context])
         self.notify.debug('Client: inviteeFriendResponse(%d, %d)' % (yesNoMaybe, context))
 
@@ -71,6 +75,8 @@ class FriendManager(DistributedObject.DistributedObject):
         messenger.send('friendConsidering', [yesNoAlready, context])
 
     def friendResponse(self, yesNoMaybe, context):
+        if yesNoMaybe == 1:
+            base.cr.ttrFriendsManager.friendOnline(self.otherToon, 0, 0)
         self.notify.debug('Client: friendResponse(%d, %d)' % (yesNoMaybe, context))
         messenger.send('friendResponse', [yesNoMaybe, context])
 
@@ -86,6 +92,7 @@ class FriendManager(DistributedObject.DistributedObject):
             self.up_inviteeFriendConsidering(6, context)
             return
         self.up_inviteeFriendConsidering(self.__available, context)
+        self.otherToon = inviterId
         if self.__available:
             messenger.send('friendInvitation', [inviterId,
              inviterName,
