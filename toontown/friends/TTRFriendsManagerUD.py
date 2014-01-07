@@ -48,7 +48,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             name = fields['setName'][0]
             dna = fields['setDNAString'][0]
             petId = fields['setPetId'][0]
-            self.sendUpdateToAvatarId(avId, 'friendDetails', [self.currId, name, dna, petId])
+            self.sendUpdateToAvatarId(avId, 'friendInfo', [self.currId, name, dna, petId])
             
         
         def handleAv(dclass, fields):
@@ -128,3 +128,22 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         
     def goingOffline(self):
         self.toonOffline(self.air.getAvatarIdFromSender())
+        
+    def getAvatarDetails(self, avId):
+        #return
+        senderId = self.air.getAvatarIdFromSender()
+        def handleToon(dclass, fields):
+            if dclass != self.air.dclassesByName['DistributedToonUD']:
+                return
+            inventory = fields['setInventory'][0]
+            trackAccess = fields['setTrackAccess'][0]
+            trophies = 0 # fields['setTrophyScore'][0] is not db
+            hp = fields['setHp'][0]
+            maxHp = fields['setMaxHp'][0]
+            defaultShard = fields['setDefaultShard'][0]
+            lastHood = fields['setLastHood'][0]
+            dnaString =  fields['setDNAString'][0]
+            # We need an actual way to send the fields to the client...............
+            # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
+            self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString])
+        self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)

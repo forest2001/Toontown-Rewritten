@@ -11,7 +11,7 @@ class TTRFriendsManager(DistributedObjectGlobal):
     def d_requestFriendsList(self):
         self.sendUpdate('requestFriendsList', [])
     
-    def friendDetails(self, resp):
+    def friendInfo(self, resp):
         base.cr.handleGetFriendsListExtended(resp)
         
     def friendList(self, resp):
@@ -25,3 +25,9 @@ class TTRFriendsManager(DistributedObjectGlobal):
         
     def d_goingOffline(self):
         self.sendUpdate('goingOffline', [])
+        
+    def d_getAvatarDetails(self, avId):
+        self.sendUpdate('getAvatarDetails', [avId])
+        
+    def friendDetails(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString):
+        base.cr.n_handleGetAvatarDetailsResp(avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString)

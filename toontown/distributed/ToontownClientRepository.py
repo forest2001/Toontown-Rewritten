@@ -384,11 +384,51 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             pad.delayDelete.destroy()
 
     def __sendGetAvatarDetails(self, avId):
+        #return
+        
+        self.ttrFriendsManager.d_getAvatarDetails(avId)
+        
+        return
         datagram = PyDatagram()
         avatar = self.__queryAvatarMap[avId].avatar
         datagram.addUint16(avatar.getRequestID())
         datagram.addUint32(avId)
         self.send(datagram)
+        
+    def n_handleGetAvatarDetailsResp(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString):
+        print('1')
+        self.notify.info('Query reponse for avId %d' % avId)
+        try:
+            pad = self.__queryAvatarMap[avId]
+        except:
+            self.notify.warning('Received unexpected or outdated details for avatar %d.' % avId)
+            return
+        
+        del self.__queryAvatarMap[avId]
+        gotData = 0
+        
+        print('2')
+        dclassName = pad.args[0]
+        dclass = self.dclassesByName[dclassName]
+        #pad.avatar.updateAllRequiredFields(dclass, fields)
+        pad.avatar.setInventory = inventory
+        pad.avatar.setTrackAccess = trackAccess
+        pad.avatar.setTrophyScore = trophies
+        pad.avatar.setHp = hp
+        pad.avatar.setMaxHp = maxHp
+        pad.avatar.setDefaultShard = defaultShard
+        pad.avatar.setLastHood = lastHood
+        pad.avatar.setDNAString = dnaString
+        gotData = 1
+        
+        print('2')
+        
+        if isinstance(pad.func, types.StringType):
+            messenger.send(pad.func, list((gotData, pad.avatar) + pad.args))
+        else:
+            apply(pad.func, (gotData, pad.avatar) + pad.args)
+            
+        pad.delayDelete.destroy()
 
     def handleGetAvatarDetailsResp(self, di):
         avId = di.getUint32()
