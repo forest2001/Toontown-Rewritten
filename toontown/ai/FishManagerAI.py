@@ -48,7 +48,7 @@ class FishManagerAI:
             netlist = av.fishTank.getNetLists()
             av.d_setFishTank(netlist[0], netlist[1], netlist[2])
             del self.requestedFish[av.doId]
-            return [FishGlobals.FishItem, genus, species, weight]
+            return [itemType, genus, species, weight]
         if itemType == FishGlobals.FishItem:
             success, genus, species, weight = FishGlobals.getRandomFishVitals(zoneId, av.getFishingRod())
             fish = FishBase(genus, species, weight)
