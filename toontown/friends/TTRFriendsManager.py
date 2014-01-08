@@ -1,4 +1,5 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
+from toontown.hood import ZoneUtil
 
 class TTRFriendsManager(DistributedObjectGlobal):
     
@@ -42,3 +43,30 @@ class TTRFriendsManager(DistributedObjectGlobal):
             ['setDNAString' , dnaString],
         ]
         base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
+        
+    def d_teleportQuery(self, toId):
+        self.sendUpdate('routeTeleportQuery', [toId])
+        
+    def teleportQuery(self, fromId):
+        if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode:
+            base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
+            self.sendUpdate('routeTeleportResponse', [
+                fromId,
+                0,
+                0,
+                0,
+                0
+            ])
+            return
+            
+        base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
+        self.sendUpdate('routeTeleportResponse', [
+            fromId,
+            base.localAvatar.getTeleportAvailable(),
+            base.localAvatar.defaultShard,
+            ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId()),
+            base.localAvatar.getZoneId()
+        ])
+        
+    def teleportResponse(self, fromId, available, shardId, hoodId, zoneId):
+        base.localAvatar.teleportResponse(fromId, available, shardId, hoodId, zoneId)

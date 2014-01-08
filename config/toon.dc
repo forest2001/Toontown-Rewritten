@@ -3279,6 +3279,11 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   getAvatarDetails(uint32) clsend;
   friendDetails(uint32, blob, uint16array, uint16, int16, int16, uint32, uint32, blob, blob, int8array);
   
+  routeTeleportQuery(uint32 toId) clsend;
+  teleportQuery(uint32 fromId);
+  routeTeleportResponse(uint32 fromId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId) clsend;
+  teleportResponse(uint32 toId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId);
+  
 };
 
 

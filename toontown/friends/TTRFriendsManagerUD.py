@@ -151,3 +151,12 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
             self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel])
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)
+        
+    def routeTeleportQuery(self, toId):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'teleportQuery', [fromId])
+        
+    def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
+        # Here is where the toId and fromId swap (because we are now sending it back)
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
