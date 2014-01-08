@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from otp.ai.MagicWordGlobal import *
 
 class FriendManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("FriendManagerAI")
@@ -111,3 +112,22 @@ class FriendManagerAI(DistributedObjectAI):
     def submitSecretResponse(self, todo0, todo1):
         pass
 
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def truefriend(avIdShort):
+    '''Automagically add a toon as a true friend.'''
+    admin = spellbook.getInvoker()
+    avIdFull = 400000000 - (300000000 - avIdShort)
+    av = simbase.air.doId2do.get(avIdFull)
+    if not av:
+        return 'avId not found/online!'
+    if int(str(avIdFull)[:2]) >= 40: # AI
+        return '%s is an NPC!' % av.getName()
+    if av.getAdminAccess() < 400:
+        return '%s is not an administrator!' % av.getName()
+    
+    
+    admin.extendFriendsList(av.getDoId(), 1)
+    av.extendFriendsList(admin.getDoId(), 1)
+    
+    admin.d_setFriendsList(admin.getFriendsList())
+    av.d_setFriendsList(av.getFriendsList())
