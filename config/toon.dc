@@ -3277,7 +3277,7 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   goingOffline() clsend;
   
   getAvatarDetails(uint32) clsend;
-  friendDetails(uint32, blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}, uint16array = {0,0,0,0,1,1,0}, blob = {0*14}, uint16, int16, int16, uint32, uint32, blob);
+  friendDetails(uint32, blob, uint16array, uint16, int16, int16, uint32, uint32, blob, blob, int8array);
   
 };
 

@@ -145,7 +145,9 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             defaultShard = fields['setDefaultShard'][0]
             lastHood = fields['setLastHood'][0]
             dnaString =  fields['setDNAString'][0]
+            experience = fields['setExperience'][0]
+            trackBonusLevel = fields['setTrackBonusLevel'][0]
             # We need an actual way to send the fields to the client...............
             # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
-            self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString])
+            self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel])
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)

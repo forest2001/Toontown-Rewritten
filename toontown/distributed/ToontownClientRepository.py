@@ -395,8 +395,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         datagram.addUint32(avId)
         self.send(datagram)
         
-    def n_handleGetAvatarDetailsResp(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString):
-        print('1')
+    def n_handleGetAvatarDetailsResp(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel):
         self.notify.info('Query reponse for avId %d' % avId)
         try:
             pad = self.__queryAvatarMap[avId]
@@ -407,21 +406,21 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         del self.__queryAvatarMap[avId]
         gotData = 0
         
-        print('2')
         dclassName = pad.args[0]
         dclass = self.dclassesByName[dclassName]
         #pad.avatar.updateAllRequiredFields(dclass, fields)
-        pad.avatar.setInventory = inventory
-        pad.avatar.setTrackAccess = trackAccess
-        pad.avatar.setTrophyScore = trophies
-        pad.avatar.setHp = hp
-        pad.avatar.setMaxHp = maxHp
-        pad.avatar.setDefaultShard = defaultShard
-        pad.avatar.setLastHood = lastHood
-        pad.avatar.setDNAString = dnaString
+        pad.avatar.setExperience(experience)
+        pad.avatar.setTrackAccess(trackAccess)
+        pad.avatar.setTrackBonusLevel(trackBonusLevel)
+        pad.avatar.setInventory(inventory)
+        #pad.avatar.setTrophyScore = trophies
+        pad.avatar.setHp(hp)
+        pad.avatar.setMaxHp(maxHp)
+        pad.avatar.setDefaultShard(defaultShard)
+        pad.avatar.setLastHood(lastHood)
+        pad.avatar.setDNAString(dnaString)
         gotData = 1
         
-        print('2')
         
         if isinstance(pad.func, types.StringType):
             messenger.send(pad.func, list((gotData, pad.avatar) + pad.args))
