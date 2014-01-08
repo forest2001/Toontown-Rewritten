@@ -395,7 +395,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         datagram.addUint32(avId)
         self.send(datagram)
         
-    def n_handleGetAvatarDetailsResp(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel):
+    def n_handleGetAvatarDetailsResp(self, avId, fields):
         self.notify.info('Query reponse for avId %d' % avId)
         try:
             pad = self.__queryAvatarMap[avId]
@@ -409,16 +409,17 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         dclassName = pad.args[0]
         dclass = self.dclassesByName[dclassName]
         #pad.avatar.updateAllRequiredFields(dclass, fields)
-        pad.avatar.setExperience(experience)
-        pad.avatar.setTrackAccess(trackAccess)
-        pad.avatar.setTrackBonusLevel(trackBonusLevel)
-        pad.avatar.setInventory(inventory)
-        #pad.avatar.setTrophyScore = trophies
-        pad.avatar.setHp(hp)
-        pad.avatar.setMaxHp(maxHp)
-        pad.avatar.setDefaultShard(defaultShard)
-        pad.avatar.setLastHood(lastHood)
-        pad.avatar.setDNAString(dnaString)
+        
+        # This is a much saner way to load avatar details, and is also
+        # dynamic. This means we aren't restricted in what we pass.
+        # Due to Python's random ordering of dictionaries, we have to pass
+        # a list containing a list of the field and value. For example:
+        # To set the hp and maxHp of an avatar, my fields list would be
+        # fields = [['setHp', 15], ['setMaxHp', 15]]
+
+        for currentField in fields:
+            getattr(pad.avatar, currentField[0])(currentField[1])
+            
         gotData = 1
         
         
