@@ -5,6 +5,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
         self.onlineToons = []
+        self.currentTpRequests = {}
     
     def removeFriend(self, friendId):
         avId = self.air.getAvatarIdFromSender()
@@ -154,9 +155,17 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         
     def routeTeleportQuery(self, toId):
         fromId = self.air.getAvatarIdFromSender()
+        self.tpRequests[fromId] = toId
         self.sendUpdateToAvatarId(toId, 'teleportQuery', [fromId])
         
     def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
         # Here is where the toId and fromId swap (because we are now sending it back)
         fromId = self.air.getAvatarIdFromSender()
+        if toId not in self.currentTpRequests:
+            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse when query does not exist!')
+            return
+        if self.tpRequests.get(toId) != fromId:
+            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse for a query that isn\'t theirs!')
+            return
         self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
+        del self.tpRequests[toId]
