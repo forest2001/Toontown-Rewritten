@@ -5,7 +5,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
         self.onlineToons = []
-        self.currentTpRequests = {}
+        self.tpRequests = {}
     
     def removeFriend(self, friendId):
         avId = self.air.getAvatarIdFromSender()
