@@ -161,7 +161,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
         # Here is where the toId and fromId swap (because we are now sending it back)
         fromId = self.air.getAvatarIdFromSender()
-        if toId not in self.currentTpRequests:
+        if toId not in self.tpRequests:
             self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse when query does not exist!')
             return
         if self.tpRequests.get(toId) != fromId:
