@@ -695,7 +695,7 @@ class UnloadAvatarFSM(OperationFSM):
         channel = self.csm.GetAccountConnectionChannel(self.target)
         
         # Tell TTRFriendsManager somebody is logging off:
-        self.csm.air.friendsManager.toonOffline(self.target)
+        self.csm.air.friendsManager.toonOffline(self.avId)
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()

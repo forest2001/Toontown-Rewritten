@@ -152,7 +152,9 @@ class TimeManager(DistributedObject.DistributedObject):
     def setDisconnectReason(self, disconnectCode):
         self.notify.info('Client disconnect reason %s.' % disconnectCode)
         self.sendUpdate('setDisconnectReason', [disconnectCode])
-        base.cr.ttrFriendsManager.d_goingOffline()
+        if disconnectCode != 4:
+            # Handle the toon going offline if they crash.
+            base.cr.ttrFriendsManager.d_goingOffline()
 
     def setExceptionInfo(self):
         info = PythonUtil.describeException()
