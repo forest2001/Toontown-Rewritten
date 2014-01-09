@@ -67,3 +67,21 @@ class TTRFriendsManager(DistributedObjectGlobal):
         
     def teleportResponse(self, fromId, available, shardId, hoodId, zoneId):
         base.localAvatar.teleportResponse(fromId, available, shardId, hoodId, zoneId)
+        
+    def d_whisperSCTo(self, toId, msgIndex):
+        self.sendUpdate('whisperSCTo', [toId, msgIndex])
+        
+    def setWhisperSCFrom(self, fromId, msgIndex):
+        base.localAvatar.setWhisperSCFrom(fromId, msgIndex)
+        
+    def d_whisperSCCustomTo(self, toId, msgIndex):
+        self.sendUpdate('whisperSCCustomTo', [toId, msgIndex])
+      
+    def setWhisperSCCustomFrom(self, fromId, msgIndex):
+        base.localAvatar.setWhisperSCCustomFrom(fromId, msgIndex)
+        
+    def d_whisperSCEmoteTo(self, toId, emoteId):
+        self.sendUpdate('whisperSCEmoteTo', [toId, emoteId])
+        
+    def setWhisperSCEmoteFrom(self, fromId, emoteId):
+        base.localAvatar.setWhisperSCEmoteFrom(fromId, emoteId)

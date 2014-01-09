@@ -161,7 +161,17 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
             self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel])
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)
-        
+    
+    # much client very trust
+    
+    # The TTRFM Uberdog acts as a 'gateway' between two friends
+    # when they cannot directly send updates to one another, for
+    # example when they are on different shards. We do this because
+    # Astron does not currently support a few things that we need.
+    # In this case, we route sent whispers and teleport queries from
+    # 1 client to another. We should probably log these, but for now
+    # we won't.
+    
     def routeTeleportQuery(self, toId):
         fromId = self.air.getAvatarIdFromSender()
         self.tpRequests[fromId] = toId
@@ -178,3 +188,15 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             return
         self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
         del self.tpRequests[toId]
+        
+    def whisperSCTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCFrom', [fromId, msgIndex])
+        
+    def whisperSCCustomTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCCustomFrom', [fromId, msgIndex])
+        
+    def whisperSCEmoteTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCEmoteFrom', [fromId, msgIndex])

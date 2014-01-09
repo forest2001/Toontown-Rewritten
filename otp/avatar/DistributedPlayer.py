@@ -143,12 +143,18 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
     def whisperSCTo(self, msgIndex, sendToId, toPlayer):
         if toPlayer:
             base.cr.playerFriendsManager.sendSCWhisper(sendToId, msgIndex)
+        elif sendToId not in base.cr.doId2do:
+            messenger.send('wakeup')
+            base.cr.ttrFriendsManager.d_whisperSCTo(sendToId, msgIndex)
         else:
             messenger.send('wakeup')
             self.sendUpdate('setWhisperSCFrom', [self.doId, msgIndex], sendToId)
 
     def setWhisperSCFrom(self, fromId, msgIndex):
-        handle = base.cr.identifyAvatar(fromId)
+        if fromId in base.cr.doId2do:
+            handle = base.cr.identifyAvatar(fromId)
+        else:
+            handle = base.cr.identifyFriend(fromId)
         if handle == None:
             return
         if base.cr.avatarFriendsManager.checkIgnored(fromId):
@@ -166,6 +172,10 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
     def whisperSCCustomTo(self, msgIndex, sendToId, toPlayer):
         if toPlayer:
             base.cr.playerFriendsManager.sendSCCustomWhisper(sendToId, msgIndex)
+            return
+        if sendToId not in base.cr.doId2do:
+            messenger.send('wakeup')
+            base.cr.ttrFriendsManager.d_whisperSCCustomTo(sendToId, msgIndex)
             return
         messenger.send('wakeup')
         self.sendUpdate('setWhisperSCCustomFrom', [self.doId, msgIndex], sendToId)
@@ -196,6 +206,10 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         print 'whisperSCEmoteTo %s %s %s' % (emoteId, sendToId, toPlayer)
         if toPlayer:
             base.cr.playerFriendsManager.sendSCEmoteWhisper(sendToId, emoteId)
+            return
+        if sendToId not in base.cr.doId2do:
+            messenger.send('wakeup')
+            base.cr.ttrFriendsManager.d_whisperSCEmoteTo(sendToId, emoteId)
             return
         messenger.send('wakeup')
         self.sendUpdate('setWhisperSCEmoteFrom', [self.doId, emoteId], sendToId)
