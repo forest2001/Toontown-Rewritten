@@ -3284,6 +3284,15 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   routeTeleportResponse(uint32 fromId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId) clsend;
   teleportResponse(uint32 toId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId);
   
+  whisperSCTo(uint32 toId, uint16 msgIndex) clsend;
+  setWhisperSCFrom(uint32 fromId, uint16 msgIndex);
+  
+  whisperSCCustomTo(uint32 toId, uint16 msgIndex) clsend;
+  setWhisperSCCustomFrom(uint32 fromId, uint16 msgIndex);
+  
+  whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
+  setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
+  
 };
 
 
