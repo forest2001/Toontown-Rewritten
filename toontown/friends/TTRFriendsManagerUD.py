@@ -1,4 +1,5 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
+from direct.distributed.PyDatagram import *
 
 class TTRFriendsManagerUD(DistributedObjectGlobalUD):
 
@@ -99,6 +100,14 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def toonOnline(self, doId, fields):
         self.onlineToons.append(doId)
         friendsList = fields['setFriendsList'][0]
+        
+        channel = self.GetPuppetConnectionChannel(doId)
+        dgcleanup = self.dclass.aiFormatUpdate('goingOffline', self.doId, self.doId, self.air.ourChannel, [doId])
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
+        self.air.send(dg)
+        
         for friend in friendsList:
             friendId = friend[0]
             if friend[0] in self.onlineToons:
@@ -129,8 +138,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
                 self.__removeFromFriendsList(friend[0], doId, True)
         self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
         
-    def goingOffline(self):
-        self.toonOffline(self.air.getAvatarIdFromSender())
+    def goingOffline(self, avId):
+        self.toonOffline(avId)
         
     def getAvatarDetails(self, avId):
         #return

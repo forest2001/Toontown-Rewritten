@@ -23,10 +23,7 @@ class TTRFriendsManager(DistributedObjectGlobal):
         
     def friendOffline(self, id):
         base.cr.handleFriendOffline(id)
-        
-    def d_goingOffline(self):
-        self.sendUpdate('goingOffline', [])
-        
+                
     def d_getAvatarDetails(self, avId):
         self.sendUpdate('getAvatarDetails', [avId])
         
