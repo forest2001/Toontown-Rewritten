@@ -151,10 +151,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
             self.sendUpdate('setWhisperSCFrom', [self.doId, msgIndex], sendToId)
 
     def setWhisperSCFrom(self, fromId, msgIndex):
-        if fromId in base.cr.doId2do:
-            handle = base.cr.identifyAvatar(fromId)
-        else:
-            handle = base.cr.identifyFriend(fromId)
+        handle = base.cr.identifyAvatar(fromId)
         if handle == None:
             return
         if base.cr.avatarFriendsManager.checkIgnored(fromId):
