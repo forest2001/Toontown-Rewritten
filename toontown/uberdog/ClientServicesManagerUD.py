@@ -61,7 +61,7 @@ class RemoteAccountDB:
 
     def lookup(self, cookie, callback):
         response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
+        if (not response.get('status') or not response.get('valid') or not response): # status will be false if there's an hmac error, for example
             callback({'success': False,
                       'reason': response.get('banner', 'Failed for unknown reason')})
         else:
@@ -74,7 +74,7 @@ class RemoteAccountDB:
                       'adminAccess': response['adminAccess']})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
-        if (not response.get('success')):
+        if (not response.get('success') or not response):
             self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response.get('banner', '[NON-PRESENT]'))
             callback(False)
         else:
@@ -90,10 +90,11 @@ class RemoteAccountDB:
         channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
         channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
         channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
-        channel.getDocument(spec)
-        channel.downloadToRam(rf)
         # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
-        return json.loads(rf.getData())
+        if channel.getDocument(spec) and channel.downloadToRam(rf):
+            return json.loads(rf.getData())
+        else:
+            return False
 
 # --- FSMs ---
 class OperationFSM(FSM):
