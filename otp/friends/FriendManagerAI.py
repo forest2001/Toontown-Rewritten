@@ -29,7 +29,7 @@ class FriendManagerAI(DistributedObjectAI):
         if avId != self.requests[context][0][0]:
             self.air.writeServerEvent('suspicious', avId, 'Player tried to cancel someone elses request!')
             return
-        self.requests[context][1] = 'canceled'
+        self.requests[context][1] = 'cancelled'
         self.sendUpdateToAvatarId(self.requests[context][0][1], 'inviteeCancelFriendQuery', [context])
 
     def inviteeFriendConsidering(self, yesNo, context):
@@ -82,7 +82,7 @@ class FriendManagerAI(DistributedObjectAI):
         if avId != self.requests[context][0][1]:
             self.air.writeServerEvent('suspicious', avId, 'Player tried to acknowledge someone else\'s cancel!')
             return
-        if self.requests[context][1] != 'canceled':
+        if self.requests[context][1] != 'cancelled':
             self.air.writeServerEvent('suspicious', avId, 'Player tried to cancel non-cancelled request!')
             return
         del self.requests[context]
