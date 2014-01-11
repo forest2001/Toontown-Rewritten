@@ -30,11 +30,11 @@ class FriendsListManager:
         return
 
     def load(self):
-        base.cr.friendManager.setGameSpecificFunction(self.processQueuedRequests)
+        #base.cr.friendManager.setGameSpecificFunction(self.processQueuedRequests)
         self.accept(OTPGlobals.AvatarNewFriendAddEvent, self.__friendAdded)
 
     def unload(self):
-        base.cr.friendManager.setGameSpecificFunction(None)
+        #base.cr.friendManager.setGameSpecificFunction(None)
         self.exitFLM()
         if self.avatarPanel:
             del self.avatarPanel
@@ -147,8 +147,8 @@ class FriendsListManager:
          avName,
          inviterDna,
          context))
-        if base.cr.friendManager.getAvailable():
-            self.processQueuedRequests()
+        #if base.cr.friendManager.getAvailable():
+        self.processQueuedRequests()
 
     def processQueuedRequests(self):
         if len(self.friendsRequestQueue):
