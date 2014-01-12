@@ -384,6 +384,16 @@ class GetAvatarsFSM(AvatarOperationFSM):
                     if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
                         self.demand('Kill', "One of the account's avatars is invalid!")
                         return
+                    # Since we weren't previously setting the DISLid of an avatar upon creating
+                    # a toon, we will check to see if they already have a DISLid value or not.
+                    # If they don't, we will set it here.
+                    if not fields.has_key('setDISLid'):
+                        self.csm.air.dbInterface.updateObject(
+                            self.csm.air.dbId,
+                            avId,
+                            self.csm.air.dclassesByName['DistributedToonUD'],
+                            {'setDISLid' : [self.target]}
+                        )
                     self.avatarFields[avId] = fields
                     self.pendingAvatars.remove(avId)
                     if not self.pendingAvatars:
