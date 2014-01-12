@@ -301,7 +301,8 @@ class CreateAvatarFSM(OperationFSM):
             'setName': (name,),
             'WishNameState': ('OPEN',),
             'WishName': ('',),
-            'setDNAString': (self.dna,)
+            'setDNAString': (self.dna,),
+            'setDISLid': (self.target,)
         }
 
         self.csm.air.dbInterface.createObject(
