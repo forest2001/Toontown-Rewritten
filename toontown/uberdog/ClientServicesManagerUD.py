@@ -61,7 +61,10 @@ class RemoteAccountDB:
 
     def lookup(self, cookie, callback):
         response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if (not response.get('status') or not response.get('valid') or not response): # status will be false if there's an hmac error, for example
+        if not response:
+            callback({'success': False,
+                      'reason': response.get('banner', 'Failed for unknown reason')})
+        elif (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
             callback({'success': False,
                       'reason': response.get('banner', 'Failed for unknown reason')})
         else:
