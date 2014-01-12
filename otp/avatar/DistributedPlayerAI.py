@@ -154,3 +154,9 @@ def gwhis(text):
             do = simbase.air.doId2do.get(doId)
             if isinstance(do, DistributedPlayerAI): # Toon?
                 do.d_setSystemMessage(0, text)
+
+@magicWord(category=CATEGORY_MODERATION)
+def accId():
+    """Get the accountId from the target player."""
+    accountId = spellbook.getTarget().DISLid
+    return "%s has the accountId of %d" % (spellbook.getTarget().getName(), accountId)
