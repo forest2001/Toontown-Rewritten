@@ -75,12 +75,21 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         # Writing this function made me hate Python
         
         self.resp = []
-        self.currFriend = 0
         self.numFriends = 0
+        self.currIndex = 0
+        self.currFriend = 0
+        self.friendsList = []
         
         def addFriend(dclass, fields):
             if dclass == self.air.dclassesByName['DistributedToonUD']:
                 self.resp.append([self.currFriend, fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0]])
+           
+            if len(self.resp) >= self.numFriends:
+                self.sendUpdateToAvatarId(avId, 'friendList', [self.resp])
+            else:
+                self.currIndex += 1
+                self.currFriend = self.friendsList[self.currIndex][0]
+                self.air.dbInterface.queryObject(self.air.dbId, self.currFriend, addFriend)
         
         def handleAv(dclass, fields):
             if dclass != self.air.dclassesByName['DistributedToonUD']:
@@ -88,13 +97,10 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             if not avId in self.onlineToons:
                 self.onlineToons.append(avId)
                 self.toonOnline(avId, fields)
-            friendsList = fields['setFriendsList'][0]
-            self.numFriends = len(friendsList)
-            for friend in friendsList:
-                self.currFriend = friend[0]
-                self.air.dbInterface.queryObject(self.air.dbId, self.currFriend, addFriend)
-            # After the loop, send it to the client.
-            self.sendUpdateToAvatarId(avId, 'friendList', [self.resp])
+            self.friendsList = fields['setFriendsList'][0]
+            self.numFriends = len(self.friendsList)
+            self.currFriend = self.friendsList[0][0]
+            self.air.dbInterface.queryObject(self.air.dbId, self.currFriend, addFriend)
             
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleAv)
         
