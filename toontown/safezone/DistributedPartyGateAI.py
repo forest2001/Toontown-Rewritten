@@ -4,7 +4,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 class DistributedPartyGateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyGateAI")
 
-    def getPartyList(self, todo0):
+    def getPartyList(self, avId):
         pass
 
     def partyChoiceRequest(self, todo0, todo1, todo2):

@@ -25,6 +25,7 @@ class DistributedPartyAI(DistributedObjectAI):
     def setHostName(self, todo0):
         pass
 
-    def avIdEnteredParty(self, todo0):
+    def avIdEnteredParty(self, avId):
+        # Sent as the client DistributedParty announces generate
         pass
 
