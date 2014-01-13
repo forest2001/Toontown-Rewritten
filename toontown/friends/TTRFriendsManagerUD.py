@@ -2,6 +2,7 @@ from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobal
 from direct.distributed.PyDatagram import *
 from direct.task import Task
 from direct.directnotify.DirectNotifyGlobal import directNotify
+import functools
 
 class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('TTRFriendsManagerUD')
@@ -10,6 +11,9 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         DistributedObjectGlobalUD.announceGenerate(self)
         self.onlineToons = []
         self.tpRequests = {}
+        self.friendsLists = {}
+        self.friendIndexes = {}
+        self.listResponses = {}
     
     def removeFriend(self, friendId):
         avId = self.air.getAvatarIdFromSender()
@@ -72,37 +76,42 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def requestFriendsList(self):
         avId = self.air.getAvatarIdFromSender()
         
-        # Writing this function made me hate Python
+        # Writing this function made me hate Python        
         
-        self.resp = []
-        self.numFriends = 0
-        self.currIndex = 0
-        self.currFriend = 0
-        self.friendsList = []
-        
-        def addFriend(dclass, fields):
+        def addFriend(dclass, fields, friendId=0, avId=0):
+            if not (avId or friendId):
+                return
             if dclass == self.air.dclassesByName['DistributedToonUD']:
-                self.resp.append([self.currFriend, fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0]])
-           
-            if len(self.resp) >= self.numFriends:
-                self.sendUpdateToAvatarId(avId, 'friendList', [self.resp])
+                self.listResponses[avId].append([friendId, fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0]])
+            if len(self.listResponses[avId]) >= len(self.friendsLists[avId]):
+                self.sendUpdateToAvatarId(avId, 'friendList', [self.listResponses[avId]])
+                del self.friendsLists[avId]
+                del self.friendIndexes[avId]
+                del self.listResponses[avId]
             else:
-                self.currIndex += 1
-                self.currFriend = self.friendsList[self.currIndex][0]
-                self.air.dbInterface.queryObject(self.air.dbId, self.currFriend, addFriend)
+                self.friendIndexes[avId] += 1
+                self.air.dbInterface.queryObject(self.air.dbId, self.friendsLists[avId][self.friendIndexes[avId]][0], functools.partial(addFriend, avId=avId, friendId=self.friendsLists[avId][self.friendIndexes[avId]][0]))
         
-        def handleAv(dclass, fields):
+        def handleAv(dclass, fields, avId=0):
+            if not avId:
+                return
             if dclass != self.air.dclassesByName['DistributedToonUD']:
                 return
             if not avId in self.onlineToons:
                 self.onlineToons.append(avId)
                 self.toonOnline(avId, fields)
-            self.friendsList = fields['setFriendsList'][0]
-            self.numFriends = len(self.friendsList)
-            self.currFriend = self.friendsList[0][0]
-            self.air.dbInterface.queryObject(self.air.dbId, self.currFriend, addFriend)
-            
-        self.air.dbInterface.queryObject(self.air.dbId, avId, handleAv)
+            self.friendsLists[avId] = fields['setFriendsList'][0]
+            self.friendIndexes[avId] = 0
+            self.listResponses[avId] = []
+            if len(self.friendsLists[avId]) <= 0:
+                self.sendUpdateToAvatarId(avId, 'friendList', [self.listResponses[avId]])
+                del self.friendsLists[avId]
+                del self.friendIndexes[avId]
+                del self.listResponses[avId]
+                return
+            self.air.dbInterface.queryObject(self.air.dbId, self.friendsLists[avId][0][0], functools.partial(addFriend, avId=avId, friendId=self.friendsLists[avId][0][0]))
+       
+        self.air.dbInterface.queryObject(self.air.dbId, avId, functools.partial(handleAv, avId=avId))
         
     def toonOnline(self, doId, fields):
         self.onlineToons.append(doId)
