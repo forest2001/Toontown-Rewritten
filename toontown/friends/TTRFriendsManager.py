@@ -45,8 +45,25 @@ class TTRFriendsManager(DistributedObjectGlobal):
         self.sendUpdate('routeTeleportQuery', [toId])
         
     def teleportQuery(self, fromId):
+        if not hasattr(base, 'localAvatar'):
+            self.sendUpdate('routeTeleportResponse', [
+                fromId,
+                0,
+                0,
+                0,
+            ])
+            return
+        if not hasattr(base.localAvatar, 'getTeleportAvailable') or not hasattr(base.localAvatar, 'ghostMode'):
+            self.sendUpdate('routeTeleportResponse', [
+                fromId,
+                0,
+                0,
+                0,
+            ])
+            return
         if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode:
-            base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
+            if hasattr(base.cr.identifyFriend(fromId), 'getName'):
+                base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
             self.sendUpdate('routeTeleportResponse', [
                 fromId,
                 0,
@@ -54,9 +71,9 @@ class TTRFriendsManager(DistributedObjectGlobal):
                 0,
                 0
             ])
-            return
-            
-        base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
+            return  
+        if hasattr(base.cr.identifyFriend(fromId), 'getName'):
+            base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
         self.sendUpdate('routeTeleportResponse', [
             fromId,
             base.localAvatar.getTeleportAvailable(),
@@ -72,16 +89,28 @@ class TTRFriendsManager(DistributedObjectGlobal):
         self.sendUpdate('whisperSCTo', [toId, msgIndex])
         
     def setWhisperSCFrom(self, fromId, msgIndex):
+        if not hasattr(base, 'localAvatar'):
+            return
+        if not hasattr(base.localAvatar, 'setWhisperSCFrom'):
+            return
         base.localAvatar.setWhisperSCFrom(fromId, msgIndex)
         
     def d_whisperSCCustomTo(self, toId, msgIndex):
         self.sendUpdate('whisperSCCustomTo', [toId, msgIndex])
       
     def setWhisperSCCustomFrom(self, fromId, msgIndex):
+        if not hasattr(base, 'localAvatar'):
+            return
+        if not hasattr(base.localAvatar, 'setWhisperSCCustomFrom'):
+            return
         base.localAvatar.setWhisperSCCustomFrom(fromId, msgIndex)
         
     def d_whisperSCEmoteTo(self, toId, emoteId):
         self.sendUpdate('whisperSCEmoteTo', [toId, emoteId])
         
     def setWhisperSCEmoteFrom(self, fromId, emoteId):
+        if not hasattr(base, 'localAvatar'):
+            return
+        if not hasattr(base.localAvatar, 'setWhisperSCEmoteFrom'):
+            return
         base.localAvatar.setWhisperSCEmoteFrom(fromId, emoteId)
