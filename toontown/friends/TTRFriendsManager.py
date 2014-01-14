@@ -46,31 +46,15 @@ class TTRFriendsManager(DistributedObjectGlobal):
         
     def teleportQuery(self, fromId):
         if not hasattr(base, 'localAvatar'):
-            self.sendUpdate('routeTeleportResponse', [
-                fromId,
-                0,
-                0,
-                0,
-            ])
+            self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return
         if not hasattr(base.localAvatar, 'getTeleportAvailable') or not hasattr(base.localAvatar, 'ghostMode'):
-            self.sendUpdate('routeTeleportResponse', [
-                fromId,
-                0,
-                0,
-                0,
-            ])
+            self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return
         if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode:
             if hasattr(base.cr.identifyFriend(fromId), 'getName'):
                 base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
-            self.sendUpdate('routeTeleportResponse', [
-                fromId,
-                0,
-                0,
-                0,
-                0
-            ])
+            self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return  
         if hasattr(base.cr.identifyFriend(fromId), 'getName'):
             base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
