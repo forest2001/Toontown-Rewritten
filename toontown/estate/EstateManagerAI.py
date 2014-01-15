@@ -16,6 +16,32 @@ class EstateManagerAI(DistributedObjectAI):
         self.air = air
         self.estateZones = {}
         self.otherToons = {}
+        
+        self.defaultEstate = {
+            'setEstateType' : [0],
+            'setDecorData' : [[]],
+            'setLastEpochTimeStamp' : [0],
+            'setRentalTimeStamp' : [0],
+            'setRentalType' : [0],
+            'setSlot0Items' : [[]],
+            'setSlot1Items' : [[]],
+            'setSlot2Items' : [[]],
+            'setSlot3Items' : [[]],
+            'setSlot4Items' : [[]],
+            'setSlot5Items' : [[]],
+        }
+        
+        self.defaultHouse = {
+            'setHouseType' : 0,
+            'setGardenPos' : 0,
+            'setAtticItems' : '',
+            'setInteriorItems' : '',
+            'setAtticWallpaper' : '',
+            'setInteriorWallpaper' : '',
+            'setAtticWindows' : '',
+            'setInteriorWindows' : '',
+            'setDeletedItems' : '',
+        }
 
     def startAprilFools(self):
         pass
@@ -32,26 +58,59 @@ class EstateManagerAI(DistributedObjectAI):
             self.estateZones[avId].append(self.air.allocateZone())
             self.__loadEstate(avId)
         self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId][0]])
-                    
+        
+    def handleCreate(self, estateId, avId):
+        if not estateId:
+            self.notify.warning('Failed to create estate for avId %d' % avId)
+            return
+        
+        accId = self.air.doId2do[avId].DISLid
+        dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate('ESTATE_ID', accId, accId, self.air.ourChannel, estateId)
+        self.air.send(dg)
+        
+        self.air.writeServerEvent('estateCreated', '%d for accountId %d' % (estateId, self.air.doId2do[avId].DISLid)) 
+        self.spawnEstate(estateId, avId)
+        
+    def spawnEstate(self, estateId, avId):
+        self.estateZones[avId].append(self.air.allocateZone())
+        self.air.sendActivate(
+            estateId,
+            self.air.districtId,
+            self.estateZones[avId][0], 
+            self.air.dclassesByName['DistributedEstateAI'],
+            {}
+        )
+        
     def __loadEstate(self, avId):
-        estate = DistributedEstateAI(self.air)
-        estate.generateWithRequired(self.estateZones[avId][0])
         
         def getAvIdName(dclass, fields, avIndex=0):
             name = fields['setName'][0]
             self.otherToons[avId][avIndex].append(name)
-            createHouse(self.otherToons[avId][avIndex][0], name, avIndex)
+            createHouse(self.otherToons[avId][avIndex][0], name, avIndex)       
         
         def getEstateHouseDetails(dclass, fields):
             self.otherToons[avId] = []
-            for avIndex in enumerate(fields['ACCOUNT_AV_SET']):
-                toonAvId = avIndex[1]
-                self.otherToons[avId].append([ toonAvId ])
-                if toonAvId != 0:
-                    self.air.dbInterface.queryObject(self.air.dbId, toonAvId, functools.partial(getAvIdName, avIndex=avIndex[0]))
-                else:
-                    self.otherToons[avId][avIndex[0]].append('')
-                    createHouse(0, '', avIndex[0])
+            estateFields = self.defaultEstate.copy()
+            
+            if fields['ESTATE_ID'] == 0:
+                for avIndex in enumerate(fields['ACCOUNT_AV_SET']):
+                    toonAvId = avIndex[1]
+                    estateFields['setSlot%dToonId' % avIndex[0]] = [toonAvId]
+                    self.otherToons[avId].append([ toonAvId ])
+                    
+                self.air.dbInterface.createObject(
+                    self.air.dbId,
+                    self.air.dclassesByName['DistributedEstateAI'],
+                    estateFields,
+                    functools.partial(self.handleCreate, avId=avId)
+                )
+            else:
+                self.spawnEstate(fields['ESTATE_ID'], avId)
+                #if toonAvId != 0:
+                    #self.air.dbInterface.queryObject(self.air.dbId, toonAvId, functools.partial(getAvIdName, avIndex=avIndex[0]))
+                #else:
+                    #self.otherToons[avId][avIndex[0]].append('')
+                    #createHouse(0, '', avIndex[0])
                 
         self.air.dbInterface.queryObject(self.air.dbId, self.air.doId2do[avId].DISLid, getEstateHouseDetails)
         
