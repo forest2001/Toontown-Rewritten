@@ -227,7 +227,9 @@ class DNAStorage:
             block = block[1:]
         return block
     def getTitleFromBlockNumber(self, index):
-        return self.blockTitles[index]
+        if self.blockTitles.has_key(index):
+            return self.blockTitles[index]
+        return ''
     def getDoorPosHprFromBlockNumber(self, index):
         return self.blockDoors[str(index)]
     def storeBlockDoor(self, index, door):
