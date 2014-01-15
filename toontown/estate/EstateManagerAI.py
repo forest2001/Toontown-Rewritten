@@ -6,6 +6,7 @@ from toontown.estate.DistributedHouseAI import DistributedHouseAI
 from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
 from toontown.building import DoorTypes
+import functools
 
 class EstateManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("EstateManagerAI")
@@ -14,9 +15,7 @@ class EstateManagerAI(DistributedObjectAI):
         DistributedObjectAI.__init__(self, air)
         self.air = air
         self.estateZones = {}
-        self.estateAvIdsAndNames = {}
-        self.otherToons = []
-        self.otherToonsNames = []
+        self.otherToons = {}
 
     def startAprilFools(self):
         pass
@@ -30,8 +29,6 @@ class EstateManagerAI(DistributedObjectAI):
     def setEstateZone(self, avId, name):
         if not avId in self.estateZones:
             self.estateZones[avId] = []
-            self.otherToons = []
-            self.otherToonsNames = []
             self.estateZones[avId].append(self.air.allocateZone())
             self.__loadEstate(avId)
         self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId][0]])
@@ -40,54 +37,35 @@ class EstateManagerAI(DistributedObjectAI):
         estate = DistributedEstateAI(self.air)
         estate.generateWithRequired(self.estateZones[avId][0])
         
-        def storeAvIdsAndNames2(dclass, fields):
+        def getAvIdName(dclass, fields, avIndex=0):
             name = fields['setName'][0]
-            self.otherToonsNames.append(name)
-            index = len(self.otherToonsNames) - 1
-            createHouse(self.otherToons[index], self.otherToonsNames[index])
-            if index < 5:
-                index += 1
-                while self.otherToons[index] == 0:
-                    print "created empty house!"
-                    self.otherToonsNames.append('hack %d' % index)
-                    createHouse(0, 'hack %d' % index)
-                    if index < 5:
-                        index += 1
-                    else:
-                        del self.otherToons
-                        del self.otherToonsNames
-                        for zoneId in self.estateZones[avId]:
-                            print "allocated zoneId %d to %d" % ( zoneId, avId)
-                        return
-                self.air.dbInterface.queryObject(self.air.dbId, self.otherToons[index], storeAvIdsAndNames2)
-            else:
-                del self.otherToons
-                del self.otherToonsNames
-                for zoneId in self.estateZones[avId]:
-                    print "allocated zoneId %d to %d" % ( zoneId, avId)
+            self.otherToons[avId][avIndex].append(name)
+            createHouse(self.otherToons[avId][avIndex][0], name, avIndex)
         
-        def storeAvIdsAndNames(dclass, fields):
-            self.otherToons = fields['ACCOUNT_AV_SET']
-            index = 0
-            while self.otherToons[index] == 0:
-                print "created empty house!"
-                self.otherToonsNames.append('hack %d' % index)
-                createHouse(0, 'hack %d' % index)
-                index += 1
-            self.air.dbInterface.queryObject(self.air.dbId, self.otherToons[index], storeAvIdsAndNames2)
-        self.air.dbInterface.queryObject(self.air.dbId, self.air.doId2do[avId].DISLid, storeAvIdsAndNames)
+        def getEstateHouseDetails(dclass, fields):
+            self.otherToons[avId] = []
+            for avIndex in enumerate(fields['ACCOUNT_AV_SET']):
+                toonAvId = avIndex[1]
+                self.otherToons[avId].append([ toonAvId ])
+                if toonAvId != 0:
+                    self.air.dbInterface.queryObject(self.air.dbId, toonAvId, functools.partial(getAvIdName, avIndex=avIndex[0]))
+                else:
+                    self.otherToons[avId][avIndex[0]].append('')
+                    createHouse(0, '', avIndex[0])
+                
+        self.air.dbInterface.queryObject(self.air.dbId, self.air.doId2do[avId].DISLid, getEstateHouseDetails)
         
-        def createHouse(avIdOfToon, name):
+        def createHouse(avIdOfToon, name, avIndex):
             house = DistributedHouseAI(self.air)
-            house.setName(name) #best name
-            house.setAvatarId(avIdOfToon) # :D
-            house.setHousePos(self.otherToonsNames.index(name))
-            house.setColor(self.otherToonsNames.index(name))
+            house.setName(name)
+            house.setAvatarId(avIdOfToon)
+            house.setHousePos(avIndex)
+            house.setColor(avIndex)
             house.setHouseType(0)
             house.generateWithRequired(self.estateZones[avId][0])
             
             self.estateZones[avId].append(self.air.allocateZone())
-            interiorZone = self.estateZones[avId][self.otherToonsNames.index(name)+1]
+            interiorZone = self.estateZones[avId][-1]
             
             door = DistributedHouseDoorAI(simbase.air)
             door.setZoneIdAndBlock(self.estateZones[avId][0], house.getDoId())
@@ -102,11 +80,10 @@ class EstateManagerAI(DistributedObjectAI):
             interiorDoor.setOtherZoneIdAndDoId(self.estateZones[avId][0], door.getDoId())
             interiorDoor.generateWithRequired(interiorZone)
 
-
             door.setOtherZoneIdAndDoId(interiorZone, interiorDoor.getDoId())
             
             interior = DistributedHouseInteriorAI(self.air)
-            interior.setHouseIndex(self.otherToonsNames.index(name))
+            interior.setHouseIndex(avIndex)
             interior.setHouseId(house.getDoId())
             interior.generateWithRequired(interiorZone)
 
