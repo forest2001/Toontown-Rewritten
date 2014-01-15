@@ -19,6 +19,9 @@ from toontown.hood import Place
 import HouseGlobals
 from toontown.building import ToonInteriorColors
 from direct.showbase.MessengerGlobal import messenger
+from toontown.dna.DNAParser import DNADoor
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
 
 class DistributedHouse(DistributedObject.DistributedObject):
     notify = directNotify.newCategory('DistributedHouse')

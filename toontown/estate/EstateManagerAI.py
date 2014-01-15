@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.ai.DatabaseObject import DatabaseObject
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
+from toontown.estate.DistributedHouseAI import DistributedHouseAI
 
 class EstateManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("EstateManagerAI")
@@ -22,12 +23,18 @@ class EstateManagerAI(DistributedObjectAI):
 
     def setEstateZone(self, avId, name):
         self.estateZones[avId] = self.air.allocateZone()
-        print "allocated zoneId %d to %d" % ( self.estateZones[avId], avId )
+        self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId]])
+        
         estate = DistributedEstateAI(self.air)
         estate.generateWithRequired(self.estateZones[avId])
-        print "spawned estate"
-        self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId]])
-
+        for i in range(6):
+            house = DistributedHouseAI(self.air)
+            house.setName('Hawkheart') #best name
+            house.setAvatarId(0) # :D
+            house.setHousePos(i)
+            house.setColor(i)
+            house.generateWithRequired(self.estateZones[avId])
+            
     def setAvHouseId(self, todo0, todo1):
         pass
 

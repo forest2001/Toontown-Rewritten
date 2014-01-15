@@ -14,6 +14,7 @@ class DistributedEstateAI(DistributedObjectAI):
         self.dawnTime = 0
         self.lastEpochTimestamp = 0
         self.rentalTimestamp = 0
+        
 
     def setEstateReady(self):
         pass
