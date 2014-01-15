@@ -26,7 +26,7 @@ class EstateManagerAI(DistributedObjectAI):
         estate = DistributedEstateAI(self.air)
         estate.generateWithRequired(self.estateZones[avId])
         print "spawned estate"
-        self.sendUpdate('setEstateZone', [avId, self.estateZones[avId]])
+        self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId]])
 
     def setAvHouseId(self, todo0, todo1):
         pass

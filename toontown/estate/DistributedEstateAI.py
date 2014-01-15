@@ -19,7 +19,7 @@ class DistributedEstateAI(DistributedObjectAI):
         pass
 
     def setClientReady(self):
-        pass
+        self.sendUpdate('setEstateReady', [])
 
     def setEstateType(self, type):
         self.estateType = type
