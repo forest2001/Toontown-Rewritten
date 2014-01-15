@@ -1,3 +1,6 @@
+# cfsworks, send help
+
+
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.ai.DatabaseObject import DatabaseObject
@@ -16,6 +19,7 @@ class EstateManagerAI(DistributedObjectAI):
         self.air = air
         self.estateZones = {}
         self.otherToons = {}
+        self.houseIds = {}
         
         self.defaultEstate = {
             'setEstateType' : [0],
@@ -32,15 +36,15 @@ class EstateManagerAI(DistributedObjectAI):
         }
         
         self.defaultHouse = {
-            'setHouseType' : 0,
-            'setGardenPos' : 0,
-            'setAtticItems' : '',
-            'setInteriorItems' : '',
-            'setAtticWallpaper' : '',
-            'setInteriorWallpaper' : '',
-            'setAtticWindows' : '',
-            'setInteriorWindows' : '',
-            'setDeletedItems' : '',
+            'setHouseType' : [0],
+            'setGardenPos' : [0],
+            'setAtticItems' : [''],
+            'setInteriorItems' : [''],
+            'setAtticWallpaper' : [''],
+            'setInteriorWallpaper' : [''],
+            'setAtticWindows' : [''],
+            'setInteriorWindows' : [''],
+            'setDeletedItems' : [''],
         }
 
     def startAprilFools(self):
@@ -55,24 +59,50 @@ class EstateManagerAI(DistributedObjectAI):
     def setEstateZone(self, avId, name):
         if not avId in self.estateZones:
             self.estateZones[avId] = []
-            self.estateZones[avId].append(self.air.allocateZone())
             self.__loadEstate(avId)
-        self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId][0]])
         
-    def handleCreate(self, estateId, avId):
+        
+    def handleEstateCreate(self, estateId, avId):
         if not estateId:
             self.notify.warning('Failed to create estate for avId %d' % avId)
             return
+            
+        for toon in self.otherToons[avId]:
+            toonId = toon[0]
+            self.air.dbInterface.queryObject(self.air.dbId, toonId, functools.partial(self.handleQueryToon, avId=avId, estateId=estateId, index=self.otherToons[avId].index(toon)))
+            
         
         accId = self.air.doId2do[avId].DISLid
         dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate('ESTATE_ID', accId, accId, self.air.ourChannel, estateId)
         self.air.send(dg)
         
+        
         self.air.writeServerEvent('estateCreated', '%d for accountId %d' % (estateId, self.air.doId2do[avId].DISLid)) 
         self.spawnEstate(estateId, avId)
         
+    def handleQueryToon(self, dclass, fields, avId, estateId, index):
+        houseFields = self.defaultHouse.copy()
+        houseFields['setName'] = fields['setName'][0]
+        houseFields['setColor'] = index
+        houseFields['setGardenPos'] = index
+        houseFields['setAvatarId'] = self.otherToons[avId][index][0]
+        self.air.dbInterface.createObject( self.air.dbId, self.air.dclassesByName['DistributedHouseAI'], houseFields, functools.partial(self.handleHouseCreate, estateId=estateId, index=index, avId=avId))
+        
+    def handleHouseCreate(self, houseId, estateId, index, avId):
+        if not houseId:
+            self.notify.warning('FUCK, I COULDN\'T BUILD A HOUSE!!!!!')
+            return
+            
+        self.houseIds[avId].append(houseId)
+        if len(self.houseIds[avId]) == 6:
+            accId = self.air.doId2do[avId].DISLid
+            dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate('HOUSE_ID_SET', accId, accId, self.air.ourChannel, self.houseIds[avId])
+            self.air.send(dg)
+            
+        
     def spawnEstate(self, estateId, avId):
         self.estateZones[avId].append(self.air.allocateZone())
+        self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId][0]])
         self.air.sendActivate(
             estateId,
             self.air.districtId,
@@ -90,7 +120,9 @@ class EstateManagerAI(DistributedObjectAI):
         
         def getEstateHouseDetails(dclass, fields):
             self.otherToons[avId] = []
+            self.houseIds[avId] = []
             estateFields = self.defaultEstate.copy()
+            
             
             if fields['ESTATE_ID'] == 0:
                 for avIndex in enumerate(fields['ACCOUNT_AV_SET']):
@@ -102,7 +134,7 @@ class EstateManagerAI(DistributedObjectAI):
                     self.air.dbId,
                     self.air.dclassesByName['DistributedEstateAI'],
                     estateFields,
-                    functools.partial(self.handleCreate, avId=avId)
+                    functools.partial(self.handleEstateCreate, avId=avId)
                 )
             else:
                 self.spawnEstate(fields['ESTATE_ID'], avId)
