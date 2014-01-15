@@ -29,7 +29,7 @@ want-karts #t
 want-pets #f
 want-news-page #f
 want-news-tab #f
-want-housing #f
+want-housing #t
 
 force-holiday-decorations 6
 want-old-fireworks #t
