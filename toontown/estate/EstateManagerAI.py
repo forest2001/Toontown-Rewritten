@@ -7,6 +7,7 @@ from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorA
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
 from toontown.building import DoorTypes
 
+
 class EstateManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("EstateManagerAI")
     
@@ -39,7 +40,7 @@ class EstateManagerAI(DistributedObjectAI):
             house.setAvatarId(0) # :D
             house.setHousePos(i)
             house.setColor(i)
-            
+            house.setHouseType(1)
             house.generateWithRequired(self.estateZones[avId])
             
             interiorZone = self.air.allocateZone()

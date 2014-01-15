@@ -31,7 +31,7 @@ class DistributedHouseAI(DistributedObjectAI):
         return self.housePos
 
     def setHouseType(self, type):
-        self.houseType = houseType
+        self.houseType = type
         
     def d_setHouseType(self, type):
         self.sendUpdate('setHouseType', [type])
