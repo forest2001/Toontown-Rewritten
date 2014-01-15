@@ -69,6 +69,7 @@ class EstateManagerAI(DistributedObjectAI):
             
         for toon in self.otherToons[avId]:
             toonId = toon[0]
+            print toonId
             self.air.dbInterface.queryObject(self.air.dbId, toonId, functools.partial(self.handleQueryToon, avId=avId, estateId=estateId, index=self.otherToons[avId].index(toon)))
             
         
@@ -82,10 +83,16 @@ class EstateManagerAI(DistributedObjectAI):
         
     def handleQueryToon(self, dclass, fields, avId, estateId, index):
         houseFields = self.defaultHouse.copy()
-        houseFields['setName'] = fields['setName'][0]
-        houseFields['setColor'] = index
-        houseFields['setGardenPos'] = index
-        houseFields['setAvatarId'] = self.otherToons[avId][index][0]
+        if dclass != self.air.dclassesByName['DistributedToonAI']:
+            houseFields['setName'] = ['']
+            houseFields['setColor'] = [index]
+            houseFields['setGardenPos'] = [index]
+            houseFields['setAvatarId'] = [0]
+        else:
+            houseFields['setName'] = [fields['setName'][0]]
+            houseFields['setColor'] = [index]
+            houseFields['setGardenPos'] = [index]
+            houseFields['setAvatarId'] = [self.otherToons[avId][index][0]]
         self.air.dbInterface.createObject( self.air.dbId, self.air.dclassesByName['DistributedHouseAI'], houseFields, functools.partial(self.handleHouseCreate, estateId=estateId, index=index, avId=avId))
         
     def handleHouseCreate(self, houseId, estateId, index, avId):
@@ -98,10 +105,12 @@ class EstateManagerAI(DistributedObjectAI):
             accId = self.air.doId2do[avId].DISLid
             dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate('HOUSE_ID_SET', accId, accId, self.air.ourChannel, self.houseIds[avId])
             self.air.send(dg)
+        self.spawnHouse(houseId, avId, index)
             
         
     def spawnEstate(self, estateId, avId):
-        self.estateZones[avId].append(self.air.allocateZone())
+        if len(self.estateZones[avId]) == 0:
+            self.estateZones[avId].append(self.air.allocateZone())
         self.sendUpdateToAvatarId(avId, 'setEstateZone', [avId, self.estateZones[avId][0]])
         self.air.sendActivate(
             estateId,
@@ -111,6 +120,16 @@ class EstateManagerAI(DistributedObjectAI):
             {}
         )
         
+    def spawnHouse(self, houseId, avId, index):
+        if len(self.estateZones[avId]) == 0:
+            self.estateZones[avId].append(self.air.allocateZone())
+        self.air.sendActivate(
+            houseId,
+            self.air.districtId,
+            self.estateZones[avId][0], 
+            self.air.dclassesByName['DistributedHouseAI'],
+            {'setHousePos' : [index] }
+        )        
     def __loadEstate(self, avId):
         
         def getAvIdName(dclass, fields, avIndex=0):
@@ -138,6 +157,8 @@ class EstateManagerAI(DistributedObjectAI):
                 )
             else:
                 self.spawnEstate(fields['ESTATE_ID'], avId)
+                for house in enumerate(fields['HOUSE_ID_SET']):
+                    self.spawnHouse(house[1], avId, house[0])
                 #if toonAvId != 0:
                     #self.air.dbInterface.queryObject(self.air.dbId, toonAvId, functools.partial(getAvIdName, avIndex=avIndex[0]))
                 #else:
