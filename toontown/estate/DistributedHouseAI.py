@@ -1,5 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
+from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
+from toontown.building import DoorTypes
 
 class DistributedHouseAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseAI")
@@ -15,7 +18,38 @@ class DistributedHouseAI(DistributedObjectAI):
         
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
+        self.interiorZone = self.air.allocateZone()
+            
+        self.door = DistributedHouseDoorAI(simbase.air)
+        self.door.setZoneIdAndBlock(self.zoneId, self.getDoId())
+        self.door.setDoorType(DoorTypes.EXT_STANDARD)
+        self.door.setSwing(3)
+        self.door.generateWithRequired(self.zoneId)
+
+        self.interiorDoor = DistributedHouseDoorAI(simbase.air)
+        self.interiorDoor.setZoneIdAndBlock(self.interiorZone, self.getDoId())
+        self.interiorDoor.setSwing(3)
+        self.interiorDoor.setDoorType(DoorTypes.INT_STANDARD)
+        self.interiorDoor.setOtherZoneIdAndDoId(self.zoneId, self.door.getDoId())
+        self.interiorDoor.generateWithRequired(self.interiorZone)
+
+        self.door.setOtherZoneIdAndDoId(self.interiorZone, self.interiorDoor.getDoId())
+            
+        self.interior = DistributedHouseInteriorAI(self.air)
+        self.interior.setHouseIndex(self.housePos)
+        self.interior.setHouseId(self.getDoId())
+        self.interior.generateWithRequired(self.interiorZone)
+
         self.sendUpdate('setHouseReady', [])
+        
+        
+    def delete(self):
+        DistributedObjectAI.delete(self)
+        self.door.requestDelete()
+        self.interiorDoor.requestDelete()
+        self.interior.requestDelete()
+        self.air.deallocateZone(self.interiorZone)
+        
 
     def setHousePos(self, pos):
         self.housePos = pos
