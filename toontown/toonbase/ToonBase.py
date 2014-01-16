@@ -214,6 +214,8 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
+        self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
+        base.playSfx(self.snapshotSfx)
         if coordOnScreen:
             if strTextLabel is not None:
                 strTextLabel.destroy()
