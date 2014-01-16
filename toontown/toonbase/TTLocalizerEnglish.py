@@ -4149,7 +4149,7 @@ DateOfBirthEntryMonths = ['Jan',
  'Dec']
 DateOfBirthEntryDefaultLabel = 'Date of Birth'
 AchievePageTitle = 'Achievements\n(Coming Soon)'
-PhotoPageTitle = 'Photo\n(Coming Soon)'
+PhotoPageTitle = 'Snapshots'
 BuildingPageTitle = 'Buildings\n(Coming Soon)'
 InventoryPageTitle = 'Gags'
 InventoryPageDeleteTitle = 'DELETE GAGS'

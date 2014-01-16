@@ -15,11 +15,13 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.textDisabledColor = Vec4(0.4, 0.8, 0.4, 1)
         self.photos = {}
         self.selectedFileName = None
+        self.selectedFilePath = None
+        self.photoPath = 'screenshots/'
         self.photoIndex = 0
         return
 
     def load(self):
-        self.title = DirectLabel(parent=self, relief=None, text='Photo Album', text_scale=0.1, pos=(0, 0, 0.6))
+        self.title = DirectLabel(parent=self, relief=None, text='Snapshots', text_scale=0.1, pos=(0, 0, 0.6))
         self.pictureImage = loader.loadModel('phase_3.5/models/gui/photo_frame')
         self.pictureImage.setScale(0.2)
         self.pictureImage.setPos(0.44, 0, 0.25)
@@ -88,22 +90,22 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def renameDialog(self, str):
         separator = '_'
-        validChars = string.letters + string.digits + ' -'
-        str = filter(lambda s: s in validChars, str)
-        if not str:
-            self.renameCleanup()
-            return 0
+        #validChars = string.letters + string.digits + ' -'
+        #str = filter(lambda s: s in validChars, str)
+        #if not str:
+        #    self.renameCleanup()
+        #    return 0
         oldName = self.selectedFileName
         numUnders = oldName.count(separator)
         if numUnders == 0:
-            newName = oldName[0:11] + separator + str + separator + oldName[10:]
+            newName = oldName[0:15] + separator + str + separator + oldName[14:]
         elif numUnders == 2:
             sp = oldName.split(separator)
             newName = sp[0] + separator + str + separator + sp[2]
         else:
             self.renameCleanup()
             return 0
-        os.rename(oldName, newName)
+        os.rename(self.photoPath + oldName, self.photoPath + newName)
         self.renameCleanup()
         self.updateScrollList()
         self.chosePhoto(newName)
@@ -151,7 +153,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         separator = '_'
         numUnders = fileName.count(separator)
         if numUnders == 0:
-            return 'noname'
+            return 'Unnamed'
         elif numUnders == 2:
             return fileName.split(separator)[1]
         else:
@@ -160,7 +162,8 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
     def chosePhoto(self, fileName):
         if fileName:
             self.selectedFileName = fileName
-            photoTexture = loader.loadTexture(fileName)
+            self.selectedFilePath = self.photoPath + fileName
+            photoTexture = loader.loadTexture(self.selectedFilePath)
             photoName = self.getPhotoName(fileName)
             self.pictureFg.setTexture(photoTexture, 1)
             self.pictureFg.setColor(1, 1, 1, 1)
@@ -179,11 +182,14 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         return
 
     def getPhotos(self):
-        files = os.listdir('.')
+        files = os.listdir(self.photoPath)
         photos = []
         for fileName in files:
-            if fileName[0:10] == 'screenshot' and fileName[-4:] == '.jpg':
+            if fileName[0:14] == 'ttr-screenshot' and fileName[-4:] == '.jpg':
+                print('Found screenshot %s.' % fileName)
                 photos.append(fileName)
+            else:
+                print('Can\'t find any screenshots! Files in folder: %s' % files)            
 
         return photos
 
