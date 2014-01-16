@@ -1,10 +1,3 @@
-# Things to do:
-# Get estateId for the account
-# If id = 0, generate an estate, generate houses (DONE)
-## Generating houses will require a search of each and every toon (DONE)
-# Spawn estate accociated with accountId (or pass from createObject)
-# Spawn houses from account's HOUSE_ID_SET field
-
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
