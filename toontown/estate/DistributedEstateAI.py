@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+import HouseGlobals
 import time
 
 class DistributedEstateAI(DistributedObjectAI):
@@ -43,7 +44,7 @@ class DistributedEstateAI(DistributedObjectAI):
 
     def requestServerTime(self):
         avId = self.air.getAvatarIdFromSender()
-        self.sendUpdateToAvatarId(avId, 'setServerTime', [time.clock() % 2700])
+        self.sendUpdateToAvatarId(avId, 'setServerTime', [time.time() % HouseGlobals.DAY_NIGHT_PERIOD])
 
     def setServerTime(self, todo0):
         pass
