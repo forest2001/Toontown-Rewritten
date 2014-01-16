@@ -86,7 +86,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
             self.cr.playGame.hood.loader.houseId2house[self.doId] = self.house
             if self.houseType == HouseGlobals.HOUSE_DEFAULT:
                 self.__setHouseColor()
-            if self.houseType == HouseGlobals.HOUSE_DEFAULT:
+            if self.houseType == HouseGlobals.HOUSE_DEFAULT or self.houseType == HouseGlobals.HOUSE_TEST:
                 self.__setupDoor()
             else:
                 self.__setupDoorCustom()
