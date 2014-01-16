@@ -137,7 +137,7 @@ class EstateManagerAI(DistributedObjectAI):
                     self.air.dbId,
                     self.air.dclassesByName['DistributedHouseAI'],
                     houseFields,
-                    functools.partial(self.__handleEstateCreation, accId=accId)
+                    functools.partial(self.__handleHouseCreation, accId=accId)
                 )
                 
     def __handleGetToonFields(self, dclass, fields, accId, avId, houseIndex):
