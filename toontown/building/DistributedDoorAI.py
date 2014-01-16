@@ -23,13 +23,13 @@ class DistributedDoorAI(DistributedObjectAI):
          State.State('closing', self.enterClosing, self.exitClosing, ['closed', 'opening']),
          State.State('closed', self.enterClosed, self.exitClosed, ['opening']),
          State.State('opening', self.enterOpening, self.exitOpening, ['open']),
-         State.State('open', self.enterOpen, self.exitOpen, ['closing', 'open'])], 'closed', 'closed')
+         State.State('open', self.enterOpen, self.exitOpen, ['closing', 'open', 'opening'])], 'closed', 'closed')
         self.fsm.enterInitialState()
         self.exitDoorFSM = ClassicFSM.ClassicFSM('DistributedDoor_left', [
          State.State('closing', self.exitDoorEnterClosing, self.exitDoorExitClosing, ['closed', 'opening']),
          State.State('closed', self.exitDoorEnterClosed, self.exitDoorExitClosed, ['opening']),
          State.State('opening', self.exitDoorEnterOpening, self.exitDoorExitOpening, ['open']),
-         State.State('open', self.exitDoorEnterOpen, self.exitDoorExitOpen, ['closing', 'open'])], 'closed', 'closed')
+         State.State('open', self.exitDoorEnterOpen, self.exitDoorExitOpen, ['closing', 'open', 'opening'])], 'closed', 'closed')
         self.exitDoorFSM.enterInitialState()
 
     def enterClosing(self):
