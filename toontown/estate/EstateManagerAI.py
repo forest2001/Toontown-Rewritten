@@ -118,7 +118,7 @@ class EstateManagerAI(DistributedObjectAI):
         
         # Create 6 new houses for our newly generated estate.
         # We will always be creating 6 houses, regardless of if an avatar exists or not.
-        self.houseIds[accId] = []
+        self.houseIds[accId] = [0, 0, 0, 0, 0, 0]
         for houseIndex in range(6):
             avId = self.accountFields[accId]['ACCOUNT_AV_SET'][houseIndex]
             if avId != 0:
@@ -137,7 +137,7 @@ class EstateManagerAI(DistributedObjectAI):
                     self.air.dbId,
                     self.air.dclassesByName['DistributedHouseAI'],
                     houseFields,
-                    functools.partial(self.__handleHouseCreation, accId=accId)
+                    functools.partial(self.__handleHouseCreation, accId=accId, houseIndex=houseIndex)
                 )
                 
     def __handleGetToonFields(self, dclass, fields, accId, avId, houseIndex):
@@ -154,10 +154,10 @@ class EstateManagerAI(DistributedObjectAI):
             self.air.dbId,
             self.air.dclassesByName['DistributedHouseAI'],
             houseFields,
-            functools.partial(self.__handleHouseCreation, accId=accId, avId=avId)
+            functools.partial(self.__handleHouseCreation, accId=accId, avId=avId, houseIndex=houseIndex)
         )
     
-    def __handleHouseCreation(self, houseId, accId, avId=0):
+    def __handleHouseCreation(self, houseId, accId, houseIndex, avId=0):
         if not houseId:
             self.notify.warning('Failed to create a house for avId %d on account %d' % (avId, accId))
             return
@@ -171,8 +171,8 @@ class EstateManagerAI(DistributedObjectAI):
                 { 'setHouseId' : [houseId] }
             )
         
-        self.houseIds[accId].append(houseId)
-        if len(self.houseIds[accId]) >= 6:
+        self.houseIds[accId][houseIndex] = houseId
+        if 0 not in self.houseIds[accId]:
             # Now that we have all 6 houses, update the account too.
             self.air.dbInterface.updateObject(
                 self.air.dbId,
