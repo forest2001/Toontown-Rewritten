@@ -3,6 +3,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
 from toontown.building import DoorTypes
+from otp.ai.MagicWordGlobal import *
 
 class DistributedHouseAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseAI")
@@ -178,4 +179,14 @@ class DistributedHouseAI(DistributedObjectAI):
 
     def setHouseReady(self):
         pass
-
+        
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def houseType(type=0):
+    """Set target house type (must be spawned!). Default (if left blank) is 0 (normal house)."""
+    if not 0 <= type <= 5:
+        return "Invalid house type!"
+    if spellbook.getTarget().getHouseId() in simbase.air.doId2do:
+        house = simbase.air.doId2do[spellbook.getTarget().getHouseId()]
+        house.b_setHouseType(type)
+        return "House type set to %d." % type
+    return "House not loaded. Could not set type."
