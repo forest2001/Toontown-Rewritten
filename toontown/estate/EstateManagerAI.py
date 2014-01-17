@@ -164,12 +164,16 @@ class EstateManagerAI(DistributedObjectAI):
         
         # Update the avatar's houseId
         if avId != 0:
-            self.air.dbInterface.updateObject(
-                self.air.dbId,
-                avId,
-                self.air.dclassesByName['DistributedToonAI'],
-                { 'setHouseId' : [houseId] }
-            )
+            av = self.air.doId2do.get(avId, None)
+            if av:
+                av.b_setHouseId(houseId)
+            else:
+                self.air.dbInterface.updateObject(
+                    self.air.dbId,
+                    avId,
+                    self.air.dclassesByName['DistributedToonAI'],
+                    { 'setHouseId' : [houseId] }
+                )
         
         self.houseIds[accId][houseIndex] = houseId
         if 0 not in self.houseIds[accId]:
