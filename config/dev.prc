@@ -33,3 +33,5 @@ want-housing #f
 
 force-holiday-decorations 6
 want-old-fireworks #t
+
+screenshot-extension png
