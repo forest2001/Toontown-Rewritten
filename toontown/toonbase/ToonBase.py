@@ -215,10 +215,9 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
-        self.camFlash = Transitions(loader)
-        self.camFlash.fadeScreenColor(1)
-        self.camFlash.setFadeColor(1, 1, 1)
-        self.camFlash.fadeIn(0.8)
+        self.transitions.fadeScreenColor(1)
+        self.transitions.setFadeColor(1, 1, 1)
+        self.transitions.fadeIn(0.8)
         self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
         base.playSfx(self.snapshotSfx)
         if coordOnScreen:
