@@ -7,6 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 import ToontownLoader
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
+from direct.showbase.Transitions import Transitions
 from pandac.PandaModules import *
 from otp.nametag.ChatBalloon import ChatBalloon
 from otp.nametag import NametagGlobals
@@ -214,6 +215,10 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
+        self.camFlash = Transitions(loader)
+        self.camFlash.fadeScreenColor(1)
+        self.camFlash.setFadeColor(1, 1, 1)
+        self.camFlash.fadeIn(0.8)
         self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
         base.playSfx(self.snapshotSfx)
         if coordOnScreen:
