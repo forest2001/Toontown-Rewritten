@@ -55,6 +55,7 @@ class ToonBase(OTPBase.OTPBase):
             self.notify.debug('Enabling particles')
             self.enableParticles()
         self.accept(ToontownGlobals.ScreenshotHotkey, self.takeScreenShot)
+        self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
         oldLoader = self.loader
         self.loader = ToontownLoader.ToontownLoader(self)
@@ -183,6 +184,12 @@ class ToonBase(OTPBase.OTPBase):
 
     def __walking(self, pressed):
         self.walking = pressed
+        
+    def toggleGui(self):
+        if aspect2d.isHidden():
+            aspect2d.show()
+        else:
+            aspect2d.hide()
 
     def takeScreenShot(self):
         if not os.path.exists('screenshots/'):
