@@ -4132,7 +4132,7 @@ AvatarChoicePassword = 'Password'
 AvatarChoiceDeletePasswordOK = lOK
 AvatarChoiceDeletePasswordCancel = lCancel
 AvatarChoiceDeleteWrongPassword = 'That password does not seem to match.  To delete this Toon, enter your password.'
-AvatarChoiceDeleteWrongConfirm = 'You did not type the right thing.  To delete %(name)s, type "%(confirm)s" and click OK.  Do not type the quotation marks.  Click Cancel if you have changed your mind.'
+AvatarChoiceDeleteWrongConfirm = 'You didn\'t type the right thing.  To delete %(name)s, type "%(confirm)s" and click OK.  Do not type the quotation marks.  Click Cancel if you have changed your mind.'
 AvatarChooserPickAToon = 'Pick  A  Toon  To  Play'
 AvatarChooserQuit = lQuit
 DateOfBirthEntryMonths = ['Jan',
@@ -4148,8 +4148,16 @@ DateOfBirthEntryMonths = ['Jan',
  'Nov',
  'Dec']
 DateOfBirthEntryDefaultLabel = 'Date of Birth'
-AchievePageTitle = 'Achievements\n(Coming Soon)'
 PhotoPageTitle = 'Snapshots'
+PhotoPageNoName = 'Unnamed'
+PhotoPageUnknownName = 'Unknown'
+PhotoPageAddName = 'Add Caption'
+PhotoPageAddNamePanel = 'Add a Caption to this Snapshot:'
+PhotoPageDelete = 'Are you sure you want to delete'
+PhotoPageConfirm = 'Yep!'
+PhotoPageCancel = lCancel
+PhotoPageTutorial = 'You haven\'t taken any snapshots yet! Press TAB to change your camera angle, and press F9 to take a snapshot.\n\n Once you\'ve made a snapshot, come here to manage and name them.'
+AchievePageTitle = 'Achievements\n(Coming Soon)'
 BuildingPageTitle = 'Buildings\n(Coming Soon)'
 InventoryPageTitle = 'Gags'
 InventoryPageDeleteTitle = 'DELETE GAGS'
