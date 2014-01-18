@@ -38,11 +38,13 @@ class EstateManager(DistributedObject.DistributedObject):
     def setEstateZone(self, ownerId, zoneId):
         self.notify.debug('setEstateZone(%s, %s)' % (ownerId, zoneId))
         messenger.send('setLocalEstateZone', [ownerId, zoneId])
+        self.atEstate = 1
 
     def generate(self):
         self.notify.debug('BASE: generate')
         DistributedObject.DistributedObject.generate(self)
         base.cr.estateMgr = self
+        self.atEstate = 0
         self.accept('getLocalEstateZone', self.getLocalEstateZone)
         self.announceGenerateName = self.uniqueName('generate')
 
@@ -65,6 +67,7 @@ class EstateManager(DistributedObject.DistributedObject):
             self.notify.warning('EstateManager disabled; unable to leave estate.')
             return
         self.sendUpdate('exitEstate')
+        self.atEstate = 0
 
     def removeFriend(self, ownerId, avId):
         self.notify.debug('removeFriend ownerId = %s, avId = %s' % (ownerId, avId))

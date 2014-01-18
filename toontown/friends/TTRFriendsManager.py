@@ -58,11 +58,15 @@ class TTRFriendsManager(DistributedObjectGlobal):
             return  
         if hasattr(base.cr.identifyFriend(fromId), 'getName'):
             base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
+        if base.cr.estateMgr.atEstate:
+            hoodId = 30000 # TODO: Get from TTGlobals (too lazy right now)
+        else:
+            hoodId = ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId())
         self.sendUpdate('routeTeleportResponse', [
             fromId,
             base.localAvatar.getTeleportAvailable(),
             base.localAvatar.defaultShard,
-            ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId()),
+            hoodId,
             base.localAvatar.getZoneId()
         ])
         
