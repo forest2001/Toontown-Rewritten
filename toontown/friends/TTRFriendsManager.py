@@ -60,6 +60,11 @@ class TTRFriendsManager(DistributedObjectGlobal):
             base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
         if base.cr.estateMgr.atEstate:
             hoodId = 30000 # TODO: Get from TTGlobals (too lazy right now)
+            
+            # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
+            self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
+            return
+            # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
         else:
             hoodId = ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId())
         self.sendUpdate('routeTeleportResponse', [
