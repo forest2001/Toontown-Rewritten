@@ -19,6 +19,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.selectedFileName = None
         self.selectedFilePath = None
         #TODO: Localizer support for screenshot storing and names
+        self.installPath = os.getcwd()
         self.photoPath = 'screenshots/'
         self.photoIndex = 0
         return
@@ -34,6 +35,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
         self.pictureCaption = DirectLabel(parent=self, relief=None, text=TTLocalizer.PhotoPageAddName, text_scale=0.05, text_wordwrap=10, text_align=TextNode.ACenter, pos=(0.45, 0, -0.22))
         self.renameButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=(1, 1, 1), pos=(0.40, 0, -0.35), text=TTLocalizer.PhotoPageAddName, text_scale=0.06, text_pos=(0, -0.02), command=self.renameImage, state=DGG.DISABLED)
+        self.directoryButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=(1, 1, 1), pos=(0.40, 0, -0.50), text=TTLocalizer.PhotoPageDirectory, text_scale=0.06, text_pos=(0, -0.02), command=self.openPhotoDirectory, state=DGG.NORMAL)
         trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui')
         self.deleteButton = DirectButton(parent=self, image=(trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.AvatarChoiceDelete, TTLocalizer.AvatarChoiceDelete), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_scale=0.1, text_pos=(0, -0.1), text_font=ToontownGlobals.getInterfaceFont(), textMayChange=0, relief=None, pos=(0.68, 0, -0.33), scale=0.4, state=DGG.DISABLED, command=self.deleteImage)
         guiButton.removeNode()
@@ -156,7 +158,6 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.renameCleanup()
         self.deletePanel['text'] = TTLocalizer.PhotoPageDelete + '\n"%s"?' % self.getPhotoName(self.selectedFileName)
         self.deletePanel.show()
-
     def makePhotoButton(self, fileName):
         return DirectButton(relief=None, text=self.getPhotoName(fileName), text_scale=0.06, text_align=TextNode.ALeft, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, command=self.chosePhoto, extraArgs=[fileName])
 
@@ -200,6 +201,14 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
                 photos.append(fileName)          
 
         return photos
+
+    def openPhotoDirectory(self):
+        systems = {
+          'nt': os.startfile,
+          'posix': lambda foldername: os.system('xdg-open "%s"' % foldername),
+          'os2': lambda foldername: os.system('open "%s"' % foldername)
+          }
+        systems.get(os.name, os.startfile)(self.installPath + '\\screenshots\\')
 
     def newScreenshot(self, filename):
         self.updateScrollList()
