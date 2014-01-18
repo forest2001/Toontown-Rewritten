@@ -269,9 +269,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             iconGeom = iconModels.find('**/Stickerbook_PartyIcon')
             iconModels.detachNode()
         elif pageName == TTLocalizer.PhotoPageTitle:
-            iconGeom = iconModels = loader.loadModel('phase_3.5/models/gui/filmstrip')
-            iconScale = 1.1
-            iconColor = Vec4(0.7, 0.7, 0.7, 1)
+            iconGeom = iconModels = loader.loadModel('phase_4/models/minigames/photogame_filmroll')
+            iconScale = (1.9, 1.5, 1.5)
             iconModels.detachNode()
         elif pageName == TTLocalizer.NewsPageName:
             iconModels = loader.loadModel('phase_3.5/models/gui/sos_textures')
