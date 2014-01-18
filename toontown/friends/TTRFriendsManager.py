@@ -56,13 +56,23 @@ class TTRFriendsManager(DistributedObjectGlobal):
                 base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return  
+        if base.cr.estateMgr.atEstate:
+            hoodId = 30000 # TODO: Get from TTGlobals (too lazy right now)
+            
+            # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
+            self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
+            base.localAvatar.setSystemMessage(0, '%s tried to visit you, but Portable Holes can\'t get here yet!' % base.cr.identifyFriend(fromId).getName())
+            return
+            # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
+        else:
+            hoodId = ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId())
         if hasattr(base.cr.identifyFriend(fromId), 'getName'):
             base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
         self.sendUpdate('routeTeleportResponse', [
             fromId,
             base.localAvatar.getTeleportAvailable(),
             base.localAvatar.defaultShard,
-            ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId()),
+            hoodId,
             base.localAvatar.getZoneId()
         ])
         

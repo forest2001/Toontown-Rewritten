@@ -1,51 +1,197 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
+from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
+from toontown.building import DoorTypes
+from otp.ai.MagicWordGlobal import *
 
 class DistributedHouseAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseAI")
+    
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        self.houseType = 0
+        self.gardenPos = 0
+        self.avatarId = 0
+        self.name = ''
+        self.color = 0
+        self.housePos = 0
+        
+    def announceGenerate(self):
+        DistributedObjectAI.announceGenerate(self)
+        self.interiorZone = self.air.allocateZone()
+            
+        self.door = DistributedHouseDoorAI(simbase.air)
+        self.door.setZoneIdAndBlock(self.zoneId, self.getDoId())
+        self.door.setDoorType(DoorTypes.EXT_STANDARD)
+        self.door.setSwing(3)
+        self.door.generateWithRequired(self.zoneId)
 
-    def setHousePos(self, todo0):
+        self.interiorDoor = DistributedHouseDoorAI(simbase.air)
+        self.interiorDoor.setZoneIdAndBlock(self.interiorZone, self.getDoId())
+        self.interiorDoor.setSwing(3)
+        self.interiorDoor.setDoorType(DoorTypes.INT_STANDARD)
+        self.interiorDoor.setOtherZoneIdAndDoId(self.zoneId, self.door.getDoId())
+        self.interiorDoor.generateWithRequired(self.interiorZone)
+
+        self.door.setOtherZoneIdAndDoId(self.interiorZone, self.interiorDoor.getDoId())
+            
+        self.interior = DistributedHouseInteriorAI(self.air)
+        self.interior.setHouseIndex(self.housePos)
+        self.interior.setHouseId(self.getDoId())
+        self.interior.generateWithRequired(self.interiorZone)
+
+        self.sendUpdate('setHouseReady', [])
+        
+        
+    def delete(self):
+        self.door.requestDelete()
+        self.interiorDoor.requestDelete()
+        self.interior.requestDelete()
+        self.air.deallocateZone(self.interiorZone)
+        DistributedObjectAI.delete(self)
+
+    def initializeInterior(self):
+        # This is a newly-created house; the default furniture needs to be
+        # spawned in.
         pass
 
-    def setHouseType(self, todo0):
-        pass
+    def setHousePos(self, pos):
+        self.housePos = pos
+        
+    def d_setHousePos(self, pos):
+        self.sendUpdate('setHousePos', [pos])
+        
+    def b_setHousePos(self, pos):
+        self.setHousePos(pos)
+        self.d_setHousePos(pos)
+        
+    def getHousePos(self):
+        return self.housePos
 
-    def setGardenPos(self, todo0):
-        pass
+    def setHouseType(self, type):
+        self.houseType = type
+        
+    def d_setHouseType(self, type):
+        self.sendUpdate('setHouseType', [type])
+    
+    def b_setHouseType(self, type):
+        self.setHouseType(type)
+        self.d_setHouseType(type)
+        
+    def getHouseType(self):
+        return self.houseType
 
-    def setAvatarId(self, todo0):
-        pass
+    def setGardenPos(self, pos):
+        self.gardenPos = pos
+        
+    def d_setGardenPos(self, pos):
+        self.sendUpdate('setGardenPos', [pos])
+        
+    def b_setGardenPos(self, pos):
+        self.setGardenPow(pos)
+        self.d_setGardenPos(pos)
+        
+    def getGardenPos(self):
+        return self.gardenPos
 
-    def setName(self, todo0):
-        pass
+    def setAvatarId(self, avId):
+        self.avatarId = avId
+        
+    def d_setAvatarId(self, avId):
+        self.sendUpdate('setAvatarId', [avId])
+        
+    def b_setAvatarId(self, avId):
+        self.setAvatarId(avId)
+        self.d_setAvatarId(avId)
+        
+    def getAvatarId(self):
+        return self.avatarId
 
-    def setColor(self, todo0):
-        pass
+    def setName(self, name):
+        self.name = name
+        
+    def d_setName(self, name):
+        self.sendUpdate('setName', [name])
+        
+    def b_setName(self, name):
+        self.setName(name)
+        self.d_setName(name)
+        
+    def getName(self):
+        return self.name
+
+    def setColor(self, color):
+        self.color = color
+        
+    def d_setColor(self, color):
+        self.sendUpdate('setColor', [color])
+        
+    def b_setColor(self, color):
+        self.setColor(color)
+        self.d_setColor(color)
+        
+    def getColor(self):
+        return self.color
 
     def setAtticItems(self, todo0):
         pass
+        
+    def getAtticItems(self):
+        return '' #TODO
 
     def setInteriorItems(self, todo0):
         pass
+        
+    def getInteriorItems(self):
+        return '' #TODO
 
     def setAtticWallpaper(self, todo0):
         pass
+        
+    def getAtticWallpaper(self):
+        return '' #TODO
 
     def setInteriorWallpaper(self, todo0):
         pass
+        
+    def getInteriorWallpaper(self):
+        return '' #TODO
 
     def setAtticWindows(self, todo0):
         pass
 
+    def getAtticWindows(self):
+        return ''
+        
     def setInteriorWindows(self, todo0):
         pass
+        
+    def getInteriorWindows(self):
+        return ''
 
     def setDeletedItems(self, todo0):
         pass
+        
+    def getDeletedItems(self):
+        return ''
 
     def setCannonEnabled(self, todo0):
         pass
+        
+    def getCannonEnabled(self):
+        return 0
 
     def setHouseReady(self):
         pass
-
+        
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def houseType(type=0):
+    """Set target house type (must be spawned!). Default (if left blank) is 0 (normal house)."""
+    if not 0 <= type <= 5:
+        return "Invalid house type!"
+    if spellbook.getTarget().getHouseId() in simbase.air.doId2do:
+        house = simbase.air.doId2do[spellbook.getTarget().getHouseId()]
+        house.b_setHouseType(type)
+        return "House type set to %d." % type
+    return "House not loaded. Could not set type."

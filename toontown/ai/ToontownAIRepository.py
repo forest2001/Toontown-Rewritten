@@ -18,6 +18,9 @@ from toontown.dna.DNAParser import loadDNAFileAI
 #friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
 
+#estates
+from toontown.estate.EstateManagerAI import EstateManagerAI
+
 # All imports needed for fireworks
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
@@ -113,6 +116,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
+        
+        self.estateManager = EstateManagerAI(self)
+        self.estateManager.generateWithRequired(2)
     
     def createZones(self):
         """
