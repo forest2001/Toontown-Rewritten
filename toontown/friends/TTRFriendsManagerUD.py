@@ -211,7 +211,6 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             taskMgr.remove('tp-query-timeout-%d' % toId)
             
         if toId not in self.tpRequests:
-            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse when query does not exist or has timed out!')
             return
         if self.tpRequests.get(toId) != fromId:
             self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse for a query that isn\'t theirs!')
