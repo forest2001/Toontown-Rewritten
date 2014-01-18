@@ -7,6 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 import ToontownLoader
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
+from direct.showbase.Transitions import Transitions
 from pandac.PandaModules import *
 from otp.nametag.ChatBalloon import ChatBalloon
 from otp.nametag import NametagGlobals
@@ -14,6 +15,9 @@ from otp.margins.MarginManager import MarginManager
 import sys
 import os
 import math
+import tempfile
+import shutil
+import atexit
 from toontown.toonbase import ToontownAccess
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
@@ -54,6 +58,7 @@ class ToonBase(OTPBase.OTPBase):
             self.notify.debug('Enabling particles')
             self.enableParticles()
         self.accept(ToontownGlobals.ScreenshotHotkey, self.takeScreenShot)
+        self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
         oldLoader = self.loader
         self.loader = ToontownLoader.ToontownLoader(self)
@@ -129,6 +134,11 @@ class ToonBase(OTPBase.OTPBase):
         self.localAvatarStyle = None
         return
 
+    def openMainWindow(self, *args, **kw):
+        result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
+        self.setCursorAndIcon()
+        return result
+
     def windowEvent(self, win):
         OTPBase.OTPBase.windowEvent(self, win)
         if not config.GetInt('keep-aspect-ratio', 0):
@@ -168,6 +178,30 @@ class ToonBase(OTPBase.OTPBase):
         self.oldX = newX
         self.oldY = newY
 
+    def setCursorAndIcon(self):
+        tempdir = tempfile.mkdtemp()
+        atexit.register(shutil.rmtree, tempdir)
+        vfs = VirtualFileSystem.getGlobalPtr()
+
+        searchPath = DSearchPath()
+        if __debug__:
+            searchPath.appendDirectory(Filename('resources/phase_3/etc'))
+        searchPath.appendDirectory(Filename('/phase_3/etc'))
+
+        for filename in ['toonmono.cur', 'icon.ico']:
+            p3filename = Filename(filename)
+            found = vfs.resolveFilename(p3filename, searchPath)
+            if not found:
+                return # Can't do anything past this point.
+
+            with open(os.path.join(tempdir, filename), 'wb') as f:
+                f.write(vfs.readFile(p3filename, False))
+
+        wp = WindowProperties()
+        wp.setCursorFilename(os.path.join(tempdir, 'toonmono.cur'))
+        wp.setIconFilename(os.path.join(tempdir, 'icon.ico'))
+        self.win.requestProperties(wp)
+
     def addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
@@ -182,6 +216,12 @@ class ToonBase(OTPBase.OTPBase):
 
     def __walking(self, pressed):
         self.walking = pressed
+        
+    def toggleGui(self):
+        if aspect2d.isHidden():
+            aspect2d.show()
+        else:
+            aspect2d.hide()
 
     def takeScreenShot(self):
         if not os.path.exists('screenshots/'):
@@ -214,6 +254,9 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
+        self.transitions.fadeScreenColor(1)
+        self.transitions.setFadeColor(1, 1, 1)
+        self.transitions.fadeIn(0.8)
         self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
         base.playSfx(self.snapshotSfx)
         if coordOnScreen:

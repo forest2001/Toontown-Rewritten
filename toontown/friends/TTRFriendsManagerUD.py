@@ -197,9 +197,10 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def giveUpTeleportQuery(self, fromId, toId):
         # The client didn't respond to the query within the set time,
         # So we will tell the query sender that the toon is unavailable.
-        del self.tpRequests[fromId]
-        self.sendUpdateToAvatarId(fromId, 'teleportResponse', [toId, 0, 0, 0, 0])
-        self.notify.warning('Teleport request that was sent by %d to %d timed out.' % (fromId, toId))
+        if fromId in self.tpRequests:
+            del self.tpRequests[fromId]
+            self.sendUpdateToAvatarId(fromId, 'teleportResponse', [toId, 0, 0, 0, 0])
+            self.notify.warning('Teleport request that was sent by %d to %d timed out.' % (fromId, toId))
         
     def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
         # Here is where the toId and fromId swap (because we are now sending it back)
@@ -210,7 +211,6 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             taskMgr.remove('tp-query-timeout-%d' % toId)
             
         if toId not in self.tpRequests:
-            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse when query does not exist or has timed out!')
             return
         if self.tpRequests.get(toId) != fromId:
             self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse for a query that isn\'t theirs!')
