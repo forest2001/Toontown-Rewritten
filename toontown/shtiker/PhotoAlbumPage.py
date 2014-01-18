@@ -1,5 +1,6 @@
 from pandac.PandaModules import *
 import ShtikerPage
+import ShtikerBook
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -47,7 +48,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
          -0.88,
          0.06), itemFrame_frameColor=(0.85, 0.95, 1, 1), itemFrame_borderWidth=(0.01, 0.01), numItemsVisible=13, items=[])
         self.renamePanel = DirectFrame(parent=self, relief=None, pos=(0.45, 0, -0.45), image=DGG.getDefaultDialogGeom(), image_color=ToontownGlobals.GlobalDialogColor, image_scale=(1.0, 1.0, 0.6), text='Caption Photo', text_scale=0.06, text_pos=(0.0, 0.13), sortOrder=NO_FADE_SORT_INDEX)
-        self.renameEntry = DirectEntry(parent=self.renamePanel, relief=DGG.SUNKEN, scale=0.06, pos=(-0.3, 0, 0), borderWidth=(0.1, 0.1), numLines=1, cursorKeys=0, frameColor=(0.8, 0.8, 0.5, 1), frameSize=(-0.2,
+        self.renameEntry = DirectEntry(parent=self.renamePanel, relief=DGG.SUNKEN, scale=0.06, pos=(-0.3, 0, 0), borderWidth=(0.1, 0.1), numLines=1, cursorKeys=1, frameColor=(0.8, 0.8, 0.5, 1), frameSize=(-0.2,
          10,
          -0.4,
          1.1), command=self.renameDialog)
@@ -105,10 +106,13 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         else:
             self.renameCleanup()
             return 0
-        os.rename(self.photoPath + oldName, self.photoPath + newName)
-        self.renameCleanup()
-        self.updateScrollList()
-        self.chosePhoto(newName)
+        if str == '':
+            self.renameCleanup()
+        else:
+            os.rename(self.photoPath + oldName, self.photoPath + newName)
+            self.renameCleanup()
+            self.updateScrollList()
+            self.chosePhoto(newName)
         return 1
 
     def renameCancel(self):
@@ -121,7 +125,10 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def renameImage(self):
         self.deleteCleanup()
-        self.renameEntry.set(self.getPhotoName(self.selectedFileName))
+        if self.getPhotoName(self.selectedFileName) == 'Unnamed':
+            self.renameEntry.set('')
+        else:
+            self.renameEntry.set(self.getPhotoName(self.selectedFileName))
         self.renamePanel.show()
         chatEntry = base.localAvatar.chatMgr.chatInputNormal.chatEntry
         chatEntry['backgroundFocus'] = 0
@@ -129,7 +136,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         print self.selectedFileName
 
     def deleteConfirm(self):
-        os.remove(self.selectedFileName)
+        os.remove(self.photoPath + self.selectedFileName)
         self.selectedFileName = None
         self.deleteCleanup()
         self.updateScrollList()
@@ -157,7 +164,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         elif numUnders == 2:
             return fileName.split(separator)[1]
         else:
-            return 'unknown'
+            return 'Unknown'
 
     def chosePhoto(self, fileName):
         if fileName:
