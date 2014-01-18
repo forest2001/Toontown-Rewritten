@@ -51,6 +51,11 @@ class DistributedHouseAI(DistributedObjectAI):
         self.air.deallocateZone(self.interiorZone)
         DistributedObjectAI.delete(self)
 
+    def initializeInterior(self):
+        # This is a newly-created house; the default furniture needs to be
+        # spawned in.
+        pass
+
     def setHousePos(self, pos):
         self.housePos = pos
         

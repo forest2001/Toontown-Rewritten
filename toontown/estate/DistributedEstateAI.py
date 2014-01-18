@@ -16,6 +16,13 @@ class DistributedEstateAI(DistributedObjectAI):
         self.lastEpochTimestamp = 0
         self.rentalTimestamp = 0
         
+        self.houses = [None] * 6
+
+    def destroy(self):
+        for house in self.houses:
+            if house:
+                house.requestDelete()
+        self.requestDelete()
 
     def setEstateReady(self):
         pass
