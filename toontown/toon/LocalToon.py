@@ -372,6 +372,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.gardenStarted:
             self.loadGardenPages()
         self.addGolfPage()
+        self.photoPage = PhotoAlbumPage.PhotoAlbumPage()
+        self.photoPage.load()
+        self.book.addPage(self.photoPage, pageName=TTLocalizer.PhotoPageTitle)
         self.addEventsPage()
         if WantNewsPage:
             self.addNewsPage()
