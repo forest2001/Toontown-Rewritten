@@ -56,17 +56,18 @@ class TTRFriendsManager(DistributedObjectGlobal):
                 base.localAvatar.setSystemMessage(0, '%s tried to visit you.' % base.cr.identifyFriend(fromId).getName())
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return  
-        if hasattr(base.cr.identifyFriend(fromId), 'getName'):
-            base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
         if base.cr.estateMgr.atEstate:
             hoodId = 30000 # TODO: Get from TTGlobals (too lazy right now)
             
             # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
+            base.localAvatar.setSystemMesssage(0,' %s tried to visit you, but estate teleporting is currently disabled.' % bbase.cr.identifyFriend(fromId).getName())
             return
             # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
         else:
             hoodId = ZoneUtil.getCanonicalHoodId(base.localAvatar.getZoneId())
+        if hasattr(base.cr.identifyFriend(fromId), 'getName'):
+            base.localAvatar.setSystemMessage(0, '%s is coming to visit you.' % base.cr.identifyFriend(fromId).getName())
         self.sendUpdate('routeTeleportResponse', [
             fromId,
             base.localAvatar.getTeleportAvailable(),
