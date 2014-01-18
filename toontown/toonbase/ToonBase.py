@@ -15,6 +15,9 @@ from otp.margins.MarginManager import MarginManager
 import sys
 import os
 import math
+import tempfile
+import shutil
+import atexit
 from toontown.toonbase import ToontownAccess
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
@@ -131,6 +134,11 @@ class ToonBase(OTPBase.OTPBase):
         self.localAvatarStyle = None
         return
 
+    def openMainWindow(self, *args, **kw):
+        result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
+        self.setCursorAndIcon()
+        return result
+
     def windowEvent(self, win):
         OTPBase.OTPBase.windowEvent(self, win)
         if not config.GetInt('keep-aspect-ratio', 0):
@@ -169,6 +177,30 @@ class ToonBase(OTPBase.OTPBase):
         base.cam.node().getLens().setFilmSize(newX, newY)
         self.oldX = newX
         self.oldY = newY
+
+    def setCursorAndIcon(self):
+        tempdir = tempfile.mkdtemp()
+        atexit.register(shutil.rmtree, tempdir)
+        vfs = VirtualFileSystem.getGlobalPtr()
+
+        searchPath = DSearchPath()
+        if __debug__:
+            searchPath.appendDirectory(Filename('resources/phase_3/etc'))
+        searchPath.appendDirectory(Filename('/phase_3/etc'))
+
+        for filename in ['toonmono.cur', 'icon.ico']:
+            p3filename = Filename(filename)
+            found = vfs.resolveFilename(p3filename, searchPath)
+            if not found:
+                return # Can't do anything past this point.
+
+            with open(os.path.join(tempdir, filename), 'wb') as f:
+                f.write(vfs.readFile(p3filename, False))
+
+        wp = WindowProperties()
+        wp.setCursorFilename(os.path.join(tempdir, 'toonmono.cur'))
+        wp.setIconFilename(os.path.join(tempdir, 'icon.ico'))
+        self.win.requestProperties(wp)
 
     def addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
