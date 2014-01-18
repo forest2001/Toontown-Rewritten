@@ -35,7 +35,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
         self.pictureCaption = DirectLabel(parent=self, relief=None, text=TTLocalizer.PhotoPageAddName, text_scale=0.05, text_wordwrap=10, text_align=TextNode.ACenter, pos=(0.45, 0, -0.22))
         self.renameButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=(1, 1, 1), pos=(0.40, 0, -0.35), text=TTLocalizer.PhotoPageAddName, text_scale=0.06, text_pos=(0, -0.02), command=self.renameImage, state=DGG.DISABLED)
-        self.directoryButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=(1, 1, 1), pos=(0.40, 0, -0.50), text=TTLocalizer.PhotoPageDirectory, text_scale=0.06, text_pos=(0, -0.02), command=self.openPhotoDirectory, state=DGG.NORMAL)
+        self.directoryButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=(1.3, 1, 1), pos=(0.46, 0, -0.50), text=TTLocalizer.PhotoPageDirectory, text_scale=0.06, text_pos=(0, -0.02), command=self.openPhotoDirectory, state=DGG.NORMAL)
         trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui')
         self.deleteButton = DirectButton(parent=self, image=(trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.AvatarChoiceDelete, TTLocalizer.AvatarChoiceDelete), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_scale=0.1, text_pos=(0, -0.1), text_font=ToontownGlobals.getInterfaceFont(), textMayChange=0, relief=None, pos=(0.68, 0, -0.33), scale=0.4, state=DGG.DISABLED, command=self.deleteImage)
         guiButton.removeNode()
@@ -44,13 +44,13 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.scrollList = DirectScrolledList(parent=self, relief=None, forceHeight=0.07, pos=(-0.5, 0, 0), incButton_image=(gui.find('**/FndsLst_ScrollUp'),
          gui.find('**/FndsLst_ScrollDN'),
          gui.find('**/FndsLst_ScrollUp_Rllvr'),
-         gui.find('**/FndsLst_ScrollUp')), incButton_relief=None, incButton_scale=(1.3, 1.3, -1.3), incButton_pos=(0.08, 0, -0.52), incButton_image3_color=Vec4(1, 1, 1, 0.2), decButton_image=(gui.find('**/FndsLst_ScrollUp'),
+         gui.find('**/FndsLst_ScrollUp')), incButton_relief=None, incButton_scale=(1.3, 1.3, -1.3), incButton_pos=(0.08, 0, -0.60), incButton_image3_color=Vec4(1, 1, 1, 0.2), decButton_image=(gui.find('**/FndsLst_ScrollUp'),
          gui.find('**/FndsLst_ScrollDN'),
          gui.find('**/FndsLst_ScrollUp_Rllvr'),
          gui.find('**/FndsLst_ScrollUp')), decButton_relief=None, decButton_scale=(1.3, 1.3, 1.3), decButton_pos=(0.08, 0, 0.52), decButton_image3_color=Vec4(1, 1, 1, 0.2), itemFrame_pos=(-0.237, 0, 0.41), itemFrame_scale=1.0, itemFrame_relief=DGG.SUNKEN, itemFrame_frameSize=(-0.05,
          0.66,
-         -0.88,
-         0.06), itemFrame_frameColor=(0.85, 0.95, 1, 1), itemFrame_borderWidth=(0.01, 0.01), numItemsVisible=13, items=[])
+         -0.98,
+         0.07), itemFrame_frameColor=(0.85, 0.95, 1, 1), itemFrame_borderWidth=(0.01, 0.01), numItemsVisible=13, items=[])
         self.renamePanel = DirectFrame(parent=self, relief=None, pos=(0.45, 0, -0.45), image=DGG.getDefaultDialogGeom(), image_color=ToontownGlobals.GlobalDialogColor, image_scale=(1.0, 1.0, 0.6), text=TTLocalizer.PhotoPageAddNamePanel, text_scale=0.06, text_pos=(0.0, 0.13), sortOrder=NO_FADE_SORT_INDEX)
         self.renameEntry = DirectEntry(parent=self.renamePanel, relief=DGG.SUNKEN, scale=0.06, pos=(-0.3, 0, 0), borderWidth=(0.1, 0.1), numLines=1, cursorKeys=1, frameColor=(0.8, 0.8, 0.5, 1), frameSize=(-0.2,
          10,
