@@ -20,7 +20,7 @@ want-mat-all-tailors #t
 want-pets #f
 want-news-page #f
 want-news-tab #f
-want-housing #f
+want-housing #t
 
 want-karts #t
 force-holiday-decorations 6
