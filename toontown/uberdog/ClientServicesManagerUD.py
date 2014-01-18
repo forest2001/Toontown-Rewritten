@@ -166,7 +166,6 @@ class LoginAccountFSM(OperationFSM):
     def enterCreateAccount(self):
         self.account = {'ACCOUNT_AV_SET': [0]*6,
                         'pirateAvatars': [],
-                        'HOUSE_ID_SET': [0]*6,
                         'ESTATE_ID': 0,
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),

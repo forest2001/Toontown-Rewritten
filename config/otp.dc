@@ -43,7 +43,6 @@ dclass Account {
   string DcObjectType db;
   uint32array ACCOUNT_AV_SET required db;
   uint32array pirateAvatars required db;
-  uint32array HOUSE_ID_SET db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
   string PLAYED_MINUTES db;
