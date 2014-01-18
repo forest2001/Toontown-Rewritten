@@ -452,6 +452,18 @@ class DeleteAvatarFSM(GetAvatarsFSM):
 
         avsDeleted = list(self.account.get('ACCOUNT_AV_SET_DEL', []))
         avsDeleted.append([self.avId, int(time.time())])
+        
+        estateId = self.account.get('ESTATE_ID', 0)
+        
+        if estateId != 0:
+            # This assumes that the house already exists, but it shouldn't
+            # be a problem if it doesn't.
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                estateId,
+                self.csm.air.dclassesByName['DistributedEstateAI'],
+                { 'setSlot%dToonId' % index : [0], 'setSlot%dItems' % index : [[]] }
+            )
 
         self.csm.air.dbInterface.updateObject(
             self.csm.air.dbId,
@@ -461,8 +473,8 @@ class DeleteAvatarFSM(GetAvatarsFSM):
              'ACCOUNT_AV_SET_DEL': avsDeleted},
             {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
              'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
-            self.__handleDelete)
-
+            self.__handleDelete)      
+            
     def __handleDelete(self, fields):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
