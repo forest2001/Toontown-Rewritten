@@ -2,11 +2,6 @@ model-path resources
 
 window-title Toontown Rewritten [DEV BUILD]
 
-# Should these be stored in the root or a phase file?
-# For now, store them in phase_3/etc/
-cursor-filename phase_3/etc/toonmono.cur
-icon-filename phase_3/etc/icon.ico
-
 server-version dev
 # This is, oddly enough, in *reverse* order of their loading...
 dc-file config/toon.dc
