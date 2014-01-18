@@ -5,6 +5,7 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 import os
+import string
 from toontown.toonbase import ToontownGlobals
 
 class PhotoAlbumPage(ShtikerPage.ShtikerPage):
@@ -91,11 +92,8 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def renameDialog(self, str):
         separator = '_'
-        #validChars = string.letters + string.digits + ' -'
-        #str = filter(lambda s: s in validChars, str)
-        #if not str:
-        #    self.renameCleanup()
-        #    return 0
+        validChars = string.letters + string.digits + ' -#&.,'
+        str = filter(lambda s: s in validChars, str)
         oldName = self.selectedFileName
         numUnders = oldName.count(separator)
         if numUnders == 0:
@@ -106,7 +104,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         else:
             self.renameCleanup()
             return 0
-        if str == '':
+        if str.isspace():
             self.renameCleanup()
         else:
             os.rename(self.photoPath + oldName, self.photoPath + newName)
