@@ -46,25 +46,13 @@ class LoadHouseFSM(FSM):
         self.demand('Off')
 
     def enterCreateHouse(self):
-        fields = {
-            'setHouseType' : [0],
-            'setGardenPos' : [0],
-            'setAtticItems' : [''],
-            'setInteriorItems' : [''],
-            'setAtticWallpaper' : [''],
-            'setInteriorWallpaper' : [''],
-            'setAtticWindows' : [''],
-            'setInteriorWindows' : [''],
-            'setDeletedItems' : [''],
-            # For if we're creating a blank house. We still need an index, however.
-            'setName' : [self.toon['setName'][0]],
-            'setAvatarId' : [self.toon['ID']],
-        }
-
         self.mgr.air.dbInterface.createObject(
             self.mgr.air.dbId,
             self.mgr.air.dclassesByName['DistributedHouseAI'],
-            fields,
+            {
+                'setName' : [self.toon['setName'][0]],
+                'setAvatarId' : [self.toon['ID']],
+            },
             self.__handleCreate)
 
     def __handleCreate(self, doId):
@@ -185,24 +173,10 @@ class LoadEstateFSM(FSM):
 
     def enterCreateEstate(self):
         # We have to ask the DB server to construct a blank estate object...
-        fields = {
-            'setEstateType' : [0],
-            'setDecorData' : [[]],
-            'setLastEpochTimeStamp' : [0],
-            'setRentalTimeStamp' : [0],
-            'setRentalType' : [0],
-            'setSlot0Items' : [[]],
-            'setSlot1Items' : [[]],
-            'setSlot2Items' : [[]],
-            'setSlot3Items' : [[]],
-            'setSlot4Items' : [[]],
-            'setSlot5Items' : [[]],
-        }
-
         self.mgr.air.dbInterface.createObject(
             self.mgr.air.dbId,
             self.mgr.air.dclassesByName['DistributedEstateAI'],
-            fields,
+            {},
             self.__handleEstateCreate)
 
     def __handleEstateCreate(self, estateId):
