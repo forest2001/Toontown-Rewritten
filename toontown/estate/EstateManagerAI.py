@@ -246,15 +246,3 @@ class EstateManagerAI(DistributedObjectAI):
         del self.estateZone[accId]
         del self.houseIds[accId]
         del self.estateId[accId]
-        
-    def setAvHouseId(self, todo0, todo1):
-        pass
-        
-    def sendAvToPlayground(self, todo0, todo1):
-        pass
-        
-    def startAprilFools(self):
-        pass
-        
-    def stopAprilFools(self):
-        pass
