@@ -46,5 +46,3 @@ audio-library-name p3openal_audio
 
 #TODO: FIX NEW FIREWORKS!
 want-old-fireworks #t
-
-screenshot-extension png
