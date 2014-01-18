@@ -60,6 +60,11 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.dOk = DirectButton(parent=self.deletePanel, image=(buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr')), relief=None, text='Ok', text_scale=0.05, text_pos=(0.0, -0.1), pos=(-0.1, 0.0, -0.1), command=self.deleteConfirm)
         self.dCancel = DirectButton(parent=self.deletePanel, image=(buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr')), relief=None, text='Cancel', text_scale=0.05, text_pos=(0.0, -0.1), pos=(0.1, 0.0, -0.1), command=self.deleteCancel)
         self.deletePanel.hide()
+        self.scroll = loader.loadModel('phase_3/models/gui/toon_council').find('**/scroll')
+        self.scroll.reparentTo(self)
+        self.scroll.setPos(0.0, 1.0, 0.2)
+        self.scroll.setScale(0.6, 0.6, 0.6)
+        self.tip = DirectLabel(parent=self.scroll, relief=None, text='You haven\'t taken any snapshots yet! Press TAB to change your camera angle, and press F9 to take a snapshot.\n\n Once you\'ve made a snapshot, come here to manage and name them.', text_scale=0.13, pos=(0.0, 0.0, 0.1), text_fg=(0.4, 0.3, 0.2, 1), text_wordwrap=18, text_align=TextNode.ACenter)
         self.leftArrow = DirectButton(parent=self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
          gui.find('**/Horiz_Arrow_DN'),
          gui.find('**/Horiz_Arrow_Rllvr'),
@@ -202,7 +207,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.updateScrollList()
 
     def updateScrollList(self):
-        newPhotos = self.getPhotos()
+        newPhotos = self.getPhotos()        
         for photo in self.photos.keys():
             if photo not in newPhotos:
                 photoButton = self.photos[photo]
@@ -218,8 +223,23 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
         if self.photos.keys():
             self.chosePhoto(self.photos.keys()[0])
+            self.scroll.hide()
+            self.scrollList.show()
+            self.pictureImage.show()
+            self.rightArrow.show()
+            self.leftArrow.show()
+            self.renameButton.show()
+            self.deleteButton.show()
+            self.scrollList.show()
         else:
             self.chosePhoto(None)
+            self.scroll.show()
+            self.scrollList.hide()
+            self.pictureImage.hide()
+            self.rightArrow.hide()
+            self.leftArrow.hide()
+            self.renameButton.hide()
+            self.deleteButton.hide()
         return
 
     def enter(self):
