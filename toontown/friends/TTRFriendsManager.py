@@ -61,7 +61,7 @@ class TTRFriendsManager(DistributedObjectGlobal):
             
             # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
-            base.localAvatar.setSystemMesssage(0,' %s tried to visit you, but estate teleporting is currently disabled.' % bbase.cr.identifyFriend(fromId).getName())
+            base.localAvatar.setSystemMesssage(0,'%s tried to visit you, but Portable Holes can\'t get here yet!' % base.cr.identifyFriend(fromId).getName())
             return
             # TEMPORARY, UNTIL TPING TO FRIENDS ESTATES WORKS
         else:
