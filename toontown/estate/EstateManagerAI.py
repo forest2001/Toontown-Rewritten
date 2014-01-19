@@ -3,6 +3,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
 from toontown.estate.DistributedHouseAI import DistributedHouseAI
+import HouseGlobals
 import functools
 
 class LoadHouseFSM(FSM):
@@ -245,6 +246,7 @@ class EstateManagerAI(DistributedObjectAI):
 
         self.estate2toons = {}
         self.toon2estate = {}
+        self.estate2timeout = {}
         
     def getEstateZone(self, avId):
         senderId = self.air.getAvatarIdFromSender()
@@ -280,6 +282,12 @@ class EstateManagerAI(DistributedObjectAI):
             # They already have an estate loaded, so let's just return it:
             self._mapToEstate(toon, toon.estate)
             self.sendUpdateToAvatarId(senderId, 'setEstateZone', [senderId, estate.zoneId])
+
+            # If a timeout is active, cancel it:
+            if estate in self.estate2timeout:
+                self.estate2timeout[estate].remove()
+                del self.estate2timeout[estate]
+
             return
 
         if getattr(toon, 'loadEstateFSM', None):
@@ -323,7 +331,14 @@ class EstateManagerAI(DistributedObjectAI):
 
     def _unloadEstate(self, toon):
         if getattr(toon, 'estate', None):
-            self._cleanupEstate(toon.estate)
+            estate = toon.estate
+            if estate not in self.estate2timeout:
+                self.estate2timeout[estate] = \
+                    taskMgr.doMethodLater(HouseGlobals.BOOT_GRACE_PERIOD,
+                                          self._cleanupEstate,
+                                          estate.uniqueName('emai-cleanup-task'),
+                                          extraArgs=[estate])
+            self._sendToonsToPlayground(toon.estate, 0) # This is a warning only...
 
         if getattr(toon, 'loadEstateFSM', None):
             self.air.deallocateZone(toon.loadEstateFSM.zoneId)
@@ -346,6 +361,10 @@ class EstateManagerAI(DistributedObjectAI):
             del self.estate2toons[estate]
         except KeyError:
             pass
+
+        # Clean up timeout, if it exists:
+        if estate in self.estate2timeout:
+            del self.estate2timeout[estate]
 
         # Destroy estate and unmap from owner:
         estate.destroy()
