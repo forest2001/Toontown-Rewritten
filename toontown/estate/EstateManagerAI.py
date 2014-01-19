@@ -324,9 +324,7 @@ class EstateManagerAI(DistributedObjectAI):
 
     def _unloadEstate(self, toon):
         if getattr(toon, 'estate', None):
-            self.air.deallocateZone(toon.estate.zoneId)
-            toon.estate.destroy()
-            toon.estate = None
+            self._cleanupEstate(toon.estate)
 
         if getattr(toon, 'loadEstateFSM', None):
             self.air.deallocateZone(toon.loadEstateFSM.zoneId)
@@ -334,6 +332,33 @@ class EstateManagerAI(DistributedObjectAI):
             toon.loadEstateFSM = None
 
         self.ignore(self.air.getAvatarExitEvent(toon.doId))
+
+    def _cleanupEstate(self, estate):
+        # Boot all Toons from estate:
+        self._sendToonsToPlayground(estate, 1)
+
+        # Clean up toon<->estate mappings...
+        for toon in self.estate2toons.get(estate, []):
+            try:
+                del self.toon2estate[toon]
+            except KeyError:
+                pass
+        try:
+            del self.estate2toons[estate]
+        except KeyError:
+            pass
+
+        # Destroy estate and unmap from owner:
+        estate.destroy()
+        estate.owner.estate = None
+
+        # Free estate's zone:
+        self.air.deallocateZone(estate.zoneId)
+
+    def _sendToonsToPlayground(self, estate, reason):
+        for toon in self.estate2toons.get(estate, []):
+            self.sendUpdateToAvatarId(toon.doId, 'sendAvToPlayground',
+                                      [toon.doId, reason])
 
     def _mapToEstate(self, toon, estate):
         self._unmapFromEstate(toon)

@@ -1145,7 +1145,7 @@ dclass EstateManager : DistributedObject {
   getEstateZone(uint32 avId) airecv clsend;
   setEstateZone(uint32 ownerId, uint32 zoneId);
   setAvHouseId(uint32, uint32array) broadcast;
-  sendAvToPlayground(uint32, uint8);
+  sendAvToPlayground(uint32 avId, uint8 reason);
   exitEstate() airecv clsend;
   removeFriend(uint32, uint32) airecv clsend;
 };
