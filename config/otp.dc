@@ -29,6 +29,14 @@ from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
 
 typedef uint8 bool;
+typedef uint8 uint8array[];
+typedef uint16 uint16array[];
+typedef uint32 uint32array[];
+typedef uint64 uint64array[];
+typedef int8 int8array[];
+typedef int16 int16array[];
+typedef int32 int32array[];
+typedef int64 int64array[];
 
 typedef uint32 DoId;
 
@@ -230,6 +238,11 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
           string(0-400) chat, TalkModification [], uint8 flags) broadcast;
 };
 
+struct FriendEntry {
+  uint32 friendId;
+  uint8 friendType;
+}
+
 dclass DistributedPlayer : DistributedAvatar {
   arrivedOnDistrict(DoId districtId) ownrecv ram;
   setAccountName(string name = "") required ownrecv db;
@@ -241,7 +254,7 @@ dclass DistributedPlayer : DistributedAvatar {
   setWhitelistChatFlags(uint8) broadcast ownrecv ram airecv;
   setSC(uint16 msgIndex) broadcast ownsend airecv;
   setSCCustom(uint16 msgIndex) broadcast ownsend airecv;
-  setFriendsList(uint32uint8array = {}) ownrecv required db airecv;
+  setFriendsList(FriendEntry[] = []) ownrecv required db airecv;
   setDISLname(string) broadcast ownrecv ram;
   setDISLid(uint32 = 0) broadcast ownrecv ram db airecv required;
   OwningAccount(DoId);
@@ -492,4 +505,3 @@ dclass StatusDatabase : DistributedObject {
 dclass CallbackObject {
   callback(uint32, bool, uint8);
 };
-
