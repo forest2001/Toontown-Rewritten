@@ -3,6 +3,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
 from toontown.estate.DistributedHouseAI import DistributedHouseAI
+import weakref
 import functools
 
 class LoadHouseFSM(FSM):
@@ -242,6 +243,9 @@ class EstateManagerAI(DistributedObjectAI):
     
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
+
+        self.estate2toons = weakref.WeakKeyDictionary()
+        self.toon2estate = weakref.WeakValueDictionary()
         
     def getEstateZone(self, avId):
         senderId = self.air.getAvatarIdFromSender()
@@ -257,18 +261,12 @@ class EstateManagerAI(DistributedObjectAI):
         if avId and avId != senderId:
             av = self.air.doId2do.get(avId)
             if av and av.dclass == self.air.dclassesByName['DistributedToonAI']:
-                # What zone is he in?
-                avZoneId = av.zoneId
-
-                # Let's find a DistributedEstateAI in that location...
-                estates = [do for do in self.air.doId2do.values()
-                           if do.zoneId == avZoneId
-                           and do.dclass ==  self.air.dclassesByName['DistributedEstateAI']]
-                # Any hits?
-                if estates:
+                estate = self._lookupEstate(av)
+                if estate:
                     # Yep, there it is!
-                    avId = estates[0].owner.doId
-                    zoneId = estates[0].zoneId
+                    avId = estate.owner.doId
+                    zoneId = estate.zoneId
+                    self._mapToEstate(toon, estate)
                     self.sendUpdateToAvatarId(senderId, 'setEstateZone', [avId, zoneId])
 
             # Bummer, couldn't find avId at an estate...
@@ -280,6 +278,7 @@ class EstateManagerAI(DistributedObjectAI):
         estate = getattr(toon, 'estate', None)
         if estate:
             # They already have an estate loaded, so let's just return it:
+            self._mapToEstate(toon, toon.estate)
             self.sendUpdateToAvatarId(senderId, 'setEstateZone', [senderId, estate.zoneId])
             return
 
@@ -295,6 +294,7 @@ class EstateManagerAI(DistributedObjectAI):
             if success:
                 toon.estate = toon.loadEstateFSM.estate
                 toon.estate.owner = toon
+                self._mapToEstate(toon, toon.estate)
                 self.sendUpdateToAvatarId(senderId, 'setEstateZone', [senderId, zoneId])
             else:
                 # Estate loading failed??!
@@ -318,6 +318,7 @@ class EstateManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', senderId, 'Sent exitEstate() but not on district!')
             return
 
+        self._unmapFromEstate(toon)
         self._unloadEstate(toon)
 
     def _unloadEstate(self, toon):
@@ -332,3 +333,22 @@ class EstateManagerAI(DistributedObjectAI):
             toon.loadEstateFSM = None
 
         self.ignore(self.air.getAvatarExitEvent(toon.doId))
+
+    def _mapToEstate(self, toon, estate):
+        self._unmapFromEstate(toon)
+
+        self.estate2toons.setdefault(estate, []).append(toon)
+        self.toon2estate[toon] = estate
+
+    def _unmapFromEstate(self, toon):
+        estate = self.toon2estate.get(toon)
+        if not estate: return
+        del self.toon2estate[toon]
+
+        try:
+            self.estate2toons[estate].remove(toon)
+        except (KeyError, ValueError):
+            pass
+
+    def _lookupEstate(self, toon):
+        return self.toon2estate.get(toon)
