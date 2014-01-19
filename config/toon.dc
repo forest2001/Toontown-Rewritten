@@ -453,7 +453,7 @@ dclass DistributedToon : DistributedPlayer {
   setTrackBonusLevel(int8array = [-1,-1,-1,-1,-1,-1,-1]) required broadcast ownrecv db;
   setInventory(blob = [0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7]) required broadcast db;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
-  setNPCFriendsDict(uint32uint8array = []) required ownrecv db;
+  setNPCFriendsDict(FriendEntry[] = []) required ownrecv db;
   setDefaultShard(uint32 = 0) required ownrecv broadcast db;
   setDefaultZone(uint32 = 0) required ownrecv broadcast db;
   setShtickerBook(blob = []) required ownrecv db;
