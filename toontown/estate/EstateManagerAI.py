@@ -267,6 +267,7 @@ class EstateManagerAI(DistributedObjectAI):
                     avId = estate.owner.doId
                     zoneId = estate.zoneId
                     self._mapToEstate(toon, estate)
+                    self._unloadEstate(toon) # In case they're doing estate->estate TP.
                     self.sendUpdateToAvatarId(senderId, 'setEstateZone', [avId, zoneId])
 
             # Bummer, couldn't find avId at an estate...
