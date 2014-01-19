@@ -198,8 +198,8 @@ class ToonBase(OTPBase.OTPBase):
                 f.write(vfs.readFile(p3filename, False))
 
         wp = WindowProperties()
-        wp.setCursorFilename(os.path.join(tempdir, 'toonmono.cur'))
-        wp.setIconFilename(os.path.join(tempdir, 'icon.ico'))
+        wp.setCursorFilename(Filename.fromOsSpecific(os.path.join(tempdir, 'toonmono.cur')))
+        wp.setIconFilename(Filename.fromOsSpecific(os.path.join(tempdir, 'icon.ico')))
         self.win.requestProperties(wp)
 
     def addCullBins(self):
