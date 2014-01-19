@@ -243,15 +243,39 @@ class EstateManagerAI(DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         
-    def getEstateZone(self):
+    def getEstateZone(self, avId):
         senderId = self.air.getAvatarIdFromSender()
         accId = self.air.getAccountIdFromSender()
 
         toon = self.air.doId2do.get(senderId)
-
         if not toon:
             self.air.writeServerEvent('suspicious', senderId, 'Sent getEstateZone() but not on district!')
             return
+
+        # If there's an avId included, then the Toon is interested in visiting a
+        # friend. We do NOT load the estate, we simply see if it's already up...
+        if avId and avId != senderId:
+            av = self.air.doId2do.get(avId)
+            if av and av.dclass == self.air.dclassesByName['DistributedToonAI']:
+                # What zone is he in?
+                avZoneId = av.zoneId
+
+                # Let's find a DistributedEstateAI in that location...
+                estates = [do for do in self.air.doId2do.values()
+                           if do.zoneId == avZoneId
+                           and do.dclass ==  self.air.dclassesByName['DistributedEstateAI']]
+                # Any hits?
+                if estates:
+                    # Yep, there it is!
+                    avId = estates[0].owner.doId
+                    zoneId = estates[0].zoneId
+                    self.sendUpdateToAvatarId(senderId, 'setEstateZone', [avId, zoneId])
+
+            # Bummer, couldn't find avId at an estate...
+            self.sendUpdateToAvatarId(senderId, 'setEstateZone', [0, 0])
+            return
+
+        # The Toon definitely wants to go to his own estate...
 
         estate = getattr(toon, 'estate', None)
         if estate:
@@ -270,6 +294,7 @@ class EstateManagerAI(DistributedObjectAI):
         def estateLoaded(success):
             if success:
                 toon.estate = toon.loadEstateFSM.estate
+                toon.estate.owner = toon
                 self.sendUpdateToAvatarId(senderId, 'setEstateZone', [senderId, zoneId])
             else:
                 # Estate loading failed??!

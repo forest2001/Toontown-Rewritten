@@ -33,7 +33,7 @@ class EstateManager(DistributedObject.DistributedObject):
         self.getLocalEstateZone(base.localAvatar.getDoId())
 
     def getLocalEstateZone(self, avId):
-        self.sendUpdate('getEstateZone', [])
+        self.sendUpdate('getEstateZone', [avId])
 
     def setEstateZone(self, ownerId, zoneId):
         self.notify.debug('setEstateZone(%s, %s)' % (ownerId, zoneId))
