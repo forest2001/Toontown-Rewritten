@@ -273,10 +273,7 @@ class EstateManagerAI(DistributedObjectAI):
                 self.sendUpdateToAvatarId(senderId, 'setEstateZone', [senderId, zoneId])
             else:
                 # Estate loading failed??!
-                # I don't know what to do here... Panic! Panic!
-                self.notify.warning('Failed to load estate for %d!' % senderId)
-                self.air.writeServerEvent('suspicious', senderId, 'Requested to load estate but it failed!')
-                toon.requestDelete()
+                self.sendUpdateToAvatarId(senderId, 'setEstateZone', [0, 0])
 
                 # And I guess we won't need our zoneId anymore...
                 self.air.deallocateZone(zoneId)
