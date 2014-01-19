@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -134,6 +134,18 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(GSHoodAI.GSHoodAI(self))
         self.hoods.append(OZHoodAI.OZHoodAI(self))
         self.hoods.append(GZHoodAI.GZHoodAI(self))
+
+    def genDNAFileName(self, zoneId):
+        zoneId = ZoneUtil.getCanonicalZoneId(zoneId)
+        hoodId = ZoneUtil.getCanonicalHoodId(zoneId)
+        hood = ToontownGlobals.dnaMap[hoodId]
+        if hoodId == zoneId:
+            zoneId = 'sz'
+            phase = ToontownGlobals.phaseMap[hoodId]
+        else:
+            phase = ToontownGlobals.streetPhaseMap[hoodId]
+
+        return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)
 
     def loadDNAFileAI(self, dnastore, filename):
         return loadDNAFileAI(dnastore, filename)

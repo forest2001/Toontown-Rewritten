@@ -1,4 +1,5 @@
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
+from toontown.suit.DistributedSuitPlannerAI import DistributedSuitPlannerAI
 
 class StreetAI:
     """
@@ -12,6 +13,10 @@ class StreetAI:
     def __init__(self, air, zoneId):
         self.air = air
         self.zoneId = zoneId
+
+        self.spawnObjects()
     
-    def spawnObjects(self, filename):
+    def spawnObjects(self):
+        filename = self.air.genDNAFileName(self.zoneId)
+
         DNASpawnerAI().spawnObjects(filename, self.zoneId)

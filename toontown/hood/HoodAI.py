@@ -52,5 +52,7 @@ class HoodAI:
         self.treasurePlanner = SZTreasurePlannerAI(self.safezone, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
         self.treasurePlanner.start()
 
-    def spawnObjects(self, filename):
+    def spawnObjects(self):
+        filename = self.air.genDNAFileName(self.safezone)
+
         DNASpawnerAI().spawnObjects(filename, self.safezone)

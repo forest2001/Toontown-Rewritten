@@ -13,4 +13,4 @@ class GZHoodAI(HoodAI):
         self.golfKarts = []
         
     def createSafeZone(self):
-        HoodAI.spawnObjects(self, 'phase_6/dna/golf_zone_sz.dna')
+        self.spawnObjects()

@@ -412,7 +412,7 @@ phaseMap = {Tutorial: 4,
  SellbotHQ: 9,
  CashbotHQ: 10,
  LawbotHQ: 11,
- GolfZone: 8,
+ GolfZone: 6,
  PartyHood: 13}
 streetPhaseMap = {ToontownCentral: 5,
  DonaldsDock: 6,

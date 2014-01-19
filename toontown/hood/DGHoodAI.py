@@ -1,1 +1,15 @@
-from toontown.toonbase import ToontownGlobalsfrom toontown.safezone.DistributedDGFlowerAI import DistributedDGFlowerAIfrom HoodAI import HoodAIfrom toontown.dna.DNAParser import DNAStoragefrom toontown.toon import NPCToonsfrom toontown.town.DGStreetAI import DGStreetAIfrom toontown.safezone import ButterflyGlobalsfrom toontown.safezone.DistributedButterflyAI import DistributedButterflyAIclass DGHoodAI(HoodAI):    HOOD = ToontownGlobals.DaisyGardens    def createSafeZone(self):        HoodAI.createSafeZone(self)                HoodAI.spawnObjects(self, 'phase_8/dna/daisys_garden_sz.dna')                self.createButterflies()        self.flower = DistributedDGFlowerAI(self.air)        self.flower.generateWithRequired(self.safezone)    def createStreets(self):        branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])        for branch in branchIds:            street = DGStreetAI(self.air, branch)            self.streets[branch] = street    def createButterflies(self):        playground = ButterflyGlobals.DG        for area in range(ButterflyGlobals.NUM_BUTTERFLY_AREAS[playground]):            for b in range(ButterflyGlobals.NUM_BUTTERFLIES[playground]):                butterfly = DistributedButterflyAI(self.air)                butterfly.setArea(playground, area)                butterfly.setState(0, 0, 0, 1, 1)                butterfly.generateWithRequired(self.HOOD)
+from toontown.toonbase import ToontownGlobals
+from toontown.safezone.DistributedDGFlowerAI import DistributedDGFlowerAI
+from HoodAI import HoodAI
+from toontown.dna.DNAParser import DNAStorage
+from toontown.toon import NPCToons
+from toontown.safezone import ButterflyGlobals
+from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
+
+class DGHoodAI(HoodAI):
+    HOOD = ToontownGlobals.DaisyGardens
+
+    def createSafeZone(self):
+        HoodAI.createSafeZone(self)
+
+        self.spawnObjects()
