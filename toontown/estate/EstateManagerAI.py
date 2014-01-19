@@ -3,7 +3,6 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
 from toontown.estate.DistributedHouseAI import DistributedHouseAI
-import weakref
 import functools
 
 class LoadHouseFSM(FSM):
@@ -244,8 +243,8 @@ class EstateManagerAI(DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
 
-        self.estate2toons = weakref.WeakKeyDictionary()
-        self.toon2estate = weakref.WeakValueDictionary()
+        self.estate2toons = {}
+        self.toon2estate = {}
         
     def getEstateZone(self, avId):
         senderId = self.air.getAvatarIdFromSender()
