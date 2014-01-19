@@ -81,8 +81,8 @@ class LoadHouseFSM(FSM):
                                   {'setHousePos': [self.houseIndex],
                                    'setColor': [self.houseIndex]})
 
-        # Now we wait for the estate to show up... We do this by hanging a messenger
-        # hook which the DistributedEstateAI throws once it spawns.
+        # Now we wait for the house to show up... We do this by hanging a messenger
+        # hook which the DistributedHouseAI throws once it spawns.
         self.acceptOnce('generate-%d' % self.houseId, self.__gotHouse)
 
     def __gotHouse(self, house):
