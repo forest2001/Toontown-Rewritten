@@ -118,8 +118,8 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         else:
             self.renameCleanup()
             return 0
-        if str.isspace():
-            self.renameCleanup()
+        if str.isspace() or str == '':
+            self.renameCancel()
         else:
             os.rename(self.photoPath + oldName, self.photoPath + newName)
             self.renameCleanup()
