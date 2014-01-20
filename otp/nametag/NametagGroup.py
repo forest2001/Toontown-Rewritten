@@ -48,12 +48,18 @@ class NametagGroup:
 
         self.tickTask = taskMgr.add(self.__tickTask, self.getUniqueId(), sort=45)
 
+        self.stompTask = None
+        self.stompText = None
+        self.stompFlags = 0
+
     def destroy(self):
         taskMgr.remove(self.tickTask)
         if self.manager is not None:
             self.unmanage(self.manager)
         for nametag in list(self.nametags):
             self.removeNametag(nametag)
+        if self.stompTask:
+            self.stompTask.remove()
 
     def getNametag2d(self):
         return self.nametag2d
@@ -68,16 +74,16 @@ class NametagGroup:
         return 1 if self.chatString and self.chatFlags else 0
 
     def getChatStomp(self):
-        return 0
+        return bool(self.stompTask)
 
     def getChat(self):
         return self.chatString
 
     def getStompText(self):
-        return ''
+        return self.stompText
 
     def getStompDelay(self):
-        return 0.0
+        return 0.2
 
     def getUniqueId(self):
         return 'Nametag-%d' % id(self)
@@ -115,6 +121,19 @@ class NametagGroup:
         self.updateTags()
 
     def setChat(self, chatString, chatFlags):
+        if not self.chatFlags&CFSpeech:
+            # We aren't already displaying some chat. Therefore, we don't have
+            # to stomp.
+            self._setChat(chatString, chatFlags)
+        else:
+            # Stomp!
+            self.clearChat()
+            self.stompText = chatString
+            self.stompFlags = chatFlags
+            self.stompTask = taskMgr.doMethodLater(self.getStompDelay(), self.__updateStomp,
+                                                   'ChatStomp-' + self.getUniqueId())
+
+    def _setChat(self, chatString, chatFlags):
         self.chatString = chatString
         self.chatFlags = chatFlags
         if self.chatString == '':
@@ -124,6 +143,10 @@ class NametagGroup:
         self._stopChatTimeout()
         if chatFlags&CFTimeout:
             self._startChatTimeout()
+
+    def __updateStomp(self, task):
+        self._setChat(self.stompText, self.stompFlags)
+        self.stompTask = None
 
     def setContents(self, contents):
         # This function is a little unique, it's meant to override contents on
@@ -144,7 +167,7 @@ class NametagGroup:
                                                      'ChatTimeout-' + self.getUniqueId())
 
     def __doChatTimeout(self, task):
-        self.setChat('', 0)
+        self._setChat('', 0)
         return task.done
 
     def _stopChatTimeout(self):
@@ -155,7 +178,9 @@ class NametagGroup:
         pass
 
     def clearChat(self):
-        self.setChat('', 0)
+        self._setChat('', 0)
+        if self.stompTask:
+            self.stompTask.remove()
 
     def updateNametag(self, tag):
         tag.font = self.font
