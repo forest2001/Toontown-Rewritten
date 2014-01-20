@@ -697,6 +697,9 @@ class LoadAvatarFSM(AvatarOperationFSM):
         # Tell TTRFriendsManager somebody is logging in:
         self.csm.air.friendsManager.toonOnline(self.avId, self.avatar)
 
+        # Tell the GlobalPartyManager as well
+        self.csm.air.globalPartyMgr.avatarJoined(self.avId)
+
         self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
         self.demand('Off')
 
