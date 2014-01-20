@@ -26,6 +26,9 @@ from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 # For spawning NPCs in zones
 from toontown.toon import NPCToons
 
+# Parties
+from toontown.safezone.DistributedPartyGateAI import DistributedPartyGateAI
+
 #alfa only
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
@@ -278,5 +281,9 @@ class DNASpawnerAI:
                     startingBlock.setPadLocationId(0)
                     startingBlock.generateWithRequired(zone)
                     pad.addStartingBlock(startingBlock)
+        if group.getName()[:15] == 'prop_party_gate':
+            gate = DistributedPartyGateAI(simbase.air)
+            gate.setArea(zone)
+            gate.generateWithRequired(zone)
         for i in range(group.getNumChildren()):
             self._createObjects(group.at(i), zone)
