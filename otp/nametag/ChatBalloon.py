@@ -7,12 +7,14 @@ class ChatBalloon:
     MIN_WIDTH = 2.5
     BUBBLE_PADDING = 0.3
     BUBBLE_PADDING_PROP = 0.05
+    BUTTON_SCALE = 6
+    BUTTON_SHIFT = (-0.2, 0, 0.6)
 
     def __init__(self, model):
         self.model = model
 
     def generate(self, text, font, textColor=(0,0,0,1), balloonColor=(1,1,1,1),
-                 wordWrap = 10.0):
+                 wordWrap = 10.0, button=None):
         root = NodePath('balloon')
 
         # Add balloon geometry:
@@ -41,6 +43,13 @@ class ChatBalloon:
         t.setPos(self.TEXT_SHIFT)
         t.setX(t, self.TEXT_SHIFT_PROP*width)
         t.setZ(t, height)
+
+        # Give the chat bubble a button, if one is requested:
+        if button:
+            np = button.copyTo(root)
+            np.setPos(t, width, 0, -height)
+            np.setPos(np, self.BUTTON_SHIFT)
+            np.setScale(self.BUTTON_SCALE)
 
         if width < self.MIN_WIDTH:
             width = self.MIN_WIDTH

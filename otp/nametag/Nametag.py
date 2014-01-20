@@ -58,6 +58,15 @@ class Nametag(ClickablePopup):
     def clickStateChanged(self):
         self.update()
 
+    def getButton(self):
+        cs = self.getClickState()
+        if self.buttons is None:
+            return None
+        elif cs in self.buttons:
+            return self.buttons[cs]
+        else:
+            return self.buttons.get(0)
+
     def update(self):
         if self.colorCode in NAMETAG_COLORS:
             cc = self.colorCode
@@ -79,7 +88,8 @@ class Nametag(ClickablePopup):
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
         balloon = balloon.generate(text, self.font, textColor=self.chatFg,
-                                   balloonColor=color, wordWrap=self.chatWordWrap)
+                                   balloonColor=color, wordWrap=self.chatWordWrap,
+                                   button=self.getButton())
         balloon.reparentTo(self.innerNP)
 
     def showThought(self):

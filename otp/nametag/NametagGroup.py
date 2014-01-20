@@ -33,7 +33,8 @@ class NametagGroup:
         self.avatar = None
         self.active = True
 
-        self.chatString = ''
+        self.chatPages = []
+        self.chatPage = 0
         self.chatFlags = 0
 
         self.objectCode = None
@@ -71,13 +72,23 @@ class NametagGroup:
         return self.icon
 
     def getNumChatPages(self):
-        return 1 if self.chatString and self.chatFlags else 0
+        if not self.chatFlags & (CFSpeech|CFThought):
+            return 0
+
+        return len(self.chatPages)
+
+    def setPageNumber(self, page):
+        self.chatPage = page
+        self.updateTags()
 
     def getChatStomp(self):
         return bool(self.stompTask)
 
     def getChat(self):
-        return self.chatString
+        if self.chatPage >= len(self.chatPages):
+            return ''
+        else:
+            return self.chatPages[self.chatPage]
 
     def getStompText(self):
         return self.stompText
@@ -89,7 +100,32 @@ class NametagGroup:
         return 'Nametag-%d' % id(self)
 
     def hasButton(self):
-        return False # TODO: Support buttons
+        return bool(self.getButtons())
+
+    def getButtons(self):
+        if self.getNumChatPages() < 2:
+            # Either only one page or no pages displayed. This means no button,
+            # unless the game code specifically requests one.
+            if self.chatFlags & CFPageButton:
+                return NametagGlobals.pageButtons
+            elif self.chatFlags & CFQuitButton:
+                return NametagGlobals.quitButtons
+            else:
+                return None
+        elif self.chatPage == self.getNumChatPages()-1:
+            # Last page of a multiple-page chat. This calls for a quit button,
+            # unless the game says otherwise.
+            if not self.chatFlags & CFNoQuitButton:
+                return NametagGlobals.quitButtons
+            else:
+                return None
+        else:
+            # Non-last page of a multiple-page chat. This calls for a page
+            # button, but only if the game requests it:
+            if self.chatFlags & CFPageButton:
+                return NametagGlobals.pageButtons
+            else:
+                return None
 
     def setActive(self, active):
         self.active = active
@@ -134,11 +170,13 @@ class NametagGroup:
                                                    'ChatStomp-' + self.getUniqueId())
 
     def _setChat(self, chatString, chatFlags):
-        self.chatString = chatString
-        self.chatFlags = chatFlags
-        if self.chatString == '':
+        if chatString:
+            self.chatPages = chatString.split('\x07')
+            self.chatFlags = chatFlags
+        else:
+            self.chatPages = []
             self.chatFlags = 0
-        self.updateTags()
+        self.setPageNumber(0) # Calls updateTags() for us.
 
         self._stopChatTimeout()
         if chatFlags&CFTimeout:
@@ -161,7 +199,7 @@ class NametagGroup:
         return self.objectCode
 
     def _startChatTimeout(self):
-        length = len(self.chatString)
+        length = len(self.getChat())
         timeout = min(max(length*self.CHAT_TIMEOUT_PROP, self.CHAT_TIMEOUT_MIN), self.CHAT_TIMEOUT_MAX)
         self.chatTimeoutTask = taskMgr.doMethodLater(timeout, self.__doChatTimeout,
                                                      'ChatTimeout-' + self.getUniqueId())
@@ -188,12 +226,13 @@ class NametagGroup:
         tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
-        tag.chatString = self.chatString
+        tag.chatString = self.getChat()
+        tag.buttons = self.getButtons()
         tag.chatFlags = self.chatFlags
         tag.avatar = self.avatar
         tag.icon = self.icon
 
-        if self.active:
+        if self.active or self.hasButton():
             tag.setClickRegionEvent(self.getUniqueId())
         else:
             tag.setClickRegionEvent(None)
