@@ -18,6 +18,10 @@ from toontown.dna.DNAParser import loadDNAFileAI
 #friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
 
+# par-tay
+from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+from otp.distributed.OtpDoGlobals import *
+
 # All imports needed for fireworks
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
@@ -113,7 +117,13 @@ class ToontownAIRepository(ToontownInternalRepository):
         
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
-    
+
+        self.partyManager = DistributedPartyManagerAI(self)
+        self.partyManager.generateWithRequired(2)
+
+        # setup our view of the global party manager ud
+        self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
