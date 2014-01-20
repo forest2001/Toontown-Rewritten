@@ -224,11 +224,11 @@ class ToonBase(OTPBase.OTPBase):
             aspect2d.hide()
 
     def takeScreenShot(self):
-        if not os.path.exists('screenshots/'):
-            os.mkdir('screenshots/')
+        if not os.path.exists(TTLocalizer.ScreenshotPath):
+            os.mkdir(TTLocalizer.ScreenshotPath)
             self.notify.info('Made new directory to save screenshots.')
         
-        namePrefix = 'screenshots/' + launcher.logPrefix + 'screenshot'
+        namePrefix = TTLocalizer.ScreenshotPath + launcher.logPrefix + 'screenshot'
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
         if self.glitchCount > 10 and self.walking:
             return

@@ -20,13 +20,13 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.selectedFilePath = None
         #TODO: Localizer support for screenshot storing and names
         self.installPath = os.getcwd()
-        self.photoPath = 'screenshots/'
+        self.photoPath = TTLocalizer.ScreenshotPath
         self.photoIndex = 0
         return
 
     def load(self):
         if not os.path.exists(self.photoPath):
-            os.mkdir('screenshots/')
+            os.mkdir(self.photoPath)
             self.notify.info('Made new directory to save screenshots.')
         self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.PhotoPageTitle, text_scale=0.1, pos=(0, 0, 0.6))
         self.pictureImage = loader.loadModel('phase_3.5/models/gui/photo_frame')
@@ -209,12 +209,14 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         return photos
 
     def openPhotoDirectory(self):
+        PhotoDir = self.installPath + '\\screenshots\\'
         systems = {
           'nt': os.startfile,
-          'posix': lambda foldername: os.system('xdg-open "%s"' % foldername),
-          'os2': lambda foldername: os.system('open "%s"' % foldername)
+          'posix': lambda foldername: os.system('xdg-open "%s"' % PhotoDir),
+          'os2': lambda foldername: os.system('open "%s"' % PhotoDir)
           }
-        systems.get(os.name, os.startfile)(self.installPath + '\\screenshots\\')
+        systems.get(os.name, os.startfile)(PhotoDir)
+        print systems.get(os.name, os.startfile)
 
     def newScreenshot(self, filename):
         self.updateScrollList()
