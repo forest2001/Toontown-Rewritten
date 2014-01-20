@@ -107,7 +107,6 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     elif type == NPC_KARTCLERK:
         npc = DistributedNPCKartClerkAI.DistributedNPCKartClerkAI(air, npcId)
     elif type == NPC_PARTYPERSON:
-        return False
         npc = DistributedNPCPartyPersonAI.DistributedNPCPartyPersonAI(air, npcId)
     elif type == NPC_SPECIALQUESTGIVER:
         return False 
