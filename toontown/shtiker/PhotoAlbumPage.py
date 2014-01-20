@@ -25,6 +25,9 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         return
 
     def load(self):
+        if not os.path.exists(self.photoPath):
+            os.mkdir('screenshots/')
+            self.notify.info('Made new directory to save screenshots.')
         self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.PhotoPageTitle, text_scale=0.1, pos=(0, 0, 0.6))
         self.pictureImage = loader.loadModel('phase_3.5/models/gui/photo_frame')
         self.pictureImage.setScale(0.2)
