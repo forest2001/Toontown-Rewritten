@@ -86,13 +86,16 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
     def unload(self):
         del self.title
         del self.scrollList
-        self.pictureImage.removeNode()
-        self.pictureFg.removeNode()
+        del self.pictureImage
+        del self.pictureFg
         del self.pictureCaption
         del self.deleteButton
         del self.renameButton
+        del self.directoryButton
         del self.renamePanel
         del self.renameEntry
+        del self.scroll
+        del self.tip
         del self.bCancel
         del self.deletePanel
         del self.dOk
