@@ -83,17 +83,19 @@ class ClickablePopup(PandaNode, DirectObject):
             state = self.CS_NORMAL
 
         if self.__clickState == state: return
+        oldState = self.__clickState
+        self.__clickState = state
 
-        if self.__clickState == self.CS_NORMAL and state == self.CS_HOVER:
+        if oldState == self.CS_NORMAL and state == self.CS_HOVER:
             # Play rollover sound:
             base.playSfx(NametagGlobals.rolloverSound)
         elif state == self.CS_CLICK:
             # Play click sound:
             base.playSfx(NametagGlobals.clickSound)
+        elif oldState == self.CS_CLICK and state == self.CS_HOVER:
             # Fire click event:
             messenger.send(self.__clickEvent)
 
-        self.__clickState = state
         self.clickStateChanged()
 
     def updateClickRegion(self, left, right, bottom, top):
