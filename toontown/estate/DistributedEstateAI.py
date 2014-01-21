@@ -1,7 +1,15 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.toonbase import ToontownGlobals
 import HouseGlobals
 import time
+
+from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
+from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
+from toontown.fishing import FishingTargetGlobals
+from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
+
 
 class DistributedEstateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedEstateAI")
@@ -16,13 +24,63 @@ class DistributedEstateAI(DistributedObjectAI):
         self.lastEpochTimestamp = 0
         self.rentalTimestamp = 0
         self.houses = [None] * 6
+        
+        self.pond = None
+        self.spots = []
+        
+        self.targets = []
 
         self.owner = None
+        
+    def generate(self):
+        DistributedObjectAI.generate(self)
+        
+        self.pond = DistributedFishingPondAI(simbase.air)
+        self.pond.setArea(ToontownGlobals.MyEstate)
+        self.pond.generateWithRequired(self.zoneId)
+            
+        for i in range(FishingTargetGlobals.getNumTargets(ToontownGlobals.MyEstate)):
+            target = DistributedFishingTargetAI(self.air)
+            target.setPondDoId(self.pond.getDoId())
+            target.generateWithRequired(self.zoneId)
+            self.targets.append(target)
+
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(49.1029, -124.805, 0.344704, 90, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(46.5222, -134.739, 0.390713, 75, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(41.31, -144.559, 0.375978, 45, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(46.8254, -113.682, 0.46015, 135, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
 
     def destroy(self):
         for house in self.houses:
             if house:
                 house.requestDelete()
+        if self.pond:
+            self.pond.requestDelete()
+            for spot in self.spots:
+                spot.requestDelete()
+            for target in self.targets:
+                target.requestDelete()
         self.requestDelete()
 
     def setEstateReady(self):
