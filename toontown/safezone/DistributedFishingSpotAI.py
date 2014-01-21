@@ -103,8 +103,8 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if self.avId != avId:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to sell fish at a pier they\'re not using!')
             return
-        #if self.air.doId2do[pondDoId].getArea() != ToontownGlobals.MyEstate:
-        #    self.air.writeServerEvent('suspicious', avId, 'Toon tried to sell fish at a pier not in their estate!')
+        if self.air.doId2do[pondDoId].getArea() != ToontownGlobals.MyEstate:
+            self.air.writeServerEvent('suspicious', avId, 'Toon tried to sell fish at a pier not in their estate!')
         av = self.air.doId2do[avId]
         result = self.air.fishManager.creditFishTank(av)
         totalFish = len(av.fishCollection)
