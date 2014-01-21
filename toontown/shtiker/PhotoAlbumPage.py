@@ -62,10 +62,13 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         self.bCancel = DirectButton(parent=self.renamePanel, image=(buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr')), relief=None, text=TTLocalizer.PhotoPageCancel, text_scale=0.05, text_pos=(0.0, -0.1), pos=(0.0, 0.0, -0.1), command=self.renameCancel)
         self.renamePanel.hide()
-        self.deletePanel = DirectFrame(parent=self, relief=None, pos=(0.45, 0, -0.45), image=DGG.getDefaultDialogGeom(), image_color=ToontownGlobals.GlobalDialogColor, image_scale=(1.0, 1.0, 0.6), text=TTLocalizer.PhotoPageDelete, text_scale=0.06, text_pos=(0.0, 0.13), sortOrder=NO_FADE_SORT_INDEX)
+        self.deletePanel = DirectFrame(parent=self, relief=None, pos=(0.45, 0, -0.45), image=DGG.getDefaultDialogGeom(), image_color=ToontownGlobals.GlobalDialogColor, image_scale=(1.0, 1.0, 0.6), text='', text_scale=0.06, text_pos=(0.0, 0.13), sortOrder=NO_FADE_SORT_INDEX)
         self.dOk = DirectButton(parent=self.deletePanel, image=(buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr')), relief=None, text=TTLocalizer.PhotoPageConfirm, text_scale=0.05, text_pos=(0.0, -0.1), pos=(-0.1, 0.0, -0.1), command=self.deleteConfirm)
         self.dCancel = DirectButton(parent=self.deletePanel, image=(buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr')), relief=None, text=TTLocalizer.PhotoPageCancel, text_scale=0.05, text_pos=(0.0, -0.1), pos=(0.1, 0.0, -0.1), command=self.deleteCancel)
         self.deletePanel.hide()
+        self.errorPanel = DirectFrame(parent=self, relief=None, pos=(0.45, 0, -0.45), image=DGG.getDefaultDialogGeom(), image_color=ToontownGlobals.GlobalDialogColor, image_scale=(1.0, 1.0, 0.6), text='', text_wordwrap=16, text_scale=0.06, text_pos=(0.0, 0.13), sortOrder=NO_FADE_SORT_INDEX)
+        self.bClose = DirectButton(parent=self.errorPanel, image=(buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr')), relief=None, text=TTLocalizer.PhotoPageClose, text_scale=0.05, text_pos=(0.0, -0.1), pos=(0.0, 0.0, -0.1), command=self.errorConfirm)       
+        self.errorPanel.hide()
         self.scroll = loader.loadModel('phase_3/models/gui/toon_council').find('**/scroll')
         self.scroll.reparentTo(self)
         self.scroll.setPos(0.0, 1.0, 0.2)
@@ -96,7 +99,9 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         del self.renameEntry
         del self.scroll
         del self.tip
+        del self.errorPanel
         del self.bCancel
+        del self.bClose
         del self.deletePanel
         del self.dOk
         del self.dCancel
@@ -105,27 +110,33 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         ShtikerPage.ShtikerPage.unload(self)
 
     def renameDialog(self, str):
-        separator = '_'
-        validChars = string.letters + string.digits + ' -#&.,'
-        str = filter(lambda s: s in validChars, str)
-        oldName = self.selectedFileName
-        numUnders = oldName.count(separator)
-        if numUnders == 0:
-            newName = oldName[0:15] + separator + str + separator + oldName[14:]
-        elif numUnders == 2:
-            sp = oldName.split(separator)
-            newName = sp[0] + separator + str + separator + sp[2]
+        if os.path.isfile(self.photoPath + self.selectedFileName):
+            separator = '_'
+            validChars = string.letters + string.digits + ' -#&.,'
+            str = filter(lambda s: s in validChars, str)
+            oldName = self.selectedFileName
+            numUnders = oldName.count(separator)
+            if numUnders == 0:
+                newName = oldName[0:15] + separator + str + separator + oldName[14:]
+            elif numUnders == 2:
+                sp = oldName.split(separator)
+                newName = sp[0] + separator + str + separator + sp[2]
+            else:
+                self.renameCleanup()
+                return 0
+            if str.isspace() or str == '':
+                self.renameCancel()
+            else:
+                os.rename(self.photoPath + oldName, self.photoPath + newName)
+                self.renameCleanup()
+                self.updateScrollList()
+                self.chosePhoto(newName)
+            return 1
         else:
-            self.renameCleanup()
-            return 0
-        if str.isspace() or str == '':
             self.renameCancel()
-        else:
-            os.rename(self.photoPath + oldName, self.photoPath + newName)
-            self.renameCleanup()
+            self.errorPanel['text'] = 'Huh. It looks like this snapshot has been deleted or removed.'
+            self.errorPanel.show()
             self.updateScrollList()
-            self.chosePhoto(newName)
-        return 1
 
     def renameCancel(self):
         self.renameCleanup()
@@ -148,11 +159,17 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         print self.selectedFileName
 
     def deleteConfirm(self):
-        os.remove(self.photoPath + self.selectedFileName)
-        self.selectedFileName = None
-        self.deleteCleanup()
-        self.updateScrollList()
-        return
+        if os.path.isfile(self.photoPath + self.selectedFileName):        
+            os.remove(self.photoPath + self.selectedFileName)
+            self.selectedFileName = None
+            self.deleteCleanup()
+            self.updateScrollList()
+            return
+        else:
+            self.deleteCancel()
+            self.errorPanel['text'] = 'Huh. It looks like this snapshot has already been deleted.'
+            self.errorPanel.show()
+            self.updateScrollList()
 
     def deleteCancel(self):
         self.deleteCleanup()
@@ -166,6 +183,9 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.deletePanel.show()
     def makePhotoButton(self, fileName):
         return DirectButton(relief=None, text=self.getPhotoName(fileName), text_scale=0.06, text_align=TextNode.ALeft, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, command=self.chosePhoto, extraArgs=[fileName])
+
+    def errorConfirm(self):
+        self.errorPanel.hide()
 
     def getPhotoName(self, fileName):
         separator = '_'
@@ -181,14 +201,19 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         if fileName:
             self.selectedFileName = fileName
             self.selectedFilePath = self.photoPath + fileName
-            photoTexture = loader.loadTexture(self.selectedFilePath)
-            photoName = self.getPhotoName(fileName)
-            self.pictureFg.setTexture(photoTexture, 1)
-            self.pictureFg.setColor(1, 1, 1, 1)
-            self.pictureCaption['text'] = photoName
-            self.renameButton['state'] = DGG.NORMAL
-            self.deleteButton['state'] = DGG.NORMAL
-            self.renameEntry.set(photoName)
+            if os.path.isfile(self.photoPath + self.selectedFileName):
+                photoTexture = loader.loadTexture(self.selectedFilePath)
+                photoName = self.getPhotoName(fileName)
+                self.pictureFg.setTexture(photoTexture, 1)
+                self.pictureFg.setColor(1, 1, 1, 1)
+                self.pictureCaption['text'] = photoName
+                self.renameButton['state'] = DGG.NORMAL
+                self.deleteButton['state'] = DGG.NORMAL
+                self.renameEntry.set(photoName)
+            else:
+                self.errorPanel['text'] = 'Huh. It looks like this snapshot has been deleted or removed.'
+                self.errorPanel.show()
+                self.updateScrollList()
         else:
             self.selectedFileName = None
             self.pictureFg.clearTexture()
