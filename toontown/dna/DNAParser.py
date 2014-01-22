@@ -5,6 +5,7 @@ from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool, ModelNode
 from direct.showbase import Loader
 from direct.stdpy.file import *
 import math, random
+from DNATypesetter import DNATypesetter
 tokens = [
   'FLOAT',
   'INTEGER',
@@ -532,7 +533,7 @@ class DNASign(DNANode):
         else:
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
-        node.getNode(0).setEffect(DecalEffect.make())
+        #node.getNode(0).setEffect(DecalEffect.make())
         node.setDepthOffset(50)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
@@ -547,31 +548,13 @@ class DNASignBaseline(DNANode):
         self.color = LVector4f(1, 1, 1, 1)
         self.font = None
         self.flags = ''
-        self.height = 0.0
-        self.counter = 0
-        self.indent = 1.0
-        self.kern = 1.0
-        self.wiggle = 1.0
-        self.stumble = 1.0
-        self.stomp = 1.0
+        self.indent = 0.0
+        self.kern = 0.0
+        self.wiggle = 0.0
+        self.stumble = 0.0
+        self.stomp = 0.0
         self.width = 0
         self.height = 0
-        self.angle = 0
-        self.f104 = 0
-    def getNextPosHprScale(self, pos, hpr, scale):
-        wiggle = self.wiggle
-        stomp = self.stomp
-        if self.counter % 2 == 0:
-            wiggle *= -1
-            stomp *= -1
-        sx, sy, sz = scale
-        h, p, r = hpr
-        x, y, z = pos
-        sx *= self.scale[0]
-        sy *= self.scale[1] 
-        sz *= self.scale[2]
-        #someone else can figure this shit out
-        return ((x,y,z), (h,p,r), (sx, sy, sz))
     def setCode(self, code):
         self.code = code
     def setColor(self, color):
@@ -580,14 +563,6 @@ class DNASignBaseline(DNANode):
         return self.code
     def getColor(self):
         return self.color
-    def getCurrentKern(self):
-        return self.kern*self.counter
-    def getCurrentStomp(self):
-        return self.stomp*self.counter
-    def getCurrentStumble(self):
-        return self.stumble*self.counter
-    def getCurrentWiggle(self):
-        return self.wiggle*self.counter
     def getFont(self):
         return self.font
     def getHeight(self):
@@ -604,12 +579,6 @@ class DNASignBaseline(DNANode):
         return self.width
     def getWiggle(self):
         return self.wiggle
-    def incCounter(self):
-        self.counter += 1
-    def reset(self):
-        self.counter = 0
-    def resetCounter(self):
-        self.counter = 0
     def setFont(self, font):
         self.font = font
     def setHeight(self, height):
@@ -632,8 +601,21 @@ class DNASignBaseline(DNANode):
         return self.flags
     def traverse(self, nodePath, dnaStorage):
         nodePath = nodePath.attachNewNode('baseline', 0)
+        nodePath.setPos(self.pos)
+        nodePath.setHpr(self.hpr)
+        nodePath.setDepthOffset(50)
+
+        texts = []
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            if child.__class__ == DNASignText:
+                texts.append(child.letters)
+            else:
+                child.traverse(nodePath, dnaStorage)
+
+        typesetter = DNATypesetter(self, dnaStorage)
+        np = typesetter.generate(texts)
+        if np:
+            np.reparentTo(nodePath)
 
 class DNASignText(DNANode):
     def __init__(self):
@@ -642,20 +624,7 @@ class DNASignText(DNANode):
     def setLetters(self, letters):
         self.letters = letters
     def traverse(self, nodePath, dnaStorage):
-        nodePath.getTop().getNode(0).setEffect(DecalEffect.make())
         return
-        tn = TextNode('sign')
-        tn.setText(self.letters)
-        baseline = self.getParent()
-        tn.setTextColor(baseline.getColor())
-        tn.setTextScale(baseline.getScale()[0])
-        font = dnaStorage.findFont(baseline.getCode())
-        if font is None:
-            font = TextProperties.getDefaultFont()
-        tn.setFont(font)
-        nodePath = nodePath.attachNewNode(tn.generate(), 0)
-        pos, hpr, scale = baseline.getNextPosHprScale(self.pos, self.hpr, self.scale)
-        nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
 class DNAFlatBuilding(DNANode): #TODO: finish me
     currentWallHeight = 0 #In the asm this is a global, we can refactor it later
@@ -1061,8 +1030,9 @@ class DNASignGraphic(DNANode):
         if node is None:
             raise DNAError('DNASignGraphic code ' + self.code + ' not found in storage')
         node = node.copyTo(nodePath, 0)
-        pos, hpr, scale = self.getParent().getNextPosHprScale(self.pos, self.hpr, self.scale)
-        node.setPosHprScale(pos, hpr, scale)
+        node.setScale(self.scale)
+        node.setScale(node, self.getParent().scale)
+        node.setPosHpr(self.pos, self.hpr)
         for child in self.children:
             child.traverse(node, dnaStorage)
 
