@@ -8,6 +8,8 @@ import os
 import string
 from toontown.toonbase import ToontownGlobals
 
+from sys import platform as systemPlatform
+
 class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def __init__(self):
@@ -234,14 +236,14 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         return photos
 
     def openPhotoDirectory(self):
-        PhotoDir = self.installPath + '\\screenshots\\'
-        systems = {
-          'nt': os.startfile,
-          'posix': lambda foldername: os.system('xdg-open "%s"' % PhotoDir),
-          'os2': lambda foldername: os.system('open "%s"' % PhotoDir)
-          }
-        systems.get(os.name, os.startfile)(PhotoDir)
-        print systems.get(os.name, os.startfile)
+        if systemPlatform == "darwin":
+            OSXPhotoDir = self.installPath + '/screenshots'
+            os.system('open "%s"' % OSXPhotoDir)
+            print OSXPhotoDir
+        elif systemPlatform == "win32":
+            PhotoDir = self.installPath + '\\screenshots\\'
+            os.startfile(PhotoDir)
+            print(PhotoDir)
 
     def newScreenshot(self, filename):
         self.updateScrollList()
