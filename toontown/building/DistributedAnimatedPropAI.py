@@ -23,7 +23,7 @@ class DistributedAnimatedPropAI(DistributedObjectAI, FSM):
         return self.propId
 
     def setAvatarInteract(self, avId):
-        self.currentAvatar = 0
+        self.currentAvatar = avId
         
     def d_setAvatarInteract(self, avId):
         self.sendUpdate('setAvatarInteract', [avId])
