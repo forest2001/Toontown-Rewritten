@@ -2,6 +2,7 @@ from pandac.PandaModules import *
 import ShtikerPage
 import ShtikerBook
 from direct.gui.DirectGui import *
+from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 import os
@@ -10,6 +11,8 @@ from toontown.toonbase import ToontownGlobals
 from sys import platform as systemPlatform
 
 class PhotoAlbumPage(ShtikerPage.ShtikerPage):
+
+    notify = DirectNotifyGlobal.directNotify.newCategory('PhotoAlbumPage')
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)
@@ -157,7 +160,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         chatEntry = base.localAvatar.chatMgr.chatInputNormal.chatEntry
         chatEntry['backgroundFocus'] = 0
         self.renameEntry['focus'] = 1
-        print self.selectedFileName
+        self.notify.debug(self.selectedFileName)
 
     def deleteConfirm(self):
         if os.path.isfile(self.photoPath + self.selectedFileName):        
@@ -238,11 +241,11 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         if systemPlatform == "darwin":
             OSXPhotoDir = self.installPath + '/screenshots'
             os.system('open "%s"' % OSXPhotoDir)
-            print OSXPhotoDir
+            self.notify.debug(OSXPhotoDir)
         elif systemPlatform == "win32":
             PhotoDir = self.installPath + '\\screenshots\\'
             os.startfile(PhotoDir)
-            print(PhotoDir)
+            self.notify.debug(PhotoDir)
 
     def newScreenshot(self, filename):
         self.updateScrollList()
