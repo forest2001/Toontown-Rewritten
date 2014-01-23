@@ -49,7 +49,8 @@ class LocalAccountDB:
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
-        self.dbm.sync()
+        if getattr(self.dbm, 'sync', None):
+            self.dbm.sync()
         callback()
 
 class RemoteAccountDB:
