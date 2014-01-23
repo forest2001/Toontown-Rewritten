@@ -7,7 +7,6 @@ from toontown.toonbase import TTLocalizer
 import os
 import string
 from toontown.toonbase import ToontownGlobals
-
 from sys import platform as systemPlatform
 
 class PhotoAlbumPage(ShtikerPage.ShtikerPage):
