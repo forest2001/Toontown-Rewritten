@@ -1,5 +1,5 @@
 # For DNAParsing
-from DNAParser import DNAVisGroup, DNALandmarkBuilding, DNAStorage
+from DNAParser import DNAVisGroup, DNALandmarkBuilding, DNAStorage, DNAFlatDoor
 
 # For buildings/interiors.
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
@@ -8,6 +8,7 @@ from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.building.DistributedPetshopInteriorAI import DistributedPetshopInteriorAI
 from toontown.building.DistributedGagshopInteriorAI import DistributedGagshopInteriorAI
 from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopInteriorAI
+from toontown.building.DistributedKnockKnockDoorAI import DistributedKnockKnockDoorAI
 from toontown.building import DoorTypes
 
 # For GSW playground
@@ -238,7 +239,17 @@ class DNASpawnerAI:
                         extDoor.setOtherZoneIdAndDoId(interiorZone, intDoor.getDoId())
                         
                         NPCToons.createNpcsInZone(simbase.air, interiorZone)
-        
+        elif isinstance(group, DNAFlatDoor):
+            building = group.getParent().getParent()
+            index = int(building.getName()[2:].split(':')[0])
+            visGroup = group.getVisGroup()
+            if visGroup == None:
+                doorZone = zone
+            else:
+                doorZone = int(visGroup.getName().split(':')[0])
+            door = DistributedKnockKnockDoorAI(simbase.air)
+            door.setPropId(index)
+            door.generateWithRequired(doorZone)
         elif group.getName()[:10] == 'racing_pad':
             index, dest = group.getName()[11:].split('_', 2)
             index = int(index)

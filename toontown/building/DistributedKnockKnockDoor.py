@@ -9,6 +9,8 @@ import DistributedAnimatedProp
 from toontown.distributed import DelayDelete
 from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.NametagConstants import *
 
 class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp):
 
@@ -91,7 +93,7 @@ class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp)
         self.nametag.setActive(0)
         self.nametag.manage(base.marginManager)
         self.nametag.getNametag3d().setBillboardOffset(4)
-        nametagNode = self.nametag.getNametag3d().upcastToPandaNode()
+        nametagNode = self.nametag.getNametag3d().innerNP.getNode(0)
         self.nametagNP = render.attachNewNode(nametagNode)
         self.nametagNP.setName('knockKnockDoor_nt_' + str(self.propId))
         pos = doorNP.node().getSolid(0).getCenter()
