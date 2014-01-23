@@ -10,6 +10,7 @@ class DistributedHouseAI(DistributedObjectAI):
     
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
+
         self.houseType = 0
         self.gardenPos = 0
         self.avatarId = 0
@@ -17,6 +18,15 @@ class DistributedHouseAI(DistributedObjectAI):
         self.color = 0
         self.housePos = 0
         self.isInteriorInitialized = 1 # Only fresh DB houses are not inited.
+
+        self.atticItems = ''
+        self.interiorItems = ''
+        self.atticItems = ''
+        self.interiorWallpaper = ''
+        self.atticWallpaper = ''
+        self.interiorWindows = ''
+        self.atticWindows = ''
+        self.deletedItems = ''
         
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
@@ -36,13 +46,14 @@ class DistributedHouseAI(DistributedObjectAI):
         self.interiorDoor.generateWithRequired(self.interiorZone)
 
         self.door.setOtherZoneIdAndDoId(self.interiorZone, self.interiorDoor.getDoId())
-            
+
         self.interior = DistributedHouseInteriorAI(self.air, self)
         self.interior.setHouseIndex(self.housePos)
         self.interior.setHouseId(self.getDoId())
+        self.interior.generateWithRequired(self.interiorZone)
+
         if not self.isInteriorInitialized:
             self.interior.initialize()
-        self.interior.generateWithRequired(self.interiorZone)
 
         self.sendUpdate('setHouseReady', [])
         
@@ -132,47 +143,96 @@ class DistributedHouseAI(DistributedObjectAI):
     def getColor(self):
         return self.color
 
-    def setAtticItems(self, todo0):
-        pass
-        
-    def getAtticItems(self):
-        return '' #TODO
+    def setAtticItems(self, atticItems):
+        self.atticItems = atticItems
 
-    def setInteriorItems(self, todo0):
-        pass
+    def d_setAtticItems(self, atticItems):
+        self.sendUpdate('setAtticItems', [atticItems])
+
+    def b_setAtticItems(self, atticItems):
+        self.setAtticItems(atticItems)
+        self.d_setAtticItems(atticItems)
+
+    def getAtticItems(self):
+        return self.atticItems
+
+    def setInteriorItems(self, interiorItems):
+        self.interiorItems = interiorItems
+
+    def d_setInteriorItems(self, interiorItems):
+        self.sendUpdate('setInteriorItems', [interiorItems])
+
+    def b_setInteriorItems(self, interiorItems):
+        self.setInteriorItems(interiorItems)
+        self.d_setInteriorItems(interiorItems)
         
     def getInteriorItems(self):
-        return '' #TODO
+        return self.interiorItems
 
-    def setAtticWallpaper(self, todo0):
-        pass
+    def setAtticWallpaper(self, atticWallpaper):
+        self.atticWallpaper = atticWallpaper
+
+    def d_setAtticWallpaper(self, atticWallpaper):
+        self.sendUpdate('setAtticWallpaper', [atticWallpaper])
+
+    def b_setAtticWallpaper(self, atticWallpaper):
+        self.setAtticWallpaper(atticWallpaper)
+        self.d_setAtticWallpaper(atticWallpaper)
         
     def getAtticWallpaper(self):
-        return '' #TODO
+        return self.atticWallpaper
 
-    def setInteriorWallpaper(self, todo0):
-        pass
-        
+    def setInteriorWallpaper(self, interiorWallpaper):
+        self.interiorWallpaper = interiorWallpaper
+
+    def d_setInteriorWallpaper(self, interiorWallpaper):
+        self.sendUpdate('setInteriorWallpaper', [interiorWallpaper])
+
+    def b_setInteriorWallpaper(self, interiorWallpaper):
+        self.setInteriorWallpaper(interiorWallpaper)
+        self.d_setInteriorWallpaper(interiorWallpaper)
+
     def getInteriorWallpaper(self):
-        return '' #TODO
+        return self.interiorWallpaper
 
-    def setAtticWindows(self, todo0):
-        pass
+    def setAtticWindows(self, atticWindows):
+        self.atticWindows = atticWindows
+
+    def d_setAtticWindows(self, atticWindows):
+        self.sendUpdate('setAtticWindows', [atticWindows])
+
+    def b_setAtticWindows(self, atticWindows):
+        self.setAtticWindows(atticWindows)
+        self.d_setAtticWindows(atticWindows)
 
     def getAtticWindows(self):
-        return ''
+        return self.atticWindows
         
-    def setInteriorWindows(self, todo0):
-        pass
-        
-    def getInteriorWindows(self):
-        return ''
+    def setInteriorWindows(self, interiorWindows):
+        self.interiorWindows = interiorWindows
 
-    def setDeletedItems(self, todo0):
-        pass
-        
+    def d_setInteriorWindows(self, interiorWindows):
+        self.sendUpdate('setInteriorWindows', [interiorWindows])
+
+    def b_setInteriorWindows(self, interiorWindows):
+        self.setInteriorWindows(interiorWindows)
+        self.d_setInteriorWindows(interiorWindows)
+
+    def getInteriorWindows(self):
+        return self.interiorWindows
+
+    def setDeletedItems(self, deletedItems):
+        self.deletedItems = deletedItems
+
+    def d_setDeletedItems(self, deletedItems):
+        self.sendUpdate('setDeletedItems', [deletedItems])
+
+    def b_setDeletedItems(self, deletedItems):
+        self.setDeletedItems(deletedItems)
+        self.d_setDeletedItems(deletedItems)
+
     def getDeletedItems(self):
-        return ''
+        return self.deletedItems
 
     def setInteriorInitialized(self, initialized):
         self.isInteriorInitialized = initialized

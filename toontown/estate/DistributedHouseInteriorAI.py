@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from DistributedFurnitureManagerAI import *
 
 class DistributedHouseInteriorAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseInteriorAI")
@@ -12,6 +13,18 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         self.houseIndex = 0
         self.wallpaper = ''
         self.windows = ''
+
+        self.furnitureManager = DistributedFurnitureManagerAI(self.air, self.house, self)
+
+    def announceGenerate(self):
+        DistributedObjectAI.announceGenerate(self)
+
+        self.furnitureManager.generateWithRequired(self.zoneId)
+
+    def delete(self):
+        DistributedObjectAI.delete(self)
+
+        self.furnitureManager.delete()
 
     def initialize(self):
         pass # Initialize the interior using houseIndex.
@@ -49,8 +62,9 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         self.sendUpdate('setWallpaper', [wallpaper])
         
     def b_setWallpaper(self, wallpaper):
-        self.setWallpaper(self, wallpaper)
-        self.d_setWallpaper(self, wallpaper)
+        self.setWallpaper(wallpaper)
+        if self.isGenerated():
+            self.d_setWallpaper(wallpaper)
         
     def getWallpaper(self):
         return self.wallpaper
@@ -63,7 +77,8 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         
     def b_setWindows(self, windows):
         self.setWindows(windows)
-        self.d_setWindows(windows)
+        if self.isGenerated():
+            self.d_setWindows(windows)
         
     def getWindows(self):
         return self.windows

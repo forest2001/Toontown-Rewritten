@@ -2046,15 +2046,15 @@ dclass DistributedMailbox : DistributedObject {
 };
 
 dclass DistributedFurnitureManager : DistributedObject {
-  setOwnerId(uint32) required broadcast ram;
-  setOwnerName(string) required broadcast ram;
-  setInteriorId(uint32) required broadcast ram;
-  setAtticItems(blob) required broadcast ram;
-  setAtticWallpaper(blob) required broadcast ram;
-  setAtticWindows(blob) required broadcast ram;
-  setDeletedItems(blob) required broadcast ram;
-  suggestDirector(uint32) airecv clsend;
-  setDirector(uint32) broadcast ram;
+  setOwnerId(uint32 ownerId) required broadcast ram;
+  setOwnerName(string ownerName) required broadcast ram;
+  setInteriorId(uint32 interiorId) required broadcast ram;
+  setAtticItems(blob atticItems) required broadcast ram;
+  setAtticWallpaper(blob atticWallpaper) required broadcast ram;
+  setAtticWindows(blob atticWindows) required broadcast ram;
+  setDeletedItems(blob deletedItems) required broadcast ram;
+  suggestDirector(uint32 directorId) airecv clsend;
+  setDirector(uint32 directorId) broadcast ram;
   avatarEnter() airecv clsend;
   avatarExit() airecv clsend;
   moveItemToAtticMessage(uint32, uint16) airecv clsend;
