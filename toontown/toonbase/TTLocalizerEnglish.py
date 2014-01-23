@@ -3100,7 +3100,18 @@ FADoorCodes_SB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon
 FADoorCodes_CB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Cashbot Disguise first!\n\nBuild your Cashbot Disguise by doing ToonTasks in Donald's Dreamland."
 FADoorCodes_LB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Lawbot Disguise first!\n\nBuild your Lawbot Disguise by doing the ToonTasks after Donald's Dreamland."
 FADoorCodes_BB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Bossbot Disguise first!\n\nBuild your Bossbot Disguise by doing the ToonTasks after Donald's Dreamland."
-KnockKnockContestJokes = {2100: ['Wally', "Wally's not looking, hit him with a pie!"],
+KnockKnockContestJokes = {
+ 2100: {44: ['Wally', "Wally's not looking, hit him with a pie!"],
+        2: ['Mirror', 'Mirror who?'],
+        1:  ['Act', 'No, we\'re starting from act one.'],
+        3:  ['Insane', 'I don\'t know, but you\'re the one talking to a door.'],
+        4: ['Candy', 'Candy have some jellybeans?'],
+        5: ['Santa', 'I santa you the key, now let me out!'],
+        6:  ['Sensor', 'Sensor not doing anything, mind opening the door?'],
+        7:  ['Donald', 'Donald your tasks yet?'],
+        49: ['Eureka', 'Eureka something weird!'],
+        60: ['Anomaly', 'Anomaly don\'t say this, but have you seen my spaceship?'],
+        10:  ['Toboggan', 'I hate toboggan with you, but will you open this door?']},
  2200: {28: ['Biscuit', 'Biscuit out of here the Cogs are coming!'],
         41: ['Dewey', 'Dewey want to go defeat some more Cogs?'],
         40: ['Minnie', "Minnie people have asked that, and it's driving me crazy!"],
@@ -3229,6 +3240,17 @@ KnockKnockJokes = [['Who', "Bad echo in here, isn't there?"],
  ['Ida', "It's not Ida who, it's Idaho."],
  ['Zippy', 'Mrs. Zippy.'],
  ['Yukon', 'Yukon go away and come back another time.']]
+KnockKnockDoorNames = { 44: DoorNametag,
+        2: 'Furr Elise',
+        1:  'Overwhelming October',
+        3:  'Slate',
+        4: 'Fanshy',
+        5: 'Smirky Bumberpop',
+        6:  'Little Flappy Bananaberry',
+        7:  'Quackity',
+        49: 'P Cuddles',
+        60: 'lilreenie',
+        10:  'parker643'}
 SharedChatterGreetings = ['Hi, %!',
  'Yoo-hoo %, nice to see you.',
  "I'm glad you're here today!",

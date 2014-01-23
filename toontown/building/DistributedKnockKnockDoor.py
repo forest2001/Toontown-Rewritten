@@ -65,12 +65,14 @@ class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp)
         self.knockSfx = base.loadSfx('phase_5/audio/sfx/GUI_knock_3.ogg')
         joke = KnockKnockJokes[self.propId % len(KnockKnockJokes)]
         place = base.cr.playGame.getPlace()
+        doorName = TTLocalizer.DoorNametag
         if place:
             zone = place.getZoneId()
             branch = ZoneUtil.getBranchZone(zone)
             if branch == ToontownGlobals.SillyStreet:
-                if self.propId == 44:
-                    joke = KnockKnockContestJokes[ToontownGlobals.SillyStreet]
+                if self.propId in KnockKnockContestJokes[ToontownGlobals.SillyStreet].keys():
+                    joke = KnockKnockContestJokes[ToontownGlobals.SillyStreet][self.propId]
+                    doorName = KnockKnockDoorNames[self.propId]
             elif branch == ToontownGlobals.LoopyLane:
                 if self.propId in KnockKnockContestJokes[ToontownGlobals.LoopyLane].keys():
                     joke = KnockKnockContestJokes[ToontownGlobals.LoopyLane][self.propId]
@@ -89,7 +91,7 @@ class DistributedKnockKnockDoor(DistributedAnimatedProp.DistributedAnimatedProp)
         self.nametag = NametagGroup()
         self.nametag.setAvatar(doorNP)
         self.nametag.setFont(ToontownGlobals.getToonFont())
-        self.nametag.setName(TTLocalizer.DoorNametag)
+        self.nametag.setName(doorName)
         self.nametag.setActive(0)
         self.nametag.manage(base.marginManager)
         self.nametag.getNametag3d().setBillboardOffset(4)
