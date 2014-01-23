@@ -16,6 +16,7 @@ class DistributedHouseAI(DistributedObjectAI):
         self.name = ''
         self.color = 0
         self.housePos = 0
+        self.isInteriorInitialized = 1 # Only fresh DB houses are not inited.
         
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
@@ -36,9 +37,11 @@ class DistributedHouseAI(DistributedObjectAI):
 
         self.door.setOtherZoneIdAndDoId(self.interiorZone, self.interiorDoor.getDoId())
             
-        self.interior = DistributedHouseInteriorAI(self.air)
+        self.interior = DistributedHouseInteriorAI(self.air, self)
         self.interior.setHouseIndex(self.housePos)
         self.interior.setHouseId(self.getDoId())
+        if not self.isInteriorInitialized:
+            self.interior.initialize()
         self.interior.generateWithRequired(self.interiorZone)
 
         self.sendUpdate('setHouseReady', [])
@@ -50,11 +53,6 @@ class DistributedHouseAI(DistributedObjectAI):
         self.interior.requestDelete()
         self.air.deallocateZone(self.interiorZone)
         DistributedObjectAI.delete(self)
-
-    def initializeInterior(self):
-        # This is a newly-created house; the default furniture needs to be
-        # spawned in.
-        pass
 
     def setHousePos(self, pos):
         self.housePos = pos
@@ -175,6 +173,19 @@ class DistributedHouseAI(DistributedObjectAI):
         
     def getDeletedItems(self):
         return ''
+
+    def setInteriorInitialized(self, initialized):
+        self.isInteriorInitialized = initialized
+
+    def d_setInteriorInitialized(self, initialized):
+        self.sendUpdate('setInteriorInitialized', [initialized])
+
+    def b_setInteriorInitialized(self, initialized):
+        self.setInteriorInitialized(initialized)
+        self.d_setInteriorInitialized(initialized)
+
+    def getInteriorInitialized(self):
+        return self.isInteriorInitialized
 
     def setCannonEnabled(self, todo0):
         pass

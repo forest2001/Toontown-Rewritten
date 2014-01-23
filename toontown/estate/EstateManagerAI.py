@@ -15,7 +15,6 @@ class LoadHouseFSM(FSM):
         self.toon = toon
         self.callback = callback
 
-        self.newHouse = False
         self.done = False
 
     def start(self):
@@ -72,7 +71,6 @@ class LoadHouseFSM(FSM):
                 {'setHouseId': [doId]})
 
         self.houseId = doId
-        self.newHouse = True
         self.demand('LoadHouse')
 
     def enterLoadHouse(self):
@@ -88,10 +86,6 @@ class LoadHouseFSM(FSM):
 
     def __gotHouse(self, house):
         self.house = house
-
-        if self.newHouse:
-            self.house.initializeInterior()
-            pass
 
         self.estate.houses[self.houseIndex] = self.house
 

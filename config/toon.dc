@@ -1214,6 +1214,7 @@ dclass DistributedHouse : DistributedObject {
   setAtticWindows(blob = "") required db;
   setInteriorWindows(blob = "") required db;
   setDeletedItems(blob = "") required db;
+  setInteriorInitialized(uint8 initialized = 0) required db;
   setCannonEnabled(uint8) required;
   setHouseReady() broadcast ram;
 };

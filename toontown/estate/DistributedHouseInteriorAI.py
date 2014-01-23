@@ -4,12 +4,17 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 class DistributedHouseInteriorAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseInteriorAI")
     
-    def __init__(self, air):
+    def __init__(self, air, house):
         DistributedObjectAI.__init__(self, air)
+        self.house = house
+
         self.houseId = 0
         self.houseIndex = 0
         self.wallpaper = ''
         self.windows = ''
+
+    def initialize(self):
+        pass # Initialize the interior using houseIndex.
 
     def setHouseId(self, houseId):
         self.houseId = houseId
@@ -62,4 +67,3 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         
     def getWindows(self):
         return self.windows
-
