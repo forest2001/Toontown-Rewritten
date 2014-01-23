@@ -2082,9 +2082,9 @@ dclass DistributedFurnitureManager : DistributedObject {
 };
 
 dclass DistributedFurnitureItem : DistributedSmoothNode {
-  setItem(uint32, blob) required broadcast ram;
-  requestPosHpr(uint8, int16/10, int16/10, int16/100, int16/10, int16/10, int16/10, int16) airecv clsend;
-  setMode(uint8, uint32) required broadcast ram;
+  setItem(uint32 furnitureMgrId, blob item) required broadcast ram;
+  requestPosHpr(uint8 final, int16/10 x, int16/10 y, int16/100 z, int16/10 h, int16/10 p, int16/10 r, int16 t) airecv clsend;
+  setMode(uint8 mdoe, uint32 avId) required broadcast ram;
 };
 
 dclass DistributedBank : DistributedFurnitureItem {

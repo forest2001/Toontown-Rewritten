@@ -2,6 +2,8 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
+from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem
+from DistributedFurnitureItemAI import DistributedFurnitureItemAI
 
 class DistributedFurnitureManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFurnitureManagerAI")
@@ -21,6 +23,7 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.atticWallpaper = None
         self.atticWindows = None
         self.deletedItems = None
+        self.items = []
 
         # Initialize the above variables:
         self.loadFromHouse()
@@ -48,10 +51,26 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.house.b_setInteriorItems(self.getItems())
 
     def setItems(self, items):
-        pass
+        # Decode the blob:
+        items = CatalogItemList(items, store=CatalogItem.Customization|CatalogItem.Location)
+
+        # Throw out our old items:
+        for item in self.items:
+            item.destroy()
+        self.items = []
+
+        for item in items:
+            do = DistributedFurnitureItemAI(self.air, self, item)
+            do.generateWithRequired(self.zoneId)
+            self.items.append(do)
 
     def getItems(self):
-        return ''
+        items = CatalogItemList(store=CatalogItem.Customization|CatalogItem.Location)
+
+        for item in self.items:
+            items.append(item.catalogItem)
+
+        return items.getBlob()
 
     def setOwnerId(self, ownerId):
         self.ownerId = ownerId
