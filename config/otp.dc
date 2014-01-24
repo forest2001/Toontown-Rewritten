@@ -29,14 +29,6 @@ from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
 
 typedef uint8 bool;
-typedef uint8 uint8array[];
-typedef uint16 uint16array[];
-typedef uint32 uint32array[];
-typedef uint64 uint64array[];
-typedef int8 int8array[];
-typedef int16 int16array[];
-typedef int32 int32array[];
-typedef int64 int64array[];
 
 typedef uint32 DoId;
 
@@ -49,8 +41,8 @@ struct AvatarPendingDel {
 
 dclass Account {
   string DcObjectType db;
-  uint32array ACCOUNT_AV_SET required db;
-  uint32array pirateAvatars required db;
+  uint32 ACCOUNT_AV_SET[] required db;
+  uint32 pirateAvatars[] required db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
   string PLAYED_MINUTES db;
