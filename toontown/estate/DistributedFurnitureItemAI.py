@@ -59,3 +59,6 @@ class DistributedFurnitureItemAI(DistributedSmoothNodeAI):
     def getMode(self):
         return self.mode, self.modeAvId
 
+    def destroy(self):
+        # Presently, we just delete ourselves... No real shutdown needed.
+        self.requestDelete()

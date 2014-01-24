@@ -5,6 +5,17 @@ from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem
 from DistributedFurnitureItemAI import DistributedFurnitureItemAI
 
+FURNITURE_FAILURE_BAD_ARGS = -1
+FURNITURE_FAILURE_MISSING_OBJECT = -2
+FURNITURE_FAILURE_MISSING_INDEX = -3
+FURNITURE_FAILURE_NONMATCHING_ITEM = -4
+FURNITURE_FAILURE_DESTINATION_OCCUPIED = -5
+
+class FurnitureError(Exception):
+    def __init__(self, code):
+        Exception.__init__(self)
+        self.code = code
+
 class DistributedFurnitureManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFurnitureManagerAI")
 
@@ -200,35 +211,128 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
     def avatarExit(self):
         pass
 
-    def moveItemToAtticMessage(self, doId, context):
+
+    # Furniture-manipulation:
+    def moveItemToAttic(self, doId):
+        item = self.getItemObject(doId)
+
+        self.atticItems.append(item.catalogItem)
+        self.d_setAtticItems(self.getAtticItems())
+
+        item.destroy()
+        self.items.remove(item)
+
+    def moveItemFromAttic(self, index, x, y, z, h, p, r):
+        item = self.getAtticFurniture(self.atticItems, index)
+
+        self.atticItems.remove(item)
+        self.d_setAtticItems(self.getAtticItems())
+
+        item.posHpr = (x, y, z, h, p, r)
+
+        do = DistributedFurnitureItemAI(self.air, self, item)
+        do.generateWithRequired(self.zoneId)
+        self.items.append(do)
+
+        return (0, do.doId)
+
+    def deleteItemFromAttic(self, blob, index):
         pass
+
+    def deleteItemFromRoom(self, blob, doId):
+        pass
+
+    def moveWallpaperFromAttic(self, index, room):
+        pass
+
+    def deleteWallpaperFromAttic(self, blob, index):
+        pass
+
+    def moveWindowToAttic(self, slot):
+        pass
+
+    def moveWindowFromAttic(self, index, slot):
+        pass
+
+    def moveWindow(self, fromSlot, toSlot):
+        pass
+
+    def deleteWindowFromAttic(self, blob, index):
+        pass
+
+    def recoverDeletedItem(self, blob, index):
+        pass
+
+    # Network handlers for the above:
+    def handleMessage(self, func, response, *args):
+        context = args[-1]
+        args = args[:-1]
+
+        try:
+            retval = func(*args) or 0
+        except FurnitureError as e:
+            retval = e.code
+
+        if response == 'moveItemFromAtticResponse':
+            # This message actually includes a doId; we split the retval apart
+            # if it's a tuple, otherwise it falls back to 0.
+            if type(retval) == tuple:
+                retval, doId = retval
+            else:
+                doId = 0
+
+            self.sendUpdate(response, [retval, doId, context])
+        else:
+            self.sendUpdate(response, [retval, context])
+
+    def moveItemToAtticMessage(self, doId, context):
+        self.handleMessage(self.moveItemToAttic, 'moveItemToAtticResponse', doId, context)
 
     def moveItemFromAtticMessage(self, index, x, y, z, h, p, r, context):
-        pass
+        self.handleMessage(self.moveItemFromAttic, 'moveItemFromAtticResponse',
+                           index, x, y, z, h, p, r, context)
 
     def deleteItemFromAtticMessage(self, blob, index, context):
-        pass
+        self.handleMessage(self.deleteItemFromAttic, 'deleteItemFromAtticResponse', blob, index, context)
 
     def deleteItemFromRoomMessage(self, blob, doId, context):
-        pass
+        self.handleMessage(self.deleteItemFromRoom, 'deleteItemFromRoomResponse', blob, doId, context)
 
     def moveWallpaperFromAtticMessage(self, index, room, context):
-        pass
+        self.handleMessage(self.moveWallpaperFromAttic, 'moveWallpaperFromAtticResponse', index, room, context)
 
     def deleteWallpaperFromAtticMessage(self, blob, index, context):
-        pass
+        self.handleMessage(self.deleteWallpaperFromAttic, 'deleteWallpaperFromAtticResponse', blob, index, context)
 
     def moveWindowToAtticMessage(self, slot, context):
-        pass
+        self.handleMessage(self.moveWindowToAttic, 'moveWindowToAtticResponse', slot, context)
 
     def moveWindowFromAtticMessage(self, index, slot, context):
-        pass
+        self.handleMessage(self.moveWindowFromAttic, 'moveWindowFromAtticResponse', index, slot, context)
 
     def moveWindowMessage(self, fromSlot, toSlot, context):
-        pass
+        self.handleMessage(self.moveWindow, 'moveWindowResponse', fromSlot, toSlot, context)
 
     def deleteWindowFromAtticMessage(self, blob, index, context):
-        pass
+        self.handleMessage(self.deleteWindowFromAttic, 'deleteWindowFromAtticResponse', blob, index, context)
 
     def recoverDeletedItemMessage(self, blob, index, context):
-        pass
+        self.handleMessage(self.recoverDeletedItem, 'recoverDeletedItemResponse', blob, index, context)
+
+    # Functions to safely process data off the wire:
+    def getItemObject(self, doId):
+        item = self.air.doId2do.get(doId)
+
+        if item is None:
+            raise FurnitureError(FURNITURE_FAILURE_MISSING_OBJECT)
+
+        if item not in self.items:
+            raise FurnitureError(FURNITURE_FAILURE_MISSING_OBJECT)
+
+        return item
+
+    def getAtticFurniture(self, attic, index):
+        if index >= len(attic):
+            raise FurnitureError(FURNITURE_FAILURE_MISSING_INDEX)
+
+        return attic[index]
