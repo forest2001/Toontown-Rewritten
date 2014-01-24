@@ -200,35 +200,35 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
     def avatarExit(self):
         pass
 
-    def moveItemToAtticMessage(self, todo0, todo1):
+    def moveItemToAtticMessage(self, doId, context):
         pass
 
-    def moveItemFromAtticMessage(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7):
+    def moveItemFromAtticMessage(self, index, x, y, z, h, p, r, context):
         pass
 
-    def deleteItemFromAtticMessage(self, todo0, todo1, todo2):
+    def deleteItemFromAtticMessage(self, blob, index, context):
         pass
 
-    def deleteItemFromRoomMessage(self, todo0, todo1, todo2):
+    def deleteItemFromRoomMessage(self, blob, doId, context):
         pass
 
-    def moveWallpaperFromAtticMessage(self, todo0, todo1, todo2):
+    def moveWallpaperFromAtticMessage(self, index, room, context):
         pass
 
-    def deleteWallpaperFromAtticMessage(self, todo0, todo1, todo2):
+    def deleteWallpaperFromAtticMessage(self, blob, index, context):
         pass
 
-    def moveWindowToAtticMessage(self, todo0, todo1):
+    def moveWindowToAtticMessage(self, slot, context):
         pass
 
-    def moveWindowFromAtticMessage(self, todo0, todo1, todo2):
+    def moveWindowFromAtticMessage(self, index, slot, context):
         pass
 
-    def moveWindowMessage(self, todo0, todo1, todo2):
+    def moveWindowMessage(self, fromSlot, toSlot, context):
         pass
 
-    def deleteWindowFromAtticMessage(self, todo0, todo1, todo2):
+    def deleteWindowFromAtticMessage(self, blob, index, context):
         pass
 
-    def recoverDeletedItemMessage(self, todo0, todo1, todo2):
+    def recoverDeletedItemMessage(self, blob, index, context):
         pass
