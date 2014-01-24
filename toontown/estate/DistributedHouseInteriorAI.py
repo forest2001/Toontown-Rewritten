@@ -1,6 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from DistributedFurnitureManagerAI import *
+from toontown.catalog.CatalogWindowItem import CatalogWindowItem
+from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
 from DNAFurnitureReaderAI import DNAFurnitureReaderAI
 from toontown.dna.DNAParser import *
 
@@ -12,6 +14,14 @@ houseInteriors = [
     'phase_5.5/dna/house_interior7.dna',
     'phase_5.5/dna/house_interior8.dna',
     'phase_5.5/dna/house_interior10.dna',
+]
+
+defaultWindows = [
+    CatalogWindowItem(20, placement=0),
+]
+
+defaultWallpaper = [
+    CatalogWallpaperItem(1100, 0, 1000, 0),
 ]
 
 class DistributedHouseInteriorAI(DistributedObjectAI):
@@ -51,6 +61,14 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
 
         # Set furniture:
         self.furnitureManager.setItems(furnitureReader.getBlob())
+
+        # Set default windows and wallpaper:
+        del self.furnitureManager.windows[:]
+        self.furnitureManager.windows.extend(defaultWindows)
+        self.furnitureManager.applyWindows()
+        del self.furnitureManager.wallpaper[:]
+        self.furnitureManager.wallpaper.extend(defaultWallpaper)
+        self.furnitureManager.applyWallpaper()
 
         # Save:
         self.furnitureManager.saveToHouse()

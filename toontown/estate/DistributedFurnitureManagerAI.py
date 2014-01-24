@@ -32,8 +32,11 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         self.atticItems = None
         self.atticWallpaper = None
+        self.wallpaper = None
         self.atticWindows = None
+        self.windows = None
         self.deletedItems = None
+
         self.items = []
 
         # Initialize the above variables:
@@ -50,8 +53,13 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.b_setAtticWindows(self.house.getAtticWindows())
         self.b_setDeletedItems(self.house.getDeletedItems())
 
-        self.interior.b_setWallpaper(self.house.getInteriorWallpaper())
-        self.interior.b_setWindows(self.house.getInteriorWindows())
+        self.wallpaper = CatalogItemList(self.house.getInteriorWallpaper(),
+                                         store=CatalogItem.Customization)
+        self.applyWallpaper()
+        self.windows = CatalogItemList(self.house.getInteriorWindows(),
+                                       store=CatalogItem.Customization |
+                                             CatalogItem.WindowPlacement)
+        self.applyWindows()
 
         self.setItems(self.house.getInteriorItems())
 
@@ -61,10 +69,16 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.house.b_setAtticWindows(self.getAtticWindows())
         self.house.b_setDeletedItems(self.getDeletedItems())
 
-        self.house.b_setInteriorWallpaper(self.interior.getWallpaper())
-        self.house.b_setInteriorWindows(self.interior.getWindows())
+        self.house.b_setInteriorWallpaper(self.wallpaper.getBlob())
+        self.house.b_setInteriorWindows(self.windows.getBlob())
 
         self.house.b_setInteriorItems(self.getItems())
+
+    def applyWallpaper(self):
+        self.interior.b_setWallpaper(self.wallpaper.getBlob())
+
+    def applyWindows(self):
+        self.interior.b_setWindows(self.windows.getBlob())
 
     def setItems(self, items):
         # Decode the blob:
