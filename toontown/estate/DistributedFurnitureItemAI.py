@@ -20,6 +20,13 @@ class DistributedFurnitureItemAI(DistributedSmoothNodeAI):
                 self.catalogItem.getBlob(CatalogItem.Customization))
 
     def requestPosHpr(self, final, x, y, z, h, p, r, t):
+        senderId = self.air.getAvatarIdFromSender()
+        if (not self.furnitureMgr.director or
+                senderId != self.furnitureMgr.director.doId):
+            self.air.writeServerEvent('suspicious', senderId,
+                                      'Tried to move furniture without being the director!')
+            return
+
         # TODO: Smoothing. For now, just set position and update catalogItem:
         self.catalogItem.posHpr = x, y, z, h, p, r
         self.b_setPosHpr(x, y, z, h, p, r)
