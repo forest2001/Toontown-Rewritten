@@ -28,6 +28,11 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         # Initialize the above variables:
         self.loadFromHouse()
 
+    def announceGenerate(self):
+        DistributedObjectAI.announceGenerate(self)
+        for item in self.items:
+            item.generateWithRequired(self.zoneId)
+
     def loadFromHouse(self):
         self.b_setAtticItems(self.house.getAtticItems())
         self.b_setAtticWallpaper(self.house.getAtticWallpaper())
@@ -61,7 +66,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         for item in items:
             do = DistributedFurnitureItemAI(self.air, self, item)
-            do.generateWithRequired(self.zoneId)
+            if self.isGenerated():
+                do.generateWithRequired(self.zoneId)
             self.items.append(do)
 
     def getItems(self):

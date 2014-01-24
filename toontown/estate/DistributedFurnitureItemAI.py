@@ -11,8 +11,9 @@ class DistributedFurnitureItemAI(DistributedSmoothNodeAI):
         self.furnitureMgr = furnitureMgr
         self.catalogItem = catalogItem
 
+    def announceGenerate(self):
         x, y, z, h, p, r = self.catalogItem.posHpr
-        self.setPosHpr(x, y, z, h, p, r)
+        self.b_setPosHpr(x, y, z, h, p, r)
 
     def getItem(self):
         return (self.furnitureMgr.doId,
