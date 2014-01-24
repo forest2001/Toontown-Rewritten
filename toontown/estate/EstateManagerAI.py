@@ -78,7 +78,9 @@ class LoadHouseFSM(FSM):
         self.mgr.air.sendActivate(self.houseId, self.mgr.air.districtId, self.estate.zoneId,
                                   self.mgr.air.dclassesByName['DistributedHouseAI'],
                                   {'setHousePos': [self.houseIndex],
-                                   'setColor': [self.houseIndex]})
+                                   'setColor': [self.houseIndex],
+                                   'setName': [self.toon['setName'][0]],
+                                   'setAvatarId': [self.toon['ID']]})
 
         # Now we wait for the house to show up... We do this by hanging a messenger
         # hook which the DistributedHouseAI throws once it spawns.
