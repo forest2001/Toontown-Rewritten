@@ -45,7 +45,8 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
             self.track = None
         self.bubbles.destroy()
         del self.bubbles
-        self.pond.removeTarget(self)
+        if self.pond:
+            self.pond.removeTarget(self)
         self.pond = None
         self.ignore('generate-%d' % self.pondDoId)
         DistributedNode.DistributedNode.disable(self)
