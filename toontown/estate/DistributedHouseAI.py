@@ -53,7 +53,9 @@ class DistributedHouseAI(DistributedObjectAI):
         self.interior.generateWithRequired(self.interiorZone)
 
         if not self.isInteriorInitialized:
+            self.notify.info('Initializing interior...')
             self.interior.initialize()
+            self.b_setInteriorInitialized(1)
 
         self.sendUpdate('setHouseReady', [])
         

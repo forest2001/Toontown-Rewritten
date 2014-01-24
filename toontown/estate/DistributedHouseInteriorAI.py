@@ -1,6 +1,18 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from DistributedFurnitureManagerAI import *
+from DNAFurnitureReaderAI import DNAFurnitureReaderAI
+from toontown.dna.DNAParser import *
+
+# The house interior DNA files for each
+houseInteriors = [
+    'phase_5.5/dna/house_interior3.dna',
+    'phase_5.5/dna/house_interior4.dna',
+    'phase_5.5/dna/house_interior5.dna',
+    'phase_5.5/dna/house_interior7.dna',
+    'phase_5.5/dna/house_interior8.dna',
+    'phase_5.5/dna/house_interior10.dna',
+]
 
 class DistributedHouseInteriorAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseInteriorAI")
@@ -27,7 +39,21 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         self.furnitureManager.delete()
 
     def initialize(self):
-        pass # Initialize the interior using houseIndex.
+        # Get DNA file appropriate to this house...
+        dnaFile = houseInteriors[self.houseIndex]
+
+        # Load DNA...
+        dnaStorage = DNAStorage()
+        dnaData = loadDNAFileAI(dnaStorage, dnaFile)
+
+        # Read it into furniture...
+        furnitureReader = DNAFurnitureReaderAI(dnaData)
+
+        # Set furniture:
+        self.furnitureManager.setItems(furnitureReader.getBlob())
+
+        # Save:
+        self.furnitureManager.saveToHouse()
 
     def setHouseId(self, houseId):
         self.houseId = houseId
