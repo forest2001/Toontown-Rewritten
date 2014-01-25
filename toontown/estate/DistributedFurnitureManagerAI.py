@@ -3,13 +3,8 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem
+from toontown.toonbase import ToontownGlobals
 from DistributedFurnitureItemAI import DistributedFurnitureItemAI
-
-FURNITURE_FAILURE_BAD_ARGS = -1
-FURNITURE_FAILURE_MISSING_OBJECT = -2
-FURNITURE_FAILURE_MISSING_INDEX = -3
-FURNITURE_FAILURE_NONMATCHING_ITEM = -4
-FURNITURE_FAILURE_DESTINATION_OCCUPIED = -5
 
 class FurnitureError(Exception):
     def __init__(self, code):
@@ -236,6 +231,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         item.destroy()
         self.items.remove(item)
 
+        return ToontownGlobals.FM_MovedItem
+
     def moveItemFromAttic(self, index, x, y, z, h, p, r):
         item = self.getAtticFurniture(self.atticItems, index)
 
@@ -248,7 +245,7 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         do.generateWithRequired(self.zoneId)
         self.items.append(do)
 
-        return (0, do.doId)
+        return (ToontownGlobals.FM_MovedItem, do.doId)
 
     def deleteItemFromAttic(self, blob, index):
         pass
@@ -263,13 +260,63 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         pass
 
     def moveWindowToAttic(self, slot):
-        pass
+        window = self.getWindow(slot)
+        if window is None:
+            return ToontownGlobals.FM_InvalidIndex
+
+        self.windows.remove(window)
+        self.applyWindows()
+        self.atticWindows.append(window)
+        self.d_setAtticWindows(self.getAtticWindows())
+
+        return ToontownGlobals.FM_MovedItem
 
     def moveWindowFromAttic(self, index, slot):
-        pass
+        retcode = ToontownGlobals.FM_MovedItem
+
+        window = self.getAtticFurniture(self.atticWindows, index)
+
+        if slot > 5:
+            # This is not a valid slot! HACKER!!!
+            self.air.writeServerEvent('suspicious', self.air.getAvatarIdFromSender(),
+                                      'Tried to move window to invalid slot %d!' % slot)
+            return ToontownGlobals.FM_HouseFull
+
+        if self.getWindow(slot):
+            # Already a window there, swap 'er out.
+            self.moveWindowToAttic(slot)
+            retcode = ToontownGlobals.FM_SwappedItem
+
+        self.atticWindows.remove(window)
+        self.d_setAtticWindows(self.getAtticWindows())
+        window.placement = slot
+        self.windows.append(window)
+        self.applyWindows()
+
+        return retcode
 
     def moveWindow(self, fromSlot, toSlot):
-        pass
+        retcode = ToontownGlobals.FM_MovedItem
+
+        window = self.getWindow(fromSlot)
+        if window is None:
+            return ToontownGlobals.FM_InvalidIndex
+
+        if toSlot > 5:
+            # This is not a valid slot! HACKER!!!
+            self.air.writeServerEvent('suspicious', self.air.getAvatarIdFromSender(),
+                                      'Tried to move window to invalid slot %d!' % toSlot)
+            return ToontownGlobals.FM_HouseFull
+
+        if self.getWindow(toSlot):
+            # Already a window there, swap 'er out.
+            self.moveWindowToAttic(toSlot)
+            retcode = ToontownGlobals.FM_SwappedItem
+
+        window.placement = toSlot
+        self.applyWindows()
+
+        return retcode
 
     def deleteWindowFromAttic(self, blob, index):
         pass
@@ -282,10 +329,17 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         context = args[-1]
         args = args[:-1]
 
-        try:
-            retval = func(*args) or 0
-        except FurnitureError as e:
-            retval = e.code
+        senderId = self.air.getAvatarIdFromSender()
+        if not self.director or senderId != self.director.doId:
+            self.air.writeServerEvent('suspicious', senderId,
+                                      'Sent furniture management request without'
+                                      ' being the director.')
+            retval = ToontownGlobals.FM_NotDirector
+        else:
+            try:
+                retval = func(*args) or 0
+            except FurnitureError as e:
+                retval = e.code
 
         if response == 'moveItemFromAtticResponse':
             # This message actually includes a doId; we split the retval apart
@@ -338,15 +392,22 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         item = self.air.doId2do.get(doId)
 
         if item is None:
-            raise FurnitureError(FURNITURE_FAILURE_MISSING_OBJECT)
+            raise FurnitureError(ToontownGlobals.FM_InvalidItem)
 
         if item not in self.items:
-            raise FurnitureError(FURNITURE_FAILURE_MISSING_OBJECT)
+            raise FurnitureError(ToontownGlobals.FM_InvalidItem)
 
         return item
 
     def getAtticFurniture(self, attic, index):
         if index >= len(attic):
-            raise FurnitureError(FURNITURE_FAILURE_MISSING_INDEX)
+            raise FurnitureError(ToontownGlobals.FM_InvalidIndex)
 
         return attic[index]
+
+    def getWindow(self, slot):
+        for window in self.windows:
+            if window.placement == slot:
+                return window
+
+        return None
