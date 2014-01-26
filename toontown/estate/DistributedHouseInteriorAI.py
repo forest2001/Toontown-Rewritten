@@ -63,9 +63,9 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         self.furnitureManager.setItems(furnitureReader.getBlob())
 
         # Set default windows and wallpaper:
-        del self.furnitureManager.windows[:]
-        self.furnitureManager.windows.extend(defaultWindows)
-        self.furnitureManager.applyWindows()
+        #del self.furnitureManager.windows[:]
+        #self.furnitureManager.windows.extend(defaultWindows)
+        #self.furnitureManager.applyWindows()
         del self.furnitureManager.wallpaper[:]
         self.furnitureManager.wallpaper.extend(defaultWallpaper)
         self.furnitureManager.applyWallpaper()
