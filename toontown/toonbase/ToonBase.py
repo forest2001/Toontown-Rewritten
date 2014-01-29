@@ -22,6 +22,7 @@ from toontown.toonbase import ToontownAccess
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
+from sys import platform
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -58,6 +59,11 @@ class ToonBase(OTPBase.OTPBase):
             self.notify.debug('Enabling particles')
             self.enableParticles()
         self.accept(ToontownGlobals.ScreenshotHotkey, self.takeScreenShot)
+
+        # The command key on OS X is the Start Key on windows
+        if platform == "darwin":
+            self.accept(ToontownGlobals.QuitGameOSX, self.userExit)
+
         self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
         oldLoader = self.loader
