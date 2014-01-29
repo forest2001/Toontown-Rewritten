@@ -976,7 +976,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.__furnitureGui:
             return
         guiModels = loader.loadModel('phase_5.5/models/gui/house_design_gui')
-        self.__furnitureGui = DirectFrame(relief=None, pos=(-1.19, 0.0, 0.33), scale=0.04, image=guiModels.find('**/attic'))
+        self.__furnitureGui = DirectFrame(relief=None, parent=base.a2dTopLeft, pos=(0.115, 0.0, -0.66), scale=0.04, image=guiModels.find('**/attic'))
         DirectLabel(parent=self.__furnitureGui, relief=None, image=guiModels.find('**/rooftile'))
         bMoveStartUp = guiModels.find('**/bu_attic/bu_attic_up')
         bMoveStartDown = guiModels.find('**/bu_attic/bu_attic_down')
@@ -1194,13 +1194,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.moveFurnitureButtonObscured <= 0:
             if self.furnitureManager != None and self.furnitureDirector == self.doId:
                 self.loadFurnitureGui()
-                self.__furnitureGui.setPos(-1.16, 0, -0.03)
+                self.__furnitureGui.setPos(0.155, -0.6, -1.045)
                 self.__furnitureGui.setScale(0.06)
             elif self.cr.furnitureManager != None:
                 self.showFurnitureGui()
                 if self.__lerpFurnitureButton:
                     self.__lerpFurnitureButton.finish()
-                self.__lerpFurnitureButton = self.__furnitureGui.posHprScaleInterval(1.0, pos=Point3(-1.19, 0.0, 0.33), hpr=Vec3(0.0, 0.0, 0.0), scale=Vec3(0.04, 0.04, 0.04), blendType='easeInOut', name='lerpFurnitureButton')
+                self.__lerpFurnitureButton = self.__furnitureGui.posHprScaleInterval(1.0, pos=Point3(0.115, 0.0, -0.66), hpr=Vec3(0.0, 0.0, 0.0), scale=Vec3(0.04, 0.04, 0.04), blendType='easeInOut', name='lerpFurnitureButton')
                 self.__lerpFurnitureButton.start()
         if hasattr(self, 'inEstate') and self.inEstate:
             self.loadGardeningGui()
