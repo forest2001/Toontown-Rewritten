@@ -2,7 +2,18 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from PartyGlobals import *
 import time
-
+# ugh all these activities
+from toontown.parties.DistributedPartyJukeboxActivityAI import DistributedPartyJukeboxActivityAI
+from toontown.parties.DistributedPartyDanceActivityAI import DistributedPartyDanceActivityAI
+from toontown.parties.DistributedPartyJukebox40ActivityAI import DistributedPartyJukebox40ActivityAI
+from toontown.parties.DistributedPartyDance20ActivityAI import DistributedPartyDance20ActivityAI
+from toontown.parties.DistributedPartyCogActivityAI import DistributedPartyCogActivityAI
+from toontown.parties.DistributedPartyTrampolineActivityAI import DistributedPartyTrampolineActivityAI
+from toontown.parties.DistributedPartyVictoryTrampolineActivityAI import DistributedPartyVictoryTrampolineActivityAI
+from toontown.parties.DistributedPartyCatchActivityAI import DistributedPartyCatchActivityAI
+from toontown.parties.DistributedPartyTugOfWarActivityAI import DistributedPartyTugOfWarActivityAI
+from toontown.parties.DistributedPartyCannonActivityAI import DistributedPartyCannonActivityAI
+from toontown.parties.DistributedPartyFireworksActivityAI import DistributedPartyFireworksActivityAI
 
 """
 dclass DistributedParty : DistributedObject {
@@ -27,9 +38,13 @@ class DistributedPartyAI(DistributedObjectAI):
         # buncha required crap
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         self.startedAt = time.strftime(PARTY_TIME_FORMAT)
-        self.partyClockInfo = (0,0,0)
         self.partyState = 0
         self.avIdsAtParty = []
+
+        # apparently 'partyclockinfo' is the xyz on the party grid
+        for activity in self.info['activities']:
+            if activity[0] == ActivityIds.PartyClock:
+                self.partyClockInfo = (activity[1], activity[2], activity[3])
 
         # We'll need to inform the UD later of the host's name so other public parties know the host. Maybe we know who he is..
         self.hostName = ''
@@ -39,7 +54,25 @@ class DistributedPartyAI(DistributedObjectAI):
 
     def generate(self):
         DistributedObjectAI.generate(self)
-        print 'regular generate called####'
+        # make stuff
+        actId2Class = {
+            ActivityIds.PartyJukebox: DistributedPartyJukeboxActivityAI,
+            ActivityIds.PartyCannon: DistributedPartyCannonActivityAI,
+            ActivityIds.PartyTrampoline: DistributedPartyTrampolineActivityAI,
+            ActivityIds.PartyVictoryTrampoline: DistributedPartyVictoryTrampolineActivityAI,
+            ActivityIds.PartyCatch: DistributedPartyCatchActivityAI,
+            ActivityIds.PartyDance: DistributedPartyDanceActivityAI, 
+            ActivityIds.PartyTugOfWar: DistributedPartyTugOfWarActivityAI,
+            ActivityIds.PartyFireworks: DistributedPartyFireworksActivityAI,
+            ActivityIds.PartyJukebox40: DistributedPartyJukebox40ActivityAI,
+            ActivityIds.PartyDance20: DistributedPartyDance20ActivityAI,
+            ActivityIds.PartyCog: DistributedPartyCogActivityAI,
+        }
+        for activity in self.info['activities']:
+            actId = activity[0]
+            if actId in actId2Class:
+                act = actId2Class[actId](self.air, self.doId, activity)
+                act.generateWithRequired(self.zoneId)
 
     def getPartyClockInfo(self):
         return self.partyClockInfo
@@ -54,27 +87,26 @@ class DistributedPartyAI(DistributedObjectAI):
         self.partyState = partyState
         self.sendUpdate('setPartyState', [partyState])
 
-    def _formatParty(self, partyDict):
+    def _formatParty(self, partyDict, status=PartyStatus.Started):
         start = partyDict['start']
         end = partyDict['end']
         return [partyDict['partyId'],
                 partyDict['hostId'],
-                start.tm_year,
-                start.tm_mon,
-                start.tm_mday,
-                start.tm_hour,
-                start.tm_min,
-                end.tm_year,
-                end.tm_mon,
-                end.tm_mday,
-                end.tm_hour,
-                end.tm_min,
+                start.year,
+                start.month,
+                start.day,
+                start.hour,
+                start.minute,
+                end.year,
+                end.month,
+                end.day,
+                end.hour,
+                end.minute,
                 partyDict['isPrivate'],
                 partyDict['inviteTheme'],
                 partyDict['activities'],
                 partyDict['decorations'],
-                PartyStatus.Started]
-
+                status]
     def getPartyInfoTuple(self):
         return self._formatParty(self.info)
 
