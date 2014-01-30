@@ -414,6 +414,7 @@ class ToonBase(OTPBase.OTPBase):
 
         self.cr.loginFSM.request('shutdown')
         self.notify.warning('Could not request shutdown; exiting anyway.')
+        self.ignore(ToontownGlobals.QuitGameOSX)
         self.exitShow()
 
     def panda3dRenderError(self):
