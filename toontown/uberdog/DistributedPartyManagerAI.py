@@ -3,7 +3,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from otp.distributed.OtpDoGlobals import *
 from pandac.PandaModules import *
 from toontown.parties.DistributedPartyAI import DistributedPartyAI
-import time
+from datetime import datetime
 
 class DistributedPartyManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyManagerAI")
@@ -14,12 +14,11 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.partyId2PlanningZone = {}
         self.partyId2Host = {}
         self.host2PartyId = {}
+        self.avId2PartyId = {}
         self.partyId2Party = {}
         self.partyInfo = {}
         self.partyAllocator = UniqueIdAllocator(0, 1000000)
         print 'DPMAI - my doid: %s' % self.doId
-
-        self.sendUpdate('partyManagerAIStartingUp', [simbase.air.districtId, 0]) # the 0 is a uint32
 
     def _makePartyDict(self, struct):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -27,9 +26,9 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         party['partyId'] = struct[0]
         party['hostId'] = struct[1]
         start = '%s-%s-%s %s:%s:00' % (struct[2], struct[3], struct[4], struct[5], struct[6])
-        party['start'] = time.strptime(start, PARTY_TIME_FORMAT)
+        party['start'] = datetime.strptime(start, PARTY_TIME_FORMAT)
         end = '%s-%s-%s %s:%s:00' % (struct[7], struct[8], struct[9], struct[10], struct[11])
-        party['end'] = time.strptime(end, PARTY_TIME_FORMAT)
+        party['end'] = datetime.strptime(end, PARTY_TIME_FORMAT)
         party['isPrivate'] = struct[12]
         party['inviteTheme'] = struct[13]
         party['activities'] = struct[14]
@@ -49,8 +48,6 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     def canBuyParties(self):
         return True
 
-    def addParty(self, todo0, todo1, todo2, todo3, todo4, todo5, todo6, todo7, todo8, todo9):
-        pass
 
     def addPartyRequest(self, hostId, startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         if hostId != simbase.air.getAvatarIdFromSender():
@@ -59,13 +56,12 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         print 'party requested: host %s, start %s, end %s, private %s, invitetheme %s, activities omitted, decor omitted, invitees %s' % (hostId, startTime, endTime, isPrivate, inviteTheme, inviteeIds)
         simbase.air.globalPartyMgr.sendAddParty(hostId, self.host2PartyId[hostId], startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds)
 
-    def addPartyResponse(self, hostId, errorCode):
-        pass
-
-    def addPartyResponseUdToAi(self, partyId, errorCode):
+    def addPartyResponseUdToAi(self, partyId, errorCode, partyStruct):
         avId = self.partyId2Host[partyId]
         print 'responding to client now that ud got back to us'
         self.sendUpdateToAvatarId(avId, 'addPartyResponse', [avId, errorCode])
+        # We also need to remember to update the field on the DToon indicating parties he's hosting
+        self.air.doId2do[avId].sendUpdate('setHostedParties', [[partyStruct]])
         pass
 
     def markInviteAsReadButNotReplied(self, todo0, todo1):
@@ -101,9 +97,6 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     def changePartyStatusResponse(self, todo0, todo1, todo2, todo3):
         pass
 
-    def partyInfoOfHostRequestAiToUd(self, todo0, todo1):
-        pass
-
     def partyInfoOfHostFailedResponseUdToAi(self, todo0):
         pass
 
@@ -123,6 +116,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
             if hostId not in self.host2PartyId:
                 # Uhh, we don't know if the host even has a party. Better ask the ud
                 self.air.globalPartyMgr.queryPartyForHost(hostId)
+                print 'querying for details against hostId %s ' % hostId
                 return
             partyId = self.host2PartyId[hostId]
             # Is the party already running?
@@ -161,6 +155,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
             print 'freeing zone'
             self.air.deallocateZone(self.partyId2PlanningZone[partyId])
             del self.partyId2PlanningZone[partyId]
+            del self.host2PartyId[hostId]
+            del self.partyId2Host[partyId]
         return
 
     def sendAvToPlayground(self, todo0, todo1):
@@ -228,4 +224,3 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def mwResponseUdToAllAi(self, todo0, todo1, todo2, todo3):
         pass
-
