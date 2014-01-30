@@ -2,7 +2,7 @@ from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobal
 from direct.distributed.PyDatagram import *
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from PartyGlobals import *
-import time
+from datetime import datetime
 
 class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('GlobalPartyManagerUD')
@@ -14,10 +14,13 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.senders2Mgrs = {}
         self.host2Party = {}
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-        startTime = time.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
-        endTime = time.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
-        self.host2Party[100000001] = {'hostId': 100000001, 'start': startTime, 'end': endTime, 'partyId': 1717986918400000, 'decorations': [[3,5,7,6]], 'activities': [[10,13,6,18],[7,8,7,0]],'inviteTheme':1,'isPrivate':0,'inviteeIds':[]}
-        
+        startTime = datetime.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
+        endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
+        #self.host2Party[100000001] = {'hostId': 100000001, 'start': startTime, 'end': endTime, 'partyId': 1717986918400000, 'decorations': [[3,5,7,6]], 'activities': [[10,13,6,18],[7,8,7,0]],'inviteTheme':1,'isPrivate':0,'inviteeIds':[]}
+
+        # Setup tasks
+        self.runAtNextInterval()
+
     # GPMUD -> PartyManagerAI messaging
     def _makeAIMsg(self, field, values, recipient):
         return self.air.dclassesByName['DistributedPartyManagerUD'].getFieldByName(field).aiFormatUpdate(recipient, recipient, simbase.air.ourChannel, values)
@@ -36,27 +39,44 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         dg = self._makeAvMsg(field, values, avId)
         self.air.send(dg)
         
+    # Task stuff
+    def runAtNextInterval(self):
+        now = datetime.now()
+        howLongUntilAFive = (60 - now.second) + 60 * (4 - (now.minute % 5))
+        taskMgr.doMethodLater(howLongUntilAFive, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
+
+    def __checkPartyStarts(self, task):
+        print 'Checkstarts invoked!<#'
+        now = datetime.now()
+        for hostId in self.host2Party:
+            party = self.host2Party[hostId]
+            if party['start'] < now:
+                # Time to start party
+                self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party, status=PartyStatus.CanStart)]])
+                self.sendToAv(hostId, 'setPartyCanStart', [party['partyId']])
+        self.runAtNextInterval()
+
     # Format a party dict into a party struct suitable for the wire
-    def _formatParty(self, partyDict):
+    def _formatParty(self, partyDict, status=PartyStatus.Pending):
         start = partyDict['start']
         end = partyDict['end']
         return [partyDict['partyId'],
                 partyDict['hostId'],
-                start.tm_year,
-                start.tm_mon,
-                start.tm_mday,
-                start.tm_hour,
-                start.tm_min,
-                end.tm_year,
-                end.tm_mon,
-                end.tm_mday,
-                end.tm_hour,
-                end.tm_min,
+                start.year,
+                start.month,
+                start.day,
+                start.hour,
+                start.minute,
+                end.year,
+                end.month,
+                end.day,
+                end.hour,
+                end.minute,
                 partyDict['isPrivate'],
                 partyDict['inviteTheme'],
                 partyDict['activities'],
                 partyDict['decorations'],
-                PartyStatus.CanStart]
+                status]
 
     # Avatar joined messages, invoked by the CSMUD
     def avatarJoined(self, avId):
@@ -87,11 +107,16 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def addParty(self, avId, partyId, start, end, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         print 'start time: %s' % start
-        startTime = time.strptime(start, PARTY_TIME_FORMAT)
-        endTime = time.strptime(end, PARTY_TIME_FORMAT)
-        print 'start year: %s' % startTime.tm_year
+        startTime = datetime.strptime(start, PARTY_TIME_FORMAT)
+        endTime = datetime.strptime(end, PARTY_TIME_FORMAT)
+        print 'start year: %s' % startTime.year
+        if avId in self.host2Party:
+            # Sorry, one party at a time
+            self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.TooManyHostedParties])
         self.host2Party[avId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds}
-        self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk])
+        self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.host2Party[avId])])
+        taskMgr.remove('GlobalPartyManager_checkStarts')
+        taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
         return
         
     def queryParty(self, hostId):
@@ -102,4 +127,3 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             self.sendToAI('partyInfoOfHostResponseUdToAi', [self._formatParty(party), party.get('inviteeIds', [])])
             return
         print 'query failed, av %s isnt hosting anything' % hostId
-        
