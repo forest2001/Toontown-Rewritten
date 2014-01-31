@@ -15,3 +15,12 @@ class GlobalPartyManagerAI(DistributedObjectGlobalAI):
         
     def queryPartyForHost(self, hostId):
         self.sendUpdate('queryParty', [hostId])
+
+    def partyStarted(self, partyId, shardId, zoneId, hostName):
+        self.sendUpdate('partyHasStarted', [partyId, shardId, zoneId, hostName])
+
+    def toonJoinedParty(self, partyId, avId):
+        self.sendUpdate('toonJoinedParty', [partyId, avId])
+
+    def toonLeftParty(self, partyId, avId):
+        self.sendUpdate('toonLeftParty', [partyId, avId])

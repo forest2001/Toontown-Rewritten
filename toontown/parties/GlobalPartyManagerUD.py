@@ -11,8 +11,11 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
+        self.notify.debug("GPMUD generated")
         self.senders2Mgrs = {}
-        self.host2Party = {}
+        self.host2PartyId = {} # just a reference mapping
+        self.id2Party = {} # This should be replaced with a longterm datastore
+        self.party2PubInfo = {} # This should not be longterm
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         startTime = datetime.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
         endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
@@ -48,12 +51,13 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def __checkPartyStarts(self, task):
         print 'Checkstarts invoked!<#'
         now = datetime.now()
-        for hostId in self.host2Party:
-            party = self.host2Party[hostId]
+        for partyId in self.id2Party:
+            party = self.id2Party[partyId]
             if party['start'] < now:
                 # Time to start party
+                hostId = party['hostId']
                 self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party, status=PartyStatus.CanStart)]])
-                self.sendToAv(hostId, 'setPartyCanStart', [party['partyId']])
+                self.sendToAv(hostId, 'setPartyCanStart', [partyId])
         self.runAtNextInterval()
 
     # Format a party dict into a party struct suitable for the wire
@@ -78,22 +82,38 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
                 partyDict['decorations'],
                 status]
 
-    # Avatar joined messages, invoked by the CSMUD
+    # Avatar joined the game, invoked by the CSMUD
     def avatarJoined(self, avId):
-        party = self.host2Party.get(avId, None)
-        if party:
+        partyId = self.host2PartyId.get(avId, None)
+        if partyId:
             print 'avId %s has a party that i am telling them about' % avId
+            party = self.id2Party[partyId]
             self.sendToAv(avId, 'setHostedParties', [[self._formatParty(party)]])
             # For now, he can start instantly
-            self.sendToAv(avId, 'setPartyCanStart', [party['partyId']])
-        
-    def __updateAIs(self):
-        # I'm pretty sure the UD is single-threaded, so it won't end up updating AIs while a new party is added, messing things up
-        partyIds = self.host2Party.keys()
-        for s in self.senders2Mgrs.keys():
-            pass#self.sendToAI('updateToPublicPartyCountUdToAllAi', [
+            self.sendToAv(avId, 'setPartyCanStart', [partyId])
 
-        
+    # uberdog coordination of public party info
+    def __updatePartyInfo(self, partyId):
+        # Update all the AIs about this public party
+        party = self.party2PubInfo[partyId]
+        for sender in self.senders2Mgrs:
+            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['hostName']])
+
+    def __updatePartyCount(self, partyId):
+        # Update the party guest count
+        for sender in self.senders2Mgrs:
+            pass
+
+    def partyHasStarted(self, partyId, shardId, zoneId, hostName):
+        print self.id2Party[partyId]['activities']
+        self.party2PubInfo[partyId] = {'partyId': partyId, 'shardId': shardId, 'zoneId': zoneId, 'hostName': hostName, 'numGuests': 0, 'maxGuests': MaxToonsAtAParty}
+        self.__updatePartyInfo(partyId)
+
+    def toonJoinedParty(self, partyId, avId):
+        pass
+    def toonLeftParty(self, partyId, avId):
+        pass
+
     def partyManagerAIHello(self, channel):
         # Upon AI boot, DistributedPartyManagerAIs are supposed to say hello. 
         # They send along the DPMAI's doId as well, so that I can talk to them later.
@@ -110,20 +130,21 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         startTime = datetime.strptime(start, PARTY_TIME_FORMAT)
         endTime = datetime.strptime(end, PARTY_TIME_FORMAT)
         print 'start year: %s' % startTime.year
-        if avId in self.host2Party:
+        if avId in self.host2PartyId:
             # Sorry, one party at a time
             self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.TooManyHostedParties])
-        self.host2Party[avId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds}
-        self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.host2Party[avId])])
+        self.id2Party[partyId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds}
+        self.host2PartyId[avId] = partyId
+        self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.id2Party[partyId])])
         taskMgr.remove('GlobalPartyManager_checkStarts')
         taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
         return
         
     def queryParty(self, hostId):
         # An AI is wondering if the host has a party. We'll tell em!
-        if hostId in self.host2Party:
+        if hostId in self.host2PartyId:
             # Yep, he has a party.
-            party = self.host2Party[hostId]
+            party = self.id2Party[self.host2PartyId[hostId]]
             self.sendToAI('partyInfoOfHostResponseUdToAi', [self._formatParty(party), party.get('inviteeIds', [])])
             return
         print 'query failed, av %s isnt hosting anything' % hostId
