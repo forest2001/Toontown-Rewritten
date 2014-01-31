@@ -16,9 +16,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.host2PartyId = {}
         self.avId2PartyId = {}
         self.partyId2Party = {}
-        self.partyInfo = {}
+        self.pubPartyInfo = {}
         self.partyAllocator = UniqueIdAllocator(0, 1000000)
-        print 'DPMAI - my doid: %s' % self.doId
 
     def _makePartyDict(self, struct):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -39,11 +38,11 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     # Management stuff
     def partyManagerUdStartingUp(self):
         # This is sent in reply to the GPMAI's hello
-        print 'uberdog has come up'
+        self.notify.info("uberdog has said hello")
 
     def partyManagerUdLost(self):
         # well fuck. ud died.
-        print 'uberdog died'
+        self.notify.warning("uberdog lost!")
 
     def canBuyParties(self):
         return True
@@ -141,6 +140,9 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         # We need to setup the party itself on our end, so make an ai party
         partyAI = DistributedPartyAI(self.air, party['hostId'], zoneId, party)
         partyAI.generateWithRequiredAndId(self.air.allocateChannel(), self.air.districtId, zoneId)
+
+        # Alert the UD
+        self.air.globalPartyMgr.partyStarted(partyId, self.air.ourChannel, zoneId, self.air.doId2do[party['hostId']].getName())
         
         # Don't forget this was initially started by a getPartyZone, so we better tell the host the partyzone
         self.sendUpdateToAvatarId(party['hostId'], 'receivePartyZone', [party['hostId'], partyId, zoneId])
@@ -183,12 +185,16 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     def toonHasExitedPartyAiToUd(self, todo0):
         pass
 
-    def partyHasFinishedUdToAllAi(self, todo0):
-        pass
+    def partyHasFinishedUdToAllAi(self, partyId):
+        # FIXME I bet i have to do some cleanup
+        del self.pubPartyInfo[partyId]
 
-    def updateToPublicPartyInfoUdToAllAi(self, shardId, partyId, hostId, numGuests, maxGuests, hostName, activities):
-        self.partyInfo[partyId] = {
+    def updateToPublicPartyInfoUdToAllAi(self, shardId, zoneId, partyId, hostId, numGuests, maxGuests, hostName, activities):
+        # The uberdog is informing us of a public party.
+        # Note that we never update the publicPartyInfo of our own parties without going through the UD. It's just good practice :)
+        self.pubPartyInfo[partyId] = {
           'shardId': shardId,
+          'zoneId': zoneId,
           'partyId': partyId,
           'hostId': hostId,
           'numGuests': numGuests,
@@ -198,13 +204,15 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def updateToPublicPartyCountUdToAllAi(self, partyCount, partyId):
         # Update the number of guests at a party
-        pass
+        if partyId in self.pubPartyInfo:
+            self.pubPartyInfo[partyId]['numGuests'] = partyCount
+        else:
+            self.notify.warning("Uberdog tried to update guest count at a public party I'm not aware of")
 
     def getPublicParties(self):
         p = []
-        for party in self.partyInfo:
-            print party.get('activities')
-            p.append([simbase.air.ourChannel, self.partyId2HostZone[party.get('partyId')][1], 1, "Fat McStink", [1], 10])
+        for party in self.pubPartyInfo:
+            p.append([party['shardId'], party['zoneId'], 69, party.get('hostName', ''), party.get('activities', []), 5]) # 69 = numGuests, 5 = minLeft
         return p
 
     def requestShardIdZoneIdForHostId(self, todo0):

@@ -16,12 +16,9 @@ class DistributedPartyGateAI(DistributedObjectAI):
 
     def getPartyList(self, avId):
         partyManager = simbase.air.partyManager
-        self.sendUpdateToAvatarId(avId, 'listAllPublicParties', partyManager.getPublicParties())
+        self.sendUpdateToAvatarId(avId, 'listAllPublicParties', [partyManager.getPublicParties()])
 
     def partyChoiceRequest(self, todo0, todo1, todo2):
-        pass
-
-    def listAllPublicParties(self, todo0):
         pass
 
     def partyRequestDenied(self, todo0):
