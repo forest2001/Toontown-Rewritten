@@ -35,6 +35,9 @@ class DistributedPartyFireworksActivity(DistributedPartyActivity, FireworkShowMi
     def setShowStyle(self, showStyle):
         DistributedPartyFireworksActivity.notify.debug('setShowStyle( %d )' % showStyle)
         self.showStyle = showStyle
+    
+    def setSongId(self, songId):
+        self.songId = songId
 
     def load(self):
         DistributedPartyFireworksActivity.notify.debug('load')
@@ -123,14 +126,14 @@ class DistributedPartyFireworksActivity(DistributedPartyActivity, FireworkShowMi
         timeSinceStart = globalClockDelta.localElapsedTime(showStartTimestamp)
         if timeSinceStart > self.rocketActor.getDuration('launch'):
             self.rocketActor.hide()
-            self.startShow(self.eventId, self.showStyle, 0, showStartTimestamp)
+            self.startShow(self.eventId, self.showStyle, self.songId, showStartTimestamp)
         else:
             self.rocketActor.play('launch')
             self.rocketParticleSeq = Sequence(Wait(RocketSoundDelay), Func(base.playSfx, self.launchSound), Func(self.rocketExplosionEffect.start), Wait(RocketDirectionDelay), LerpHprInterval(self.rocketActor, 4.0, Vec3(0, 0, -60)), Func(self.rocketExplosionEffect.end), Func(self.rocketActor.hide))
             self.rocketParticleSeq.start()
             taskMgr.doMethodLater(FireworksPostLaunchDelay, self.startShow, self.taskName('delayedStartShow'), extraArgs=[self.eventId,
              self.showStyle,
-             0,
+             self.songId,
              showStartTimestamp,
              self.root])
 

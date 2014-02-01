@@ -1369,8 +1369,9 @@ dclass DistributedPartyCannon : DistributedObject {
 };
 
 dclass DistributedPartyFireworksActivity : DistributedPartyActivity {
-  setEventId(uint8) required broadcast;
-  setShowStyle(uint8) required broadcast;
+  setEventId(uint8 eventId) required broadcast;
+  setShowStyle(uint8 style) required broadcast;
+  setSongId(uint8 songId) required broadcast;
 };
 
 dclass DistributedPartyTrampolineActivity : DistributedPartyActivity {

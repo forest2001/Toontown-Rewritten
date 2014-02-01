@@ -2,7 +2,9 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.parties.DistributedPartyActivityAI import DistributedPartyActivityAI
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.fsm.FSM import FSM
+from toontown.effects import FireworkShows
 import PartyGlobals
+import random
 
 class DistributedPartyFireworksActivityAI(DistributedPartyActivityAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyFireworksActivityAI")
@@ -11,18 +13,15 @@ class DistributedPartyFireworksActivityAI(DistributedPartyActivityAI, FSM):
         DistributedPartyActivityAI.__init__(self, air, parent, activityTuple)
         FSM.__init__(self, 'DistributedPartyActivityAI')
         self.state = 'Idle'
-
-    def setEventId(self, todo0):
-        return
         
     def getEventId(self):
         return PartyGlobals.FireworkShows.Summer
-
-    def setShowStyle(self, todo0):
-        pass
         
     def getShowStyle(self):
-        return 0
+        return random.randint(0, len(FireworkShows.shows[PartyGlobals.FireworkShows.Summer]) - 1)
+        
+    def getSongId(self):
+        return random.randint(0, 1)
 
     def toonJoinRequest(self):
         avId = self.air.getAvatarIdFromSender()
