@@ -224,7 +224,12 @@ MapHotkeyOn = 'delete'
 MapHotkeyOff = 'delete-up'
 DetectGarbageHotkey = 'shift-f11'
 PrintCamPosHotkey = 'f12'
-QuitGameOSX = 'meta-q'
+QuitGameHotKeyOSX = 'meta-q'
+QuitGameHotKeyRepeatOSX = 'meta-q-repeat'
+HideGameHotKeyOSX = 'meta-h'
+HideGameHotKeyRepeatOSX = 'meta-h-repeat'
+MinimizeGameHotKeyOSX = 'meta-m'
+MinimizeGameHotKeyRepeatOSX = 'meta-m-repeat'
 GlobalDialogColor = (1,
  1,
  0.75,

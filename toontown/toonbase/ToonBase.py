@@ -22,6 +22,7 @@ from toontown.toonbase import ToontownAccess
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
+from toontown.toontowngui import TTDialog
 from sys import platform
 
 class ToonBase(OTPBase.OTPBase):
@@ -58,11 +59,17 @@ class ToonBase(OTPBase.OTPBase):
         if self.config.GetBool('want-particles', 1) == 1:
             self.notify.debug('Enabling particles')
             self.enableParticles()
+
         self.accept(ToontownGlobals.ScreenshotHotkey, self.takeScreenShot)
 
-        # The command key on OS X is the Start Key on windows
+        # OS X Specific Actions
         if platform == "darwin":
-            self.accept(ToontownGlobals.QuitGameOSX, self.userExit)
+            self.acceptOnce(ToontownGlobals.QuitGameHotKeyOSX, self.exitOSX)
+            self.accept(ToontownGlobals.QuitGameHotKeyRepeatOSX, self.exitOSX)
+            self.acceptOnce(ToontownGlobals.HideGameHotKeyOSX, self.hideGame)
+            self.accept(ToontownGlobals.HideGameHotKeyRepeatOSX, self.hideGame)
+            self.acceptOnce(ToontownGlobals.MinimizeGameHotKeyOSX, self.minimizeGame)
+            self.accept(ToontownGlobals.MinimizeGameHotKeyRepeatOSX, self.minimizeGame)
 
         self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
@@ -414,7 +421,12 @@ class ToonBase(OTPBase.OTPBase):
 
         self.cr.loginFSM.request('shutdown')
         self.notify.warning('Could not request shutdown; exiting anyway.')
-        self.ignore(ToontownGlobals.QuitGameOSX)
+        self.ignore(ToontownGlobals.QuitGameHotKeyOSX)
+        self.ignore(ToontownGlobals.QuitGameHotKeyRepeatOSX)
+        self.ignore(ToontownGlobals.HideGameHotKeyOSX)
+        self.ignore(ToontownGlobals.HideGameHotKeyRepeatOSX)
+        self.ignore(ToontownGlobals.MinimizeGameHotKeyOSX)
+        self.ignore(ToontownGlobals.MinimizeGameHotKeyRepeatOSX)
         self.exitShow()
 
     def panda3dRenderError(self):
@@ -434,3 +446,28 @@ class ToonBase(OTPBase.OTPBase):
 
     def playMusic(self, music, looping = 0, interrupt = 1, volume = None, time = 0.0):
         OTPBase.OTPBase.playMusic(self, music, looping, interrupt, volume, time)
+
+
+    # OS X Specific Actions
+    def exitOSX(self):
+        self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=TTLocalizer.OptionsPageExitConfirm, style=TTDialog.TwoChoice)
+        self.confirm.show()
+        self.accept('confirmDone', self.handleConfirm)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            self.userExit()
+
+    def hideGame(self):
+        # Not sure how to go about this one...
+        self.notify.debug("Toontown Hidden")
+
+    def minimizeGame(self):
+        wp = WindowProperties()
+        wp.setMinimized(True)
+        base.win.requestProperties(wp)
+
