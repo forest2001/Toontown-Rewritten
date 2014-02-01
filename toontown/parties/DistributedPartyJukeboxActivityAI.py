@@ -7,5 +7,5 @@ class DistributedPartyJukeboxActivityAI(DistributedPartyJukeboxActivityBaseAI):
     
     def __init__(self, air, parent, activityTuple):
         DistributedPartyJukeboxActivityBaseAI.__init__(self, air, parent, activityTuple)
-        self.music =  PartyGlobals.PhaseToMusicData
+        self.music = PartyGlobals.PhaseToMusicData
 
