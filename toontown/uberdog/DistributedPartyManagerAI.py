@@ -56,7 +56,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         simbase.air.globalPartyMgr.sendAddParty(hostId, self.host2PartyId[hostId], startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds)
 
     def addPartyResponseUdToAi(self, partyId, errorCode, partyStruct):
-        avId = self.partyId2Host[partyId]
+        avId = partyStruct[1]
         print 'responding to client now that ud got back to us'
         self.sendUpdateToAvatarId(avId, 'addPartyResponse', [avId, errorCode])
         # We also need to remember to update the field on the DToon indicating parties he's hosting
