@@ -32,7 +32,7 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
             self.air.writeServerEvent('suspicious',avId,'Toon reported incorrect number of collected jellybeans!')
         av = self.air.doId2do[avId]
         reward = self.collected*2
-        messsage = TTLocalizer.PartyTrampolineBeanResults % self.collected
+        message = TTLocalizer.PartyTrampolineBeanResults % self.collected
         if self.collected == PartyGlobals.TrampolineNumJellyBeans:
             reward += PartyGlobals.TrampolineJellyBeanBonus
             messsage = TTLocalizer.PartyTrampolineBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
