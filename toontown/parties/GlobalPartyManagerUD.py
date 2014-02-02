@@ -3,6 +3,7 @@ from direct.distributed.PyDatagram import *
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from PartyGlobals import *
 from datetime import datetime, timedelta
+from pandac.PandaModules import *
 
 class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('GlobalPartyManagerUD')
@@ -20,6 +21,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         startTime = datetime.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
         endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
+        self.partyAllocator = UniqueIdAllocator(0, 0xFFFFFFFF)
         #self.host2Party[100000001] = {'hostId': 100000001, 'start': startTime, 'end': endTime, 'partyId': 1717986918400000, 'decorations': [[3,5,7,6]], 'activities': [[10,13,6,18],[7,8,7,0]],'inviteTheme':1,'isPrivate':0,'inviteeIds':[]}
 
         # Setup tasks
@@ -188,7 +190,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             self.sendToAI('partyInfoOfHostResponseUdToAi', [self._formatParty(party), party.get('inviteeIds', [])])
             return
         print 'query failed, av %s isnt hosting anything' % hostId
-        
+
     def requestPartySlot(self, partyId, avId, gateId):
         if partyId not in self.party2PubInfo:
             return # TODO there's a client error code I can send
@@ -213,3 +215,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         sender = simbase.air.getAvatarIdFromSender() # try to pretend the AI sent it. ily2 cfsworks
         dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('setParty').aiFormatUpdate(gateId, recipient, sender, [info, hostId])
         self.air.send(dg)
+
+    def allocIds(self, numIds):
+        ids = []
+        while len(ids) < numIds:
+            ids.append(self.partyAllocator.allocate())
+        self.sendToAI('receiveId', [ids])

@@ -30,3 +30,6 @@ class GlobalPartyManagerAI(DistributedObjectGlobalAI):
         
     def requestPartySlot(self, partyId, avId, gateId):
         self.sendUpdate('requestPartySlot', [partyId, avId, gateId])
+
+    def allocIds(self, numIds):
+        self.sendUpdate('allocIds', [numIds])

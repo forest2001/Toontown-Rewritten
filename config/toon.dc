@@ -3182,6 +3182,7 @@ dclass DistributedPartyManager : DistributedObject {
   forceCheckStart();
   requestMw(uint32, string, uint32, uint32);
   mwResponseUdToAllAi(uint32, string, uint32, uint32) airecv;
+  receiveId(uint64array ids) airecv;
 };
 
 dclass DistributedObjectGlobal : DistributedObject {
@@ -3196,6 +3197,7 @@ dclass GlobalPartyManager : DistributedObjectGlobal {
     toonLeftParty(uint64 partyId, uint32 avId);
     requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
     partyDone(uint64 partyId);
+    allocIds(uint16 count);
 };
 
 struct PotentialToon {

@@ -19,7 +19,18 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.avId2PartyId = {}
         self.id2Party = {}
         self.pubPartyInfo = {}
-        self.partyAllocator = UniqueIdAllocator(0, 1000000)
+        self.idPool = []
+        # get 100 ids at the start and top up
+        self.air.globalPartyMgr.allocIds(100)
+        taskMgr.doMethodLater(180, self.__getIds, 'DistributedPartyManagerAI___getIds')
+
+    def receiveId(self, ids):
+        self.idPool += ids
+
+    def __getIds(self):
+        if len(self.idPool) < 50:
+            self.air.globalPartyMgr.allocIds(100 - len(self.idPool))
+        taskMgr.doMethodLater(180, self.__getIds, 'DistributedPartyManagerAI___getIds')
 
     def _makePartyDict(self, struct):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -108,7 +119,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.notify.debug('getPartyZone(hostId = %s, zoneId = %s, isAboutToPlan = %s' % (hostId, zoneId, isAvAboutToPlanParty))
         avId = self.air.getAvatarIdFromSender()
         if isAvAboutToPlanParty:
-            partyId = self.partyAllocator.allocate() + (simbase.air.ourChannel << 32) # high 32 bits are the AI's id, low 32 up to AI
+            partyId = self.idPool.pop()
             print 'pid %s' % partyId
             self.partyId2Host[partyId] = hostId
             self.partyId2PlanningZone[partyId] = zoneId
