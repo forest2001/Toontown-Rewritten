@@ -566,6 +566,7 @@ class DistributedParty(DistributedObject.DistributedObject):
         self.doSpawnTitleText(partyText)
 
     def doSpawnTitleText(self, text):
+        return
         self.titleColor = (1.0, 0.5, 0.4, 1.0)
         self.titleText = OnscreenText.OnscreenText(text, fg=self.titleColor, font=ToontownGlobals.getSignFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1, wordwrap=16)
         self.titleText.setText(text)

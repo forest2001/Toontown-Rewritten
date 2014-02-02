@@ -4,7 +4,7 @@ from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer
 from direct.task.Task import Task
 from direct.distributed import ClockDelta
-from pandac.PandaModules import Point3
+from pandac.PandaModules import *
 from otp.nametag.NametagConstants import CFSpeech, CFTimeout
 from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPLocalizer
@@ -122,7 +122,9 @@ class DistributedNPCPartyPerson(DistributedNPCToonBase):
             self.setupAvatars(self.av)
             if self.isInteractingWithLocalToon:
                 camera.wrtReparentTo(render)
-                camera.lerpPosHpr(-5, 9, base.localAvatar.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+                quat = Quat()
+                quat.setHpr((-150, -2, 0))
+                camera.posQuatInterval(1, Point3(-5, 9, base.localAvatar.getHeight() - 0.5), quat, other=self, blendType='easeOut').start()
                 taskMgr.doMethodLater(1.0, self.popupAskGUI, self.uniqueName('popupAskGUI'))
             else:
                 self.setChatAbsolute(TTLocalizer.PartyDoYouWantToPlan, CFSpeech | CFTimeout)

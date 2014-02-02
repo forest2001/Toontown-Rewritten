@@ -303,6 +303,7 @@ from toontown.cogdominium import DistCogdoFlyingGame/AI
 from toontown.cogdominium import DistCogdoCrane/AI
 from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
 from toontown.cogdominium import DistCogdoCraneCog/AI
+from toontown.parties.GlobalPartyManager/AI/UD import GlobalPartyManager/AI/UD
 
 struct GiftItem {
   blob Item;
@@ -692,7 +693,7 @@ dclass DistributedPartyGate : DistributedObject {
   partyChoiceRequest(uint32, uint64, uint64) airecv clsend;
   listAllPublicParties(publicPartyInfo []);
   partyRequestDenied(uint8);
-  setParty(publicPartyInfo);
+  setParty(publicPartyInfo, uint32 hostId);
 };
 
 dclass DistributedTrolley : DistributedObject {
@@ -1369,8 +1370,9 @@ dclass DistributedPartyCannon : DistributedObject {
 };
 
 dclass DistributedPartyFireworksActivity : DistributedPartyActivity {
-  setEventId(uint8) required broadcast;
-  setShowStyle(uint8) required broadcast;
+  setEventId(uint8 eventId) required broadcast;
+  setShowStyle(uint8 style) required broadcast;
+  setSongId(uint8 songId) required broadcast;
 };
 
 dclass DistributedPartyTrampolineActivity : DistributedPartyActivity {
@@ -3136,39 +3138,46 @@ dclass DistributedPartyManager : DistributedObject {
   addParty(uint32, uint32, string, string, int8, int8, activity [], decoration [], uint32array, uint16);
   addPartyRequest(uint32, char [0-256], char [0-256], int8, int8, activity [], decoration [], uint32array) airecv clsend;
   addPartyResponse(uint32, int8);
-  addPartyResponseUdToAi(uint32, int8, uint16) airecv;
+  addPartyResponseUdToAi(uint64, int8, party) airecv;
+
   markInviteAsReadButNotReplied(uint32, uint64);
   respondToInvite(uint32, uint32, uint16, uint64, uint8);
   respondToInviteResponse(uint32, uint16, uint64, int8, uint8) airecv;
+
   changePrivateRequest(uint64, int8) airecv clsend;
   changePrivateRequestAiToUd(uint32, uint64, int8);
   changePrivateResponseUdToAi(uint32, uint64, int8, int8) airecv;
   changePrivateResponse(uint64, int8, int8);
+
   changePartyStatusRequest(uint64, int8) airecv clsend;
   changePartyStatusRequestAiToUd(uint32, uint64, int8);
   changePartyStatusResponseUdToAi(uint32, uint64, int8, int8) airecv;
   changePartyStatusResponse(uint64, int8, int8, uint16);
+
   partyInfoOfHostRequestAiToUd(uint32, uint32);
   partyInfoOfHostFailedResponseUdToAi(uint32) airecv;
   partyInfoOfHostResponseUdToAi(party, uint32array) airecv;
+
   givePartyRefundResponse(uint32, uint64, int8, uint16, uint32);
   getPartyZone(uint32, uint32, uint8) clsend airecv;
   receivePartyZone(uint32, uint64, uint32);
   freeZoneIdFromPlannedParty(uint32, uint32) clsend airecv;
+
   sendAvToPlayground(uint32, uint8);
   exitParty(uint32) clsend airecv;
   removeGuest(uint32, uint32) airecv clsend;
   partyManagerAIStartingUp(uint32, uint32);
   partyManagerAIGoingDown(uint32, uint32);
-  partyHasStartedAiToUd(uint32, uint64, uint32, uint32, string);
+  partyHasStartedAiToUd(uint64 partyId, uint32 shardId, uint32 zoneId, string hostName);
   toonHasEnteredPartyAiToUd(uint32);
   toonHasExitedPartyAiToUd(uint32);
-  partyHasFinishedUdToAllAi(uint32) airecv;
-  updateToPublicPartyInfoUdToAllAi(uint32, uint64, uint32, uint32, uint8, uint8, string, uint8 [], uint64) airecv;
-  updateToPublicPartyCountUdToAllAi(uint32, uint8) airecv;
+  partyHasFinishedUdToAllAi(uint64 partyId) airecv;
+  updateToPublicPartyInfoUdToAllAi(uint32 shardId, uint32 zoneId, uint64 partyId, uint32 hostId, uint8 numGuests, uint8 maxGuests, string hostName, uint8 [] activities, uint8 minLeft) airecv;
+  updateToPublicPartyCountUdToAllAi(uint32 partyCount, uint64 partyId) airecv;
   requestShardIdZoneIdForHostId(uint32) clsend airecv;
   sendShardIdZoneIdToAvatar(uint32, uint32);
   partyManagerUdStartingUp() airecv;
+  partyManagerUdLost() airecv;
   updateAllPartyInfoToUd(uint32, uint64, uint32, uint32, uint8, uint8, string, uint8 [], uint64);
   forceCheckStart();
   requestMw(uint32, string, uint32, uint32);
@@ -3176,6 +3185,17 @@ dclass DistributedPartyManager : DistributedObject {
 };
 
 dclass DistributedObjectGlobal : DistributedObject {
+};
+
+dclass GlobalPartyManager : DistributedObjectGlobal {
+    partyManagerAIHello(uint32 channel);
+    queryParty(uint32 hostId);
+    addParty(uint32 avId, uint64 partyId, string start, string end, int8 isPrivate, int8 inviteTheme, activity [], decoration [], uint32array inviteeIds);
+    partyHasStarted(uint64 partyId, uint32 shardId, uint32 zoneId, string hostName);
+    toonJoinedParty(uint64 partyId, uint32 avId);
+    toonLeftParty(uint64 partyId, uint32 avId);
+    requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
+    partyDone(uint64 partyId);
 };
 
 struct PotentialToon {

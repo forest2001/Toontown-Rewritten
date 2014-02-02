@@ -110,7 +110,20 @@ PartyEditorActivityOrder = [ActivityIds.PartyCog,
  ActivityIds.PartyTugOfWar,
  ActivityIds.PartyFireworks,
  ActivityIds.PartyClock]
-UnreleasedActivityIds = ()
+UnreleasedActivityIds = (ActivityIds.PartyCog,
+ ActivityIds.PartyWinterCog,
+ ActivityIds.PartyValentineJukebox,
+ ActivityIds.PartyValentineJukebox40,
+ ActivityIds.PartyCannon,
+ ActivityIds.PartyValentineTrampoline,
+ ActivityIds.PartyWinterTrampoline,
+ ActivityIds.PartyCatch,
+ ActivityIds.PartyWinterCatch,
+ ActivityIds.PartyDance,
+ ActivityIds.PartyDance20,
+ ActivityIds.PartyValentineDance,
+ ActivityIds.PartyValentineDance20,
+ ActivityIds.PartyTugOfWar)
 MutuallyExclusiveActivities = ((ActivityIds.PartyJukebox, ActivityIds.PartyJukebox40),
  (ActivityIds.PartyValentineJukebox, ActivityIds.PartyValentineJukebox40),
  (ActivityIds.PartyDance, ActivityIds.PartyDance20),
@@ -157,6 +170,34 @@ DecorationIds = PythonUtil.Enum(('BalloonAnvil',
  'snowman',
  'snowDoodle',
  'BalloonAnvilValentine'))
+TTRUnreleasedDecor = [DecorationIds.BalloonAnvil,
+ DecorationIds.BalloonStage,
+ DecorationIds.Bow,
+ DecorationIds.Cake,
+ DecorationIds.Castle,
+ DecorationIds.GiftPile,
+ DecorationIds.Horn,
+ DecorationIds.MardiGras,
+ DecorationIds.NoiseMakers,
+ DecorationIds.Pinwheel,
+ DecorationIds.GagGlobe,
+ DecorationIds.BannerJellyBean,
+ DecorationIds.CakeTower,
+ DecorationIds.HeartTarget,
+ DecorationIds.HeartBanner,
+ DecorationIds.FlyingHeart,
+ DecorationIds.Hydra,
+ DecorationIds.BannerVictory,
+ DecorationIds.CannonVictory,
+ DecorationIds.CogStatueVictory,
+ DecorationIds.TubeCogVictory,
+ DecorationIds.CogIceCreamVictory,
+ DecorationIds.cogIceCreamWinter,
+ DecorationIds.StageWinter,
+ DecorationIds.CogStatueWinter,
+ DecorationIds.snowman,
+ DecorationIds.snowDoodle,
+ DecorationIds.BalloonAnvilValentine]
 DECORATION_VOLUME = 1.0
 DECORATION_CUTOFF = 45
 VictoryPartyDecorationIds = frozenset([DecorationIds.Hydra,
@@ -209,7 +250,7 @@ PlayGroundToPartyClockColors = {'the_burrrgh': (53.0 / 255.0,
 PartyGridUnitLength = [14.4, 14.6]
 PartyGridHeadingConverter = 15.0
 PartyGridToPandaOffset = (-PartyGridUnitLength[0] * PartyEditorGridSize[0] / 2.0, -PartyGridUnitLength[1] * PartyEditorGridSize[1] / 2.0)
-PartyCostMultiplier = 1
+PartyCostMultiplier = 0 # ALPHA ONLY - remove after parties are legit
 MinimumPartyCost = 100 * PartyCostMultiplier
 ActivityInformationDict = {ActivityIds.PartyJukebox: {'cost': int(50 * PartyCostMultiplier),
                             'gridsize': (1, 1),

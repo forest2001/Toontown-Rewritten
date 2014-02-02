@@ -47,6 +47,11 @@ uberdogs:
     - class: TTCodeRedemptionMgr
       id: 4695
       anonymous: false
+
+    - class: GlobalPartyManager
+      id: 4477
+      anonymous: false
+
 roles:
     - type: clientagent
       bind: 127.0.0.1:7198

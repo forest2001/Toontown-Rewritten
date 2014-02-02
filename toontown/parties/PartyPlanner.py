@@ -24,6 +24,9 @@ from toontown.parties.PartyEditor import PartyEditor
 from otp.otpbase import OTPGlobals
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
+from otp.nametag.NametagFloat2d import *
 
 class PartyPlanner(DirectFrame, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyPlanner')
@@ -35,7 +38,7 @@ class PartyPlanner(DirectFrame, FSM):
         self.stateArray = ['Off',
          'Welcome',
          'PartyEditor',
-         'Guests',
+         #'Guests',  jjkoletar: this should mean that it skips over the guests state
          'Date',
          'Time',
          'Invitation',
@@ -285,14 +288,14 @@ class PartyPlanner(DirectFrame, FSM):
             self.nametagNode.setContents(Nametag.CName)
             self.nametagGroup.addNametag(self.nametagNode)
             self.nametagGroup.setName(base.cr.partyManager.getPartyPlannerName())
-            self.nametagNP = parent.attachNewNode(self.nametagNode.upcastToPandaNode())
+            self.nametagNP = parent.attachNewNode(self.nametagNode)
             nametagPos = self.gui.find('**/step_01_partymanPeteNametag_locator').getPos()
             self.nametagNP.setPosHprScale(nametagPos[0], 0, nametagPos[2], 0, 0, 0, 0.1, 1, 0.1)
             self.chatNode = NametagFloat2d()
             self.chatNode.setContents(Nametag.CSpeech | Nametag.CThought)
             self.nametagGroup.addNametag(self.chatNode)
             self.nametagGroup.setChat(TTLocalizer.PartyPlannerInstructions, CFSpeech)
-            self.chatNP = parent.attachNewNode(self.chatNode.upcastToPandaNode())
+            self.chatNP = parent.attachNewNode(self.chatNode)
             chatPos = self.gui.find('**/step_01_partymanPeteText_locator').getPos()
             self.chatNP.setPosHprScale(chatPos[0], 0, chatPos[2], 0, 0, 0, 0.08, 1, 0.08)
         return
