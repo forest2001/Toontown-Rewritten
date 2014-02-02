@@ -234,7 +234,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
             party = self.pubPartyInfo[partyId]
             # calculate time left
             minLeft = party['minLeft'] - int((datetime.now() - party['started']).seconds / 60)
-            p.append([party['shardId'], party['zoneId'], party.get('numGuests', 0), party.get('hostName', ''), party.get('activities', []), minLeft])
+            # alpha bandaid: return constant 1 person at party, due to occasionally out of uint8 range values as seen here: http://puu.sh/6GWuJ/a1a244b79d.png
+            p.append([party['shardId'], party['zoneId'], 1, party.get('hostName', ''), party.get('activities', []), minLeft])
         return p
 
     def requestShardIdZoneIdForHostId(self, todo0):
