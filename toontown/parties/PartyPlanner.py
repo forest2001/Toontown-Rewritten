@@ -38,7 +38,7 @@ class PartyPlanner(DirectFrame, FSM):
         self.stateArray = ['Off',
          'Welcome',
          'PartyEditor',
-         'Guests',
+         #'Guests',  jjkoletar: this should mean that it skips over the guests state
          'Date',
          'Time',
          'Invitation',
