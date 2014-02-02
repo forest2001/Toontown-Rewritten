@@ -21,7 +21,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         startTime = datetime.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
         endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
-        self.partyAllocator = UniqueIdAllocator(0, 0xFFFFFFFF)
+        self.partyAllocator = UniqueIdAllocator(0, 100000000)
         #self.host2Party[100000001] = {'hostId': 100000001, 'start': startTime, 'end': endTime, 'partyId': 1717986918400000, 'decorations': [[3,5,7,6]], 'activities': [[10,13,6,18],[7,8,7,0]],'inviteTheme':1,'isPrivate':0,'inviteeIds':[]}
 
         # Setup tasks
@@ -220,4 +220,4 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         ids = []
         while len(ids) < numIds:
             ids.append(self.partyAllocator.allocate())
-        self.sendToAI('receiveId', [ids])
+        self.sendToAI('receiveId', ids)

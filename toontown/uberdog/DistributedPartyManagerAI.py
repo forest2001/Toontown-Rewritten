@@ -19,18 +19,17 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.avId2PartyId = {}
         self.id2Party = {}
         self.pubPartyInfo = {}
-        self.idPool = []
+        self.idPool = range(self.air.ourChannel, self.air.ourChannel + 100000)
         # get 100 ids at the start and top up
-        self.air.globalPartyMgr.allocIds(100)
-        taskMgr.doMethodLater(180, self.__getIds, 'DistributedPartyManagerAI___getIds')
+        #taskMgr.doMethodLater(0, self.__getIds, 'DistributedPartyManagerAI___getIds')
 
     def receiveId(self, ids):
         self.idPool += ids
 
-    def __getIds(self):
-        if len(self.idPool) < 50:
-            self.air.globalPartyMgr.allocIds(100 - len(self.idPool))
-        taskMgr.doMethodLater(180, self.__getIds, 'DistributedPartyManagerAI___getIds')
+#    def __getIds(self, task):
+#        if len(self.idPool) < 50:
+#            self.air.globalPartyMgr.allocIds(100 - len(self.idPool))
+#        taskMgr.doMethodLater(180, self.__getIds, 'DistributedPartyManagerAI___getIds')
 
     def _makePartyDict(self, struct):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
