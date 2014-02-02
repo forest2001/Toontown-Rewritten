@@ -222,7 +222,7 @@ PlayGroundToPartyClockColors = {'the_burrrgh': (53.0 / 255.0,
 PartyGridUnitLength = [14.4, 14.6]
 PartyGridHeadingConverter = 15.0
 PartyGridToPandaOffset = (-PartyGridUnitLength[0] * PartyEditorGridSize[0] / 2.0, -PartyGridUnitLength[1] * PartyEditorGridSize[1] / 2.0)
-PartyCostMultiplier = 1
+PartyCostMultiplier = 0 # ALPHA ONLY - remove after parties are legit
 MinimumPartyCost = 100 * PartyCostMultiplier
 ActivityInformationDict = {ActivityIds.PartyJukebox: {'cost': int(50 * PartyCostMultiplier),
                             'gridsize': (1, 1),
