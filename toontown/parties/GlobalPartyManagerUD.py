@@ -53,7 +53,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         now = datetime.now()
         delta = timedelta(minutes=15)
         endStartable = party['start'] + delta
-        return True#party['start'] < now and endStartable > now
+        return party['start'] < now# and endStartable > now
 
     def isTooLate(self, party):
         now = datetime.now()
@@ -176,8 +176,8 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.id2Party[partyId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds, 'status': PartyStatus.Pending}
         self.host2PartyId[avId] = partyId
         self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.id2Party[partyId])])
-        taskMgr.remove('GlobalPartyManager_checkStarts')
-        taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
+        #taskMgr.remove('GlobalPartyManager_checkStarts')
+        #taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
         return
         
     def queryParty(self, hostId):
