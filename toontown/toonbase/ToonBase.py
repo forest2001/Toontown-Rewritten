@@ -463,8 +463,9 @@ class ToonBase(OTPBase.OTPBase):
             self.userExit()
 
     def hideGame(self):
-        # Not sure how to go about this one...
-        self.notify.debug("Toontown Hidden")
+        # Hacky, I know, but it works
+        hideCommand = """osascript -e 'tell application "System Events" set frontProcess to first process whose frontmost is true set visible of frontProcess to false end tell'"""
+        os.system(hideCommand)
 
     def minimizeGame(self):
         wp = WindowProperties()
