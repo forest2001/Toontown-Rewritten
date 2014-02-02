@@ -16,6 +16,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.host2PartyId = {} # just a reference mapping
         self.id2Party = {} # This should be replaced with a longterm datastore
         self.party2PubInfo = {} # This should not be longterm
+        self.tempSlots = {}
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         startTime = datetime.strptime('2014-01-20 11:50:00', PARTY_TIME_FORMAT)
         endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
@@ -31,7 +32,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def sendToAI(self, field, values, sender=None):
         if not sender:
             sender = self.air.getAvatarIdFromSender()
-        dg = self._makeAIMsg(field, values, self.senders2Mgrs[sender])
+        dg = self._makeAIMsg(field, values, self.senders2Mgrs.get(sender, sender + 8))
         self.air.send(dg)
         
     # GPMUD -> toon messaging
@@ -99,6 +100,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     # Avatar joined the game, invoked by the CSMUD
     def avatarJoined(self, avId):
+#        self.host2PartyId[avId] = (1337 << 32) + 10000
         partyId = self.host2PartyId.get(avId, None)
         if partyId:
             party = self.id2Party[partyId]
@@ -115,28 +117,42 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             actIds = []
             for activity in self.id2Party[partyId]['activities']:
                 actIds.append(activity[0]) # First part of activity tuple should be actId
-            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['maxGuests'], party['hostName'], actIds])
+            minLeft = int((PARTY_DURATION - (datetime.now() - party['started']).seconds) / 60)
+            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['maxGuests'], party['hostName'], actIds, minLeft])
 
     def __updatePartyCount(self, partyId):
         # Update the party guest count
         for sender in self.senders2Mgrs:
-            pass
+            self.sendToAI('updateToPublicPartyCountUdToAllAi', [self.party2PubInfo[partyId]['numGuests'], partyId])
 
     def partyHasStarted(self, partyId, shardId, zoneId, hostName):
-        self.party2PubInfo[partyId] = {'partyId': partyId, 'shardId': shardId, 'zoneId': zoneId, 'hostName': hostName, 'numGuests': 0, 'maxGuests': MaxToonsAtAParty}
+        self.party2PubInfo[partyId] = {'partyId': partyId, 'shardId': shardId, 'zoneId': zoneId, 'hostName': hostName, 'numGuests': 0, 'maxGuests': MaxToonsAtAParty, 'started': datetime.now()}
         self.__updatePartyInfo(partyId)
         # update the host's book
-        party = self.id2Party.get(partyId, None)
-        self.id2Party[partyId]['status'] = PartyStatus.Started
-        if not party:
+        if partyId not in self.id2Party:
             self.notify.warning("didn't find details for starting party id %s hosted by %s" % (partyId, hostName))
             return
+        self.id2Party[partyId]['status'] = PartyStatus.Started
+        party = self.id2Party.get(partyId, None)
         self.sendToAv(party['hostId'], 'setHostedParties', [[self._formatParty(party)]])
 
+    def partyDone(self, partyId):
+        del self.party2PubInfo[partyId]
+        self.id2Party[partyId]['status'] = PartyStatus.Finished
+        party = self.id2Party.get(partyId, None)
+        self.sendToAv(party['hostId'], 'setHostedParties', [[self._formatParty(party)]])
+        del self.id2Party[partyId]
+        self.air.writeServerEvent('party-done', '%s')
+
     def toonJoinedParty(self, partyId, avId):
-        pass
+        if avId in self.tempSlots:
+            del self.tempSlots[avId]
+        self.party2PubInfo.get(partyId, {'numGuests': 0})['numGuests'] += 1
+        self.__updatePartyCount(partyId)
+
     def toonLeftParty(self, partyId, avId):
-        pass
+        self.id2Party.get(partyId, {'numGuests': 0})['numGuests'] -= 1
+        self.__updatePartyCount(partyId)
 
     def partyManagerAIHello(self, channel):
         # Upon AI boot, DistributedPartyManagerAIs are supposed to say hello. 
@@ -181,6 +197,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             return # TODOOOOO send the right error code saying it's now full
         # get them a slot
         party['numGuests'] = party['numGuests'] + 1
+        # note that they might not show up
+        self.tempSlots[avId] = partyId
+        # TODO detect when the allocated slot wasn't used
         
         # now format the pubPartyInfo
         actIds = []

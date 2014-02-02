@@ -3171,7 +3171,7 @@ dclass DistributedPartyManager : DistributedObject {
   toonHasEnteredPartyAiToUd(uint32);
   toonHasExitedPartyAiToUd(uint32);
   partyHasFinishedUdToAllAi(uint64 partyId) airecv;
-  updateToPublicPartyInfoUdToAllAi(uint32 shardId, uint32 zoneId, uint64 partyId, uint32 hostId, uint8 numGuests, uint8 maxGuests, string hostName, uint8 [] activities) airecv;
+  updateToPublicPartyInfoUdToAllAi(uint32 shardId, uint32 zoneId, uint64 partyId, uint32 hostId, uint8 numGuests, uint8 maxGuests, string hostName, uint8 [] activities, uint8 minLeft) airecv;
   updateToPublicPartyCountUdToAllAi(uint32 partyCount, uint64 partyId) airecv;
   requestShardIdZoneIdForHostId(uint32) clsend airecv;
   sendShardIdZoneIdToAvatar(uint32, uint32);
@@ -3194,6 +3194,7 @@ dclass GlobalPartyManager : DistributedObjectGlobal {
     toonJoinedParty(uint64 partyId, uint32 avId);
     toonLeftParty(uint64 partyId, uint32 avId);
     requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
+    partyDone(uint64 partyId);
 };
 
 struct PotentialToon {

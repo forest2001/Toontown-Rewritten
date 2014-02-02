@@ -19,6 +19,9 @@ class GlobalPartyManagerAI(DistributedObjectGlobalAI):
     def partyStarted(self, partyId, shardId, zoneId, hostName):
         self.sendUpdate('partyHasStarted', [partyId, shardId, zoneId, hostName])
 
+    def partyDone(self, partyId):
+        self.sendUpdate('partyDone', [partyId])
+
     def toonJoinedParty(self, partyId, avId):
         self.sendUpdate('toonJoinedParty', [partyId, avId])
 

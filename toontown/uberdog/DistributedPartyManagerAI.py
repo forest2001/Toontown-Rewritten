@@ -4,6 +4,8 @@ from otp.distributed.OtpDoGlobals import *
 from pandac.PandaModules import *
 from toontown.parties.DistributedPartyAI import DistributedPartyAI
 from datetime import datetime
+from toontown.parties.PartyGlobals import *
+from otp.ai.MagicWordGlobal import *
 
 class DistributedPartyManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyManagerAI")
@@ -15,7 +17,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.partyId2Host = {}
         self.host2PartyId = {}
         self.avId2PartyId = {}
-        self.partyId2Party = {}
+        self.id2Party = {}
         self.pubPartyInfo = {}
         self.partyAllocator = UniqueIdAllocator(0, 1000000)
 
@@ -123,9 +125,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
             if partyId in self.partyId2Zone:
                 # Yep!
                 zoneId = self.partyId2Zone[partyId]
-            elif avId == hostId:
-                # Time to start party
-                pass
+            else:
+                self.notify.warning("getPartyZone did not match a case!")
                 
         self.sendUpdateToAvatarId(avId, 'receivePartyZone', [hostId, partyId, zoneId])
 
@@ -141,12 +142,29 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         # We need to setup the party itself on our end, so make an ai party
         partyAI = DistributedPartyAI(self.air, party['hostId'], zoneId, party)
         partyAI.generateWithRequiredAndId(self.air.allocateChannel(), self.air.districtId, zoneId)
+        self.id2Party[partyId] = partyAI
 
         # Alert the UD
         self.air.globalPartyMgr.partyStarted(partyId, self.air.ourChannel, zoneId, self.air.doId2do[party['hostId']].getName())
         
         # Don't forget this was initially started by a getPartyZone, so we better tell the host the partyzone
         self.sendUpdateToAvatarId(party['hostId'], 'receivePartyZone', [party['hostId'], partyId, zoneId])
+        
+        # And last, set up our cleanup stuff
+        taskMgr.doMethodLater(PARTY_DURATION * 60.0, self.closeParty, 'DistributedPartyManagerAI_cleanup%s' % partyId, [partyId])
+
+    def closeParty(self, partyId):
+        partyAI = self.id2Party[partyId]
+        self.air.globalPartyMgr.partyDone(partyId)
+        for av in partyAI.avIdsAtParty:
+            self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 1])
+        partyAI.b_setPartyState(PartyStatus.Finished)
+        partyAI.delete()
+        zoneId = self.partyId2Zone[partyId]
+        del self.partyId2Zone[partyId]
+        del self.id2Party[partyId]
+        del self.pubPartyInfo[partyId]
+        self.air.deallocateZone(zoneId)
 
     def freeZoneIdFromPlannedParty(self, hostId, zoneId):
         sender = self.air.getAvatarIdFromSender()
@@ -187,9 +205,10 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         # FIXME I bet i have to do some cleanup
         del self.pubPartyInfo[partyId]
 
-    def updateToPublicPartyInfoUdToAllAi(self, shardId, zoneId, partyId, hostId, numGuests, maxGuests, hostName, activities):
+    def updateToPublicPartyInfoUdToAllAi(self, shardId, zoneId, partyId, hostId, numGuests, maxGuests, hostName, activities, minLeft):
         # The uberdog is informing us of a public party.
         # Note that we never update the publicPartyInfo of our own parties without going through the UD. It's just good practice :)
+        started = None
         self.pubPartyInfo[partyId] = {
           'shardId': shardId,
           'zoneId': zoneId,
@@ -198,6 +217,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
           'numGuests': numGuests,
           'maxGuests': maxGuests,
           'hostName': hostName,
+          'minLeft': minLeft,
+          'started': datetime.now(),
           'activities': activities }
 
     def updateToPublicPartyCountUdToAllAi(self, partyCount, partyId):
@@ -211,7 +232,9 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         p = []
         for partyId in self.pubPartyInfo:
             party = self.pubPartyInfo[partyId]
-            p.append([party['shardId'], party['zoneId'], 69, party.get('hostName', ''), party.get('activities', []), 5]) # 69 = numGuests, 5 = minLeft
+            # calculate time left
+            minLeft = party['minLeft'] - int((datetime.now() - party['started']).seconds / 60)
+            p.append([party['shardId'], party['zoneId'], party.get('numGuests', 0), party.get('hostName', ''), party.get('activities', []), minLeft])
         return p
 
     def requestShardIdZoneIdForHostId(self, todo0):
@@ -231,3 +254,14 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def mwResponseUdToAllAi(self, todo0, todo1, todo2, todo3):
         pass
+
+#@magicWord()
+#def endParty():
+#    print 'magicworded'
+#    p = simbase.air.partyManager
+#    for i in p.id2Party:
+#        partyId = i
+#    p.closeParty(i)
+#    return 'bye, such code'
+#
+#    too jank to even use

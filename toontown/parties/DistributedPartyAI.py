@@ -121,5 +121,7 @@ class DistributedPartyAI(DistributedObjectAI):
 
     def avIdEnteredParty(self, avId):
         # Sent as the client DistributedParty announces generate
-        pass
+        self.air.globalPartyMgr.toonJoinedParty(self.info.get('partyId', 0), avId)
+        self.avIdsAtParty.append(avId)
+        # FIXME how the hell do I know they left a party
 
