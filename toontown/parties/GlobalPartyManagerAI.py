@@ -24,3 +24,6 @@ class GlobalPartyManagerAI(DistributedObjectGlobalAI):
 
     def toonLeftParty(self, partyId, avId):
         self.sendUpdate('toonLeftParty', [partyId, avId])
+        
+    def requestPartySlot(self, partyId, avId, gateId):
+        self.sendUpdate('requestPartySlot', [partyId, avId, gateId])

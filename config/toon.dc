@@ -693,7 +693,7 @@ dclass DistributedPartyGate : DistributedObject {
   partyChoiceRequest(uint32, uint64, uint64) airecv clsend;
   listAllPublicParties(publicPartyInfo []);
   partyRequestDenied(uint8);
-  setParty(publicPartyInfo);
+  setParty(publicPartyInfo, uint32 hostId);
 };
 
 dclass DistributedTrolley : DistributedObject {
@@ -3193,6 +3193,7 @@ dclass GlobalPartyManager : DistributedObjectGlobal {
     partyHasStarted(uint64 partyId, uint32 shardId, uint32 zoneId, string hostName);
     toonJoinedParty(uint64 partyId, uint32 avId);
     toonLeftParty(uint64 partyId, uint32 avId);
+    requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
 };
 
 struct PotentialToon {

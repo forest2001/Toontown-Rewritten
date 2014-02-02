@@ -103,6 +103,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         pass
 
     def getPartyZone(self, hostId, zoneId, isAvAboutToPlanParty):
+        self.notify.debug('getPartyZone(hostId = %s, zoneId = %s, isAboutToPlan = %s' % (hostId, zoneId, isAvAboutToPlanParty))
         avId = self.air.getAvatarIdFromSender()
         if isAvAboutToPlanParty:
             partyId = self.partyAllocator.allocate() + (simbase.air.ourChannel << 32) # high 32 bits are the AI's id, low 32 up to AI
@@ -176,9 +177,6 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     def partyManagerAIGoingDown(self, todo0, todo1):
         pass
 
-    def partyHasStartedAiToUd(self, todo0, todo1, todo2, todo3, todo4):
-        pass
-
     def toonHasEnteredPartyAiToUd(self, todo0):
         pass
 
@@ -211,7 +209,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def getPublicParties(self):
         p = []
-        for party in self.pubPartyInfo:
+        for partyId in self.pubPartyInfo:
+            party = self.pubPartyInfo[partyId]
             p.append([party['shardId'], party['zoneId'], 69, party.get('hostName', ''), party.get('activities', []), 5]) # 69 = numGuests, 5 = minLeft
         return p
 

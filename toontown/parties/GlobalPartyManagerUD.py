@@ -2,7 +2,7 @@ from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobal
 from direct.distributed.PyDatagram import *
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from PartyGlobals import *
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('GlobalPartyManagerUD')
@@ -48,20 +48,35 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         howLongUntilAFive = (60 - now.second) + 60 * (4 - (now.minute % 5))
         taskMgr.doMethodLater(howLongUntilAFive, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
 
+    def canPartyStart(self, party):
+        now = datetime.now()
+        delta = timedelta(minutes=15)
+        endStartable = party['start'] + delta
+        return True#party['start'] < now and endStartable > now
+
+    def isTooLate(self, party):
+        now = datetime.now()
+        delta = timedelta(minutes=15)
+        endStartable = party['start'] + delta
+        return endStartable > now
+
     def __checkPartyStarts(self, task):
-        print 'Checkstarts invoked!<#'
         now = datetime.now()
         for partyId in self.id2Party:
             party = self.id2Party[partyId]
-            if party['start'] < now:
+            if self.canPartyStart(party):
                 # Time to start party
                 hostId = party['hostId']
-                self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party, status=PartyStatus.CanStart)]])
+                party['status'] = PartyStatus.CanStart
+                self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party)]])
                 self.sendToAv(hostId, 'setPartyCanStart', [partyId])
+            elif self.isTooLate(party):
+                party['status'] = PartyStatus.NeverStarted
+                self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party)]])
         self.runAtNextInterval()
 
     # Format a party dict into a party struct suitable for the wire
-    def _formatParty(self, partyDict, status=PartyStatus.Pending):
+    def _formatParty(self, partyDict):
         start = partyDict['start']
         end = partyDict['end']
         return [partyDict['partyId'],
@@ -80,24 +95,27 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
                 partyDict['inviteTheme'],
                 partyDict['activities'],
                 partyDict['decorations'],
-                status]
+                partyDict.get('status', PartyStatus.Pending)]
 
     # Avatar joined the game, invoked by the CSMUD
     def avatarJoined(self, avId):
         partyId = self.host2PartyId.get(avId, None)
         if partyId:
-            print 'avId %s has a party that i am telling them about' % avId
             party = self.id2Party[partyId]
             self.sendToAv(avId, 'setHostedParties', [[self._formatParty(party)]])
-            # For now, he can start instantly
-            self.sendToAv(avId, 'setPartyCanStart', [partyId])
+            if partyId not in self.party2PubInfo and self.canPartyStart(party):
+                # The party hasn't started and it can start
+                self.sendToAv(avId, 'setPartyCanStart', [partyId])
 
     # uberdog coordination of public party info
     def __updatePartyInfo(self, partyId):
         # Update all the AIs about this public party
         party = self.party2PubInfo[partyId]
         for sender in self.senders2Mgrs:
-            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['hostName']])
+            actIds = []
+            for activity in self.id2Party[partyId]['activities']:
+                actIds.append(activity[0]) # First part of activity tuple should be actId
+            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['maxGuests'], party['hostName'], actIds])
 
     def __updatePartyCount(self, partyId):
         # Update the party guest count
@@ -105,9 +123,15 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             pass
 
     def partyHasStarted(self, partyId, shardId, zoneId, hostName):
-        print self.id2Party[partyId]['activities']
         self.party2PubInfo[partyId] = {'partyId': partyId, 'shardId': shardId, 'zoneId': zoneId, 'hostName': hostName, 'numGuests': 0, 'maxGuests': MaxToonsAtAParty}
         self.__updatePartyInfo(partyId)
+        # update the host's book
+        party = self.id2Party.get(partyId, None)
+        self.id2Party[partyId]['status'] = PartyStatus.Started
+        if not party:
+            self.notify.warning("didn't find details for starting party id %s hosted by %s" % (partyId, hostName))
+            return
+        self.sendToAv(party['hostId'], 'setHostedParties', [[self._formatParty(party)]])
 
     def toonJoinedParty(self, partyId, avId):
         pass
@@ -133,7 +157,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         if avId in self.host2PartyId:
             # Sorry, one party at a time
             self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.TooManyHostedParties])
-        self.id2Party[partyId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds}
+        self.id2Party[partyId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds, 'status': PartyStatus.Pending}
         self.host2PartyId[avId] = partyId
         self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.id2Party[partyId])])
         taskMgr.remove('GlobalPartyManager_checkStarts')
@@ -148,3 +172,25 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             self.sendToAI('partyInfoOfHostResponseUdToAi', [self._formatParty(party), party.get('inviteeIds', [])])
             return
         print 'query failed, av %s isnt hosting anything' % hostId
+        
+    def requestPartySlot(self, partyId, avId, gateId):
+        if partyId not in self.party2PubInfo:
+            return # TODO there's a client error code I can send
+        party = self.party2PubInfo[partyId]
+        if party['numGuests'] >= party['maxGuests']:
+            return # TODOOOOO send the right error code saying it's now full
+        # get them a slot
+        party['numGuests'] = party['numGuests'] + 1
+        
+        # now format the pubPartyInfo
+        actIds = []
+        for activity in self.id2Party[partyId]['activities']:
+            actIds.append(activity[0])
+        info = [party['shardId'], party['zoneId'], party['numGuests'], party['hostName'], actIds, 0] # the param is minleft
+        # find the hostId
+        hostId = self.id2Party[party['partyId']]['hostId']
+        # send update to client's gate
+        recipient = avId + (1001L << 32)
+        sender = simbase.air.getAvatarIdFromSender() # try to pretend the AI sent it. ily2 cfsworks
+        dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('setParty').aiFormatUpdate(gateId, recipient, sender, [info, hostId])
+        self.air.send(dg)

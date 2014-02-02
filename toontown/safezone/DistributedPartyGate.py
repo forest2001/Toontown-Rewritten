@@ -138,7 +138,7 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
         elif reason == PartyGlobals.PartyGateDenialReasons.Full:
             self.showMessage(TTLocalizer.PartyGatePartyFull)
 
-    def setParty(self, partyInfoTuple):
+    def setParty(self, partyInfoTuple, hostId):
         DistributedPartyGate.notify.debug('setParty')
         self.freeAvatar()
         if partyInfoTuple[0] == 0:
@@ -153,7 +153,7 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
          'hoodId': ToontownGlobals.PartyHood,
          'zoneId': zoneId,
          'shardId': shardId,
-         'avId': -1})
+         'avId': hostId})
         return
 
     def freeAvatar(self):
