@@ -1,6 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
-
+from toontown.parties import PartyGlobals, PartyUtils
 """
 dclass DistributedPartyActivity : DistributedObject {
   setX(int16/10) broadcast required;
@@ -24,7 +24,10 @@ class DistributedPartyActivityAI(DistributedObjectAI):
     def __init__(self, air, parent, activityTuple):
         DistributedObjectAI.__init__(self, air)
         self.parent = parent
-        self.x, self.y, self.h = activityTuple[1:] # ignore activity ID
+        x, y, h = activityTuple[1:] # ignore activity ID
+        self.x = PartyUtils.convertDistanceFromPartyGrid(x, 0)
+        self.y = PartyUtils.convertDistanceFromPartyGrid(y, 1)
+        self.h = h * PartyGlobals.PartyGridHeadingConverter
         self.toonsPlaying = []
 
     def getX(self):
