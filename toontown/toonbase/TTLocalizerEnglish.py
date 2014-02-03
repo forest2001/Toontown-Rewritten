@@ -9748,6 +9748,7 @@ HolidayNamesInCalendar = {1: ('Summer Fireworks', 'Celebrate Summer with a firew
 UnknownHoliday = 'Unknown Holiday %d'
 HolidayFormat = '%b %d '
 TimeZone = 'US/Pacific'
+HourFormat = '12'
 CogdoMemoGuiTitle = 'Memos:'
 CogdoMemoNames = 'Barrel-Destruction Memos'
 CogdoStomperName = 'Stomp-O-Matic'
