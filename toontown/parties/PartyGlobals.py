@@ -119,8 +119,6 @@ UnreleasedActivityIds = (ActivityIds.PartyCog,
  ActivityIds.PartyWinterTrampoline,
  ActivityIds.PartyCatch,
  ActivityIds.PartyWinterCatch,
- ActivityIds.PartyDance,
- ActivityIds.PartyDance20,
  ActivityIds.PartyValentineDance,
  ActivityIds.PartyValentineDance20,
  ActivityIds.PartyTugOfWar)
