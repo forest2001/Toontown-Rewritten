@@ -15,7 +15,12 @@ DefaultCameraFar = 400.0
 DefaultCameraNear = 1.0
 AICollisionPriority = 10
 AICollMovePriority = 8
-MaxFriends = 50
+
+# As of right now, 200 friends is pretty insane, especially with the current CONSTANT db querying.
+# But since we told people that we are allowing "unlimited" friends, we instead can give them a
+# high amount.
+MaxFriends = 200
+
 MaxPlayerFriends = 300
 MaxBackCatalog = 48
 FriendChat = 1
@@ -219,6 +224,12 @@ MapHotkeyOn = 'delete'
 MapHotkeyOff = 'delete-up'
 DetectGarbageHotkey = 'shift-f11'
 PrintCamPosHotkey = 'f12'
+QuitGameHotKeyOSX = 'meta-q'
+QuitGameHotKeyRepeatOSX = 'meta-q-repeat'
+HideGameHotKeyOSX = 'meta-h'
+HideGameHotKeyRepeatOSX = 'meta-h-repeat'
+MinimizeGameHotKeyOSX = 'meta-m'
+MinimizeGameHotKeyRepeatOSX = 'meta-m-repeat'
 GlobalDialogColor = (1,
  1,
  0.75,

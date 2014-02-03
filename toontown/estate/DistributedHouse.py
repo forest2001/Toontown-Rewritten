@@ -19,13 +19,16 @@ from toontown.hood import Place
 import HouseGlobals
 from toontown.building import ToonInteriorColors
 from direct.showbase.MessengerGlobal import messenger
+from toontown.dna.DNAParser import DNADoor
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
 
 class DistributedHouse(DistributedObject.DistributedObject):
     notify = directNotify.newCategory('DistributedHouse')
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
-        self.houseType = None
+        self.houseType = 0
         self.avId = -1
         self.ownerId = 0
         self.colorIndex = 0
@@ -75,18 +78,15 @@ class DistributedHouse(DistributedObject.DistributedObject):
     def load(self):
         self.notify.debug('load')
         if not self.house_loaded:
-            if self.housePosInd == 1:
-                houseModelIndex = base.config.GetInt('want-custom-house', HouseGlobals.HOUSE_DEFAULT)
-            else:
-                houseModelIndex = HouseGlobals.HOUSE_DEFAULT
-            houseModelIndex = base.config.GetInt('want-custom-house-all', houseModelIndex)
-            houseModel = self.cr.playGame.hood.loader.houseModels[houseModelIndex]
+            if self.houseType >= len(self.cr.playGame.hood.loader.houseModels):
+                self.houseType = HouseGlobals.HOUSE_DEFAULT
+            houseModel = self.cr.playGame.hood.loader.houseModels[self.houseType]
             self.house = houseModel.copyTo(self.cr.playGame.hood.loader.houseNode[self.housePosInd])
             self.house_loaded = 1
             self.cr.playGame.hood.loader.houseId2house[self.doId] = self.house
-            if houseModelIndex == HouseGlobals.HOUSE_DEFAULT:
+            if self.houseType == HouseGlobals.HOUSE_DEFAULT:
                 self.__setHouseColor()
-            if houseModelIndex == HouseGlobals.HOUSE_DEFAULT:
+            if self.houseType == HouseGlobals.HOUSE_DEFAULT or self.houseType == HouseGlobals.HOUSE_TEST:
                 self.__setupDoor()
             else:
                 self.__setupDoorCustom()

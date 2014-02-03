@@ -9,10 +9,32 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
-from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI
+from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
+from toontown.dna.DNAParser import loadDNAFileAI
+
+#friends!
+from otp.friends.FriendManagerAI import FriendManagerAI
+
+#estates
+from toontown.estate.EstateManagerAI import EstateManagerAI
+
+# par-tay
+from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+from otp.distributed.OtpDoGlobals import *
+
+# All imports needed for fireworks
+from direct.task import Task
+from toontown.toonbase import ToontownGlobals
+from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
+from toontown.effects import FireworkShows
+import random
+from direct.distributed.ClockDelta import *
+import time
+from otp.ai.MagicWordGlobal import *
+from toontown.parties import PartyGlobals
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -96,6 +118,18 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.safeZoneManager = SafeZoneManagerAI(self)
         self.safeZoneManager.generateWithRequired(2)
 
+        self.friendManager = FriendManagerAI(self)
+        self.friendManager.generateWithRequired(2)
+
+        self.partyManager = DistributedPartyManagerAI(self)
+        self.partyManager.generateWithRequired(2)
+
+        # setup our view of the global party manager ud
+        self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+
+        self.estateManager = EstateManagerAI(self)
+        self.estateManager.generateWithRequired(2)
+
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
@@ -109,3 +143,19 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(DLHoodAI.DLHoodAI(self))
         self.hoods.append(GSHoodAI.GSHoodAI(self))
         self.hoods.append(OZHoodAI.OZHoodAI(self))
+        self.hoods.append(GZHoodAI.GZHoodAI(self))
+
+    def genDNAFileName(self, zoneId):
+        zoneId = ZoneUtil.getCanonicalZoneId(zoneId)
+        hoodId = ZoneUtil.getCanonicalHoodId(zoneId)
+        hood = ToontownGlobals.dnaMap[hoodId]
+        if hoodId == zoneId:
+            zoneId = 'sz'
+            phase = ToontownGlobals.phaseMap[hoodId]
+        else:
+            phase = ToontownGlobals.streetPhaseMap[hoodId]
+
+        return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)
+
+    def loadDNAFileAI(self, dnastore, filename):
+        return loadDNAFileAI(dnastore, filename)

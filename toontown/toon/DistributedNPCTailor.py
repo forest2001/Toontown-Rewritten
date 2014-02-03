@@ -8,6 +8,7 @@ import TailorClothesGUI
 from toontown.toonbase import TTLocalizer
 import ToonDNA
 from toontown.estate import ClosetGlobals
+from otp.nametag.NametagConstants import CFSpeech, CFTimeout
 
 class DistributedNPCTailor(DistributedNPCToonBase):
 
@@ -26,7 +27,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
     def disable(self):
         self.ignoreAll()
         taskMgr.remove(self.uniqueName('popupPurchaseGUI'))
-        taskMgr.remove(self.uniqueName('lerpCamera'))
+        #taskMgr.remove(self.uniqueName('lerpCamera'))
         if self.clothesGUI:
             self.clothesGUI.exit()
             self.clothesGUI.unload()
@@ -61,7 +62,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
     def resetTailor(self):
         self.ignoreAll()
         taskMgr.remove(self.uniqueName('popupPurchaseGUI'))
-        taskMgr.remove(self.uniqueName('lerpCamera'))
+        #taskMgr.remove(self.uniqueName('lerpCamera'))
         if self.clothesGUI:
             self.clothesGUI.hideButtons()
             self.clothesGUI.exit()
@@ -91,7 +92,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         if mode == NPCToons.PURCHASE_MOVIE_CLEAR:
             return
         if mode == NPCToons.PURCHASE_MOVIE_TIMEOUT:
-            taskMgr.remove(self.uniqueName('lerpCamera'))
+            #taskMgr.remove(self.uniqueName('lerpCamera'))
             if self.isLocalToon:
                 self.ignore(self.purchaseDoneEvent)
                 self.ignore(self.swapEvent)
@@ -102,11 +103,11 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 self.__handlePurchaseDone(timeout=1)
             self.setChatAbsolute(TTLocalizer.STOREOWNER_TOOKTOOLONG, CFSpeech | CFTimeout)
             self.resetTailor()
-        elif mode == NPCToons.PURCHASE_MOVIE_START or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_NOROOM:
+        elif mode == NPCToons.PURCHASE_MOVIE_START or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_NOROOM or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
             if mode == NPCToons.PURCHASE_MOVIE_START:
                 self.browsing = 0
                 self.roomAvailable = 1
-            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE:
+            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE or mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
                 self.browsing = 1
                 self.roomAvailable = 1
             elif mode == NPCToons.PURCHASE_MOVIE_START_NOROOM:
@@ -123,13 +124,17 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             self.oldStyle.makeFromNetString(style.makeNetString())
             self.setupAvatars(self.av)
             if self.isLocalToon:
-                camera.wrtReparentTo(render)
-                camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+                #camera.wrtReparentTo(render)
+                #camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+                self.cameraWork = camera.posHprInterval(2, Point3(-5, 9, self.getHeight() - 0.5), Point3(-150, -2, 0), blendType='easeOut')
+                self.cameraWork.start()
             if self.browsing == 0:
                 if self.roomAvailable == 0:
                     self.setChatAbsolute(TTLocalizer.STOREOWNER_NOROOM, CFSpeech | CFTimeout)
                 else:
                     self.setChatAbsolute(TTLocalizer.STOREOWNER_GREETING, CFSpeech | CFTimeout)
+            elif mode == NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS:
+                self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING_JBS, CFSpeech | CFTimeout)
             else:
                 self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING, CFSpeech | CFTimeout)
             if self.isLocalToon:

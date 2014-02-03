@@ -18,11 +18,15 @@ cog-thief-ortho 0
 
 show-total-population #t
 want-mat-all-tailors #t
+want-tailor-jellybeans #t
+
+estate-day-night #t
 
 want-karts #t
 want-pets #f
 want-news-page #f
 want-news-tab #f
-want-housing #f
+want-housing #t
 
-force-holiday 6
+force-holiday-decorations 6
+want-old-fireworks #t

@@ -23,6 +23,7 @@ QUEST_MOVIE_TIER_NOT_DONE = 11
 PURCHASE_MOVIE_CLEAR = 0
 PURCHASE_MOVIE_START = 1
 PURCHASE_MOVIE_START_BROWSE = 9
+PURCHASE_MOVIE_START_BROWSE_JBS = 11
 PURCHASE_MOVIE_COMPLETE = 2
 PURCHASE_MOVIE_NO_MONEY = 3
 PURCHASE_MOVIE_TIMEOUT = 8
@@ -60,6 +61,7 @@ NPC_PARTYPERSON = 8
 NPC_SPECIALQUESTGIVER = 9
 NPC_FLIPPYTOONHALL = 10
 NPC_SCIENTIST = 11
+NPC_SNOWBALLGIVER = 12
 CLERK_COUNTDOWN_TIME = 120
 TAILOR_COUNTDOWN_TIME = 300
 RTDNAFile = '/RTDNAFile.txt'
@@ -83,31 +85,41 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     import DistributedNPCSpecialQuestGiverAI
     import DistributedNPCFlippyInToonHallAI
     import DistributedNPCScientistAI
+    import DistributedNPCSnowballGiverAI
     canonicalZoneId, name, dnaType, gender, protected, type = desc
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     elif type == NPC_HQ:
+        return False
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback, hq=1)
     elif type == NPC_CLERK:
+        return False
         npc = DistributedNPCClerkAI.DistributedNPCClerkAI(air, npcId)
     elif type == NPC_TAILOR:
+        #return False
         npc = DistributedNPCTailorAI.DistributedNPCTailorAI(air, npcId)
     elif type == NPC_BLOCKER:
         npc = DistributedNPCBlockerAI.DistributedNPCBlockerAI(air, npcId)
     elif type == NPC_FISHERMAN:
         npc = DistributedNPCFishermanAI.DistributedNPCFishermanAI(air, npcId)
     elif type == NPC_PETCLERK:
+        return False
         npc = DistributedNPCPetclerkAI.DistributedNPCPetclerkAI(air, npcId)
     elif type == NPC_KARTCLERK:
         npc = DistributedNPCKartClerkAI.DistributedNPCKartClerkAI(air, npcId)
     elif type == NPC_PARTYPERSON:
         npc = DistributedNPCPartyPersonAI.DistributedNPCPartyPersonAI(air, npcId)
     elif type == NPC_SPECIALQUESTGIVER:
+        return False 
         npc = DistributedNPCSpecialQuestGiverAI.DistributedNPCSpecialQuestGiverAI(air, npcId)
     elif type == NPC_FLIPPYTOONHALL:
+        return False
         npc = DistributedNPCFlippyInToonHallAI.DistributedNPCFlippyInToonHallAI(air, npcId)
     elif type == NPC_SCIENTIST:
+        return False
         npc = DistributedNPCScientistAI.DistributedNPCScientistAI(air, npcId)
+    elif type == NPC_SNOWBALLGIVER:
+        npc = DistributedNPCSnowballGiverAI.DistributedNPCSnowballGiverAI(air, npcId)
     else:
         print 'createNPC() error!!!'
     npc.setName(name)

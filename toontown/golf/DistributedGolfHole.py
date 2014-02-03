@@ -1418,10 +1418,13 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
             if avId == localAvatar.doId:
                 self.setCamera2Ball()
                 if not self.state == 'ChooseTee':
-                    self.request('ChooseTee')
+                    try:
+                        self.demand('ChooseTee')
+                    except:
+                        self.demand('Aim')
             else:
                 self.setCamera2Ball()
-                self.request('WatchTee')
+                self.demand('WatchTee')
             self.takeOutToon(self.currentGolfer)
 
     def setAvatarTempTee(self, avId, tempTee):

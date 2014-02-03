@@ -49,7 +49,8 @@ class LocalAccountDB:
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
-        self.dbm.sync()
+        if getattr(self.dbm, 'sync', None):
+            self.dbm.sync()
         callback()
 
 class RemoteAccountDB:
@@ -61,7 +62,10 @@ class RemoteAccountDB:
 
     def lookup(self, cookie, callback):
         response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
+        if not response:
+            callback({'success': False,
+                      'reason': 'Account server failed to respond properly.'})
+        elif (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
             callback({'success': False,
                       'reason': response.get('banner', 'Failed for unknown reason')})
         else:
@@ -74,7 +78,10 @@ class RemoteAccountDB:
                       'adminAccess': response['adminAccess']})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
-        if (not response.get('success')):
+        if not response:
+            self.csm.notify.warning("Unable to set accountId with account server. No response!")
+            callback(False)
+        elif (not response.get('success')):
             self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response.get('banner', '[NON-PRESENT]'))
             callback(False)
         else:
@@ -90,10 +97,11 @@ class RemoteAccountDB:
         channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
         channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
         channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
-        channel.getDocument(spec)
-        channel.downloadToRam(rf)
         # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
-        return json.loads(rf.getData())
+        if channel.getDocument(spec) and channel.downloadToRam(rf):
+            return json.loads(rf.getData())
+        else:
+            return False
 
 # --- FSMs ---
 class OperationFSM(FSM):
@@ -159,7 +167,6 @@ class LoginAccountFSM(OperationFSM):
     def enterCreateAccount(self):
         self.account = {'ACCOUNT_AV_SET': [0]*6,
                         'pirateAvatars': [],
-                        'HOUSE_ID_SET': [0]*6,
                         'ESTATE_ID': 0,
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
@@ -294,7 +301,8 @@ class CreateAvatarFSM(OperationFSM):
             'setName': (name,),
             'WishNameState': ('OPEN',),
             'WishName': ('',),
-            'setDNAString': (self.dna,)
+            'setDNAString': (self.dna,),
+            'setDISLid': (self.target,)
         }
 
         self.csm.air.dbInterface.createObject(
@@ -376,6 +384,16 @@ class GetAvatarsFSM(AvatarOperationFSM):
                     if dclass != self.csm.air.dclassesByName['DistributedToonUD']:
                         self.demand('Kill', "One of the account's avatars is invalid!")
                         return
+                    # Since we weren't previously setting the DISLid of an avatar upon creating
+                    # a toon, we will check to see if they already have a DISLid value or not.
+                    # If they don't, we will set it here.
+                    if not fields.has_key('setDISLid'):
+                        self.csm.air.dbInterface.updateObject(
+                            self.csm.air.dbId,
+                            avId,
+                            self.csm.air.dclassesByName['DistributedToonUD'],
+                            {'setDISLid' : [self.target]}
+                        )
                     self.avatarFields[avId] = fields
                     self.pendingAvatars.remove(avId)
                     if not self.pendingAvatars:
@@ -435,6 +453,18 @@ class DeleteAvatarFSM(GetAvatarsFSM):
 
         avsDeleted = list(self.account.get('ACCOUNT_AV_SET_DEL', []))
         avsDeleted.append([self.avId, int(time.time())])
+        
+        estateId = self.account.get('ESTATE_ID', 0)
+        
+        if estateId != 0:
+            # This assumes that the house already exists, but it shouldn't
+            # be a problem if it doesn't.
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                estateId,
+                self.csm.air.dclassesByName['DistributedEstateAI'],
+                { 'setSlot%dToonId' % index : [0], 'setSlot%dItems' % index : [[]] }
+            )
 
         self.csm.air.dbInterface.updateObject(
             self.csm.air.dbId,
@@ -444,13 +474,14 @@ class DeleteAvatarFSM(GetAvatarsFSM):
              'ACCOUNT_AV_SET_DEL': avsDeleted},
             {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
              'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
-            self.__handleDelete)
-
+            self.__handleDelete)      
+            
     def __handleDelete(self, fields):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
-
+        
+        self.csm.air.friendsManager.clearList(self.avId) #RIP friends list
         self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
         self.demand('QueryAvatars')
 
@@ -539,6 +570,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
         # Render pattern into a string:
         parts = []
         for p,f in self.pattern:
+            if p==213: p=212 # Don't allow the name Slappy if they try to add it back in NameMasterEnglish (it will generate a blank name)
             part = self.csm.nameGenerator.nameDictionary.get(p, ('',''))[1]
             if f: part = part[:1].upper() + part[1:]
             else: part = part.lower()
@@ -673,6 +705,12 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
         dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
         self.csm.air.send(dg)
+        
+        # Tell TTRFriendsManager somebody is logging in:
+        self.csm.air.friendsManager.toonOnline(self.avId, self.avatar)
+
+        # Tell the GlobalPartyManager as well
+        self.csm.air.globalPartyMgr.avatarJoined(self.avId)
 
         self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
         self.demand('Off')
@@ -688,6 +726,9 @@ class UnloadAvatarFSM(OperationFSM):
 
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
+        
+        # Tell TTRFriendsManager somebody is logging off:
+        self.csm.air.friendsManager.toonOffline(self.avId)
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()

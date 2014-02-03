@@ -97,6 +97,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.csm = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
         self.avatarFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_AVATAR_FRIENDS_MANAGER, 'AvatarFriendsManager')
         self.playerFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_PLAYER_FRIENDS_MANAGER, 'TTPlayerFriendsManager')
+        self.ttrFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER, 'TTRFriendsManager')
         self.speedchatRelay = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_SPEEDCHAT_RELAY, 'TTSpeedchatRelay')
         self.deliveryManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         if config.GetBool('want-code-redemption', 1):
@@ -383,11 +384,51 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             pad.delayDelete.destroy()
 
     def __sendGetAvatarDetails(self, avId):
+        #return
+        
+        self.ttrFriendsManager.d_getAvatarDetails(avId)
+        
+        return
         datagram = PyDatagram()
         avatar = self.__queryAvatarMap[avId].avatar
         datagram.addUint16(avatar.getRequestID())
         datagram.addUint32(avId)
         self.send(datagram)
+        
+    def n_handleGetAvatarDetailsResp(self, avId, fields):
+        self.notify.info('Query reponse for avId %d' % avId)
+        try:
+            pad = self.__queryAvatarMap[avId]
+        except:
+            self.notify.warning('Received unexpected or outdated details for avatar %d.' % avId)
+            return
+        
+        del self.__queryAvatarMap[avId]
+        gotData = 0
+        
+        dclassName = pad.args[0]
+        dclass = self.dclassesByName[dclassName]
+        #pad.avatar.updateAllRequiredFields(dclass, fields)
+        
+        # This is a much saner way to load avatar details, and is also
+        # dynamic. This means we aren't restricted in what we pass.
+        # Due to Python's random ordering of dictionaries, we have to pass
+        # a list containing a list of the field and value. For example:
+        # To set the hp and maxHp of an avatar, my fields list would be
+        # fields = [['setHp', 15], ['setMaxHp', 15]]
+
+        for currentField in fields:
+            getattr(pad.avatar, currentField[0])(currentField[1])
+            
+        gotData = 1
+        
+        
+        if isinstance(pad.func, types.StringType):
+            messenger.send(pad.func, list((gotData, pad.avatar) + pad.args))
+        else:
+            apply(pad.func, (gotData, pad.avatar) + pad.args)
+            
+        pad.delayDelete.destroy()
 
     def handleGetAvatarDetailsResp(self, di):
         avId = di.getUint32()
@@ -748,8 +789,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return 1
 
     def removeFriend(self, avatarId):
-        base.localAvatar.sendUpdate('friendsNotify', [base.localAvatar.doId, 1], sendToId=avatarId)
-        self.notify.warning('removeFriend: TODO!')
+        #base.localAvatar.sendUpdate('friendsNotify', [base.localAvatar.doId, 1], sendToId=avatarId)
+        self.ttrFriendsManager.d_removeFriend(avatarId)
 
     def clearFriendState(self):
         self.friendsMap = {}
@@ -758,9 +799,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.friendsListError = 0
 
     def sendGetFriendsListRequest(self):
-        self.notify.warning('sendGetFriendsListRequest: TODO!')
-        self.friendsMapPending = 0
-        messenger.send('friendsMapComplete')
+        self.friendsMapPending = 1
+        self.friendsListError = 0
+        self.ttrFriendsManager.d_requestFriendsList()
 
     def cleanPetsFromFriendsMap(self):
         for objId, obj in self.friendsMap.items():
@@ -793,74 +834,56 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
         PetDetail.PetDetail(doId, petDetailsCallback)
 
-    def handleGetFriendsList(self, di):
-        error = di.getUint8()
-        if error:
-            self.notify.warning('Got error return from friends list.')
-            self.friendsListError = 1
-        else:
-            count = di.getUint16()
-            for i in range(0, count):
-                doId = di.getUint32()
-                name = di.getString()
-                dnaString = di.getString()
-                dna = ToonDNA.ToonDNA()
-                dna.makeFromNetString(dnaString)
-                petId = di.getUint32()
-                handle = FriendHandle.FriendHandle(doId, name, dna, petId)
-                self.friendsMap[doId] = handle
-                if self.friendsOnline.has_key(doId):
-                    self.friendsOnline[doId] = handle
-                if self.friendPendingChatSettings.has_key(doId):
-                    self.notify.debug('calling setCommonAndWL %s' % str(self.friendPendingChatSettings[doId]))
-                    handle.setCommonAndWhitelistChatFlags(*self.friendPendingChatSettings[doId])
+    def handleGetFriendsList(self, resp):
+        print len(resp)
+        for toon in resp:
+            doId = toon[0]
+            name = toon[1]
+            dnaString = toon[2]
+            dna = ToonDNA.ToonDNA()
+            dna.makeFromNetString(dnaString)
+            petId = toon[3]
+            handle = FriendHandle.FriendHandle(doId, name, dna, petId)
+            self.friendsMap[doId] = handle
+            if self.friendsOnline.has_key(doId):
+                self.friendsOnline[doId] = handle
+            if self.friendPendingChatSettings.has_key(doId):
+                self.notify.debug('calling setCommonAndWL %s' % str(self.friendPendingChatSettings[doId]))
+                handle.setCommonAndWhitelistChatFlags(*self.friendPendingChatSettings[doId])
 
-            if base.wantPets and base.localAvatar.hasPet():
+        if base.wantPets and base.localAvatar.hasPet():
 
-                def handleAddedPet():
-                    self.friendsMapPending = 0
-                    messenger.send('friendsMapComplete')
+            def handleAddedPet():
+                self.friendsMapPending = 0
+                messenger.send('friendsMapComplete')
 
-                self.addPetToFriendsMap(handleAddedPet)
-                return
+            self.addPetToFriendsMap(handleAddedPet)
+            return
         self.friendsMapPending = 0
         messenger.send('friendsMapComplete')
 
-    def handleGetFriendsListExtended(self, di):
-        avatarHandleList = []
-        error = di.getUint8()
-        if error:
-            self.notify.warning('Got error return from friends list extended.')
-        else:
-            count = di.getUint16()
-            for i in range(0, count):
-                abort = 0
-                doId = di.getUint32()
-                name = di.getString()
-                if name == '':
-                    abort = 1
-                dnaString = di.getString()
-                if dnaString == '':
-                    abort = 1
-                else:
-                    dna = ToonDNA.ToonDNA()
-                    dna.makeFromNetString(dnaString)
-                petId = di.getUint32()
-                if not abort:
-                    handle = FriendHandle.FriendHandle(doId, name, dna, petId)
-                    avatarHandleList.append(handle)
+    def handleGetFriendsListExtended(self, resp):
+        for toon in resp:
+            abort = 0
+            doId = toon[0]
+            name = toon[1]
+            if name == '':
+                abort = 1
+            dnaString = toon[2]
+            if dnaString == '':
+                abort = 1
+            else:
+                dna = ToonDNA.ToonDNA()
+                dna.makeFromNetString(dnaString)
+            petId = toon[3]
+            if not abort:
+                handle = FriendHandle.FriendHandle(doId, name, dna, petId)
+                avatarHandleList.append(handle)
 
         if avatarHandleList:
             messenger.send('gotExtraFriendHandles', [avatarHandleList])
 
-    def handleFriendOnline(self, di):
-        doId = di.getUint32()
-        commonChatFlags = 0
-        whitelistChatFlags = 0
-        if di.getRemainingSize() > 0:
-            commonChatFlags = di.getUint8()
-        if di.getRemainingSize() > 0:
-            whitelistChatFlags = di.getUint8()
+    def handleFriendOnline(self, doId, commonChatFlags, whitelistChatFlags):
         self.notify.debug('Friend %d now online. common=%d whitelist=%d' % (doId, commonChatFlags, whitelistChatFlags))
         if not self.friendsOnline.has_key(doId):
             self.friendsOnline[doId] = self.identifyFriend(doId)
@@ -868,8 +891,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             if not self.friendsOnline[doId]:
                 self.friendPendingChatSettings[doId] = (commonChatFlags, whitelistChatFlags)
 
-    def handleFriendOffline(self, di):
-        doId = di.getUint32()
+    def handleFriendOffline(self, doId):
         self.notify.debug('Friend %d now offline.' % doId)
         try:
             del self.friendsOnline[doId]
@@ -1059,7 +1081,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return 0
 
     def requestAvatarInfo(self, avId):
-        self.notify.warning('requestAvatarInfo: TODO!')
+        if avId == 0:
+            return
+        self.ttrFriendsManager.d_requestAvatarInfo([avId])
 
     def queueRequestAvatarInfo(self, avId):
         removeTask = 0
@@ -1072,4 +1096,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         taskMgr.doMethodLater(0.1, self.sendAvatarInfoRequests, 'avatarRequestQueueTask')
 
     def sendAvatarInfoRequests(self, task = None):
-        self.notify.warning('sendAvatarInfoRequests: TODO!')
+        if not hasattr(self, 'avatarInfoRequests'):
+            return
+        if len(self.avatarInfoRequests) == 0:
+            return
+        self.ttrFriendsManager.d_requestAvatarInfo(self.avatarInfoRequests)

@@ -83,7 +83,7 @@ class DistributedRacePad(DistributedKartPad, FSM):
         self.ignore('enterPlayground')
         self.acceptOnce('enterPlayground', self.setTunnelSignText)
 
-    def enterOff(self):
+    def enterOff(self, *args):
         self.notify.debug('enterOff: Entering Off State for RacePad %s' % self.id)
         if self.tunnelSignInterval:
             self.tunnelSignInterval.finish()

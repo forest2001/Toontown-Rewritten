@@ -1,5 +1,7 @@
 from toontown.toonbase import ToontownGlobals
 from HoodAI import HoodAI
+from toontown.dna.DNAParser import DNAStorage
+from toontown.toon import NPCToons
 
 class DLHoodAI(HoodAI):
     HOOD = ToontownGlobals.DonaldsDreamland
@@ -7,4 +9,4 @@ class DLHoodAI(HoodAI):
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
         
-        self.createHQ(9505,5)
+        self.spawnObjects()

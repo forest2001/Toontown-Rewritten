@@ -133,7 +133,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
 
     def chooseDoor(self):
         doorModelName = 'door_double_round_ur'
-        if doorModelName[-1:] == 'r':
+        if doorModelName[-1:] == 'l':
             doorModelName = doorModelName[:-1] + 'l'
         else:
             doorModelName = doorModelName[:-1] + 'r'

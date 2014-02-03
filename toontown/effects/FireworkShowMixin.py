@@ -50,56 +50,61 @@ class FireworkShowMixin:
         if self.timestamp:
             self.getLoader().music.stop()
             t = globalClockDelta.localElapsedTime(self.timestamp) - self.startDelay
-            base.playMusic(self.showMusic, 0, 1, 0.8, max(0, t))
+            base.playMusic(self.showMusic, 0, 1, 1, max(0, t))
 
     def shootFirework(self, x, y, z, style, color1, color2):
         amp = 5
         Fireworks.shootFirework(style, x, y, z, color1, color2, amp)
 
-    def startShow(self, eventId, style, timestamp, root = render):
+    def startShow(self, eventId, style, songId, timestamp, root = render):
         t = globalClockDelta.localElapsedTime(timestamp) - self.startDelay
         self.timestamp = timestamp
         self.showMusic = None
         self.eventId = eventId
         if base.config.GetBool('want-old-fireworks', 0):
-            self.currentShow = self.getFireworkShowIval(eventId, style, t)
+            self.currentShow = self.getFireworkShowIval(eventId, style, songId, t)
             if self.currentShow:
                 self.currentShow.start(t)
         else:
             self.createFireworkShow()
             if t > self.fireworkShow.getShowDuration():
                 return
-            preShow = self.preShow(eventId, t)
+            preShow = self.preShow(eventId, songId, t)
             postShow = self.postShow(eventId)
             beginFireworkShow = Func(self.beginFireworkShow, max(0, t), root)
             self.currentShow = Sequence(preShow, beginFireworkShow, Wait(max(0, self.fireworkShow.getShowDuration() - max(0, t))), postShow)
             self.currentShow.start()
         return
 
-    def preShow(self, eventId, startT):
+    def preShow(self, eventId, songId, startT):
         if eventId == JULY4_FIREWORKS:
             instructionMessage = TTLocalizer.FireworksInstructions
             startMessage = TTLocalizer.FireworksJuly4Beginning
             endMessage = TTLocalizer.FireworksJuly4Ending
-            musicFile = 'phase_4/audio/bgm/tt_party2.ogg'
+            songs = ['tt_summer', 'firework_music']
+            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
         elif eventId == NEWYEARS_FIREWORKS:
             instructionMessage = TTLocalizer.FireworksInstructions
             startMessage = TTLocalizer.FireworksNewYearsEveBeginning
             endMessage = TTLocalizer.FireworksNewYearsEveEnding
-            musicFile = 'phase_4/audio/bgm/tt_s_ara_gen_fireworks_auldLangSyne.ogg'
+            songs = ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
+            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
         elif eventId == PartyGlobals.FireworkShows.Summer:
             instructionMessage = TTLocalizer.FireworksActivityInstructions
             startMessage = TTLocalizer.FireworksActivityBeginning
             endMessage = TTLocalizer.FireworksActivityEnding
-            musicFile = 'phase_4/audio/bgm/tt_summer.ogg'
+            songs = ['tt_party1', 'tt_party2']
+            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
         elif eventId == COMBO_FIREWORKS:
             instructionMessage = TTLocalizer.FireworksInstructions
             startMessage = TTLocalizer.FireworksComboBeginning
             endMessage = TTLocalizer.FireworksComboEnding
-            musicFile = 'phase_4/audio/bgm/tt_party2.ogg'
+            songs = ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
+            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
         else:
             FireworkShowMixin.notify.warning('Invalid fireworks event ID: %d' % eventId)
             return None
+                    
         self.showMusic = loader.loadMusic(musicFile)
         self.showMusic.setVolume(1)
 
@@ -155,6 +160,7 @@ class FireworkShowMixin:
         else:
             FireworkShowMixin.notify.warning('Invalid fireworks event ID: %d' % eventId)
             return None
+                
         if self.__checkHoodValidity() and hasattr(base.cr.playGame.hood, 'sky') and base.cr.playGame.hood.sky:
             postShow = Sequence(Func(base.cr.playGame.hood.sky.show), Parallel(LerpColorScaleInterval(base.cr.playGame.hood.sky, 2.5, Vec4(1, 1, 1, 1)), LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 2.5, Vec4(1, 1, 1, 1)), LerpColorScaleInterval(base.localAvatar, 2.5, Vec4(1, 1, 1, 1))), Func(self.__restoreDDFog), Func(self.restoreCameraLens), Func(base.setBackgroundColor, DefaultBackgroundColor), Func(self.showMusic.stop), Func(base.localAvatar.setSystemMessage, 0, endMessage))
         if self.restorePlaygroundMusic:
@@ -207,12 +213,12 @@ class FireworkShowMixin:
                 self.fireworkShow.lookAt(0, 0, 0)
                 self.fireworkShow.setScale(1.8)
 
-    def getFireworkShowIval(self, eventId, index, startT):
+    def getFireworkShowIval(self, eventId, index, songId, startT):
         show = FireworkShows.getShow(eventId, index)
         if show is None:
             FireworkShowMixin.notify.warning('could not find firework show: index: %s' % index)
             return
-        preShow = self.preShow(eventId, startT)
+        preShow = self.preShow(eventId, songId, startT)
         mainShow = Sequence()
         currentT = skyTransitionDuration + preShowPauseDuration
         for effect in show:

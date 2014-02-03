@@ -171,7 +171,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         self.quitEarlyButton.stash()
         self.flashText = OnscreenText(text='', pos=(0.0, -0.45), scale=0.2, fg=(1.0, 1.0, 0.65, 1.0), align=TextNode.ACenter, font=ToontownGlobals.getSignFont(), mayChange=True)
         self.timer = PartyUtils.getNewToontownTimer()
-        self.timer.reparentTo(self.screenPlaneElements)
+        self.timer.posInTopRightCorner()
         return
 
     def loadSounds(self):
@@ -527,13 +527,13 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         newPos = currentPos + vec * (dt * self.cameraSpeed)
         base.camera.setPos(self.toon, newPos)
         base.camera.lookAt(self.toon)
-        if z > self.trampHeight:
-            heightFactor = 1.0 - min(1.0, (z - self.trampHeight) / self.dropShadowCutoff)
-            self.toon.dropShadow.setAlphaScale(heightFactor)
-            self.toon.dropShadow.setScale(max(0.1, heightFactor))
-        else:
-            self.toon.dropShadow.setAlphaScale(1.0)
-            self.toon.dropShadow.setScale(1.0)
+        #if z > self.trampHeight:
+        #    heightFactor = 1.0 - min(1.0, (z - self.trampHeight) / self.dropShadowCutoff)
+        #    self.toon.dropShadow.setAlphaScale(heightFactor)
+        #    self.toon.dropShadow.setScale(max(0.1, heightFactor))
+        #else:
+        #    self.toon.dropShadow.setAlphaScale(1.0)
+        #    self.toon.dropShadow.setScale(1.0)
         if self.leavingTrampoline and z < self.trampHeight and abs(a) < 0.1:
             self.releaseToon()
         return Task.cont

@@ -47,8 +47,13 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+
+# Magic Word imports
 from otp.ai.MagicWordGlobal import *
+from direct.distributed.PyDatagram import PyDatagram
+from direct.distributed.MsgTypes import *
 import shlex
+
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -89,6 +94,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             PetLookerAI.PetLookerAI.__init__(self)
         self.air = air
         self.dna = ToonDNA.ToonDNA()
+        self.mwDNABackup = {}
         self.inventory = None
         self.fishCollection = None
         self.fishTank = None
@@ -342,8 +348,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return
 
     def ban(self, comment):
-        simbase.air.banManager.ban(self.doId, self.DISLid, comment)
-
+        #simbase.air.banManager.ban(self.doId, self.DISLid, comment)
+        pass
+        
     def disconnect(self):
         self.requestDelete()
 
@@ -375,7 +382,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if simbase.config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s wearing a suit in a zone they are not allowed to in. Zone: %s' % (self.doId, newZoneId)
                     dislId = self.DISLid
-                    simbase.air.banManager.ban(self.doId, dislId, commentStr)
+                    #simbase.air.banManager.ban(self.doId, dislId, commentStr)'''
 
     def announceZoneChange(self, newZoneId, oldZoneId):
         from toontown.pets import PetObserve
@@ -517,9 +524,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             allowedColors = []
             if self.dna.gender == 'm':
-                allowedColors = ToonDNA.defaultBoyColorList + [26]
+                allowedColors = ToonDNA.defaultBoyColorList
             else:
-                allowedColors = ToonDNA.defaultGirlColorList + [26]
+                allowedColors = ToonDNA.defaultGirlColorList
+            
+            # No idea why this wasn't done by disney, but add sanity checks for black (and now white) toons.
+            if self.dna.getAnimal() == 'bear':
+                allowedColors = allowedColors + [0]
+            if self.dna.getAnimal() == 'cat':
+                allowedColors = allowedColors + [26]
+                
             if self.dna.legColor not in allowedColors:
                 self.dna.legColor = allowedColors[0]
                 changed = True
@@ -634,7 +648,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if friendsList:
             friendId = friendsList[-1]
             otherAv = self.air.doId2do.get(friendId)
-            self.air.questManager.toonMadeFriend(self, otherAv)
+            #self.air.questManager.toonMadeFriend(self, otherAv)
 
     def getFriendsList(self):
         return self.friendsList
@@ -1190,7 +1204,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if animName not in ToontownGlobals.ToonAnimStates:
             desc = 'tried to set invalid animState: %s' % (animName,)
             if config.GetBool('want-ban-animstate', 1):
-                simbase.air.banManager.ban(self.doId, self.DISLid, desc)
+                #simbase.air.banManager.ban(self.doId, self.DISLid, desc)
+                pass
             else:
                 self.air.writeServerEvent('suspicious', self.doId, desc)
             return
@@ -1469,7 +1484,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.notify.warning('%s setCogIndex invalid: %s' % (self.doId, index))
                 if simbase.config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s trying to set cog index to %s in Zone: %s' % (self.doId, index, self.zoneId)
-                    simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
+                    #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
         else:
             self.cogIndex = index
 
@@ -1746,9 +1761,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('setCheesyEffect', [effect, hoodId, expireTime])
 
     def setCheesyEffect(self, effect, hoodId, expireTime):
-        if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
-            self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
-            return
+        # We don't yet have a working holidayManager, and we want to keep snowman heads.
+        #if simbase.air.holidayManager and ToontownGlobals.WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and ToontownGlobals.WACKY_WINTER_CAROLING not in simbase.air.holidayManager.currentHolidays and effect == ToontownGlobals.CESnowMan:
+            #self.b_setCheesyEffect(ToontownGlobals.CENormal, hoodId, expireTime)
+            #return
         self.savedCheesyEffect = effect
         self.savedCheesyHoodId = hoodId
         self.savedCheesyExpireTime = expireTime
@@ -1958,7 +1974,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             simbase.air.writeServerEvent('suspicious', self.doId, 'Toon teleporting to zone %s they do not have access to.' % zoneId)
             if simbase.config.GetBool('want-ban-teleport', False):
                 commentStr = 'Toon %s teleporting to a zone %s they do not have access to' % (self.doId, zoneId)
-                simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
+                #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
                 
     def setTeleportOverride(self, flag):
         self.teleportOverride = flag
@@ -2479,7 +2495,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             commentStr = 'User %s has negative money %s' % (self.doId, money)
             dislId = self.DISLid
             if simbase.config.GetBool('want-ban-negative-money', False):
-                simbase.air.banManager.ban(self.doId, dislId, commentStr)
+                #simbase.air.banManager.ban(self.doId, dislId, commentStr)
+                pass
         self.money = money
 
     def getMoney(self):
@@ -3702,14 +3719,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if 'invalid msgIndex in setSCSinging:' in eventName:
                 if senderId == self.doId:
                     commentStr = 'Toon %s trying to call setSCSinging' % self.doId
-                    simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
+                    #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
                 else:
                     self.notify.warning('logSuspiciousEvent event=%s senderId=%s != self.doId=%s' % (eventName, senderId, self.doId))
         if simbase.config.GetBool('want-ban-setAnimState', True):
             if eventName.startswith('setAnimState: '):
                 if senderId == self.doId:
                     commentStr = 'Toon %s trying to call setAnimState' % self.doId
-                    simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
+                    #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
                 else:
                     self.notify.warning('logSuspiciousEvent event=%s senderId=%s != self.doId=%s' % (eventName, senderId, self.doId))
 
@@ -4169,7 +4186,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                     if simbase.config.GetBool('want-ban-blacklist-module', False):
                         commentStr = 'User has blacklist module: %s attached to their game process' % module
                         dislId = self.DISLid
-                        simbase.air.banManager.ban(self.doId, dislId, commentStr)
+                        #simbase.air.banManager.ban(self.doId, dislId, commentStr)
                 else:
                     self.air.writeServerEvent('suspicious', avId, 'Unknown module %s loaded into process.' % module)
 
@@ -4387,12 +4404,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
 
-        # Their fishing rod should be level 2.
-        self.b_setFishingRod(2)
+        # Their fishing rod should be level 4.
+        self.b_setFishingRod(4)
 
         # They need bigger jellybean jars to hold all of their money:
-        if self.getMaxMoney()<120: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
-            self.b_setMaxMoney(120)
+        if self.getMaxMoney()<250: #This is mostly for admins, but we should only setMaxMoney if their maxMoney isn't already 120+
+            self.b_setMaxMoney(250)
 
         # Unlock all of the emotes they should have during alpha:
         emotes = list(self.getEmoteAccess())
@@ -4416,16 +4433,29 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             emotes[emoteId] = 1
 
         self.b_setEmoteAccess(emotes)
-        
+        self.b_setHoodsVisited([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000])
+        self.b_setTeleportAccess([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000])
+
+
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
         if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
+        
+        # Remove effects and accessories from non-admins.
+        # This decision was made after so many toons complained about how it is unfair
+        # that some toons are allowed accessories/effects and they aren't.
+        if self.getAdminAccess() < 400:
+            self.b_setCheesyEffect(0, 0, 0)
+            self.b_setHat(0, 0, 0)
+            self.b_setGlasses(0, 0, 0)
+            self.b_setShoes(0, 0, 0)
+            self.b_setBackpack(0, 0, 0)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
     """Set Cheesy Effect of the target."""
     CEHood = CEHood * 1000 #So the invoker only has to use '1' for DonaldsDock, '2' for TTC etc.
-    if not 0 <= CEValue <= 18:
+    if not 0 <= CEValue <= 16:
         return 'Invalid value %s specified for Cheesy Effect.' % CEValue
     if CEHood != 0 and not 100 < CEHood < ToontownGlobals.DynamicZonesBegin:
         return 'Invalid zoneId specified.'
@@ -4525,18 +4555,17 @@ def setName(nameStr):
     return "Changed avId %s's name to %s" % (spellbook.getTarget().doId, nameStr)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS)
-def restockAllResistances():
+def gibunites():
     """Restock all CFO phrases."""
-    return 'This magic word is currently disabled, as unites are broken with Mirai.'
-    spellbook.getTarget().restockAllResistanceMessages(1)
-    return 'Gave %s all CFO unites.' % spellbook.getTarget().getName()
+    spellbook.getTarget().restockAllResistanceMessages(99)
+    return 'i gib %s all dem unitez' % spellbook.getTarget().getName()
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setHat(hatId, hatTex=0):
     """Set hat of target toon."""
     if not 0 <= hatId <= 56:
         return 'Invalid hat specified.'
-    if not 0 <= hatTex <= 19:
+    if not 0 <= hatTex <= 20:
         return 'Invalid hat texture specified.'
     spellbook.getTarget().b_setHat(hatId, hatTex, 0)
     
@@ -4572,8 +4601,13 @@ def kick(overrideSelfKick=False):
     """Kick the player from the game server."""
     if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
         return "Are you sure you want to kick yourself? Use '~kick True' if you are."
-    spellbook.getTarget().disconnect()
-    return "The player %s was kicked." % spellbook.getTarget().name
+    #spellbook.getTarget().disconnect()
+    dg = PyDatagram()
+    dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
+    dg.addUint16(155)
+    dg.addString('You were kicked by a moderator!')
+    simbase.air.send(dg)
+    return "The player %s was kicked." % spellbook.getTarget().getName()
 
 @magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
@@ -4696,3 +4730,149 @@ def setTickets(tixVal):
         return 'Ticket value out of range (0-99999)'
     spellbook.getTarget().b_setTickets(tixVal)
     return "%s's tickets were set to %s." % (spellbook.getTarget().getName(), tixVal)
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def setCogIndex(indexVal):
+    """Transform into a cog/suit. THIS SHOULD ONLY BE USED WHERE NEEDED, E.G. ELECTIONS"""
+    if not -1 <= indexVal <= 3:
+        return 'CogIndex value %s is invalid.' % str(indexVal)
+    spellbook.getTarget().b_setCogIndex(indexVal)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
+def dna(part, value):
+    # This is where the fun begins, woo!
+    """Set a specific part of DNA for the target toon. Be careful, you don't want to break anyone!"""
+    
+    av = spellbook.getTarget()
+    
+    dna = ToonDNA.ToonDNA()
+    dna.makeFromNetString(av.getDNAString())
+    
+    def isValidColor(colorIndex):
+        if not 0 <= colorIndex <= 26: # This could actually be selected from ToonDNA, but I prefer this :D
+            return False
+        if colorIndex == 0 and dna.getAnimal() != 'bear':
+            return False
+        if colorIndex == 26 and dna.getAnimal() != 'cat':
+            return False
+        return True
+    
+    # Body Part Colors
+    if part=='headColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for head."
+        dna.headColor = value
+    elif part=='armColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for arms."
+        dna.armColor = value
+    elif part=='legColor':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for legs."
+        dna.legColor = value
+    elif part=='color':
+        value = int(value)
+        if not isValidColor(value):
+            return "DNA: Invalid color specified for toon."
+        dna.headColor = value
+        dna.armColor = value
+        dna.legColor = value
+    elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
+        return "DNA: Change of glove colors are not allowed."
+        # If you ever want to be able to edit gloves, feel free to comment out this return.
+        # However, since DToonAI checks ToonDNA, this would be impossible unless changes
+        # are made.
+        value = int(value)
+        if not 0 <= value <= 26:
+            return "DNA: Color index out of range."
+        dna.gloveColor = value
+        
+    # Body Sizes, Species & Gender (y u want to change gender pls)
+    elif part=='gender':
+        if value=='male':
+            dna.gender = 'm'
+        elif value=='female':
+            dna.gender = 'f'
+        else:
+            return "DNA: Invalid gender. Stick to 'male' or 'female'."
+    elif part=='species':
+        species = ['dog', 'cat', 'horse', 'mouse', 'rabbit', 'duck', 'monkey', 'bear', 'pig']
+        if value not in species:
+            return "DNA: Invalid head type specified."
+        if dna.headColor == 0x1a and value != 'cat':
+            return "DNA: Cannot have a black toon (non-cat)!"
+        if dna.headColor == 0 and value != 'bear':
+            return "DNA: Cannot have a white toon (non-bear)!"
+        species = dict(map(None, species, ToonDNA.toonSpeciesTypes))
+        headSize = dna.head[1:3]
+        dna.head = (species.get(value) + headSize)
+    elif part=='headSize':
+        sizes = ['ls', 'ss', 'sl', 'll']
+        value = int(value)
+        if not 0 <= value <= 3:
+            return "DNA: Invalid head size index."
+        species = dna.head[0]
+        dna.head = (species + sizes[value])
+    elif part=='torso':
+        value = int(value)
+        if dna.gender == 'm':
+            if not 0 <= value <= 2:
+                return "DNA: Male torso index out of range (0-2)."
+        elif dna.gender == 'f':
+            if not 3 <= value <= 8:
+                return "DNA: Female torso index out of range (3-8)."
+        else:
+            return "DNA: Unable to determine gender. Aborting DNA change."
+        dna.torso = ToonDNA.toonTorsoTypes[value]
+    elif part=='legs':
+        value = int(value)
+        if not 0 <= value <= 2:
+            return "DNA: Legs index out of range."
+        dna.legs = ToonDNA.toonLegTypes[value]
+    
+    # Allow Admins to back up a toons current DNA before making changes.
+    elif part=='save':
+        av.mwDNABackup[spellbook.getInvoker().doId] = av.getDNAString()
+        return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
+        
+    # Restore from a previous back up of DNA.
+    elif part=='restore':
+        if spellbook.getInvoker().doId in av.mwDNABackup:
+            dna.makeFromNetString(av.mwDNABackup.get(spellbook.getInvoker().doId))
+            av.b_setDNAString(dna.makeNetString())
+            return "Restored %s's DNA to last save." % av.getName()
+        else:
+            return "DNA: There are no backups available."
+    
+    # Don't allow them to submit any changes if they don't enter a valid DNA part.
+    else:
+        return "DNA: Invalid part specified."
+    
+    av.b_setDNAString(dna.makeNetString())
+    return "Completed DNA change successfully."
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def setTrophyScore(value):
+    """Set the trophy score of target"""
+    if value < 0:
+        return "Cannot have a trophy score below 0."
+    spellbook.getTarget().d_setTrophyScore(value)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
+def givePies(pieType, numPies=0):
+    """Give target Y number of X pies."""
+    av = spellbook.getTarget()
+    if pieType == -1:
+        av.b_setNumPies(0)
+        return "Removed %s's pies." % spellbook.getTarget().getName()
+    if pieType == 6:
+        return "Wedding cake 'pie' cause client crashes!"
+    if not 0 <= pieType <= 7:
+        return "pieType value out of range (0-7)"
+    if not 0 <= numPies <= 99:
+        return "numPies value out of range (0-99)"
+    av.b_setPieType(pieType)
+    av.b_setNumPies(numPies)

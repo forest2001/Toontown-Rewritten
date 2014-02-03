@@ -7,6 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 import ToontownLoader
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
+from direct.showbase.Transitions import Transitions
 from pandac.PandaModules import *
 from otp.nametag.ChatBalloon import ChatBalloon
 from otp.nametag import NametagGlobals
@@ -14,10 +15,15 @@ from otp.margins.MarginManager import MarginManager
 import sys
 import os
 import math
+import tempfile
+import shutil
+import atexit
 from toontown.toonbase import ToontownAccess
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
+from toontown.toontowngui import TTDialog
+from sys import platform
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -53,7 +59,19 @@ class ToonBase(OTPBase.OTPBase):
         if self.config.GetBool('want-particles', 1) == 1:
             self.notify.debug('Enabling particles')
             self.enableParticles()
+
         self.accept(ToontownGlobals.ScreenshotHotkey, self.takeScreenShot)
+
+        # OS X Specific Actions
+        if platform == "darwin":
+            self.acceptOnce(ToontownGlobals.QuitGameHotKeyOSX, self.exitOSX)
+            self.accept(ToontownGlobals.QuitGameHotKeyRepeatOSX, self.exitOSX)
+            self.acceptOnce(ToontownGlobals.HideGameHotKeyOSX, self.hideGame)
+            self.accept(ToontownGlobals.HideGameHotKeyRepeatOSX, self.hideGame)
+            self.acceptOnce(ToontownGlobals.MinimizeGameHotKeyOSX, self.minimizeGame)
+            self.accept(ToontownGlobals.MinimizeGameHotKeyRepeatOSX, self.minimizeGame)
+
+        self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
         oldLoader = self.loader
         self.loader = ToontownLoader.ToontownLoader(self)
@@ -70,6 +88,10 @@ class ToonBase(OTPBase.OTPBase):
         if self.inactivityTimeout:
             self.notify.debug('Enabling Panda timeout: %s' % self.inactivityTimeout)
             self.mouseWatcherNode.setInactivityTimeout(self.inactivityTimeout)
+        self.mouseWatcherNode.setEnterPattern('mouse-enter-%r')
+        self.mouseWatcherNode.setLeavePattern('mouse-leave-%r')
+        self.mouseWatcherNode.setButtonDownPattern('button-down-%r')
+        self.mouseWatcherNode.setButtonUpPattern('button-up-%r')
         self.randomMinigameAbort = self.config.GetBool('random-minigame-abort', 0)
         self.randomMinigameDisconnect = self.config.GetBool('random-minigame-disconnect', 0)
         self.randomMinigameNetworkPlugPull = self.config.GetBool('random-minigame-netplugpull', 0)
@@ -125,6 +147,11 @@ class ToonBase(OTPBase.OTPBase):
         self.localAvatarStyle = None
         return
 
+    def openMainWindow(self, *args, **kw):
+        result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
+        self.setCursorAndIcon()
+        return result
+
     def windowEvent(self, win):
         OTPBase.OTPBase.windowEvent(self, win)
         if not config.GetInt('keep-aspect-ratio', 0):
@@ -164,6 +191,30 @@ class ToonBase(OTPBase.OTPBase):
         self.oldX = newX
         self.oldY = newY
 
+    def setCursorAndIcon(self):
+        tempdir = tempfile.mkdtemp()
+        atexit.register(shutil.rmtree, tempdir)
+        vfs = VirtualFileSystem.getGlobalPtr()
+
+        searchPath = DSearchPath()
+        if __debug__:
+            searchPath.appendDirectory(Filename('resources/phase_3/etc'))
+        searchPath.appendDirectory(Filename('/phase_3/etc'))
+
+        for filename in ['toonmono.cur', 'icon.ico']:
+            p3filename = Filename(filename)
+            found = vfs.resolveFilename(p3filename, searchPath)
+            if not found:
+                return # Can't do anything past this point.
+
+            with open(os.path.join(tempdir, filename), 'wb') as f:
+                f.write(vfs.readFile(p3filename, False))
+
+        wp = WindowProperties()
+        wp.setCursorFilename(Filename.fromOsSpecific(os.path.join(tempdir, 'toonmono.cur')))
+        wp.setIconFilename(Filename.fromOsSpecific(os.path.join(tempdir, 'icon.ico')))
+        self.win.requestProperties(wp)
+
     def addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
@@ -178,13 +229,19 @@ class ToonBase(OTPBase.OTPBase):
 
     def __walking(self, pressed):
         self.walking = pressed
+        
+    def toggleGui(self):
+        if aspect2d.isHidden():
+            aspect2d.show()
+        else:
+            aspect2d.hide()
 
     def takeScreenShot(self):
-        if not os.path.exists('screenshots/'):
-            os.mkdir('screenshots/')
+        if not os.path.exists(TTLocalizer.ScreenshotPath):
+            os.mkdir(TTLocalizer.ScreenshotPath)
             self.notify.info('Made new directory to save screenshots.')
         
-        namePrefix = 'screenshots/' + launcher.logPrefix + 'screenshot'
+        namePrefix = TTLocalizer.ScreenshotPath + launcher.logPrefix + 'screenshot'
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
         if self.glitchCount > 10 and self.walking:
             return
@@ -210,6 +267,11 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
+        self.transitions.fadeScreenColor(1)
+        self.transitions.setFadeColor(1, 1, 1)
+        self.transitions.fadeIn(0.8)
+        self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
+        base.playSfx(self.snapshotSfx)
         if coordOnScreen:
             if strTextLabel is not None:
                 strTextLabel.destroy()
@@ -359,6 +421,12 @@ class ToonBase(OTPBase.OTPBase):
 
         self.cr.loginFSM.request('shutdown')
         self.notify.warning('Could not request shutdown; exiting anyway.')
+        self.ignore(ToontownGlobals.QuitGameHotKeyOSX)
+        self.ignore(ToontownGlobals.QuitGameHotKeyRepeatOSX)
+        self.ignore(ToontownGlobals.HideGameHotKeyOSX)
+        self.ignore(ToontownGlobals.HideGameHotKeyRepeatOSX)
+        self.ignore(ToontownGlobals.MinimizeGameHotKeyOSX)
+        self.ignore(ToontownGlobals.MinimizeGameHotKeyRepeatOSX)
         self.exitShow()
 
     def panda3dRenderError(self):
@@ -378,3 +446,29 @@ class ToonBase(OTPBase.OTPBase):
 
     def playMusic(self, music, looping = 0, interrupt = 1, volume = None, time = 0.0):
         OTPBase.OTPBase.playMusic(self, music, looping, interrupt, volume, time)
+
+
+    # OS X Specific Actions
+    def exitOSX(self):
+        self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=TTLocalizer.OptionsPageExitConfirm, style=TTDialog.TwoChoice)
+        self.confirm.show()
+        self.accept('confirmDone', self.handleConfirm)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            self.userExit()
+
+    def hideGame(self):
+        # Hacky, I know, but it works
+        hideCommand = """osascript -e 'tell application "System Events" set frontProcess to first process whose frontmost is true set visible of frontProcess to false end tell'"""
+        os.system(hideCommand)
+
+    def minimizeGame(self):
+        wp = WindowProperties()
+        wp.setMinimized(True)
+        base.win.requestProperties(wp)
+

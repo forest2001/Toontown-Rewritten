@@ -5,6 +5,7 @@ from panda3d.core import LVector3f, LVector4f, BitMask32, TexturePool, ModelNode
 from direct.showbase import Loader
 from direct.stdpy.file import *
 import math, random
+from DNATypesetter import DNATypesetter
 tokens = [
   'FLOAT',
   'INTEGER',
@@ -134,6 +135,7 @@ class DNAStorage:
         self.blockTitles = {}
         self.blockArticles = {}
         self.blockBuildingTypes = {}
+        self.blockDoors = {}
         self.textures = {}
         self.catalogCodes = {}
     def storeSuitPoint(self, suitPoint):
@@ -226,7 +228,13 @@ class DNAStorage:
             block = block[1:]
         return block
     def getTitleFromBlockNumber(self, index):
-        return self.blockTitles[index]
+        if self.blockTitles.has_key(index):
+            return self.blockTitles[index]
+        return ''
+    def getDoorPosHprFromBlockNumber(self, index):
+        return self.blockDoors[str(index)]
+    def storeBlockDoor(self, index, door):
+        self.blockDoors[index] = door
     def storeBlockTitle(self, index, title):
         self.blockTitles[index] = title
     def storeBlockArticle(self, index, article):
@@ -352,12 +360,16 @@ class DNAGroup:
         self.name = name
         self.children = []
         self.parent = None
+        self.visGroup = None
     def add(self, child):
         self.children += [child]
     def at(self, index):
         return self.children[index]
     def clearParent(self):
         self.parent = None
+        self.visGroup = None
+    def getVisGroup(self):
+        return self.visGroup
     def getNumChildren(self):
         return len(self.children)
     def getParent(self):
@@ -366,6 +378,7 @@ class DNAGroup:
         self.children.remove(child)
     def setParent(self, parent):
         self.parent = parent
+        self.visGroup = parent.getVisGroup()
     def getName(self):
         return self.name
     def traverse(self, nodePath, dnaStorage):
@@ -380,6 +393,8 @@ class DNAVisGroup(DNAGroup):
         self.visibles = []
         self.suitEdges = []
         self.battleCells = []
+    def getVisGroup(self):
+        return self
     def addBattleCell(self, cell):
         self.battleCells += [cell]
     def addSuitEdge(self, edge):
@@ -518,7 +533,7 @@ class DNASign(DNANode):
         else:
             node = ModelNode('sign')
             node = decNode.attachNewNode(node, 0)
-        node.getNode(0).setEffect(DecalEffect.make())
+        #node.getNode(0).setEffect(DecalEffect.make())
         node.setDepthOffset(50)
         origin = nodePath.find('**/*sign_origin')
         node.setPosHprScale(origin, self.pos, self.hpr, self.scale)
@@ -533,31 +548,13 @@ class DNASignBaseline(DNANode):
         self.color = LVector4f(1, 1, 1, 1)
         self.font = None
         self.flags = ''
-        self.height = 0.0
-        self.counter = 0
-        self.indent = 1.0
-        self.kern = 1.0
-        self.wiggle = 1.0
-        self.stumble = 1.0
-        self.stomp = 1.0
+        self.indent = 0.0
+        self.kern = 0.0
+        self.wiggle = 0.0
+        self.stumble = 0.0
+        self.stomp = 0.0
         self.width = 0
         self.height = 0
-        self.angle = 0
-        self.f104 = 0
-    def getNextPosHprScale(self, pos, hpr, scale):
-        wiggle = self.wiggle
-        stomp = self.stomp
-        if self.counter % 2 == 0:
-            wiggle *= -1
-            stomp *= -1
-        sx, sy, sz = scale
-        h, p, r = hpr
-        x, y, z = pos
-        sx *= self.scale[0]
-        sy *= self.scale[1] 
-        sz *= self.scale[2]
-        #someone else can figure this shit out
-        return ((x,y,z), (h,p,r), (sx, sy, sz))
     def setCode(self, code):
         self.code = code
     def setColor(self, color):
@@ -566,14 +563,6 @@ class DNASignBaseline(DNANode):
         return self.code
     def getColor(self):
         return self.color
-    def getCurrentKern(self):
-        return self.kern*self.counter
-    def getCurrentStomp(self):
-        return self.stomp*self.counter
-    def getCurrentStumble(self):
-        return self.stumble*self.counter
-    def getCurrentWiggle(self):
-        return self.wiggle*self.counter
     def getFont(self):
         return self.font
     def getHeight(self):
@@ -590,12 +579,6 @@ class DNASignBaseline(DNANode):
         return self.width
     def getWiggle(self):
         return self.wiggle
-    def incCounter(self):
-        self.counter += 1
-    def reset(self):
-        self.counter = 0
-    def resetCounter(self):
-        self.counter = 0
     def setFont(self, font):
         self.font = font
     def setHeight(self, height):
@@ -618,8 +601,21 @@ class DNASignBaseline(DNANode):
         return self.flags
     def traverse(self, nodePath, dnaStorage):
         nodePath = nodePath.attachNewNode('baseline', 0)
+        nodePath.setPos(self.pos)
+        nodePath.setHpr(self.hpr)
+        nodePath.setDepthOffset(50)
+
+        texts = []
         for child in self.children:
-            child.traverse(nodePath, dnaStorage)
+            if child.__class__ == DNASignText:
+                texts.append(child.letters)
+            else:
+                child.traverse(nodePath, dnaStorage)
+
+        typesetter = DNATypesetter(self, dnaStorage)
+        np = typesetter.generate(texts)
+        if np:
+            np.reparentTo(nodePath)
 
 class DNASignText(DNANode):
     def __init__(self):
@@ -628,20 +624,7 @@ class DNASignText(DNANode):
     def setLetters(self, letters):
         self.letters = letters
     def traverse(self, nodePath, dnaStorage):
-        nodePath.getTop().getNode(0).setEffect(DecalEffect.make())
         return
-        tn = TextNode('sign')
-        tn.setText(self.letters)
-        baseline = self.getParent()
-        tn.setTextColor(baseline.getColor())
-        tn.setTextScale(baseline.getScale()[0])
-        font = dnaStorage.findFont(baseline.getCode())
-        if font is None:
-            font = TextProperties.getDefaultFont()
-        tn.setFont(font)
-        nodePath = nodePath.attachNewNode(tn.generate(), 0)
-        pos, hpr, scale = baseline.getNextPosHprScale(self.pos, self.hpr, self.scale)
-        nodePath.setPosHprScale(nodePath.getParent(), pos, hpr, scale)
 
 class DNAFlatBuilding(DNANode): #TODO: finish me
     currentWallHeight = 0 #In the asm this is a global, we can refactor it later
@@ -823,6 +806,7 @@ class DNALandmarkBuilding(DNANode):
         self.title = ''
         self.article = ''
         self.buildingType = ''
+        self.door = None
     def getArticle(self):
         return self.article
     def getBuildingType(self):
@@ -893,9 +877,9 @@ class DNADoor(DNAGroup):
         rightHole = doorNodePath.find('door_*_hole_right')
         rightHole.setName('doorFrameHoleRight')
         leftDoor = doorNodePath.find('door_*_left')
-        leftDoor.setName('rightDoor')
+        leftDoor.setName('leftDoor')
         rightDoor = doorNodePath.find('door_*_right')
-        rightDoor.setName('leftDoor')
+        rightDoor.setName('rightDoor')
         doorFlat = doorNodePath.find('door_*_flat')
         leftHole.wrtReparentTo(doorFlat, 0)
         rightHole.wrtReparentTo(doorFlat, 0)
@@ -912,6 +896,10 @@ class DNADoor(DNAGroup):
         doorTrigger.setScale(2,2,2)
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_' + block)
+        
+        store = NodePath('door-%s' % block)
+        store.setPosHprScale(doorNodePath, (0,0,0), (0,0,0), (1,1,1))
+        dnaStore.storeBlockDoor(block, store)
     def traverse(self, nodePath, dnaStorage):
         frontNode = nodePath.find('**/*_front')
         if not frontNode.getNode(0).isGeomNode():
@@ -1042,8 +1030,9 @@ class DNASignGraphic(DNANode):
         if node is None:
             raise DNAError('DNASignGraphic code ' + self.code + ' not found in storage')
         node = node.copyTo(nodePath, 0)
-        pos, hpr, scale = self.getParent().getNextPosHprScale(self.pos, self.hpr, self.scale)
-        node.setPosHprScale(pos, hpr, scale)
+        node.setScale(self.scale)
+        node.setScale(node, self.getParent().scale)
+        node.setPosHpr(self.pos, self.hpr)
         for child in self.children:
             child.traverse(node, dnaStorage)
 
@@ -1860,8 +1849,7 @@ p_substreet_list.__doc__ = \
 def p_modeldef(p):
     filename = Filename(p[2])
     filename.setExtension('bam')
-    loader = Loader.Loader(None)
-    p.parser.nodePath = loader.loadModel(filename)
+    p.parser.nodePath = base.loader.loadModel(filename)
     p.parser.modelType = p[1]
 p_modeldef.__doc__ = \
     '''modeldef : MODEL string
@@ -1947,3 +1935,11 @@ def loadDNAFile(dnaStore, filename):
     if not graph is None:
         return graph.getNode(0)
     return None
+
+def loadDNAFileAI(dnaStore, filename):
+    print 'AI: Reading DNA file... ', filename
+    dnaloader = DNALoader()
+    dnaloader.getData().setDnaStorage(dnaStore)
+    filename = 'resources/' + filename
+    dnaloader.getData().read(open(filename, 'r'))
+    return dnaloader.getData()

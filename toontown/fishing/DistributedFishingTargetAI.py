@@ -23,6 +23,11 @@ class DistributedFishingTargetAI(DistributedNodeAI):
         pond = self.air.doId2do[self.pondId]
         pond.addTarget(self)
         self.centerPoint = FishingTargetGlobals.getTargetCenter(pond.getArea())
+        
+    def delete(self):
+        taskMgr.remove('updateFishingTarget%d' % self.doId)
+        
+        DistributedNodeAI.delete(self)
 
     def setPondDoId(self, pondId):
         self.pondId = pondId
@@ -46,5 +51,5 @@ class DistributedFishingTargetAI(DistributedNodeAI):
         z = self.centerPoint[2]
 
         self.sendUpdate('setState', [0, self.angle, self.targetRadius, self.time, globalClockDelta.getRealNetworkTime()])
-        taskMgr.doMethodLater(self.time + random.uniform(5, 2.5), DistributedFishingTargetAI.updateState, 'updateFishingTarget', [self])
+        taskMgr.doMethodLater(self.time + random.uniform(5, 2.5), DistributedFishingTargetAI.updateState, 'updateFishingTarget%d' % self.doId, [self])
 

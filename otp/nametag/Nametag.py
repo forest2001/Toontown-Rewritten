@@ -11,8 +11,14 @@ class Nametag(ClickablePopup):
     NAME_PADDING = 0.2
     CHAT_ALPHA = 1.0
 
+    IS_3D = False # 3D variants will set this to True.
+
     def __init__(self):
-        ClickablePopup.__init__(self)
+        if self.IS_3D:
+            ClickablePopup.__init__(self, NametagGlobals.camera)
+        else:
+            ClickablePopup.__init__(self)
+
         self.contents = 0 # To be set by subclass.
 
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
@@ -36,6 +42,9 @@ class Nametag(ClickablePopup):
         self.chatString = ''
         self.chatFlags = 0
 
+    def destroy(self):
+        ClickablePopup.destroy(self)
+
     def setContents(self, contents):
         self.contents = contents
         self.update()
@@ -46,13 +55,25 @@ class Nametag(ClickablePopup):
     def tick(self):
         pass # Does nothing by default.
 
+    def clickStateChanged(self):
+        self.update()
+
+    def getButton(self):
+        cs = self.getClickState()
+        if self.buttons is None:
+            return None
+        elif cs in self.buttons:
+            return self.buttons[cs]
+        else:
+            return self.buttons.get(0)
+
     def update(self):
         if self.colorCode in NAMETAG_COLORS:
             cc = self.colorCode
         else:
             cc = CCNormal
 
-        self.nameFg, self.nameBg, self.chatFg, self.chatBg = NAMETAG_COLORS[cc][0]
+        self.nameFg, self.nameBg, self.chatFg, self.chatBg = NAMETAG_COLORS[cc][self.getClickState()]
 
         self.innerNP.node().removeAllChildren()
         if self.contents&self.CThought and self.chatFlags&CFThought:
@@ -67,7 +88,8 @@ class Nametag(ClickablePopup):
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
         balloon = balloon.generate(text, self.font, textColor=self.chatFg,
-                                   balloonColor=color, wordWrap=self.chatWordWrap)
+                                   balloonColor=color, wordWrap=self.chatWordWrap,
+                                   button=self.getButton())
         balloon.reparentTo(self.innerNP)
 
     def showThought(self):

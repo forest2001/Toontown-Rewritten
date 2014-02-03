@@ -43,7 +43,6 @@ dclass Account {
   string DcObjectType db;
   uint32array ACCOUNT_AV_SET required db;
   uint32array pirateAvatars required db;
-  uint32array HOUSE_ID_SET db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
   string PLAYED_MINUTES db;
@@ -212,7 +211,7 @@ dclass AvatarHandle : TalkPath_whisper {
 dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   string DcObjectType db;
   setName(string = "[Name not set]") required broadcast db airecv;
-  friendsNotify(int32, int8) ownrecv airecv clsend;
+  friendsNotify(int32, int8) ownrecv airecv;
   checkAvOnShard(uint32) clsend airecv;
   confirmAvOnShard(uint32, int8);
   setTalk(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) broadcast;

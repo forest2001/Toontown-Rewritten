@@ -31,6 +31,10 @@ uberdogs:
     - class: PlayerFriendsManager
       id: 4687
       anonymous: false
+    
+    - class: TTRFriendsManager
+      id: 4666
+      anonymous: false
 
     - class: TTSpeedchatRelay
       id: 4712
@@ -42,6 +46,10 @@ uberdogs:
 
     - class: TTCodeRedemptionMgr
       id: 4695
+      anonymous: false
+
+    - class: GlobalPartyManager
+      id: 4477
       anonymous: false
 
 roles:
@@ -59,7 +67,7 @@ roles:
       generate:
         min: 100000000
         max: 399999999
-      engine:
+      backend:
         type: yaml
         foldername: ../databases/astrondb
 
@@ -71,4 +79,4 @@ roles:
 
     - type: eventlogger
       bind: 127.0.0.1:7197
-      output: ../events-%y%m%d_%H%M%S.log
+      output: ../logs/events-%y%m%d_%H%M%S.log

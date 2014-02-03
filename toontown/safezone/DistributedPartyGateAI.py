@@ -4,18 +4,31 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 class DistributedPartyGateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyGateAI")
 
-    def getPartyList(self, todo0):
-        pass
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        self.area = None
 
-    def partyChoiceRequest(self, todo0, todo1, todo2):
-        pass
+    def setArea(self, area):
+        self.area = area
 
-    def listAllPublicParties(self, todo0):
-        pass
+    def getArea(self):
+        return self.area
 
-    def partyRequestDenied(self, todo0):
-        pass
+    def getPartyList(self, avId):
+        partyManager = simbase.air.partyManager
+        self.sendUpdateToAvatarId(avId, 'listAllPublicParties', [partyManager.getPublicParties()])
 
-    def setParty(self, todo0):
-        pass
-
+    def partyChoiceRequest(self, avId, shardId, zoneId):
+        # Try to get a spot for them in the party
+        # find partyId
+        party = None
+        pid = 0
+        for partyId in self.air.partyManager.pubPartyInfo:
+            p = self.air.partyManager.pubPartyInfo[partyId]
+            if p.get('shardId', 0) == shardId and p.get('zoneId', 0) == zoneId:
+                party = p
+                pid = partyId
+                break
+        if not party:
+            return #dafuq
+        self.air.globalPartyMgr.requestPartySlot(pid, self.air.getAvatarIdFromSender(), self.doId)

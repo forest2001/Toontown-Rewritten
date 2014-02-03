@@ -20,9 +20,10 @@ want-mat-all-tailors #t
 want-pets #f
 want-news-page #f
 want-news-tab #f
-want-housing #f
+want-housing #t
 
-force-holiday 6
+want-karts #t
+force-holiday-decorations 6
 
 model-path /
 model-cache-models #f
@@ -43,3 +44,5 @@ vfs-mount phase_13.mf /
 
 audio-library-name p3openal_audio
 
+#TODO: FIX NEW FIREWORKS!
+want-old-fireworks #t

@@ -3,7 +3,7 @@ HOUSE_DEFAULT = 0
 HOUSE_CRAFTSMAN = 1
 HOUSE_TEST = 5
 CLEANUP_DELAY = 8
-BOOT_GRACE_PERIOD = 5
+BOOT_GRACE_PERIOD = 15
 CLEANUP_DELAY_AFTER_BOOT = 2
 WANT_TELEPORT_TIMEOUT = 0
 TELEPORT_TIMEOUT = 15
@@ -13,7 +13,7 @@ houseModels = ['phase_5.5/models/estate/houseA.bam',
  'phase_5.5/models/estate/tt_m_ara_est_house_tepee.bam',
  'phase_5.5/models/estate/tt_m_ara_est_house_castle.bam',
  'phase_5.5/models/estate/tt_m_ara_est_house_cupcake.bam',
- 'phase_5.5/models/estate/test_houseA.bam']
+ 'phase_5.5/models/estate/houseB.bam'] # do we need test_houseA?
 houseDrops = [(-56.7788, -42.8756, 4.06471, -90, 0, 0),
  (83.3909, -77.5085, 0.0708361, 116.565, 0, 0),
  (-69.077, -119.496, 0.025, 77.1957, 0, 0),
