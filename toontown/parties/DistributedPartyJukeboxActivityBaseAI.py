@@ -127,4 +127,4 @@ class DistributedPartyJukeboxActivityBaseAI(DistributedPartyActivityAI):
         self.queue.insert(0, song)
         
         for toon in self.toonsPlaying:
-            self.sendUpdateToAvatarId(toon, 'moveHostSongToTop')
+            self.sendUpdateToAvatarId(toon, 'moveHostSongToTop', [])
