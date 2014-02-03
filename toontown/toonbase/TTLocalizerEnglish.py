@@ -12,6 +12,8 @@ SuitFont = 'phase_3/models/fonts/vtRemingtonPortable.ttf'
 SignFont = 'phase_3/models/fonts/MickeyFont'
 MinnieFont = 'phase_3/models/fonts/MinnieFont'
 FancyFont = 'phase_3/models/fonts/Comedy'
+BuildingNametagFont = 'phase_3/models/fonts/MickeyFont'
+BuildingNametagShadow = None
 NametagFonts = ('phase_3/models/fonts/AnimGothic',
  'phase_3/models/fonts/Aftershock',
  'phase_3/models/fonts/JiggeryPokery',
@@ -42,12 +44,11 @@ NametagFontNames = ('Member',
  'Western')
 NametagLabel = ' Nametag'
 UnpaidNameTag = 'Basic'
+ScreenshotPath = 'screenshots/'
 GM_NAMES = ('TOON COUNCIL',
  'TOON TROOPER',
  'RESISTANCE RANGER',
  'GC')
-BuildingNametagFont = 'phase_3/models/fonts/MickeyFont'
-BuildingNametagShadow = None
 ProductPrefix = 'TT'
 Mickey = 'Mickey'
 VampireMickey = 'VampireMickey'
@@ -222,34 +223,23 @@ QuestsDefaultLeaving = ('Bye!',
  'Good luck!',
  'Have fun in Toontown!',
  'See you later!')
-QuestsDefaultReject = ('Hello.',
- 'Can I help you?',
- 'How are you?',
- 'Hello there.',
- "I'm a little busy now, _avName_.",
+QuestsDefaultReject = ('Heya, _avName_!',
+ 'Whatcha need?',
+ 'Hello! How are you doing?',
+ 'Hi there.',
+ "Sorry _avName_, I'm a bit busy right now.",
  'Yes?',
  'Howdy, _avName_!',
  'Welcome, _avName_!',
- "Hey, _avName_! How's it going?",
- 'Did you know you can open your Shticker Book by hitting F8?',
- 'You can use your map to teleport back to the playground!',
- 'You can make friends with other players by clicking on them.',
- 'You can discover more about a ' + Cog + ' by clicking on him.',
- 'Gather treasures in the playgrounds to fill your Laff meter.',
- Cog + ' buildings are dangerous places! Do not go in alone!',
- 'When you lose a battle, the ' + Cogs + ' take all your gags.',
- 'To get more gags, play Trolley games!',
- 'You can get more Laff points by completing ToonTasks.',
- 'Every ToonTask gives you a reward.',
- 'Some rewards let you carry more gags.',
- 'If you win a battle, you get ToonTask credit for every ' + Cog + ' defeated.',
- 'If you recapture a ' + Cog + ' building, go back inside to see a special thank-you from its owner!',
- 'If you press the Page Up key, you can look up!',
- 'If you press the Tab key, you can see different views of your surroundings!',
- "To show True Friends what you're thinking, enter a '.' before your thought.",
- 'If a ' + Cog + ' is stunned, it is more difficult for them to avoid falling objects.',
- 'Each kind of ' + Cog + ' building has a distinct look.',
- 'Defeating ' + Cogs + ' on the higher floors of a building will give you greater skill rewards.')
+ "Hey, _avName_! How's it hanging?",
+ "Need any help?",
+ "Welcome to the Grand Opening of my shop, _avName_!",
+ "Hi _avName_, what brings you here?",
+ "I heard that Lil' Oldman is opening up a shop in The Brrrgh.",
+ "Have you visited Sticky Lou's store? She just moved in recently.",
+ "Oof, not right now _avName_. I should have never gotten that membership to Squash and Stretch Gym.",
+ "I wonder how Alec is doing with the elections.",
+ "How do you like my shop, _avName_?")
 QuestsDefaultTierNotDone = ('Hello, _avName_! You must finish your current ToonTasks before getting a new one.', 'Hi there! You need to finish the ToonTasks you are working on in order to get a new one.', 'Hi, _avName_! Before I can give you a new ToonTask, you need to finish the ones you have.')
 QuestsDefaultQuest = None
 QuestsDefaultVisitQuestDialog = ('I heard _toNpcName_ is looking for you._where_',
@@ -3110,7 +3100,57 @@ FADoorCodes_SB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon
 FADoorCodes_CB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Cashbot Disguise first!\n\nBuild your Cashbot Disguise by doing ToonTasks in Donald's Dreamland."
 FADoorCodes_LB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Lawbot Disguise first!\n\nBuild your Lawbot Disguise by doing the ToonTasks after Donald's Dreamland."
 FADoorCodes_BB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Bossbot Disguise first!\n\nBuild your Bossbot Disguise by doing the ToonTasks after Donald's Dreamland."
-KnockKnockContestJokes = {2100: ['Wally', "Wally's not looking, hit him with a pie!"],
+KnockKnockDoorNames = { 44: DoorNametag,
+        2: 'Furr Elise',
+        1:  'Overwhelming October',
+        3:  'Slate',
+        4: 'Fanshy',
+        5: 'Smirky Bumberpop',
+        6:  'Little Flappy Bananaberry',
+        7:  'Quackity',
+        49: 'P Cuddles',
+        60: 'lilreenie',
+        10:  'parker643',
+        11: 'Midnite Purr',
+        63: 'Chipythepig',
+        62: 'Amanda',
+        16: 'Tyrynn',
+        18: 'mrpiggywinkles',
+        66: 'Error',
+        21: 'Quackity',
+        65: 'Azure Swallowtail',
+        24: 'krae2121',
+        26: 'GeeMayn',
+        25: 'FancyJackL',
+        67: 'Kewldude',
+        61: 'Macca',
+        29: 'PicklesJesse2'}
+KnockKnockContestJokes = {
+ 2100: {44: ['Wally', "Wally's not looking, hit him with a pie!"],
+        2: ['Mirror', 'Mirror who?'],
+        1:  ['Act', 'No, we\'re starting from act one.'],
+        3:  ['Insane', 'I don\'t know, but you\'re the one talking to a door.'],
+        4: ['Candy', 'Candy have some jellybeans?'],
+        5: ['Santa', 'I santa you the key, now let me out!'],
+        6:  ['Sensor', 'Sensor not doing anything, mind opening the door?'],
+        7:  ['Donald', 'Donald your tasks yet?'],
+        49: ['Eureka', 'Eureka something weird!'],
+        60: ['Anomaly', 'Anomaly don\'t say this, but have you seen my spaceship?'],
+        10:  ['Toboggan', 'I hate toboggan with you, but will you open this door?'],
+        11: ['Goshi', 'Goshi wonder if I won an alpha key.'],
+        63: ['Shelly', 'Shelly compare thee to a summer\'s day?'],
+        62: ['Were', 'No, Werewolf! Owoooooo!'],
+        16: ['Stan', 'Stan back, or I\'ll throw this pie!'],
+        18: ['Snow', 'Snow way I\'m telling you!'],
+        66: ['Big Cheese', 'Big Cheese pizza delivery here, open up!'],
+        21: ['Telemarketer', 'Telemarketer I\'m not buying his offer.'],
+        65: ['June', 'Juneau how to get out of this fountain?'],
+        24: ['Mickey', 'Mickey is stuck! Help'],
+        26: ['Guess', 'Does he have a mustache?'],
+        25: ['Usain', 'Usain you forgot me?'],
+        67: ['Wayt', 'Wayt, you forgot my name?'],
+        61: ['Fuchsia', 'Fuchsia stop talking to doors and go finish that ToonTask!'],
+        29: ['Vincent', 'Vincent, where did my Van Gogh?']},
  2200: {28: ['Biscuit', 'Biscuit out of here the Cogs are coming!'],
         41: ['Dewey', 'Dewey want to go defeat some more Cogs?'],
         40: ['Minnie', "Minnie people have asked that, and it's driving me crazy!"],
@@ -4143,7 +4183,7 @@ AvatarChoicePassword = 'Password'
 AvatarChoiceDeletePasswordOK = lOK
 AvatarChoiceDeletePasswordCancel = lCancel
 AvatarChoiceDeleteWrongPassword = 'That password does not seem to match.  To delete this Toon, enter your password.'
-AvatarChoiceDeleteWrongConfirm = 'You did not type the right thing.  To delete %(name)s, type "%(confirm)s" and click OK.  Do not type the quotation marks.  Click Cancel if you have changed your mind.'
+AvatarChoiceDeleteWrongConfirm = 'You didn\'t type the right thing.  To delete %(name)s, type "%(confirm)s" and click OK.  Do not type the quotation marks.  Click Cancel if you have changed your mind.'
 AvatarChooserPickAToon = 'Pick  A  Toon  To  Play'
 AvatarChooserQuit = lQuit
 DateOfBirthEntryMonths = ['Jan',
@@ -4159,8 +4199,18 @@ DateOfBirthEntryMonths = ['Jan',
  'Nov',
  'Dec']
 DateOfBirthEntryDefaultLabel = 'Date of Birth'
+PhotoPageTitle = 'Snapshots'
+PhotoPageNoName = 'Unnamed'
+PhotoPageUnknownName = 'Unknown'
+PhotoPageAddName = 'Add Caption'
+PhotoPageAddNamePanel = 'Add a Caption to this Snapshot:'
+PhotoPageDelete = 'Are you sure you want to delete'
+PhotoPageConfirm = 'Yep!'
+PhotoPageCancel = lCancel
+PhotoPageClose = lClose
+PhotoPageDirectory = 'Open Folder'
+PhotoPageTutorial = 'You haven\'t taken any snapshots yet! Press TAB to change your camera angle, and press F9 to take a snapshot.\n\n Once you\'ve made a snapshot, come here to manage and name them.'
 AchievePageTitle = 'Achievements\n(Coming Soon)'
-PhotoPageTitle = 'Photo\n(Coming Soon)'
 BuildingPageTitle = 'Buildings\n(Coming Soon)'
 InventoryPageTitle = 'Gags'
 InventoryPageDeleteTitle = 'DELETE GAGS'
@@ -4590,7 +4640,7 @@ DanceAnimLeft = 'Left'
 PartyCannonActivityTitle = 'Party Cannons'
 PartyCannonActivityInstructions = 'Hit the clouds to change their color and bounce in the air! While IN THE AIR, you can USE THE ARROW KEYS to GLIDE.'
 PartyCannonResults = 'You collected %d jelly beans!\n\nNumber of Clouds Hit: %d'
-FireworksActivityInstructions = 'Hit the "Page Up" key to see better.'
+FireworksActivityInstructions = 'Look up using the "Page Up" key to see better.'
 FireworksActivityBeginning = 'Party fireworks are about to start! Enjoy the show!'
 FireworksActivityEnding = 'Hope you enjoyed the show!'
 PartyFireworksAlreadyActive = 'The fireworks show has already started.'
@@ -4601,7 +4651,7 @@ PartyTrampolineActivityInstructions = 'Use the Control key to jump.\n\nJump when
 PartyTrampolineActivityOccupied = 'Trampoline in use.'
 PartyTrampolineQuitEarlyButton = 'Hop Off'
 PartyTrampolineBeanResults = 'You collected %d jelly beans.'
-PartyTrampolineBonusBeanResults = 'You collected %d jelly beans, plus %d more for getting the Big Bean.'
+PartyTrampolineBonusBeanResults = 'You collected %d jelly beans, plus %d more for getting the Big Bean. '
 PartyTrampolineTopHeightResults = 'Your top height was %d ft.'
 PartyTrampolineTimesUp = "Time's Up"
 PartyTrampolineReady = 'Ready...'
@@ -5534,6 +5584,7 @@ STOREOWNER_GOODBYE = 'See you later!'
 STOREOWNER_NEEDJELLYBEANS = 'You need to ride the Trolley to get some jellybeans.'
 STOREOWNER_GREETING = 'Choose what you want to buy.'
 STOREOWNER_BROWSING = 'You can browse, but you need a clothing ticket to buy.'
+STOREOWNER_BROWSING_JBS = 'You can browse, but you need at least 200 jellybeans to buy.'
 STOREOWNER_NOCLOTHINGTICKET = 'You need a clothing ticket to shop for clothes.'
 STOREOWNER_NOFISH = 'Come back here to sell fish to the Pet Shop for jellybeans.'
 STOREOWNER_THANKSFISH = 'Thanks! The Pet Shop will love these. Bye!'
@@ -6973,7 +7024,7 @@ NPCToonNames = {20000: 'Tutorial Tom',
  2019: 'Doctor Dimm',
  2020: 'Professor Prepostera',
  2021: 'Slappy',
- 2022: 'Alec Tinn', 
+ 2022: 'Alec Tinn',
  2101: 'Dentist Daniel',
  2102: 'Sheriff Sherry',
  2103: 'Sneezy Kitty',
@@ -8242,12 +8293,12 @@ PetTrait2descriptions = {'hungerThreshold': ('Always Hungry',
                         'Sometimes Affectionate',
                         'Often Affectionate',
                         'Always Affectionate')}
-FireworksInstructions = lToonHQ + ': Hit the "Page Up" key to see the show!'
+FireworksInstructions = lToonHQ + ': Look up using the "Page Up" key to see the show!'
 startFireworksResponse = "Usage: startFireworksShow ['num']\n                                         'num' = %s - New Years\n                                         %s - Party Summer \n                                         %s - 4th of July"
 FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
 FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
-FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show!'
-FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Happy New Year!'
+FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
+FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
 FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
 FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
 BlockerTitle = 'LOADING TOONTOWN...'
