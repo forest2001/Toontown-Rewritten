@@ -195,14 +195,14 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     def requestPartySlot(self, partyId, avId, gateId):
         if partyId not in self.party2PubInfo:
-            recipient = avId + (1001L << 32)
+            recipient = self.GetPuppetConnectionChannel(avId)
             sender = simbase.air.getAvatarIdFromSender()
             dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Unavailable])
             self.air.send(dg)
             return
         party = self.party2PubInfo[partyId]
         if party['numGuests'] >= party['maxGuests']:
-            recipient = avId + (1001L << 32)
+            recipient = self.GetPuppetConnectionChannel(avId)
             sender = simbase.air.getAvatarIdFromSender()
             dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Full])
             self.air.send(dg)
@@ -223,7 +223,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         # find the hostId
         hostId = self.id2Party[party['partyId']]['hostId']
         # send update to client's gate
-        recipient = avId + (1001L << 32)
+        recipient = self.GetPuppetConnectionChannel(avId)
         sender = simbase.air.getAvatarIdFromSender() # try to pretend the AI sent it. ily2 cfsworks
         dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('setParty').aiFormatUpdate(gateId, recipient, sender, [info, hostId])
         self.air.send(dg)
