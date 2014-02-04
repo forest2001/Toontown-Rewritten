@@ -16,20 +16,38 @@ class GlobalPartyManagerAI(DistributedObjectGlobalAI):
     def queryPartyForHost(self, hostId):
         self.sendUpdate('queryParty', [hostId])
 
-    def partyStarted(self, partyId, shardId, zoneId, hostName):
+    def d_partyStarted(self, partyId, shardId, zoneId, hostName):
         self.sendUpdate('partyHasStarted', [partyId, shardId, zoneId, hostName])
+        
+    def partyStarted(self, partyId, shardId, zoneId, hostName):
+        pass
 
-    def partyDone(self, partyId):
+    def d_partyDone(self, partyId):
         self.sendUpdate('partyDone', [partyId])
+        
+    def partyDone(self, partyId):
+        pass
 
-    def toonJoinedParty(self, partyId, avId):
+    def d_toonJoinedParty(self, partyId, avId):
         self.sendUpdate('toonJoinedParty', [partyId, avId])
+        
+    def toonJoinedParty(self, partyId, avId):
+        pass
 
-    def toonLeftParty(self, partyId, avId):
+    def d_toonLeftParty(self, partyId, avId):
         self.sendUpdate('toonLeftParty', [partyId, avId])
         
-    def requestPartySlot(self, partyId, avId, gateId):
+    def toonLeftParty(self, partyId, avId):
+        pass
+        
+    def d_requestPartySlot(self, partyId, avId, gateId):
         self.sendUpdate('requestPartySlot', [partyId, avId, gateId])
+        
+    def requestPartySlot(self, partyId, avId, gateId):
+        pass
 
-    def allocIds(self, numIds):
+    def d_allocIds(self, numIds):
         self.sendUpdate('allocIds', [numIds])
+        
+    def allocIds(self, numIds):
+        pass

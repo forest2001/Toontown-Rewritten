@@ -145,8 +145,6 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
             DistributedPartyGate.notify.debug('Public Party closed before toon could get to it.')
             return
         shardId, zoneId, numberOfGuests, hostName, activityIds, lane = partyInfoTuple
-        if base.localAvatar.defaultShard != shardId:
-            shardId = None
         base.cr.playGame.getPlace().requestLeave({'loader': 'safeZoneLoader',
          'where': 'party',
          'how': 'teleportIn',

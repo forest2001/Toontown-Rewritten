@@ -68,7 +68,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         now = datetime.now()
         for partyId in self.id2Party:
             party = self.id2Party[partyId]
-            if self.canPartyStart(party):
+            if self.canPartyStart(party) and party['status'] != PartyStatus.CanStart:
                 # Time to start party
                 hostId = party['hostId']
                 party['status'] = PartyStatus.CanStart
@@ -116,17 +116,17 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def __updatePartyInfo(self, partyId):
         # Update all the AIs about this public party
         party = self.party2PubInfo[partyId]
-        for sender in self.senders2Mgrs:
+        for sender in self.senders2Mgrs.keys():
             actIds = []
             for activity in self.id2Party[partyId]['activities']:
                 actIds.append(activity[0]) # First part of activity tuple should be actId
             minLeft = int((PARTY_DURATION - (datetime.now() - party['started']).seconds) / 60)
-            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['maxGuests'], party['hostName'], actIds, minLeft])
+            self.sendToAI('updateToPublicPartyInfoUdToAllAi', [party['shardId'], party['zoneId'], partyId, self.id2Party[partyId]['hostId'], party['numGuests'], party['maxGuests'], party['hostName'], actIds, minLeft], sender=sender)
 
     def __updatePartyCount(self, partyId):
         # Update the party guest count
-        for sender in self.senders2Mgrs:
-            self.sendToAI('updateToPublicPartyCountUdToAllAi', [self.party2PubInfo[partyId]['numGuests'], partyId])
+        for sender in self.senders2Mgrs.keys():
+            self.sendToAI('updateToPublicPartyCountUdToAllAi', [self.party2PubInfo[partyId]['numGuests'], partyId], sender=sender)
 
     def partyHasStarted(self, partyId, shardId, zoneId, hostName):
         self.party2PubInfo[partyId] = {'partyId': partyId, 'shardId': shardId, 'zoneId': zoneId, 'hostName': hostName, 'numGuests': 0, 'maxGuests': MaxToonsAtAParty, 'started': datetime.now()}
@@ -197,18 +197,19 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         if partyId not in self.party2PubInfo:
             recipient = self.GetPuppetConnectionChannel(avId)
             sender = simbase.air.getAvatarIdFromSender()
-            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Unavailable])
+            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGateDenialReasons.Unavailable])
             self.air.send(dg)
             return
         party = self.party2PubInfo[partyId]
         if party['numGuests'] >= party['maxGuests']:
             recipient = self.GetPuppetConnectionChannel(avId)
             sender = simbase.air.getAvatarIdFromSender()
-            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Full])
+            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGateDenialReasons.Full])
             self.air.send(dg)
             return
         # get them a slot
-        party['numGuests'] = party['numGuests'] + 1
+        party['numGuests'] += 1
+        self.__updatePartyCount(partyId)
         # note that they might not show up
         self.tempSlots[avId] = partyId
         

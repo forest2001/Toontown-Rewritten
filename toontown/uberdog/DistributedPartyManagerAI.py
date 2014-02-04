@@ -142,6 +142,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def partyInfoOfHostResponseUdToAi(self, partyStruct, inviteeIds):
         party = self._makePartyDict(partyStruct)
+        av = self.air.doId2do.get(party['hostId'])
         party['inviteeIds'] = inviteeIds
         partyId = party['partyId']
         # This is issued in response to a request for the party to start, essentially. So let's alloc a zone
@@ -155,7 +156,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.id2Party[partyId] = partyAI
 
         # Alert the UD
-        self.air.globalPartyMgr.partyStarted(partyId, self.air.ourChannel, zoneId, self.air.doId2do[party['hostId']].getName())
+        self.air.globalPartyMgr.d_partyStarted(partyId, self.air.ourChannel, zoneId, self.air.doId2do[party['hostId']].getName())
         
         # Don't forget this was initially started by a getPartyZone, so we better tell the host the partyzone
         self.sendUpdateToAvatarId(party['hostId'], 'receivePartyZone', [party['hostId'], partyId, zoneId])
@@ -165,7 +166,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def closeParty(self, partyId):
         partyAI = self.id2Party[partyId]
-        self.air.globalPartyMgr.partyDone(partyId)
+        self.air.globalPartyMgr.d_partyDone(partyId)
         for av in partyAI.avIdsAtParty:
             self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 1])
         partyAI.b_setPartyState(PartyStatus.Finished)
@@ -241,10 +242,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def updateToPublicPartyCountUdToAllAi(self, partyCount, partyId):
         # Update the number of guests at a party
-        if partyId in self.pubPartyInfo:
+        if partyId in self.pubPartyInfo.keys():
             self.pubPartyInfo[partyId]['numGuests'] = partyCount
-        else:
-            self.notify.warning("Uberdog tried to update guest count at a public party I'm not aware of")
 
     def getPublicParties(self):
         p = []

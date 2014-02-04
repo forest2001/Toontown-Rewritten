@@ -401,6 +401,7 @@ class DistributedParty(DistributedObject.DistributedObject):
             del base.partyHasJukebox
 
     def announceGenerate(self):
+        #TODO - for some reason this is getting called hundreds of times when there are multiple districts
         DistributedObject.DistributedObject.announceGenerate(self)
         self.sendUpdate('enteredParty', [])
         globalClock.syncFrameTime()

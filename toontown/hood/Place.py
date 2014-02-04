@@ -441,7 +441,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
              'how': 'teleportIn',
              'hoodId': hoodId,
              'zoneId': zoneId,
-             'shardId': shardId,
+             'shardId': None, # ALPHA BANDAGE: should be shardId, but this causes the AI it teleports to to die right now.
              'avId': -1})
         else:
             if hostId is None:
