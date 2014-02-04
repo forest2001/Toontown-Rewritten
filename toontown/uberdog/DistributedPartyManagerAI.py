@@ -161,7 +161,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.sendUpdateToAvatarId(party['hostId'], 'receivePartyZone', [party['hostId'], partyId, zoneId])
         
         # And last, set up our cleanup stuff
-        taskMgr.doMethodLater(PARTY_DURATION * 60.0, self.closeParty, 'DistributedPartyManagerAI_cleanup%s' % partyId, [partyId])
+        taskMgr.doMethodLater(PARTY_DURATION, self.closeParty, 'DistributedPartyManagerAI_cleanup%s' % partyId, [partyId])
 
     def closeParty(self, partyId):
         partyAI = self.id2Party[partyId]
@@ -180,7 +180,8 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         sender = self.air.getAvatarIdFromSender()
         # Only the host of a party can free its zone
         if sender != hostId:
-            return # TODO suspicious
+            self.air.writeServerEvent('suspicious',sender,'Toon tried to free zone for someone else\'s party!')
+            return
         partyId = self.host2PartyId[hostId]
         if partyId in self.partyId2PlanningZone:
             print 'freeing zone'
