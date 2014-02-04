@@ -154,7 +154,7 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
          'how': 'teleportIn',
          'hoodId': ToontownGlobals.PartyHood,
          'zoneId': zoneId,
-         'shardId': shardId,
+         'shardId': None,
          'avId': hostId})
         return
 
