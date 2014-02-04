@@ -1239,7 +1239,7 @@ dclass DistributedParty : DistributedObject {
   setAvIdsAtParty(uint32 []) required broadcast;
   setPartyStartedTime(string) required broadcast;
   setHostName(string) required broadcast;
-  avIdEnteredParty(uint32) clsend airecv;
+  enteredParty() clsend airecv;
 };
 
 dclass DistributedPartyActivity : DistributedObject {

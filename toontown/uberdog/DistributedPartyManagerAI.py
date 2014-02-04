@@ -194,8 +194,15 @@ class DistributedPartyManagerAI(DistributedObjectAI):
     def sendAvToPlayground(self, todo0, todo1):
         pass
 
-    def exitParty(self, zoneIdOfAv):
-        pass
+    def exitParty(self, partyZone):
+        avId = simbase.air.getAvatarIdFromSender()
+        for partyInfo in self.pubPartyInfo.values():
+            if partyInfo['zoneId'] == partyZone:
+                party = self.id2Party.get(partyInfo['partyId'])
+                if party:
+                    party._removeAvatar(avId)
+                
+        
 
     def removeGuest(self, ownerId, avId):
         pass
@@ -245,8 +252,13 @@ class DistributedPartyManagerAI(DistributedObjectAI):
             party = self.pubPartyInfo[partyId]
             # calculate time left
             minLeft = party['minLeft'] - int((datetime.now() - party['started']).seconds / 60)
-            # alpha bandaid: return constant 1 person at party, due to occasionally out of uint8 range values as seen here: http://puu.sh/6GWuJ/a1a244b79d.png
-            p.append([party['shardId'], party['zoneId'], 1, party.get('hostName', ''), party.get('activities', []), minLeft])
+            #less band-aidy bandaid
+            guests = party.get('numGuests', 0)
+            if guests > 255:
+                guests = 255
+            elif guests < 0:
+                guests = 0
+            p.append([party['shardId'], party['zoneId'], guests, party.get('hostName', ''), party.get('activities', []), minLeft])
         return p
 
     def requestShardIdZoneIdForHostId(self, todo0):

@@ -1,6 +1,7 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.PyDatagram import *
 from direct.directnotify.DirectNotifyGlobal import directNotify
+from direct.task import Task
 from PartyGlobals import *
 from datetime import datetime, timedelta
 from pandac.PandaModules import *
@@ -149,11 +150,12 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def toonJoinedParty(self, partyId, avId):
         if avId in self.tempSlots:
             del self.tempSlots[avId]
+            return
         self.party2PubInfo.get(partyId, {'numGuests': 0})['numGuests'] += 1
         self.__updatePartyCount(partyId)
 
     def toonLeftParty(self, partyId, avId):
-        self.id2Party.get(partyId, {'numGuests': 0})['numGuests'] -= 1
+        self.party2PubInfo.get(partyId, {'numGuests': 0})['numGuests'] -= 1
         self.__updatePartyCount(partyId)
 
     def partyManagerAIHello(self, channel):
@@ -209,7 +211,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         party['numGuests'] = party['numGuests'] + 1
         # note that they might not show up
         self.tempSlots[avId] = partyId
-        # TODO detect when the allocated slot wasn't used
+        
+        #give the client a minute to connect before freeing their slot
+        taskMgr.doMethodLater(60, self._removeTempSlot, 'partyManagerTempSlot%d' % avId, extraArgs=[avId])
         
         # now format the pubPartyInfo
         actIds = []
@@ -223,6 +227,13 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         sender = simbase.air.getAvatarIdFromSender() # try to pretend the AI sent it. ily2 cfsworks
         dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('setParty').aiFormatUpdate(gateId, recipient, sender, [info, hostId])
         self.air.send(dg)
+        
+    def _removeTempSlot(self, avId):
+        partyId = self.tempSlots.get(avId)
+        if partyId:
+            del self.tempSlots[avId]
+            self.party2PubInfo.get(partyId, {'numGuests': 0})['numGuests'] -= 1
+            self.__updatePartyCount(partyId)
 
     def allocIds(self, numIds):
         ids = []

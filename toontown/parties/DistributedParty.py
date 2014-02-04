@@ -402,7 +402,7 @@ class DistributedParty(DistributedObject.DistributedObject):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-        self.sendUpdate('avIdEnteredParty', [base.localAvatar.doId])
+        self.sendUpdate('enteredParty', [])
         globalClock.syncFrameTime()
         self.startPartyClock()
         base.localAvatar.chatMgr.chatInputSpeedChat.addInsidePartiesMenu()

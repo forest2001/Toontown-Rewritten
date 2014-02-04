@@ -125,9 +125,12 @@ class DistributedPartyAI(DistributedObjectAI):
     def getHostName(self):
         return self.hostName
 
-    def avIdEnteredParty(self, avId):
-        # Sent as the client DistributedParty announces generate
+    def enteredParty(self):
+        avId = self.air.getAvatarIdFromSender()
         self.air.globalPartyMgr.toonJoinedParty(self.info.get('partyId', 0), avId)
         self.avIdsAtParty.append(avId)
-        # FIXME how the hell do I know they left a party
+        
+    def _removeAvatar(self, avId):
+        self.air.globalPartyMgr.toonLeftParty(self.info.get('partyId', 0), avId)
+        self.avIdsAtParty.remove(avId)
 
