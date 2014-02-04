@@ -193,10 +193,18 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     def requestPartySlot(self, partyId, avId, gateId):
         if partyId not in self.party2PubInfo:
-            return # TODO there's a client error code I can send
+            recipient = avId + (1001L << 32)
+            sender = simbase.air.getAvatarIdFromSender()
+            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Unavailable])
+            self.air.send(dg)
+            return
         party = self.party2PubInfo[partyId]
         if party['numGuests'] >= party['maxGuests']:
-            return # TODOOOOO send the right error code saying it's now full
+            recipient = avId + (1001L << 32)
+            sender = simbase.air.getAvatarIdFromSender()
+            dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('partyRequestDenied').aiFormatUpdate(gateId, recipient, sender, [PartyGlobals.PartyGateDenialReasons.Full])
+            self.air.send(dg)
+            return
         # get them a slot
         party['numGuests'] = party['numGuests'] + 1
         # note that they might not show up

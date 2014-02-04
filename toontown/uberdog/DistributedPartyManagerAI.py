@@ -62,7 +62,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def addPartyRequest(self, hostId, startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         if hostId != simbase.air.getAvatarIdFromSender():
-            # todo: a suspicious
+            self.air.writeServerEvent('suspicious',simbase.air.getAvatarIdFromSender(),'Toon tried to create a party as someone else!')
             return
         print 'party requested: host %s, start %s, end %s, private %s, invitetheme %s, activities omitted, decor omitted, invitees %s' % (hostId, startTime, endTime, isPrivate, inviteTheme, inviteeIds)
         simbase.air.globalPartyMgr.sendAddParty(hostId, self.host2PartyId[hostId], startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds)
@@ -169,7 +169,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         for av in partyAI.avIdsAtParty:
             self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 1])
         partyAI.b_setPartyState(PartyStatus.Finished)
-        partyAI.delete()
+        partyAI.requestDelete()
         zoneId = self.partyId2Zone[partyId]
         del self.partyId2Zone[partyId]
         del self.id2Party[partyId]

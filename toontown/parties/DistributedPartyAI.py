@@ -40,7 +40,6 @@ class DistributedPartyAI(DistributedObjectAI):
         self.startedAt = time.strftime(PARTY_TIME_FORMAT)
         self.partyState = 0
         self.avIdsAtParty = []
-
         # apparently 'partyclockinfo' is the xyz on the party grid
         for activity in self.info['activities']:
             if activity[0] == ActivityIds.PartyClock:
@@ -51,6 +50,7 @@ class DistributedPartyAI(DistributedObjectAI):
         host = self.air.doId2do.get(self.hostId, None)
         if host:
             self.hostName = host.getName()
+        self.activities = []
 
     def generate(self):
         DistributedObjectAI.generate(self)
@@ -73,6 +73,12 @@ class DistributedPartyAI(DistributedObjectAI):
             if actId in actId2Class:
                 act = actId2Class[actId](self.air, self.doId, activity)
                 act.generateWithRequired(self.zoneId)
+                self.activities.append(act)
+                
+    def delete(self):
+        for act in self.activities:
+            act.requestDelete()
+        DistributedObjectAI.delete(self)
 
     def getPartyClockInfo(self):
         return self.partyClockInfo
