@@ -68,9 +68,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         now = datetime.now()
         for partyId in self.id2Party:
             party = self.id2Party[partyId]
+            hostId = party['hostId']
             if self.canPartyStart(party) and party['status'] != PartyStatus.CanStart:
                 # Time to start party
-                hostId = party['hostId']
                 party['status'] = PartyStatus.CanStart
                 self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party)]])
                 self.sendToAv(hostId, 'setPartyCanStart', [partyId])
