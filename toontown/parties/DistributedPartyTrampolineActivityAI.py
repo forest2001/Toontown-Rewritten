@@ -39,7 +39,9 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         if self.collected == PartyGlobals.TrampolineNumJellyBeans:
             reward += PartyGlobals.TrampolineJellyBeanBonus
             message = TTLocalizer.PartyTrampolineBonusBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
-        message += TTLocalizer.PartyTrampolineTopHeightResults % height
+        message += '\n\n' + TTLocalizer.PartyTrampolineTopHeightResults % height
+        # TODO: Pass a msgId(?) to the client so the client can use whatever localizer it chooses.
+        # Ideally, we shouldn't even be passing strings that *should* be localized.
         self.sendUpdateToAvatarId(avId, 'showJellybeanReward', [reward, av.getMoney(), message])
         av.addMoney(reward)
         
