@@ -60,7 +60,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     def isTooLate(self, party):
         now = datetime.now()
-        delta = timedelta(minutes=15)
+        delta = timedelta(minutes=1)
         endStartable = party['start'] + delta
         return endStartable > now
 
