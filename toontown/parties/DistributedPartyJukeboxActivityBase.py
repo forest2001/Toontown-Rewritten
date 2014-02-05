@@ -31,6 +31,7 @@ class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
         DistributedPartyActivity.load(self)
         self.jukebox = Actor('phase_13/models/parties/jukebox_model', {'dance': 'phase_13/models/parties/jukebox_dance'})
         self.jukebox.reparentTo(self.root)
+        self.jukebox.loop('dance', fromFrame=0, toFrame=48)
         self.collNode = CollisionNode(self.getCollisionName())
         self.collNode.setCollideMask(ToontownGlobals.CameraBitmask | ToontownGlobals.WallBitmask)
         collTube = CollisionTube(0, 0, 0, 0.0, 0.0, 4.25, 2.25)
@@ -172,13 +173,9 @@ class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
             self.music.setTime(0.0)
             self.music.setLoopCount(getMusicRepeatTimes(length))
             self.music.play()
-            jukeboxAnimControl = self.jukebox.getAnimControl('dance')
-            if not jukeboxAnimControl.isPlaying():
-                self.jukebox.loop('dance')
             self.currentSongData = (phase, filename)
 
     def __stop(self):
-        self.jukebox.stop()
         self.currentSongData = None
         if self.music:
             self.music.stop()
