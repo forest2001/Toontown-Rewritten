@@ -38,7 +38,7 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         message = TTLocalizer.PartyTrampolineBeanResults % self.collected
         if self.collected == PartyGlobals.TrampolineNumJellyBeans:
             reward += PartyGlobals.TrampolineJellyBeanBonus
-            messsage = TTLocalizer.PartyTrampolineBonusBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
+            message = TTLocalizer.PartyTrampolineBonusBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
         message += TTLocalizer.PartyTrampolineTopHeightResults % height
         self.sendUpdateToAvatarId(avId, 'showJellybeanReward', [reward, av.getMoney(), message])
         av.addMoney(reward)
