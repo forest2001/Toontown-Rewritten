@@ -2576,7 +2576,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if gmType > len(iconInfo) - 1:
             return
         self.gmIcon = loader.loadModel(iconInfo[gmType])
-        self.gmIcon.reparentTo(self.nametag.getNameIcon())
+        self.gmIcon.reparentTo(NodePath(self.nametag.getNameIcon()))
         self.gmIcon.setScale(3.25)
         self.setTrophyScore(self.trophyScore)
         self.gmIcon.setZ(1.0)
