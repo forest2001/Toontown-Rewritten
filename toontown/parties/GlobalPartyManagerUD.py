@@ -60,7 +60,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     def isTooLate(self, party):
         now = datetime.now()
-        delta = timedelta(minutes=1)
+        delta = timedelta(minutes=15)
         endStartable = party['start'] + delta
         return endStartable > now
 
@@ -69,7 +69,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         for partyId in self.id2Party:
             party = self.id2Party[partyId]
             hostId = party['hostId']
-            if self.canPartyStart(party) and party['status'] != PartyStatus.CanStart:
+            if self.canPartyStart(party) and party['status'] == PartyStatus.Pending:
                 # Time to start party
                 party['status'] = PartyStatus.CanStart
                 self.sendToAv(hostId, 'setHostedParties', [[self._formatParty(party)]])
