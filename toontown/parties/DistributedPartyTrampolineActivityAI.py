@@ -51,6 +51,7 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         av = self.air.doId2do.get(avId, None)
         if not av:
             self.air.writeServerEvent('suspicious',avId,'Toon tried to report height without being on the district!')
+            return
         if height > self.record:
             self.record = height
             self.sendUpdate('setBestHeightInfo', [av.getName(), height])
