@@ -126,7 +126,8 @@ class DistributedPartyFireworksActivity(DistributedPartyActivity, FireworkShowMi
         timeSinceStart = globalClockDelta.localElapsedTime(showStartTimestamp)
         if timeSinceStart > self.rocketActor.getDuration('launch'):
             self.rocketActor.hide()
-            self.startShow(self.eventId, self.showStyle, self.songId, showStartTimestamp)
+            if timeSinceStart < 60:
+                self.startShow(self.eventId, self.showStyle, self.songId, showStartTimestamp)
         else:
             self.rocketActor.play('launch')
             self.rocketParticleSeq = Sequence(Wait(RocketSoundDelay), Func(base.playSfx, self.launchSound), Func(self.rocketExplosionEffect.start), Wait(RocketDirectionDelay), LerpHprInterval(self.rocketActor, 4.0, Vec3(0, 0, -60)), Func(self.rocketExplosionEffect.end), Func(self.rocketActor.hide))
