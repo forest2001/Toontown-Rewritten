@@ -11,7 +11,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
     
     def __init__(self, air, parent, activityTuple):
         DistributedPartyActivityAI.__init__(self, air, parent, activityTuple)
-        self.numGenerations = 0
+        self.numGenerations = 1
         self.generations = []
         self.player2catches = {}
         self.startTimestamp = globalClockDelta.getRealNetworkTime()
@@ -67,9 +67,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         if len(self.toonsPlaying) > 0:
             self.__startGame()
         else:
-            self.playing = False
-            self.sendUpdate('setState', ['Idle', globalClockDelta.getRealNetworkTime()])
-        
+            self.playing = False        
     def getGenerations(self):
         return self.generations
 
