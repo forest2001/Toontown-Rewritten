@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from PartyGlobals import *
+import PartyUtils
 import time
 # ugh all these activities
 from toontown.parties.DistributedPartyJukeboxActivityAI import DistributedPartyJukeboxActivityAI
@@ -13,6 +14,7 @@ from toontown.parties.DistributedPartyVictoryTrampolineActivityAI import Distrib
 from toontown.parties.DistributedPartyCatchActivityAI import DistributedPartyCatchActivityAI
 from toontown.parties.DistributedPartyTugOfWarActivityAI import DistributedPartyTugOfWarActivityAI
 from toontown.parties.DistributedPartyCannonActivityAI import DistributedPartyCannonActivityAI
+from toontown.parties.DistributedPartyCannonAI import DistributedPartyCannonAI
 from toontown.parties.DistributedPartyFireworksActivityAI import DistributedPartyFireworksActivityAI
 
 """
@@ -51,13 +53,13 @@ class DistributedPartyAI(DistributedObjectAI):
         if host:
             self.hostName = host.getName()
         self.activities = []
+        self.cannonActivity = None
 
     def generate(self):
         DistributedObjectAI.generate(self)
         # make stuff
         actId2Class = {
             ActivityIds.PartyJukebox: DistributedPartyJukeboxActivityAI,
-            ActivityIds.PartyCannon: DistributedPartyCannonActivityAI,
             ActivityIds.PartyTrampoline: DistributedPartyTrampolineActivityAI,
             ActivityIds.PartyVictoryTrampoline: DistributedPartyVictoryTrampolineActivityAI,
             ActivityIds.PartyCatch: DistributedPartyCatchActivityAI,
@@ -74,10 +76,24 @@ class DistributedPartyAI(DistributedObjectAI):
                 act = actId2Class[actId](self.air, self.doId, activity)
                 act.generateWithRequired(self.zoneId)
                 self.activities.append(act)
-                
+            elif actId == ActivityIds.PartyCannon:
+                if not self.cannonActivity:
+                    self.cannonActivity = DistributedPartyCannonActivityAI(self.air, self.doId, activity)
+                    self.cannonActivity.generateWithRequired(self.zoneId)
+                act = DistributedPartyCannonAI(self.air)
+                act.setActivityDoId(self.cannonActivity.doId)
+                x, y, h = activity[1:] # ignore activity ID
+                x = PartyUtils.convertDistanceFromPartyGrid(x, 0)
+                y = PartyUtils.convertDistanceFromPartyGrid(y, 1)
+                h *= PartyGridHeadingConverter
+                act.setPosHpr(x,y,0,h,0,0)
+                act.generateWithRequired(self.zoneId)
+                self.activities.append(act)
     def delete(self):
         for act in self.activities:
             act.requestDelete()
+        if self.cannonActivity:
+            self.cannonActivity.requestDelete()
         DistributedObjectAI.delete(self)
 
     def getPartyClockInfo(self):

@@ -9,6 +9,8 @@ from toontown.minigame.CannonGameGlobals import *
 from toontown.toonbase import ToontownGlobals
 from toontown.parties.PartyUtils import toRadians, calcVelocity
 from direct.showbase.PythonUtil import StackTrace
+from otp.nametag.NametagFloat3d import NametagFloat3d
+from otp.nametag.Nametag import Nametag
 CANNON_ROTATION_MIN = -70
 CANNON_ROTATION_MAX = 70
 INITIAL_VELOCITY = 80.0
@@ -136,7 +138,7 @@ class Cannon:
         tag.setBillboardOffset(0)
         tag.setAvatar(self.toonHead)
         toon.nametag.addNametag(tag)
-        tagPath = self.toonHead.attachNewNode(tag.upcastToPandaNode())
+        tagPath = self.toonHead.attachNewNode(tag)
         tagPath.setPos(0, 0, 1)
         self.toonHead.tag = tag
 
