@@ -53,6 +53,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
             catches = PartyGlobals.CatchMaxTotalReward
         self.sendUpdateToAvatarId(avId, 'showJellybeanReward', [catches, av.getMoney(), TTLocalizer.PartyCatchRewardMessage % (catches, catches)])
         av.addMoney(catches)
+        DistributedPartyActivityAI.toonExitDemand(self)
             
     def __startGame(self):
         self.playing = True
