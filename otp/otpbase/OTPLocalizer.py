@@ -1,4 +1,4 @@
-from pandac.libpandaexpressModules import *
+from panda3d.core import *
 import string
 import types
 try:

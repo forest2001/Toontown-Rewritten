@@ -12,13 +12,13 @@ collections.namedtuple = lambda *x: tuple
 import _miraidata
 
 # Load all packaged config pages:
-from libpanda import loadPrcFileData
+from panda3d.core import loadPrcFileData
 for i,config in enumerate(_miraidata.CONFIG):
     loadPrcFileData('Mirai Packaged Config Page #%d' % i, config)
 
 # The VirtualFileSystem, which has already initialized, doesn't see the mount
 # directives in the config(s) yet. We have to force it to load those manually:
-from libpandaexpress import VirtualFileSystem, ConfigVariableList, Filename
+from panda3d.core import VirtualFileSystem, ConfigVariableList, Filename
 vfs = VirtualFileSystem.getGlobalPtr()
 mounts = ConfigVariableList('vfs-mount')
 for mount in mounts:
@@ -29,7 +29,7 @@ for mount in mounts:
 # read DC from filenames only. DCFile does let us read in istreams, but there's
 # really no way to pass the istream off through ConnectionRepository. We can stick
 # the file on the vfs, but that's messy...
-from libpandaexpress import StringStream
+from panda3d.core import StringStream
 dcStream = StringStream(_miraidata.DC)
 
 from direct.distributed import ConnectionRepository
