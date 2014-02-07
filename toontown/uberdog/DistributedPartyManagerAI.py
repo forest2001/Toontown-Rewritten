@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from direct.task import Task
 from otp.distributed.OtpDoGlobals import *
 from pandac.PandaModules import *
 from toontown.parties.DistributedPartyAI import DistributedPartyAI
@@ -168,14 +169,21 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         partyAI = self.id2Party[partyId]
         self.air.globalPartyMgr.d_partyDone(partyId)
         for av in partyAI.avIdsAtParty:
-            self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 1])
+            self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 0])
         partyAI.b_setPartyState(PartyStatus.Finished)
+        taskMgr.doMethodLater(10, self.__deleteParty, 'closeParty%d' % partyId, extraArgs=[partyId])
+    
+    def __deleteParty(self, partyId):
+        partyAI = self.id2Party[partyId]
+        for av in partyAI.avIdsAtParty:
+            self.sendUpdateToAvatarId(av, 'sendAvToPlayground', [av, 1])
         partyAI.requestDelete()
         zoneId = self.partyId2Zone[partyId]
         del self.partyId2Zone[partyId]
         del self.id2Party[partyId]
         del self.pubPartyInfo[partyId]
         self.air.deallocateZone(zoneId)
+
 
     def freeZoneIdFromPlannedParty(self, hostId, zoneId):
         sender = self.air.getAvatarIdFromSender()
