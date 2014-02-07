@@ -59,6 +59,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         self.playing = True
         self.calcDifficultyConstants(len(self.toonsPlaying))
         self.generations.append([self.numGenerations, globalClockDelta.getRealNetworkTime(), len(self.toonsPlaying)])
+        self.numGenerations += 1
         self.sendUpdate('setGenerations', [self.generations])
         taskMgr.doMethodLater(self.generationDuration, self.__newGeneration, 'newGeneration%d' % self.doId, extraArgs=[])
         
@@ -85,4 +86,4 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
             return
         if PartyGlobals.DOTypeId2Name[objType] != 'anvil':
             self.player2catches[avId] += 1
-        self.sendUpdate('setObjectCaught', [generation, objNum, objType])
+        self.sendUpdate('setObjectCaught', [avId, generation, objNum])
