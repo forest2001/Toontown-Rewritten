@@ -21,11 +21,11 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         taskMgr.remove('newGeneration%d' % self.doId)
         DistributedPartyActivityAI.delete(self)
 
-    def setStartTimestamp(self, ts):
-        self.startTimestamp = ts
-        
     def getStartTimestamp(self):
         return self.startTimestamp
+
+    def setStartTimestamp(self, ts):
+        self.startTimestamp = ts
 
     def setGenerations(self, generations):
         self.generations = generations
