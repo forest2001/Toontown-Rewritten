@@ -261,9 +261,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
             return Task.done
         if self.isLocalToonId(toonId):
             self.inWater = 0
-            flightResults = self.__calcFlightResults(cannon, toonId, launchTime)
-            for key in flightResults:
-                exec "%s = flightResults['%s']" % (key, key)
+            startPos, startHpr, startVel, trajectory = self.__calcFlightResults(cannon, toonId, launchTime)
 
             self.notify.debug('start position: ' + str(startPos))
             self.notify.debug('start velocity: ' + str(startVel))
@@ -379,10 +377,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         quantizeVec(startVel, self.NetDivisor)
         trajectory = Trajectory.Trajectory(launchTime, startPos, startVel)
         self.trajectory = trajectory
-        return {'startPos': startPos,
-         'startHpr': startHpr,
-         'startVel': startVel,
-         'trajectory': trajectory}
+        return startPos, startHpr, startVel, trajectory
 
     def __shootTask(self, task):
         task.info['cannon'].fire()
