@@ -30,3 +30,4 @@ want-housing #t
 
 force-holiday-decorations 6
 want-old-fireworks #t
+want-instant-parties #t

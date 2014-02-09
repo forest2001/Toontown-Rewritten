@@ -24,6 +24,8 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         endTime = datetime.strptime('2014-01-20 12:20:00', PARTY_TIME_FORMAT)
         self.partyAllocator = UniqueIdAllocator(0, 100000000)
         #self.host2Party[100000001] = {'hostId': 100000001, 'start': startTime, 'end': endTime, 'partyId': 1717986918400000, 'decorations': [[3,5,7,6]], 'activities': [[10,13,6,18],[7,8,7,0]],'inviteTheme':1,'isPrivate':0,'inviteeIds':[]}
+        config = getConfigShowbase()
+        self.wantInstantParties = config.GetBool('want-instant-parties', 0)
 
         # Setup tasks
         self.runAtNextInterval()
@@ -56,7 +58,10 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         now = datetime.now()
         delta = timedelta(minutes=15)
         endStartable = party['start'] + delta
-        return party['start'] < now# and endStartable > now
+        if self.wantInstantParties:
+            return True
+        else:
+            return party['start'] < now# and endStartable > now
 
     def isTooLate(self, party):
         now = datetime.now()
@@ -180,8 +185,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.id2Party[partyId] = {'partyId': partyId, 'hostId': avId, 'start': startTime, 'end': endTime, 'isPrivate': isPrivate, 'inviteTheme': inviteTheme, 'activities': activities, 'decorations': decorations, 'inviteeIds': inviteeIds, 'status': PartyStatus.Pending}
         self.host2PartyId[avId] = partyId
         self.sendToAI('addPartyResponseUdToAi', [partyId, AddPartyErrorCode.AllOk, self._formatParty(self.id2Party[partyId])])
-        #taskMgr.remove('GlobalPartyManager_checkStarts')
-        #taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
+        if self.wantInstantParties:
+            taskMgr.remove('GlobalPartyManager_checkStarts')
+            taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
         return
         
     def queryParty(self, hostId):
