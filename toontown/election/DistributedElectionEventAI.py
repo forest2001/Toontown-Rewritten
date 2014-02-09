@@ -14,7 +14,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.stateTime = globalClockDelta.getRealNetworkTime()
 
     def enterOff(self):
-        pass
+        self.requestDelete()
 
     def enterIntro(self):
         pass
@@ -44,7 +44,8 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 def election(state):
     event = simbase.air.doFind('ElectionEvent')
     if event is None:
-        return 'No Election event created'
+        event = DistributedElectionEventAI(simbase.air)
+        event.generateWithRequired(2000)
 
     if not hasattr(event, 'enter'+state):
         return 'Invalid state'
