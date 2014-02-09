@@ -45,7 +45,7 @@ from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
 from toontown.safezone import DistributedDGFlower/AI
-from toontown.safezone import DistributedElectionEvent/AI
+from toontown.election import DistributedElectionEvent/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
