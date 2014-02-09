@@ -771,12 +771,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
         self.trajectory = trajectory
         hitTreasures = self.__calcHitTreasures(trajectory)
         timeOfImpact, hitWhat = self.__calcToonImpact(trajectory)
-        return {'startPos': startPos,
-         'startHpr': startHpr,
-         'startVel': startVel,
-         'trajectory': trajectory,
-         'timeOfImpact': 3 * timeOfImpact,
-         'hitWhat': hitWhat}
+        return startPos, startHpr, startVel, trajectory, 3 * timeOfImpact, hitWhat
 
     def __fireCannonTask(self, task):
         launchTime = task.fireTime
@@ -784,9 +779,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
         self.inWater = 0
         if not self.toonHead:
             return Task.done
-        flightResults = self.__calcFlightResults(avId, launchTime)
-        for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+        startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat = self.__calcFlightResults(avId, launchTime)
 
         self.notify.debug('start position: ' + str(startPos))
         self.notify.debug('start velocity: ' + str(startVel))

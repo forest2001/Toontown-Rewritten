@@ -10,7 +10,7 @@ MaxPlannedYear = 2030
 MinPlannedYear = 1975
 JellybeanMultiplier = 1.5
 JellyBeanDayMultiplier = 2
-PARTY_DURATION = 1800.0
+PARTY_DURATION = 1800
 EventsPageGuestNameMaxWidth = 0.42
 EventsPageGuestNameMaxLetters = 18
 EventsPageHostNameMaxWidth = 0.37
@@ -30,7 +30,7 @@ JarLabelMaxedTextColor = (1.0,
 TuftsOfGrass = 75
 MaxToonsAtAParty = 20
 DefaultPartyDuration = 0.5
-DelayBeforeAutoKick = 30.0
+DelayBeforeAutoKick = 1.0
 MaxHostedPartiesPerToon = 1
 PartyEditorGridBounds = ((-0.11, 0.289), (0.55, -0.447))
 PartyEditorGridCenter = (PartyEditorGridBounds[0][0] + (PartyEditorGridBounds[1][0] - PartyEditorGridBounds[0][0]) / 2.0, PartyEditorGridBounds[1][1] + (PartyEditorGridBounds[0][1] - PartyEditorGridBounds[1][1]) / 2.0)
@@ -90,8 +90,7 @@ ActivityIds = PythonUtil.Enum(('PartyJukebox',
  'PartyValentineJukebox',
  'PartyValentineJukebox40',
  'PartyValentineTrampoline'))
-PartyEditorActivityOrder = [ActivityIds.PartyCog,
- ActivityIds.PartyWinterCog,
+PartyEditorActivityOrder = [ ActivityIds.PartyClock,
  ActivityIds.PartyJukebox,
  ActivityIds.PartyJukebox40,
  ActivityIds.PartyValentineJukebox,
@@ -101,26 +100,23 @@ PartyEditorActivityOrder = [ActivityIds.PartyCog,
  ActivityIds.PartyValentineTrampoline,
  ActivityIds.PartyVictoryTrampoline,
  ActivityIds.PartyWinterTrampoline,
- ActivityIds.PartyCatch,
- ActivityIds.PartyWinterCatch,
  ActivityIds.PartyDance,
  ActivityIds.PartyDance20,
  ActivityIds.PartyValentineDance,
  ActivityIds.PartyValentineDance20,
  ActivityIds.PartyTugOfWar,
- ActivityIds.PartyFireworks,
- ActivityIds.PartyClock]
+ ActivityIds.PartyCatch,
+ ActivityIds.PartyWinterCatch,
+ ActivityIds.PartyCog,
+ ActivityIds.PartyWinterCog,
+ ActivityIds.PartyFireworks]
 UnreleasedActivityIds = (ActivityIds.PartyCog,
  ActivityIds.PartyWinterCog,
  ActivityIds.PartyValentineJukebox,
  ActivityIds.PartyValentineJukebox40,
- ActivityIds.PartyCannon,
  ActivityIds.PartyValentineTrampoline,
  ActivityIds.PartyWinterTrampoline,
- ActivityIds.PartyCatch,
  ActivityIds.PartyWinterCatch,
- ActivityIds.PartyDance,
- ActivityIds.PartyDance20,
  ActivityIds.PartyValentineDance,
  ActivityIds.PartyValentineDance20,
  ActivityIds.PartyTugOfWar)
@@ -768,7 +764,7 @@ MUSIC_MIN_LENGTH_SECONDS = 50.0
 MUSIC_GAP = 2.5
 PhaseToMusicData = {3.5: {'TC_SZ.ogg': [TTLocalizer.MusicTcSz, 57]},
  3: {'create_a_toon.ogg': [TTLocalizer.MusicCreateAToon, 175],
-     'ttr_theme.ogg': [TTLocalizer.MusicTtTheme, 51]},
+     'tt_theme.ogg': [TTLocalizer.MusicTtTheme, 51]},
  4: {'TC_nbrhood.ogg': [TTLocalizer.MusicTcNbrhood, 59],
      'MG_TwoDGame.ogg': [TTLocalizer.MusicMgTwodgame, 60],
      'MG_Vine.ogg': [TTLocalizer.MusicMgVine, 32],
@@ -789,7 +785,7 @@ PhaseToMusicData = {3.5: {'TC_SZ.ogg': [TTLocalizer.MusicTcSz, 57]},
 PhaseToMusicData40 = {3.5: {'encntr_general_bg.ogg': [TTLocalizer.MusicEncntrGeneralBg, 30],
        'TC_SZ.ogg': [TTLocalizer.MusicTcSz, 57]},
  3: {'create_a_toon.ogg': [TTLocalizer.MusicCreateAToon, 175],
-     'ttr_theme.ogg': [TTLocalizer.MusicTtTheme, 51]},
+     'ttr_theme.ogg': [TTLocalizer.MusicTtrTheme, 51]},
  4: {'minigame_race.ogg': [TTLocalizer.MusicMinigameRace, 77],
      'TC_nbrhood.ogg': [TTLocalizer.MusicTcNbrhood, 59],
      'MG_TwoDGame.ogg': [TTLocalizer.MusicMgTwodgame, 60],

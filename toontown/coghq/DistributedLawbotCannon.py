@@ -667,9 +667,7 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         avId = task.avId
         if self.toonHead == None or not self.boss.state == 'BattleTwo':
             return Task.done
-        flightResults = self.__calcFlightResults(avId, launchTime)
-        for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+        startPos, startHpr, startVel, trajectory, timeOfImpact, hitWhat = self.__calcFlightResults(avId, launchTime)
 
         self.notify.debug('start position: ' + str(startPos))
         self.notify.debug('start velocity: ' + str(startVel))
@@ -741,12 +739,7 @@ class DistributedLawbotCannon(DistributedObject.DistributedObject):
         trajectory = Trajectory.Trajectory(launchTime, startPos, startVel)
         self.trajectory = trajectory
         timeOfImpact, hitWhat = self.__calcToonImpact(trajectory)
-        return {'startPos': startPos,
-         'startHpr': startHpr,
-         'startVel': startVel,
-         'trajectory': trajectory,
-         'timeOfImpact': 3 * timeOfImpact,
-         'hitWhat': hitWhat}
+        return startPos, startHpr, startVel, trajectory, 3 * timeOfImpact, hitWhat
 
     def __calcToonImpact(self, trajectory):
         t_groundImpact = trajectory.checkCollisionWithGround(GROUND_PLANE_MIN)

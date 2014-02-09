@@ -4357,6 +4357,7 @@ MusicEncntrGeneralBg = 'Encounter With Cogs'
 MusicTcSzActivity = 'Toontorial Medley'
 MusicTcSz = 'Strolling Along'
 MusicCreateAToon = 'The New Toon in Town'
+MusicTtrTheme = 'The Toontown Rewritten Theme'
 MusicTtTheme = 'The Toontown Theme'
 MusicMinigameRace = 'Slow and Steady'
 MusicMgPairing = 'Remember Me?'
@@ -4430,10 +4431,10 @@ PartyOverWarningWithName = '%s party has ended! Thanks for coming!'
 PartyCountdownClockText = 'Time\n\nLeft'
 PartyTitleText = '%s Party'
 PartyActivityConjunction = ', and'
-PartyActivityNameDict = {0: {'generic': 'Jukebox\n20 songs',
-     'invite': 'a 20 song Jukebox',
-     'editor': 'Jukebox - 20',
-     'description': 'Listen to music with your own 20 song jukebox!'},
+PartyActivityNameDict = {0: {'generic': 'Jukebox',
+     'invite': 'a Jukebox',
+     'editor': 'Jukebox',
+     'description': 'Listen to music with your own jukebox!'},
  1: {'generic': 'Party Cannons',
      'invite': 'Party Cannons',
      'editor': 'Cannons',
@@ -4462,10 +4463,10 @@ PartyActivityNameDict = {0: {'generic': 'Jukebox\n20 songs',
      'invite': 'a Party Clock',
      'editor': 'Party Clock',
      'description': 'Counts down the time left in your party.'},
- 8: {'generic': 'Jukebox\n40 songs',
-     'invite': 'a 40 song jukebox',
-     'editor': 'Jukebox - 40',
-     'description': 'Listen to music with your own 40 song jukebox!'},
+ 8: {'generic': 'Deluxe Jukebox',
+     'invite': 'a deluxe jukebox',
+     'editor': 'Deluxe Jukebox',
+     'description': 'Your own deluxe jukebox with double the tunes for double the deal!'},
  9: {'generic': 'Dance Floor\n20 moves',
      'invite': 'a 20 move Dance Floor',
      'editor': 'Dance Floor - 20',
@@ -9749,6 +9750,7 @@ HolidayNamesInCalendar = {1: ('Summer Fireworks', 'Celebrate Summer with a firew
 UnknownHoliday = 'Unknown Holiday %d'
 HolidayFormat = '%b %d '
 TimeZone = 'US/Pacific'
+HourFormat = '12'
 CogdoMemoGuiTitle = 'Memos:'
 CogdoMemoNames = 'Barrel-Destruction Memos'
 CogdoStomperName = 'Stomp-O-Matic'

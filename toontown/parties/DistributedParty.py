@@ -401,8 +401,9 @@ class DistributedParty(DistributedObject.DistributedObject):
             del base.partyHasJukebox
 
     def announceGenerate(self):
+        #TODO - for some reason this is getting called hundreds of times when there are multiple districts
         DistributedObject.DistributedObject.announceGenerate(self)
-        self.sendUpdate('avIdEnteredParty', [base.localAvatar.doId])
+        self.sendUpdate('enteredParty', [])
         globalClock.syncFrameTime()
         self.startPartyClock()
         base.localAvatar.chatMgr.chatInputSpeedChat.addInsidePartiesMenu()

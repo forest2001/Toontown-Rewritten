@@ -145,14 +145,16 @@ class DistributedPartyGate(DistributedObject.DistributedObject):
             DistributedPartyGate.notify.debug('Public Party closed before toon could get to it.')
             return
         shardId, zoneId, numberOfGuests, hostName, activityIds, lane = partyInfoTuple
-        if base.localAvatar.defaultShard == shardId:
+        #For some reason, the party gate is attempting to teleport to the host of a party rather than a random spot in the party.
+        #This temporarily fixes a hang on the loading screen
+        if base.localAvatar.defaultShard != shardId:
             shardId = None
         base.cr.playGame.getPlace().requestLeave({'loader': 'safeZoneLoader',
          'where': 'party',
          'how': 'teleportIn',
          'hoodId': ToontownGlobals.PartyHood,
          'zoneId': zoneId,
-         'shardId': shardId,
+         'shardId': None,
          'avId': hostId})
         return
 

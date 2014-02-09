@@ -38,8 +38,10 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         message = TTLocalizer.PartyTrampolineBeanResults % self.collected
         if self.collected == PartyGlobals.TrampolineNumJellyBeans:
             reward += PartyGlobals.TrampolineJellyBeanBonus
-            messsage = TTLocalizer.PartyTrampolineBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
-        message += TTLocalizer.PartyTrampolineTopHeightResults % height
+            message = TTLocalizer.PartyTrampolineBonusBeanResults % (self.collected, PartyGlobals.TrampolineJellyBeanBonus)
+        message += '\n\n' + TTLocalizer.PartyTrampolineTopHeightResults % height
+        # TODO: Pass a msgId(?) to the client so the client can use whatever localizer it chooses.
+        # Ideally, we shouldn't even be passing strings that *should* be localized.
         self.sendUpdateToAvatarId(avId, 'showJellybeanReward', [reward, av.getMoney(), message])
         av.addMoney(reward)
         
@@ -49,6 +51,7 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         av = self.air.doId2do.get(avId, None)
         if not av:
             self.air.writeServerEvent('suspicious',avId,'Toon tried to report height without being on the district!')
+            return
         if height > self.record:
             self.record = height
             self.sendUpdate('setBestHeightInfo', [av.getName(), height])

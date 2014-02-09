@@ -464,7 +464,10 @@ class ToonBase(OTPBase.OTPBase):
 
     def hideGame(self):
         # Hacky, I know, but it works
-        hideCommand = """osascript -e 'tell application "System Events" set frontProcess to first process whose frontmost is true set visible of frontProcess to false end tell'"""
+        hideCommand = """osascript -e 'tell application "System Events" 
+                                            set frontProcess to first process whose frontmost is true 
+                                            set visible of frontProcess to false 
+                                       end tell'"""
         os.system(hideCommand)
 
     def minimizeGame(self):

@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.parties import PartyGlobals
 
 class DistributedPartyGateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyGateAI")
@@ -30,5 +31,6 @@ class DistributedPartyGateAI(DistributedObjectAI):
                 pid = partyId
                 break
         if not party:
+            self.sendUpdateToAvatarId(self.air.getAvatarIdFromSender(), 'partyRequestDenied', [PartyGlobals.PartyGateDenialReasons.Unavailable])
             return #dafuq
-        self.air.globalPartyMgr.requestPartySlot(pid, self.air.getAvatarIdFromSender(), self.doId)
+        self.air.globalPartyMgr.d_requestPartySlot(pid, self.air.getAvatarIdFromSender(), self.doId)
