@@ -55,6 +55,8 @@ uberdogs:
 roles:
     - type: clientagent
       bind: 127.0.0.1:7198
+      client:
+       relocate: true
       channels:
         min: 1000000000
         max: 1009999999
