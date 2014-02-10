@@ -5,6 +5,7 @@ from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 import SafezoneInvasionConstants
+from toontown.suit import SuitTimings
 
 class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSafezoneInvasionAI")
@@ -44,6 +45,33 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # Reset spawnpoints and suits:
         self.spawnPoints = range(len(SafezoneInvasionConstants.SuitSpawnPoints))
         self.suits = []
+
+        # Get the suits to call:
+        suitsToCall = SafezoneInvasionConstants.SuitWaves[self.waveNumber]
+
+        # How long do we have to spread out the suit calldowns?
+        # In case some dummkopf set WaveBeginningTime too low:
+        delay = max(SafezoneInvasionConstants.WaveBeginningTime, SuitTimings.fromSky)
+        spread = delay - SuitTimings.fromSky
+        spreadPerSuit = spread/len(suitsToCall)
+
+        self._waveBeginTasks = []
+        for i, suit in enumerate(suitsToCall):
+            self._waveBeginTasks.append(
+                taskMgr.doMethodLater(i*spreadPerSuit, self.spawnOne,
+                                      self.uniqueName('summon-suit-%s' % i),
+                                      extraArgs=[suit]))
+
+        # Plus a task to switch to the 'Wave' state:
+        self._waveBeginTasks.append(
+            taskMgr.doMethodLater(delay, self.demand,
+                                  self.uniqueName('begin-wave'),
+                                  extraArgs=['Wave']))
+
+
+    def exitBeginWave(self):
+        for task in self._waveBeginTasks:
+            task.remove()
 
     def enterWave(self):
         # This state is entered after all Cogs have been spawned by BeginWave.

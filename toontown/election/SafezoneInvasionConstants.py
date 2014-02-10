@@ -17,3 +17,6 @@ SuitWaves = [
     # WAVE 0:
     ['f', 'bf', 'sc', 'cc'],
 ]
+
+# This should be at least 6.5 (the suit fly-down time)
+WaveBeginningTime = 10
