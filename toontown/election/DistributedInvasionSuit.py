@@ -18,10 +18,10 @@ class DistributedInvasionSuit(DistributedSuitBase, FSM):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterFlyDown(self, time):
-        x, y, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
         self.setH(h)
-        self.mtrack = self.beginSupaFlyMove(Point3(x, y, 0), 1, 'fromSky')
+        self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky')
         self.mtrack.start(time)
 
     def exitFlyDown(self):
