@@ -22,8 +22,13 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.demand('BeginWave', 0)
 
     def delete(self):
+        DistributedObjectAI.delete(self)
+        self.__deleteSuits()
+
+    def __deleteSuits(self):
         for suit in self.suits:
             suit.requestDelete()
+        self.suits = []
 
     def spawnOne(self, suitType):
         # Pick a spawnpoint:
@@ -44,7 +49,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Reset spawnpoints and suits:
         self.spawnPoints = range(len(SafezoneInvasionConstants.SuitSpawnPoints))
-        self.suits = []
+        self.__deleteSuits()
 
         # Get the suits to call:
         suitsToCall = SafezoneInvasionConstants.SuitWaves[self.waveNumber]
@@ -84,8 +89,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def exitWave(self):
         # Clean up any loose suits, in case the wave is being ended by MW.
-        for suit in self.suits:
-            suit.requestDelete()
+        self.__deleteSuits()
 
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a
