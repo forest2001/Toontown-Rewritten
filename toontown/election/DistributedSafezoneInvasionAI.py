@@ -33,7 +33,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         pointId = random.choice(self.spawnPoints)
         self.spawnPoints.remove(pointId)
 
-        suit = DistributedInvasionSuitAI(self.air)
+        suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit(suitType)
         suit.generateWithRequired(self.zoneId)
         suit.b_setState('FlyDown')
@@ -52,7 +52,16 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterWave(self):
         # This state is entered after all Cogs have been spawned by BeginWave.
         # We wait for all of them to die, then move to the intermission.
-        pass
+
+        # Start the suits marching!
+        for suit in self.suits:
+            if suit.state == 'Idle':
+                suit.b_setState('March')
+
+    def exitWave(self):
+        # Clean up any loose suits, in case the wave is being ended by MW.
+        for suit in self.suits:
+            suit.requestDelete()
 
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a

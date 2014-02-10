@@ -21,5 +21,8 @@ class DistributedInvasionSuit(DistributedSuitBase, FSM):
         del self.mtrack
         self.detachPropeller()
 
+    def enterIdle(self, time):
+        self.loop('neutral', 0)
+
     def enterMarch(self, time):
-        pass
+        self.loop('walk', 0)

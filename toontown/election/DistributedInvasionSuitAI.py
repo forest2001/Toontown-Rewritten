@@ -7,9 +7,10 @@ from toontown.suit import SuitTimings
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
 
-    def __init__(self, air):
+    def __init__(self, air, invasion):
         DistributedSuitBaseAI.__init__(self, air)
         FSM.__init__(self, 'InvasionSuitFSM')
+        self.invasion = invasion
 
         self.stateTime = globalClockDelta.getRealNetworkTime()
 
@@ -20,10 +21,18 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
-        self.demand('March')
+        if self.invasion.state == 'BeginWave':
+            self.b_setState('Idle')
+        else:
+            self.b_setState('March')
 
     def exitFlyDown(self):
         self._delay.remove()
+
+    def enterIdle(self):
+        # We do nothing. We wait for the invasion manager to shift into the
+        # 'Wave' state, and we all begin marching at once.
+        pass
 
     def enterMarch(self):
         pass # Right now, no AI logic for this...
