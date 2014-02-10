@@ -4,14 +4,10 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
+import SafezoneInvasionConstants
 
 class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSafezoneInvasionAI")
-
-    SPAWN_POINTS = [
-        #  X      Y      Z      H
-        (  0.0,   0.0,   0.0,   0.0),
-    ]
 
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
@@ -46,7 +42,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.waveNumber = waveNumber
 
         # Reset spawnpoints and suits:
-        self.spawnPoints = range(len(self.SPAWN_POINTS))
+        self.spawnPoints = range(len(SafezoneInvasionConstants.SuitSpawnPoints))
         self.suits = []
 
     def enterWave(self):
