@@ -765,6 +765,7 @@ dclass DistributedStageSuit : DistributedFactorySuit {
 
 dclass DistributedInvasionSuit : DistributedSuitBase {
   setState(string state, int32 timestamp) required broadcast ram;
+  setSpawnPoint(uint8 pointId) required broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {

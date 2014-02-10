@@ -13,6 +13,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
         self.invasion = invasion
 
         self.stateTime = globalClockDelta.getRealNetworkTime()
+        self.spawnPointId = 0
 
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
@@ -36,6 +37,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
 
     def enterMarch(self):
         pass # Right now, no AI logic for this...
+
+    def setSpawnPoint(self, pointId):
+        self.spawnPointId = pointId
+
+    def getSpawnPoint(self):
+        return self.spawnPointId
 
     def setState(self, state):
         self.demand(state)
