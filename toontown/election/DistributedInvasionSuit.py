@@ -75,7 +75,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def enterFlyDown(self, time):
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
-        self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky')
+        self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky',
+                                            walkAfterLanding=False)
         self.mtrack.start(time)
 
     def exitFlyDown(self):
