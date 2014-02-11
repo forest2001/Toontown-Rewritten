@@ -9,21 +9,33 @@ class InvasionSuitBrainAI(FSM):
         self.__started = False
 
     def start(self):
-        if self.__started:
+        if self.state != 'Off':
             return
-        self.__started = True
 
         self.demand('Walking')
 
+    def stop(self):
+        if self.state == 'Off':
+            return
+        self.demand('Off')
+
     def enterWalking(self):
         self.chooseNewWalkPoint()
-        taskMgr.doMethodLater(50, self.demand, self.suit.uniqueName('brainwalk'),
-                              extraArgs=['Waiting'])
+        self._timeout = taskMgr.doMethodLater(50, self.demand,
+                                              self.suit.uniqueName('brainwalk'),
+                                              extraArgs=['Waiting'])
+
+    def exitWalking(self):
+        self._timeout.remove()
 
     def enterWaiting(self):
         self.suit.idle()
-        taskMgr.doMethodLater(50, self.demand, self.suit.uniqueName('brainwait'),
-                              extraArgs=['Walking'])
+        self._timeout = taskMgr.doMethodLater(50, self.demand,
+                                              self.suit.uniqueName('brainwait'),
+                                              extraArgs=['Walking'])
+
+    def exitWaiting(self):
+        self._timeout.remove()
 
     def suitFinishedWalking(self):
         # The suit finished walking. The brain is expected to perform another

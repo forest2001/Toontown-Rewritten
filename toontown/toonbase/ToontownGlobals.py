@@ -536,6 +536,7 @@ PieCodeBossInsides = 4
 PieCodeDefensePan = 5
 PieCodeProsecutionPan = 6
 PieCodeLawyer = 7
+PieCodeInvasionSuit = 8
 PieCodeColors = {PieCodeBossCog: None,
  PieCodeNotBossCog: (0.8,
                      0.8,

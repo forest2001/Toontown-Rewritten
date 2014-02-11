@@ -972,6 +972,8 @@ dclass DistributedElectionEvent : DistributedObject {
 };
 
 dclass DistributedSafezoneInvasion : DistributedObject {
+  hitToon(uint32 avId) clsend airecv;
+  hitSuit(uint32 avId) clsend airecv;
 };
 
 dclass DistributedFishingPond : DistributedObject {

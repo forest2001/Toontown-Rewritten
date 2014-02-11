@@ -1,7 +1,9 @@
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
+from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 
@@ -19,8 +21,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = None
 
     def delete(self):
-        DistributedSuitBase.delete(self)
+        self.demand('Off')
+
         self.stopMoveTask()
+        DistributedSuitBase.delete(self)
 
     def announceGenerate(self):
         DistributedSuitBase.announceGenerate(self)
@@ -28,12 +32,25 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.healthBar.show()
         self.updateHealthBar(0, 1)
 
+        # Set ourselves up for a good pieing:
+        colNode = self.find('**/distAvatarCollNode*')
+        colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
+
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
         self.setPos(x, y, z)
         self.setH(h)
+
+    def setHP(self, hp):
+        currHP = getattr(self, 'currHP', 0)
+        if currHP > hp:
+            self.showHpText(hp - currHP)
+
+        DistributedSuitBase.setHP(self, hp)
+
+        self.updateHealthBar(0, 1)
 
     def setState(self, state, timestamp):
         self._stateTimestamp = timestamp
@@ -57,6 +74,20 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def enterMarch(self, time):
         self.loop('walk', 0)
         self.startMoveTask()
+
+    def enterExplode(self, time):
+        loseActor = self.getLoseActor()
+        loseActor.reparentTo(render)
+        self.stash()
+
+        # TODO: This animation is incomplete. There's no sound, particles, or
+        # proper clipping at the end.
+        self._explosionInterval = ActorInterval(loseActor, 'lose')
+        self._explosionInterval.start(time)
+
+    def exitExplode(self):
+        self._explosionInterval.finish()
+        self.cleanupLoseActor()
 
     def setMarchLerp(self, x1, y1, x2, y2, timestamp):
         self.setLerpPoints(x1, y1, x2, y2)

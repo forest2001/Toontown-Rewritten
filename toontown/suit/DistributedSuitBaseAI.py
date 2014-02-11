@@ -11,7 +11,18 @@ class DistributedSuitBaseAI(DistributedObjectAI, SuitBase):
         SuitBase.__init__(self)
 
         self.dna = SuitDNA()
+        self.name = ''
         self.skeleRevives = 0
+
+    def b_setHP(self, hp):
+        self.d_setHP(hp)
+        self.setHP(hp)
+
+    def d_setHP(self, hp):
+        self.sendUpdate('setHP', [hp])
+
+    def setHP(self, hp):
+        self.currHP = hp
 
     def getHP(self):
         return self.currHP
@@ -34,3 +45,6 @@ class DistributedSuitBaseAI(DistributedObjectAI, SuitBase):
 
     def getDNAString(self):
         return self.dna.makeNetString()
+
+    def setDisplayName(self, name):
+        pass # This only exists because SuitBase tries to call it.

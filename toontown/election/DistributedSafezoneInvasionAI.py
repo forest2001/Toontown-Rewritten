@@ -25,12 +25,39 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         DistributedObjectAI.delete(self)
         self.__deleteSuits()
 
+    def hitToon(self, doId):
+        # Someone hit a Toon!
+        avId = self.air.getAvatarIdFromSender()
+
+        toon = self.air.doId2do.get(doId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Hit a nonexistent Toon with a pie!')
+            return
+
+        from toontown.toon.DistributedToonAI import DistributedToonAI
+        if not isinstance(toon, DistributedToonAI):
+            self.air.writeServerEvent('suspicious', avId, 'Hit a non-Toon with a pie through hitToon()!')
+            return
+
+        toon.toonUp(SafezoneInvasionGlobals.ToonHealAmount)
+
+    def hitSuit(self, doId):
+        # Someone hit one of our suits...
+        avId = self.air.getAvatarIdFromSender()
+
+        suit = self.air.doId2do.get(doId)
+        if suit not in self.suits:
+            self.air.writeServerEvent('suspicious', avId, 'DistributedSafezoneInvasion.hitSuit() but not one of our suits!')
+            return
+
+        suit.takeDamage(SafezoneInvasionGlobals.ToonAttackAmount)
+
     def __deleteSuits(self):
         for suit in self.suits:
             suit.requestDelete()
         self.suits = []
 
-    def spawnOne(self, suitType):
+    def spawnOne(self, suitType, levelOffset=0):
         # Pick a spawnpoint:
         pointId = random.choice(self.spawnPoints)
         self.spawnPoints.remove(pointId)
@@ -38,10 +65,31 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit(suitType)
         suit.setSpawnPoint(pointId)
+        suit.setLevel(levelOffset)
         suit.generateWithRequired(self.zoneId)
         suit.b_setState('FlyDown')
 
         self.suits.append(suit)
+
+    def suitDied(self, suit):
+        if suit not in self.suits:
+            self.notify.warning('suitDied called twice for same suit!')
+            return
+
+        self.suits.remove(suit)
+        if not self.suits:
+            self.waveWon()
+
+    def waveWon(self):
+        if self.state != 'Wave':
+            return
+
+        lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves)-1)
+
+        if lastWave:
+            self.demand('Victory')
+        else:
+            self.demand('Intermission')
 
     def enterBeginWave(self, waveNumber):
         # In this state, Cogs rain down from the heavens. We call .spawnOne at
@@ -96,6 +144,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # pause in the action until the next wave.
         pass
 
+    def enterVictory(self):
+        # The Toons win! ...
+        pass
 
 @magicWord(category=CATEGORY_DEBUG, types=[str, str])
 def szInvasion(cmd, arg=''):

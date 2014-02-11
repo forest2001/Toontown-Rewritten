@@ -20,3 +20,9 @@ SuitWaves = [
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10
+
+
+# How much healing does a pie on a Toon do?
+ToonHealAmount = 1
+# How much does a Toon damage a Cog with a pie?
+ToonAttackAmount = 3

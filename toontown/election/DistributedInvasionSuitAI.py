@@ -32,6 +32,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         DistributedSuitBaseAI.delete(self)
         self.demand('Off')
 
+        self.invasion.suitDied(self)
+
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
@@ -60,6 +62,17 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.freezeLerp(x, y)
 
         self.__stopWalkTimer()
+
+    def enterExplode(self):
+        self.brain.stop()
+        self._delay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
+                                            self.uniqueName('explode'))
+
+    def __exploded(self, task):
+        self.requestDelete()
+
+    def exitExplode(self):
+        self._delay.remove()
 
     def walkTo(self, x, y):
         # Begin walking to a given point. It's OK to call this before the suit
@@ -95,6 +108,14 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def start(self):
         # Start the brain, if it hasn't been started already:
         self.brain.start()
+
+    def takeDamage(self, hp):
+        hp = min(hp, self.currHP) # Don't take more damage than we have...
+        self.b_setHP(self.currHP - hp)
+
+        if self.currHP < 1:
+            # We're dead!
+            self.b_setState('Explode')
 
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
