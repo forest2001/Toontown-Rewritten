@@ -22,6 +22,12 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         DistributedSuitBase.delete(self)
         self.stopMoveTask()
 
+    def announceGenerate(self):
+        DistributedSuitBase.announceGenerate(self)
+        self.corpMedallion.hide()
+        self.healthBar.show()
+        self.updateHealthBar(0, 1)
+
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
