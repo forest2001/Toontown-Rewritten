@@ -2,7 +2,6 @@ from toontown.toonbase import ToontownGlobals
 from HoodAI import HoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
-from toontown.safezone.DistributedElectionEventAI import DistributedElectionEventAI
 from toontown.toon import NPCToons
 
 class TTHoodAI(HoodAI):
