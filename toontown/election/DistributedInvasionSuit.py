@@ -72,6 +72,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = self.quatInterval(0.1, q, blendType='easeOut')
         self._turnInterval.start()
 
+        # And set the Z properly:
+        self.__placeOnGround()
+
     def enterFlyDown(self, time):
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
@@ -134,14 +137,19 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.moveTask = None
 
     def __move(self, task):
-        self.__setPositionAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
-        return task.cont
-
-    def __setPositionAt(self, t):
-        x, y = self.getPosAt(t)
+        x, y = self.getPosAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
         self.setX(x)
         self.setY(y)
 
-        # We need to pin ourselves to the ground. I'm lazy so I'll just keep
-        # putting the suit on top of the shadow.
+        self.__placeOnGround()
+
+        return task.cont
+
+    def __placeOnGround(self):
+        # This schedules a task to fire after the shadow-culling to place the
+        # suit directly on his shadow.
+        taskMgr.add(self.__placeOnGroundTask, self.uniqueName('place-on-ground'), sort=31)
+
+    def __placeOnGroundTask(self, task):
         self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
+        return task.done
