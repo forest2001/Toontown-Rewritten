@@ -23,7 +23,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def delete(self):
         DistributedObjectAI.delete(self)
-        self.__deleteSuits()
+        self.demand('Off')
 
     def hitToon(self, doId):
         # Someone hit a Toon!
@@ -55,7 +55,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def __deleteSuits(self):
         for suit in self.suits:
             suit.requestDelete()
-        self.suits = []
 
     def spawnOne(self, suitType, levelOffset=0):
         # Pick a spawnpoint:
@@ -155,6 +154,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterVictory(self):
         # The Toons win! ...
         pass
+
+    def enterOff(self):
+        self.__deleteSuits()
 
 @magicWord(category=CATEGORY_DEBUG, types=[str, str])
 def szInvasion(cmd, arg=''):
