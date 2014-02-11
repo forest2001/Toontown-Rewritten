@@ -770,6 +770,8 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
 
   setState(string state, int32 timestamp) required broadcast ram;
   setMarchLerp(int16/10 x1, int16/10 y1, int16/10 x2, int16/10 y2, int32 timestamp) broadcast ram;
+
+  setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {

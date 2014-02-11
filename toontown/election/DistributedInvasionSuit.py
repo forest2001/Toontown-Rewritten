@@ -16,9 +16,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.spawnPointId = 0
         self.moveTask = None
 
-        self._stateTimestamp = 0
         self._lerpTimestamp = 0
         self._turnInterval = None
+        self._staticPoint = (0, 0, 0)
 
     def delete(self):
         self.demand('Off')
@@ -53,9 +53,24 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.updateHealthBar(0, 1)
 
     def setState(self, state, timestamp):
-        self._stateTimestamp = timestamp
-        self.__applyLerpPosition()
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
+
+    def setStaticPoint(self, x, y, h):
+        self._staticPoint = (x, y, h)
+        if self.state != 'March':
+            self.__moveToStaticPoint()
+
+    def __moveToStaticPoint(self):
+        x, y, h = self._staticPoint
+        self.setX(x)
+        self.setY(y)
+
+        if self._turnInterval:
+            self._turnInterval.finish()
+        q = Quat()
+        q.setHpr((h, 0, 0))
+        self._turnInterval = self.quatInterval(0.1, q, blendType='easeOut')
+        self._turnInterval.start()
 
     def enterFlyDown(self, time):
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
@@ -101,21 +116,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = self.quatInterval(0.1, q, blendType='easeOut')
         self._turnInterval.start()
 
-        self.__applyLerpPosition()
-
-    def __applyLerpPosition(self):
-        lerpStartedAgo = globalClockDelta.localElapsedTime(self._lerpTimestamp)
-        stateStartedAgo = globalClockDelta.localElapsedTime(self._stateTimestamp)
-
-        if lerpStartedAgo > stateStartedAgo:
-            self.__setPositionAt(lerpStartedAgo - stateStartedAgo)
-
     def exitMarch(self):
         self.loop('neutral', 0)
         self.stopMoveTask()
 
-        if self._turnInterval:
-            self._turnInterval.finish()
+        self.__moveToStaticPoint()
 
     def startMoveTask(self):
         if self.moveTask:

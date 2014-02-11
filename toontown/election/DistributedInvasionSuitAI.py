@@ -59,6 +59,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def exitMarch(self):
         x, y = self.getCurrentPos()
+        self.d_setStaticPoint(x, y, self._idealH)
         self.freezeLerp(x, y)
 
         self.__stopWalkTimer()
@@ -151,3 +152,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def getState(self):
         return (self.state, self.stateTime)
+
+    def d_setStaticPoint(self, x, y, h):
+        self.sendUpdate('setStaticPoint', [x, y, h])
