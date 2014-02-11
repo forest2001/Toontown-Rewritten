@@ -47,7 +47,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         suit = self.air.doId2do.get(doId)
         if suit not in self.suits:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedSafezoneInvasion.hitSuit() but not one of our suits!')
+            # N.B. this is NOT suspicious as it can happen as a result of a race condition
             return
 
         suit.takeDamage(SafezoneInvasionGlobals.ToonAttackAmount)
