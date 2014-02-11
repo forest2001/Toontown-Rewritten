@@ -258,7 +258,7 @@ class Estate(Place.Place):
                 self.nextState = 'petTutorial'
 
     def teleportInDone(self):
-        self.notify.spam('teleportInDone')
+        self.notify.debug('teleportInDone')
         self.toonSubmerged = -1
         if self.nextState is not 'petTutorial':
             self.notify.info('add estate-check-toon-underwater to TaskMgr in teleportInDone()')
