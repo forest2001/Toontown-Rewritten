@@ -3,17 +3,24 @@ from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
+import SafezoneInvasionConstants
+from InvasionSuitBase import InvasionSuitBase
 
-class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
+class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
 
     def __init__(self, air, invasion):
         DistributedSuitBaseAI.__init__(self, air)
+        InvasionSuitBase.__init__(self)
         FSM.__init__(self, 'InvasionSuitFSM')
         self.invasion = invasion
 
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.spawnPointId = 0
+
+    def announceGenerate(self):
+        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        self.freezeLerp(x, y)
 
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
@@ -36,7 +43,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, FSM):
         pass
 
     def enterMarch(self):
-        pass # Right now, no AI logic for this...
+        # Right now, no AI logic for this... Instead, we'll move at a diagonal for debugging.
+        x, y = self.getPosAt(0)
+        self.sendUpdate('setMarchLerp', [x, y, x-50, y+25, globalClockDelta.getRealNetworkTime()])
 
     def setSpawnPoint(self, pointId):
         self.spawnPointId = pointId
