@@ -61,7 +61,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = self.quatInterval(0.1, q, blendType='easeOut')
         self._turnInterval.start()
 
-    def exitMarch(self, time):
+    def exitMarch(self):
         self.loop('neutral', 0)
         self.stopMoveTask()
 

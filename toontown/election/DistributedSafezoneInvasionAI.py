@@ -85,8 +85,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Start the suits marching!
         for suit in self.suits:
-            if suit.state == 'Idle':
-                suit.b_setState('March')
+            suit.start()
 
     def exitWave(self):
         # Clean up any loose suits, in case the wave is being ended by MW.

@@ -5,6 +5,7 @@ from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
 import SafezoneInvasionConstants
 from InvasionSuitBase import InvasionSuitBase
+from InvasionSuitBrainAI import InvasionSuitBrainAI
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -18,11 +19,18 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.spawnPointId = 0
 
+        self.brain = InvasionSuitBrainAI(self)
+
         self.lastMarchTime = 0.0
+        self.__walkTimer = None
 
     def announceGenerate(self):
         x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
+
+    def delete(self):
+        DistributedSuitBaseAI.delete(self)
+        self.demand('Off')
 
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
@@ -31,10 +39,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
-        if self.invasion.state == 'BeginWave':
-            self.b_setState('Idle')
-        else:
-            self.b_setState('March')
+        self.b_setState('Idle')
+
+        if self.invasion.state != 'BeginWave':
+            self.start()
 
     def exitFlyDown(self):
         self._delay.remove()
@@ -45,8 +53,13 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         pass
 
     def enterMarch(self):
-        # Right now, no AI logic for this...
         pass
+
+    def exitMarch(self):
+        x, y = self.getCurrentPos()
+        self.freezeLerp(x, y)
+
+        self.__stopWalkTimer()
 
     def walkTo(self, x, y):
         # Begin walking to a given point. It's OK to call this before the suit
@@ -54,6 +67,34 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         # calculate the suit's current position and walk from there.
         oldX, oldY = self.getCurrentPos()
         self.b_setMarchLerp(oldX, oldY, x, y)
+        self.__startWalkTimer()
+
+        if self.state != 'March':
+            self.b_setState('March')
+
+    def idle(self):
+        self.b_setState('Idle')
+
+    def __startWalkTimer(self):
+        self.__stopWalkTimer()
+        self.__walkTimer = taskMgr.doMethodLater(self._lerpDelay, self.__walkTimerOver,
+                                                 self.uniqueName('walkTimer'))
+
+    def __stopWalkTimer(self):
+        if self.__walkTimer:
+            self.__walkTimer.remove()
+            self.__walkTimer = None
+
+    def __walkTimerOver(self, task):
+        if self.state != 'March':
+            self.notify.warning('Walk timer ran out, but not in March state!')
+            return
+
+        self.brain.suitFinishedWalking()
+
+    def start(self):
+        # Start the brain, if it hasn't been started already:
+        self.brain.start()
 
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
