@@ -23,6 +23,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
+        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        self.freezeLerp(x, y)
+        self.setPos(x, y, z)
+        self.setH(h)
 
     def setState(self, state, timestamp):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
@@ -30,7 +34,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def enterFlyDown(self, time):
         x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
-        self.setH(h)
         self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky')
         self.mtrack.start(time)
 
@@ -38,11 +41,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.mtrack.finish()
         del self.mtrack
         self.detachPropeller()
-
-        # Initialize our lerper to our current position, while we wait for an
-        # actual lerp value:
-        x, y, z = self.getPos()
-        self.freezeLerp(x, y)
 
     def enterIdle(self, time):
         self.loop('neutral', 0)
