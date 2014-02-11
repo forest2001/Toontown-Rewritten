@@ -111,7 +111,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 #        self.host2PartyId[avId] = (1337 << 32) + 10000
         partyId = self.host2PartyId.get(avId, None)
         if partyId:
-            party = self.id2Party[partyId]
+            party = self.id2Party.get(partyId, None)
+            if not party:
+                return # There's a partyId without an actual party?? What is this madness.
             self.sendToAv(avId, 'setHostedParties', [[self._formatParty(party)]])
             if partyId not in self.party2PubInfo and self.canPartyStart(party):
                 # The party hasn't started and it can start
