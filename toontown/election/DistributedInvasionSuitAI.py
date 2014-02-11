@@ -18,6 +18,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.spawnPointId = 0
 
+        self.lastMarchTime = 0.0
+
     def announceGenerate(self):
         x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
@@ -43,15 +45,36 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         pass
 
     def enterMarch(self):
-        # Right now, no AI logic for this... Instead, we'll move at a diagonal for debugging.
-        x, y = self.getPosAt(0)
-        self.sendUpdate('setMarchLerp', [x, y, x-50, y+25, globalClockDelta.getRealNetworkTime()])
+        # Right now, no AI logic for this...
+        pass
+
+    def walkTo(self, x, y):
+        # Begin walking to a given point. It's OK to call this before the suit
+        # finishes reaching its old waypoint; if that happens, the AI will
+        # calculate the suit's current position and walk from there.
+        oldX, oldY = self.getCurrentPos()
+        self.b_setMarchLerp(oldX, oldY, x, y)
+
+    def getCurrentPos(self):
+        return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
 
     def setSpawnPoint(self, pointId):
         self.spawnPointId = pointId
 
     def getSpawnPoint(self):
         return self.spawnPointId
+
+    def setMarchLerp(self, x1, y1, x2, y2):
+        self.setLerpPoints(x1, y1, x2, y2)
+        self.lastMarchTime = globalClock.getRealTime()
+
+    def d_setMarchLerp(self, x1, y1, x2, y2):
+        self.sendUpdate('setMarchLerp', [x1, y1, x2, y2,
+                                         globalClockDelta.getRealNetworkTime()])
+
+    def b_setMarchLerp(self, x1, y1, x2, y2):
+        self.setMarchLerp(x1, y1, x2, y2)
+        self.d_setMarchLerp(x1, y1, x2, y2)
 
     def setState(self, state):
         self.demand(state)
