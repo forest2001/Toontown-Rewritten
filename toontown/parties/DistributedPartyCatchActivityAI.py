@@ -14,7 +14,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         self.numGenerations = 1
         self.generations = []
         self.player2catches = {}
-        self.startTimestamp = globalClockDelta.getRealNetworkTime()
+        self.startTimestamp = globalClockDelta.getRealNetworkTime(bits=32)
         self.playing = False
         
     def delete(self):
@@ -58,7 +58,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
     def __startGame(self):
         self.playing = True
         self.calcDifficultyConstants(len(self.toonsPlaying))
-        self.generations.append([self.numGenerations, globalClockDelta.getRealNetworkTime(), len(self.toonsPlaying)])
+        self.generations.append([self.numGenerations, globalClockDelta.getRealNetworkTime(bits=32), len(self.toonsPlaying)])
         self.numGenerations += 1
         self.sendUpdate('setGenerations', [self.generations])
         taskMgr.doMethodLater(self.generationDuration, self.__newGeneration, 'newGeneration%d' % self.doId, extraArgs=[])
