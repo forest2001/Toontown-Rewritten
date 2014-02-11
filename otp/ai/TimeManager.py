@@ -203,7 +203,7 @@ class TimeManager(DistributedObject.DistributedObject):
          di.getCpuBrandIndex(),
          '%0.03f,%0.03f' % cpuSpeed,
          '%d,%d' % (numCpuCores, numLogicalCpus))
-        print 'cpu info: %s' % info
+        self.notify.debug('setCpuInfo: "%s"' % info
         self.sendUpdate('setCpuInfo', [info, cacheStatus])
 
     def setFrameRateInterval(self, frameRateInterval):
