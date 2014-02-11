@@ -16,10 +16,16 @@ SuitSpawnPoints = [
 SuitWaves = [
     # WAVE 0:
     ['f', 'bf', 'sc', 'cc'],
+    # WAVE 1:
+    ['f', 'f', 'f', 'bf', 'bf', 'sc', 'sc', 'cc'],
+    # WAVE 2:
+    ['pp', 'ym', 'pp'],
 ]
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10
+# How long does the intermission last?
+IntermissionTime = 20
 
 
 # How much healing does a pie on a Toon do?

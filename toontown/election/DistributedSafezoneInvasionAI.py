@@ -142,7 +142,15 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a
         # pause in the action until the next wave.
-        pass
+        self._delay = taskMgr.doMethodLater(SafezoneInvasionGlobals.IntermissionTime,
+                                            self.__endIntermission,
+                                            self.uniqueName('intermission'))
+
+    def __endIntermission(self, task):
+        self.demand('BeginWave', self.waveNumber + 1)
+
+    def exitIntermission(self):
+        self._delay.remove()
 
     def enterVictory(self):
         # The Toons win! ...
@@ -167,5 +175,5 @@ def szInvasion(cmd, arg=''):
         invasion.spawnOne(arg)
     elif cmd == 'wave':
         invasion.demand('BeginWave', int(arg))
-    elif cmd == 'intermission':
-        invasion.demand('Intermission')
+    elif cmd == 'endWave':
+        invasion.waveWon()
