@@ -14,6 +14,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.spawnPointId = 0
         self.moveTask = None
 
+        self._stateTimestamp = 0
         self._lerpTimestamp = 0
         self._turnInterval = None
 
@@ -29,6 +30,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.setH(h)
 
     def setState(self, state, timestamp):
+        self._stateTimestamp = timestamp
+        self.__applyLerpPosition()
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterFlyDown(self, time):
@@ -61,6 +64,15 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = self.quatInterval(0.1, q, blendType='easeOut')
         self._turnInterval.start()
 
+        self.__applyLerpPosition()
+
+    def __applyLerpPosition(self):
+        lerpStartedAgo = globalClockDelta.localElapsedTime(self._lerpTimestamp)
+        stateStartedAgo = globalClockDelta.localElapsedTime(self._stateTimestamp)
+
+        if lerpStartedAgo > stateStartedAgo:
+            self.__setPositionAt(lerpStartedAgo - stateStartedAgo)
+
     def exitMarch(self):
         self.loop('neutral', 0)
         self.stopMoveTask()
@@ -79,11 +91,14 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.moveTask = None
 
     def __move(self, task):
-        x, y = self.getPosAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
+        self.__setPositionAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
+        return task.cont
+
+    def __setPositionAt(self, t):
+        x, y = self.getPosAt(t)
         self.setX(x)
         self.setY(y)
 
         # We need to pin ourselves to the ground. I'm lazy so I'll just keep
         # putting the suit on top of the shadow.
         self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
-        return task.cont
