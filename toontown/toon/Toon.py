@@ -2028,12 +2028,12 @@ class Toon(Avatar.Avatar, ToonHead):
         self.setPlayRate(animMultiplier * 0.4, 'neutral')
         self.setChatAbsolute(SLEEP_STRING, CFThought)
         if self == base.localAvatar:
-            print 'adding timeout task'
+            self.notify.debug('Adding timeout task to Toon.')
             taskMgr.doMethodLater(self.afkTimeout, self.__handleAfkTimeout, self.uniqueName('afkTimeout'))
         self.setActiveShadow(0)
 
     def __handleAfkTimeout(self, task):
-        print 'handling timeout'
+        self.notify.debug('Handling timeout task on Toon.')
         self.ignore('wakeup')
         self.takeOffSuit()
         base.cr.playGame.getPlace().fsm.request('final')
