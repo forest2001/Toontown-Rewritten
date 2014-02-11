@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
-import SafezoneInvasionConstants
+import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
@@ -24,7 +24,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
-        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
         self.setPos(x, y, z)
         self.setH(h)
@@ -35,7 +35,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterFlyDown(self, time):
-        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
         self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky')
         self.mtrack.start(time)

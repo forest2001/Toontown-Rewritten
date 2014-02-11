@@ -4,7 +4,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
-import SafezoneInvasionConstants
+import SafezoneInvasionGlobals
 from toontown.suit import SuitTimings
 
 class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
@@ -49,15 +49,15 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.waveNumber = waveNumber
 
         # Reset spawnpoints and suits:
-        self.spawnPoints = range(len(SafezoneInvasionConstants.SuitSpawnPoints))
+        self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
         self.__deleteSuits()
 
         # Get the suits to call:
-        suitsToCall = SafezoneInvasionConstants.SuitWaves[self.waveNumber]
+        suitsToCall = SafezoneInvasionGlobals.SuitWaves[self.waveNumber]
 
         # How long do we have to spread out the suit calldowns?
         # In case some dummkopf set WaveBeginningTime too low:
-        delay = max(SafezoneInvasionConstants.WaveBeginningTime, SuitTimings.fromSky)
+        delay = max(SafezoneInvasionGlobals.WaveBeginningTime, SuitTimings.fromSky)
         spread = delay - SuitTimings.fromSky
         spreadPerSuit = spread/len(suitsToCall)
 

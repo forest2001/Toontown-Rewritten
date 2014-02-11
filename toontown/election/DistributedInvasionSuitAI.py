@@ -3,7 +3,7 @@ from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
-import SafezoneInvasionConstants
+import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
 
@@ -25,7 +25,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.__walkTimer = None
 
     def announceGenerate(self):
-        x, y, z, h = SafezoneInvasionConstants.SuitSpawnPoints[self.spawnPointId]
+        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
 
     def delete(self):
