@@ -5,6 +5,7 @@ from direct.fsm.FSM import FSM
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
+from toontown.battle import BattleParticles
 from InvasionSuitBase import InvasionSuitBase
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
@@ -94,15 +95,52 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.loop('walk', 0)
         self.startMoveTask()
 
+    def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
+        explosionTrack = Sequence()
+        explosion = loader.loadModel('phase_3.5/models/props/explosion.bam')
+        explosion.setBillboardPointEye()
+        explosion.setDepthWrite(False)
+        explosionPoint = Point3(0, 0, 4.1) #This should be set according to suit height.
+        explosionTrack.append(Func(explosion.reparentTo, parent))
+        explosionTrack.append(Func(explosion.setPos, explosionPoint))
+        explosionTrack.append(Func(explosion.setScale, 0.4)) #The scale should also be set according to the suit.
+        explosionTrack.append(Wait(0.6))
+        explosionTrack.append(Func(explosion.removeNode))
+        return explosionTrack
+
     def enterExplode(self, time):
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+        deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
         self.stash()
 
-        # TODO: This animation is incomplete. There's no sound, particles, or
-        # proper clipping at the end.
+        # TODO: This needs to be cleaned up or changed entirely. Just thrown together right now.
         self._explosionInterval = ActorInterval(loseActor, 'lose')
+        self.deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+        BattleParticles.loadParticles()
+        smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+        singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+        smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+        bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ()) #Z should be set by suit height
+        #smallGears.setPos(gearPoint)
+        #singleGear.setPos(gearPoint)
+        smallGears.setDepthWrite(False)
+        singleGear.setDepthWrite(False)
+        #smallGearExplosion.setPos(gearPoint)
+        #bigGearExplosion.setPos(gearPoint)
+        smallGearExplosion.setDepthWrite(False)
+        bigGearExplosion.setDepthWrite(False)
+        explosionTrack = Sequence()
+        explosionTrack.append(Wait(5.4))
+        explosionTrack.append(self.createKapowExplosionTrack(loseActor))
+        self.gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+        self.gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
         self._explosionInterval.start(time)
+        self.deathSoundTrack.start(time)
+        self.gears1Track.start(time)
+        self.gears2MTrack.start(time)
 
     def exitExplode(self):
         self._explosionInterval.finish()
