@@ -151,5 +151,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         taskMgr.add(self.__placeOnGroundTask, self.uniqueName('place-on-ground'), sort=31)
 
     def __placeOnGroundTask(self, task):
-        self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
+        if getattr(self, 'shadowPlacer', None) and \
+           getattr(self.shadowPlacer, 'shadowNodePath', None):
+            self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
         return task.done
