@@ -3172,7 +3172,7 @@ dclass DistributedPartyManager : DistributedObject {
   toonHasEnteredPartyAiToUd(uint32);
   toonHasExitedPartyAiToUd(uint32);
   partyHasFinishedUdToAllAi(uint64 partyId) airecv;
-  updateToPublicPartyInfoUdToAllAi(uint32 shardId, uint32 zoneId, uint64 partyId, uint32 hostId, uint8 numGuests, uint8 maxGuests, string hostName, uint8 [] activities, uint8 minLeft) airecv;
+  updateToPublicPartyInfoUdToAllAi(uint32 shardId, uint32 zoneId, uint64 partyId, uint32 hostId, uint8 numGuests, uint8 maxGuests, string hostName, uint8 activities[], uint8 minLeft) airecv;
   updateToPublicPartyCountUdToAllAi(uint32 partyCount, uint64 partyId) airecv;
   requestShardIdZoneIdForHostId(uint32) clsend airecv;
   sendShardIdZoneIdToAvatar(uint32, uint32);
@@ -3182,7 +3182,7 @@ dclass DistributedPartyManager : DistributedObject {
   forceCheckStart();
   requestMw(uint32, string, uint32, uint32);
   mwResponseUdToAllAi(uint32, string, uint32, uint32) airecv;
-  receiveId(uint64array ids) airecv;
+  receiveId(uint64 ids[]) airecv;
 };
 
 dclass DistributedObjectGlobal : DistributedObject {
@@ -3191,7 +3191,8 @@ dclass DistributedObjectGlobal : DistributedObject {
 dclass GlobalPartyManager : DistributedObjectGlobal {
     partyManagerAIHello(uint32 channel);
     queryParty(uint32 hostId);
-    addParty(uint32 avId, uint64 partyId, string start, string end, int8 isPrivate, int8 inviteTheme, activity [], decoration [], uint32array inviteeIds);
+    addParty(DoId avId, uint64 partyId, string start, string end, int8 isPrivate,
+             int8 inviteTheme, activity [], decoration [], DoIdList inviteeIds);
     partyHasStarted(uint64 partyId, uint32 shardId, uint32 zoneId, string hostName);
     toonJoinedParty(uint64 partyId, uint32 avId);
     toonLeftParty(uint64 partyId, uint32 avId);

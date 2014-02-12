@@ -56,7 +56,7 @@ dclass Account {
 struct BarrierData {
   uint16 context;
   string name;
-  DoidList avIds;
+  DoIdList avIds;
 };
 
 dclass DistributedObject {
@@ -225,7 +225,7 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   setName(string = "[Name not set]") required broadcast db airecv;
   friendsNotify(DoId avId, int8 status) ownrecv airecv;
   checkAvOnShard(DoId) clsend airecv;
-  confirmAvOnShard(Doid avId, int8 isOnShard);
+  confirmAvOnShard(DoId avId, int8 isOnShard);
   setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
           string(0-400) chat, TalkModification [], uint8 flags) broadcast;
 };
