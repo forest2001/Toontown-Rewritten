@@ -4,6 +4,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
+from InvasionMasterAI import InvasionMasterAI
 import SafezoneInvasionGlobals
 from toontown.suit import SuitTimings
 
@@ -13,6 +14,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         FSM.__init__(self, 'InvasionFSM')
+
+        self.master = InvasionMasterAI(self)
 
         self.waveNumber = 0
         self.spawnPoints = []

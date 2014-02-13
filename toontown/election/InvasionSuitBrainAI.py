@@ -1,48 +1,59 @@
 import random
 from direct.fsm.FSM import FSM
+from InvasionPathDataAI import pathfinder
 
 class InvasionSuitBrainAI(FSM):
     def __init__(self, suit):
         FSM.__init__(self, 'InvasionSuitBrainFSM')
         self.suit = suit
+        self.master = self.suit.invasion.master
 
         self.__started = False
+
+        # For the nav system:
+        self.__waypoints = []
 
     def start(self):
         if self.state != 'Off':
             return
 
-        self.demand('Walking')
+        self.demand('Idle')
 
     def stop(self):
         if self.state == 'Off':
             return
         self.demand('Off')
 
-    def enterWalking(self):
-        self.chooseNewWalkPoint()
-        self._timeout = taskMgr.doMethodLater(50, self.demand,
-                                              self.suit.uniqueName('brainwalk'),
-                                              extraArgs=['Waiting'])
-
-    def exitWalking(self):
-        self._timeout.remove()
-
-    def enterWaiting(self):
+    def enterIdle(self):
+        # Brain has nothing to do -- ask the master for orders:
         self.suit.idle()
-        self._timeout = taskMgr.doMethodLater(50, self.demand,
-                                              self.suit.uniqueName('brainwait'),
-                                              extraArgs=['Walking'])
+        self.master.requestOrders(self)
 
-    def exitWaiting(self):
-        self._timeout.remove()
+    def enterOff(self):
+        # Brain is shutting down -- tell the master.
+        pass # TODO
+
+    def suitFinishedNavigating(self):
+        pass
+
+    # Navigation:
+    def navigateTo(self, x, y):
+        self.__waypoints = pathfinder.planPath(self.suit.getCurrentPos(),
+                                               (x, y))
+        if self.__waypoints:
+            self.__walkToNextWaypoint()
+            return True
+        else:
+            return False
 
     def suitFinishedWalking(self):
-        # The suit finished walking. The brain is expected to perform another
-        # action.
-        self.chooseNewWalkPoint()
+        # The suit finished walking. If there's another waypoint, go to it.
+        # Otherwise, elevate the callback to suitFinishedNavigating.
+        if self.__waypoints:
+            self.__walkToNextWaypoint()
+        else:
+            self.suitFinishedNavigating()
 
-    def chooseNewWalkPoint(self):
-        x = random.randrange(-30, 30)
-        y = random.randrange(-30, 30)
+    def __walkToNextWaypoint(self):
+        x, y = self.__waypoints.pop(0)
         self.suit.walkTo(x, y)
