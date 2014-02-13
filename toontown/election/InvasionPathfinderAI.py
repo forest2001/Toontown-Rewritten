@@ -116,7 +116,7 @@ class InvasionPathfinderAI:
                     projectedVertex.link(toVertex)
                     self._considerLink(fromVertex, projectedVertex)
                     for vertex in self.vertices:
-                        self._considerLink(vertex, projectedVertex)
+                        self._considerLink(vertex, projectedVertex, False)
                     tempVertices.append(projectedVertex)
 
             # Run A* search:
@@ -136,24 +136,25 @@ class InvasionPathfinderAI:
             for tempVertex in tempVertices:
                 tempVertex.unlinkAll()
 
-    def _considerLink(self, v1, v2):
+    def _considerLink(self, v1, v2, testAngles=True):
         # If the vertices are polygonal neighbors, they should also be
         # edges on the nav graph:
         if v1.isVertexPolygonalNeighbor(v2):
             v1.link(v2)
             return
 
-        # First, test to make sure a link between the vertices would not
-        # go across the inside of a polygon (even if there are no line
-        # segments in the way)
-        if v1.isVertexInsideAngle(v2) or v2.isVertexInsideAngle(v1):
-            return # These vertices are not "facing" each other.
+        if testAngles:
+            # First, test to make sure a link between the vertices would not
+            # go across the inside of a polygon (even if there are no line
+            # segments in the way)
+            if v1.isVertexInsideAngle(v2) or v2.isVertexInsideAngle(v1):
+                return # These vertices are not "facing" each other.
 
-        # As an optimization, if either vertex is inside the other's
-        # vertically opposite angle, no link between them will ever be
-        # used, since neither vertex will obstruct the other.
-        if v1.isVertexInsideOpposite(v2) or v2.isVertexInsideOpposite(v1):
-            return
+            # As an optimization, if either vertex is inside the other's
+            # vertically opposite angle, no link between them will ever be
+            # used, since neither vertex will obstruct the other.
+            if v1.isVertexInsideOpposite(v2) or v2.isVertexInsideOpposite(v1):
+                return
 
         # Now test for intersections with any of the polygon borders:
         x1, y1 = v1.pos
