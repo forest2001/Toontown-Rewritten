@@ -172,7 +172,8 @@ class InvasionPathfinderAI:
             # incident line runs from (0,0)->(0,1) in this coordinate space.
             # This is an exclusive range as *grazing* the line (skimming by one
             # of its endpoints) is OK.
-            if 0.0 < b < 1.0:
+            epsilon = 0.001
+            if 0.0+epsilon < b < 1.0-epsilon:
                 return True
 
         # The for loop concluded, nothing found.
