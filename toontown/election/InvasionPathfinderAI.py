@@ -3,6 +3,8 @@ import math
 from pandac.PandaModules import *
 
 class InvasionPathfinderAI:
+    VERTEX_EXTRUSION = 0.15
+
     def __init__(self, polygons=None):
         self.borders = []
         self.vertices = []
@@ -33,7 +35,7 @@ class InvasionPathfinderAI:
             nextVertex = newVertices[(i+1)%len(newVertices)]
 
             vertex.setPolygonalNeighbors(prevVertex, nextVertex)
-            vertex.extrudeVertex(0.15)
+            vertex.extrudeVertex(self.VERTEX_EXTRUSION)
 
             if vertex.interiorAngle > 180:
                 # This vertex is concave. Nothing is ever going to *walk to* it
@@ -104,6 +106,11 @@ class InvasionPathfinderAI:
                     if (projected - toVertex.pos).lengthSquared() > closeEnoughSquared:
                         # The projection is too far away to consider.
                         continue
+
+                    # We have to extrude the projected vertex a little bit, too.
+                    projectionDirection = projected - toVertex.pos
+                    projectionDirection.normalize()
+                    projected += projectionDirection * self.VERTEX_EXTRUSION
 
                     projectedVertex = AStarVertex(projected)
                     projectedVertex.link(toVertex)
