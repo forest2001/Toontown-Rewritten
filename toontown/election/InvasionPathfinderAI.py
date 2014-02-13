@@ -47,33 +47,7 @@ class InvasionPathfinderAI:
         # Now we test every vertex pair for visibility to each other:
         for i,v1 in enumerate(self.vertices):
             for v2 in self.vertices[i+1:]:
-                # If the vertices are polygonal neighbors, they should also be
-                # edges on the nav graph:
-                if v1.isVertexPolygonalNeighbor(v2):
-                    v1.link(v2)
-                    continue
-
-                # First, test to make sure a link between the vertices would not
-                # go across the inside of a polygon (even if there are no line
-                # segments in the way)
-                if v1.isVertexInsideAngle(v2) or v2.isVertexInsideAngle(v1):
-                    continue # These vertices are not "facing" each other.
-
-                # As an optimization, if either vertex is inside the other's
-                # vertically opposite angle, no link between them will ever be
-                # used, since neither vertex will obstruct the other.
-                if v1.isVertexInsideOpposite(v2) or v2.isVertexInsideOpposite(v1):
-                    continue
-
-                # Now test for intersections with any of the polygon borders:
-                x1, y1 = v1.pos
-                x2, y2 = v2.pos
-                if self._testLineIntersections((x1, y1, x2, y2), self.borders):
-                    continue # Nope, a border is in the way!
-
-                # If we made it here, the two vertices can "see" each other and
-                # should thus be made neighbors for pathfinding purposes.
-                v1.link(v2)
+                self._considerLink(v1, v2)
 
     def planPath(self, fromPoint, toPoint):
         # Find a path from fromPoint to toPoint, and return it as a series of
@@ -97,18 +71,7 @@ class InvasionPathfinderAI:
         # Now create edges for both vertices:
         for vertex in (fromVertex, toVertex):
             for otherVertex in self.vertices:
-
-                if otherVertex.isVertexInsideAngle(vertex):
-                    # The other vertex cannot "see" this vertex because it is
-                    # across the polygon.
-                    continue
-
-                x1, y1 = vertex.pos
-                x2, y2 = otherVertex.pos
-                if self._testLineIntersections((x1, y1, x2, y2), self.borders):
-                    continue
-
-                vertex.link(otherVertex)
+                self._considerLink(vertex, otherVertex)
 
         # Run A* search:
         astar = AStarSearch()
@@ -122,6 +85,35 @@ class InvasionPathfinderAI:
             return [vertex.pos for vertex in result]
         else:
             return None
+
+    def _considerLink(self, v1, v2):
+        # If the vertices are polygonal neighbors, they should also be
+        # edges on the nav graph:
+        if v1.isVertexPolygonalNeighbor(v2):
+            v1.link(v2)
+            return
+
+        # First, test to make sure a link between the vertices would not
+        # go across the inside of a polygon (even if there are no line
+        # segments in the way)
+        if v1.isVertexInsideAngle(v2) or v2.isVertexInsideAngle(v1):
+            return # These vertices are not "facing" each other.
+
+        # As an optimization, if either vertex is inside the other's
+        # vertically opposite angle, no link between them will ever be
+        # used, since neither vertex will obstruct the other.
+        if v1.isVertexInsideOpposite(v2) or v2.isVertexInsideOpposite(v1):
+            return
+
+        # Now test for intersections with any of the polygon borders:
+        x1, y1 = v1.pos
+        x2, y2 = v2.pos
+        if self._testLineIntersections((x1, y1, x2, y2), self.borders):
+            return # Nope, a border is in the way!
+
+        # If we made it here, the two vertices can "see" each other and
+        # should thus be made neighbors for pathfinding purposes.
+        v1.link(v2)
 
     ############################################################################
     # If you are allergic to linear math, stop reading this file and consult   #
