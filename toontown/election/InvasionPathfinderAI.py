@@ -49,13 +49,18 @@ class InvasionPathfinderAI:
             for v2 in self.vertices[i+1:]:
                 self._considerLink(v1, v2)
 
-    def planPath(self, fromPoint, toPoint):
+    def planPath(self, fromPoint, toPoint, closeEnough=0):
         # Find a path from fromPoint to toPoint, and return it as a series of
         # waypoints (including toPoint, excluding fromPoint).
         # If a direct path exists, this will simply return [toPoint].
         # If no direct path exists, the pathfinder will use the A* algorithm to
         # generate a path linking the two points.
         # If no path is possible, this function returns None.
+        #
+        # If closeEnough is provided, it specifies a radius around toPoint that
+        # is considered "close enough" so that, if toPoint lies inside an
+        # inaccessible location, the pathfinder will look for an approximate
+        # destination instead.
 
         # See if the fromPoint->toPoint path crosses any polygons:
         x1, y1 = fromPoint
@@ -73,23 +78,54 @@ class InvasionPathfinderAI:
             self._considerLink(vertex, fromVertex)
             self._considerLink(vertex, toVertex)
 
+        tempVertices = [fromVertex, toVertex]
+        isApproximate = False
+
         try:
             if not toVertex.getNeighbors():
-                # toVertex is in an inaccessible location -- fail.
-                return None
+                if closeEnough is 0:
+                    # toVertex is in an inaccessible location -- fail.
+                    return None
+
+                # We're doing approximate pathing -- instead of failing, try to
+                # get some "good enough" connections. We do this by creating a
+                # temporary vertex on every nearby border and linking those in.
+                isApproximate = True
+
+                closeEnoughSquared = closeEnough*closeEnough
+                for border in self.borders:
+                    projected = self._projectPointToLine(toVertex.pos, border)
+                    if projected is None:
+                        # No projection lies on the line segment.
+                        continue
+
+                    if (projected - toVertex.pos).lengthSquared() > closeEnoughSquared:
+                        # The projection is too far away to consider.
+                        continue
+
+                    projectedVertex = AStarVertex(projected)
+                    projectedVertex.link(toVertex)
+                    self._considerLink(fromVertex, projectedVertex)
+                    for vertex in self.vertices:
+                        self._considerLink(vertex, projectedVertex)
+                    tempVertices.append(projectedVertex)
 
             # Run A* search:
             astar = AStarSearch()
             result = astar.search(fromVertex, toVertex)
 
             if result:
+                if isApproximate:
+                    # Approximate paths are approximate -- they can't go all the
+                    # way to toVertex.
+                    result.pop(-1)
                 return [vertex.pos for vertex in result]
             else:
                 return None
         finally:
             # Clean up the temporary vertices:
-            fromVertex.unlinkAll()
-            toVertex.unlinkAll()
+            for tempVertex in tempVertices:
+                tempVertex.unlinkAll()
 
     def _considerLink(self, v1, v2):
         # If the vertices are polygonal neighbors, they should also be
@@ -187,6 +223,22 @@ class InvasionPathfinderAI:
 
         # The for loop concluded, nothing found.
         return False
+
+    def _projectPointToLine(self, point, line):
+        x1, y1, x2, y2 = line
+        x, y = point
+
+        origin = Point2(x1, y1)
+        vecLine = Point2(x2, y2) - origin
+        vecPoint = Point2(x, y) - origin
+
+        projectedPoint = vecPoint.project(vecLine)
+        if projectedPoint.lengthSquared() > vecLine.lengthSquared():
+            return None
+        elif projectedPoint.dot(vecLine) < 0:
+            return None
+
+        return origin + projectedPoint
 
 class AStarVertex:
     def __init__(self, pos):
