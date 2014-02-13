@@ -59,6 +59,12 @@ class InvasionPathfinderAI:
                 if v1.isVertexInsideAngle(v2) or v2.isVertexInsideAngle(v1):
                     continue # These vertices are not "facing" each other.
 
+                # As an optimization, if either vertex is inside the other's
+                # vertically opposite angle, no link between them will ever be
+                # used, since neither vertex will obstruct the other.
+                if v1.isVertexInsideOpposite(v2) or v2.isVertexInsideOpposite(v1):
+                    continue
+
                 # Now test for intersections with any of the polygon borders:
                 x1, y1 = v1.pos
                 x2, y2 = v2.pos
@@ -246,6 +252,21 @@ class AStarVertex:
         # self.interiorAngle represents the overall degrees CCW that our corner
         # has (and it may be >180 if this is a concave angle). Therefore, if the
         # 'other' vertex is inside our interior angle, angle < interiorAngle.
+        return angle < self.interiorAngle
+
+    def isVertexInsideOpposite(self, other):
+        if self.prevPolyNeighbor is None or self.interiorAngle is None:
+            # We are a single vertex, not part of a polygon. Nothing can be
+            # "inside" the angle.
+            return False
+
+        vecToPrev = self.prevPolyNeighbor.pos - self.pos
+        vecToOther = other.pos - self.pos
+
+        angle = vecToPrev.signedAngleDeg(vecToOther)
+        angle -= 180 # Spin it around to test the opposite.
+        angle %= 360 # Convert this to an unsigned angle.
+
         return angle < self.interiorAngle
 
     def isVertexPolygonalNeighbor(self, other):
