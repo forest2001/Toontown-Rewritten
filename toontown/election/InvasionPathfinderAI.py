@@ -74,6 +74,10 @@ class InvasionPathfinderAI:
             self._considerLink(vertex, toVertex)
 
         try:
+            if not toVertex.getNeighbors():
+                # toVertex is in an inaccessible location -- fail.
+                return None
+
             # Run A* search:
             astar = AStarSearch()
             result = astar.search(fromVertex, toVertex)
