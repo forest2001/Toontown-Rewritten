@@ -33,6 +33,12 @@ class InvasionPathfinderAI:
 
             vertex.setPolygonalNeighbors(prevVertex, nextVertex)
 
+            if vertex.interiorAngle > 180:
+                # This vertex is concave. Nothing is ever going to *walk to* it
+                # in order to go somewhere else, so we can actually exclude it
+                # from the pathfinding system.
+                self.vertices.remove(vertex)
+
     def buildNeighbors(self):
         # First reset all vertex neighbors:
         for vertex in self.vertices:
