@@ -32,6 +32,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         DistributedSuitBaseAI.delete(self)
         self.demand('Off')
 
+        self.brain.stop()
         self.invasion.suitDied(self)
 
     def enterFlyDown(self):
