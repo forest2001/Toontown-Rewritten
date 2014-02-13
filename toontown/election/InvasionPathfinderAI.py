@@ -1,4 +1,5 @@
 import bisect
+import math
 from pandac.PandaModules import *
 
 class InvasionPathfinderAI:
@@ -32,6 +33,7 @@ class InvasionPathfinderAI:
             nextVertex = newVertices[(i+1)%len(newVertices)]
 
             vertex.setPolygonalNeighbors(prevVertex, nextVertex)
+            vertex.extrudeVertex(0.15)
 
             if vertex.interiorAngle > 180:
                 # This vertex is concave. Nothing is ever going to *walk to* it
@@ -249,6 +251,7 @@ class AStarVertex:
         self.prevPolyNeighbor = None
         self.nextPolyNeighbor = None
         self.interiorAngle = None
+        self.extrudeVector = None
 
     def link(self, neighbor):
         self.__addNeighbor(neighbor)
@@ -285,6 +288,12 @@ class AStarVertex:
         self.nextPolyNeighbor = next
         self.interiorAngle = angle
 
+        prevAngle = Vec2(1, 0).signedAngleDeg(vecToPrev)
+        extrudeAngle = prevAngle + self.interiorAngle/2.0 + 180
+        extrudeAngle *= math.pi/180 # Degrees to radians
+
+        self.extrudeVector = Vec2(math.cos(extrudeAngle), math.sin(extrudeAngle))
+
     def isVertexInsideAngle(self, other):
         if self.prevPolyNeighbor is None or self.interiorAngle is None:
             # We are a single vertex, not part of a polygon. Nothing can be
@@ -317,6 +326,13 @@ class AStarVertex:
         angle %= 360 # Convert this to an unsigned angle.
 
         return angle < self.interiorAngle
+
+    def extrudeVertex(self, distance):
+        # Push the vertex outward from the center of the geometry it contains.
+        if self.extrudeVector is None:
+            return # Cannot extrude this, not part of a polygon!
+
+        self.pos += self.extrudeVector * distance
 
     def isVertexPolygonalNeighbor(self, other):
         return other in (self.prevPolyNeighbor, self.nextPolyNeighbor)
