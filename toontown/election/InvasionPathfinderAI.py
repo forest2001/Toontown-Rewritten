@@ -69,9 +69,9 @@ class InvasionPathfinderAI:
         toVertex = AStarVertex(Point2(x2, y2))
 
         # Now create edges for both vertices:
-        for vertex in (fromVertex, toVertex):
-            for otherVertex in self.vertices:
-                self._considerLink(vertex, otherVertex)
+        for vertex in self.vertices:
+            self._considerLink(vertex, fromVertex)
+            self._considerLink(vertex, toVertex)
 
         # Run A* search:
         astar = AStarSearch()
