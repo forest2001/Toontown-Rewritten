@@ -73,18 +73,19 @@ class InvasionPathfinderAI:
             self._considerLink(vertex, fromVertex)
             self._considerLink(vertex, toVertex)
 
-        # Run A* search:
-        astar = AStarSearch()
-        result = astar.search(fromVertex, toVertex)
+        try:
+            # Run A* search:
+            astar = AStarSearch()
+            result = astar.search(fromVertex, toVertex)
 
-        # Clean up the temporary vertices:
-        fromVertex.unlinkAll()
-        toVertex.unlinkAll()
-
-        if result:
-            return [vertex.pos for vertex in result]
-        else:
-            return None
+            if result:
+                return [vertex.pos for vertex in result]
+            else:
+                return None
+        finally:
+            # Clean up the temporary vertices:
+            fromVertex.unlinkAll()
+            toVertex.unlinkAll()
 
     def _considerLink(self, v1, v2):
         # If the vertices are polygonal neighbors, they should also be
