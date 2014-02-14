@@ -13,30 +13,32 @@ class DistributedElectionEvent(DistributedObject, FSM):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
 
-        self.stage = NodePath('stage')
-        self.stage.setPos(64, 0, 4)
+        self.showFloor = NodePath('ShowFloor') #This currently isn't part of the main geometry, so it isn't dimmed with the sky. Will fix later.
+        self.showFloor.setPos(80, 0, 4)
 
-        rope = loader.loadModel('phase_4/models/modules/tt_m_ara_int_ropes')
-        rope.reparentTo(self.stage)
+        stage = loader.loadModel('phase_4/models/events/election_stage')
+        stage.reparentTo(self.showFloor)
+        stage.setHpr(270, 0, 0)
+        stage.setScale(2.0, 1.8, 1.5)
 
         self.flippy = NPCToons.createLocalNPC(2001)
         self.alec = NPCToons.createLocalNPC(2022)        
         self.slappy = NPCToons.createLocalNPC(2021)
-        self.flippy.reparentTo(self.stage)
-        self.slappy.reparentTo(self.stage)
-        self.alec.reparentTo(self.stage)
+        self.flippy.reparentTo(self.showFloor)
+        self.slappy.reparentTo(self.showFloor)
+        self.alec.reparentTo(self.showFloor)
         
         self.suit = Suit.Suit()
         cogDNA = SuitDNA.SuitDNA()
         cogDNA.newSuit('ym')
         self.suit.setDNA(cogDNA)
-        self.suit.reparentTo(self.stage)
+        self.suit.reparentTo(self.showFloor)
 
     def delete(self):
         self.demand('Off', 0.)
 
         # Clean up everything...
-        self.stage.removeNode()
+        self.showFloor.removeNode()
 
         DistributedObject.delete(self)
 
@@ -44,10 +46,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterOff(self, offset):
-        self.stage.reparentTo(hidden)
+        self.showFloor.reparentTo(hidden)
 
     def exitOff(self):
-        self.stage.reparentTo(render)
+        self.showFloor.reparentTo(render)
 
     def enterIntro(self, offset):
         pass # In the future, set NPC animations.
