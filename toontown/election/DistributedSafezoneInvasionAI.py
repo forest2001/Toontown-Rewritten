@@ -47,6 +47,12 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             self.toons.remove(toon)
             self.ignore(self.air.getAvatarExitEvent(toon.doId))
 
+    def getToon(self, toonId):
+        for toon in self.toons:
+            if toon.doId == toonId:
+                return toon
+        return None
+
     def delete(self):
         DistributedObjectAI.delete(self)
         self.demand('Off')

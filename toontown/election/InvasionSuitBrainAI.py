@@ -19,7 +19,7 @@ class AttackBehavior(FSM):
 
     def getToon(self):
         # Convenience function to get the Toon, or None if they're gone.
-        return self.brain.suit.air.doId2do.get(self.toonId)
+        return self.brain.suit.invasion.getToon(self.toonId)
 
     def start(self):
         self.assessDistance()
