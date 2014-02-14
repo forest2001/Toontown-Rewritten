@@ -261,6 +261,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.applyAlphaModifications()
 
     def setLocation(self, parentId, zoneId):
+        messenger.send('toon-left-%s' % self.zoneId, [self])
+        messenger.send('toon-entered-%s' % zoneId, [self])
+
         DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI

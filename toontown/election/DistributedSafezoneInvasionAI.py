@@ -20,13 +20,38 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.waveNumber = 0
         self.spawnPoints = []
         self.suits = []
+        self.toons = []
 
     def announceGenerate(self):
         self.demand('BeginWave', 0)
 
+        # Start up the "which Toons are in the area" tracking.
+        for toon in self.air.doId2do.values():
+            if toon.zoneId != self.zoneId:
+                continue # Object isn't here.
+            if toon.dclass != self.air.dclassesByName['DistributedToonAI']:
+                continue # Object isn't a Toon.
+            self._handleToonEnter(toon)
+        self.accept('toon-entered-%s' % self.zoneId, self._handleToonEnter)
+        self.accept('toon-left-%s' % self.zoneId, self._handleToonExit)
+
+    def _handleToonEnter(self, toon):
+        if toon not in self.toons:
+            self.toons.append(toon)
+            self.acceptOnce(self.air.getAvatarExitEvent(toon.doId),
+                            self._handleToonExit,
+                            extraArgs=[toon])
+
+    def _handleToonExit(self, toon):
+        if toon in self.toons:
+            self.toons.remove(toon)
+            self.ignore(self.air.getAvatarExitEvent(toon.doId))
+
     def delete(self):
         DistributedObjectAI.delete(self)
         self.demand('Off')
+
+        self.ignoreAll()
 
     def hitToon(self, doId):
         # Someone hit a Toon!
