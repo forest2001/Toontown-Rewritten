@@ -16,33 +16,46 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor = NodePath('ShowFloor') #This currently isn't part of the main geometry, so it isn't dimmed with the sky. Will fix later.
         self.showFloor.setPos(80, 0, 4)
 
+        #Stage
         stage = loader.loadModel('phase_4/models/events/election_stage')
         stage.reparentTo(self.showFloor)
         stage.setHpr(270, 0, 0)
         stage.setScale(2.0, 1.8, 1.5)
-
+        podium = loader.loadModel('phase_4/models/events/election_stagePodium')
+        podium.reparentTo(self.showFloor)
+        podium.setPosHpr(-6, 0, 3.185, 270, 0, 5)
+        podium.setScale(0.7)
         counterLeft = loader.loadModel('phase_4/models/events/election_counterLeft')
         counterLeft.reparentTo(self.showFloor)
         counterLeft.setPosHpr(13.5, 10, 2.95, 270, 0, 0)
         counterLeft.setScale(2.0)
-
         counterRight = loader.loadModel('phase_4/models/events/election_counterRight')
         counterRight.reparentTo(self.showFloor)
         counterRight.setPosHpr(13.5, -10, 3.25, 270, 0, 0)
         counterRight.setScale(2.0)
 
+        #Campaign stands
+        flippyStand = loader.loadModel('phase_4/models/events/election_flippyStand-static')
+        flippyStand.reparentTo(self.showFloor)
+        flippyStand.setPosHpr(-30, -16, 0.05, 180, 0, 0)
+        flippyStand.setScale(0.55)
+        slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
+        slappyStand.reparentTo(self.showFloor)
+        slappyStand.setPosHpr(-30, 16, 0.05, 0, 0, 0)
+        slappyStand.setScale(0.55)
+
         self.flippy = NPCToons.createLocalNPC(2001)
         self.alec = NPCToons.createLocalNPC(2022)        
         self.slappy = NPCToons.createLocalNPC(2021)
-        self.flippy.reparentTo(self.showFloor)
-        self.slappy.reparentTo(self.showFloor)
-        self.alec.reparentTo(self.showFloor)
+        #self.flippy.reparentTo(self.showFloor)
+        #self.slappy.reparentTo(self.showFloor)
+        #self.alec.reparentTo(self.showFloor)
 
         self.suit = Suit.Suit()
         cogDNA = SuitDNA.SuitDNA()
         cogDNA.newSuit('ym')
         self.suit.setDNA(cogDNA)
-        self.suit.reparentTo(self.showFloor)
+        #self.suit.reparentTo(self.showFloor)
 
     def delete(self):
         self.demand('Off', 0.)
