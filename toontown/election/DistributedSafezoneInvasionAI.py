@@ -7,6 +7,7 @@ from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 import SafezoneInvasionGlobals
 from toontown.suit import SuitTimings
+from toontown.toonbase import ToontownBattleGlobals
 
 class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSafezoneInvasionAI")
@@ -79,12 +80,20 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # Someone hit one of our suits...
         avId = self.air.getAvatarIdFromSender()
 
+        toon = self.air.doId2do.get(avId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to throw a pie!')
+
         suit = self.air.doId2do.get(doId)
         if suit not in self.suits:
             # N.B. this is NOT suspicious as it can happen as a result of a race condition
             return
 
-        suit.takeDamage(SafezoneInvasionGlobals.ToonAttackAmount)
+        # How much damage does this Throw gag do?
+        pieDamageEntry = ToontownBattleGlobals.AvPropDamage[ToontownBattleGlobals.THROW_TRACK][toon.pieType]
+        (pieDamage, pieGroupDamage), _ = pieDamageEntry
+
+        suit.takeDamage(pieDamage)
 
     def __deleteSuits(self):
         for suit in self.suits:

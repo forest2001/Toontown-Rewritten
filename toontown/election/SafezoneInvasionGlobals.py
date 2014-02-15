@@ -29,8 +29,6 @@ IntermissionTime = 20
 
 # How much healing does a pie on a Toon do?
 ToonHealAmount = 1
-# How much does a Toon damage a Cog with a pie?
-ToonAttackAmount = 3
 
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' #This is temporary until we have all pieces of the song in separate files.
