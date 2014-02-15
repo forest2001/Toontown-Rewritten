@@ -21,13 +21,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
         stage.setHpr(270, 0, 0)
         stage.setScale(2.0, 1.8, 1.5)
 
+        counterLeft = loader.loadModel('phase_4/models/events/election_counterLeft')
+        counterLeft.reparentTo(self.showFloor)
+        counterLeft.setPosHpr(13.5, 10, 2.95, 270, 0, 0)
+        counterLeft.setScale(2.0)
+
+        counterRight = loader.loadModel('phase_4/models/events/election_counterRight')
+        counterRight.reparentTo(self.showFloor)
+        counterRight.setPosHpr(13.5, -10, 3.25, 270, 0, 0)
+        counterRight.setScale(2.0)
+
         self.flippy = NPCToons.createLocalNPC(2001)
         self.alec = NPCToons.createLocalNPC(2022)        
         self.slappy = NPCToons.createLocalNPC(2021)
         self.flippy.reparentTo(self.showFloor)
         self.slappy.reparentTo(self.showFloor)
         self.alec.reparentTo(self.showFloor)
-        
+
         self.suit = Suit.Suit()
         cogDNA = SuitDNA.SuitDNA()
         cogDNA.newSuit('ym')
