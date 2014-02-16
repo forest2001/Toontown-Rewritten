@@ -30,6 +30,7 @@ from toontown.suit import DistributedTutorialSuit/AI
 from toontown.suit import DistributedFactorySuit/AI
 from toontown.suit import DistributedMintSuit/AI
 from toontown.suit import DistributedStageSuit/AI
+from toontown.election import DistributedInvasionSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
@@ -45,6 +46,8 @@ from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
 from toontown.safezone import DistributedDGFlower/AI
+from toontown.election import DistributedElectionEvent/AI
+from toontown.election import DistributedSafezoneInvasion/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
@@ -760,6 +763,17 @@ dclass DistributedMintSuit : DistributedFactorySuit {
 dclass DistributedStageSuit : DistributedFactorySuit {
 };
 
+dclass DistributedInvasionSuit : DistributedSuitBase {
+  // This should be networked BEFORE the current state, so that the spawn point
+  // can be known and the position can be initialized.
+  setSpawnPoint(uint8 pointId) required broadcast ram;
+
+  setState(string state, int32 timestamp) required broadcast ram;
+  setMarchLerp(int16/10 x1, int16/10 y1, int16/10 x2, int16/10 y2, int32 timestamp) broadcast ram;
+
+  setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
+};
+
 dclass DistributedBossCog : DistributedNode {
   setDNAString(blob) required broadcast db;
   setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
@@ -953,6 +967,15 @@ dclass DistributedDGFlower : DistributedObject {
   avatarEnter() airecv clsend;
   avatarExit() airecv clsend;
   setHeight(uint8/10) broadcast ram;
+};
+
+dclass DistributedElectionEvent : DistributedObject {
+  setState(string state, int32 timestamp) required broadcast ram;
+};
+
+dclass DistributedSafezoneInvasion : DistributedObject {
+  hitToon(uint32 avId) clsend airecv;
+  hitSuit(uint32 avId) clsend airecv;
 };
 
 dclass DistributedFishingPond : DistributedObject {

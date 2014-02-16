@@ -5,3 +5,4 @@ victoryDance = 9.08
 fromSuitBuilding = 2.0
 toSuitBuilding = 2.5
 toToonBuilding = 2.5
+suitDeath = 7.5

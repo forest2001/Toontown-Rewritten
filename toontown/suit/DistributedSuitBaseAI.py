@@ -1,27 +1,50 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from SuitBase import SuitBase
+from SuitDNA import SuitDNA
 
-class DistributedSuitBaseAI(DistributedObjectAI):
+class DistributedSuitBaseAI(DistributedObjectAI, SuitBase):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSuitBaseAI")
 
-    def denyBattle(self):
-        pass
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        SuitBase.__init__(self)
 
-    def setDNAString(self, todo0):
-        pass
+        self.dna = SuitDNA()
+        self.name = ''
+        self.skeleRevives = 0
 
-    def setLevelDist(self, todo0):
-        pass
+    def b_setHP(self, hp):
+        self.d_setHP(hp)
+        self.setHP(hp)
 
-    def setBrushOff(self, todo0):
-        pass
+    def d_setHP(self, hp):
+        self.sendUpdate('setHP', [hp])
 
-    def setSkelecog(self, todo0):
-        pass
+    def setHP(self, hp):
+        self.currHP = hp
 
-    def setSkeleRevives(self, todo0):
-        pass
+    def getHP(self):
+        return self.currHP
 
-    def setHP(self, todo0):
-        pass
+    def getLevelDist(self):
+        return self.level
 
+    def getSkeleRevives(self):
+        return self.skeleRevives
+
+    def b_setDNAString(self, string):
+        self.d_setDNAString(string)
+        self.setDNAString(string)
+
+    def d_setDNAString(self, string):
+        self.sendUpdate('setDNAString', [string])
+
+    def setDNAString(self, string):
+        self.dna.makeFromNetString(string)
+
+    def getDNAString(self):
+        return self.dna.makeNetString()
+
+    def setDisplayName(self, name):
+        pass # This only exists because SuitBase tries to call it.

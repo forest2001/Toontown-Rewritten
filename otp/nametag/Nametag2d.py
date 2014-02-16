@@ -59,7 +59,10 @@ class Nametag2d(Nametag, MarginPopup):
         self.arrow = NametagGlobals.arrowModel.copyTo(self.innerNP)
         self.arrow.setZ(arrowZ)
         self.arrow.setScale(self.ARROW_SCALE)
-        self.arrow.setColor(self.nameFg)
+        if self.colorCode == CCSuit:
+            self.arrow.setColor(0.8, 0.4, 0.0, 1.0)
+        else:
+            self.arrow.setColor(self.nameFg)
 
     def update(self):
         Nametag.update(self)

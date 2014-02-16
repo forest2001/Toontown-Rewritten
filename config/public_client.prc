@@ -21,6 +21,7 @@ want-pets #f
 want-news-page #f
 want-news-tab #f
 want-housing #t
+want-doomsday #f
 
 want-karts #t
 force-holiday-decorations 6
