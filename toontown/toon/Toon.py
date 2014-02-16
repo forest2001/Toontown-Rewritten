@@ -490,6 +490,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.forceJumpIdle = False
         self.numPies = 0
         self.pieType = 0
+        self.pieThrowType = ToontownGlobals.PieThrowArc
         self.pieModel = None
         self.__pieModelType = None
         self.pieScale = 1.0
@@ -3009,7 +3010,7 @@ class Toon(Avatar.Avatar, ToonHead):
         track = Sequence(Func(self.setPosHpr, x, y, z, h, 0, 0), Func(pie.reparentTo, self.rightHand), Func(pie.setPosHpr, 0, 0, 0, 0, 0, 0), Parallel(pie.scaleInterval(1, self.pieScale, startScale=MovieUtil.PNT3_NEARZERO), ActorInterval(self, 'throw', startFrame=0, endFrame=31), animPie), Func(self.pingpong, 'throw', fromFrame=32, toFrame=47), pingpongPie)
         return track
 
-    def getTossPieInterval(self, x, y, z, h, power, beginFlyIval = Sequence()):
+    def getTossPieInterval(self, x, y, z, h, power, throwType, beginFlyIval = Sequence()):
         from toontown.toonbase import ToontownBattleGlobals
         from toontown.battle import BattleProps
         pie = self.getPieModel()
@@ -3020,11 +3021,19 @@ class Toon(Avatar.Avatar, ToonHead):
         if pieType == 'actor':
             animPie = ActorInterval(pie, pieName, startFrame=48)
         sound = loader.loadSfx('phase_3.5/audio/sfx/AA_pie_throw_only.ogg')
-        t = power / 100.0
-        dist = 100 - 70 * t
-        time = 1 + 0.5 * t
-        proj = ProjectileInterval(None, startPos=Point3(0, 0, 0), endPos=Point3(0, dist, 0), duration=time)
-        relVel = proj.startVel
+        if throwType == ToontownGlobals.PieThrowArc:
+            t = power / 100.0
+            dist = 100 - 70 * t
+            time = 1 + 0.5 * t
+            proj = ProjectileInterval(None, startPos=Point3(0, 0, 0),
+                                      endPos=Point3(0, dist, 0), duration=time)
+            relVel = proj.startVel
+        elif throwType == ToontownGlobals.PieThrowLinear:
+            magnitude = power / 2. + 25
+
+            relVel = Vec3(0, 1, 0.25)
+            relVel.normalize()
+            relVel *= magnitude
 
         def getVelocity(toon = self, relVel = relVel):
             return render.getRelativeVector(toon, relVel)

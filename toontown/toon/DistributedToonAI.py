@@ -2598,6 +2598,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setPieType(self, pieType):
         self.pieType = pieType
 
+    def b_setPieThrowType(self, pieThrowType):
+        self.setPieThrowType(pieThrowType)
+        self.d_setPieThrowType(pieThrowType)
+
+    def d_setPieThrowType(self, pieThrowType):
+        self.sendUpdate('setPieThrowType', [pieThrowType])
+
+    def setPieThrowType(self, pieThrowType):
+        self.pieThrowType = pieThrowType
+
     def d_setTrophyScore(self, score):
         self.sendUpdate('setTrophyScore', [score])
 

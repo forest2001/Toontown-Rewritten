@@ -781,12 +781,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
              hpr[0] % 360.0,
              sequence,
              power,
+             self.pieThrowType,
              timestamp32])
             if self.numPies != ToontownGlobals.FullPies:
                 self.setNumPies(self.numPies - 1)
             base.cTrav.addCollider(pieBubble, self.pieHandler)
 
-        toss, pie, flyPie = self.getTossPieInterval(pos[0], pos[1], pos[2], hpr[0], power, beginFlyIval=Func(pieFlies))
+        toss, pie, flyPie = self.getTossPieInterval(pos[0], pos[1], pos[2], hpr[0], power, self.pieThrowType, beginFlyIval=Func(pieFlies))
         pieBubble.reparentTo(flyPie)
         flyPie.setTag('pieSequence', str(sequence))
         toss = Sequence(toss)
