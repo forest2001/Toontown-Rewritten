@@ -3,6 +3,7 @@ from HoodAI import HoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 from toontown.toon import NPCToons
+from toontown.election.DistributedElectionEventAI import DistributedElectionEventAI
 
 class TTHoodAI(HoodAI):
     HOOD = ToontownGlobals.ToontownCentral
@@ -12,7 +13,16 @@ class TTHoodAI(HoodAI):
         self.spawnObjects()
         
         self.createButterflies()
-            
+        
+        self.spawnElection()
+    
+    def spawnElection(self):
+        event = self.air.doFind('ElectionEvent')
+        if event is None:
+            event = DistributedElectionEventAI(self.air)
+            event.generateWithRequired(self.HOOD)
+        event.b_setState('Intro')
+    
     def createButterflies(self):
         playground = ButterflyGlobals.TTC
         for area in range(ButterflyGlobals.NUM_BUTTERFLY_AREAS[playground]):
