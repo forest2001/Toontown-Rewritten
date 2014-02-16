@@ -44,17 +44,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
         slappyStand.setPosHpr(-30, 16, 0.05, 0, 0, 0)
         slappyStand.setScale(0.55)
 
-        self.flippy = NPCToons.createLocalNPC(2001)
-        self.alec = NPCToons.createLocalNPC(2022)        
-        self.slappy = NPCToons.createLocalNPC(2021)
+        #self.flippy = NPCToons.createLocalNPC(2001)
+        #self.alec = NPCToons.createLocalNPC(2022)        
+        #self.slappy = NPCToons.createLocalNPC(2021)
         #self.flippy.reparentTo(self.showFloor)
         #self.slappy.reparentTo(self.showFloor)
         #self.alec.reparentTo(self.showFloor)
 
-        self.suit = Suit.Suit()
-        cogDNA = SuitDNA.SuitDNA()
-        cogDNA.newSuit('ym')
-        self.suit.setDNA(cogDNA)
+        #self.suit = Suit.Suit()
+        #cogDNA = SuitDNA.SuitDNA()
+        #cogDNA.newSuit('ym')
+        #self.suit.setDNA(cogDNA)
         #self.suit.reparentTo(self.showFloor)
 
     def delete(self):
@@ -66,6 +66,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         DistributedObject.delete(self)
 
     def setState(self, state, timestamp):
+        if state != 'Intro':
+            return
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterOff(self, offset):
