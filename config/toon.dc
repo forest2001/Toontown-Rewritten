@@ -2404,7 +2404,7 @@ dclass DistributedPet : DistributedSmoothNode {
   setAngerThreshold(PetTrait) required broadcast db;
   setSurpriseThreshold(PetTrait) required broadcast db;
   setAffectionThreshold(PetTrait) required broadcast db;
-  setHead(int8(-1 - 0)) required broadcast db;
+  setHead(int8(-1 - 1)) required broadcast db; // Supposed to be -1 - 0, but minification causes this to become -1-0, which is a parse problem.
   setEars(int8(-1 - 4)) required broadcast db;
   setNose(int8(-1 - 3)) required broadcast db;
   setTail(int8(-1 - 6)) required broadcast db;
