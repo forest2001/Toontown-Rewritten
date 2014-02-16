@@ -28,7 +28,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         
         # Kill all the butterflies in Toontown Central.
         for butterfly in self.air.hoods[0].butterflies:
-            print "butterfly doId %d deleted" % butterfly.doId
             butterfly.requestDelete()
 
         # Start up the "which Toons are in the area" tracking.
