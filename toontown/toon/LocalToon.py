@@ -693,12 +693,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
          pos[1],
          pos[2],
          hpr[0] % 360.0,
-         hpr[1],
-         hpr[2],
          timestamp32])
         Emote.globalEmote.disableBody(self)
         messenger.send('begin-pie')
-        ival = self.getPresentPieInterval(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
+        ival = self.getPresentPieInterval(pos[0], pos[1], pos[2], hpr[0])
         ival = Sequence(ival, name=self.uniqueName('localPresentPie'))
         self.tossTrack = ival
         ival.start()
@@ -781,8 +779,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
              pos[1],
              pos[2],
              hpr[0] % 360.0,
-             hpr[1],
-             hpr[2],
              sequence,
              power,
              timestamp32])
@@ -790,7 +786,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 self.setNumPies(self.numPies - 1)
             base.cTrav.addCollider(pieBubble, self.pieHandler)
 
-        toss, pie, flyPie = self.getTossPieInterval(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2], power, beginFlyIval=Func(pieFlies))
+        toss, pie, flyPie = self.getTossPieInterval(pos[0], pos[1], pos[2], hpr[0], power, beginFlyIval=Func(pieFlies))
         pieBubble.reparentTo(flyPie)
         flyPie.setTag('pieSequence', str(sequence))
         toss = Sequence(toss)

@@ -1381,7 +1381,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         return True
 
-    def presentPie(self, x, y, z, h, p, r, timestamp32):
+    def presentPie(self, x, y, z, h, timestamp32):
         if self.numPies <= 0:
             return
         if not launcher.getPhaseComplete(5):
@@ -1392,7 +1392,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             tossTrack = None
         ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
-        ival = self.getPresentPieInterval(x, y, z, h, p, r)
+        ival = self.getPresentPieInterval(x, y, z, h)
         if ts > 0:
             startTime = ts
             lastTossTrack.finish()
@@ -1405,7 +1405,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.tossTrack = ival
         return
 
-    def tossPie(self, x, y, z, h, p, r, sequence, power, timestamp32):
+    def tossPie(self, x, y, z, h, sequence, power, timestamp32):
         if self.numPies <= 0:
             return
         if self.numPies != ToontownGlobals.FullPies:
@@ -1423,7 +1423,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             del self.pieTracks[sequence]
         ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
-        toss, pie, flyPie = self.getTossPieInterval(x, y, z, h, p, r, power)
+        toss, pie, flyPie = self.getTossPieInterval(x, y, z, h, power)
         if ts > 0:
             startTime = ts
             lastTossTrack.finish()
