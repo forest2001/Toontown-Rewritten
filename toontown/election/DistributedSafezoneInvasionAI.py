@@ -25,6 +25,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def announceGenerate(self):
         self.demand('BeginWave', 0)
+        
+        # Kill all the butterflies in Toontown Central.
+        for butterfly in self.air.hoods[0].butterflies:
+            print "butterfly doId %d deleted" % butterfly.doId
+            butterfly.requestDelete()
 
         # Start up the "which Toons are in the area" tracking.
         for toon in self.air.doId2do.values():
