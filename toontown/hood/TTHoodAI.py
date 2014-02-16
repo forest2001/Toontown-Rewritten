@@ -11,9 +11,7 @@ class TTHoodAI(HoodAI):
     def createSafeZone(self):
         HoodAI.createSafeZone(self)
         self.spawnObjects()
-        
         self.createButterflies()
-        
         self.spawnElection()
     
     def spawnElection(self):
@@ -24,6 +22,7 @@ class TTHoodAI(HoodAI):
         event.b_setState('Intro')
     
     def createButterflies(self):
+        self.butterflies = []
         playground = ButterflyGlobals.TTC
         for area in range(ButterflyGlobals.NUM_BUTTERFLY_AREAS[playground]):
             for b in range(ButterflyGlobals.NUM_BUTTERFLIES[playground]):
@@ -31,3 +30,4 @@ class TTHoodAI(HoodAI):
                 butterfly.setArea(playground, area)
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
+                self.butterflies.append(butterfly)
