@@ -45,7 +45,7 @@ class AttackBehavior(FSM):
 
             # We can only update our walk-to if we're walking to begin with:
             if self.state == 'Walk':
-                nav = self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackMax)
+                nav = self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackPrefer)
             else:
                 nav = False
 
