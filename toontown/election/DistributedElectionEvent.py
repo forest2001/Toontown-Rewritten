@@ -77,6 +77,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
         for pieSettings in FLIPPY_WHEELBARROW_PIES:
             pieModel = pie.copyTo(wheelbarrow)
             pieModel.setPosHprScale(*pieSettings)
+            
+        # Collision sphere for giving pies!
+        cs = CollisionSphere(0, 8.5, 5, 7)
+        self.pieCollisionNodePath = wheelbarrow.attachNewNode(CollisionNode('wheelbarrow_collision'))
+        self.pieCollisionNodePath.node().addSolid(cs)
+        self.accept('enter' + self.pieCollisionNodePath.node().getName(), self.handleCollisionSphereEnter)
+        self.pieCollisionNodePath.show()
 
         #self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -91,9 +98,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #self.suit.setDNA(cogDNA)
         #self.suit.reparentTo(self.showFloor)
 
+    def handleCollisionSphereEnter(self, collEntry):
+        pass
+    
     def delete(self):
         self.demand('Off', 0.)
-
+        
+        self.ignore('enter' + self.pieCollisionNodePath.node().getName())
+        
         # Clean up everything...
         self.showFloor.removeNode()
 
