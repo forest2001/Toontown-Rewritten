@@ -87,6 +87,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         toon = self.air.doId2do.get(avId)
         if not toon:
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to throw a pie!')
+            return
 
         suit = self.air.doId2do.get(doId)
         if suit not in self.suits:
@@ -98,6 +99,17 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         (pieDamage, pieGroupDamage), _ = pieDamageEntry
 
         suit.takeDamage(pieDamage)
+
+    def takeDamage(self, damage):
+        # A Toon got hit!
+        avId = self.air.getAvatarIdFromSender()
+
+        toon = self.air.doId2do.get(avId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            return
+
+        toon.takeDamage(damage)
 
     def __deleteSuits(self):
         for suit in self.suits:

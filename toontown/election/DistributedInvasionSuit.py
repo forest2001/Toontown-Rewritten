@@ -6,7 +6,7 @@ from otp.nametag.NametagConstants import *
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
-from toontown.battle import BattleParticles, SuitBattleGlobals
+from toontown.battle import BattleParticles, SuitBattleGlobals, BattleProps
 from InvasionSuitBase import InvasionSuitBase
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
@@ -21,6 +21,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._lerpTimestamp = 0
         self._turnInterval = None
         self._staticPoint = (0, 0, 0)
+
+        self.attackTarget = 0
+        self.attackProp = ''
+        self.attackDamage = 0
 
     def delete(self):
         self.demand('Off')
@@ -40,6 +44,14 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Set ourselves up for a good pieing:
         colNode = self.find('**/distAvatarCollNode*')
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
+
+    def generateAnimDict(self):
+        animDict = DistributedSuitBase.generateAnimDict(self)
+        if self.style.body == 'c':
+            animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
+        else:
+            animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
+        return animDict
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
@@ -160,6 +172,63 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def exitExplode(self):
         self._explosionInterval.finish()
         self.cleanupLoseActor()
+
+    def enterAttack(self, time):
+        self._attackInterval = self.makeAttackTrack()
+        self._attackInterval.start(time)
+
+    def makeAttackTrack(self):
+        prop = BattleProps.globalPropPool.getProp(self.attackProp)
+
+        # Prop collisions:
+        colNode = CollisionNode('SuitAttack')
+        colNode.setTag('damage', str(self.attackDamage))
+
+        bounds = prop.getBounds()
+        center = bounds.getCenter()
+        radius = bounds.getRadius()
+        sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
+        sphere.setTangible(0)
+        colNode.addSolid(sphere)
+        prop.attachNewNode(colNode)
+
+        toonId = self.attackTarget
+
+        def throwProp():
+            toon = self.cr.doId2do.get(toonId)
+            if not toon:
+                prop.cleanup()
+                prop.removeNode()
+                return
+
+            prop.wrtReparentTo(render)
+
+            hitPos = toon.getPos() + Vec3(0, 0, 2.5)
+            distance = (prop.getPos() - hitPos).length()
+            speed = 50.0
+
+            Sequence(prop.posInterval(distance/speed, hitPos),
+                     Func(prop.removeNode)).start()
+
+        track = Parallel(
+            ActorInterval(self, 'throw-paper'),
+            Track(
+                (0.0, Func(prop.reparentTo, self.getRightHand())),
+                (2.15, Func(throwProp)),
+                (10.0, Func(prop.cleanup)),
+                (10.0, Func(prop.removeNode)) # Ensure cleanup
+            ),
+        )
+
+        return track
+
+    def exitAttack(self):
+        self._attackInterval.finish()
+
+    def setAttackInfo(self, targetId, attackProp, attackDamage):
+        self.attackTarget = targetId
+        self.attackProp = attackProp
+        self.attackDamage = attackDamage
 
     def setMarchLerp(self, x1, y1, x2, y2, timestamp):
         self.setLerpPoints(x1, y1, x2, y2)

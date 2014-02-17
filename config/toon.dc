@@ -768,6 +768,8 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   // This should be networked BEFORE the current state, so that the spawn point
   // can be known and the position can be initialized.
   setSpawnPoint(uint8 pointId) required broadcast ram;
+  // Ditto:
+  setAttackInfo(uint32 targetId, string prop, uint8 damage) required broadcast ram;
 
   setState(string state, int32 timestamp) required broadcast ram;
   setMarchLerp(int16/10 x1, int16/10 y1, int16/10 x2, int16/10 y2, int32 timestamp) broadcast ram;
@@ -979,6 +981,7 @@ dclass DistributedElectionEvent : DistributedObject {
 dclass DistributedSafezoneInvasion : DistributedObject {
   hitToon(uint32 avId) clsend airecv;
   hitSuit(uint32 avId) clsend airecv;
+  takeDamage(uint8 damage) clsend airecv;
 };
 
 dclass DistributedFishingPond : DistributedObject {

@@ -70,6 +70,17 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.__stopWalkTimer()
 
+    def enterAttack(self):
+        self._delay = taskMgr.doMethodLater(3.33, self.__attackDone,
+                                            self.uniqueName('attack'))
+
+    def __attackDone(self, task):
+        self.brain.suitFinishedAttacking()
+        return task.done
+
+    def exitAttack(self):
+        self._delay.remove()
+
     def enterStunned(self):
         self.brain.stop()
         self._delay = taskMgr.doMethodLater(SuitTimings.suitStun, self.__unstun,
@@ -85,6 +96,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             self.brain.start()
 
         return task.done
+
+    def exitStunned(self):
+        self._delay.remove()
 
     def enterExplode(self):
         self._delay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
@@ -109,6 +123,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def idle(self):
         self.b_setState('Idle')
+
+    def attack(self, who):
+        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', 5])
+        self.b_setState('Attack')
 
     def __startWalkTimer(self):
         self.__stopWalkTimer()
@@ -152,6 +170,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def getSpawnPoint(self):
         return self.spawnPointId
+
+    def getAttackInfo(self):
+        return (0, '', 0) # This is only set dynamically.
 
     def setMarchLerp(self, x1, y1, x2, y2):
         self.setLerpPoints(x1, y1, x2, y2)

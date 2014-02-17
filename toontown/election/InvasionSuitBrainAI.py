@@ -59,14 +59,8 @@ class AttackBehavior(FSM):
             self.demand('Walk', toonPos.getX(), toonPos.getY())
 
     def enterAttack(self):
-        # Attack the Toon. TODO! For now, just exit silently.
-        self.brain.suit.idle()
-        self._attackDelay = taskMgr.doMethodLater(5.0, self.onAttackCompleted,
-                                                  self.brain.suit.uniqueName('attack'),
-                                                  extraArgs=[])
-
-    def exitAttack(self):
-        self._attackDelay.remove()
+        # Attack the Toon.
+        self.brain.suit.attack(self.toonId)
 
     def enterWalk(self, x, y):
         # Walk state -- we try to get closer to the Toon. When we're
@@ -300,9 +294,10 @@ class InvasionSuitBrainAI(FSM):
         self.behavior.demand('Off')
         self.behavior = None
 
-    def suitFinishedNavigating(self):
-        if self.behavior:
-            self.behavior.onArrive()
+    # Attacks:
+    def suitFinishedAttacking(self):
+        if hasattr(self.behavior, 'onAttackCompleted'):
+            self.behavior.onAttackCompleted()
 
     # Navigation:
     def navigateTo(self, x, y, closeEnough=0):
@@ -323,6 +318,10 @@ class InvasionSuitBrainAI(FSM):
             self.__walkToNextWaypoint()
         else:
             self.suitFinishedNavigating()
+
+    def suitFinishedNavigating(self):
+        if hasattr(self.behavior, 'onArrive'):
+            self.behavior.onArrive()
 
     def __walkToNextWaypoint(self):
         x, y = self.__waypoints.pop(0)

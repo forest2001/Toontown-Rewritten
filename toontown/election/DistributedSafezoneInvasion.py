@@ -9,6 +9,7 @@ class DistributedSafezoneInvasion(DistributedObject):
         DistributedObject.__init__(self, cr)
 
         self.accept('localPieSplat', self.__localPieSplat)
+        self.accept('enterSuitAttack', self.__localToonHit)
 
         base.cr.playGame.hood.loader.music.stop() #This will already be gone before the election sequence starts. We'll just delete it for now.
         musicEnter = base.loadMusic(SafezoneInvasionGlobals.InvasionMusicEnter)
@@ -74,3 +75,10 @@ class DistributedSafezoneInvasion(DistributedObject):
 
     def d_hitSuit(self, doId):
         self.sendUpdate('hitSuit', [doId])
+
+    def __localToonHit(self, entry):
+        damage = int(entry.getIntoNode().getTag('damage'))
+        self.d_takeDamage(damage)
+
+    def d_takeDamage(self, damage):
+        self.sendUpdate('takeDamage', [damage])
