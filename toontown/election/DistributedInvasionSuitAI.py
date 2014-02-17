@@ -1,8 +1,10 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
+from toontown.toonbase import ToontownGlobals
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
+from toontown.battle import SuitBattleGlobals
 import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
@@ -27,6 +29,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def announceGenerate(self):
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
+
+        self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
+                          SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
 
     def delete(self):
         DistributedSuitBaseAI.delete(self)

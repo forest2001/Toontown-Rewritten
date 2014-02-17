@@ -34,6 +34,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.healthBar.show()
         self.updateHealthBar(0, 1)
 
+        self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
+                          SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
+
         # Set ourselves up for a good pieing:
         colNode = self.find('**/distAvatarCollNode*')
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
