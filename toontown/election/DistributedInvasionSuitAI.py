@@ -119,6 +119,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             # We're dead!
             self.b_setState('Explode')
 
+    def d_sayFaceoffTaunt(self):
+        self.sendUpdate('sayFaceoffTaunt', [])
+
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
 

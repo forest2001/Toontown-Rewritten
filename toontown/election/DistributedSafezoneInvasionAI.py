@@ -181,6 +181,10 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         for suit in self.suits:
             suit.start()
 
+        # The first suit on the scene also says a faceoff taunt:
+        if self.suits:
+            self.suits[0].d_sayFaceoffTaunt()
+
     def exitWave(self):
         # Clean up any loose suits, in case the wave is being ended by MW.
         self.__deleteSuits()

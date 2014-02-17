@@ -2,10 +2,11 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
+from otp.nametag.NametagConstants import *
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
-from toontown.battle import BattleParticles
+from toontown.battle import BattleParticles, SuitBattleGlobals
 from InvasionSuitBase import InvasionSuitBase
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
@@ -60,6 +61,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._staticPoint = (x, y, h)
         if self.state != 'March':
             self.__moveToStaticPoint()
+
+    def sayFaceoffTaunt(self):
+        taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId)
+        self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
 
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
