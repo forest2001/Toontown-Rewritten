@@ -100,7 +100,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #self.suit.reparentTo(self.showFloor)
 
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
-        if base.localAvatar.numPies <= 0:
+        if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
     
