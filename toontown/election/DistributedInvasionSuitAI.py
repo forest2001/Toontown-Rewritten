@@ -127,6 +127,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.brain.start()
 
     def takeDamage(self, hp):
+        if self.state == 'FlyDown':
+            return # We can't/shouldn't take damage in this state.
+
         hp = min(hp, self.currHP) # Don't take more damage than we have...
         self.b_setHP(self.currHP - hp)
 
