@@ -208,6 +208,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             speed = 50.0
 
             Sequence(prop.posInterval(distance/speed, hitPos),
+                     Func(prop.cleanup),
                      Func(prop.removeNode)).start()
 
         track = Parallel(
