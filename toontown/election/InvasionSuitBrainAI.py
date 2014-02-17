@@ -7,7 +7,7 @@ from InvasionPathDataAI import pathfinder
 
 # Attack a specific Toon.
 class AttackBehavior(FSM):
-    REASSESS_INTERVAL = 2.0
+    REASSESS_INTERVAL = 1.0
 
     def __init__(self, brain, toonId):
         FSM.__init__(self, 'AttackFSM')
