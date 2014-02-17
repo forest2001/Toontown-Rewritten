@@ -375,7 +375,7 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         if self.frameworkFSM.getCurrentState().getName() != 'frameworkWaitServerFinish':
             self.__serverFinished = 1
         else:
-            self.notify.spam("Must wait for server to exit game: ask the framework to cleanup.")
+            self.notify.debug("Must wait for server to exit game: ask the framework to cleanup.")
             self.frameworkFSM.request('frameworkCleanup')
 
     def exitFrameworkWaitServerFinish(self):
