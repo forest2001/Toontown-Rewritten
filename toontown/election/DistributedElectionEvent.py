@@ -79,11 +79,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
             pieModel.setPosHprScale(*pieSettings)
             
         # Collision sphere for giving pies!
-        cs = CollisionSphere(0, 8.5, 5, 7)
+        # I wasn't sure if the wheelbarrow had a separate collision, but I threw this
+        # together pretty quickly. If anyone wants to change this, go ahead.
         self.pieCollisionNodePath = wheelbarrow.attachNewNode(CollisionNode('wheelbarrow_collision'))
-        self.pieCollisionNodePath.node().addSolid(cs)
-        self.accept('enter' + self.pieCollisionNodePath.node().getName(), self.handleCollisionSphereEnter)
-        self.pieCollisionNodePath.show()
+        self.pieCollisionNodePath.node().addSolid(CollisionSphere(0, 8.5, 5, 7))
+        self.accept('enter' + self.pieCollisionNodePath.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        #self.pieCollisionNodePath.show()
 
         #self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -98,8 +99,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #self.suit.setDNA(cogDNA)
         #self.suit.reparentTo(self.showFloor)
 
-    def handleCollisionSphereEnter(self, collEntry):
-        pass
+    def handleWheelbarrowCollisionSphereEnter(self, collEntry):
+        if base.localAvatar.numPies <= 0:
+            # We need to give them more pies! Send a request to the server.
+            self.sendUpdate('wheelbarrowAvatarEnter', [])
     
     def delete(self):
         self.demand('Off', 0.)
