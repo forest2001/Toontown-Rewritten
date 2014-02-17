@@ -14,7 +14,6 @@ class AttackBehavior(FSM):
         self.brain = brain
         self.toonId = toonId
 
-        self._walkingTo = None
         self._walkTask = None
 
     def getToon(self):
@@ -39,7 +38,8 @@ class AttackBehavior(FSM):
         attackPrefer, attackMax = self.brain.getAttackRange()
         if distance < attackPrefer:
             self.demand('Attack')
-        elif self._walkingTo and (self._walkingTo - toonPos).length() < attackMax:
+        elif self.state == 'Walk' and self.brain.finalWaypoint and \
+             (self.brain.finalWaypoint - toonPos).length() < attackMax:
             return
         else:
             self.demand('Walk', toonPos.getX(), toonPos.getY())
@@ -64,7 +64,6 @@ class AttackBehavior(FSM):
             self.brain.demand('Idle')
             return
 
-        self._walkingTo = Point2(x, y)
         if self._walkTask:
             self._walkTask.remove()
         self._walkTask = taskMgr.doMethodLater(self.REASSESS_INTERVAL, self.__reassess,
@@ -75,7 +74,6 @@ class AttackBehavior(FSM):
         return task.again
 
     def exitWalk(self):
-        self._walkingTo = None
         if self._walkTask:
             self._walkTask.remove()
 
@@ -194,6 +192,7 @@ class InvasionSuitBrainAI(FSM):
 
         # For the nav system:
         self.__waypoints = []
+        self.finalWaypoint = None
 
     def start(self):
         if self.state != 'Off':
@@ -296,9 +295,11 @@ class InvasionSuitBrainAI(FSM):
         self.__waypoints = pathfinder.planPath(self.suit.getCurrentPos(),
                                                (x, y), closeEnough)
         if self.__waypoints:
+            self.finalWaypoint = Point2(self.__waypoints[-1])
             self.__walkToNextWaypoint()
             return True
         else:
+            self.finalWaypoint = None
             return False
 
     def suitFinishedWalking(self):
