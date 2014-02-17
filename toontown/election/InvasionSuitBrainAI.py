@@ -36,9 +36,10 @@ class AttackBehavior(FSM):
         toonPos = Point2(toon.getComponentX(), toon.getComponentY())
         distance = (toonPos - self.brain.suit.getCurrentPos()).length()
 
-        if distance < self.brain.getAttackRange():
+        attackPrefer, attackMax = self.brain.getAttackRange()
+        if distance < attackPrefer:
             self.demand('Attack')
-        elif self._walkingTo and (self._walkingTo - toonPos).length() < self.brain.getAttackRange():
+        elif self._walkingTo and (self._walkingTo - toonPos).length() < attackMax:
             return
         else:
             self.demand('Walk', toonPos.getX(), toonPos.getY())
@@ -56,7 +57,8 @@ class AttackBehavior(FSM):
     def enterWalk(self, x, y):
         # Walk state -- we try to get closer to the Toon. When we're
         # close enough, we switch to 'Attack'
-        if not self.brain.navigateTo(x, y, self.brain.getAttackRange()):
+        attackPrefer, attackMax = self.brain.getAttackRange()
+        if not self.brain.navigateTo(x, y, attackMax):
             # Can't get there, Captain!
             self.brain.master.toonUnreachable(self.toonId)
             self.brain.demand('Idle')
@@ -205,7 +207,8 @@ class InvasionSuitBrainAI(FSM):
         self.demand('Off')
 
     def getAttackRange(self):
-        return 20.0
+        # Returns a tuple: Preferred attack distance, maximum distance for an attack to work
+        return 10.0, 25.0
 
     def enterOff(self):
         self.__stopProxemics()
