@@ -207,7 +207,7 @@ class InvasionSuitBrainAI(FSM):
 
     def getAttackRange(self):
         # Returns a tuple: Preferred attack distance, maximum distance for an attack to work
-        return 10.0, 25.0
+        return 15.0, 25.0
 
     def enterOff(self):
         self.__stopProxemics()
