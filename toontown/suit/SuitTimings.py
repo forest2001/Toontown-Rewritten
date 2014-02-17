@@ -6,3 +6,4 @@ fromSuitBuilding = 2.0
 toSuitBuilding = 2.5
 toToonBuilding = 2.5
 suitDeath = 7.5
+suitStun = 2.5

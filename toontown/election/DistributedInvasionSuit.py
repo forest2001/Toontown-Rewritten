@@ -113,6 +113,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         explosionTrack.append(Func(explosion.removeNode))
         return explosionTrack
 
+    def enterStunned(self, time):
+        self._stunInterval = ActorInterval(self, 'pie-small-react')
+        self._stunInterval.start(time)
+
+    def exitStunned(self):
+        self._stunInterval.finish()
+
     def enterExplode(self, time):
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)

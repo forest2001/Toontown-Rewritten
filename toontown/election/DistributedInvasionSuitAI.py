@@ -65,8 +65,23 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.__stopWalkTimer()
 
-    def enterExplode(self):
+    def enterStunned(self):
         self.brain.stop()
+        self._delay = taskMgr.doMethodLater(SuitTimings.suitStun, self.__unstun,
+                                            self.uniqueName('stunned'))
+
+    def __unstun(self, task):
+        if self.currHP < 1:
+            # We're dead!
+            self.b_setState('Explode')
+        else:
+            # Not dead, we can go back to thinking:
+            self.demand('Idle')
+            self.brain.start()
+
+        return task.done
+
+    def enterExplode(self):
         self._delay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
                                             self.uniqueName('explode'))
 
@@ -115,9 +130,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         hp = min(hp, self.currHP) # Don't take more damage than we have...
         self.b_setHP(self.currHP - hp)
 
-        if self.currHP < 1:
-            # We're dead!
-            self.b_setState('Explode')
+        if self.state != 'Stunned':
+            self.b_setState('Stunned')
 
     def d_sayFaceoffTaunt(self):
         self.sendUpdate('sayFaceoffTaunt', [])
