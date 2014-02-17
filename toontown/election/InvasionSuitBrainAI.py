@@ -152,7 +152,7 @@ class UnclumpBehavior(FSM):
                 continue # Too far away to consider them.
 
             # Use an inverse square law to scale the "move away" vector.
-            moveMag = 1.0/moveAway.lengthSquared()
+            moveMag = 1.0/max(moveAway.lengthSquared(), 0.1)
             moveAway.normalize()
             moveAway *= moveMag
 
