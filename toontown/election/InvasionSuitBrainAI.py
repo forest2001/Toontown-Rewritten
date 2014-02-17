@@ -38,6 +38,20 @@ class AttackBehavior(FSM):
         attackPrefer, attackMax = self.brain.getAttackRange()
         if distance < attackPrefer:
             self.demand('Attack')
+        elif distance < attackMax:
+            # We're close enough that we *could* attack, but let's try to get
+            # within the preferred attacking distance. If this is not possible,
+            # just attack now.
+
+            # We can only update our walk-to if we're walking to begin with:
+            if self.state == 'Walk':
+                nav = self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackMax)
+            else:
+                nav = False
+
+            if not nav:
+                # Yeah, can't get close. Attack!
+                self.demand('Attack')
         elif self.state == 'Walk' and self.brain.finalWaypoint and \
              (self.brain.finalWaypoint - toonPos).length() < attackMax:
             return
