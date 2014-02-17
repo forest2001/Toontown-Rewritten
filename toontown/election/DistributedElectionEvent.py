@@ -77,14 +77,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         for pieSettings in FLIPPY_WHEELBARROW_PIES:
             pieModel = pie.copyTo(wheelbarrow)
             pieModel.setPosHprScale(*pieSettings)
+        self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
             
-        # Collision sphere for giving pies!
-        # I wasn't sure if the wheelbarrow had a separate collision, but I threw this
-        # together pretty quickly. If anyone wants to change this, go ahead.
-        self.pieCollisionNodePath = wheelbarrow.attachNewNode(CollisionNode('wheelbarrow_collision'))
-        self.pieCollisionNodePath.node().addSolid(CollisionSphere(0, 8.5, 5, 7))
+        #Find FlippyStand's collision to give people pies.
+        #Roger didn't separate the main stand from the wheelbarrow, so currently running to both gives pies.
+        #That should probably be fixed before Doomsday, but it's fine for now.
+        self.pieCollisionNodePath = flippyStand.find('**/FlippyCollision')
+        self.pieCollisionNodePath.setScale(7.83, 4.36, 9.41)
         self.accept('enter' + self.pieCollisionNodePath.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
-        #self.pieCollisionNodePath.show()
 
         #self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -103,6 +103,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
+            self.restockSfx.play()
     
     def delete(self):
         self.demand('Off', 0.)
