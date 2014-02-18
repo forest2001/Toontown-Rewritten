@@ -116,16 +116,16 @@ class FireworkShowMixin:
                 if not self.__checkStreetValidity():
                     return
                 else:
-                    place.halloweenLights = base.cr.playGame.getPlace().loader.geom.findAllMatches('**/*light*').asList()
-                    place.halloweenLights.extend(base.cr.playGame.getPlace().loader.geom.findAllMatches('**/*lamp*').asList())
+                    place.halloweenLights = base.cr.playGame.getPlace().loader.geom.findAllMatches('**/*light*')
+                    place.halloweenLights.extend(base.cr.playGame.getPlace().loader.geom.findAllMatches('**/*lamp*'))
                     for light in place.halloweenLights:
                         light.setColorScaleOff(0)
 
             elif not self.__checkHoodValidity():
                 return
             else:
-                place.loader.hood.halloweenLights = base.cr.playGame.hood.loader.geom.findAllMatches('**/*light*').asList()
-                place.loader.hood.halloweenLights.extend(base.cr.playGame.hood.loader.geom.findAllMatches('**/*lamp*').asList())
+                place.loader.hood.halloweenLights = base.cr.playGame.hood.loader.geom.findAllMatches('**/*light*')
+                place.loader.hood.halloweenLights.extend(base.cr.playGame.hood.loader.geom.findAllMatches('**/*lamp*'))
                 for light in base.cr.playGame.hood.halloweenLights:
                     light.setColorScaleOff(0)
 
@@ -140,7 +140,6 @@ class FireworkShowMixin:
 
     def restoreCameraLens(self):
         hood = self.getHood()
-        from toontown.hood import *
         if isinstance(hood, OZHood.OZHood):
             base.camLens.setFar(SpeedwayCameraFar)
         elif isinstance(hood, GSHood.GSHood):
@@ -183,7 +182,6 @@ class FireworkShowMixin:
             self.fireworkShow.begin(timeStamp)
             self.fireworkShow.reparentTo(root)
             hood = self.getHood()
-            from toontown.hood import *
             if isinstance(hood, TTHood.TTHood):
                 self.fireworkShow.setPos(150, 0, 80)
                 self.fireworkShow.setHpr(90, 0, 0)

@@ -281,7 +281,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 del self.kartPage
         if base.wantNametags:
             self.nametag.unmanage(base.marginManager)
-        taskMgr.removeTasksMatching('*ioorrd234*')
         self.ignoreAll()
         DistributedToon.DistributedToon.disable(self)
         return
