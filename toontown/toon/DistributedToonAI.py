@@ -4458,6 +4458,30 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
+        
+
+        # I hate this, but here we go.......... Q_Q
+        from toontown.chat import ResistanceChat
+        if not hasattr(self.air, 'issuedSlappyUnites'):
+            self.air.issuedSlappyUnites = []
+        Jellybean100UniteId = ResistanceChat.encodeId(ResistanceChat.RESISTANCE_MONEY, 0)
+        RestockThrowUniteId = ResistanceChat.encodeId(ResistanceChat.RESISTANCE_RESTOCK, 4)
+        msgs = self.getResistanceMessages()
+        # Check if they already have any of the unites...
+        for unite in msgs:
+            if unite[0] == Jellybean100UniteId:
+                self.air.issuedSlappyUnites.append(self.doId)
+                break
+            if unite[0] == RestockThrowUniteId:
+                self.air.issuedSlappyUnites.append(self.doId)
+                break
+        # If they haven't already been issued the unites, give it to them.
+        if self.doId not in self.air.issuedSlappyUnites:
+            for i in range(0, 4):
+                self.addResistanceMessage(Jellybean100UniteId)
+            for i in range(0, 2):
+                self.addResistanceMessage(RestockThrowUniteId)
+            self.air.issuedSlappyUnites.append(self.doId)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
