@@ -3030,7 +3030,7 @@ class Toon(Avatar.Avatar, ToonHead):
             relVel = proj.startVel
         elif throwType == ToontownGlobals.PieThrowLinear:
             magnitude = power / 2. + 25
-
+ 
             relVel = Vec3(0, 1, 0.25)
             relVel.normalize()
             relVel *= magnitude

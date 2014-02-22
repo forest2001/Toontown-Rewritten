@@ -12,7 +12,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         FSM.__init__(self, 'ElectionFSM')
         self.air = air
         self.stateTime = globalClockDelta.getRealNetworkTime()
-        self.pieTypeAmount = [4, 20]
+        self.pieTypeAmount = [4, 20, 1]
 
     def enterOff(self):
         self.requestDelete()
@@ -29,6 +29,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             return
         av.b_setPieType(self.pieTypeAmount[0])
         av.b_setNumPies(self.pieTypeAmount[1])
+        av.b_setPieThrowType(self.pieTypeAmount[2])
             
     def enterIntro(self):
         pass
