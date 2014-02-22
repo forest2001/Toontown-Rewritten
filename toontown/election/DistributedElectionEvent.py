@@ -24,8 +24,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         stage.setScale(2.0, 1.8, 1.5)
         podium = loader.loadModel('phase_4/models/events/election_stagePodium')
         podium.reparentTo(self.showFloor)
-        podium.setPosHpr(-6, 0, 3.185, 270, -2, 5)
-        podium.setScale(0.7)
+        podium.setPosHpr(-6, 0, 3, 270, -2, 5)
+        podium.setScale(0.65)
         counterLeft = loader.loadModel('phase_4/models/events/election_counterLeft')
         counterLeft.reparentTo(self.showFloor)
         counterLeft.setPosHpr(13.5, 10, 2.95, 270, 0, 0)
@@ -39,6 +39,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
         rope.setScale(2, 2, 2)
         rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
+        #rope.find('**/collide').remove() #This is handy for positioning
 
         #Campaign stands
         flippyStand = loader.loadModel('phase_4/models/events/election_flippyStand-static')
@@ -72,12 +73,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision.setScale(7.83, 4.36, 9.41)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
-        #self.flippy = NPCToons.createLocalNPC(2001)
-        #self.alec = NPCToons.createLocalNPC(2022)        
-        #self.slappy = NPCToons.createLocalNPC(2021)
-        #self.flippy.reparentTo(self.showFloor)
-        #self.slappy.reparentTo(self.showFloor)
-        #self.alec.reparentTo(self.showFloor)
+        #Hi NPCs!
+        self.alec = NPCToons.createLocalNPC(2022)
+        self.slappy = NPCToons.createLocalNPC(2021)
+        self.flippy = NPCToons.createLocalNPC(2001)
+        #Sometimes they all need to do the same thing.
+        self.characters = [self.alec, self.slappy, self.flippy]
 
         #self.suit = Suit.Suit()
         #cogDNA = SuitDNA.SuitDNA()
@@ -102,8 +103,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         DistributedObject.delete(self)
 
     def setState(self, state, timestamp):
-        if state != 'Intro':
-            return
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterOff(self, offset):
@@ -112,8 +111,58 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitOff(self):
         self.showFloor.reparentTo(render)
 
-    def enterIntro(self, offset):
-        pass # In the future, set NPC animations.
+
+
+    def enterIdle(self, offset):
+        pass
+
+    def enterEvent(self, offset):
+        self.eventInterval = Sequence(
+            Func(base.cr.playGame.hood.loader.music.stop),
+            Wait(3),
+            Func(self.enterBegin, offset),
+        )
+        self.eventInterval.start()
+        self.eventInterval.setT(offset)
+
+    def enterBegin(self, offset):
+        #Oh boy, here come the candidates
+        for character in self.characters:
+            character.reparentTo(self.showFloor)
+            character.setPosHpr(35, -0.3, 0, 90, 0, 0)
+        musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
+
+        self.alecHallInterval = Sequence(
+            Parallel(Func(self.alec.loop, 'walk'), Func(base.playMusic, musicIntro, looping=0, volume=0.8)),
+            self.alec.posInterval(3, (12.96, -0.38, 0)),
+            self.alec.posInterval(2, (4.2, -0.25, 3.13)),
+            self.alec.posInterval(2, (-4.5, -0.14, 3.13)),
+            Func(self.alec.loop, 'neutral'),
+        )
+        self.slappyHallInterval = Sequence(
+            Wait(1),
+            Func(self.slappy.loop, 'walk'),
+            self.slappy.posInterval(2.5, (12.96, -0.38, 0)),
+            self.slappy.posHprInterval(2, (4.3, 2.72, 3.13), (70, 0, 0)),
+            self.slappy.posHprInterval(1, (2.36, 5.18, 3.08), (40, 0, 0)),
+            self.slappy.posHprInterval(1, (1, 9, 3.03), (90, 0, 0)),
+            Func(self.slappy.loop, 'neutral'),
+        )
+        self.flippyHallInterval = Sequence(
+            Wait(2),
+            Func(self.flippy.loop, 'walk'),
+            self.flippy.posInterval(3, (12.96, -0.38, 0)),
+            self.flippy.posHprInterval(1, (3.3, -2.39, 3.13), (120, 0, 0)),
+            self.flippy.posHprInterval(1, (2.49, -6.09, 3.17), (155, 0, 0)),
+            self.flippy.posHprInterval(1, (2, -10, 3.23), (90, 0, 0)),
+            Func(self.flippy.loop, 'neutral'),
+        )
+        self.alecHallInterval.start()
+        self.alecHallInterval.setT(offset)
+        self.slappyHallInterval.start()
+        self.slappyHallInterval.setT(offset)
+        self.flippyHallInterval.start()
+        self.flippyHallInterval.setT(offset)
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:

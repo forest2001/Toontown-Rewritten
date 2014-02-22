@@ -21,7 +21,7 @@ class TTHoodAI(HoodAI):
         if event is None:
             event = DistributedElectionEventAI(self.air)
             event.generateWithRequired(self.HOOD)
-        event.b_setState('Intro')
+        event.b_setState('Idle')
     
     def createButterflies(self):
         playground = ButterflyGlobals.TTC

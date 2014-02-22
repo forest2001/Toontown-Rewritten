@@ -30,8 +30,14 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         av.b_setPieType(self.pieTypeAmount[0])
         av.b_setNumPies(self.pieTypeAmount[1])
         av.b_setPieThrowType(self.pieTypeAmount[2])
-            
-    def enterIntro(self):
+
+    def enterIdle(self):
+        pass
+
+    def enterEvent(self):
+        pass
+
+    def enterBegin(self):
         pass
 
     def enterFlippyRunning(self):

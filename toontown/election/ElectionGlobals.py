@@ -11,3 +11,6 @@ FLIPPY_WHEELBARROW_PIES = [
     [-1.74, 5.42, 6.28, 327.53, 318.81, 4.76, 1.8, 2, 2],
     [-1.55, 9.22, 5.72, 266.53, 341.57, 0.00, 2.09, 1.68, 1.81],
 ]
+
+#Election Sequence Music
+IntroMusic = 'phase_4/audio/bgm/EE_intro.ogg' #Played when Alec, Flippy, and Slappy enter
