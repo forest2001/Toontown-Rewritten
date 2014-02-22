@@ -52,7 +52,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.reparentTo(self.showFloor)
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
         rope.setScale(2, 2, 2)
-        rope.show()
+        rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
 
         #Campaign stands
         flippyStand = loader.loadModel('phase_4/models/events/election_flippyStand-static')
@@ -82,9 +82,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #Find FlippyStand's collision to give people pies.
         #Roger didn't separate the main stand from the wheelbarrow, so currently running to both gives pies.
         #That should probably be fixed before Doomsday, but it's fine for now.
-        self.pieCollisionNodePath = flippyStand.find('**/FlippyCollision')
-        self.pieCollisionNodePath.setScale(7.83, 4.36, 9.41)
-        self.accept('enter' + self.pieCollisionNodePath.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        self.pieCollision = flippyStand.find('**/FlippyCollision')
+        self.pieCollision.setScale(7.83, 4.36, 9.41)
+        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
         #self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -108,7 +108,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def delete(self):
         self.demand('Off', 0.)
         
-        self.ignore('enter' + self.pieCollisionNodePath.node().getName())
+        self.ignore('enter' + self.pieCollision.node().getName())
         
         # Clean up everything...
         self.showFloor.removeNode()
