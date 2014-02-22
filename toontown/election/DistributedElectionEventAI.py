@@ -1,8 +1,10 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.distributed.ClockDelta import *
+from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
+import DistributedSafezoneInvasionAI
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -35,10 +37,27 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         pass
 
     def enterEvent(self):
-        pass
+        event = simbase.air.doFind('ElectionEvent')
+        if event is None:
+            event = DistributedElectionEventAI(simbase.air)
+            event.generateWithRequired(2000)
+        self.eventSequence = Sequence(
+            Wait(140),
+            Func(event.b_setState, 'Invasion'),
+        )
+        self.eventSequence.start()
 
     def enterBegin(self):
         pass
+
+    def enterAlecSpeech(self):
+        pass
+
+    def enterInvasion(self):
+        invasion = simbase.air.doFind('SafezoneInvasion')
+        if invasion is None:
+            invasion = DistributedSafezoneInvasionAI.DistributedSafezoneInvasionAI(simbase.air)
+            invasion.generateWithRequired(2000)
 
     def enterFlippyRunning(self):
         pass

@@ -48,7 +48,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         flippyTable = flippyStand.find('**/Cube')
         wheelbarrow = flippyStand.find('**/Box')
         wheelbarrow.setPosHprScale(-3.61, -1.4, 0, 319, 0, 270, 3, 2, 1.8)
-        
+
         slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
         slappyStand.reparentTo(self.showFloor)
         slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
@@ -65,7 +65,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             pieModel = pie.copyTo(wheelbarrow)
             pieModel.setPosHprScale(*pieSettings)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
-            
+
         #Find FlippyStand's collision to give people pies.
         #Roger didn't separate the main stand from the wheelbarrow, so currently running to both gives pies.
         #That should probably be fixed before Doomsday, but it's fine for now.
@@ -121,6 +121,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(base.cr.playGame.hood.loader.music.stop),
             Wait(3),
             Func(self.enterBegin, offset),
+            Wait(10),
+            Func(self.enterAlecSpeech, offset),
+            Wait(130),
+            #TODO: Func(self.enterVoteBuildup, offset),
+            #TODO: Func(self.enterWinnerAnnounce, offset),
+            #TODO: Func(self.enterCogLanding, offset),
+            #TODO: Func(self.enterWinnerDeath, offset),
+            Func(self.enterInvasion, offset),
         )
         self.eventInterval.start()
         self.eventInterval.setT(offset)
@@ -163,6 +171,55 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.slappyHallInterval.setT(offset)
         self.flippyHallInterval.start()
         self.flippyHallInterval.setT(offset)
+
+    def enterAlecSpeech(self, offset):
+        #For some reason, the sound only plays on their first message. Can anyone look into that?
+        self.alecSpeech = Sequence(
+            Func(self.alec.setChatAbsolute, 'Hellooo Toontown~!', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.alec.setChatAbsolute, 'As many of you know, I''m your Hilarious Host and Eccentric Elector: Alec Tinn!', CFSpeech|CFTimeout),
+            Wait(8.5),
+            Func(self.alec.setChatAbsolute, 'And of course, we can''t forget about our two toonerific toons who have been selected to fight for the Presidency...', CFSpeech|CFTimeout),
+            Wait(9),
+            Func(self.alec.setChatAbsolute, 'Slappy Quackintosh, and Flippy Doggenbottom!', CFSpeech|CFTimeout),
+            Wait(6.5),
+            Func(self.alec.setChatAbsolute, 'I must say, this turnout is absolutely, positivley, extra-tooneriffically, astounding!', CFSpeech|CFTimeout),
+            Wait(6),
+            Func(self.alec.setChatAbsolute, 'It''s truely an honor to be here on this day, and I''m sure I speak for all of us when I thank you for coming.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.alec.setChatAbsolute, 'Now, the votes are almost ready to be tallied! Flippy, Slappy, do either of you have anything to say before the moment of truth?', CFSpeech|CFTimeout),
+            Wait(10),
+            Func(self.slappy.setChatAbsolute, 'The only thing I have to say, no matter who wins...', CFSpeech|CFTimeout),
+            Wait(6.5),
+            Func(self.slappy.setChatAbsolute, 'I know that Toontown is going to grow to be even more... "Toontastic" than ever before.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.slappy.setChatAbsolute, 'All of you are truer-than-truely the best!', CFSpeech|CFTimeout),
+            Wait(10),
+            Func(self.flippy.setChatAbsolute, 'Like Slappy said, I can''t even begin to thank all of you Toontastic toons for this.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.flippy.setChatAbsolute, 'Even after all of this terrific time together, I''m still speechless that I''m here today.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.flippy.setChatAbsolute, 'Here''s to Toontown, Slappy, and all of you!', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.alec.setChatAbsolute, 'Well said, the both of you!', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.alec.setChatAbsolute, 'Ooh, I''m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
+            Wait(10),
+            Func(self.alec.setChatAbsolute, 'Hmm, I''m not sure if you are. Let me ask again: Are you toons ready to hear the winners?!', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.alec.setChatAbsolute, 'WOAH! Woah! No need to yell! I''m right here, I get it. You guys want to hear them.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.alec.setChatAbsolute, 'So, without further ado...', CFSpeech|CFTimeout),
+            Wait(4),
+            Func(self.alec.setChatAbsolute, 'I will now pull the GRAND ELECTORAL LEVER!', CFSpeech|CFTimeout),
+        )
+        self.alecSpeech.start()
+        self.alecSpeech.setT(offset)
+
+    def enterInvasion(self, offset):
+        pass
+
+
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:
