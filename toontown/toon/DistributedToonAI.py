@@ -2733,6 +2733,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
             self.b_setPieType(4)
             self.b_setNumPies(20)
+            self.b_setPieThrowType(1)
             self.notify.debug('Alpha Pie Restock for ' + self.name)
 #        elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
 #            self.inventory.NPCMaxOutInv(msgValue)
