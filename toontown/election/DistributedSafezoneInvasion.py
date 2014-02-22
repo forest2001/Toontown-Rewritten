@@ -11,6 +11,9 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.accept('localPieSplat', self.__localPieSplat)
         self.accept('enterSuitAttack', self.__localToonHit)
 
+        self.showFloor = base.render.find('**/ShowFloor')
+        self.geom = base.cr.playGame.hood.loader.geom
+
         base.cr.playGame.hood.loader.music.stop() #This will already be gone before the election sequence starts. We'll just delete it for now.
         musicEnter = base.loadMusic(SafezoneInvasionGlobals.InvasionMusicEnter)
         base.playMusic(musicEnter, looping=1, volume=1.0) #This will be called somewhere else once we have all parts to the soundtrack to piece together.      
@@ -26,8 +29,10 @@ class DistributedSafezoneInvasion(DistributedObject):
     def startCogSky(self):
         if hasattr(self, 'sky') and self.sky:
             self.stopCogSky()
-        self.cogSkyBegin = Sequence(LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1)))
-        self.cogSkyEnd = LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 5.0, Vec4(1, 1, 1, 1))
+        self.cogSkyBegin = Sequence(LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1)))
+        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 5.0, Vec4(1, 1, 1, 1)) 
+        self.cogSkyBeginStage = Sequence(LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1)))
+        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 5.0, Vec4(1, 1, 1, 1)) 
         self.sky = loader.loadModel(SafezoneInvasionGlobals.CogSkyFile)
         self.sky.setTag('sky', 'Invasion')
         self.sky.setScale(1.0)
@@ -45,6 +50,7 @@ class DistributedSafezoneInvasion(DistributedObject):
         ce = CompassEffect.make(NodePath(), CompassEffect.PRot | CompassEffect.PZ)
         self.sky.node().setEffect(ce)
         self.cogSkyBegin.start()
+        self.cogSkyBeginStage.start()
 
     def stopCogSky(self):
         if hasattr(self, 'sky') and self.sky:
