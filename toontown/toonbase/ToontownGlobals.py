@@ -95,6 +95,7 @@ FM_DeletedItem = 3
 FM_RecoveredItem = 4
 SPDonaldsBoat = 3
 SPMinniesPiano = 4
+SPSlappysBalloon = 5
 CEVirtual = 14
 MaxHpLimit = 137
 MaxCarryLimit = 80

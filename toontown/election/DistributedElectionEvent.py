@@ -5,8 +5,9 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
 from toontown.toon import NPCToons
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
+from toontown.suit import Suit, SuitDNA
+from direct.task import Task
+from toontown.toonbase import ToontownGlobals
 
 # TODO: ElectionGlobals (especially since it's scripted!)
 FLIPPY_WHEELBARROW_PIES = [
@@ -22,6 +23,83 @@ FLIPPY_WHEELBARROW_PIES = [
     [-1.74, 5.42, 6.28, 327.53, 318.81, 4.76, 1.8, 2, 2],
     [-1.55, 9.22, 5.72, 266.53, 341.57, 0.00, 2.09, 1.68, 1.81],
 ]
+SLAPPY_BALLOON_SCALE = 2.5
+
+class HotAirBalloonFSM(FSM):
+    def __init__(self, election): # maybe a callback?
+        FSM.__init__(self, 'HotAirBalloonFSM')
+        self.election = election
+        self.balloon = None
+        self.currentToon = 0
+        
+    def start(self):
+        self.balloon = loader.loadModel('phase_4/models/events/airballoon.egg')
+        self.balloon.reparentTo(self.election.showFloor)
+        self.balloon.setPosHprScale(-95, 33, -3.1, 0, 0, 0, SLAPPY_BALLOON_SCALE, SLAPPY_BALLOON_SCALE, SLAPPY_BALLOON_SCALE)
+        self.collisionNP = self.balloon.find('**/BasketOutsideCollision')
+        self.collisionNP.show()
+        self.slappy = NPCToons.createLocalNPC(2021)
+        self.slappy.reparentTo(self.balloon)
+        self.slappy.setScale(0.4)
+        self.slappy.loop('wave')
+        base.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
+        
+    def enterWaiting(self, offset):
+        # Waiting for a toon to enter...
+        self.balloonIdle = Sequence(
+            Wait(0.3),
+            self.balloon.posInterval(3, (-95, 33, -2.7)),
+            Wait(0.3),
+            self.balloon.posInterval(3, (-95, 33, -3.1)),
+        )
+        self.balloonIdle.loop()
+        self.balloonIdle.setT(offset) # Might as well make use of the offset...
+        self.accept('enter' + self.collisionNP.node().getName(), self.__handleToonEnter)
+        
+    def __handleToonEnter(self, collEntry):
+        if self.currentToon != 0:
+            print "error: toon currently assigned..."
+            return # Weird... we already have a toon?
+        if self.state != 'Waiting':
+            print "error: not waiting"
+            return # We're not waiting for a toon...
+        print "i hit the collision!"
+        self.election.sendUpdate('balloonAvatarEnter', [])
+        
+    def exitWaiting(self):
+        self.balloonIdle.finish()
+        self.ignore('enter' + self.collisionNP.node().getName())
+        
+    def enterStartBalloon(self, avId, offset):
+        self.currentToon = avId
+        # Up we go!
+        if self.currentToon == base.localAvatar.doId:
+            # TODO: Fix the glitchy jittering that the toon likes to do...
+            base.localAvatar.b_setParent(ToontownGlobals.SPSlappysBalloon)
+            base.localAvatar.setPos(0, 0, 0.5)
+        self.balloonSequence = Sequence(
+            Func(self.slappy.setChatAbsolute, 'Off we go!', CFSpeech|CFTimeout),
+            Wait(0.5),
+            self.balloon.posInterval(5.0, Point3(-95, 33, 50)),
+            Wait(0.5),
+            self.balloon.posInterval(5.0, Point3(-205, 33, 50)),
+            Wait(0.5),
+            self.balloon.posInterval(5.0, Point3(-95, 33, 50)),
+            Wait(0.5),
+            self.balloon.posInterval(5.0, Point3(-95, 33, -3.1)),
+        )
+        self.balloonSequence.start()
+        self.balloonSequence.setT(offset)
+        
+    def exitStartBalloon(self):
+        self.balloonSequence.finish()
+        
+    def enterFinished(self, offset):
+        if self.currentToon == base.localAvatar.doId:
+            base.localAvatar.b_setParent(ToontownGlobals.SPRender)
+            base.localAvatar.setPos(-17.178, 6, 43.3134)
+        self.currentToon = 0
+        self.demand('Waiting', 0.0)
 
 class DistributedElectionEvent(DistributedObject, FSM):
     def __init__(self, cr):
@@ -85,6 +163,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision = flippyStand.find('**/FlippyCollision')
         self.pieCollision.setScale(7.83, 4.36, 9.41)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        
+        # Hot Air Balloon!!! woo!
+        self.balloon = HotAirBalloonFSM(self)
+        self.balloon.start()
 
         #self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -114,13 +196,25 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
 
         DistributedObject.delete(self)
-
+    
+    def setBalloonState(self, state, timestamp):
+        print "entering state %s" %state
+        self.balloon.demand(state, globalClockDelta.localElapsedTime(timestamp))
+        
+    def setBalloonStart(self, toonId, timestamp):
+        print "entering state StartBalloon"
+        self.balloon.demand('StartBalloon', toonId, globalClockDelta.localElapsedTime(timestamp))
+        
+    def setBalloonCurrentToon(self, avId):
+        self.balloon.currentToon = avId
+    
     def setState(self, state, timestamp):
         if state != 'Intro':
             return
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterOff(self, offset):
+        base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
         self.showFloor.reparentTo(hidden)
 
     def exitOff(self):
