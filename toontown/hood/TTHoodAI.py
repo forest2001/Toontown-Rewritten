@@ -22,7 +22,6 @@ class TTHoodAI(HoodAI):
             event = DistributedElectionEventAI(self.air)
             event.generateWithRequired(self.HOOD)
         event.b_setState('Intro')
-        event.b_setBalloonState('Waiting')
     
     def createButterflies(self):
         playground = ButterflyGlobals.TTC
