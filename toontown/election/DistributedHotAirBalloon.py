@@ -80,6 +80,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
             base.localAvatar.b_setParent(ToontownGlobals.SPSlappysBalloon)
             base.localAvatar.setPos(0, 0, 0.5)
+            base.localAvatar.setTeleportAvailable(0)
         # Maybe we want a short speech before we take off?
         self.occupiedSequence = Sequence(
             Func(self.slappy.setChatAbsolute, 'Keep your hands and feet in the basket at all times!', CFSpeech | CFTimeout),
@@ -114,4 +115,5 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             # We were on the ride! Better reparent to the render and get out of the balloon...
             base.localAvatar.b_setParent(ToontownGlobals.SPRender)
             base.localAvatar.setPos(-17.178, 6, 43.3134)
+            base.localAvatar.setTeleportAvailable(1)
         
