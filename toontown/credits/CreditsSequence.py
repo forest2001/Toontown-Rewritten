@@ -8,8 +8,7 @@ class CreditsSequence:
         self.interval = None
 
         self.creditsScenes = [
-            TestScene1(),
-            TestScene2()
+            FlippyScene()
             ]
 
     def load(self):
