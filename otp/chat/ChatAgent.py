@@ -5,11 +5,9 @@ from otp.otpbase import OTPGlobals
 class ChatAgent(DistributedObjectGlobal):
     def __init__(self, cr):
         DistributedObjectGlobal.__init__(self, cr)
-        self.notify.warning('ChatAgent going online')
 
     def delete(self):
         self.ignoreAll()
-        self.notify.warning('ChatAgent going offline')
         self.cr.chatManager = None
         DistributedObjectGlobal.delete(self)
         return

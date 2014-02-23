@@ -530,10 +530,6 @@ class OTPClientRepository(ClientRepositoryBase):
     def gotoFirstScreen(self):
         self.startReaderPollTask()
         #self.startHeartbeat()
-        newInstall = launcher.getIsNewInstallation()
-        newInstall = base.config.GetBool('new-installation', newInstall)
-        if newInstall:
-            self.notify.warning('new installation')
         self.loginFSM.request('login')
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')

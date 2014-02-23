@@ -2598,6 +2598,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setPieType(self, pieType):
         self.pieType = pieType
 
+    def b_setPieThrowType(self, pieThrowType):
+        self.setPieThrowType(pieThrowType)
+        self.d_setPieThrowType(pieThrowType)
+ 
+    def d_setPieThrowType(self, pieThrowType):
+        self.sendUpdate('setPieThrowType', [pieThrowType])
+ 
+    def setPieThrowType(self, pieThrowType):
+        self.pieThrowType = pieThrowType
+
     def d_setTrophyScore(self, score):
         self.sendUpdate('setTrophyScore', [score])
 
@@ -2719,10 +2729,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             else:
                 self.toonUp(msgValue)
             self.notify.debug('Toon-up for ' + self.name)
+      #Slappy's Alpha Only Unite
         elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
-            self.inventory.NPCMaxOutInv(msgValue)
-            self.d_setInventory(self.inventory.makeNetString())
-            self.notify.debug('Restock for ' + self.name)
+            self.b_setPieType(4)
+            self.b_setNumPies(20)
+            self.b_setPieThrowType(1)
+            self.notify.debug('Alpha Pie Restock for ' + self.name)
+#        elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
+#            self.inventory.NPCMaxOutInv(msgValue)
+#            self.d_setInventory(self.inventory.makeNetString())
+#            self.notify.debug('Restock for ' + self.name)
         elif msgType == ResistanceChat.RESISTANCE_MONEY:
             if msgValue == -1:
                 self.addMoney(999999)
@@ -4453,6 +4469,30 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
+        
+
+        # I hate this, but here we go.......... Q_Q
+        from toontown.chat import ResistanceChat
+        if not hasattr(self.air, 'issuedSlappyUnites'):
+            self.air.issuedSlappyUnites = []
+        Jellybean100UniteId = ResistanceChat.encodeId(ResistanceChat.RESISTANCE_MONEY, 0)
+        RestockThrowUniteId = ResistanceChat.encodeId(ResistanceChat.RESISTANCE_RESTOCK, 4)
+        msgs = self.getResistanceMessages()
+        # Check if they already have any of the unites...
+        for unite in msgs:
+            if unite[0] == Jellybean100UniteId:
+                self.air.issuedSlappyUnites.append(self.doId)
+                break
+            if unite[0] == RestockThrowUniteId:
+                self.air.issuedSlappyUnites.append(self.doId)
+                break
+        # If they haven't already been issued the unites, give it to them.
+        if self.doId not in self.air.issuedSlappyUnites:
+            for i in range(0, 4):
+                self.addResistanceMessage(Jellybean100UniteId)
+            for i in range(0, 2):
+                self.addResistanceMessage(RestockThrowUniteId)
+            self.air.issuedSlappyUnites.append(self.doId)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

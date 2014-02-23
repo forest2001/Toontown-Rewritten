@@ -143,7 +143,9 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def partyInfoOfHostResponseUdToAi(self, partyStruct, inviteeIds):
         party = self._makePartyDict(partyStruct)
-        av = self.air.doId2do.get(party['hostId'])
+        av = self.air.doId2do.get(party['hostId'], None)
+        if not av:
+            return # The host isn't on the district... wat do
         party['inviteeIds'] = inviteeIds
         partyId = party['partyId']
         # This is issued in response to a request for the party to start, essentially. So let's alloc a zone
@@ -157,7 +159,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         self.id2Party[partyId] = partyAI
 
         # Alert the UD
-        self.air.globalPartyMgr.d_partyStarted(partyId, self.air.ourChannel, zoneId, self.air.doId2do[party['hostId']].getName())
+        self.air.globalPartyMgr.d_partyStarted(partyId, self.air.ourChannel, zoneId, av.getName())
         
         # Don't forget this was initially started by a getPartyZone, so we better tell the host the partyzone
         self.sendUpdateToAvatarId(party['hostId'], 'receivePartyZone', [party['hostId'], partyId, zoneId])

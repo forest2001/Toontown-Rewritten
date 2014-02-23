@@ -41,8 +41,8 @@ struct AvatarPendingDel {
 
 dclass Account {
   string DcObjectType db;
-  uint32array ACCOUNT_AV_SET required db;
-  uint32array pirateAvatars required db;
+  uint32 ACCOUNT_AV_SET[] required db;
+  uint32 pirateAvatars[] required db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
   string PLAYED_MINUTES db;
@@ -56,13 +56,14 @@ dclass Account {
 struct BarrierData {
   uint16 context;
   string name;
-  uint32 avIds[];
+  DoIdList avIds;
 };
 
 dclass DistributedObject {
   setBarrierData(BarrierData []) broadcast ram;
-  setBarrierReady(uint16) airecv clsend;
-  execCommand(string, uint32, uint32, uint32);
+  setBarrierReady(uint16 barrierContext) airecv clsend;
+  execCommand(string command, DoId magicWordMgr,
+              DoId avatar, uint32 zoneId);
   broadcastMessage() broadcast;
 };
 
@@ -92,18 +93,25 @@ struct CPUSpeed {
 };
 
 dclass TimeManager : DistributedObject {
-  requestServerTime(uint8) airecv clsend;
-  serverTime(uint8, int32, uint32);
+  requestServerTime(uint8 context) airecv clsend;
+  serverTime(uint8 context, int32 timestap, uint32 timeOfDay);
   setDisconnectReason(uint8) airecv clsend;
   setExceptionInfo(string(0-1024)) airecv clsend;
-  setSignature(string(0-1024), char [16], char [16]) airecv clsend;
-  setFrameRate(uint16/10, uint16/1000, uint16, string(0-256), uint32/10, uint32/10, string(0-256), uint16, uint16, uint32/10, uint32/10, uint32/10, uint32, OSInfo, CPUSpeed, uint16, uint16, string(0-256)) airecv clsend;
-  setCpuInfo(string(0-1024), string) airecv clsend;
+  setSignature(string(0-1024) signature, char prcHash[16],
+               char pycHash[16]) airecv clsend;
+  setFrameRate(uint16/10 fps, uint16/1000 deviation, uint16 numAvatars,
+               string(0-256) locationCode, uint32/10 timeInLocation,
+               uint32/10 timeInGame, string(0-256) gameOptionsCode,
+               uint16 vendorId, uint16 deviceId, uint32/10 processMemory,
+               uint32/10 pageFileUsage, uint32/10 physicalMemory,
+               uint32 pageFaultCount, OSInfo, CPUSpeed, uint16 cpuCores,
+               uint16 logicalCPUs, string(0-256) apiName) airecv clsend;
+  setCpuInfo(string(0-1024) infoStr, string cacheStatus) airecv clsend;
   checkForGarbageLeaks(bool) airecv clsend;
   setNumAIGarbageLeaks(uint32);
   setClientGarbageLeak(uint32, string(0-1024)) airecv clsend;
-  checkAvOnDistrict(uint32, DoId) clsend airecv;
-  checkAvOnDistrictResult(uint32, DoId, bool);
+  checkAvOnDistrict(uint32 context, DoId avatar) clsend airecv;
+  checkAvOnDistrictResult(uint32 context, DoId av, bool isOnDistrict);
 };
 
 dclass ObjectServer {
@@ -190,19 +198,23 @@ struct TalkModification {
 };
 
 dclass TalkPath_owner {
-  setTalk(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) broadcast ownsend;
+  setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
+          string(0-400) chat, TalkModification [], uint8 flags) broadcast ownsend;
 };
 
 dclass TalkPath_whisper {
-  setTalkWhisper(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) ownrecv clsend;
+  setTalkWhisper(DoId fromAv, DoId fromAcc, string(0-256) avName,
+                 string(0-400) chat, TalkModification [], uint8 flags) ownrecv clsend;
 };
 
 dclass TalkPath_group {
-  setTalkGroup(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) clsend airecv;
+  setTalkGroup(DoId fromAv, DoId fromAcc, string(0-256) avName,
+               string(0-400) chat, TalkModification [], uint8 flags) clsend airecv;
 };
 
 dclass TalkPath_account {
-  setTalkAccount(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) airecv clsend;
+  setTalkAccount(DoId toAcc, DoId fromAcc, string(0-256) avName,
+                 string(0-400) msg, TalkModification [], uint8 flags) airecv clsend;
 };
 
 dclass AvatarHandle : TalkPath_whisper {
@@ -211,29 +223,33 @@ dclass AvatarHandle : TalkPath_whisper {
 dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   string DcObjectType db;
   setName(string = "[Name not set]") required broadcast db airecv;
-  friendsNotify(int32, int8) ownrecv airecv;
-  checkAvOnShard(uint32) clsend airecv;
-  confirmAvOnShard(uint32, int8);
-  setTalk(uint32, uint32, string(0-256), string(0-400), TalkModification [], uint8) broadcast;
+  friendsNotify(DoId avId, int8 status) ownrecv airecv;
+  checkAvOnShard(DoId) clsend airecv;
+  confirmAvOnShard(DoId avId, int8 isOnShard);
+  setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
+          string(0-400) chat, TalkModification [], uint8 flags) broadcast;
 };
 
+struct FriendEntry {
+  uint32 friendId;
+  uint8 friendType;
+}
+
 dclass DistributedPlayer : DistributedAvatar {
-  arrivedOnDistrict(uint32) ownrecv ram;
-  setAccountName(string = "") required ownrecv db;
-  setWhisperFrom(uint32, string(0-256), uint32) ownrecv clsend;
-  setWhisperWLFrom(uint32, string(0-256), uint32) ownrecv clsend;
-  setWhisperSCFrom(uint32, uint16) ownrecv clsend;
-  setWhisperSCCustomFrom(uint32, uint16) ownrecv clsend;
-  setWhisperSCEmoteFrom(uint32, uint16) ownrecv clsend;
-  setSystemMessage(uint32, string(0-256)) ownrecv;
+  arrivedOnDistrict(DoId districtId) ownrecv ram;
+  setAccountName(string name = "") required ownrecv db;
+  setWhisperSCFrom(DoId fromAv, uint16 msgIndex) ownrecv clsend;
+  setWhisperSCCustomFrom(DoId fromAv, uint16 msgIndex) ownrecv clsend;
+  setWhisperSCEmoteFrom(DoId fromAv, uint16 emoteId) ownrecv clsend;
+  setSystemMessage(DoId aboutId, string(0-256) chatString) ownrecv;
   setCommonChatFlags(uint8) broadcast ownrecv ram airecv;
   setWhitelistChatFlags(uint8) broadcast ownrecv ram airecv;
-  setSC(uint16) broadcast ownsend airecv;
-  setSCCustom(uint16) broadcast ownsend airecv;
-  setFriendsList(uint32uint8array = {}) ownrecv required db airecv;
+  setSC(uint16 msgIndex) broadcast ownsend airecv;
+  setSCCustom(uint16 msgIndex) broadcast ownsend airecv;
+  setFriendsList(FriendEntry[] = []) ownrecv required db airecv;
   setDISLname(string) broadcast ownrecv ram;
   setDISLid(uint32 = 0) broadcast ownrecv ram db airecv required;
-  OwningAccount(uint32);
+  OwningAccount(DoId);
   WishName(string = "") db ram;
   WishNameState(string = "OPEN") db ram;
   setPreviousAccess(uint8 = 0) required db airecv;
@@ -481,4 +497,3 @@ dclass StatusDatabase : DistributedObject {
 dclass CallbackObject {
   callback(uint32, bool, uint8);
 };
-

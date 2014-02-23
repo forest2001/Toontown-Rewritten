@@ -7,14 +7,13 @@ from InvasionPathDataAI import pathfinder
 
 # Attack a specific Toon.
 class AttackBehavior(FSM):
-    REASSESS_INTERVAL = 2.0
+    REASSESS_INTERVAL = 1.0
 
     def __init__(self, brain, toonId):
         FSM.__init__(self, 'AttackFSM')
         self.brain = brain
         self.toonId = toonId
 
-        self._walkingTo = None
         self._walkTask = None
 
     def getToon(self):
@@ -36,33 +35,43 @@ class AttackBehavior(FSM):
         toonPos = Point2(toon.getComponentX(), toon.getComponentY())
         distance = (toonPos - self.brain.suit.getCurrentPos()).length()
 
-        if distance < self.brain.getAttackRange():
+        attackPrefer, attackMax = self.brain.getAttackRange()
+        if distance < attackPrefer:
             self.demand('Attack')
-        elif self._walkingTo and (self._walkingTo - toonPos).length() < self.brain.getAttackRange():
+        elif distance < attackMax:
+            # We're close enough that we *could* attack, but let's try to get
+            # within the preferred attacking distance. If this is not possible,
+            # just attack now.
+
+            # We can only update our walk-to if we're walking to begin with:
+            if self.state == 'Walk':
+                nav = self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackPrefer)
+            else:
+                nav = False
+
+            if not nav:
+                # Yeah, can't get close. Attack!
+                self.demand('Attack')
+        elif self.state == 'Walk' and self.brain.finalWaypoint and \
+             (self.brain.finalWaypoint - toonPos).length() < attackMax:
             return
         else:
             self.demand('Walk', toonPos.getX(), toonPos.getY())
 
     def enterAttack(self):
-        # Attack the Toon. TODO! For now, just exit silently.
-        self.brain.suit.idle()
-        self._attackDelay = taskMgr.doMethodLater(5.0, self.onAttackCompleted,
-                                                  self.brain.suit.uniqueName('attack'),
-                                                  extraArgs=[])
-
-    def exitAttack(self):
-        self._attackDelay.remove()
+        # Attack the Toon.
+        self.brain.suit.attack(self.toonId)
 
     def enterWalk(self, x, y):
         # Walk state -- we try to get closer to the Toon. When we're
         # close enough, we switch to 'Attack'
-        if not self.brain.navigateTo(x, y, self.brain.getAttackRange()):
+        attackPrefer, attackMax = self.brain.getAttackRange()
+        if not self.brain.navigateTo(x, y, attackMax):
             # Can't get there, Captain!
             self.brain.master.toonUnreachable(self.toonId)
             self.brain.demand('Idle')
             return
 
-        self._walkingTo = Point2(x, y)
         if self._walkTask:
             self._walkTask.remove()
         self._walkTask = taskMgr.doMethodLater(self.REASSESS_INTERVAL, self.__reassess,
@@ -73,7 +82,6 @@ class AttackBehavior(FSM):
         return task.again
 
     def exitWalk(self):
-        self._walkingTo = None
         if self._walkTask:
             self._walkTask.remove()
 
@@ -138,7 +146,7 @@ class UnclumpBehavior(FSM):
                 continue # Too far away to consider them.
 
             # Use an inverse square law to scale the "move away" vector.
-            moveMag = 1.0/moveAway.lengthSquared()
+            moveMag = 1.0/max(moveAway.lengthSquared(), 0.1)
             moveAway.normalize()
             moveAway *= moveMag
 
@@ -192,6 +200,7 @@ class InvasionSuitBrainAI(FSM):
 
         # For the nav system:
         self.__waypoints = []
+        self.finalWaypoint = None
 
     def start(self):
         if self.state != 'Off':
@@ -205,7 +214,8 @@ class InvasionSuitBrainAI(FSM):
         self.demand('Off')
 
     def getAttackRange(self):
-        return 20.0
+        # Returns a tuple: Preferred attack distance, maximum distance for an attack to work
+        return 15.0, 25.0
 
     def enterOff(self):
         self.__stopProxemics()
@@ -284,18 +294,21 @@ class InvasionSuitBrainAI(FSM):
         self.behavior.demand('Off')
         self.behavior = None
 
-    def suitFinishedNavigating(self):
-        if self.behavior:
-            self.behavior.onArrive()
+    # Attacks:
+    def suitFinishedAttacking(self):
+        if hasattr(self.behavior, 'onAttackCompleted'):
+            self.behavior.onAttackCompleted()
 
     # Navigation:
     def navigateTo(self, x, y, closeEnough=0):
         self.__waypoints = pathfinder.planPath(self.suit.getCurrentPos(),
                                                (x, y), closeEnough)
         if self.__waypoints:
+            self.finalWaypoint = Point2(self.__waypoints[-1])
             self.__walkToNextWaypoint()
             return True
         else:
+            self.finalWaypoint = None
             return False
 
     def suitFinishedWalking(self):
@@ -305,6 +318,10 @@ class InvasionSuitBrainAI(FSM):
             self.__walkToNextWaypoint()
         else:
             self.suitFinishedNavigating()
+
+    def suitFinishedNavigating(self):
+        if hasattr(self.behavior, 'onArrive'):
+            self.behavior.onArrive()
 
     def __walkToNextWaypoint(self):
         x, y = self.__waypoints.pop(0)

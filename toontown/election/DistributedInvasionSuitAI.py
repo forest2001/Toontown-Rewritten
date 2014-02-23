@@ -1,8 +1,10 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
+from toontown.toonbase import ToontownGlobals
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
+from toontown.battle import SuitBattleGlobals
 import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
@@ -27,6 +29,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def announceGenerate(self):
         x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
+
+        self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
+                          SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
 
     def delete(self):
         DistributedSuitBaseAI.delete(self)
@@ -65,8 +70,37 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.__stopWalkTimer()
 
-    def enterExplode(self):
+    def enterAttack(self):
+        self._delay = taskMgr.doMethodLater(3.33, self.__attackDone,
+                                            self.uniqueName('attack'))
+
+    def __attackDone(self, task):
+        self.brain.suitFinishedAttacking()
+        return task.done
+
+    def exitAttack(self):
+        self._delay.remove()
+
+    def enterStunned(self):
         self.brain.stop()
+        self._delay = taskMgr.doMethodLater(SuitTimings.suitStun, self.__unstun,
+                                            self.uniqueName('stunned'))
+
+    def __unstun(self, task):
+        if self.currHP < 1:
+            # We're dead!
+            self.b_setState('Explode')
+        else:
+            # Not dead, we can go back to thinking:
+            self.demand('Idle')
+            self.brain.start()
+
+        return task.done
+
+    def exitStunned(self):
+        self._delay.remove()
+
+    def enterExplode(self):
         self._delay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
                                             self.uniqueName('explode'))
 
@@ -90,6 +124,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def idle(self):
         self.b_setState('Idle')
 
+    def attack(self, who):
+        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', 5])
+        self.b_setState('Attack')
+
     def __startWalkTimer(self):
         self.__stopWalkTimer()
         self.__walkTimer = taskMgr.doMethodLater(self._lerpDelay, self.__walkTimerOver,
@@ -112,12 +150,17 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.brain.start()
 
     def takeDamage(self, hp):
+        if self.state == 'FlyDown':
+            return # We can't/shouldn't take damage in this state.
+
         hp = min(hp, self.currHP) # Don't take more damage than we have...
         self.b_setHP(self.currHP - hp)
 
-        if self.currHP < 1:
-            # We're dead!
-            self.b_setState('Explode')
+        if self.state != 'Stunned':
+            self.b_setState('Stunned')
+
+    def d_sayFaceoffTaunt(self):
+        self.sendUpdate('sayFaceoffTaunt', [])
 
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
@@ -127,6 +170,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def getSpawnPoint(self):
         return self.spawnPointId
+
+    def getAttackInfo(self):
+        return (0, '', 0) # This is only set dynamically.
 
     def setMarchLerp(self, x1, y1, x2, y2):
         self.setLerpPoints(x1, y1, x2, y2)

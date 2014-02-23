@@ -22,6 +22,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.spawnPoints = []
         self.suits = []
         self.toons = []
+        self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves)-1)
 
     def announceGenerate(self):
         self.demand('BeginWave', 0)
@@ -87,6 +88,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         toon = self.air.doId2do.get(avId)
         if not toon:
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to throw a pie!')
+            return
 
         suit = self.air.doId2do.get(doId)
         if suit not in self.suits:
@@ -98,6 +100,17 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         (pieDamage, pieGroupDamage), _ = pieDamageEntry
 
         suit.takeDamage(pieDamage)
+
+    def takeDamage(self, damage):
+        # A Toon got hit!
+        avId = self.air.getAvatarIdFromSender()
+
+        toon = self.air.doId2do.get(avId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            return
+
+        toon.takeDamage(damage)
 
     def __deleteSuits(self):
         for suit in self.suits:
@@ -114,7 +127,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.setLevel(levelOffset)
         suit.generateWithRequired(self.zoneId)
         suit.b_setState('FlyDown')
-
         self.suits.append(suit)
 
     def suitDied(self, suit):
@@ -130,10 +142,13 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         if self.state != 'Wave':
             return
 
-        lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves)-1)
-
-        if lastWave:
+        #Was this the last wave?
+        if self.lastWave:
             self.demand('Victory')
+        #Should we spawn this one immidiately?
+        elif self.waveNumber in SafezoneInvasionGlobals.SuitWaitWaves:
+            self.demand('BeginWave', self.waveNumber + 1)
+        #No, we'll give an intermission.
         else:
             self.demand('Intermission')
 
@@ -142,9 +157,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # regular intervals until the quota for the wave is met.
         self.waveNumber = waveNumber
 
-        # Reset spawnpoints and suits:
+        # Reset spawnpoints:
         self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
-        self.__deleteSuits()
 
         # Get the suits to call:
         suitsToCall = SafezoneInvasionGlobals.SuitWaves[self.waveNumber]
@@ -175,15 +189,29 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def enterWave(self):
         # This state is entered after all Cogs have been spawned by BeginWave.
-        # We wait for all of them to die, then move to the intermission.
+        # If the next wave isn't an Intermission or Wait Wave, it will spawn the next one.
 
-        # Start the suits marching!
+        # Send the suits marching!
         for suit in self.suits:
             suit.start()
 
+        #If the wave isn't an Intermission or Wait Wave, send another set of suits out.
+        #Otherwise, wait until all suits are dead and let waveWon() decide what to do.
+        if self.lastWave:
+            return
+        else:
+            if self.waveNumber not in SafezoneInvasionGlobals.SuitIntermissionWaves and self.waveNumber not in SafezoneInvasionGlobals.SuitWaitWaves:
+                self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
+                self.demand('BeginWave', self.waveNumber + 1)
+
+        # The first suit on the scene also says a faceoff taunt:
+        if self.suits:
+            self.suits[0].d_sayFaceoffTaunt()
+
     def exitWave(self):
         # Clean up any loose suits, in case the wave is being ended by MW.
-        self.__deleteSuits()
+        if self.waveNumber in SafezoneInvasionGlobals.SuitIntermissionWaves or self.waveNumber in SafezoneInvasionGlobals.SuitWaitWaves:
+            self.__deleteSuits()
 
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a

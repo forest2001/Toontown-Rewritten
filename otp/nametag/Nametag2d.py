@@ -21,7 +21,7 @@ class Nametag2d(Nametag, MarginPopup):
         self.innerNP.setScale(self.SCALE_2D)
 
     def showBalloon(self, balloon, text):
-        text = '%s: %s' % (self.displayName, text)
+        text = '%s: %s' % (self.name, text)
         Nametag.showBalloon(self, balloon, text)
 
         # Next, center the balloon in the cell:

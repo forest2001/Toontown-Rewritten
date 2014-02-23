@@ -368,15 +368,14 @@ class DistributedMinigame(DistributedObject.DistributedObject):
             self.frameworkFSM.request('frameworkCleanup')
 
     def setGameExit(self):
-        print 'setGameExit'
         if not self.hasLocalToon:
             return
-        self.notify.debug('BASE: setGameExit: now safe to exit game')
+
+        self.notify.debug('BASE: setGameExit -- it is now safe to exit the game.')
         if self.frameworkFSM.getCurrentState().getName() != 'frameworkWaitServerFinish':
-            print 'not waiting'
             self.__serverFinished = 1
         else:
-            print 'waiting'
+            self.notify.debug("Must wait for server to exit game: ask the framework to cleanup.")
             self.frameworkFSM.request('frameworkCleanup')
 
     def exitFrameworkWaitServerFinish(self):
@@ -390,7 +389,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
 
     def enterFrameworkCleanup(self):
         self.notify.debug('BASE: enterFrameworkCleanup')
-        print 'cleanup'
         for action in self.cleanupActions:
             action()
 
@@ -453,4 +451,3 @@ def abortMinigame():
 def winMinigame():
     """Win the current minigame you are in."""
     messenger.send('minigameVictory')
-    

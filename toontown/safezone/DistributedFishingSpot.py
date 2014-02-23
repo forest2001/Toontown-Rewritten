@@ -341,6 +341,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         return
 
     def __removePole(self):
+        self.pole.cleanup()
         self.pole.removeNode()
         self.poleNode = []
         self.ptop.removeNode()
