@@ -7,6 +7,7 @@ from direct.fsm.FSM import FSM
 from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from direct.task import Task
+from random import choice
 
 # TODO: ElectionGlobals C:?
 # ^ Already done in Doomsday Branch
@@ -86,10 +87,16 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             base.localAvatar.disableAvatarControls()
             self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls))
             self.hopOnAnim.start()
+
         # Maybe we want a short speech before we take off?
-        # TODO: Randomly select some Slappy speeches to say throughout the ride
+        # DONE: Randomly select some Slappy speeches to say throughout the ride
+        # Not sure what to add here. Just added a few for testing. 
+        slappySpeaches = ['Keep your hands and feet in the basket at all times',
+                          'Hold on tight! Here we Go!',
+                          'Remember, don\'t be wacky and vote for slappy!',
+                          'Ready to sore through the sky?']
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, 'Keep your hands and feet in the basket at all times!', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, choice(slappySpeaches), CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()
