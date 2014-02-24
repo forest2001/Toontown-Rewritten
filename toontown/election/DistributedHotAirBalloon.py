@@ -85,7 +85,14 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
             base.localAvatar.disableAvatarControls()
-            self.hopOnAnim = Sequence(Func(base.localAvatar.b_setAnimState, 'jump', 1.0), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls), Func(self.ignore, 'control'))
+
+            self.hopOnAnim = Sequence(
+                Func(base.localAvatar.b_setAnimState, 'jump', 1.0), 
+                base.localAvatar.posInterval(0.6, (0, 0, 4)), 
+                base.localAvatar.posInterval(0.4, (0, 0, 0.7)), 
+                Func(base.localAvatar.enableAvatarControls), 
+                Func(self.ignore, 'control'))
+
             self.hopOnAnim.start()
             self.ignore('control')
 
@@ -106,9 +113,10 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.rideSequence = self.flightPaths[self.flightPathIndex]
         self.rideSequence.start()
         self.rideSequence.setT(offset)
-        self.toonRideSequence = self.toonFlightPaths[0] #temporary, fix this
-        self.toonRideSequence.start()
-        self.toonRideSequence.setT(offset)
+        if self.avId == base.localAvatar.doId:
+            self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
+            self.toonRideSequence.start()
+            self.toonRideSequence.setT(offset)
         
     def exitStartRide(self):
         self.rideSequence.finish()
@@ -117,6 +125,12 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         if self.avId == base.localAvatar.doId:
             # We were on the ride! Better reparent to the render and get out of the balloon...
             base.localAvatar.disableAvatarControls()
-            self.hopOffAnim = Sequence(Wait(1), Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), Wait(0.3), base.localAvatar.posInterval(0.3, (-14, 25, 6)), base.localAvatar.posInterval(0.7, (-14, 20, 0)), Wait(0.3), Func(base.localAvatar.enableAvatarControls), Wait(0.3), Func(base.localAvatar.b_setAnimState, 'neutral'))
+            
+            self.hopOffAnim = Sequence(
+                Func(base.localAvatar.b_setAnimState, 'jump', 1.0), 
+                base.localAvatar.posInterval(0.3, (-14, 25, 6)), 
+                base.localAvatar.posInterval(0.7, (-14, 20, 0)), 
+                Func(base.localAvatar.enableAvatarControls))
+
             self.hopOffAnim.start()
         
