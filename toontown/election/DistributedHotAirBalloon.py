@@ -145,6 +145,4 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             base.localAvatar.disableAvatarControls()
             self.hopOffAnim = Sequence(Wait(1), Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), Wait(0.3), base.localAvatar.posInterval(0.3, (-14, 25, 6)), base.localAvatar.posInterval(0.7, (-14, 20, 0)), Wait(0.3), Func(base.localAvatar.enableAvatarControls))
             self.hopOffAnim.start()
-
-            self.accept('control', )
         
