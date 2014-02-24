@@ -37,6 +37,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         # Create balloon flight paths. It's important we do this AFTER we load everything
         # else as this requires both the balloon and Slappy.
         self.flightPaths = ElectionGlobals.generateFlightPaths(self)
+        self.toonFlightPaths = ElectionGlobals.generateToonFlightPaths(self)
         
     def delete(self):
         # Clean up after our mess...
@@ -84,7 +85,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
             base.localAvatar.disableAvatarControls()
-            self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls), Func(self.ignore, 'control'))
+            self.hopOnAnim = Sequence(Func(base.localAvatar.b_setAnimState, 'jump', 1.0), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls), Func(self.ignore, 'control'))
             self.hopOnAnim.start()
             self.ignore('control')
 
@@ -105,6 +106,9 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.rideSequence = self.flightPaths[self.flightPathIndex]
         self.rideSequence.start()
         self.rideSequence.setT(offset)
+        self.toonRideSequence = self.toonFlightPaths[0] #temporary, fix this
+        self.toonRideSequence.start()
+        self.toonRideSequence.setT(offset)
         
     def exitStartRide(self):
         self.rideSequence.finish()
