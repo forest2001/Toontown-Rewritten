@@ -9,6 +9,7 @@ from toontown.toonbase import ToontownGlobals
 from direct.task import Task
 
 # TODO: ElectionGlobals C:?
+# ^ Already done in Doomsday Branch
 BALLOON_BASE_POS = [-15, 33, 1.1]
 BALLOON_SCALE = 2.5
 
@@ -26,12 +27,15 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         # So we can reparent toons to the balloon so they don't fall out
         self.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
         # Balloon collision NodePath (outside)
-        self.collisionNP = self.balloon.find('**/BasketOutsideCollision')
+        self.collisionNP = self.balloon.find('**/Collision_Outer')
         # Slappy
+        # TODO: Give Slappy a collision
         self.slappy = NPCToons.createLocalNPC(2021)
         self.slappy.reparentTo(self.balloon)
+        self.slappy.setPos(0.7, 0.7, 0.4)
+        self.slappy.setH(150)
         self.slappy.setScale((1/BALLOON_SCALE)) # We want a normal sized Slappy
-        self.slappy.loop('wave')
+        self.slappy.loop('neutral')
         
     def delete(self):
         # Clean up after our mess...
@@ -78,9 +82,12 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def enterOccupied(self, offset):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
-            base.localAvatar.b_setParent(ToontownGlobals.SPSlappysBalloon)
-            base.localAvatar.setPos(0, 0, 0.5)
+            # TODO: Disable Jumping
+            base.localAvatar.disableAvatarControls()
+            self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls))
+            self.hopOnAnim.start()
         # Maybe we want a short speech before we take off?
+        # TODO: Randomly select some Slappy speeches to say throughout the ride
         self.occupiedSequence = Sequence(
             Func(self.slappy.setChatAbsolute, 'Keep your hands and feet in the basket at all times!', CFSpeech | CFTimeout),
             Wait(3.5),
@@ -92,6 +99,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.occupiedSequence.finish()
         
     def enterStartRide(self, offset):
+        # TODO: Choose a random route to fly on (or at least improve this one)
         self.rideSequence = Sequence(
             Func(self.slappy.setChatAbsolute, 'Off we go!', CFSpeech | CFTimeout),
             Wait(0.5),
@@ -108,10 +116,12 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         
     def exitStartRide(self):
         self.rideSequence.finish()
-        
+
     def enterRideOver(self, offset):
+        self.ignore('enter' + self.collisionNP.node().getName())
         if self.avId == base.localAvatar.doId:
             # We were on the ride! Better reparent to the render and get out of the balloon...
-            base.localAvatar.b_setParent(ToontownGlobals.SPRender)
-            base.localAvatar.setPos(-17.178, 6, 43.3134)
+            base.localAvatar.disableAvatarControls()
+            self.hopOffAnim = Sequence(Wait(1), Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), Wait(0.3), base.localAvatar.posInterval(0.3, (-14, 25, 6)), base.localAvatar.posInterval(0.7, (-14, 20, 0)), Wait(0.3), Func(base.localAvatar.enableAvatarControls))
+            self.hopOffAnim.start()
         

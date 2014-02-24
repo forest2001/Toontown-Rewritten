@@ -55,4 +55,4 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         
     def enterRideOver(self):
         # So that the client can handle events without instantly switching to the "Waiting" state...
-        taskMgr.doMethodLater(2, self.b_setState, 'balloon-cleaningup-task', extraArgs=['Waiting'])
+        taskMgr.doMethodLater(5, self.b_setState, 'balloon-cleaningup-task', extraArgs=['Waiting'])
