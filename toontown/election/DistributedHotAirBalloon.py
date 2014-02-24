@@ -31,7 +31,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.slappy.reparentTo(self.balloon)
         self.slappy.setPos(0.7, 0.7, 0.4)
         self.slappy.setH(150)
-        self.slappy.setScale((1/ElectionGlobals.BALLOON_SCALE)) # We want a normal sized Slappy
+        self.slappy.setScale((1/ElectionGlobals.BalloonScale)) # We want a normal sized Slappy
         self.slappy.loop('neutral')
         
         # Create balloon flight paths. It's important we do this AFTER we load everything
@@ -84,7 +84,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
             base.localAvatar.disableAvatarControls()
-            self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls))
+            self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls), Func(self.ignore, 'control'))
             self.hopOnAnim.start()
             self.ignore('control')
 
