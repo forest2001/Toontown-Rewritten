@@ -83,10 +83,10 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def enterOccupied(self, offset):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
-            self.ignore('control')
             base.localAvatar.disableAvatarControls()
             self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls))
             self.hopOnAnim.start()
+            self.ignore('control')
 
         self.occupiedSequence = Sequence(
             Func(self.slappy.setChatAbsolute, choice(ElectionGlobals.SlappySpeeches), CFSpeech | CFTimeout),
