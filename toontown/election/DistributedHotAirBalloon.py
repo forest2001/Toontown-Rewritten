@@ -13,6 +13,17 @@ from random import choice
 # ^ Already done in Doomsday Branch
 BALLOON_BASE_POS = [-15, 33, 1.1]
 BALLOON_SCALE = 2.5
+# Not sure what to add here. Just added a few for testing. 
+SLAPPY_SPEACHES = ['Keep your hands and feet in the basket at all times',
+                  'Hold on tight! Here we Go!',
+                  'Remember, don\'t be wacky and vote for slappy!',
+                  'Ready to soar through the sky?']
+# No clue what these should be called. Feel free to rename
+SLAPPY_OFF_WE_GO = 'Off we go!'
+SLAPPY_VIEW = 'How about that view?'
+SLAPPY_WIGHT_MISSED = 'Rats! The weight missed the gag shop!'
+SLAPPY_PODIUM = 'Hey look! The Beatles are playing!'
+SLAPPY_RIDE_DONE = 'Hope you enjoyed the Ride!'
 
 class DistributedHotAirBalloon(DistributedObject, FSM):
     def __init__(self, cr):
@@ -92,13 +103,8 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
 
         # Maybe we want a short speech before we take off?
         # DONE: Randomly select some Slappy speeches to say throughout the ride
-        # Not sure what to add here. Just added a few for testing. 
-        slappySpeaches = ['Keep your hands and feet in the basket at all times',
-                          'Hold on tight! Here we Go!',
-                          'Remember, don\'t be wacky and vote for slappy!',
-                          'Ready to sore through the sky?']
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, choice(slappySpeaches), CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, choice(SLAPPY_SPEACHES), CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()
@@ -110,7 +116,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def enterStartRide(self, offset):
         # TODO: Choose a random route to fly on (or at least improve this one)
         self.rideSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, 'Off we go!', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, SLAPPY_OFF_WE_GO, CFSpeech | CFTimeout),
 
             # Lift Off
             Wait(0.5),
@@ -119,26 +125,26 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
 
             # To the tunnel we go
             Wait(0.5),
-            Func(self.slappy.setChatAbsolute, 'How about that view?', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, SLAPPY_VIEW, CFSpeech | CFTimeout),
             self.balloon.posInterval(5.0, Point3(-125, 33, 54)),
             # 11 Seconds
 
             # Lets drop a weight on the gag shop
             Wait(0.5),
             self.balloon.posInterval(4.0, Point3(-100, -60, 54)),
-            Func(self.slappy.setChatAbsolute, 'Rats! The weight missed the gag shop!', CFSpeech | CFTimeout),        
+            Func(self.slappy.setChatAbsolute, SLAPPY_WIGHT_MISSED, CFSpeech | CFTimeout),        
             # 16.5 Seconds
 
             # Rats, we missed! Lets checkout the podium
             Wait(0.5),
             self.balloon.posInterval(7.0, Point3(60, -10, 54)),
-            Func(self.slappy.setChatAbsolute, 'Hey look! The Beatles are playing!', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, SLAPPY_PODIUM, CFSpeech | CFTimeout),
             # 22 Seconds
 
             # Back to the Launchpad
             Wait(0.5),
             self.balloon.posInterval(4.0, Point3(-15, 33, 54)),
-            Func(self.slappy.setChatAbsolute, 'Hope you enjoyed the Ride!', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
             # 27.5 Seconds
 
             # Set her down; gently
