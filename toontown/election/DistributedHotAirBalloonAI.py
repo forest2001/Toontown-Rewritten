@@ -3,6 +3,8 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from direct.task import Task
+import ElectionGlobals
+from random import randint
 
 class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHotAirBalloonAI")
@@ -12,6 +14,7 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         FSM.__init__(self, 'HotAirBalloonFSM')
         self.avId = 0
         self.stateTime = globalClockDelta.getRealNetworkTime()
+        self.flightPathIndex = 0
         
     def b_setState(self, state, avId=0):
         if avId != self.avId:
@@ -46,8 +49,23 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         self.b_setState('Occupied', avId)
         
     def enterOccupied(self):
+        # Generate a flight path while we wait for the toon to hop in
+        self.b_setFlightPath(randint(0, ElectionGlobals.SLAPPY_BALLOON_NUM_PATHS-1))
         # After 3.5 seconds, we take off!
         taskMgr.doMethodLater(3.5, self.b_setState, 'balloon-startride-task', extraArgs=['StartRide', self.avId])
+        
+    def b_setFlightPath(self, flightPathIndex):
+        self.setFlightPath(flightPathIndex)
+        self.d_setFlightPath(flightPathIndex)
+        
+    def setFlightPath(self, flightPathIndex):
+        self.flightPathIndex = flightPathIndex
+        
+    def d_setFlightPath(self, flightPathIndex):
+        self.sendUpdate('setFlightPath', [flightPathIndex])
+        
+    def getFlightPath(self):
+        return self.flightPathIndex
         
     def enterStartRide(self):
         # After 33 seconds, the ride is over!

@@ -34,6 +34,10 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.slappy.setScale((1/ElectionGlobals.BALLOON_SCALE)) # We want a normal sized Slappy
         self.slappy.loop('neutral')
         
+        # Create balloon flight paths. It's important we do this AFTER we load everything
+        # else as this requires both the balloon and Slappy.
+        self.flightPaths = ElectionGlobals.generateFlightPaths(self)
+        
     def delete(self):
         # Clean up after our mess...
         # This is what happens when you don't clean up:
@@ -94,45 +98,11 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def exitOccupied(self):
         self.occupiedSequence.finish()
         
+    def setFlightPath(self, flightPathIndex):
+        self.flightPathIndex = flightPathIndex
+        
     def enterStartRide(self, offset):
-        # TODO: Choose a random route to fly on (or at least improve this one)
-        self.rideSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyRideStartMessage, CFSpeech | CFTimeout),
-
-            # Lift Off
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 54)),
-            # 5.5 Seconds
-
-            # To the tunnel we go
-            Wait(0.5),
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyViewMessage, CFSpeech | CFTimeout),
-            self.balloon.posInterval(5.0, Point3(-125, 33, 54)),
-            # 11 Seconds
-
-            # Lets drop a weight on the gag shop
-            Wait(0.5),
-            self.balloon.posInterval(4.0, Point3(-100, -60, 54)),
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyWeightMissedMessage, CFSpeech | CFTimeout),        
-            # 16.5 Seconds
-
-            # Rats, we missed! Lets checkout the podium
-            Wait(0.5),
-            self.balloon.posInterval(7.0, Point3(60, -10, 54)),
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyPodiumMessage, CFSpeech | CFTimeout),
-            # 22 Seconds
-
-            # Back to the Launchpad
-            Wait(0.5),
-            self.balloon.posInterval(4.0, Point3(-15, 33, 54)),
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyRideDoneMessage, CFSpeech | CFTimeout),
-            # 27.5 Seconds
-
-            # Set her down; gently
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 1.1)),
-            # 33 Seconds
-        )
+        self.rideSequence = self.flightPaths[self.flightPathIndex]
         self.rideSequence.start()
         self.rideSequence.setT(offset)
         

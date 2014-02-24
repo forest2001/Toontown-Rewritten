@@ -1,3 +1,7 @@
+from direct.interval.IntervalGlobal import *
+from otp.nametag.NametagConstants import *
+from pandac.PandaModules import *
+
 FLIPPY_WHEELBARROW_PIES = [
     # Format: posHprScale
     [1.16, 11.24, 7.00, 246.80, 351.25, 0.00, 1.60, 1.40, 1.8],
@@ -19,8 +23,46 @@ SlappySpeeches = [
     'Remember, don\'t be wacky and vote for slappy!',
     'Ready to soar through the sky?'
 ]
-SlappyRideStartMessage = 'Off we go!'
-SlappyViewMessage = 'How about that view?'
-SlappyWeightMissedMessage = 'Rats! The weight missed the gag shop!'
-SlappyPodiumMessage = 'Hey look! The Beatles are playing!'
-SlappyRideDoneMessage = 'Hope you enjoyed the Ride!'
+SLAPPY_RIDE_START = 'Off we go!'
+SLAPPY_VIEW = 'How about that view?'
+SLAPPY_WEIGHT_MISSED = 'Rats! The weight missed the gag shop!'
+SLAPPY_PODIUM = 'Hey look! The Beatles are playing!'
+SLAPPY_RIDE_DONE = 'Hope you enjoyed the Ride!'
+SLAPPY_BALLOON_NUM_PATHS = 1
+
+def generateFlightPaths(balloon):
+    # This is quite messy imo... but I didn't have much time to think about it.
+    # For each sequence, you basically copy and paste this whole section and edit
+    # the sequence. When you add a new sequence here, you MUST edit the 
+    # SLAPPY_BALLOON_NUM_PATHS constant.
+    flightPaths = []
+    flightPaths.append(
+        Sequence(
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_START, CFSpeech | CFTimeout),
+            # Lift Off
+            Wait(0.5),
+            balloon.balloon.posInterval(5.0, Point3(-15, 33, 54)),
+            # To the tunnel we go
+            Wait(0.5),
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_VIEW, CFSpeech | CFTimeout),
+            balloon.balloon.posInterval(5.0, Point3(-125, 33, 54)),
+            # Lets drop a weight on the gag shop
+            Wait(0.5),
+            balloon.balloon.posInterval(4.0, Point3(-100, -60, 54)),
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_WEIGHT_MISSED, CFSpeech | CFTimeout),        
+            # Rats, we missed! Lets checkout the podium
+            Wait(0.5),
+            balloon.balloon.posInterval(7.0, Point3(60, -10, 54)),
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_PODIUM, CFSpeech | CFTimeout),
+            # Back to the Launchpad
+            Wait(0.5),
+            balloon.balloon.posInterval(4.0, Point3(-15, 33, 54)),
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
+            # Set her down; gently
+            Wait(0.5),
+            balloon.balloon.posInterval(5.0, Point3(-15, 33, 1.1)),
+        )
+    )
+    
+    # Return the flight paths back to the HotAirBalloon...
+    return flightPaths
