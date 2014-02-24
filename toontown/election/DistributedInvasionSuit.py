@@ -25,6 +25,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackTarget = 0
         self.attackProp = ''
         self.attackDamage = 0
+        self.msStompLoop = None
 
     def delete(self):
         self.demand('Off')
@@ -47,6 +48,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
+
+        # Movers and Shakers should stomp when walking
+        if self.style.name == 'ms':
+            animDict['walk'] = 'phase_5/models/char/suitB-stomp'
+        # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
         else:
@@ -112,8 +118,19 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.loop('neutral', 0)
 
     def enterMarch(self, time):
-        self.loop('walk', 0)
-        self.startMoveTask()
+        if self.style.name == 'ms':
+            self.msStartWalk = Sequence(
+            Func(self.play, 'walk', fromFrame=0, toFrame=22),
+            Wait(0.9),
+            Parallel(self.startMoveTask(), Func(self.loop, 'walk', fromFrame=22, toFrame=62))
+            )
+            self.msStartWalk.start()
+            stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
+            self.msStompLoop = Sequence(SoundInterval(stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
+            self.msStompLoop.loop()
+        else:
+            self.loop('walk', 0)
+            self.startMoveTask()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
@@ -246,7 +263,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def exitMarch(self):
         self.loop('neutral', 0)
         self.stopMoveTask()
-
+        if self.msStompLoop:
+            self.msStompLoop.finish()
         self.__moveToStaticPoint()
 
     def startMoveTask(self):

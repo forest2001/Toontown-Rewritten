@@ -18,7 +18,7 @@ SuitWaves = [
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    ['f', 'bf'],
+    ['f', 'ms'],
     ['sc', 'cc', 'sc'], #Wait Wave
     ['f', 'bf', 'sc', 'cc', 'f', 'bf', 'sc', 'cc', 'sc'],
 
