@@ -11,3 +11,16 @@ FLIPPY_WHEELBARROW_PIES = [
     [-1.74, 5.42, 6.28, 327.53, 318.81, 4.76, 1.8, 2, 2],
     [-1.55, 9.22, 5.72, 266.53, 341.57, 0.00, 2.09, 1.68, 1.81],
 ]
+BALLOON_BASE_POS = [-15, 33, 1.1]
+BALLOON_SCALE = 2.5
+SLAPPY_SPEECHES = [
+    'Keep your hands and feet in the basket at all times',
+    'Hold on tight! Here we Go!',
+    'Remember, don\'t be wacky and vote for slappy!',
+    'Ready to soar through the sky?'
+]
+SLAPPY_RIDE_START = 'Off we go!'
+SLAPPY_VIEW = 'How about that view?'
+SLAPPY_WEIGHT_MISSED = 'Rats! The weight missed the gag shop!'
+SLAPPY_PODIUM = 'Hey look! The Beatles are playing!'
+SLAPPY_RIDE_DONE = 'Hope you enjoyed the Ride!'

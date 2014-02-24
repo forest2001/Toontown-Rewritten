@@ -8,22 +8,7 @@ from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from direct.task import Task
 from random import choice
-
-# TODO: ElectionGlobals C:?
-# ^ Already done in Doomsday Branch
-BALLOON_BASE_POS = [-15, 33, 1.1]
-BALLOON_SCALE = 2.5
-# Not sure what to add here. Just added a few for testing. 
-SLAPPY_SPEECHES = ['Keep your hands and feet in the basket at all times',
-                  'Hold on tight! Here we Go!',
-                  'Remember, don\'t be wacky and vote for slappy!',
-                  'Ready to soar through the sky?']
-# No clue what these should be called. Feel free to rename
-SLAPPY_OFF_WE_GO = 'Off we go!'
-SLAPPY_VIEW = 'How about that view?'
-SLAPPY_WIGHT_MISSED = 'Rats! The weight missed the gag shop!'
-SLAPPY_PODIUM = 'Hey look! The Beatles are playing!'
-SLAPPY_RIDE_DONE = 'Hope you enjoyed the Ride!'
+import ElectionGlobals
 
 class DistributedHotAirBalloon(DistributedObject, FSM):
     def __init__(self, cr):
@@ -34,8 +19,8 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         # Create the balloon
         self.balloon = loader.loadModel('phase_4/models/events/airballoon.egg') # TODO: Use .bam model
         self.balloon.reparentTo(base.render)
-        self.balloon.setPos(*BALLOON_BASE_POS)
-        self.balloon.setScale(BALLOON_SCALE)
+        self.balloon.setPos(*ElectionGlobals.BALLOON_BASE_POS)
+        self.balloon.setScale(ElectionGlobals.BALLOON_SCALE)
         # So we can reparent toons to the balloon so they don't fall out
         self.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
         # Balloon collision NodePath (outside)
@@ -46,7 +31,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.slappy.reparentTo(self.balloon)
         self.slappy.setPos(0.7, 0.7, 0.4)
         self.slappy.setH(150)
-        self.slappy.setScale((1/BALLOON_SCALE)) # We want a normal sized Slappy
+        self.slappy.setScale((1/ElectionGlobals.BALLOON_SCALE)) # We want a normal sized Slappy
         self.slappy.loop('neutral')
         
     def delete(self):
@@ -94,17 +79,13 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def enterOccupied(self, offset):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
-            # TODO: Disable Jumping
-
             self.ignore('control')
             base.localAvatar.disableAvatarControls()
             self.hopOnAnim = Sequence(Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), base.localAvatar.posInterval(0.6, (0, 0, 4)), base.localAvatar.posInterval(0.4, (0, 0, 0.7)), Func(base.localAvatar.enableAvatarControls))
             self.hopOnAnim.start()
 
-        # Maybe we want a short speech before we take off?
-        # DONE: Randomly select some Slappy speeches to say throughout the ride
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, choice(SLAPPY_SPEECHES), CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, choice(ElectionGlobals.SLAPPY_SPEECHES), CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()
@@ -116,7 +97,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def enterStartRide(self, offset):
         # TODO: Choose a random route to fly on (or at least improve this one)
         self.rideSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, SLAPPY_OFF_WE_GO, CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SLAPPY_RIDE_START, CFSpeech | CFTimeout),
 
             # Lift Off
             Wait(0.5),
@@ -125,26 +106,26 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
 
             # To the tunnel we go
             Wait(0.5),
-            Func(self.slappy.setChatAbsolute, SLAPPY_VIEW, CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SLAPPY_VIEW, CFSpeech | CFTimeout),
             self.balloon.posInterval(5.0, Point3(-125, 33, 54)),
             # 11 Seconds
 
             # Lets drop a weight on the gag shop
             Wait(0.5),
             self.balloon.posInterval(4.0, Point3(-100, -60, 54)),
-            Func(self.slappy.setChatAbsolute, SLAPPY_WIGHT_MISSED, CFSpeech | CFTimeout),        
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SLAPPY_WEIGHT_MISSED, CFSpeech | CFTimeout),        
             # 16.5 Seconds
 
             # Rats, we missed! Lets checkout the podium
             Wait(0.5),
             self.balloon.posInterval(7.0, Point3(60, -10, 54)),
-            Func(self.slappy.setChatAbsolute, SLAPPY_PODIUM, CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SLAPPY_PODIUM, CFSpeech | CFTimeout),
             # 22 Seconds
 
             # Back to the Launchpad
             Wait(0.5),
             self.balloon.posInterval(4.0, Point3(-15, 33, 54)),
-            Func(self.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
             # 27.5 Seconds
 
             # Set her down; gently
@@ -159,7 +140,6 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.rideSequence.finish()
 
     def enterRideOver(self, offset):
-        self.ignore('enter' + self.collisionNP.node().getName())
         if self.avId == base.localAvatar.doId:
             # We were on the ride! Better reparent to the render and get out of the balloon...
             base.localAvatar.disableAvatarControls()
