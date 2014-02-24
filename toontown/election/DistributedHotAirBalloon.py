@@ -14,7 +14,7 @@ from random import choice
 BALLOON_BASE_POS = [-15, 33, 1.1]
 BALLOON_SCALE = 2.5
 # Not sure what to add here. Just added a few for testing. 
-SLAPPY_SPEACHES = ['Keep your hands and feet in the basket at all times',
+SLAPPY_SPEECHES = ['Keep your hands and feet in the basket at all times',
                   'Hold on tight! Here we Go!',
                   'Remember, don\'t be wacky and vote for slappy!',
                   'Ready to soar through the sky?']
@@ -104,7 +104,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         # Maybe we want a short speech before we take off?
         # DONE: Randomly select some Slappy speeches to say throughout the ride
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, choice(SLAPPY_SPEACHES), CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, choice(SLAPPY_SPEECHES), CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()
@@ -165,4 +165,6 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             base.localAvatar.disableAvatarControls()
             self.hopOffAnim = Sequence(Wait(1), Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), Wait(0.3), base.localAvatar.posInterval(0.3, (-14, 25, 6)), base.localAvatar.posInterval(0.7, (-14, 20, 0)), Wait(0.3), Func(base.localAvatar.enableAvatarControls))
             self.hopOffAnim.start()
+
+            self.accept('control', )
         
