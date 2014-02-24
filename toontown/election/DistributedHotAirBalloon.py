@@ -109,14 +109,40 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         # TODO: Choose a random route to fly on (or at least improve this one)
         self.rideSequence = Sequence(
             Func(self.slappy.setChatAbsolute, 'Off we go!', CFSpeech | CFTimeout),
+
+            # Lift Off
             Wait(0.5),
             self.balloon.posInterval(5.0, Point3(-15, 33, 54)),
+            # 5.5 Seconds
+
+            # To the tunnel we go
             Wait(0.5),
+            Func(self.slappy.setChatAbsolute, 'How about that view?', CFSpeech | CFTimeout),
             self.balloon.posInterval(5.0, Point3(-125, 33, 54)),
+            # 11 Seconds
+
+            # Lets drop a weight on the gag shop
             Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 54)),
+            self.balloon.posInterval(4.0, Point3(-100, -60, 54)),
+            Func(self.slappy.setChatAbsolute, 'Rats! The weight missed the gag shop!', CFSpeech | CFTimeout),        
+            # 16.5 Seconds
+
+            # Rats, we missed! Lets checkout the podium
+            Wait(0.5),
+            self.balloon.posInterval(7.0, Point3(60, -10, 54)),
+            Func(self.slappy.setChatAbsolute, 'Hey look! The Beatles are playing!', CFSpeech | CFTimeout),
+            # 22 Seconds
+
+            # Back to the Launchpad
+            Wait(0.5),
+            self.balloon.posInterval(4.0, Point3(-15, 33, 54)),
+            Func(self.slappy.setChatAbsolute, 'Hope you enjoyed the Ride!', CFSpeech | CFTimeout),
+            # 27.5 Seconds
+
+            # Set her down; gently
             Wait(0.5),
             self.balloon.posInterval(5.0, Point3(-15, 33, 1.1)),
+            # 33 Seconds
         )
         self.rideSequence.start()
         self.rideSequence.setT(offset)
