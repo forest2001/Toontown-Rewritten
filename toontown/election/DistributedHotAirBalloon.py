@@ -15,7 +15,8 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'HotAirBalloonFSM')
         self.avId = 0
-        
+        self.flightPathIndex = 0
+
         # Create the balloon
         self.balloon = loader.loadModel('phase_4/models/events/election_slappyBalloon-static')
         self.balloon.reparentTo(base.render)
@@ -110,29 +111,17 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.flightPathIndex = flightPathIndex
         
     def enterStartRide(self, offset):
-        # Try and get the flightPath from the AI
-        try:
-            self.rideSequence = self.flightPaths[self.flightPathIndex]
-            self.rideSequence.start()
-            self.rideSequence.setT(offset)
-        except Exception, e:
-            self.notify.debug('Exception: %s' % e)
+        self.rideSequence = self.flightPaths[self.flightPathIndex]
+        self.rideSequence.start()
+        self.rideSequence.setT(offset)
 
         if self.avId == base.localAvatar.doId:
-            # More Try/Excepts!
-            try:
-                self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
-                self.toonRideSequence.start()
-                self.toonRideSequence.setT(offset)
-            except Exception, e:
-                self.notify.debug('Exception: %s' % e)
+            self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
+            self.toonRideSequence.start()
+            self.toonRideSequence.setT(offset)
         
     def exitStartRide(self):
-        # Try and finish the sequence
-        try:
-            self.rideSequence.finish()
-        except Exception, e:
-            self.notify.debug('Exception: %s' % e)
+        self.rideSequence.finish()
 
     def enterRideOver(self, offset):
         if self.avId == base.localAvatar.doId:
