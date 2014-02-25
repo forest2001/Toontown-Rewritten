@@ -34,12 +34,6 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         av.b_setNumPies(self.pieTypeAmount[1])
         av.b_setPieThrowType(self.pieTypeAmount[2])
 
-    def enterIntro(self):
-        # Generate Slappy's Hot Air Balloon!
-        self.balloon = DistributedHotAirBalloonAI(self.air)
-        self.balloon.generateWithRequired(self.zoneId)
-        self.balloon.b_setState('Waiting')
-
     def enterIdle(self):
         pass
 
