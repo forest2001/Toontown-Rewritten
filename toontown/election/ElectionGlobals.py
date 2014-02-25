@@ -60,7 +60,7 @@ def generateFlightPaths(balloon):
             # Back to the Launchpad
             balloon.balloon.posInterval(4.0, Point3(-15, 33, 54)),
             Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
-            
+
             # Set her down; gently
             balloon.balloon.posInterval(5.0, Point3(-15, 33, 1.1)),
         )
