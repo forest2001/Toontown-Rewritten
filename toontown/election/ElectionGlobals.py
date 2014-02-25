@@ -43,11 +43,12 @@ def generateFlightPaths(balloon):
             Wait(0.5),
             balloon.balloon.posHprInterval(1.0, Point3(-19, 35, 3), (0, 3, 3)),
             balloon.balloon.posHprInterval(1.0, Point3(-23, 38, 5), (0, -2, -2)),
-            balloon.balloon.posHprInterval(6.0, Point3(-43, 78, 26), (0, 0, 0)),
+            balloon.balloon.posHprInterval(5.0, Point3(-43, 78, 26), (0, 0, 0)),
 
             # To the tunnel we go
             Func(balloon.slappy.setChatAbsolute, SLAPPY_VIEW, CFSpeech | CFTimeout),
-            balloon.balloon.posHprInterval(5.0, Point3(-125, 33, 54), (0, -2, -2)),
+            balloon.balloon.posHprInterval(5.0, Point3(-105, 33, 54), (0, -2, 3-2)),
+            balloon.balloon.posHprInterval(1.0, Point3(-125, 33, 54), (0, 0, 0)),
 
             # Lets drop a weight on the gag shop
             balloon.balloon.posInterval(4.0, Point3(-100, -60, 54)),
@@ -81,8 +82,9 @@ def generateToonFlightPaths(balloon):
             Wait(0.5),
             base.localAvatar.posInterval(1.0, Point3(-19, 35, 3)),
             base.localAvatar.posInterval(1.0, Point3(-23, 38, 5)),
-            base.localAvatar.posInterval(6.0, Point3(-43, 78, 26)),
-            base.localAvatar.posInterval(5.0, Point3(-125, 33, 54)),
+            base.localAvatar.posInterval(5.0, Point3(-43, 78, 26)),
+            base.localAvatar.posInterval(5.0, Point3(-105, 33, 54)),
+            base.localAvatar.posInterval(1.0, Point3(-125, 33, 54)),
             # Lets drop a weight on the gag shop
             base.localAvatar.posInterval(4.0, Point3(-100, -60, 54)),       
             # Rats, we missed! Lets checkout the podium
