@@ -89,7 +89,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             self.hopOnAnim = Sequence(Parallel(
                 Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), # Required to put the toon in the basket
                 Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
-                base.localAvatar.posInterval(0.6, (0, 0, 4)), 
+                base.localAvatar.posInterval(0.6, (0, 0, 2)), 
                 base.localAvatar.posInterval(0.4, (0, 0, 0.7)), 
                 Func(base.localAvatar.enableAvatarControls), 
                 Func(self.ignore, 'control'),
@@ -107,7 +107,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         
     def exitOccupied(self):
         self.occupiedSequence.finish()
-        
+
     def setFlightPath(self, flightPathIndex):
         self.flightPathIndex = flightPathIndex
         
@@ -129,7 +129,6 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             base.localAvatar.disableAvatarControls()
 
             self.hopOffAnim = Sequence(
-                Wait(1), 
                 Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
                 Wait(0.3), 
                 base.localAvatar.posInterval(0.3, (-14, 25, 6)), 
