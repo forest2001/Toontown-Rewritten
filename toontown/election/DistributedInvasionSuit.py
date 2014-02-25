@@ -120,10 +120,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def enterMarch(self, time):
         if self.style.name == 'ms':
             self.msStartWalk = Sequence(
-            Func(self.play, 'walk', fromFrame=0, toFrame=22),
-            Wait(0.9),
-            Parallel(self.startMoveTask(), Func(self.loop, 'walk', fromFrame=22, toFrame=62))
-            )
+                Func(self.play, 'walk', fromFrame=0, toFrame=22),
+                Wait(0.9),
+                Parallel(Func(self.startMoveTask), Func(self.loop, 'walk', fromFrame=22, toFrame=62)))
             self.msStartWalk.start()
             stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
             self.msStompLoop = Sequence(SoundInterval(stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
