@@ -68,9 +68,10 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         return self.flightPathIndex
         
     def enterStartRide(self):
-        # After 33 seconds, the ride is over!
+        # After 68 seconds, the ride is over!
         taskMgr.doMethodLater(68, self.b_setState, 'balloon-riding-task', extraArgs=['RideOver', self.avId])
         
     def enterRideOver(self):
         # So that the client can handle events without instantly switching to the "Waiting" state...
         taskMgr.doMethodLater(5, self.b_setState, 'balloon-cleaningup-task', extraArgs=['Waiting'])
+        
