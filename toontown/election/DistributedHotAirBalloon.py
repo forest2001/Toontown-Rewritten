@@ -110,16 +110,26 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.flightPathIndex = flightPathIndex
         
     def enterStartRide(self, offset):
-        self.rideSequence = self.flightPaths[self.flightPathIndex]
-        self.rideSequence.start()
-        self.rideSequence.setT(offset)
+        # Try and get the flightPath from the AI
+        try:
+            self.rideSequence = self.flightPaths[self.flightPathIndex]
+            self.rideSequence.start()
+            self.rideSequence.setT(offset)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
+
         if self.avId == base.localAvatar.doId:
             self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
             self.toonRideSequence.start()
             self.toonRideSequence.setT(offset)
         
     def exitStartRide(self):
-        self.rideSequence.finish()
+        # Try and finish the sequence
+        # Doesn't get any hacky-er than this!
+        try:
+            self.rideSequence.finish()
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
     def enterRideOver(self, offset):
         if self.avId == base.localAvatar.doId:
