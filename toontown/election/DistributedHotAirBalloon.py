@@ -83,7 +83,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
             base.localAvatar.disableAvatarControls()
-
+            
             self.hopOnAnim = Sequence(Parallel(
                 Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), # Required to put the toon in the basket
                 Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
@@ -119,13 +119,16 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             self.notify.debug('Exception: %s' % e)
 
         if self.avId == base.localAvatar.doId:
-            self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
-            self.toonRideSequence.start()
-            self.toonRideSequence.setT(offset)
+            # More Try/Excepts!
+            try:
+                self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
+                self.toonRideSequence.start()
+                self.toonRideSequence.setT(offset)
+            except Exception, e:
+                self.notify.debug('Exception: %s' % e)
         
     def exitStartRide(self):
         # Try and finish the sequence
-        # Doesn't get any hacky-er than this!
         try:
             self.rideSequence.finish()
         except Exception, e:

@@ -21,7 +21,7 @@ BalloonScale = 2.5
 
 #TODO: More Slappy Speeches
 SlappySpeech1 = [
-    'Off we goooo~!',
+    'Off we goooo!',
     "In case you didn't get it back there, that was a pun.",
     '"Up" for a ride. Get it?',
     'Haha! I quack myself up.',
