@@ -4,15 +4,17 @@ from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
+from direct.task import Task
 from toontown.toon import NPCToons
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
+from toontown.suit import Suit, SuitDNA
+from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
+        self.cr.election = self
 
         self.showFloor = NodePath('ShowFloor')
         self.showFloor.setPos(80, 0, 4)
@@ -101,11 +103,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
 
         DistributedObject.delete(self)
-
+    
     def setState(self, state, timestamp):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
 
     def enterOff(self, offset):
+        base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
         self.showFloor.reparentTo(hidden)
 
     def exitOff(self):

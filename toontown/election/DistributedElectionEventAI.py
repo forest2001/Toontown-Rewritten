@@ -4,6 +4,7 @@ from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
+from toontown.election.DistributedHotAirBalloonAI import DistributedHotAirBalloonAI
 import DistributedSafezoneInvasionAI
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
@@ -32,6 +33,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         av.b_setPieType(self.pieTypeAmount[0])
         av.b_setNumPies(self.pieTypeAmount[1])
         av.b_setPieThrowType(self.pieTypeAmount[2])
+
+    def enterIntro(self):
+        # Generate Slappy's Hot Air Balloon!
+        self.balloon = DistributedHotAirBalloonAI(self.air)
+        self.balloon.generateWithRequired(self.zoneId)
+        self.balloon.b_setState('Waiting')
 
     def enterIdle(self):
         pass
