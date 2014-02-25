@@ -64,7 +64,7 @@ def generateFlightPaths(balloon):
 
             # Set her down; gently
             balloon.balloon.posHprInterval(15.0, Point3(-15, 33, 1.1), (0, 0, 0)),
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
+            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout)
         )
     )
     
@@ -93,7 +93,7 @@ def generateToonFlightPaths(balloon):
             base.localAvatar.posInterval(18.0, Point3(60, -10, 54)),
             base.localAvatar.posInterval(0.5, Point3(62, -11, 54)),
             # Set her down; gently
-            base.localAvatar.posInterval(15.0, Point3(-15, 33, 1.1)),
+            base.localAvatar.posInterval(15.0, Point3(-15, 33, 1.1))
         )
     )
 

@@ -135,7 +135,9 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
                 base.localAvatar.posInterval(0.7, (-14, 20, 0)), 
                 Wait(0.3), 
                 Func(base.localAvatar.enableAvatarControls), 
-                Wait(0.3), Func(base.localAvatar.b_setAnimState, 'neutral'))
+                Wait(0.3), 
+                Func(base.localAvatar.b_setAnimState, 'neutral')
+                )
 
             self.hopOffAnim.start()
         
