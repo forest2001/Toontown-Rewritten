@@ -1,6 +1,7 @@
 from direct.interval.IntervalGlobal import *
 from otp.nametag.NametagConstants import *
 from pandac.PandaModules import *
+from random import choice
 
 FLIPPY_WHEELBARROW_PIES = [
     # Format: posHprScale
@@ -17,13 +18,36 @@ FLIPPY_WHEELBARROW_PIES = [
 ]
 BalloonBasePosition = [-15, 33, 1.1]
 BalloonScale = 2.5
-#TODO: Full Slappy Speeches
-SlappySpeeches = [
-    'Keep your hands and feet in the basket at all times',
-    'Hold on tight! Here we Go!',
-    'Remember, don\'t be wacky and vote for slappy!',
-    'Ready to soar through the sky?'
+
+#TODO: More Slappy Speeches
+SlappySpeech1 = [
+    'Off we goooo~!',
+    "In case you didn't get it back there, that was a pun.",
+    '"Up" for a ride. Get it?',
+    'Haha! I quack myself up.',
+    'That was another pun!',
+    "Do you know any good puns? I'm full of them.",
+    "That wasn't a pun, though. I should have had one there. It was fitting.",
+    "Oh man, we're almost back already?",
+    "Well, at least we had a WHALE of a time!",
+    "Err- no. Wrong pun. That one didn't make sense.",
+    "I'll CATCHA later! Get it, because of the whale pun? It makes sense now. I planned that."
 ]
+SlappySpeech2 = [
+    'Hello! Want a ride, I assume?',
+    "Good! It would be kind of weird if you didn't.",
+    "I take it you're a balloon fanatic like myself, eh?",
+    "No? Oh. I don't see how you can't be.",
+    "Just look at this thing. It's a 500 pound bag floating in the sky!",
+    "If that isn't amazing, I don't know what is.",
+    "Small balloons, too. You know, I've always wanted to be a balloon salesman.",
+    "I'd get my own little cart and everything!",
+    "They soar thrugh the skies, going beyond what we know.",
+    "Maybe even into another world. Who knows what they'd see on the outskirts of Toontown?",
+    "D'awh, here already. I was just about to get into the history of balloons. Come back any time!"
+]
+SlappySpeechChoice = [SlappySpeech1, SlappySpeech2]
+SlappySpeeches = choice(SlappySpeechChoice)
 SLAPPY_RIDE_START = 'Off we go!'
 SLAPPY_VIEW = 'How about that view?'
 SLAPPY_WEIGHT_MISSED = 'Rats! The weight missed the gag shop!'
@@ -37,9 +61,30 @@ def generateFlightPaths(balloon):
     # the sequence. When you add a new sequence here, you MUST edit the 
     # SLAPPY_BALLOON_NUM_PATHS constant.
     flightPaths = []
+    speechSequence = Sequence(
+        Wait(4),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[1], CFSpeech | CFTimeout),
+        Wait(6),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[2], CFSpeech | CFTimeout),
+        Wait(4),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[3], CFSpeech | CFTimeout),
+        Wait(6),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[4], CFSpeech | CFTimeout),
+        Wait(10),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[5], CFSpeech | CFTimeout),
+        Wait(6),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[6], CFSpeech | CFTimeout),
+        Wait(10),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[7], CFSpeech | CFTimeout),
+        Wait(6),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[8], CFSpeech | CFTimeout),
+        Wait(7),
+        Func(balloon.slappy.setChatAbsolute, SlappySpeeches[9], CFSpeech | CFTimeout),
+    )
     flightPaths.append(
         Sequence(
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_START, CFSpeech | CFTimeout),
+            Func(balloon.slappy.setChatAbsolute, SlappySpeeches[0], CFSpeech | CFTimeout),
+            Func(speechSequence.start),
             # Lift Off
             Wait(0.5),
             balloon.balloon.posHprInterval(1.5, Point3(-19, 35, 3), (0, 2, 2)),
@@ -48,23 +93,20 @@ def generateFlightPaths(balloon):
             balloon.balloon.posHprInterval(0.5, Point3(-54, 76, 25), (5, 2, 2)),
 
             # To the tunnel we go
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_VIEW, CFSpeech | CFTimeout),
             balloon.balloon.posHprInterval(11.0, Point3(-105, 33, 54), (180, -2, -2)),
             balloon.balloon.posHprInterval(0.5, Point3(-106, 34, 55), (175, -4, 0)),
 
             # Lets drop a weight on the gag shop
             balloon.balloon.posHprInterval(10.0, Point3(-100, -60, 54), (0, 2, -2)),
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_WEIGHT_MISSED, CFSpeech | CFTimeout),
-            balloon.balloon.posHprInterval(0.5, Point3(-99.5, -59.5, 54), (-2, -2, 2)), 
+            balloon.balloon.posHprInterval(0.5, Point3(-97.5, -59.5, 54), (-2, -2, 2)), 
 
             # Rats, we missed! Lets checkout the podium
             balloon.balloon.posHprInterval(18.0, Point3(60, -10, 54), (-70, 0, 0)),
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_PODIUM, CFSpeech | CFTimeout),
             balloon.balloon.posHprInterval(0.5, Point3(62, -11, 54), (-65, -2, 2)),
 
             # Set her down; gently
             balloon.balloon.posHprInterval(15.0, Point3(-15, 33, 1.1), (0, 0, 0)),
-            Func(balloon.slappy.setChatAbsolute, SLAPPY_RIDE_DONE, CFSpeech | CFTimeout),
+            Func(balloon.slappy.setChatAbsolute, SlappySpeeches[10], CFSpeech | CFTimeout),
         )
     )
     

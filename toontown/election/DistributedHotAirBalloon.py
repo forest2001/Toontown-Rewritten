@@ -17,7 +17,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.avId = 0
         
         # Create the balloon
-        self.balloon = loader.loadModel('phase_4/models/events/airballoon.egg') # TODO: Use .bam model
+        self.balloon = loader.loadModel('phase_4/models/events/election_slappyBalloon-static')
         self.balloon.reparentTo(base.render)
         self.balloon.setPos(*ElectionGlobals.BalloonBasePosition)
         self.balloon.setScale(ElectionGlobals.BalloonScale)
@@ -25,8 +25,6 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
         # Balloon collision NodePath (outside)
         self.collisionNP = self.balloon.find('**/Collision_Outer')
-        # Slappy
-        # TODO: Give Slappy a collision
         self.slappy = NPCToons.createLocalNPC(2021)
         self.slappy.reparentTo(self.balloon)
         self.slappy.setPos(0.7, 0.7, 0.4)
@@ -99,7 +97,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             self.ignore('control')
 
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, choice(ElectionGlobals.SlappySpeeches), CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, 'Hiya! Up for a ride?', CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()
