@@ -97,7 +97,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             self.ignore('control')
 
         self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, 'Hiya! Up for a ride?', CFSpeech | CFTimeout),
+            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyUpForARide, CFSpeech | CFTimeout),
             Wait(3.5),
         )
         self.occupiedSequence.start()

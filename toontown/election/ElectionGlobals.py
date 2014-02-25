@@ -48,11 +48,7 @@ SlappySpeech2 = [
 ]
 SlappySpeechChoice = [SlappySpeech1, SlappySpeech2]
 SlappySpeeches = choice(SlappySpeechChoice)
-SLAPPY_RIDE_START = 'Off we go!'
-SLAPPY_VIEW = 'How about that view?'
-SLAPPY_WEIGHT_MISSED = 'Rats! The weight missed the gag shop!'
-SLAPPY_PODIUM = 'Hey look! The Beatles are playing!'
-SLAPPY_RIDE_DONE = 'Hope you enjoyed the Ride!'
+SlappyUpForARide = 'Hiya! Up for a ride?'
 SLAPPY_BALLOON_NUM_PATHS = 1
 
 def generateFlightPaths(balloon):
