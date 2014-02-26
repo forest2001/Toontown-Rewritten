@@ -62,7 +62,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         pie.setPosHprScale(-2.8, -2.4, 6.1, 0, 355.24, 351.87, 2, 2.1, 1.6)
         pieS.setPosHprScale(3.54, -3.94, 0.42, 45.00, 42.27, 0, 1.6, 1.6, 1.6)
         # Pies in the wheelbarrow.
-        for pieSettings in ElectionGlobals.FLIPPY_WHEELBARROW_PIES:
+        for pieSettings in ElectionGlobals.FlippyWheelbarrowPies:
             pieModel = pie.copyTo(wheelbarrow)
             pieModel.setPosHprScale(*pieSettings)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')

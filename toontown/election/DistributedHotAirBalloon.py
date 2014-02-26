@@ -33,10 +33,11 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.slappy.setScale((1/ElectionGlobals.BalloonScale)) # We want a normal sized Slappy
         self.slappy.loop('neutral')
         
-        # Create balloon flight paths. It's important we do this AFTER we load everything
+        # Create balloon flight paths and Slappy speeches. It's important we do this AFTER we load everything
         # else as this requires both the balloon and Slappy.
         self.flightPaths = ElectionGlobals.generateFlightPaths(self)
         self.toonFlightPaths = ElectionGlobals.generateToonFlightPaths(self)
+        self.speechSequence = ElectionGlobals.generateSpeechSequence(self)
         
     def delete(self):
         # Clean up after our mess...
@@ -90,22 +91,17 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
                 Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
                 base.localAvatar.posInterval(0.6, (0, 0, 2)), 
                 base.localAvatar.posInterval(0.4, (0, 0, 0.7)), 
-                Func(base.localAvatar.enableAvatarControls), 
-                Func(self.ignore, 'control'),
+                Func(base.localAvatar.enableAvatarControls),
                 Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender))) # Unparent the toon and balloon
 
             self.hopOnAnim.start()
-            self.ignore('control')
 
-        self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, ElectionGlobals.SlappyUpForARide, CFSpeech | CFTimeout),
-            Wait(3.5),
-        )
-        self.occupiedSequence.start()
-        self.occupiedSequence.setT(offset)
+        self.speechSequence = self.speechSequence
+        self.speechSequence.start()
+        self.speechSequence.setT(offset)
         
     def exitOccupied(self):
-        self.occupiedSequence.finish()
+        self.hopOnAnim.finish()
 
     def setFlightPath(self, flightPathIndex):
         self.flightPathIndex = flightPathIndex
@@ -122,6 +118,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         
     def exitStartRide(self):
         self.rideSequence.finish()
+        self.speechSequence.finish()
 
     def enterRideOver(self, offset):
         if self.avId == base.localAvatar.doId:

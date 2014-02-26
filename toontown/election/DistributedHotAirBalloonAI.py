@@ -50,7 +50,7 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         
     def enterOccupied(self):
         # Generate a flight path while we wait for the toon to hop in
-        self.b_setFlightPath(randint(0, ElectionGlobals.SLAPPY_BALLOON_NUM_PATHS-1))
+        self.b_setFlightPath(randint(0, ElectionGlobals.NumBalloonPaths-1))
         # After 3.5 seconds, we take off!
         taskMgr.doMethodLater(3.5, self.b_setState, 'balloon-startride-task', extraArgs=['StartRide', self.avId])
         
