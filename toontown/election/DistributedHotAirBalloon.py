@@ -7,32 +7,38 @@ from direct.fsm.FSM import FSM
 from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from direct.task import Task
-
-# TODO: ElectionGlobals C:?
-BALLOON_BASE_POS = [-15, 33, 1.1]
-BALLOON_SCALE = 2.5
+from random import choice
+import ElectionGlobals
 
 class DistributedHotAirBalloon(DistributedObject, FSM):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'HotAirBalloonFSM')
         self.avId = 0
+        self.flightPathIndex = 0
 
         # Create the balloon
-        self.balloon = loader.loadModel('phase_4/models/events/airballoon.egg') # TODO: Use .bam model
+        self.balloon = loader.loadModel('phase_4/models/events/election_slappyBalloon-static')
         self.balloon.reparentTo(base.render)
-        self.balloon.setPos(*BALLOON_BASE_POS)
-        self.balloon.setScale(BALLOON_SCALE)
+        self.balloon.setPos(*ElectionGlobals.BalloonBasePosition)
+        self.balloon.setScale(ElectionGlobals.BalloonScale)
         # So we can reparent toons to the balloon so they don't fall out
         self.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
         # Balloon collision NodePath (outside)
-        self.collisionNP = self.balloon.find('**/BasketOutsideCollision')
-        # Slappy
+        self.collisionNP = self.balloon.find('**/Collision_Outer')
         self.slappy = NPCToons.createLocalNPC(2021)
         self.slappy.reparentTo(self.balloon)
-        self.slappy.setScale((1/BALLOON_SCALE)) # We want a normal sized Slappy
-        self.slappy.loop('wave')
-
+        self.slappy.setPos(0.7, 0.7, 0.4)
+        self.slappy.setH(150)
+        self.slappy.setScale((1/ElectionGlobals.BalloonScale)) # We want a normal sized Slappy
+        self.slappy.loop('neutral')
+        
+        # Create balloon flight paths and Slappy speeches. It's important we do this AFTER we load everything
+        # else as this requires both the balloon and Slappy.
+        self.flightPaths = ElectionGlobals.generateFlightPaths(self)
+        self.toonFlightPaths = ElectionGlobals.generateToonFlightPaths(self)
+        self.speechSequence = ElectionGlobals.generateSpeechSequence(self)
+        
     def delete(self):
         # Clean up after our mess...
         # This is what happens when you don't clean up:
@@ -43,12 +49,12 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.balloon.removeNode()
         self.slappy.delete()
         DistributedObject.delete(self)
-
+        
     def setState(self, state, timestamp, avId):
         if avId != self.avId:
             self.avId = avId
         self.demand(state, globalClockDelta.localElapsedTime(timestamp))
-
+            
     def enterWaiting(self, offset):
         # Wait for a collision...
         self.accept('enter' + self.collisionNP.node().getName(), self.__handleToonEnter)
@@ -61,7 +67,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         )
         self.balloonIdle.loop()
         self.balloonIdle.setT(offset)
-
+        
     def __handleToonEnter(self, collEntry):
         if self.avId != 0:
             # Someone is already occupying the balloon
@@ -70,49 +76,80 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             # The balloon isn't waiting for a toon
             return
         self.sendUpdate('requestEnter', [])
-
+        
     def exitWaiting(self):
         self.balloonIdle.finish()
         self.ignore('enter' + self.collisionNP.node().getName())
-
+        
     def enterOccupied(self, offset):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.
-            base.localAvatar.b_setParent(ToontownGlobals.SPSlappysBalloon)
-            base.localAvatar.setPos(0, 0, 0.5)
-            base.localAvatar.setTeleportAvailable(0)
-        # Maybe we want a short speech before we take off?
-        self.occupiedSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, 'Keep your hands and feet in the basket at all times!', CFSpeech | CFTimeout),
-            Wait(3.5),
-        )
-        self.occupiedSequence.start()
-        self.occupiedSequence.setT(offset)
+            base.localAvatar.disableAvatarControls()
+            
+            self.hopOnAnim = Sequence(Parallel(
+                Func(base.localAvatar.b_setParent, ToontownGlobals.SPSlappysBalloon), # Required to put the toon in the basket
+                Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
+                base.localAvatar.posInterval(0.6, (0, 0, 2)), 
+                base.localAvatar.posInterval(0.4, (0, 0, 0.7)), 
+                Func(base.localAvatar.enableAvatarControls),
+                Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender))) # Unparent the toon and balloon
 
+            self.hopOnAnim.start()
+        try:
+            self.speechSequence = self.speechSequence
+            self.speechSequence.start()
+            self.speechSequence.setT(offset)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
+        
     def exitOccupied(self):
-        self.occupiedSequence.finish()
+        try:
+            self.hopOnAnim.finish()
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
+    def setFlightPath(self, flightPathIndex):
+        self.flightPathIndex = flightPathIndex
+        
     def enterStartRide(self, offset):
-        self.rideSequence = Sequence(
-            Func(self.slappy.setChatAbsolute, 'Off we go!', CFSpeech | CFTimeout),
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 54)),
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-125, 33, 54)),
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 54)),
-            Wait(0.5),
-            self.balloon.posInterval(5.0, Point3(-15, 33, 1.1)),
-        )
-        self.rideSequence.start()
-        self.rideSequence.setT(offset)
+        # Try and get the flightPath from the AI
+        try:
+            self.rideSequence = self.flightPaths[self.flightPathIndex]
+            self.rideSequence.start()
+            self.rideSequence.setT(offset)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
+        if self.avId == base.localAvatar.doId:
+            try:
+                self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
+                self.toonRideSequence.start()
+                self.toonRideSequence.setT(offset)
+            except Exception, e:
+                self.notify.debug('Exception: %s' % e)            
+        
     def exitStartRide(self):
-        self.rideSequence.finish()
+        try:
+            self.rideSequence.finish()
+            self.speechSequence.finish()
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e) 
 
     def enterRideOver(self, offset):
         if self.avId == base.localAvatar.doId:
             # We were on the ride! Better reparent to the render and get out of the balloon...
-            base.localAvatar.b_setParent(ToontownGlobals.SPRender)
-            base.localAvatar.setPos(-17.178, 6, 43.3134)
-            base.localAvatar.setTeleportAvailable(1)
+            base.localAvatar.disableAvatarControls()
+
+            self.hopOffAnim = Sequence(
+                Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender), Func(base.localAvatar.b_setAnimState, 'jump', 1.0)), 
+                Wait(0.3), 
+                base.localAvatar.posInterval(0.3, (-14, 25, 6)), 
+                base.localAvatar.posInterval(0.7, (-14, 20, 0)), 
+                Wait(0.3), 
+                Func(base.localAvatar.enableAvatarControls), 
+                Wait(0.3), 
+                Func(base.localAvatar.b_setAnimState, 'neutral')
+                )
+
+            self.hopOffAnim.start()
+        
