@@ -95,30 +95,45 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
                 Parallel(Func(base.localAvatar.b_setParent, ToontownGlobals.SPRender))) # Unparent the toon and balloon
 
             self.hopOnAnim.start()
-
-        self.speechSequence = self.speechSequence
-        self.speechSequence.start()
-        self.speechSequence.setT(offset)
+        try:
+            self.speechSequence = self.speechSequence
+            self.speechSequence.start()
+            self.speechSequence.setT(offset)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
         
     def exitOccupied(self):
-        self.hopOnAnim.finish()
+        try:
+            self.hopOnAnim.finish()
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
     def setFlightPath(self, flightPathIndex):
         self.flightPathIndex = flightPathIndex
         
     def enterStartRide(self, offset):
-        self.rideSequence = self.flightPaths[self.flightPathIndex]
-        self.rideSequence.start()
-        self.rideSequence.setT(offset)
+        # Try and get the flightPath from the AI
+        try:
+            self.rideSequence = self.flightPaths[self.flightPathIndex]
+            self.rideSequence.start()
+            self.rideSequence.setT(offset)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
         if self.avId == base.localAvatar.doId:
-            self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
-            self.toonRideSequence.start()
-            self.toonRideSequence.setT(offset)
+            try:
+                self.toonRideSequence = self.toonFlightPaths[self.flightPathIndex]
+                self.toonRideSequence.start()
+                self.toonRideSequence.setT(offset)
+            except Exception, e:
+                self.notify.debug('Exception: %s' % e)            
         
     def exitStartRide(self):
-        self.rideSequence.finish()
-        self.speechSequence.finish()
+        try:
+            self.rideSequence.finish()
+            self.speechSequence.finish()
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e) 
 
     def enterRideOver(self, offset):
         if self.avId == base.localAvatar.doId:
