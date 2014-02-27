@@ -156,7 +156,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterBeginWave(self, waveNumber):
         # In this state, Cogs rain down from the heavens. We call .spawnOne at
         # regular intervals until the quota for the wave is met.
-
         self.waveNumber = waveNumber
 
         # Reset spawnpoints:
