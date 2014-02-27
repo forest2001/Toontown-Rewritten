@@ -23,7 +23,7 @@ SuitWaves = [
     [('f', 2), ('bf', 2), ('sc', 2), ('cc', 2), ('f', 2), ('bf', 2), ('sc', 2), ('cc', 2), ('sc', 2)],
 
     # WAVE 2:
-    [('pp', 2), ('ym', 2), ('pp', 2)]
+    [('ym', 2), ('dt', 2), ('tw', 2)]
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
