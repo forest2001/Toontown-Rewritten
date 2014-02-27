@@ -18,12 +18,12 @@ SuitWaves = [
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    ['f', 'ms'],
-    ['sc', 'cc', 'sc'], #Wait Wave
-    ['f', 'bf', 'sc', 'cc', 'f', 'bf', 'sc', 'cc', 'sc'],
+    [('f', 1), ('ms', 4)],
+    [('sc', 1), ('cc', 1), ('sc', 1)], # Wait Wave
+    [('f', 2), ('bf', 2), ('sc', 2), ('cc', 2), ('f', 2), ('bf', 2), ('sc', 2), ('cc', 2), ('sc', 2)],
 
     # WAVE 2:
-    ['pp', 'ym', 'pp']
+    [('pp', 2), ('ym', 2), ('pp', 2)]
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.

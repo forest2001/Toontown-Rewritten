@@ -170,11 +170,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         spreadPerSuit = spread/len(suitsToCall)
 
         self._waveBeginTasks = []
-        for i, suit in enumerate(suitsToCall):
+        for i, (suit, level) in enumerate(suitsToCall):
             self._waveBeginTasks.append(
                 taskMgr.doMethodLater(i*spreadPerSuit, self.spawnOne,
                                       self.uniqueName('summon-suit-%s' % i),
-                                      extraArgs=[suit]))
+                                      extraArgs=[suit, level]))
 
         # Plus a task to switch to the 'Wave' state:
         self._waveBeginTasks.append(
