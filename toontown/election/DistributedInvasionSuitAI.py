@@ -162,6 +162,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def d_sayFaceoffTaunt(self):
         self.sendUpdate('sayFaceoffTaunt', [])
 
+    def makeSkelecog(self):
+        self.sendUpdate('makeSkelecog', [])
+
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
 

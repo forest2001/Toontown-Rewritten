@@ -778,6 +778,7 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
 
   sayFaceoffTaunt() broadcast;
+  makeSkelecog() broadcast;
 };
 
 dclass DistributedBossCog : DistributedNode {

@@ -128,6 +128,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.generateWithRequired(self.zoneId)
         suit.b_setState('FlyDown')
         self.suits.append(suit)
+        # Is this a skelecog wave? If so, make them a skelecog.
+        if self.waveNumber in SafezoneInvasionGlobals.SuitSkelecogWaves:
+            suit.makeSkelecog()
 
     def suitDied(self, suit):
         if suit not in self.suits:

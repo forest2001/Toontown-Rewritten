@@ -89,6 +89,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
             self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
 
+    def makeSkelecog(self):
+        self.setSkelecog(1)
+
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
         self.setX(x)

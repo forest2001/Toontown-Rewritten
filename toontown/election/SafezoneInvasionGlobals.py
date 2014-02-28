@@ -16,6 +16,7 @@ SuitWaves = [
     # Suits in a wave can't exceed spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
+    # TODO: Do full wave setup
 
     # WAVE 1:
     [('f', 1), ('ms', 4)],
@@ -31,6 +32,9 @@ SuitWaves = [
 SuitWaitWaves = [1, 4, 7, 10]
 # These waves have a 20 second intermission period after all suits are destroyed.
 SuitIntermissionWaves = [2, 5, 8, 11]
+# These are the last waves that start turning cogs into Skelecogs.
+# TODO: Skelecog fly down animation; figure out why they don't obey collisions
+SuitSkelecogWaves = [1, 6, 9, 12]
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10
