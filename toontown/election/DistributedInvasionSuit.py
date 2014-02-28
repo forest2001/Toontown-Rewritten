@@ -86,6 +86,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def sayFaceoffTaunt(self):
         taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId)
         self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
+        print(taunt, self.getStyleName(), self.doId, (CFSpeech | CFTimeout))
 
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
@@ -222,6 +223,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
             distance = (prop.getPos() - hitPos).length()
             speed = 50.0
+
+            self.sayFaceoffTaunt()
 
             Sequence(prop.posInterval(distance/speed, hitPos),
                      Func(prop.cleanup),

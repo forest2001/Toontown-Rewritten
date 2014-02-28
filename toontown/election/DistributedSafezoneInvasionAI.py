@@ -22,7 +22,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.spawnPoints = []
         self.suits = []
         self.toons = []
-        self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves)-1)
+        self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
 
     def announceGenerate(self):
         self.demand('BeginWave', 0)
@@ -142,13 +142,14 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         if self.state != 'Wave':
             return
 
-        #Was this the last wave?
+        # Was this the last wave?
         if self.lastWave:
             self.demand('Victory')
-        #Should we spawn this one immidiately?
+        # Should we spawn this one immidiately?
         elif self.waveNumber in SafezoneInvasionGlobals.SuitWaitWaves:
             self.demand('BeginWave', self.waveNumber + 1)
-        #No, we'll give an intermission.
+            self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
+        # No, we'll give an intermission.
         else:
             self.demand('Intermission')
 
@@ -170,11 +171,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         spreadPerSuit = spread/len(suitsToCall)
 
         self._waveBeginTasks = []
-        for i, suit in enumerate(suitsToCall):
+        for i, (suit, level) in enumerate(suitsToCall):
             self._waveBeginTasks.append(
                 taskMgr.doMethodLater(i*spreadPerSuit, self.spawnOne,
                                       self.uniqueName('summon-suit-%s' % i),
-                                      extraArgs=[suit]))
+                                      extraArgs=[suit, level]))
 
         # Plus a task to switch to the 'Wave' state:
         self._waveBeginTasks.append(
@@ -195,14 +196,15 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         for suit in self.suits:
             suit.start()
 
-        #If the wave isn't an Intermission or Wait Wave, send another set of suits out.
-        #Otherwise, wait until all suits are dead and let waveWon() decide what to do.
+        # If the wave isn't an Intermission or Wait Wave, send another set of suits out.
+        # Otherwise, wait until all suits are dead and let waveWon() decide what to do.
         if self.lastWave:
             return
         else:
             if self.waveNumber not in SafezoneInvasionGlobals.SuitIntermissionWaves and self.waveNumber not in SafezoneInvasionGlobals.SuitWaitWaves:
                 self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
                 self.demand('BeginWave', self.waveNumber + 1)
+                self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
 
         # The first suit on the scene also says a faceoff taunt:
         if self.suits:
@@ -222,12 +224,14 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def __endIntermission(self, task):
         self.demand('BeginWave', self.waveNumber + 1)
+        self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
 
     def exitIntermission(self):
         self._delay.remove()
 
     def enterVictory(self):
         # The Toons win! ...
+        # Needs to be implemented...
         pass
 
     def enterOff(self):
