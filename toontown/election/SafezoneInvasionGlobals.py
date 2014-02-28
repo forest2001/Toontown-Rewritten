@@ -48,3 +48,9 @@ ToonHealAmount = 1
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
+
+ElectionSpawnPoints = [
+    #  X     Y     Z     H
+    (-66.7, 87.8, 0.5, 45.0),
+]
+

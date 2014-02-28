@@ -82,17 +82,20 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #Sometimes they all need to do the same thing.
         self.characters = [self.alec, self.slappy, self.flippy]
 
-        #self.suit = Suit.Suit()
-        #cogDNA = SuitDNA.SuitDNA()
-        #cogDNA.newSuit('ym')
-        #self.suit.setDNA(cogDNA)
-        #self.suit.reparentTo(self.showFloor)
+        # self.suit = Suit.Suit()
+        # cogDNA = SuitDNA.SuitDNA()
+        # cogDNA.newSuit('tbc')
+        # self.suit.setDNA(cogDNA)
+        # self.suit.reparentTo(self.showFloor)
 
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
         if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
             self.restockSfx.play()
+
+            # TODO: Remove this. Added here for testing
+            self.sendUpdate('requestSuit', [])
     
     def delete(self):
         self.demand('Off', 0.)
@@ -113,7 +116,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def exitOff(self):
         self.showFloor.reparentTo(render)
-
 
 
     def enterIdle(self, offset):

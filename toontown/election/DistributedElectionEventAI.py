@@ -6,6 +6,9 @@ from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from toontown.election.DistributedHotAirBalloonAI import DistributedHotAirBalloonAI
 import DistributedSafezoneInvasionAI
+from DistributedInvasionSuitAI import DistributedInvasionSuitAI
+from InvasionMasterAI import InvasionMasterAI
+import SafezoneInvasionGlobals
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -16,6 +19,11 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.air = air
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.pieTypeAmount = [4, 20, 1]
+
+        # For the DistributedInvasionSuitAI
+        self.master = InvasionMasterAI(self)
+        self.toons = []
+        self.suits = []
 
     def enterOff(self):
         self.requestDelete()
@@ -80,6 +88,17 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def getState(self):
         return (self.state, self.stateTime)
 
+    def requestSuit(self):
+        # TODO: Set a spawn point on the stage
+        # Figure out why it doesnt spawn at the custom point
+        spawnPoints = range(len(SafezoneInvasionGlobals.ElectionSpawnPoints))
+        suit = DistributedInvasionSuitAI(self.air, self)
+        suit.setElection(True)
+        suit.dna.newSuit('tbc')
+        suit.setSpawnPoint(spawnPoints[0])
+        suit.setLevel(4)
+        suit.generateWithRequired(2000)
+        suit.b_setState('FlyDown')
 
 @magicWord()
 def election(state):
