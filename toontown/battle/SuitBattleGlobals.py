@@ -3055,13 +3055,15 @@ WATERCOOLER = SuitAttacks.keys().index('Watercooler')
 WITHDRAWAL = SuitAttacks.keys().index('Withdrawal')
 WRITE_OFF = SuitAttacks.keys().index('WriteOff')
 
-def getFaceoffTaunt(suitName, doId):
+def getFaceoffTaunt(suitName, doId, randomChoice = False):
     if SuitFaceoffTaunts.has_key(suitName):
         taunts = SuitFaceoffTaunts[suitName]
     else:
         taunts = TTLocalizer.SuitFaceoffDefaultTaunts
-    return taunts[doId % len(taunts)]
-
+    if randomChoice == True:
+        return random.choice(taunts)
+    else:
+        return taunts[doId % len(taunts)]
 
 SuitFaceoffTaunts = OTPLocalizer.SuitFaceoffTaunts
 

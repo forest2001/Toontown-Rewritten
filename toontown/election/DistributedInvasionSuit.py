@@ -8,6 +8,7 @@ from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 from toontown.battle import BattleParticles, SuitBattleGlobals, BattleProps
 from InvasionSuitBase import InvasionSuitBase
+import random
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def __init__(self, cr):
@@ -84,9 +85,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.__moveToStaticPoint()
 
     def sayFaceoffTaunt(self):
-        taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId)
-        self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
-        print(taunt, self.getStyleName(), self.doId, (CFSpeech | CFTimeout))
+        if random.random() < 0.2:
+            taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
+            self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
 
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
@@ -224,8 +225,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             distance = (prop.getPos() - hitPos).length()
             speed = 50.0
 
-            self.sayFaceoffTaunt()
-
             Sequence(prop.posInterval(distance/speed, hitPos),
                      Func(prop.cleanup),
                      Func(prop.removeNode)).start()
@@ -234,6 +233,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             ActorInterval(self, 'throw-paper'),
             Track(
                 (0.0, Func(prop.reparentTo, self.getRightHand())),
+                (0.0, Func(self.sayFaceoffTaunt)),
                 (2.15, Func(throwProp)),
                 (10.0, Func(prop.cleanup)),
                 (10.0, Func(prop.removeNode)) # Ensure cleanup
