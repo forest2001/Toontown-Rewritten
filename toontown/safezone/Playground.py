@@ -52,7 +52,8 @@ class Playground(Place.Place):
                             'quest',
                             'purchase',
                             'stopped',
-                            'fishing']),
+                            'fishing',
+                            'died']),
             State.State('stickerBook',
                         self.enterStickerBook,
                         self.exitStickerBook, [

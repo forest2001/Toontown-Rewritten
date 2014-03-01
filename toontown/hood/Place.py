@@ -619,11 +619,15 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         base.localAvatar.obscureMoveFurnitureButton(-1)
 
     def enterDied(self, requestStatus, callback = None):
-        if callback == None:
-            callback = self.__diedDone
-        base.localAvatar.laffMeter.start()
-        camera.wrtReparentTo(render)
-        base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
+        if self.zoneId == ToontownGlobals.ToontownCentral:
+            base.localAvatar.laffMeter.start()
+            base.localAvatar.b_setAnimState('PlaygroundDied', 1, callback, [requestStatus])
+        else:
+            if callback == None:
+                callback = self.__diedDone
+            base.localAvatar.laffMeter.start()
+            camera.wrtReparentTo(render)
+            base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
         base.localAvatar.obscureMoveFurnitureButton(1)
         return
 
