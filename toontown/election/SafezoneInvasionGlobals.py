@@ -67,3 +67,5 @@ ToonHealAmount = 1
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
 
+# Leave Toontown Central Alert
+LeaveToontownCentralAlert = "You can't leave, Toontown is in danger!"

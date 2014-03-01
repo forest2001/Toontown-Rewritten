@@ -5,6 +5,8 @@ import random
 from toontown.launcher import DownloadForceAcknowledge
 from direct.task.Task import Task
 from toontown.hood import ZoneUtil
+from toontown.toontowngui import TTDialog
+from toontown.election import SafezoneInvasionGlobals
 
 class TTPlayground(Playground.Playground):
 
@@ -32,7 +34,12 @@ class TTPlayground(Playground.Playground):
         return Task.done
 
     def doRequestLeave(self, requestStatus):
-        self.fsm.request('trialerFA', [requestStatus])
+        if base.config.GetBool('want-doomsday', True):
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+        else:
+            self.fsm.request('trialerFA', [requestStatus])
 
     def enterDFA(self, requestStatus):
         doneEvent = 'dfaDoneEvent'
@@ -47,6 +54,14 @@ class TTPlayground(Playground.Playground):
             self.dfa.enter(base.cr.hoodMgr.getPhaseFromHood(ToontownGlobals.PartyHood))
         else:
             self.dfa.enter(5)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            pass
 
     def showPaths(self):
         from toontown.classicchars import CCharPaths

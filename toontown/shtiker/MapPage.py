@@ -5,6 +5,8 @@ from toontown.hood import ZoneUtil
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
+from toontown.toontowngui import TTDialog
+from toontown.election import SafezoneInvasionGlobals
 
 class MapPage(ShtikerPage.ShtikerPage):
 
@@ -229,8 +231,21 @@ class MapPage(ShtikerPage.ShtikerPage):
         messenger.send(self.doneEvent)
 
     def __buttonCallback(self, hood):
-        if hood in base.localAvatar.getTeleportAccess() and hood in base.cr.hoodMgr.getAvailableZones():
-            base.localAvatar.sendUpdate('checkTeleportAccess', [hood])
-            self.doneStatus = {'mode': 'teleport',
-             'hood': hood}
-            messenger.send(self.doneEvent)
+        if base.config.GetBool('want-doomsday', True):
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+        else:
+            if hood in base.localAvatar.getTeleportAccess() and hood in base.cr.hoodMgr.getAvailableZones():
+                base.localAvatar.sendUpdate('checkTeleportAccess', [hood])
+                self.doneStatus = {'mode': 'teleport',
+                 'hood': hood}
+                messenger.send(self.doneEvent)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            pass
