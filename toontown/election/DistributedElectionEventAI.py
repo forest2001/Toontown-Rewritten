@@ -9,7 +9,7 @@ from DistributedSafezoneInvasionAI import DistributedSafezoneInvasionAI
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 from toontown.toonbase import ToontownGlobals
-import SafezoneInvasionGloabls
+import SafezoneInvasionGlobals
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
