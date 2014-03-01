@@ -22,6 +22,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.spawnPoints = []
         self.suits = []
         self.toons = []
+        self.sadToons = []
         self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
 
     def announceGenerate(self):
@@ -48,10 +49,17 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
                             self._handleToonExit,
                             extraArgs=[toon])
 
+            # Don't want those cogs attacking us if we are sad. 
+            # Thats just mean
+            self.checkToonHp(toon)
+
     def _handleToonExit(self, toon):
         if toon in self.toons:
             self.toons.remove(toon)
             self.ignore(self.air.getAvatarExitEvent(toon.doId))
+
+        if toon in self.sadToons:
+            self.sadToons.remove(toon)
 
     def getToon(self, toonId):
         for toon in self.toons:
@@ -80,6 +88,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
 
         toon.toonUp(SafezoneInvasionGlobals.ToonHealAmount)
+
+        self.checkToonHp(toon)
 
     def hitSuit(self, doId):
         # Someone hit one of our suits...
@@ -112,6 +122,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         toon.takeDamage(damage)
 
+        self.checkToonHp(toon)
+
     def __deleteSuits(self):
         for suit in self.suits:
             suit.requestDelete()
@@ -131,6 +143,24 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # Is this a skelecog wave? If so, make them a skelecog.
         if self.waveNumber in SafezoneInvasionGlobals.SuitSkelecogWaves:
             suit.makeSkelecog()
+
+    def checkToonHp(self, toon):
+        if toon.hp <= -1:
+            # We kicked the bucket
+            if toon not in self.sadToons:
+                self.sadToons.append(toon) # They got one of us!
+
+            # Make sure we are in the invasion
+            if toon in self.master.invasion.toons:
+                # Stop attacking us sad toons!
+                self.master.invasion.toons.remove(toon)
+        elif toon.hp > -1: 
+            # Toon now has some laffs...
+            if toon in self.sadToons:
+                self.sadToons.remove(toon) # Remove the sad toon
+
+            # Add the toon back into the invasion
+            self.master.invasion.toons.append(toon)
 
     def suitDied(self, suit):
         if suit not in self.suits:
