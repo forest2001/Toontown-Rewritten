@@ -169,6 +169,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def detachPropeller(self):
         if self.prop:
+            self.prop.cleanup()
             self.prop.removeNode()
             self.prop = None
         if self.propInSound:
