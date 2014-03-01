@@ -1,4 +1,8 @@
 
+# The Spawnpoint of the first cog to land
+FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
+
+# Spawn points for the Invasion Minigame
 SuitSpawnPoints = [
     #   X       Y     Z     H
     ( -59.0,  70.0,   0.0,-149.0),
@@ -13,7 +17,7 @@ SuitSpawnPoints = [
 ]
 
 SuitWaves = [
-    # Suits in a wave can't exceed spawn points.
+    # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
     # TODO: Do full wave setup
@@ -48,9 +52,4 @@ ToonHealAmount = 1
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
-
-ElectionSpawnPoints = [
-    #  X     Y     Z     H
-    (-66.7, 87.8, 0.5, 45.0),
-]
 

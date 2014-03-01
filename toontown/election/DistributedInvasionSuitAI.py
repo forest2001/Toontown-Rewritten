@@ -26,15 +26,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.lastMarchTime = 0.0
         self.__walkTimer = None
 
-        self.election = False
-
     def announceGenerate(self):
-        if self.election == True:
-            x, y, z, h = SafezoneInvasionGlobals.ElectionSpawnPoints[self.spawnPointId]
-            self.freezeLerp(x, y)
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
         else:
             x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
-            self.freezeLerp(x, y)
+        self.freezeLerp(x, y)
 
         self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
                           SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
@@ -179,12 +176,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def getSpawnPoint(self):
         return self.spawnPointId
-
-    def setElection(self, election):
-        self.election = election
-
-    def getElection(self):
-        return self.election
 
     def getAttackInfo(self):
         return (0, '', 0) # This is only set dynamically.

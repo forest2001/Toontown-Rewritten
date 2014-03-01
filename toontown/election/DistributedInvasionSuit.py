@@ -28,14 +28,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackDamage = 0
         self.msStompLoop = None
 
-        self.election = False
-
-    def setElection(self, election):
-        self.election = election
-
-    def getElection(self):
-        return self.election
-
     def delete(self):
         self.demand('Off')
 
@@ -70,16 +62,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
-        if self.election == True:
-            x, y, z, h = SafezoneInvasionGlobals.ElectionSpawnPoints[self.spawnPointId]
-            self.freezeLerp(x, y)
-            self.setPos(x, y, z)
-            self.setH(h)
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
         else:
             x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
-            self.freezeLerp(x, y)
-            self.setPos(x, y, z)
-            self.setH(h)
+        self.freezeLerp(x, y)
+        self.setPos(x, y, z)
+        self.setH(h)
         
 
     def setHP(self, hp):
@@ -123,8 +112,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.__placeOnGround()
 
     def enterFlyDown(self, time):
-        if self.election == True:
-            x, y, z, h = SafezoneInvasionGlobals.ElectionSpawnPoints[self.spawnPointId]
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
         else:
             x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)

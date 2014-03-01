@@ -93,9 +93,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
             self.restockSfx.play()
-
-            # TODO: Remove this. Added here for testing
-            self.sendUpdate('requestSuit', [])
     
     def delete(self):
         self.demand('Off', 0.)
@@ -131,7 +128,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(130),
             #TODO: Func(self.enterVoteBuildup, offset),
             #TODO: Func(self.enterWinnerAnnounce, offset),
-            #TODO: Func(self.enterCogLanding, offset),
+            Func(self.enterCogLanding, offset),
+            Wait(10),
             #TODO: Func(self.enterWinnerDeath, offset),
             Func(self.enterInvasion, offset),
         )
@@ -220,6 +218,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         )
         self.alecSpeech.start()
         self.alecSpeech.setT(offset)
+
+    def enterCogLanding(self, offset):
+        self.sendUpdate('requestSuit', [])
 
     def enterInvasion(self, offset):
         pass

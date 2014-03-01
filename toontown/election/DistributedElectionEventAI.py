@@ -5,10 +5,9 @@ from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from toontown.election.DistributedHotAirBalloonAI import DistributedHotAirBalloonAI
-import DistributedSafezoneInvasionAI
+from DistributedSafezoneInvasionAI import DistributedSafezoneInvasionAI
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
-import SafezoneInvasionGlobals
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -62,10 +61,13 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def enterAlecSpeech(self):
         pass
 
+    def enterCogLanding(self):
+        pass
+
     def enterInvasion(self):
         invasion = simbase.air.doFind('SafezoneInvasion')
         if invasion is None:
-            invasion = DistributedSafezoneInvasionAI.DistributedSafezoneInvasionAI(simbase.air)
+            invasion = DistributedSafezoneInvasionAI(simbase.air)
             invasion.generateWithRequired(2000)
 
     def enterFlippyRunning(self):
@@ -91,12 +93,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def requestSuit(self):
         # TODO: Set a spawn point on the stage
         # Figure out why it doesnt spawn at the custom point
-        spawnPoints = range(len(SafezoneInvasionGlobals.ElectionSpawnPoints))
         suit = DistributedInvasionSuitAI(self.air, self)
-        suit.setElection(True)
-        suit.dna.newSuit('tbc')
-        suit.setSpawnPoint(spawnPoints[0])
-        suit.setLevel(4)
+        suit.dna.newSuit('ym')
+        suit.setSpawnPoint(99)
+        suit.setLevel(0)
         suit.generateWithRequired(2000)
         suit.b_setState('FlyDown')
 
