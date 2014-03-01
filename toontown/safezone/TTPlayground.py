@@ -35,6 +35,7 @@ class TTPlayground(Playground.Playground):
 
     def doRequestLeave(self, requestStatus):
         if base.config.GetBool('want-doomsday', True):
+            base.localAvatar.disableAvatarControls()
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
@@ -61,7 +62,7 @@ class TTPlayground(Playground.Playground):
         self.confirm.cleanup()
         del self.confirm
         if status == 'ok':
-            pass
+            base.localAvatar.enableAvatarControls()
 
     def showPaths(self):
         from toontown.classicchars import CCharPaths
