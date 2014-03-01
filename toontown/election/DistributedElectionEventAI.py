@@ -8,6 +8,8 @@ from toontown.election.DistributedHotAirBalloonAI import DistributedHotAirBalloo
 from DistributedSafezoneInvasionAI import DistributedSafezoneInvasionAI
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
+from toontown.toonbase import ToontownGlobals
+import SafezoneInvasionGloabls
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -94,10 +96,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         # TODO: Set a spawn point on the stage
         # Figure out why it doesnt spawn at the custom point
         suit = DistributedInvasionSuitAI(self.air, self)
-        suit.dna.newSuit('ym')
+        suit.dna.newSuit(SafezoneInvasionGloabls.FirstSuitType)
         suit.setSpawnPoint(99)
         suit.setLevel(0)
-        suit.generateWithRequired(2000)
+        suit.generateWithRequired(ToontownGlobals.ToontownCentral)
         suit.b_setState('FlyDown')
 
 @magicWord()

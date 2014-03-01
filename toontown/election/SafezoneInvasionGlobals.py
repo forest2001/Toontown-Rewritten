@@ -1,6 +1,7 @@
 
 # The Spawnpoint of the first cog to land
 FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
+FirstSuitType = 'ym'
 
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints
