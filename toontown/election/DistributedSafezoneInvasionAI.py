@@ -145,7 +145,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             suit.makeSkelecog()
 
     def checkToonHp(self, toon):
-        if toon.hp <= 0:
+        if toon.hp <= -1:
             # We kicked the bucket
 
             if toon not in self.sadToons:
@@ -155,7 +155,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             if toon in self.master.invasion.toons:
                 self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
 
-        elif toon.hp > 0: 
+        elif toon.hp > -1: 
             # Toon now has some laffs...
             if toon in self.sadToons:
                 self.master.invasion.toons.append(toon) # Add the toon back into the invasion
