@@ -74,8 +74,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.__stopWalkTimer()
 
     def enterAttack(self):
-        self._delay = taskMgr.doMethodLater(3.33, self.__attackDone,
-                                            self.uniqueName('attack'))
+        if self.brain.suit.dna.body in ['a', 'b']:
+            self._delay = taskMgr.doMethodLater(4.6, self.__attackDone,
+                                                self.uniqueName('attack'))
+        else:
+            self._delay = taskMgr.doMethodLater(3.3, self.__attackDone,
+                                                self.uniqueName('attack'))
 
     def __attackDone(self, task):
         self.brain.suitFinishedAttacking()

@@ -206,6 +206,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._attackInterval.start(time)
 
     def makeAttackTrack(self):
+        # TODO: Add more props than the tie. Possibly more animations.
         prop = BattleProps.globalPropPool.getProp(self.attackProp)
 
         # Prop collisions:
@@ -221,6 +222,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
+
+        if self.style.body in ['a', 'b']:
+            throwDelay = 3
+        elif self.style.body == 'c':
+            throwDelay = 2.3
 
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
@@ -242,9 +248,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         track = Parallel(
             ActorInterval(self, 'throw-paper'),
             Track(
-                (0.0, Func(prop.reparentTo, self.getRightHand())),
+                (0.4, Func(prop.reparentTo, self.getRightHand())),
+                (0.0, Func(prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
                 (0.0, Func(self.sayFaceoffTaunt)),
-                (2.15, Func(throwProp)),
+                (throwDelay, Func(throwProp)),
                 (10.0, Func(prop.cleanup)),
                 (10.0, Func(prop.removeNode)) # Ensure cleanup
             ),
