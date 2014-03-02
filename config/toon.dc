@@ -777,7 +777,7 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
 
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
 
-  sayFaceoffTaunt() broadcast;
+  sayFaceoffTaunt(bool custom, string phrase) broadcast;
   makeSkelecog() broadcast;
 };
 
@@ -980,6 +980,7 @@ dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
   requestSuit() clsend airecv;
+  saySuitTaunt(string phrase) clsend airecv;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {

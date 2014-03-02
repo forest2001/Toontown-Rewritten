@@ -222,10 +222,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterCogLanding(self, offset):
         self.sendUpdate('requestSuit', [])
 
+    def sayCogPhrase(self, phrase):
+        self.sendUpdate('saySuitTaunt', [phrase])
+
     def enterInvasion(self, offset):
         pass
-
-
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:

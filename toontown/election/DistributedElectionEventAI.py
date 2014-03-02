@@ -25,6 +25,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.master = InvasionMasterAI(self)
         self.toons = []
         self.suits = []
+        self.suit = 0
 
     def enterOff(self):
         self.requestDelete()
@@ -96,11 +97,15 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         # TODO: Set a spawn point on the stage
         # Figure out why it doesnt spawn at the custom point
         suit = DistributedInvasionSuitAI(self.air, self)
-        suit.dna.newSuit(SafezoneInvasionGloabls.FirstSuitType)
+        suit.dna.newSuit(SafezoneInvasionGlobals.FirstSuitType)
         suit.setSpawnPoint(99)
         suit.setLevel(0)
         suit.generateWithRequired(ToontownGlobals.ToontownCentral)
         suit.b_setState('FlyDown')
+        self.suit = suit
+
+    def saySuitTaunt(self, phrase):
+        self.suit.d_sayFaceoffTaunt(True, phrase)
 
 @magicWord()
 def election(state):

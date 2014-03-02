@@ -88,10 +88,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.state != 'March':
             self.__moveToStaticPoint()
 
-    def sayFaceoffTaunt(self):
-        if random.random() < 0.2:
-            taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
-            self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
+    def sayFaceoffTaunt(self, custom, phrase):
+        if custom == True:
+            self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
+        elif custom == False:
+            if random.random() < 0.2:
+                taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
+                self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
 
     def makeSkelecog(self):
         self.setSkelecog(1)
@@ -250,7 +253,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             Track(
                 (0.4, Func(prop.reparentTo, self.getRightHand())),
                 (0.0, Func(prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
-                (0.0, Func(self.sayFaceoffTaunt)),
+                (0.0, Func(self.sayFaceoffTaunt, False, '')),
                 (throwDelay, Func(throwProp)),
                 (10.0, Func(prop.cleanup)),
                 (10.0, Func(prop.removeNode)) # Ensure cleanup

@@ -166,8 +166,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if self.state != 'Stunned':
             self.b_setState('Stunned')
 
-    def d_sayFaceoffTaunt(self):
-        self.sendUpdate('sayFaceoffTaunt', [])
+    def d_sayFaceoffTaunt(self, custom, phrase):
+        self.sendUpdate('sayFaceoffTaunt', [custom, phrase])
 
     def makeSkelecog(self):
         self.sendUpdate('makeSkelecog', [])
