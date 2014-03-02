@@ -27,9 +27,11 @@ FlippyWheelbarrowPies = [
 #   Election Sequence  #
 ########################
 
-#Election Sequence Music
-IntroMusic = 'phase_4/audio/bgm/EE_intro.ogg' #Played when Alec, Flippy, and Slappy enter
-
+# Election Music
+IntroMusic = 'phase_4/audio/bgm/EE_Intro.ogg' #Played when Alec, Flippy, and Slappy enter
+AnnouncementMusic = 'phase_4/audio/bgm/EE_Announcement.ogg' #Played when Alec, Flippy, and Slappy enter
+VictoryMusic = 'phase_4/audio/bgm/EE_Celebration.ogg' #Played during Slappy's victory, right before the cog lands
+SadMusic = 'phase_4/audio/bgm/EE_DiesandPies.ogg' #Played when Slappy dies and the first pie thrown
 
 
 ########################
