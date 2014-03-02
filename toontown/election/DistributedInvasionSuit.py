@@ -88,7 +88,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.state != 'March':
             self.__moveToStaticPoint()
 
-    def sayFaceoffTaunt(self, custom = False, phrase = None):
+    def sayFaceoffTaunt(self, custom = False, phrase = ""):
         if custom == True:
             self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
         elif custom == False:
