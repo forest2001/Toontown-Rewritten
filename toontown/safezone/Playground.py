@@ -160,7 +160,8 @@ class Playground(Place.Place):
             State.State('died',
                         self.enterDied,
                         self.exitDied, [
-                            'final']),
+                            'final',
+                            'walk']),
             State.State('tunnelIn',
                         self.enterTunnelIn,
                         self.exitTunnelIn, [

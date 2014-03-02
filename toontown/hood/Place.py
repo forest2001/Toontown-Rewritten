@@ -620,6 +620,8 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
 
     def enterDied(self, requestStatus, callback = None):
         if self.zoneId == ToontownGlobals.ToontownCentral:
+            if callback == None:
+                callback = self.__pgdiedDone
             base.localAvatar.laffMeter.start()
             base.localAvatar.b_setAnimState('PlaygroundDied', 1, callback, [requestStatus])
         else:
@@ -630,6 +632,9 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
             base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
         base.localAvatar.obscureMoveFurnitureButton(1)
         return
+        
+    def __pgdiedDone(self, requestStatus):
+        self.fsm.request('walk')
 
     def __diedDone(self, requestStatus):
         self.doneStatus = requestStatus
