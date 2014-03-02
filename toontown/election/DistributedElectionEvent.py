@@ -127,10 +127,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.enterAlecSpeech, offset),
             Wait(130),
             #TODO: Func(self.enterVoteBuildup, offset),
-            #TODO: Func(self.enterWinnerAnnounce, offset),
+            Func(self.enterWinnerAnnounce, offset),
+            Wait(12),
             Func(self.enterCogLanding, offset),
             Wait(10),
-            #TODO: Func(self.enterWinnerDeath, offset),
             Func(self.enterInvasion, offset),
         )
         self.eventInterval.start()
@@ -174,6 +174,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.slappyHallInterval.setT(offset)
         self.flippyHallInterval.start()
         self.flippyHallInterval.setT(offset)
+
+    def exitBegin(self):
+        self.alecHallInterval.finish()
+        self.slappyHallInterval.finish()
+        self.flippyHallInterval.finish()
 
     def enterAlecSpeech(self, offset):
         #For some reason, the sound only plays on their first message. Can anyone look into that?
@@ -219,14 +224,119 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.alecSpeech.start()
         self.alecSpeech.setT(offset)
 
-    def enterCogLanding(self, offset):
-        self.sendUpdate('requestSuit', [])
+    def exitAlecSpeech(self):
+        self.alecSpeech.finish()
 
-    def sayCogPhrase(self, phrase):
-        self.sendUpdate('saySuitTaunt', [phrase])
+    def enterWinnerAnnounce(self, offset):
+        musicVictory = base.loadMusic(ElectionGlobals.VictoryMusic)
+        self.victorySequence = Sequence(
+            Func(base.playMusic, musicVictory, looping=0, volume=0.8)
+        )
+        self.victorySequence.setT(offset)
+        self.victorySequence.start()
+
+    def exitWinnerAnnounce(self):
+        self.victorySequence.finish()
+
+    def enterCogLanding(self, offset):
+        # TODO: Figure out how to get the cog here
+        musicSad = base.loadMusic(ElectionGlobals.SadMusic)
+        sfxSad = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
+        self.sendUpdate('requestSuit', [])
+        self.pieHold = Sequence(
+            ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47),
+            ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47, playRate=-1),
+        )
+        self.cogSequence = Sequence(
+            Wait(3),
+            Func(self.slappy.setChatAbsolute, 'But also... Uhh...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.alec.setChatAbsolute, 'Wha- What is that...?', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.slappy.setChatAbsolute, 'Hey there, fella!', CFSpeech|CFTimeout),
+            Func(self.slappy.loop, 'walk'),
+            self.slappy.posHprInterval(1, (-4, 8.5, 3.03), (110, 0, 0)),
+            Func(self.slappy.play, 'jump'),
+            Wait(0.45),
+            self.slappy.posInterval(0.2, (-7.5, 8.3, 3.5)),
+            self.slappy.posHprInterval(0.4, (-13, 8, 0), (125, 0, 0)),
+            Wait(0.8),
+            Func(self.slappy.loop, 'neutral'),
+            Wait(0.5),
+            Func(self.slappy.setChatAbsolute, 'My name is Slappy, President of the Toon Council in this fair town. Pleased to meet you!', CFSpeech|CFTimeout),
+            Wait(7),
+            #President, you say? Just the Toon I need to speak with.
+            Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on those cameras.", CFSpeech|CFTimeout),
+            Wait(6),
+            #Yes, now as I was-
+            Func(self.slappy.setChatAbsolute, "Ooh, and the suit too. Where did you come from, anyway? It can't be Loony Labs, they're off today.", CFSpeech|CFTimeout),
+            Wait(6),
+            #Now see here, Toon. I-
+            Func(self.slappy.setChatAbsolute, "No, don't tell me! Let me guess. Errrr... Montana? No, no, they don't have that fancy of a suit there. Hrmm...", CFSpeech|CFTimeout),
+            Wait(1),
+            ActorInterval(self.slappy, 'think', startFrame=0, endFrame=46),
+            ActorInterval(self.slappy, 'think', startFrame=46, endFrame=0),
+            Func(self.slappy.loop, 'neutral'),
+            Wait(1),
+            #STOP!
+            #I like your lingo, Toon. You know how to schmooze.
+            #However you seem to need some Positive Reinforcement.
+            Func(self.slappy.play, 'lose'),
+            Wait(2),
+            Func(base.playSfx, sfxSad, volume=0.6),
+            Wait(1.8),
+            Func(base.playMusic, musicSad, looping=0),
+            Wait(0.5),
+            Func(self.flippy.setChatAbsolute, "Slappy, NO!", CFSpeech|CFTimeout),
+            Wait(0.5),
+            Func(self.alec.setChatAbsolute, "Oh my goodness- he...", CFSpeech|CFTimeout),
+            self.slappy.scaleInterval(1.5, VBase3(0.01, 0.01, 0.01), blendType='easeInOut'),
+            Wait(2),
+            Parallel(Func(self.alec.setChatAbsolute, "No. Nonono, no. This isn't happening.", CFSpeech|CFTimeout), Func(self.alec.loop, 'walk')),
+            Parallel(self.alec.posInterval(2, (-1.5, -0.14, 3.13))),
+            Func(self.alec.loop, 'neutral'),
+            Parallel(Func(self.flippy.setChatAbsolute, "What have you done?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'run')),
+            self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)),
+            Func(self.flippy.play, 'jump'),
+            Wait(0.45),
+            self.flippy.posInterval(0.2, (-7.5, -9.2, 3.5)),
+            self.flippy.posHprInterval(0.4, (-14, -9, 0), (50, 0, 0)),
+            Wait(0.2),
+            Func(self.flippy.loop, 'run'),
+            self.flippy.posHprInterval(1, (-15, -1, 0), (0, 0, 0)),
+            Parallel(Func(self.flippy.setChatAbsolute, "Where did you send him?! Where is he?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'neutral')),
+            Wait(2.5),
+            Func(self.alec.setChatAbsolute, "Flippy, NO! Get away from it!", CFSpeech|CFTimeout),
+            Wait(6),
+            Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
+            Wait(8),
+            #I don't like your tone. Perhaps you need a smear of Positive Reinforcement as well.
+            Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
+            Func(self.flippy.loop, 'neutral'),
+            #Let me confirm our meeting to discuss this. I won't take no for an answer.
+            Wait(3.5),
+            Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
+            #Fun cannot exist without order.
+            Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=31), Func(self.flippy.setChatAbsolute, "I'm warning you, stay away!", CFSpeech|CFTimeout)),
+            Func(self.pieHold.loop),
+            #Don't worry, I haven't been wrong yet.
+            Wait(4),
+            Func(self.pieHold.finish),
+            Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout)),
+            Func(self.flippy.loop, 'neutral')
+        )
+        self.cogSequence.setT(offset)
+        self.cogSequence.start()
+
+    def exitCogLanding(self):
+        self.cogSequence.finish()
 
     def enterInvasion(self, offset):
         pass
+
+
+    def sayCogPhrase(self, phrase):
+        self.sendUpdate('saySuitTaunt', [phrase])
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:
