@@ -41,7 +41,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.demand('Off')
 
         self.brain.stop()
-        self.invasion.suitDied(self)
+        try:
+            self.invasion.suitDied(self)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch

@@ -124,20 +124,21 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(3),
             Func(self.enterBegin, offset),
             Wait(10),
-            Func(self.enterAlecSpeech, offset),
-            Wait(130),
-            #TODO: Func(self.enterVoteBuildup, offset),
+            #Func(self.enterAlecSpeech, offset),
+            #Wait(140),
+            Func(self.enterVoteBuildup, offset),
+            Wait(12),
             Func(self.enterWinnerAnnounce, offset),
             Wait(12),
             Func(self.enterCogLanding, offset),
-            Wait(10),
+            Wait(80),
             Func(self.enterInvasion, offset),
         )
         self.eventInterval.start()
         self.eventInterval.setT(offset)
 
     def enterBegin(self, offset):
-        #Oh boy, here come the candidates
+        # Oh boy, here come the candidates
         for character in self.characters:
             character.reparentTo(self.showFloor)
             character.setPosHpr(35, -0.3, 0, 90, 0, 0)
@@ -181,19 +182,19 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyHallInterval.finish()
 
     def enterAlecSpeech(self, offset):
-        #For some reason, the sound only plays on their first message. Can anyone look into that?
+        # For some reason, the sound only plays on their first message. Can anyone look into that?
         self.alecSpeech = Sequence(
             Func(self.alec.setChatAbsolute, 'Hellooo Toontown~!', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.alec.setChatAbsolute, 'As many of you know, I''m your Hilarious Host and Eccentric Elector: Alec Tinn!', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'As many of you know, I\'m your Hilarious Host and Eccentric Elector: Alec Tinn!', CFSpeech|CFTimeout),
             Wait(8.5),
-            Func(self.alec.setChatAbsolute, 'And of course, we can''t forget about our two toonerific toons who have been selected to fight for the Presidency...', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'And of course, we can\'t forget about our two toonerific toons who have been selected to fight for the Presidency...', CFSpeech|CFTimeout),
             Wait(9),
             Func(self.alec.setChatAbsolute, 'Slappy Quackintosh, and Flippy Doggenbottom!', CFSpeech|CFTimeout),
             Wait(6.5),
             Func(self.alec.setChatAbsolute, 'I must say, this turnout is absolutely, positivley, extra-tooneriffically, astounding!', CFSpeech|CFTimeout),
             Wait(6),
-            Func(self.alec.setChatAbsolute, 'It''s truely an honor to be here on this day, and I''m sure I speak for all of us when I thank you for coming.', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'It\'s truely an honor to be here on this day, and I''m sure I speak for all of us when I thank you for coming.', CFSpeech|CFTimeout),
             Wait(8),
             Func(self.alec.setChatAbsolute, 'Now, the votes are almost ready to be tallied! Flippy, Slappy, do either of you have anything to say before the moment of truth?', CFSpeech|CFTimeout),
             Wait(10),
@@ -207,15 +208,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(8),
             Func(self.flippy.setChatAbsolute, 'Even after all of this terrific time together, I''m still speechless that I''m here today.', CFSpeech|CFTimeout),
             Wait(8),
-            Func(self.flippy.setChatAbsolute, 'Here''s to Toontown, Slappy, and all of you!', CFSpeech|CFTimeout),
+            Func(self.flippy.setChatAbsolute, 'Here\'s to Toontown, Slappy, and all of you!', CFSpeech|CFTimeout),
             Wait(7),
             Func(self.alec.setChatAbsolute, 'Well said, the both of you!', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.alec.setChatAbsolute, 'Ooh, I''m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'Ooh, I\'m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
             Wait(10),
-            Func(self.alec.setChatAbsolute, 'Hmm, I''m not sure if you are. Let me ask again: Are you toons ready to hear the winners?!', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'Hmm, I\'m not sure if you are. Let me ask again: Are you toons ready to hear the winners?!', CFSpeech|CFTimeout),
             Wait(8),
-            Func(self.alec.setChatAbsolute, 'WOAH! Woah! No need to yell! I''m right here, I get it. You guys want to hear them.', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'WOAH! Woah! No need to yell! I\'m right here, I get it. You guys want to hear them.', CFSpeech|CFTimeout),
             Wait(8),
             Func(self.alec.setChatAbsolute, 'So, without further ado...', CFSpeech|CFTimeout),
             Wait(4),
@@ -227,10 +228,33 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitAlecSpeech(self):
         self.alecSpeech.finish()
 
+    def enterVoteBuildup(self, offset):
+        musicAnnouncement = base.loadMusic(ElectionGlobals.AnnouncementMusic)
+        self.buildupSequence = Sequence(
+            Func(self.alec.setChatAbsolute, 'And the winner is...', CFSpeech|CFTimeout),
+            Wait(4),
+            Func(base.playMusic, musicAnnouncement, looping=0, volume=0.8),
+            Wait(1),
+            Func(self.alec.setChatAbsolute, 'SLAPPYYYY~ QUACKINTOSH!', CFSpeech|CFTimeout),
+            Wait(2),
+            ActorInterval(self.slappy, 'good-putt'),
+            ActorInterval(self.slappy, 'happy-dance'),
+            Func(self.slappy.loop, 'neutral'),
+        )
+        self.buildupSequence.start()
+        self.buildupSequence.setT(offset)
+
     def enterWinnerAnnounce(self, offset):
+        # Slappy won! Lets give him some victory time before his rude interruption.
         musicVictory = base.loadMusic(ElectionGlobals.VictoryMusic)
         self.victorySequence = Sequence(
-            Func(base.playMusic, musicVictory, looping=0, volume=0.8)
+            Func(base.playMusic, musicVictory, looping=0, volume=0.8),
+            Wait(0.3),
+            Func(self.slappy.setChatAbsolute, 'Holy smokes... I don\'t even know where to begin!', CFSpeech|CFTimeout),
+            Wait(4),
+            Func(self.slappy.setChatAbsolute, 'I know without any doubt that I hereby accept my duty as your President...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.slappy.setChatAbsolute, '...and will Presently Preside with full Presidential Priorities of this Presidentliness!', CFSpeech|CFTimeout),
         )
         self.victorySequence.setT(offset)
         self.victorySequence.start()
@@ -245,15 +269,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.sendUpdate('requestSuit', [])
         self.pieHold = Sequence(
             ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47),
-            ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47, playRate=-1),
+            ActorInterval(self.flippy, 'throw', startFrame=46, endFrame=33),
         )
         self.cogSequence = Sequence(
             Wait(3),
-            Func(self.slappy.setChatAbsolute, 'But also... Uhh...', CFSpeech|CFTimeout),
+            Func(self.slappy.setChatAbsolute, 'I will ensure- Uhh...', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.alec.setChatAbsolute, 'Wha- What is that...?', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.slappy.setChatAbsolute, 'Hey there, fella!', CFSpeech|CFTimeout),
+            Func(self.slappy.setChatAbsolute, 'Err... Hey there, fella!', CFSpeech|CFTimeout),
             Func(self.slappy.loop, 'walk'),
             self.slappy.posHprInterval(1, (-4, 8.5, 3.03), (110, 0, 0)),
             Func(self.slappy.play, 'jump'),
@@ -263,24 +287,30 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(0.8),
             Func(self.slappy.loop, 'neutral'),
             Wait(0.5),
-            Func(self.slappy.setChatAbsolute, 'My name is Slappy, President of the Toon Council in this fair town. Pleased to meet you!', CFSpeech|CFTimeout),
-            Wait(7),
-            #President, you say? Just the Toon I need to speak with.
+            Func(self.slappy.setChatAbsolute, 'My name is Slappy, the newly elected President of the Toon Council in this Toonerrific Town. Pleased to meet you!', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.setSuitPhrase, 'President, you say? Just the Toon I need to speak with.'),
+            Wait(5),
             Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on those cameras.", CFSpeech|CFTimeout),
-            Wait(6),
-            #Yes, now as I was-
+            Wait(5),
+            Func(self.setSuitPhrase, 'Yes. Now as I began to-'),
+            Wait(1),
             Func(self.slappy.setChatAbsolute, "Ooh, and the suit too. Where did you come from, anyway? It can't be Loony Labs, they're off today.", CFSpeech|CFTimeout),
-            Wait(6),
-            #Now see here, Toon. I-
+            Wait(5),
+            Func(self.setSuitPhrase, 'See here, Toon. I am-'),
+            Wait(1),
             Func(self.slappy.setChatAbsolute, "No, don't tell me! Let me guess. Errrr... Montana? No, no, they don't have that fancy of a suit there. Hrmm...", CFSpeech|CFTimeout),
             Wait(1),
             ActorInterval(self.slappy, 'think', startFrame=0, endFrame=46),
             ActorInterval(self.slappy, 'think', startFrame=46, endFrame=0),
             Func(self.slappy.loop, 'neutral'),
             Wait(1),
-            #STOP!
-            #I like your lingo, Toon. You know how to schmooze.
-            #However you seem to need some Positive Reinforcement.
+            Func(self.setSuitPhrase, 'STOP!'),
+            Wait(4),
+            Func(self.setSuitPhrase, 'I like your lingo, Toon. You know how to schmooze.'),
+            Wait(6),
+            Func(self.setSuitPhrase, 'However, you seem to need a smear of Positive Reinforcement.'),
+            Wait(5),
             Func(self.slappy.play, 'lose'),
             Wait(2),
             Func(base.playSfx, sfxSad, volume=0.6),
@@ -309,21 +339,27 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.setChatAbsolute, "Flippy, NO! Get away from it!", CFSpeech|CFTimeout),
             Wait(6),
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
-            Wait(8),
-            #I don't like your tone. Perhaps you need a smear of Positive Reinforcement as well.
+            Wait(4),
+            Func(self.setSuitPhrase, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.'),
+            Wait(4),
             Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
             Func(self.flippy.loop, 'neutral'),
-            #Let me confirm our meeting to discuss this. I won't take no for an answer.
-            Wait(3.5),
+            Wait(1.5),
+            Func(self.setSuitPhrase, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.'),
+            Wait(1.5),
             Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
-            #Fun cannot exist without order.
+            Func(self.flippy.loop, 'nuetral'),
+            Func(self.setSuitPhrase, 'Fun cannot exist without order.'),
+            Wait(2),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=31), Func(self.flippy.setChatAbsolute, "I'm warning you, stay away!", CFSpeech|CFTimeout)),
-            Func(self.pieHold.loop),
-            #Don't worry, I haven't been wrong yet.
-            Wait(4),
+            Wait(1),
+            Func(self.setSuitPhrase, 'Don\'t worry, I haven\'t been wrong yet.'),
+            Wait(1.5),
             Func(self.pieHold.finish),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout)),
-            Func(self.flippy.loop, 'neutral')
+            Func(self.flippy.loop, 'neutral'),
+            Wait(1),
+            Func(self.setSuitState, 'Explode')
         )
         self.cogSequence.setT(offset)
         self.cogSequence.start()
@@ -335,8 +371,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         pass
 
 
-    def sayCogPhrase(self, phrase):
-        self.sendUpdate('saySuitTaunt', [phrase])
+    def setSuitPhrase(self, phrase):
+        self.sendUpdate('setSuitPhrase', [phrase])
+        
+    def setSuitState(self, state):
+        self.sendUpdate('setSuitState', [state])
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:

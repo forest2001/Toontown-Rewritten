@@ -980,7 +980,8 @@ dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
   requestSuit() clsend airecv;
-  saySuitTaunt(string phrase) clsend airecv;
+  setSuitPhrase(string phrase) clsend airecv;
+  setSuitState(string phrase) clsend airecv;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {

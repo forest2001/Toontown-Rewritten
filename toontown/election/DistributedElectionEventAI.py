@@ -52,7 +52,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             event = DistributedElectionEventAI(simbase.air)
             event.generateWithRequired(2000)
         self.eventSequence = Sequence(
-            Wait(180),
+            Wait(260),
             Func(event.b_setState, 'Invasion'),
         )
         self.eventSequence.start()
@@ -100,8 +100,11 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
         self.suit.b_setState('FlyDown')
 
-    def saySuitTaunt(self, phrase):
+    def setSuitPhrase(self, phrase):
         self.suit.d_sayFaceoffTaunt(True, phrase)
+        
+    def setSuitState(self, state):
+        self.suit.b_setState(state)
 
 @magicWord()
 def election(state):
