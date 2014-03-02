@@ -166,7 +166,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if self.state != 'Stunned':
             self.b_setState('Stunned')
 
-    def d_sayFaceoffTaunt(self, custom, phrase):
+    def d_sayFaceoffTaunt(self, custom = False, phrase = None):
+        # Always crashes
+        # AssertionError: Don't know how to pack object: None at line 857 of direct/src/dcparser/dcPacker.cxx
         self.sendUpdate('sayFaceoffTaunt', [custom, phrase])
 
     def makeSkelecog(self):

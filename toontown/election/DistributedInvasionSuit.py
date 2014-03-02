@@ -88,7 +88,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.state != 'March':
             self.__moveToStaticPoint()
 
-    def sayFaceoffTaunt(self, custom, phrase):
+    def sayFaceoffTaunt(self, custom = False, phrase = None):
         if custom == True:
             self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
         elif custom == False:
@@ -253,7 +253,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             Track(
                 (0.4, Func(prop.reparentTo, self.getRightHand())),
                 (0.0, Func(prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
-                (0.0, Func(self.sayFaceoffTaunt, False, '')),
+                (0.0, Func(self.sayFaceoffTaunt)),
                 (throwDelay, Func(throwProp)),
                 (10.0, Func(prop.cleanup)),
                 (10.0, Func(prop.removeNode)) # Ensure cleanup
