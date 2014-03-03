@@ -106,6 +106,9 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def setSuitState(self, state):
         self.suit.b_setState(state)
 
+    def setSuitDamage(self, hp):
+        self.suit.takeDamage(hp)
+
 @magicWord()
 def election(state):
     event = simbase.air.doFind('ElectionEvent')

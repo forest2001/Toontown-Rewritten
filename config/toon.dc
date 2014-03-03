@@ -981,7 +981,8 @@ dclass DistributedElectionEvent : DistributedObject {
   wheelbarrowAvatarEnter() clsend airecv;
   requestSuit() clsend airecv;
   setSuitPhrase(string phrase) clsend airecv;
-  setSuitState(string phrase) clsend airecv;
+  setSuitState(string state) clsend airecv;
+  setSuitDamage(uint8 damage) clsend airecv;  
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {

@@ -351,15 +351,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.flippy.loop, 'nuetral'),
             Func(self.setSuitPhrase, 'Fun cannot exist without order.'),
             Wait(2),
-            Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=31), Func(self.flippy.setChatAbsolute, "I'm warning you, stay away!", CFSpeech|CFTimeout)),
+            Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay away!", CFSpeech|CFTimeout)),
             Wait(1),
             Func(self.setSuitPhrase, 'Don\'t worry, I haven\'t been wrong yet.'),
             Wait(1.5),
-            Func(self.pieHold.finish),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout)),
             Func(self.flippy.loop, 'neutral'),
             Wait(1),
-            Func(self.setSuitState, 'Explode')
+            Func(self.setSuitDamage, 36)
         )
         self.cogSequence.setT(offset)
         self.cogSequence.start()
@@ -370,12 +369,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterInvasion(self, offset):
         pass
 
+    def setSuitPhrase(self, phrase):
+        self.sendUpdate('setSuitPhrase', [phrase])
 
     def setSuitPhrase(self, phrase):
         self.sendUpdate('setSuitPhrase', [phrase])
-        
+
     def setSuitState(self, state):
         self.sendUpdate('setSuitState', [state])
+
+    def setSuitDamage(self, hp):
+        self.sendUpdate('setSuitDamage', [hp])
 
     def enterFlippyRunning(self, offset):
         # First, put Flippy at a start position:
