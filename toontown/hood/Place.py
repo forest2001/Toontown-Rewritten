@@ -623,6 +623,8 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
             callback = self.__pgdiedDone
             base.localAvatar.laffMeter.start()
             base.localAvatar.b_setAnimState('PlaygroundDied', 1, callback, [])
+            base.localAvatar.setNumPies(0)
+            #base.localAvatar.endAllowPies()
         else:
             if callback == None:
                 callback = self.__diedDone

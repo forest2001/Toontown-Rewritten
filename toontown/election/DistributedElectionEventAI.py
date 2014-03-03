@@ -39,9 +39,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         if not av:
             self.air.writeServerEvent('suspicious', avId, 'Got a request for pies from a toon that isn\'t on the district!')
             return
-        av.b_setPieType(self.pieTypeAmount[0])
-        av.b_setNumPies(self.pieTypeAmount[1])
-        av.b_setPieThrowType(self.pieTypeAmount[2])
+        if av.hp > 0:
+            av.b_setPieType(self.pieTypeAmount[0])
+            av.b_setNumPies(self.pieTypeAmount[1])
+            av.b_setPieThrowType(self.pieTypeAmount[2])
 
     def enterIdle(self):
         pass
