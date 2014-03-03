@@ -1010,4 +1010,5 @@ class Suit(Avatar.Avatar):
             loadSkelDialog()
             return SkelSuitDialogArray
         else:
+            loadDialog(1)
             return SuitDialogArray
