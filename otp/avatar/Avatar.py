@@ -316,6 +316,10 @@ class Avatar(Actor, ShadowCaster):
             sfxIndex = 5
         else:
             notify.error('unrecognized dialogue type: ', type)
+        
+        if base.config.GetBool('want-doomsday', True):
+            sfxIndex = random.choice([0, 1, 2, 3])
+        
         if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:
             base.playSfx(dialogueArray[sfxIndex], node=self)
         return
