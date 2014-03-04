@@ -261,10 +261,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.applyAlphaModifications()
 
     def setLocation(self, parentId, zoneId):
-        messenger.send('toon-left-%s' % self.zoneId, [self])
-        messenger.send('toon-entered-%s' % zoneId, [self])
+        if simbase.config.GetBool('want-doomsday', True):
+            messenger.send('toon-left-%s' % self.zoneId, [self])
+            messenger.send('toon-entered-%s' % ToontownGlobals.ToontownCentral, [self])
 
-        DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
+            DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, ToontownGlobals.ToontownCentral)
+        else:
+            messenger.send('toon-left-%s' % self.zoneId, [self])
+            messenger.send('toon-entered-%s' % zoneId, [self])
+
+            DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
@@ -277,7 +283,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
-                    
+                
                 if zoneId == ToontownGlobals.GoofySpeedway:
                     tpAccess = self.getTeleportAccess()
                     if not ToontownGlobals.GoofySpeedway in tpAccess:
