@@ -346,6 +346,7 @@ class Avatar(Actor, ShadowCaster):
         return retval
 
     def setChatAbsolute(self, chatString, chatFlags, dialogue = None, interrupt = 1):
+        self.clearChat()
         self.nametag.setChat(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
