@@ -300,7 +300,6 @@ class Avatar(Actor, ShadowCaster):
         dialogueArray = self.getDialogueArray()
         if dialogueArray == None:
             return
-        print dialogueArray
         sfxIndex = None
         if type == 'statementA' or type == 'statementB':
             if length == 1:
