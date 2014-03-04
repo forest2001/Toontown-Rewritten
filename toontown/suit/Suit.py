@@ -259,8 +259,8 @@ def loadDialog(level):
         for file in SuitDialogFiles:
             SuitDialogArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
-        SuitDialogArray.append(SuitDialogArray[2])
-        SuitDialogArray.append(SuitDialogArray[2])
+        SuitDialogArray.append(SuitDialogArray[0])
+        SuitDialogArray.append(SuitDialogArray[1])
 
 
 def loadSkelDialog():
