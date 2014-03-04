@@ -133,16 +133,20 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         pointId = random.choice(self.spawnPoints)
         self.spawnPoints.remove(pointId)
 
+        # Define our suit:
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit(suitType)
         suit.setSpawnPoint(pointId)
         suit.setLevel(levelOffset)
         suit.generateWithRequired(self.zoneId)
-        suit.b_setState('FlyDown')
-        self.suits.append(suit)
-        # Is this a skelecog wave? If so, make them a skelecog.
+
+        # Is this a skelecog wave?
         if self.waveNumber in SafezoneInvasionGlobals.SuitSkelecogWaves:
             suit.makeSkelecog()
+
+        # Now send 'em in!
+        suit.b_setState('FlyDown')
+        self.suits.append(suit)
 
     def checkToonHp(self, toon):
         if toon.hp <= -1:

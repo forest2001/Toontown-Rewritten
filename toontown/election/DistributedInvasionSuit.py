@@ -98,6 +98,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def makeSkelecog(self):
         self.setSkelecog(1)
+        self.corpMedallion.hide()
+        self.healthBar.show()
 
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
