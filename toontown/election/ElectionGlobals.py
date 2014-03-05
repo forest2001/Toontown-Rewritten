@@ -32,6 +32,101 @@ FlippyGibPies = [
 ]
 FlippyGibPiesChoice = choice(FlippyGibPies)
 
+# Interactive Phrases
+FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
+                   [107, 108],                                           # Hello?/Are you still there?
+                   [200, 201, 202, 206, 207],                            # Bye
+                   [203, 204, 205],                                      # Have a nice day
+                   [208, 209],                                           # I need to go
+                   [301],                                                # Owooo!
+                   [500],                                                # Thanks!
+                   [505, 506, 507, 5602],                                # That was fun!,
+                   [508, 511, 1001, 1003, 1005, 1006, 1126, 1127, 5603], # Let's work together!
+                   [509],                                                # Need some help?
+                   [510],                                                # Want to be friends?
+                   [600, 601, 602, 603],                                 # You are ______!
+                   [700, 701, 702, 704, 705, 706, 707],                  # I like your ____
+                   [703],                                                # I like your skirt
+                   [800, 801, 802, 803, 804],                            # Sorry
+                   [807],                                                # Sorry, what did you say?
+                   [808],                                                # Sorry, I can only use speedchat
+                   [901],                                                # You stink!
+                   [900, 902, 903, 904, 905],                            # Please go away!
+                   [1200],                                               # What Toontask are you working on?
+                   [1500],                                               # Got gags?
+                   [1501],                                               # I need more gags
+                   [1508],                                               # Lets use throw
+                   [1415],                                               # I need more laff
+                   [1520],                                               # Catch!
+                   [1526],                                               # Piece of cake
+                   [1702, 1554, 1556, 1557],                             # Cogs
+                   [1558],                                               # Save powerful gags
+                   [5400],                                               # Toontown Rewritten
+                   [5401, 5407, 5408, 5409],                             # Found any bugs
+                   [5402],                                               # Crashed
+                   [5404],                                               # Toonbook
+                   [5405],                                               # Livestreaming
+                   [5500],                                               # :)
+                   [5501],                                               # :(
+                   [5502],                                               # :D
+                   [5503],                                               # :C
+                   [5504],                                               # :O
+                   [5505],                                               # :P
+                   [5506],                                               # >:)
+                   [5507],                                               # >:C
+                   [5600, 5601],                                         # what's up?
+                   [10100],                                              # Who are you voting for?
+                   [10101, 10102],                                       # Flippy
+                   [10103, 10104],                                       # Slappy
+                   [10105]]                                              # Decorations
+
+FlippyPhrases = ['Hey there! How are you doing?',
+                 'I\'m here, present and accounted for!',
+                 'Alrighty, catcha later!',
+                 'Thanks! To you as well.',
+                 'Leaving so soon?',
+                 'Ha, that\'s a funny phrase. Owooo!',
+                 'No problem.',
+                 'You betcha!',
+                 'I would if I could, but I should stay here in case new toons come along.',
+                 'Thanks for the offer, but I think I have things under control.',
+                 'Sorry, I\'m not allowed to make friends over the election period. :(',
+                 'Right back \'atcha!',
+                 'Aw, shucks. I like yours too!',
+                 'Not sure if I should consider that a compliement or...',
+                 'No problem. It\'s all good.'
+                 'Huh. I forget.',
+                 'Good, because I can only respond to SpeedChat. Haha!',
+                 'It\'s probably the leftover ingredients from all of those pies. Pee-yew!',
+                 'I\'m sorry. Did I do something wrong? :(',
+                 'I haven\'t gotten any in a while. I guess you could say that the election is my ToonTask!',
+                 'All the cream pies we need!',
+                 'Oh? No problem, just grab some from the wheelbarrow.',
+                 'Totally! Throw is my favorite kind of gag.',
+                 'Uh oh, that\'s no good. You should find an ice cream cone around here.',
+                 'I\'m wide open, pass it here!',
+                 'Sorry, only pies here.',
+                 '...like, the gear? What have gears ever done to you? :(',
+                 'Hmm, good idea. Pies are going so fast that we might have to switch to cupcakes by the time of the election.',
+                 'Toontown... Rewritten? I\'ve heard Surlee say that a few times, but I can never figure out what he means.',
+                 'Hmm, well I did spot a butterfly over there.',
+                 'Oof, plenty of times at first. Karts are tricky to get used to.',
+                 'I do, actually! I don\'t use it often.',
+                 'Hiya, viewers! Don\'t forget to Flip for Flippy!',
+                 ':D',
+                 ':C',
+                 ':)',
+                 ':(',
+                 ':P',
+                 ':O',
+                 '>:C',
+                 '>:)',
+                 'I\'m doing pretty great! And you?',
+                 'I\'m not allowed to vote, silly!',
+                 'That\'s the spirit! :)',
+                 'Slappy is pretty fun, too. Great balloon. Though... See that plane stuck up there...?',
+                 'Me too. Alec did a great job, and I hear there are more coming.']
+
 # Let's define all of Slappy's speeches.
 # There should be exactly 12 phrases for each to fit with the sequence.
 # If you add another, make sure to add it to SlappySpeechChoices.
@@ -106,6 +201,7 @@ SlappySpeech5 = [
     "You and I will figure out the secrets of the grey, unleash the creativity it holds. I promise you on that.",
     "We'll find out what it is, for not only Toontown but for the whole Tooniverse. Make sure you hold me to it! "
 ]
+
 # Now we need to take those phrases and pick one to use
 SlappySpeechChoices = [SlappySpeech1, SlappySpeech2, SlappySpeech3, SlappySpeech5]
 SlappySpeeches = choice(SlappySpeechChoices)

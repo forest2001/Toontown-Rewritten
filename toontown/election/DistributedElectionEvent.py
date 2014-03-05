@@ -109,168 +109,21 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippy.initializeBodyCollisions('toon')
         self.interactiveOn = 1
         self.flippyPhrase = None
+
         def phraseSaid(phraseId):
             # Check distance...
             if Vec3(base.localAvatar.getPos(self.flippy)).length() > 10:
                 return
             
-            # This is really really bad but I have no idea how to do what I wanted to do
-            # Originally I wanted to do:
-            # if ElectionGlobals.[literal phraseId]:
-            #     say ElectionGlobals.[literal phraseId] (which would be a string)
-            # but I have no idea how to translate that to real python
-            if phraseId in [100, 101, 102, 103, 104, 105]:
-                # Hello
-                self.flippyPhrase = 'Hey there! How are you doing?'
-            elif phraseId in [107, 108]:
-                # Hello?/Are you still there?
-                self.flippyPhrase = 'I\'m here, present and accounted for!'
-            elif phraseId in [200, 201, 202, 206, 207]:
-                # Bye
-                self.flippyPhrase = 'Alrighty, catcha later!'
-            elif phraseId in [203, 204, 205]:
-                # Have a nice day
-                self.flippyPhrase = 'Thanks! To you as well.'
-            elif phraseId in [208, 209]:
-                # I need to go
-                self.flippyPhrase = 'Leaving so soon?'
-            elif phraseId == 301:
-                # Owooo!
-                self.flippyPhrase = 'Ha, that\'s a funny phrase. Owooo!'
-            elif phraseId == 500:
-                # Thanks!
-                self.flippyPhrase = 'No problem.'
-            elif phraseId in [505, 506, 507, 5602]:
-                # That was fun!
-                self.flippyPhrase = 'You betcha!'
-            elif phraseId in [508, 511, 1001, 1003, 1005, 1006, 1126, 1127, 5603]:
-                # Let's work together!
-                self.flippyPhrase = 'I would if I could, but I should stay here in case new toons come along.'
-            elif phraseId == 509:
-                # Need some help?
-                self.flippyPhrase = 'Thanks for the offer, but I think I have things under control.'
-            elif phraseId == 510:
-                # Want to be friends?
-                self.flippyPhrase = 'Sorry, I\'m not allowed to make friends over the election period. :('
-            elif phraseId in [600, 601, 602, 603]:
-                # You are ______!
-                self.flippyPhrase = 'Right back \'atcha!'
-            elif phraseId in [700, 701, 702, 704, 705, 706, 707]:
-                # I like your ____
-                self.flippyPhrase = 'Aw, shucks. I like yours too!'
-            elif phraseId == 703:
-                # I like your skirt
-                self.flippyPhrase = 'Not sure if I should consider that a compliement or...'
-            elif phraseId in [800, 801, 802, 803, 804]:
-                # Sorry
-                self.flippyPhrase = 'No problem. It\'s all good.'
-            elif phraseId == 807:
-                # Sorry, what did you say?
-                # He'll repeat what he said unless the phrase is none.
-                if self.flippyPhrase == None:
-                    self.flippyPhrase = 'Huh. I forget.'    
-                else:
-                    pass
-            elif phraseId == 808:
-                # Sorry, I can only use speedchat
-                self.flippyPhrase = 'Good, because I can only respond to SpeedChat. Haha!'
-            elif phraseId == 901:
-                # You stink!
-                self.flippyPhrase = 'It\'s probably the leftover ingredients from all of those pies. Pee-yew!'
-            elif phraseId in [900, 902, 903, 904, 905]:
-                # Please go away!
-                self.flippyPhrase = 'I\'m sorry. Did I do something wrong? :('
-            elif phraseId == 1200:
-                # What Toontask are you working on?
-                self.flippyPhrase = 'I haven\'t gotten any in a while. I guess you could say that the election is my ToonTask!'
-            elif phraseId == 1500:
-                # Got gags?
-                self.flippyPhrase = 'All the cream pies we need!'
-            elif phraseId == 1501:
-                # I need more gags
-                self.flippyPhrase = 'Oh? No problem, just grab some from the wheelbarrow.'
-            elif phraseId == 1508:
-                # Lets use throw
-                self.flippyPhrase = 'Totally! Throw is my favorite kind of gag.'
-            elif phraseId == 1415:
-                # I need more laff
-                self.flippyPhrase = 'Uh oh, that\'s no good. You should find an ice cream cone around here.'
-            elif phraseId == 1520:
-                # Catch!
-                self.flippyPhrase = 'I\'m wide open, pass it here!'
-            elif phraseId == 1526:
-                # Piece of cake
-                self.flippyPhrase = 'Sorry, only pies here.'
-            elif phraseId in [1702, 1554, 1556, 1557]:
-                # Cogs
-                self.flippyPhrase = '...like, the gear? What have gears ever done to you? :('
-            elif phraseId == 1558:
-                # Save powerful gags
-                self.flippyPhrase = 'Hmm, good idea. Pies are going so fast that we might have to switch to cupcakes by the time of the election.'
-            elif phraseId == 5400:
-                # Toontown Rewritten
-                self.flippyPhrase = 'Toontown... Rewritten? I\'ve heard Surlee say that a few times, but I can never figure out what he means.'
-            elif phraseId in [5401, 5407, 5408, 5409]:
-                # Found any bugs
-                self.flippyPhrase = 'Hmm, well I did spot a butterfly over there.'
-            elif phraseId == 5402:
-                # Crashed
-                self.flippyPhrase = 'Oof, plenty of times at first. Karts are tricky to get used to.'
-            elif phraseId == 5404:
-                # Toonbook
-                self.flippyPhrase = 'I do, actually! I don\'t use it often.'
-            elif phraseId == 5405:
-                # Livestreaming
-                self.flippyPhrase = 'Hiya, viewers! Don\'t forget to Flip for Flippy!'
-            elif phraseId == 5405:
-                # Livestreaming
-                self.flippyPhrase = 'Hiya, viewers! Don\'t forget to Flip for Flippy!'
-            elif phraseId == 5500:
-                # :)
-                self.flippyPhrase = ':D'
-            elif phraseId == 5501:
-                # :(
-                self.flippyPhrase = ':C'
-            elif phraseId == 5502:
-                # :D
-                self.flippyPhrase = ':)'
-            elif phraseId == 5503:
-                # :C
-                self.flippyPhrase = ':('
-            elif phraseId == 5504:
-                # :O
-                self.flippyPhrase = ':P'
-            elif phraseId == 5505:
-                # :P
-                self.flippyPhrase = ':O'
-            elif phraseId == 5506:
-                # >:)
-                self.flippyPhrase = '>:C'
-            elif phraseId == 5507:
-                # >:C
-                self.flippyPhrase = '>:)'
-            elif phraseId in [5600, 5601]:
-                # what's up?
-                self.flippyPhrase = 'I\'m doing pretty great! And you?'
-            elif phraseId == 10100:
-                # Who are you voting for?
-                self.flippyPhrase = 'I\'m not allowed to vote, silly!'
-            elif phraseId in [10101, 10102]:
-                # Flippy
-                self.flippyPhrase = 'That\'s the spirit! :)'
-            elif phraseId in [10103, 10104]:
-                # Slappy
-                self.flippyPhrase = 'Slappy is pretty fun, too. Great balloon. Though... See that plane stuck up there...?'
-            elif phraseId == 10105:
-                # Decorations
-                self.flippyPhrase = 'Me too. Alec did a great job, and I hear there are more coming.'
-            else:
-                self.flippyPhrase = None
+            for flippyPhraseIndexes in ElectionGlobals.FlippyPhraseIds:
+                if phraseId in flippyPhraseIndexes:
+                    index = ElectionGlobals.FlippyPhraseIds.index(flippyPhraseIndexes)
+                    self.flippyPhrase = ElectionGlobals.FlippyPhrases[index] 
 
             if self.flippy.nametag.getChat() == '' and self.flippyPhrase != None:
                 sayChatLater = Sequence(
                     Wait(1),
-                    Func(self.flippy.setChatAbsolute, self.flippyPhrase, CFSpeech|CFTimeout)
+                    Func(self.flippy.setChatAbsolute, self.flippyPhrase, CFSpeech | CFTimeout)
                 )
                 sayChatLater.start()
         
