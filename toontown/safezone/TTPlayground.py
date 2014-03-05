@@ -39,8 +39,9 @@ class TTPlayground(Playground.Playground):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
-        else:
-            self.fsm.request('trialerFA', [requestStatus])
+            return
+        
+        self.fsm.request('trialerFA', [requestStatus])
 
     def enterDFA(self, requestStatus):
         doneEvent = 'dfaDoneEvent'

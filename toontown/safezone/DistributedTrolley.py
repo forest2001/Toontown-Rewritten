@@ -177,23 +177,23 @@ class DistributedTrolley(DistributedObject.DistributedObject):
             place.fsm.request('walk')
 
     def handleEnterTrolleySphere(self, collEntry):
-        self.notify.debug('Entering Trolley Sphere....')
-        if base.localAvatar.getPos(render).getZ() < self.trolleyCar.getPos(render).getZ():
-            return
-
         if base.config.GetBool('want-doomsday', True):
             base.localAvatar.disableAvatarControls()
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
+            return
+            
+        self.notify.debug('Entering Trolley Sphere....')
+        if base.localAvatar.getPos(render).getZ() < self.trolleyCar.getPos(render).getZ():
+            return
+        if self.allowedToEnter():
+            self.loader.place.detectedTrolleyCollision()
         else:
-            if self.allowedToEnter():
-                self.loader.place.detectedTrolleyCollision()
-            else:
-                place = base.cr.playGame.getPlace()
-                if place:
-                    place.fsm.request('stopped')
-                self.dialog = TeaserPanel.TeaserPanel(pageName='minigames', doneFunc=self.handleOkTeaser)
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.fsm.request('stopped')
+            self.dialog = TeaserPanel.TeaserPanel(pageName='minigames', doneFunc=self.handleOkTeaser)
 
     def handleConfirm(self):
         status = self.confirm.doneStatus

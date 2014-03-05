@@ -298,15 +298,16 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
+            return
+
+        if self.allowedToEnter():
+            messenger.send('DistributedDoor_doorTrigger')
+            self.sendUpdate('requestEnter')
         else:
-            if self.allowedToEnter():
-                messenger.send('DistributedDoor_doorTrigger')
-                self.sendUpdate('requestEnter')
-            else:
-                place = base.cr.playGame.getPlace()
-                if place:
-                    place.fsm.request('stopped')
-                self.dialog = TeaserPanel.TeaserPanel(pageName='otherHoods', doneFunc=self.handleOkTeaser)
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.fsm.request('stopped')
+            self.dialog = TeaserPanel.TeaserPanel(pageName='otherHoods', doneFunc=self.handleOkTeaser)
 
     def handleConfirm(self):
         status = self.confirm.doneStatus

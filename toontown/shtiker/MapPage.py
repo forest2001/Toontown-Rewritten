@@ -224,6 +224,12 @@ class MapPage(ShtikerPage.ShtikerPage):
         messenger.send(self.doneEvent)
 
     def goHome(self):
+        if base.config.GetBool('want-doomsday', True):
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+            return
+            
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: VISITESTATE: Visit estate')
         self.doneStatus = {'mode': 'gohome',
@@ -235,12 +241,13 @@ class MapPage(ShtikerPage.ShtikerPage):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
-        else:
-            if hood in base.localAvatar.getTeleportAccess() and hood in base.cr.hoodMgr.getAvailableZones():
-                base.localAvatar.sendUpdate('checkTeleportAccess', [hood])
-                self.doneStatus = {'mode': 'teleport',
-                 'hood': hood}
-                messenger.send(self.doneEvent)
+            return
+
+        if hood in base.localAvatar.getTeleportAccess() and hood in base.cr.hoodMgr.getAvailableZones():
+            base.localAvatar.sendUpdate('checkTeleportAccess', [hood])
+            self.doneStatus = {'mode': 'teleport',
+             'hood': hood}
+            messenger.send(self.doneEvent)
 
     def handleConfirm(self):
         status = self.confirm.doneStatus

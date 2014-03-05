@@ -261,16 +261,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.applyAlphaModifications()
 
     def setLocation(self, parentId, zoneId):
-        if simbase.config.GetBool('want-doomsday', True):
-            messenger.send('toon-left-%s' % self.zoneId, [self])
-            messenger.send('toon-entered-%s' % ToontownGlobals.ToontownCentral, [self])
+        messenger.send('toon-left-%s' % self.zoneId, [self])
+        messenger.send('toon-entered-%s' % zoneId, [self])
 
-            DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, ToontownGlobals.ToontownCentral)
-        else:
-            messenger.send('toon-left-%s' % self.zoneId, [self])
-            messenger.send('toon-entered-%s' % zoneId, [self])
-
-            DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
+        DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
@@ -4429,6 +4423,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
+
+        # Spawn toons in TTC for Doomsday
+        if simbase.config.GetBool('want-doomsday', True):
+            self.setLocation(self.parentId, ToontownGlobals.ToontownCentral) # Toon enters then instantly leaves to ports to the last zone
 
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
