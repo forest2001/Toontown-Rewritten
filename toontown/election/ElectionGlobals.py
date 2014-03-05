@@ -79,7 +79,8 @@ FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
                    [10100],                                              # Who are you voting for?
                    [10101, 10102],                                       # Flippy
                    [10103, 10104],                                       # Slappy
-                   [10105]]                                              # Decorations
+                   [10105],                                              # Decorations
+                   [5700]]                                               # Toontastic
 
 # A toon's name can be included here using "__NAME__" (the code automatically replaces it when it's called).
 FlippyPhrases = ['Hey there, __NAME__! How are you doing?',
@@ -125,9 +126,10 @@ FlippyPhrases = ['Hey there, __NAME__! How are you doing?',
                  '>:)',
                  'I\'m doing pretty great! And you?',
                  'I\'m not allowed to vote, silly!',
-                 'That\'s the spirit! :)',
+                 'That\'s the spirit!',
                  'Slappy is pretty fun, too. Great balloon. Though... See that plane stuck up there...?',
-                 'Me too. Alec did a great job, and I hear there are more coming.']
+                 'Me too. Alec did a great job, and I hear there are more coming.',
+                 'Ooooh, I just love that word! Good to see it catching on.']
 
 # Let's define all of Slappy's speeches.
 # There should be exactly 12 phrases for each to fit with the sequence.

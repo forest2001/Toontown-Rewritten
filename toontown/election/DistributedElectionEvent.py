@@ -132,6 +132,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         if not self.interactiveOn:
             self.notify.warning("Received flippySpeech from AI while Interactive Flippy is disabled on our client.")
             return
+        if self.flippy.nametag.getChat() == '':
+            # Flippy is already saying something, so he didn't hear them say the phrase.
+            return
         if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
             self.flippy.setChatAbsolute(ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
             return
