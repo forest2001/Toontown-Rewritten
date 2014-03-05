@@ -122,8 +122,8 @@ def truefriend(avIdShort):
         return 'avId not found/online!'
     if int(str(avIdFull)[:2]) >= 40: # AI
         return '%s is an NPC!' % av.getName()
-    if av.getAdminAccess() < 400:
-        return '%s is not an administrator!' % av.getName()
+    if not av._isGM:
+        return '%s is not a staff member!' % av.getName()
     
     
     admin.extendFriendsList(av.getDoId(), 1)
