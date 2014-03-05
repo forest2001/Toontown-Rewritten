@@ -112,6 +112,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
 @magicWord()
 def election(state):
+    if not simbase.config.GetBool('want-doomsday', False):
+        simbase.air.writeServerEvent('aboose', spellbook.getInvoker().doId, 'Attempted to initiate doomsday while it is disabled.')
+        return 'ABOOSE! Doomsday is currently disabled. Your request has been logged.'
+        
     event = simbase.air.doFind('ElectionEvent')
     if event is None:
         event = DistributedElectionEventAI(simbase.air)
