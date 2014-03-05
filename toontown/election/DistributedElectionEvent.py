@@ -10,6 +10,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
 from direct.directnotify import DirectNotifyGlobal
+from random import choice
 
 # Interactive Flippy
 from otp.speedchat import SpeedChatGlobals
@@ -141,7 +142,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             return
         if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
             taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
-                                  extraArgs = [ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
+                                  extraArgs = [choice(ElectionGlobals.FlippyGibPies).replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
             return
         if len(ElectionGlobals.FlippyPhraseIds) != len(ElectionGlobals.FlippyPhrases):
             # There is a mismatch in the number of phrases and the phraseIds we're looking out for...
