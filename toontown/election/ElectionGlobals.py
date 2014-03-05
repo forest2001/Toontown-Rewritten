@@ -20,6 +20,7 @@ BalloonBasePosition = [-15, 33, 1.1]
 BalloonScale = 2.5
 
 # Let's give InteractiveFlippy some phrases to say.
+# A toon's name can be included here using "__NAME__" (the code automatically replaces it when it's called).
 FlippyGibPies = [
     'Let \'em fly!',
     'Wow, I\'ve never seen someone carry so many pies.',
@@ -27,10 +28,10 @@ FlippyGibPies = [
     'Ready for WAR?',
     'Let the pies fly!',
     'Clobber the competition! Try not to hit him too hard, though.',
-    'Are you really going to eat that many pies?',
+    'Are you really going to eat that many pies, __NAME__?',
     'Oof, I better start baking more pies!',
 ]
-FlippyGibPiesChoice = choice(FlippyGibPies)
+FlippyGibPiesChoice = FlippyGibPies[6]#choice(FlippyGibPies)
 
 # Interactive Phrases
 FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
@@ -80,7 +81,8 @@ FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
                    [10103, 10104],                                       # Slappy
                    [10105]]                                              # Decorations
 
-FlippyPhrases = ['Hey there! How are you doing?',
+# A toon's name can be included here using "__NAME__" (the code automatically replaces it when it's called).
+FlippyPhrases = ['Hey there, __NAME__! How are you doing?',
                  'I\'m here, present and accounted for!',
                  'Alrighty, catcha later!',
                  'Thanks! To you as well.',

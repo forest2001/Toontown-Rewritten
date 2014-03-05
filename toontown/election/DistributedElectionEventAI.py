@@ -31,6 +31,16 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         av.b_setPieType(self.pieTypeAmount[0])
         av.b_setNumPies(self.pieTypeAmount[1])
         av.b_setPieThrowType(self.pieTypeAmount[2])
+        self.sendUpdate('flippySpeech', [avId, 1]) # 1 = Pie Request
+        
+    def phraseSaidToFlippy(self, phraseId):
+        # Someone said something (relavent) to Flippy!
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId, None)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
+            return
+        self.sendUpdate('flippySpeech', [avId, phraseId])
             
     def enterIntro(self):
         # Generate Slappy's Hot Air Balloon!

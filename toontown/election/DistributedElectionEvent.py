@@ -10,12 +10,15 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
 
+# Interactive Flippy
+from otp.speedchat import SpeedChatGlobals
+
 class DistributedElectionEvent(DistributedObject, FSM):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
         self.cr.election = self
-        self.interactiveOn = None
+        self.interactiveOn = False
 
         self.showFloor = NodePath('ShowFloor')
         self.showFloor.setPos(80, 0, 4)
@@ -94,41 +97,48 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
             self.restockSfx.play()
-            print(self.flippy.nametag.getChat())
-            if self.interactiveOn and self.flippy.nametag.getChat() == '':
-                sayPieChatLater = Sequence(
-                    Wait(0.5),
-                    Func(self.flippy.setChatAbsolute, ElectionGlobals.FlippyGibPiesChoice, CFSpeech|CFTimeout)
-                )
-                sayPieChatLater.start()
 
     def startInteractiveFlippy(self):
-        from otp.speedchat import SpeedChatGlobals
         self.flippy.reparentTo(self.showFloor)
         self.flippy.setPosHpr(-40.6, -18.5, 0.01, 20, 0, 0)
         self.flippy.initializeBodyCollisions('toon')
-        self.interactiveOn = 1
+        self.interactiveOn = True
         self.flippyPhrase = None
-
-        def phraseSaid(phraseId):
-            # Check distance...
-            if Vec3(base.localAvatar.getPos(self.flippy)).length() > 10:
-                return
-            
-            for flippyPhraseIndexes in ElectionGlobals.FlippyPhraseIds:
-                if phraseId in flippyPhraseIndexes:
-                    index = ElectionGlobals.FlippyPhraseIds.index(flippyPhraseIndexes)
-                    self.flippyPhrase = ElectionGlobals.FlippyPhrases[index] 
-
-            if self.flippy.nametag.getChat() == '' and self.flippyPhrase != None:
-                sayChatLater = Sequence(
-                    Wait(1),
-                    Func(self.flippy.setChatAbsolute, self.flippyPhrase, CFSpeech | CFTimeout)
-                )
-                sayChatLater.start()
+        self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, self.phraseSaidToFlippy)
         
-        self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
-        
+    def stopInteractiveFlippy(self):
+        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
+        self.interactiveOn = False
+    
+    def phraseSaidToFlippy(self, phraseId):
+        # Check distance...
+        if Vec3(base.localAvatar.getPos(self.flippy)).length() > 10:
+            return
+        # Check if the phrase is something that Flippy should respond to.
+        for phraseIdList in ElectionGlobals.FlippyPhraseIds:
+            if phraseId in phraseIdList:
+                self.sendUpdate('phraseSaidToFlippy', [phraseId])
+                break
+    
+    def flippySpeech(self, avId, phraseId):
+        av = self.cr.doId2do.get(avId)
+        if not av:
+            # An avatar we don't know about interacted with Flippy... odd.
+            return
+        if not self.interactiveOn:
+            # startInteractiveFlippy hasn't been called!
+            return
+        if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
+            self.flippy.setChatAbsolute(ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
+            return
+        for index, phraseIdList in enumerate(ElectionGlobals.FlippyPhraseIds):
+            for pid in phraseIdList:
+                if pid == phraseId:
+                    # This could potentially lead to a crash if there is a mismatch in the number (indexes) of
+                    # phraseIdLists and phrases. Could possibly use a python dict ( { key : value } ) to
+                    # prevent this...
+                    self.flippy.setChatAbsolute(ElectionGlobals.FlippyPhrases[index].replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
+                    return 
 
     def delete(self):
         self.demand('Off', 0.)
@@ -137,6 +147,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         
         # Clean up everything...
         self.showFloor.removeNode()
+        self.stopInteractiveFlippy()
 
         DistributedObject.delete(self)
     
