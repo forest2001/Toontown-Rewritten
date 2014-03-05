@@ -115,7 +115,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
     
     def phraseSaidToFlippy(self, phraseId):
         # Check distance...
+        if self.flippy.nametag.getChat() != '':
+            # Flippy is already responding to someone, ignore them.
+            return
         if Vec3(base.localAvatar.getPos(self.flippy)).length() > 10:
+            # Too far away.
             return
         # Check if the phrase is something that Flippy should respond to.
         for phraseIdList in ElectionGlobals.FlippyPhraseIds:
@@ -132,11 +136,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         if not self.interactiveOn:
             self.notify.warning("Received flippySpeech from AI while Interactive Flippy is disabled on our client.")
             return
-        if self.flippy.nametag.getChat() == '':
-            # Flippy is already saying something, so he didn't hear them say the phrase.
+        if self.flippy.nametag.getChat() != '':
+            # Flippy is alredy responding to someone, ignore.
             return
         if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
-            self.flippy.setChatAbsolute(ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
+            taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
+                                  extraArgs = [ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
             return
         if len(ElectionGlobals.FlippyPhraseIds) != len(ElectionGlobals.FlippyPhrases):
             # There is a mismatch in the number of phrases and the phraseIds we're looking out for...
@@ -149,7 +154,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
                     # This could potentially lead to a crash if there is a mismatch in the number (indexes) of
                     # phraseIdLists and phrases. Could possibly use a python dict ( { key : value } ) to
                     # prevent this...
-                    self.flippy.setChatAbsolute(ElectionGlobals.FlippyPhrases[index].replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
+                    taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
+                                          extraArgs = [ElectionGlobals.FlippyPhrases[index].replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
                     return 
 
     def delete(self):

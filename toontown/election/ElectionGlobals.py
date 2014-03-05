@@ -32,6 +32,7 @@ FlippyGibPies = [
     'Oof, I better start baking more pies!',
 ]
 FlippyGibPiesChoice = choice(FlippyGibPies)
+FlippyDelayResponse = 1.0
 
 # Interactive Phrases
 FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
