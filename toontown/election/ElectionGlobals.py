@@ -31,7 +31,7 @@ FlippyGibPies = [
     'Are you really going to eat that many pies, __NAME__?',
     'Oof, I better start baking more pies!',
 ]
-FlippyGibPiesChoice = FlippyGibPies[6]#choice(FlippyGibPies)
+FlippyGibPiesChoice = choice(FlippyGibPies)
 
 # Interactive Phrases
 FlippyPhraseIds = [[100, 101, 102, 103, 104, 105],                       # Hello
@@ -96,7 +96,7 @@ FlippyPhrases = ['Hey there, __NAME__! How are you doing?',
                  'Right back \'atcha!',
                  'Aw, shucks. I like yours too!',
                  'Not sure if I should consider that a compliement or...',
-                 'No problem. It\'s all good.'
+                 'No problem. It\'s all good.',
                  'Huh. I forget.',
                  'Good, because I can only respond to SpeedChat. Haha!',
                  'It\'s probably the leftover ingredients from all of those pies. Pee-yew!',
