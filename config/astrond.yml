@@ -31,7 +31,7 @@ uberdogs:
     - class: PlayerFriendsManager
       id: 4687
       anonymous: false
-    
+
     - class: TTRFriendsManager
       id: 4666
       anonymous: false
@@ -57,6 +57,7 @@ roles:
       bind: 127.0.0.1:7198
       client:
        relocate: true
+       add_interest: enabled
       channels:
         min: 1000000000
         max: 1009999999
