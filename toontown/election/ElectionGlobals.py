@@ -19,6 +19,19 @@ FlippyWheelbarrowPies = [
 BalloonBasePosition = [-15, 33, 1.1]
 BalloonScale = 2.5
 
+# Let's give InteractiveFlippy some phrases to say.
+FlippyGibPies = [
+    'Let \'em fly!',
+    'Wow, I\'ve never seen someone carry so many pies.',
+    'Come back any time.',
+    'Ready for WAR?',
+    'Let the pies fly!',
+    'Clobber the competition! Try not to hit him too hard, though.',
+    'Are you really going to eat that many pies?',
+    'Oof, I better start baking more pies!',
+]
+FlippyGibPiesChoice = choice(FlippyGibPies)
+
 # Let's define all of Slappy's speeches.
 # There should be exactly 12 phrases for each to fit with the sequence.
 # If you add another, make sure to add it to SlappySpeechChoices.
