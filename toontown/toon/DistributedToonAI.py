@@ -4424,9 +4424,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
 
-        # Spawn toons in TTC for Doomsday
+        # Spawn in TTC for Doomsday
         if simbase.config.GetBool('want-doomsday', True):
-            self.setLocation(self.parentId, ToontownGlobals.ToontownCentral) # Toon enters then instantly leaves to ports to the last zone
+            self.b_setDefaultZone(ToontownGlobals.ToontownCentral)
 
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
