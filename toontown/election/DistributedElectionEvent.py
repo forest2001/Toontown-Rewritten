@@ -9,11 +9,14 @@ from toontown.suit import Suit, SuitDNA
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
+from direct.directnotify import DirectNotifyGlobal
 
 # Interactive Flippy
 from otp.speedchat import SpeedChatGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEvent")
+    
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
@@ -124,12 +127,18 @@ class DistributedElectionEvent(DistributedObject, FSM):
         av = self.cr.doId2do.get(avId)
         if not av:
             # An avatar we don't know about interacted with Flippy... odd.
+            self.notify.warning("Received unknown avId in flippySpeech from the AI.")
             return
         if not self.interactiveOn:
-            # startInteractiveFlippy hasn't been called!
+            self.notify.warning("Received flippySpeech from AI while Interactive Flippy is disabled on our client.")
             return
         if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
             self.flippy.setChatAbsolute(ElectionGlobals.FlippyGibPiesChoice.replace("__NAME__", av.getName()), CFSpeech | CFTimeout)
+            return
+        if len(ElectionGlobals.FlippyPhraseIds) != len(ElectionGlobals.FlippyPhrases):
+            # There is a mismatch in the number of phrases and the phraseIds we're looking out for...
+            # If this ever occurs on the live client, then clearly this wasn't tested and someone needs a slap.
+            raise Exception("There is a mismatch in the number of phraseIds and the number of phrases for Flippy Interactive!")
             return
         for index, phraseIdList in enumerate(ElectionGlobals.FlippyPhraseIds):
             for pid in phraseIdList:
