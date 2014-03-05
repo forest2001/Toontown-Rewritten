@@ -175,7 +175,7 @@ SlappySpeech3 = [
     "Not to mention the Jellybeans they could have saved by not buying paint.",
     "It seems counterproductive to me. Those are definitely getting torn down.",
     "That is, if I get elected. Hey, are you voting for me?",
-    "Nonono, don't tell me. I want to be surprised. Remember this free balloon ride at the pools, though!"
+    "Nonono, don't tell me. I want to be surprised. Remember this free balloon ride at the polls, though!"
 ]
 # This one was being chosen too often. It got old. Renable it if more phrases are added so there is a larger pool to choose from.
 '''SlappySpeech4 = [
