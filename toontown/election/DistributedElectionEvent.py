@@ -201,9 +201,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
             elif phraseId == 1526:
                 # Piece of cake
                 self.flippyPhrase = 'Sorry, only pies here.'
-            elif phraseId == 1526:
-                # I need more gags
-                self.flippyPhrase = 'Sorry, only pies here.'
             elif phraseId in [1702, 1554, 1556, 1557]:
                 # Cogs
                 self.flippyPhrase = '...like, the gear? What have gears ever done to you? :('
