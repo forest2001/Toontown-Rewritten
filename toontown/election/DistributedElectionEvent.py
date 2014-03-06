@@ -9,12 +9,20 @@ from toontown.suit import Suit, SuitDNA
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
+from direct.directnotify import DirectNotifyGlobal
+from random import choice
+
+# Interactive Flippy
+from otp.speedchat import SpeedChatGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEvent")
+    
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
         self.cr.election = self
+        self.interactiveOn = False
 
         self.showFloor = NodePath('ShowFloor')
         self.showFloor.setPos(80, 0, 4)
@@ -73,8 +81,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision = flippyStand.find('**/FlippyCollision')
         self.pieCollision.setScale(7.83, 4.36, 9.41)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
-
-        #self.flippy = NPCToons.createLocalNPC(2001)
+       
+        self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
         #self.slappy = NPCToons.createLocalNPC(2021)
         #self.flippy.reparentTo(self.showFloor)
@@ -86,13 +94,71 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #cogDNA.newSuit('ym')
         #self.suit.setDNA(cogDNA)
         #self.suit.reparentTo(self.showFloor)
+        self.startInteractiveFlippy()
 
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
         if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
             self.restockSfx.play()
+
+    def startInteractiveFlippy(self):
+        self.flippy.reparentTo(self.showFloor)
+        self.flippy.setPosHpr(-40.6, -18.5, 0.01, 20, 0, 0)
+        self.flippy.initializeBodyCollisions('toon')
+        self.interactiveOn = True
+        self.flippyPhrase = None
+        self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, self.phraseSaidToFlippy)
+        
+    def stopInteractiveFlippy(self):
+        self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
+        self.interactiveOn = False
     
+    def phraseSaidToFlippy(self, phraseId):
+        # Check distance...
+        if self.flippy.nametag.getChat() != '':
+            # Flippy is already responding to someone, ignore them.
+            return
+        if Vec3(base.localAvatar.getPos(self.flippy)).length() > 10:
+            # Too far away.
+            return
+        # Check if the phrase is something that Flippy should respond to.
+        for phraseIdList in ElectionGlobals.FlippyPhraseIds:
+            if phraseId in phraseIdList:
+                self.sendUpdate('phraseSaidToFlippy', [phraseId])
+                break
+    
+    def flippySpeech(self, avId, phraseId):
+        av = self.cr.doId2do.get(avId)
+        if not av:
+            # An avatar we don't know about interacted with Flippy... odd.
+            self.notify.warning("Received unknown avId in flippySpeech from the AI.")
+            return
+        if not self.interactiveOn:
+            self.notify.warning("Received flippySpeech from AI while Interactive Flippy is disabled on our client.")
+            return
+        if self.flippy.nametag.getChat() != '':
+            # Flippy is alredy responding to someone, ignore.
+            return
+        if phraseId == 1: # Someone requested pies... Lets pray that we don't need phraseId 1...
+            taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
+                                  extraArgs = [choice(ElectionGlobals.FlippyGibPies).replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
+            return
+        if len(ElectionGlobals.FlippyPhraseIds) != len(ElectionGlobals.FlippyPhrases):
+            # There is a mismatch in the number of phrases and the phraseIds we're looking out for...
+            # If this ever occurs on the live client, then clearly this wasn't tested and someone needs a slap.
+            raise Exception("There is a mismatch in the number of phraseIds and the number of phrases for Flippy Interactive!")
+            return
+        for index, phraseIdList in enumerate(ElectionGlobals.FlippyPhraseIds):
+            for pid in phraseIdList:
+                if pid == phraseId:
+                    # This could potentially lead to a crash if there is a mismatch in the number (indexes) of
+                    # phraseIdLists and phrases. Could possibly use a python dict ( { key : value } ) to
+                    # prevent this...
+                    taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
+                                          extraArgs = [ElectionGlobals.FlippyPhrases[index].replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
+                    return 
+
     def delete(self):
         self.demand('Off', 0.)
         
@@ -100,6 +166,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         
         # Clean up everything...
         self.showFloor.removeNode()
+        self.stopInteractiveFlippy()
 
         DistributedObject.delete(self)
     
