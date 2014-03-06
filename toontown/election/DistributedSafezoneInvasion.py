@@ -22,41 +22,44 @@ class DistributedSafezoneInvasion(DistributedObject):
 
     def delete(self):
         DistributedObject.delete(self)
-        del self.sky
+        self.stopCogSky()
         del self.cogSkyBegin
+        del self.cogSkyEnd
+        del self.cogSkyBeginStage
+        del self.cogSkyEndStage
+        del self.sky
         self.ignoreAll()
 
     def startCogSky(self):
         if hasattr(self, 'sky') and self.sky:
-            self.stopCogSky()
-        self.cogSkyBegin = Sequence(LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1)))
-        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 5.0, Vec4(1, 1, 1, 1)) 
-        self.cogSkyBeginStage = Sequence(LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1)))
-        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 5.0, Vec4(1, 1, 1, 1)) 
+            return
         self.sky = loader.loadModel(SafezoneInvasionGlobals.CogSkyFile)
         self.sky.setTag('sky', 'Invasion')
-        self.sky.setScale(1.0)
+        self.sky.setBin('background', 100)
+        self.sky.setColor(0.3, 0.3, 0.28, 1)
+        self.sky.setTransparency(TransparencyAttrib.MDual, 1)
         self.sky.setDepthTest(0)
         self.sky.setDepthWrite(0)
-        self.sky.setColor(0.3, 0.3, 0.28, 1)
-        self.sky.setBin('background', 100)
         self.sky.setFogOff()
-        self.sky.reparentTo(camera)
-        self.sky.setTransparency(TransparencyAttrib.MDual, 1)
-        fadeIn = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 1), startColorScale=Vec4(1, 1, 1, 0), blendType='easeInOut')
-        fadeIn.start()
         self.sky.setZ(-20.0)
-        self.sky.setHpr(0.0, 0.0, 0.0)
+        self.sky.reparentTo(camera)
         ce = CompassEffect.make(NodePath(), CompassEffect.PRot | CompassEffect.PZ)
         self.sky.node().setEffect(ce)
+
+        self.fadeIn = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 1), startColorScale=Vec4(1, 1, 1, 0), blendType='easeInOut')
+        self.fadeOut = self.sky.colorScaleInterval(10.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
+        self.cogSkyBegin = LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
+        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 9.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.cogSkyBeginStage = LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
+        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 9.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.fadeIn.start()
         self.cogSkyBegin.start()
         self.cogSkyBeginStage.start()
 
     def stopCogSky(self):
-        if hasattr(self, 'sky') and self.sky:
-            base.cr.playGame.hood.loader.stopSky()
-            fadeOut = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
-            fadeIn.start()
+        self.cogSkyEnd.start()
+        self.cogSkyEndStage.start()
+        self.fadeOut.start()
 
     def __localPieSplat(self, pieCode, entry):
         if pieCode == ToontownGlobals.PieCodeToon:
