@@ -68,4 +68,4 @@ CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
 
 # Leave Toontown Central Alert
-LeaveToontownCentralAlert = "You can't leave Tootown Central right now."
+LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."
