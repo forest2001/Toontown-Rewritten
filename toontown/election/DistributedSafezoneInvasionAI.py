@@ -26,6 +26,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
 
     def announceGenerate(self):
+        self.sendUpdate('startInvasion', [])
         self.demand('BeginWave', 0)
         
         # Kill all the butterflies in Toontown Central.
@@ -266,9 +267,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterVictory(self):
-        # The Toons win! ...
-        # Needs to be implemented...
-        pass
+        self.sendUpdate('finishInvasion', [])
 
     def enterOff(self):
         self.__deleteSuits()
