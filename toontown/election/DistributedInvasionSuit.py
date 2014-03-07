@@ -169,42 +169,34 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._stunInterval.finish()
 
     def enterExplode(self, time):
+        # We're done with our suit. Let's get rid of him and load an actor for the explosion
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
         self.stash()
 
-        # TODO: This needs to be cleaned up or changed entirely. Just thrown together right now.
-        self._explosionInterval = ActorInterval(loseActor, 'lose')
-        self.deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+        # Oh boy, time to load all of our explosion effects!
+        explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
+        deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
         BattleParticles.loadParticles()
         smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
         singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
         smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
         bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
-        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ()) #Z should be set by suit height
-        #smallGears.setPos(gearPoint)
-        #singleGear.setPos(gearPoint)
+        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ())
         smallGears.setDepthWrite(False)
         singleGear.setDepthWrite(False)
-        #smallGearExplosion.setPos(gearPoint)
-        #bigGearExplosion.setPos(gearPoint)
         smallGearExplosion.setDepthWrite(False)
         bigGearExplosion.setDepthWrite(False)
         explosionTrack = Sequence()
         explosionTrack.append(Wait(5.4))
         explosionTrack.append(self.createKapowExplosionTrack(loseActor))
-        self.gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-        self.gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
-        self._explosionInterval.start(time)
-        self.deathSoundTrack.start(time)
-        self.gears1Track.start(time)
-        self.gears2MTrack.start(time)
-
-    def exitExplode(self):
-        self._explosionInterval.finish()
-        self.cleanupLoseActor()
+        gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+        gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+        cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
+        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack, cleanupTrack)
+        explodeTrack.start(time)
 
     def enterAttack(self, time):
         self._attackInterval = self.makeAttackTrack()
