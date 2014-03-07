@@ -278,6 +278,17 @@ class InvasionSuitBrainAI(FSM):
         self.suit.idle()
         self.master.requestOrders(self)
 
+    def enterAskAgain(self):
+        # Brain has absolutely nothing to do. Let's ask the master again in a few seconds in case any toons become available.
+        self.suit.idle()
+        self._askDelay = \
+        taskMgr.doMethodLater(10.0, self.demand,
+                              self.suit.uniqueName('askingAgain'),
+                              extraArgs=['Idle'])
+
+    def exitAskAgain(self):
+        self._askDelay.remove()
+
     def enterAttack(self, toonId):
         self.behavior = AttackBehavior(self, toonId)
         self.behavior.start()

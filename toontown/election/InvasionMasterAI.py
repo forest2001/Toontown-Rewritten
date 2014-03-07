@@ -37,7 +37,8 @@ class InvasionMasterAI:
             toonId = random.choice(attackables).doId
             brain.demand('Attack', toonId)
         else:
-            pass # Below state not implemented yet.
+            brain.demand('AskAgain')
+            # Below state not implemented yet.
             #brain.demand('Wander')
 
     def toonUnreachable(self, toonId):
