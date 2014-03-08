@@ -49,6 +49,8 @@ from toontown.safezone import DistributedDGFlower/AI
 from toontown.election import DistributedElectionEvent/AI
 from toontown.election import DistributedHotAirBalloon/AI
 from toontown.election import DistributedSafezoneInvasion/AI
+from toontown.election import DistributedElectionCamera/AI
+from toontown.election import DistributedElectionCameraManager/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
@@ -983,6 +985,17 @@ dclass DistributedElectionEvent : DistributedObject {
   setSuitPhrase(string phrase) clsend airecv;
   setSuitState(string state) clsend airecv;
   setSuitDamage(uint8 damage) clsend airecv;  
+};
+
+dclass DistributedElectionCamera : DistributedNode
+{
+  moveTo(uint16, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, int16%360/10 r, uint8 time, int16 ts) broadcast;
+  requestMoveTo(uint16, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, int16%360/10 r, uint8 time) clsend airecv;
+};
+
+dclass DistributedElectionCameraManager : DistributedObject
+{
+  setMainCamera(uint32 doId) required broadcast;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {
