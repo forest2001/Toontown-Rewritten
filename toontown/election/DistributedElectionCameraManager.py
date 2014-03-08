@@ -42,5 +42,5 @@ def cameraTask(task):
     dCamera = base.cr.doId2do.get(base.cr.cameraManager.mainCam)
     if not dCamera:
         return task.again
-    base.cr.cameraManager.camera.setPos(dCamera.getX(), dCamera.getY(), dCamera.getZ())
+    base.cr.cameraManager.camera.setPosHpr(dCamera.getX(), dCamera.getY(), dCamera.getZ(), dCamera.getH(), 0, 0)
     return task.again

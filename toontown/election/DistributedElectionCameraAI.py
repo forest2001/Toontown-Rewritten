@@ -30,4 +30,4 @@ class DistributedElectionCameraAI(DistributedNodeAI):
         taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[x, y, z, h])
         
     def __finishMove(self, x, y, z, h):
-        self.b_setPosHpr(x, y, z, 0, h, 0)
+        self.b_setPosHpr(x, y, z, h, 0, 0)
