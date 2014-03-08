@@ -17,9 +17,11 @@ class DistributedElectionCamera(DistributedNode):
     def setState(self, state, ts, x, y, z, h, p, target):
         if state == 'Move':
             self.wrtReparentTo(render)
-        elif state == 'Follow':
+        elif state == 'Follow' and target in base.cr.doId2do:
             object = base.cr.doId2do[target]
             self.wrtReparentTo(object)
+        else:
+            return
         dist = math.sqrt( (self.getX() - x)**2 + (self.getY() - y)**2 + (self.getZ() - z)**2)
         time = dist/10.0
         elapsed = globalClockDelta.localElapsedTime(ts)
