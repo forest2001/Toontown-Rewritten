@@ -989,13 +989,14 @@ dclass DistributedElectionEvent : DistributedObject {
 
 dclass DistributedElectionCamera : DistributedNode
 {
-  moveTo(uint16, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, int16%360/10 r, uint8 time, int16 ts) broadcast;
-  requestMoveTo(uint16, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, int16%360/10 r, uint8 time) clsend airecv;
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, uint32 target) required broadcast ram;
+  
 };
 
 dclass DistributedElectionCameraManager : DistributedObject
 {
-  setMainCamera(uint32 doId) required broadcast;
+  setMainCamera(uint32 doId) required broadcast ram;
+  setCameraIds(uint32[]) required broadcast ram;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {

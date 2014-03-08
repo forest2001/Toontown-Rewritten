@@ -12,20 +12,22 @@ class DistributedElectionCameraManager(DistributedObject):
         DistributedObject.__init__(self, cr)
         self.cr.cameraManager = self
         self.mainCam = 0
+        self.cameraIds = []
         
     def generate(self):
         DistributedObject.generate(self)
         self.tv = loader.loadModel('phase_4/models/events/tv')
         self.tv.reparentTo(render)
-        self.tv.setPosHpr(-16, 1, 5, 0, 0, 0)
+        self.tv.setPosHpr(-16, 1, 5, 180, 0, 0)
         self.buffer = base.win.makeTextureBuffer("tv", 512, 256)
         self.buffer.setSort(-100)
         self.camera = base.makeCamera(self.buffer)
         self.camera.reparentTo(render)
-        
-        self.tv.find('**/screen').setTexture(self.buffer.getTexture(), 1)
+                
+        ts = self.tv.find('**/screen').findTextureStage('*')
+        self.tv.find('**/screen').setTexture(ts, self.buffer.getTexture(), 1)
         taskMgr.add(cameraTask, 'DistributedECM RTT')
-        
+                
     def disable(self):
         self.tv.removeNode()
         self.screen = None
@@ -33,6 +35,9 @@ class DistributedElectionCameraManager(DistributedObject):
     def setMainCamera(self, new):
         self.mainCam = new
         
+    def setCameraIds(self, ids):
+        self.cameraIds = ids
+                
 def cameraTask(task):
     dCamera = base.cr.doId2do.get(base.cr.cameraManager.mainCam)
     if not dCamera:
