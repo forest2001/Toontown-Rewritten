@@ -220,6 +220,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
         toonId = self.attackTarget
 
+        # Rotate the suit to look at the toon it is attacking
+        toon = self.cr.doId2do.get(toonId)
+        self.lookAt(toon)
+
         if self.style.body in ['a', 'b']:
             throwDelay = 3
         elif self.style.body == 'c':
