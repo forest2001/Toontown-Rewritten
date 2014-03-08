@@ -989,7 +989,7 @@ dclass DistributedElectionEvent : DistributedObject {
 
 dclass DistributedElectionCamera : DistributedNode
 {
-  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, uint32 target) required broadcast ram;
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
   
 };
 

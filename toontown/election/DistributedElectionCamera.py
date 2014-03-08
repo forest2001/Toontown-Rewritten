@@ -14,11 +14,14 @@ class DistributedElectionCamera(DistributedNode):
         self.assign(render.attachNewNode('DistributedElectionCamera'))
         DistributedNode.generate(self)
         
-    def setState(self, state, ts, x, y, z, h, target):
+    def setState(self, state, ts, x, y, z, h, p, target):
         if state == 'Move':
-            dist = math.sqrt( (self.getX() - x)**2 + (self.getY() - y)**2 + (self.getZ() - z)**2)
-            time = dist/10.0
-            elapsed = globalClockDelta.localElapsedTime(ts)
-            movement = self.posHprInterval(time-elapsed, Point3(x, y, z), Vec3(h, 0, 0))
-            #TODO: make the rotation less sickening
-            movement.start()
+            self.wrtReparentTo(render)
+        elif state == 'Follow':
+            object = base.cr.doId2do[target]
+            self.wrtReparentTo(object)
+        dist = math.sqrt( (self.getX() - x)**2 + (self.getY() - y)**2 + (self.getZ() - z)**2)
+        time = dist/10.0
+        elapsed = globalClockDelta.localElapsedTime(ts)
+        movement = Sequence(self.hprInterval(1-elapsed, Vec3(h, p, 0)), self.posInterval(time-elapsed, Point3(x, y, z)))
+        movement.start()
