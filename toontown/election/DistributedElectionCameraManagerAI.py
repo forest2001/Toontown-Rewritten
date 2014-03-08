@@ -36,71 +36,74 @@ class DistributedElectionCameraManagerAI(DistributedObjectAI):
     def b_setCameraIds(self, ids):
         self.setCameraIds(ids)
         self.d_setCameraIds(ids)
-        
-@magicWord()
-def spawnCameras(category=CATEGORY_CAMERA):
-    if not hasattr(simbase.air, 'cameraManager'):
-        cameras = []
-        for i in range(5):
-            camera = DistributedElectionCameraAI(simbase.air)
+
+@magicWord(category=CATEGORY_CAMERA, types=[str, str])
+def cameras(cmd, args=''):
+	if not hasattr(simbase.air, 'cameraManager') && cmd != 'spawn':
+		return "There is no Camera Manager!"
+	
+	if cmd == 'spawn':
+		if hasattr(simbase.air, 'cameraManager'):
+			return "A Camera Manager already exists!"
+		cameras = []
+		for cameraId in range(5):
+			cam = DistributedElectionCameraAI(simbase.air)
             camera.setState('Waiting', globalClockDelta.getRealNetworkTime(), 0, 0, 0, 0, 0, 0)
             camera.generateWithRequired(2000)
             camera.b_setPosHpr(0, 0, 0, 0, 0, 0)
             cameras.append(camera.getDoId())
-        manager = DistributedElectionCameraManagerAI(simbase.air)
-        manager.setMainCamera(cameras[0])
+		camMgr = DistributedElectionCameraManagerAI(simbase.air)
+		manager.setMainCamera(cameras[0])
         manager.setCameraIds(cameras)
         manager.generateWithRequired(2000)
-        return 'Created ElectionCameraManager and 5 cameras.'
-    return 'There are already cameras.'
-        
-@magicWord(types=[int], category=CATEGORY_CAMERA)
-def camComeHere(id):
-    if not hasattr(simbase.air, 'cameraManager'):
-        return 'Create some cameras with spawnCameras first.'
-    if id >= len(simbase.air.cameraManager.ids) or id < 0:
-        return 'Invalid camera number.'
-    cam = simbase.air.doId2do[simbase.air.cameraManager.ids[id]]
-    av = spellbook.getTarget()
-    cam._moveTo(av.getX(), av.getY(), av.getZ() + 3.0, av.getH(), 0)
-    return 'Camera %d is moving to %s.' % (id, av.getName())
-    
-@magicWord(types=[int, float, float, float, float, float], category=CATEGORY_CAMERA)
-def camGoTo(id, x, y, z, h, p):
-    if not hasattr(simbase.air, 'cameraManager'):
-        return 'Create some cameras with spawnCameras first.'
-    if id >= len(simbase.air.cameraManager.ids) or id < 0:
-        return 'Invalid camera number.'
-    cam = simbase.air.doId2do[simbase.air.cameraManager.ids[id]]
-    cam.__moveTo(x, y, z, h, p)
-    return 'Camera moving to point.'
-    
-@magicWord(types=[int], category=CATEGORY_CAMERA)
-def camFollowBehind(id):
-    if not hasattr(simbase.air, 'cameraManager'):
-        return 'Create some cameras with spawnCameras first.'
-    if id >= len(simbase.air.cameraManager.ids) or id < 0:
-        return 'Invalid camera number.'
-    cam = simbase.air.doId2do[simbase.air.cameraManager.ids[id]]
-    cam._followBehind(spellbook.getTarget())
-    return 'Camera now in follow mode.'
-
-@magicWord(types=[int], category=CATEGORY_CAMERA)
-def camFollowFront(id):
-    if not hasattr(simbase.air, 'cameraManager'):
-        return 'Create some cameras with spawnCameras first.'
-    if id >= len(simbase.air.cameraManager.ids) or id < 0:
-        return 'Invalid camera number.'
-    cam = simbase.air.doId2do[simbase.air.cameraManager.ids[id]]
-    cam._watch(spellbook.getTarget())
-    return 'Camera now in follow mode.'
-
-    
-@magicWord(types=[int], category=CATEGORY_CAMERA)
-def setMainCam(id):
-    if not hasattr(simbase.air, 'cameraManager'):
-        return 'Create some cameras with spawnCameras first.'
-    if id >= len(simbase.air.cameraManager.ids) or id < 0:
-        return 'Invalid camera number.'
-    simbase.air.cameraManager.b_setMainCamera(simbase.air.cameraManager.ids[id])
-    return 'Camera %d is now main camera.' % id
+		return "Camera Manager has been spawned successfully."
+	
+	args = args.split()
+	camMgr = simbase.air.cameraManager
+	
+	if cmd == 'move':
+		# A bunch of sanity checks...
+		if len(args) < 2:
+			return "You haven't specified enough parameters!"
+		camId = int(args[0])
+		if not 0 <= camId <= len(camMgr.ids):
+			return "Invalid Camera ID specified."
+		cam = simbase.air.doId2do.get(camMgr.ids[camId], None)
+		if not cam:
+			return "Could not locate camera in the AIR doId2do table."
+		# Lets move the camera somewhere...
+		if args[1] == 'here':
+			av = spellbook.getTarget()
+			cam._moveTo(av.getX(), av.getY(), av.getZ() + 3.0, av.getH(), 0)
+			return "Camera %d is moving to %s." % (camId, av.getName())
+		if args[1] == 'to':
+			# This is fun...
+			if len(args) < 7:
+				return "You haven't specified enough position parameters! (x, y, z, h, p)"
+			cam.__moveTo(float(args[2]), float(args[3]), float(args[4]), float(args[5]), float(args[6]))
+			return "Camera %d is moving to the specified location." % camId
+		return "Invalid arguments for 'move' specified."
+		
+	if cmd == 'follow':
+		if len(args) < 2:
+			return "You haven't specified enough parameters!"
+		camId = int(args[0])
+		if not 0 <= camId <= len(camMgr.ids):
+			return "Invalid Camera ID specified."
+		cam = simbase.air.doId2do.get(camMgr.ids[camId], None)
+		if not cam:
+			return "Could not locate camera in the AIR doId2do table."
+		if arg[1] == 'behind':
+			cam._followBehind(spellbook.getTarget())
+			return "Camera %d is now stalking you from behind." % camId
+		if args[1] == 'front':
+			cam._watch(spellbook.getTarget())
+			return "Camera %d is now stalking you from the front." % camId
+		return "Invalid arguments for 'follow' specified."
+		
+	if cmd == 'setmain':
+		camId = int(args[0])
+		if not 0 <= camId <= len(camMgr.ids):
+			return "Invalid Camera ID specified."
+		camMgr.b_setMainCamera(camMgr.ids[camId])
+		return 'Camera %d is now main camera.' % camId
