@@ -49,7 +49,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
 
         if self.style.name == 'ms':
-            taskMgr.add(self.__checkToonsInRadius, 'ShakerAttack', extraArgs=[])
+            taskMgr.add(self.__checkToonsInRadius, 'ShakerAttack')
 
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
@@ -341,11 +341,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         return task.done
 
     # Move Shaker
-    def __checkToonsInRadius(self):
+    def __checkToonsInRadius(self, task):
         toon = base.localAvatar
         if toon:
-            toonDistance = toon.getPos().length()
-            if self.getPos().length() < toonDistance < (self.getPos().length() + SafezoneInvasionGlobals.MoveShakerRadius):
+            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
                 if toon.hp > -1:
                     if not toon.isStunned:
                         self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
@@ -353,7 +352,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
                 else:
                     # Dont try and enable avatar controls if a toon is sad
                     taskMgr.remove('EnableAvatarControls')
-        return Task.cont
+        return task.cont
 
     def d_takeShakerDamage(self, damage, toon):
         if toon.isStunned:
