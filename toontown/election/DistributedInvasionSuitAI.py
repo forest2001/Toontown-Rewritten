@@ -8,6 +8,7 @@ from toontown.battle import SuitBattleGlobals
 import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
+import SafezoneInvasionGlobals
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -135,7 +136,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.b_setState('Idle')
 
     def attack(self, who):
-        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', 5])
+        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', SafezoneInvasionGlobals.StandardSuitDamage])
         self.b_setState('Attack')
 
     def __startWalkTimer(self):
@@ -215,3 +216,11 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def d_setStaticPoint(self, x, y, h):
         self.sendUpdate('setStaticPoint', [x, y, h])
+
+    def takeShakerDamage(self, doId, damage):
+        toon = self.air.doId2do.get(doId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            return
+
+        toon.takeDamage(damage)

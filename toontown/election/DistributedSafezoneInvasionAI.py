@@ -150,21 +150,21 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.suits.append(suit)
 
     def checkToonHp(self, toon):
-        if toon.hp <= -1:
-            # We kicked the bucket
+        # Check all the toons
+        for toon in self.toons:
+            if toon.hp <= -1:
+                # We kicked the bucket
+                if toon not in self.sadToons:
+                    self.sadToons.append(toon) # They got one of us!
 
-            if toon not in self.sadToons:
-                self.sadToons.append(toon) # They got one of us!
-
-            # Make sure the toon is the invasion before removing it
-            if toon in self.master.invasion.toons:
-                self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
-
-        elif toon.hp > -1: 
-            # Toon now has some laffs...
-            if toon in self.sadToons:
-                self.master.invasion.toons.append(toon) # Add the toon back into the invasion
-                self.sadToons.remove(toon) # Remove the sad toon
+                # Make sure the toon is the invasion before removing it
+                if toon in self.master.invasion.toons:
+                    self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
+            elif toon.hp > -1:
+                # Toon now has some laffs...
+                if toon in self.sadToons:
+                    self.master.invasion.toons.append(toon) # Add the toon back into the invasion
+                    self.sadToons.remove(toon) # Remove the sad toon
 
     def suitDied(self, suit):
         if suit not in self.suits:
