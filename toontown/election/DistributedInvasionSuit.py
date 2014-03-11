@@ -2,6 +2,7 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
+from direct.task.Task import Task
 from otp.nametag.NametagConstants import *
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
@@ -28,6 +29,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackDamage = 0
         self.msStompLoop = None
 
+        self.shakerAttackRadius = 0
+
     def delete(self):
         self.demand('Off')
 
@@ -46,6 +49,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Set ourselves up for a good pieing:
         colNode = self.find('**/distAvatarCollNode*')
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
+
+        if self.style.name == 'ms':
+            taskMgr.add(self.__checkToonsInRadius, 'ShakerAttack', extraArgs=[])
 
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
@@ -222,7 +228,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
         # Rotate the suit to look at the toon it is attacking
         toon = self.cr.doId2do.get(toonId)
-        self.lookAt(toon)
+        if toon:
+            self.lookAt(toon)
 
         if self.style.body in ['a', 'b']:
             throwDelay = 3
@@ -304,6 +311,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
         self.__placeOnGround()
 
+        if self.style.name == 'ms':
+            self.shakerAttackRadius = (self.getPos().length() - SafezoneInvasionGlobals.MoveShakerRadius)
+
         return task.cont
 
     def __placeOnGround(self):
@@ -316,3 +326,35 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
            getattr(self.shadowPlacer, 'shadowNodePath', None):
             self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
         return task.done
+
+    # Move Shaker
+    def __checkToonsInRadius(self):
+        toon = base.localAvatar
+        if toon:
+            toonDistance = toon.getPos().length()
+            if toonDistance < self.shakerAttackRadius:
+                if toon.hp > -1:
+                    if not toon.isStunned:
+                        self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
+                        self.setToonStunned(toon, True)
+        return Task.cont
+
+    def d_takeShakerDamage(self, damage, toon):
+        if toon.isStunned:
+            return
+
+        if toon is base.localAvatar:
+            base.localAvatar.disableAvatarControls()
+            taskMgr.doMethodLater(1, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
+
+        toon.b_setEmoteState(12, 1.0)
+        
+        self.sendUpdate('takeShakerDamage', [toon.doId, damage])
+
+        taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
+
+    def setToonStunned(self, toon, stunned = False):
+        toon.isStunned = stunned
+        if stunned == False:
+            taskMgr.remove('ToonStunned')
+

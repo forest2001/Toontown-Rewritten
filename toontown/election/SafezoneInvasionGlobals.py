@@ -59,6 +59,13 @@ WaveBeginningTime = 10
 # How long does the intermission last?
 IntermissionTime = 20
 
+# How much damage does a suit's attack do?
+StandardSuitDamage = 5
+
+# How much damage does a Move and Shaker's attack do?
+MoveShakerDamageRadius = 3
+MoveShakerRadius = 30
+MoveShakerStunTime = 5.0
 
 # How much healing does a pie on a Toon do?
 ToonHealAmount = 1

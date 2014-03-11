@@ -779,6 +779,8 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
 
   sayFaceoffTaunt(bool custom, string phrase) broadcast;
   makeSkelecog() broadcast;
+  
+  takeShakerDamage(uint32 doId, uint8 damage) clsend airecv;
 };
 
 dclass DistributedBossCog : DistributedNode {
