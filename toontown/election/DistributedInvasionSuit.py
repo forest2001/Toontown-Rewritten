@@ -361,11 +361,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             if toon is base.localAvatar:
                 base.localAvatar.disableAvatarControls()
                 taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
-
-            toon.b_setEmoteState(12, 1.0)
-            
-            self.sendUpdate('takeShakerDamage', [damage])
-
+                toon.b_setEmoteState(12, 1.0)              
+                self.sendUpdate('takeShakerDamage', [damage])
             taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
 
     def setToonStunned(self, toon, stunned = False):
