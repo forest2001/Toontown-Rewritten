@@ -365,7 +365,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
             toon.b_setEmoteState(12, 1.0)
             
-            self.sendUpdate('takeShakerDamage', [toon.doId, damage])
+            self.sendUpdate('takeShakerDamage', [damage])
 
             taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
 
