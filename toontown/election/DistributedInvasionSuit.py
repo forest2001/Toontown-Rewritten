@@ -29,8 +29,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackDamage = 0
         self.msStompLoop = None
 
-        self.shakerAttackRadius = 0
-
     def delete(self):
         self.demand('Off')
 
@@ -205,6 +203,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         explodeTrack.start(time)
 
     def enterAttack(self, time):
+        if self.style.name == 'ms':
+            self._attackInterval = self.makeShakerAttackTrack()
+            self._attackInterval.start(time)
+            return
         self._attackInterval = self.makeAttackTrack()
         self._attackInterval.start(time)
 
@@ -227,9 +229,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         toonId = self.attackTarget
 
         # Rotate the suit to look at the toon it is attacking
-        toon = self.cr.doId2do.get(toonId)
-        if toon:
-            self.lookAt(toon)
+        self.lookAtToon(self.attackTarget)
 
         if self.style.body in ['a', 'b']:
             throwDelay = 3
@@ -266,6 +266,22 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         )
 
         return track
+
+    def makeShakerAttackTrack(self):
+        self.lookAtToon(self.attackTarget)
+        track = Parallel(
+            ActorInterval(self, 'walk'),
+            Track(
+                (0.0, Func(self.sayFaceoffTaunt))
+            ),
+        )
+
+        return track
+
+    def lookAtToon(self, toonId):
+        toon = self.cr.doId2do.get(toonId)
+        if toon:
+            self.lookAt(toon)
 
     def exitAttack(self):
         self._attackInterval.finish()
@@ -311,9 +327,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
         self.__placeOnGround()
 
-        if self.style.name == 'ms':
-            self.shakerAttackRadius = (self.getPos().length() - SafezoneInvasionGlobals.MoveShakerRadius)
-
         return task.cont
 
     def __placeOnGround(self):
@@ -332,26 +345,29 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         toon = base.localAvatar
         if toon:
             toonDistance = toon.getPos().length()
-            if toonDistance < self.shakerAttackRadius:
+            if self.getPos().length() < toonDistance < (self.getPos().length() + SafezoneInvasionGlobals.MoveShakerRadius):
                 if toon.hp > -1:
                     if not toon.isStunned:
                         self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
                         self.setToonStunned(toon, True)
+                else:
+                    # Dont try and enable avatar controls if a toon is sad
+                    taskMgr.remove('EnableAvatarControls')
         return Task.cont
 
     def d_takeShakerDamage(self, damage, toon):
         if toon.isStunned:
             return
+        if toon.hp > -1:
+            if toon is base.localAvatar:
+                base.localAvatar.disableAvatarControls()
+                taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
 
-        if toon is base.localAvatar:
-            base.localAvatar.disableAvatarControls()
-            taskMgr.doMethodLater(1, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
+            toon.b_setEmoteState(12, 1.0)
+            
+            self.sendUpdate('takeShakerDamage', [toon.doId, damage])
 
-        toon.b_setEmoteState(12, 1.0)
-        
-        self.sendUpdate('takeShakerDamage', [toon.doId, damage])
-
-        taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
+            taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
 
     def setToonStunned(self, toon, stunned = False):
         toon.isStunned = stunned
