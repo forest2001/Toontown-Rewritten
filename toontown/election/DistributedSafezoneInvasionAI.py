@@ -52,7 +52,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
             # Don't want those cogs attacking us if we are sad. 
             # Thats just mean
-            self.checkToonHp(toon)
+            self.checkToonHp()
 
     def _handleToonExit(self, toon):
         if toon in self.toons:
@@ -90,7 +90,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         toon.toonUp(SafezoneInvasionGlobals.ToonHealAmount)
 
-        self.checkToonHp(toon)
+        self.checkToonHp()
 
     def hitSuit(self, doId):
         # Someone hit one of our suits...
@@ -123,7 +123,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         toon.takeDamage(damage)
 
-        self.checkToonHp(toon)
+        self.checkToonHp()
 
     def __deleteSuits(self):
         for suit in self.suits:
@@ -149,7 +149,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.b_setState('FlyDown')
         self.suits.append(suit)
 
-    def checkToonHp(self, toon):
+    def checkToonHp(self):
         # Check all the toons
         for toon in self.toons:
             if toon.hp <= -1:
