@@ -43,16 +43,51 @@ SuitWaves = [
     [('pp', 0), ('dt', 0), ('cc', 1), ('tm', 0), ('bf', 2), ('b', 0), ('p', 1)],
     [('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 0), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 1), ('bf', 1), ('p', 0)], # Wait Wave
     [('p', 1), ('b', 0), ('b', 1), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 2), ('bf', 2), ('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 3)], # Intermission Wave
+
+    # WAVE 3:
+    [('ym', 0), ('dt', 0), ('tw', 0), ('nd', 0), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1)],
+    [('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('dt', 1)], # Wait Wave
+    [('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3)], # Intermission Wave
+
+    # WAVE 4:
+    [('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0), ('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0)],
+    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1)], # Wait Wave
+    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2)], # Intermission Wave
+
+    # WAVE 5:
+    [('ds', 0), ('bs', 0), ('nc', 0), ('ms', 0), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1)],
+    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2)], # Wait Wave
+    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2)], # Intermission Wave
+
+    # WAVE 6:
+    [('hh', 0), ('sd', 0), ('mb', 0), ('tf', 0), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1)],
+    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2)], # Wait Wave
+    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2)], # Intermission Wave
+
+    # WAVE 7:
+    [('cr', 0), ('le', 0), ('ls', 0), ('m', 0), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1)],
+    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2)], # Wait Wave
+    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2)], # Intermission Wave
+
+    # WAVE 8:
+    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
+    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
+    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+
+    # WAVE 9: The Final Wave
+    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
+    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
+    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
 # Once the suits are destroyed, the next wave will spawn again instantly with no intermission.
-SuitWaitWaves = [1, 4, 7, 10]
+SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
 # These waves have a 20 second intermission period after all suits are destroyed.
-SuitIntermissionWaves = [2, 5, 8, 11]
-# These are the last waves that start turning cogs into Skelecogs.
+SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
+# These are the last waves that start turning cogs into Skebwcogs.
 # TODO: Stick Skelecogs to the floor
-SuitSkelecogWaves = [12]
+SuitSkelecogWaves = [24]
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10
