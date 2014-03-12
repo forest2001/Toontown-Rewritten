@@ -28,10 +28,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackProp = ''
         self.attackDamage = 0
         self.msStompLoop = None
+        self.shakerRadialAttack = None
 
     def delete(self):
         self.demand('Off')
-
+        self.stopShakerRadiusAttack()
         self.stopMoveTask()
         DistributedSuitBase.delete(self)
 
@@ -49,7 +50,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
 
         if self.style.name == 'ms':
-            taskMgr.add(self.__checkToonsInRadius, 'ShakerAttack')
+            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
 
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
@@ -319,6 +320,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.moveTask:
             self.moveTask.remove()
             self.moveTask = None
+
+    def stopShakerRadiusAttack(self):
+        if self.shakerRadialAttack:
+            self.shakerRadialAttack.remove()
+            self.shakerRadialAttack = None
 
     def __move(self, task):
         x, y = self.getPosAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
