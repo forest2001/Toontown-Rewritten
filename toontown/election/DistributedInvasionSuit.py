@@ -230,7 +230,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         toonId = self.attackTarget
 
         # Rotate the suit to look at the toon it is attacking
-        self.lookAtToon(self.attackTarget)
+        self.lookAtToon()
 
         if self.style.body in ['a', 'b']:
             throwDelay = 3
@@ -243,6 +243,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
                 prop.cleanup()
                 prop.removeNode()
                 return
+
+            self.lookAtToon()
 
             prop.wrtReparentTo(render)
 
@@ -269,7 +271,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         return track
 
     def makeShakerAttackTrack(self):
-        self.lookAtToon(self.attackTarget)
+        self.lookAtToon()
         track = Parallel(
             ActorInterval(self, 'walk'),
             Track(
@@ -279,10 +281,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
         return track
 
-    def lookAtToon(self, toonId):
-        toon = self.cr.doId2do.get(toonId)
-        if toon:
-            self.lookAt(toon)
+    def lookAtToon(self):
+        toon = self.cr.doId2do.get(self.attackTarget)
+        self.lookAt(toon)
 
     def exitAttack(self):
         self._attackInterval.finish()
