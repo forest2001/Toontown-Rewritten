@@ -282,10 +282,12 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         return track
 
     def lookAtTarget(self):
-        if self.attackTarget:
-            toon = self.cr.doId2do.get(self.attackTarget)
-            if toon:
-                self.lookAt(toon)
+        if not self.attackTarget:
+            return # No target to look at.
+        target = self.cr.doId2do.get(self.attackTarget)
+        if not target:
+            return # Target not found.
+        self.lookAt(target)
 
     def exitAttack(self):
         self._attackInterval.finish()
