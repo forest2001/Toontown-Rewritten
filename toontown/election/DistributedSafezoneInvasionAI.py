@@ -88,8 +88,14 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             self.air.writeServerEvent('suspicious', avId, 'Hit a non-Toon with a pie through hitToon()!')
             return
 
-        toon.toonUp(SafezoneInvasionGlobals.ToonHealAmount)
+        # Just to be safe, let's check if the Toon has less than 0 laff.
+        # Sometimes this happens from multiple cog hits at once.
+        if toon.hp < 0:
+            # They do! :( Let's give them a little boost before tooning up to make it fair.
+            toon.setHp(0)
 
+        # Time to toon up!
+        toon.toonUp(SafezoneInvasionGlobals.ToonHealAmount)
         self.checkToonHp()
 
     def hitSuit(self, doId):
@@ -121,7 +127,12 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
             return
 
-        toon.takeDamage(damage)
+        # If the cog's attack is higher than the amount of laff they have, we'll only take away what they have.
+        # If the attack is 5 and the toon has 3 laff, we'll only take away 3 laff. This mostly prevents toons going under 0 Laff.
+        if damage > toon.hp:
+            toon.takeDamage(toon.hp)
+        else:
+            toon.takeDamage(damage)
 
         self.checkToonHp()
 
