@@ -217,8 +217,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def d_setStaticPoint(self, x, y, h):
         self.sendUpdate('setStaticPoint', [x, y, h])
 
-    def takeShakerDamage(self, doId, damage):
-        toon = self.air.doId2do.get(doId)
+    def takeShakerDamage(self, damage):
+        avId = self.air.getAvatarIdFromSender()
+        toon = self.air.doId2do.get(avId)
         if not toon:
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
             return
