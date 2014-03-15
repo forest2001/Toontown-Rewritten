@@ -5,6 +5,7 @@ from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from otp.ai.MagicWordGlobal import *
 from toontown.toonbase import ToontownGlobals
+from toontown.battle import BattleProps
 from direct.task import Task
 
 
@@ -18,9 +19,26 @@ class DistributedElectionCameraManager(DistributedObject):
         self.cameraViewEnabled = False
     def generate(self):
         DistributedObject.generate(self)
+
+        # Load the TV, and give it a nice idle animation.
+        # This will probably be moved somewhere else once we get it into the scripted sequence
         self.tv = loader.loadModel('phase_4/models/events/tv')
         self.tv.reparentTo(render)
-        self.tv.setPosHpr(-16, 1, 5, 180, 0, 0)
+        self.tv.setPosHprScale(87.85, -0.25, 21.0, 270.0, 0.0, 0.0, 1.5, 1.5, 1.5)
+        self.tvIdle = Sequence(
+            self.tv.posInterval(2.5, (87.85, -0.25, 22.0), blendType='easeInOut'),
+            self.tv.posInterval(2.5, (87.85, -0.25, 21.0), blendType='easeInOut'),
+        )
+        self.tvIdle.loop()
+
+        # Attach a cog's propeller onto the TV. Foreshadowing!
+        self.prop = BattleProps.globalPropPool.getProp('propeller')
+        propJoint = self.tv.find('**/topSphere')
+        self.prop.reparentTo(propJoint)
+        self.prop.loop('propeller', fromFrame=0, toFrame=8)
+        self.prop.setZ(1.5)
+        self.prop.setScale(2.0, 1.5, 1.0)
+
         self.buffer = base.win.makeTextureBuffer("tv", 512, 256)
         self.buffer.setSort(-100)
         self.camera = base.makeCamera(self.buffer)
