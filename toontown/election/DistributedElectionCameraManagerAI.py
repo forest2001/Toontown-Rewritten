@@ -48,7 +48,6 @@ def cameras(cmd, args=''):
         cameras = []
         for cameraId in range(5):
             cam = DistributedElectionCameraAI(simbase.air)
-            cam.setState('Waiting', globalClockDelta.getRealNetworkTime(), 0, 0, 0, 0, 0, 0)
             cam.generateWithRequired(2000)
             cam.b_setPosHpr(0, 0, 0, 0, 0, 0)
             cameras.append(cam.getDoId())
