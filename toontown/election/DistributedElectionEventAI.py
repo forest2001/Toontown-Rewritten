@@ -93,21 +93,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def getState(self):
         return (self.state, self.stateTime)
 
-    def requestSuit(self):
+    def setSuitDamage(self, hp):
         self.suit = DistributedInvasionSuitAI(self.air, self)
         self.suit.dna.newSuit('ym')
         self.suit.setSpawnPoint(99)
         self.suit.setLevel(0)
         self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
-        self.suit.b_setState('FlyDown')
-
-    def setSuitPhrase(self, phrase):
-        self.suit.d_sayFaceoffTaunt(True, phrase)
-        
-    def setSuitState(self, state):
-        self.suit.b_setState(state)
-
-    def setSuitDamage(self, hp):
         self.suit.takeDamage(hp)
 
 @magicWord()

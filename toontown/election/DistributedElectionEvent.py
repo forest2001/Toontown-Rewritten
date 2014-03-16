@@ -6,7 +6,7 @@ from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
 from direct.task import Task
 from toontown.toon import NPCToons
-from toontown.suit import Suit, SuitDNA
+from toontown.suit import DistributedSuitBase, SuitDNA
 from toontown.toonbase import ToontownGlobals
 import ElectionGlobals
 
@@ -82,11 +82,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #Sometimes they all need to do the same thing.
         self.characters = [self.alec, self.slappy, self.flippy]
 
-        # self.suit = Suit.Suit()
-        # cogDNA = SuitDNA.SuitDNA()
-        # cogDNA.newSuit('tbc')
-        # self.suit.setDNA(cogDNA)
-        # self.suit.reparentTo(self.showFloor)
+        self.suit = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ym')
+        self.suit.setDNA(suitDNA)
+        self.suit.setDisplayName('Yesman\nBossbot\nLevel 3')
+        self.suit.setPickable(0)
 
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
         if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
@@ -142,6 +143,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         for character in self.characters:
             character.reparentTo(self.showFloor)
             character.setPosHpr(35, -0.3, 0, 90, 0, 0)
+            character.addActive()
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
 
         self.alecHallInterval = Sequence(
@@ -263,15 +265,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.victorySequence.finish()
 
     def enterCogLanding(self, offset):
-        # TODO: Figure out how to get the cog here
         musicSad = base.loadMusic(ElectionGlobals.SadMusic)
         sfxSad = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
-        self.sendUpdate('requestSuit', [])
+        mtrack = self.suit.beginSupaFlyMove(Point3(65, 3.6, 4.0), 1, 'fromSky', walkAfterLanding=False)
         self.pieHold = Sequence(
             ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47),
             ActorInterval(self.flippy, 'throw', startFrame=46, endFrame=33),
         )
         self.cogSequence = Sequence(
+            Parallel(Func(self.suit.reparentTo, render), Func(self.suit.addActive), Func(mtrack.start, offset)),
             Wait(3),
             Func(self.slappy.setChatAbsolute, 'I will ensure- Uhh...', CFSpeech|CFTimeout),
             Wait(5),
@@ -289,15 +291,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(0.5),
             Func(self.slappy.setChatAbsolute, 'My name is Slappy, the newly elected President of the Toon Council in this Toonerrific Town.', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.setSuitPhrase, 'President, you say? Just the Toon I need to speak with.'),
+            Func(self.suit.setChatAbsolute, 'President, you say? Just the Toon I need to speak with.', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on those cameras.", CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.setSuitPhrase, 'Yes. Now as I began to-'),
+            Func(self.suit.setChatAbsolute, 'Yes. Now as I began to-', CFSpeech|CFTimeout),
             Wait(1),
             Func(self.slappy.setChatAbsolute, "Ooh, and the suit too. Where did you come from, anyway? It can't be Loony Labs, they're off today.", CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.setSuitPhrase, 'See here, Toon. I am-'),
+            Func(self.suit.setChatAbsolute, 'See here, Toon. I am-', CFSpeech|CFTimeout),
             Wait(1),
             Func(self.slappy.setChatAbsolute, "No, don't tell me. Let me guess. Errrr... Montana. Final answer. No, no, nevermind. They wouldn't have that fancy of a suit there. Hrmm...", CFSpeech|CFTimeout),
             Wait(1),
@@ -305,11 +307,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ActorInterval(self.slappy, 'think', startFrame=46, endFrame=0),
             Func(self.slappy.loop, 'neutral'),
             Wait(1),
-            Func(self.setSuitPhrase, 'STOP!'),
+            Func(self.suit.setChatAbsolute, 'STOP!', CFSpeech|CFTimeout),
             Wait(4),
-            Func(self.setSuitPhrase, 'I like your lingo, Toon. You know how to schmooze.'),
+            Func(self.suit.setChatAbsolute, 'I like your lingo, Toon. You know how to schmooze.', CFSpeech|CFTimeout),
             Wait(6),
-            Func(self.setSuitPhrase, 'However, you seem to need a smear of Positive Reinforcement.'),
+            Func(self.suit.setChatAbsolute, 'However, you seem to need a smear of Positive Reinforcement.', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.slappy.play, 'lose'),
             Wait(2),
@@ -340,42 +342,34 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(6),
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
             Wait(4),
-            Func(self.setSuitPhrase, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.'),
+            Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout),
             Wait(4),
             Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
             Func(self.flippy.loop, 'neutral'),
             Wait(1.5),
-            Func(self.setSuitPhrase, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.'),
+            Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout),
             Wait(1.5),
             Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.setSuitPhrase, 'Fun cannot exist without order.'),
+            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout),
             Wait(2),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout)),
             Wait(1),
-            Func(self.setSuitPhrase, 'Don\'t worry, I haven\'t been wrong yet.'),
+            Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
             Wait(1.5),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout)),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.setSuitDamage, 36)
+            Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36))
         )
         self.cogSequence.setT(offset)
         self.cogSequence.start()
 
     def exitCogLanding(self):
         self.cogSequence.finish()
+        del self.suit
 
     def enterInvasion(self, offset):
         pass
-
-    def setSuitPhrase(self, phrase):
-        self.sendUpdate('setSuitPhrase', [phrase])
-
-    def setSuitPhrase(self, phrase):
-        self.sendUpdate('setSuitPhrase', [phrase])
-
-    def setSuitState(self, state):
-        self.sendUpdate('setSuitState', [state])
 
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
