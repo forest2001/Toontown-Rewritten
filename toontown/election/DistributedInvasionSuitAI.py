@@ -50,7 +50,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
-        self._delay = taskMgr.doMethodLater(SuitTimings.fromSky, self.__flyDownComplete,
+        self._delay = taskMgr.doMethodLater((SuitTimings.fromSky + 1.0), self.__flyDownComplete,
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
