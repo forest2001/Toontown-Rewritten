@@ -962,10 +962,15 @@ class Suit(Avatar.Avatar):
         model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
-        dropShadow = self.dropShadow
-        if not dropShadow.isEmpty():
-            dropShadow.reparentTo(hidden)
-        self.removePart('modelRoot')
+        # Remove all of the previous cog except for a few necessary joints
+        modelRoot = self.getGeomNode()
+        modelRoot.find('**/torso').removeNode()
+        modelRoot.find('**/arms').removeNode()
+        modelRoot.find('**/hands').removeNode()
+        modelRoot.find('**/legs').removeNode()
+        modelRoot.find('**/').removeNode() # These are feet
+        modelRoot.find('**/joint_head').removeNode()
+        # Now, to load our skelecog
         self.loadModel(model)
         self.loadAnims(anims)
         self.getGeomNode().setScale(self.scale * 1.0173)
@@ -987,10 +992,6 @@ class Suit(Avatar.Avatar):
         self.rightHand = self.find('**/joint_Rhold')
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagNull = self.find('**/joint_nameTag')
-        if not dropShadow.isEmpty():
-            dropShadow.setScale(0.75)
-            if not self.shadowJoint.isEmpty():
-                dropShadow.reparentTo(self.shadowJoint)
         self.loop(anim)
         self.isSkeleton = 1
 
