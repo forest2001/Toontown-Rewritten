@@ -7,7 +7,10 @@ import SafezoneInvasionGlobals
 class DistributedSafezoneInvasion(DistributedObject):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
-
+        
+        # So we can access it later...
+        cr.invasion = self
+        
         self.accept('localPieSplat', self.__localPieSplat)
         self.accept('enterSuitAttack', self.__localToonHit)
 
@@ -42,6 +45,7 @@ class DistributedSafezoneInvasion(DistributedObject):
             self.showFloor.setColor(Vec4(0.4, 0.4, 0.4, 1))
 
     def delete(self):
+        self.cr.invasion = None
         DistributedObject.delete(self)
         # We should check if the invasion is loaded first to be safe.
         if self.invasionOn == True:
