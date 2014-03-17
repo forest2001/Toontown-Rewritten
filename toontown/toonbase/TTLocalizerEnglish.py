@@ -8299,12 +8299,18 @@ PetTrait2descriptions = {'hungerThreshold': ('Always Hungry',
                         'Always Affectionate')}
 FireworksInstructions = lToonHQ + ': Look up using the "Page Up" key to see the show!'
 startFireworksResponse = "Usage: startFireworksShow ['num']\n                                         'num' = %s - New Years\n                                         %s - Party Summer \n                                         %s - 4th of July"
-FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
-FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
-FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
-FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
-FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
-FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
+#FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
+#FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
+#FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
+#FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
+#FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
+#FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
+FireworksJuly4Beginning = 'Flippy: Hiya, Toons! Press PAGE UP to see some fireworks to celebrate this last week of the election!'
+FireworksJuly4Ending = 'Flippy: Hope you enjoyed the show. Don't forget to stop by Toontown Central for some pies!'
+FireworksNewYearsEveBeginning = 'Flippy: Hiya, Toons! Press PAGE UP to see some fireworks to celebrate this last week of the election!'
+FireworksNewYearsEveEnding =  'Flippy: Hope you enjoyed the show. Don't forget to stop by Toontown Central for some pies!'
+FireworksComboBeginning = 'Flippy: Hiya, Toons! Press PAGE UP to see some fireworks to celebrate this last week of the election!'
+FireworksComboEnding = 'Flippy: Hope you enjoyed the show. Don't forget to stop by Toontown Central for some pies!'
 BlockerTitle = 'LOADING TOONTOWN...'
 BlockerLoadingTexts = ['Rewriting history',
  'Baking pie crusts',
