@@ -4,6 +4,7 @@ from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
+from direct.actor import Actor
 from toontown.toon import NPCToons
 from toontown.suit import Suit, SuitDNA
 from direct.task import Task
@@ -51,12 +52,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
 
         #Campaign stands
-        flippyStand = loader.loadModel('phase_4/models/events/election_flippyStand-static')
-        flippyStand.reparentTo(self.showFloor)
-        flippyStand.setPosHprScale(-43.6, -24.5, 0.01, 200, 0, 0, 0.55, 0.55, 0.55)
-        flippyTable = flippyStand.find('**/Cube')
-        wheelbarrow = flippyStand.find('**/Box')
-        wheelbarrow.setPosHprScale(-3.61, -1.4, 0, 319, 0, 270, 3, 2, 1.8)
+        self.flippyStand = Actor.Actor('phase_4/models/events/election_flippyStand-mod', {'idle': 'phase_4/models/events/election_flippyStand-idle'})
+        self.flippyStand.reparentTo(self.showFloor)
+        self.flippyStand.setPosHprScale(-43.6, -24.5, 0.01, 200, 0, 0, 0.55, 0.55, 0.55)
+        self.flippyStand.exposeJoint(None,"modelRoot", "LInnerShoulder")
+        flippyTable = self.flippyStand.find('**/LInnerShoulder')
+        self.flippyStand.exposeJoint(None,"modelRoot", "Box_Joint")
+        wheelbarrowJoint = self.flippyStand.find('**/Box_Joint')
+        wheelbarrow = self.flippyStand.find('**/Box')
+        wheelbarrow.setPosHprScale(-2.36, 0.00, 1.83, 0.00, 0.00, 6.34, 1.14, 1.50, 0.93)
         
         slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
         slappyStand.reparentTo(self.showFloor)
@@ -65,23 +69,24 @@ class DistributedElectionEvent(DistributedObject, FSM):
         #Let's give FlippyStand a bunch of pies.
         # Pies on/around the stand.
         pie = loader.loadModel('phase_3.5/models/props/tart')
-        pie.reparentTo(flippyStand)
-        pieS = pie.copyTo(flippyStand)
-        pie.setPosHprScale(-2.8, -2.4, 6.1, 0, 355.24, 351.87, 2, 2.1, 1.6)
-        pieS.setPosHprScale(3.54, -3.94, 0.42, 45.00, 42.27, 0, 1.6, 1.6, 1.6)
+        #pie.reparentTo(flippyTable)
+        pieS = pie.copyTo(flippyTable)
+        #pie.setPosHprScale(-2.8, -2.4, 6.1, 0, 355.24, 351.87, 2, 2.1, 1.6)
+        pieS.setPosHprScale(-2.61, -0.37, -1.99, 355.60, 90.00, 4.09, 1.6, 1.6, 1.6)
         # Pies in the wheelbarrow.
         for pieSettings in ElectionGlobals.FlippyWheelbarrowPies:
-            pieModel = pie.copyTo(wheelbarrow)
+            pieModel = pie.copyTo(wheelbarrowJoint)
             pieModel.setPosHprScale(*pieSettings)
+        # This currently causes placement problems with the animation
+        wheelbarrowJoint.setPosHprScale(2.51, 0.0, 1.0, 270.0, 344.74, 0.0, 1.47, 1.12, 1.0)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
             
-        #Find FlippyStand's collision to give people pies.
-        #Roger didn't separate the main stand from the wheelbarrow, so currently running to both gives pies.
-        #That should probably be fixed before Doomsday, but it's fine for now.
-        self.pieCollision = flippyStand.find('**/FlippyCollision')
-        self.pieCollision.setScale(7.83, 4.36, 9.41)
-        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
-       
+        # Find FlippyStand's collision to give people pies.
+        # The new animated model doesn't have any collisions, so this needs to be replaced with a collision box. Harv did it once, just need to look back in the commit history.
+        #self.pieCollision = flippyStand.find('**/FlippyCollision')
+        #self.pieCollision.setScale(7.83, 4.36, 9.41)
+        #self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+
         self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
         #self.slappy = NPCToons.createLocalNPC(2021)
@@ -109,6 +114,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.interactiveOn = True
         self.flippyPhrase = None
         self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, self.phraseSaidToFlippy)
+        self.flippyStand.loop('idle') # Comment this out to see the proper positioning for pies
         
     def stopInteractiveFlippy(self):
         self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
