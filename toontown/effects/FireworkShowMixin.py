@@ -10,6 +10,9 @@ import FireworkShows
 from FireworkGlobals import skyTransitionDuration, preShowPauseDuration, postShowPauseDuration, preNormalMusicPauseDuration
 from toontown.effects.FireworkShow import FireworkShow
 
+# Client seems to complain about these not being defined... lets just import all the modules.
+from toontown.hood import BRHood, DDHood, DGHood, DLHood, GSHood, GZHood, MMHood, OZHood, TTHood
+
 class FireworkShowMixin:
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworkShowMixin')
 
