@@ -140,7 +140,7 @@ class FireworkShowMixin:
 
     def restoreCameraLens(self):
         hood = self.getHood()
-        if hood.id == GoofySpeedway or hood.id == OutdoorZone
+        if hood.id == GoofySpeedway or hood.id == OutdoorZone:
             base.camLens.setFar(SpeedwayCameraFar)
         else:
             base.camLens.setFar(DefaultCameraFar)

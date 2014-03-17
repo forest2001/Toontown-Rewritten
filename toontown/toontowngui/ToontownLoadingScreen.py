@@ -28,7 +28,7 @@ class ToontownLoadingScreen:
         # This will bring up the placer panel, which is useful for positioning objects but also rather buggy.
         # Make sure the models in {Panda3D}\models\misc are converted to .bam, or it will crash.
         # To save you the trouble, you can get the converted models from here: https://dl.dropboxusercontent.com/u/37515491/TTR/misc.zip - Tell someone if the link is broken.
-        if base.config.GetBool('want-placer-panel', 0):
+        if base.config.GetBool('want-placer-panel', False):
             self.gui.place()
         return
 
