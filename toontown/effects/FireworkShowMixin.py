@@ -10,9 +10,6 @@ import FireworkShows
 from FireworkGlobals import skyTransitionDuration, preShowPauseDuration, postShowPauseDuration, preNormalMusicPauseDuration
 from toontown.effects.FireworkShow import FireworkShow
 
-# Client seems to complain about these not being defined... lets just import all the modules.
-from toontown.hood import BRHood, DDHood, DGHood, DLHood, GSHood, GZHood, MMHood, OZHood, TTHood
-
 class FireworkShowMixin:
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworkShowMixin')
 
@@ -142,16 +139,11 @@ class FireworkShowMixin:
         return None
 
     def restoreCameraLens(self):
-#     This is broken for some reason, and I don't have time to debug it right now.
-#     It was fine during New Years fireworks, so I have no idea what caused it.
-#        hood = self.getHood()
-#        if isinstance(hood, OZHood.OZHood):
-#            base.camLens.setFar(SpeedwayCameraFar)
-#        elif isinstance(hood, GSHood.GSHood):
-#            base.camLens.setFar(SpeedwayCameraFar)
-#        else:
-#            base.camLens.setFar(DefaultCameraFar)
-        base.camLens.setFar(DefaultCameraFar)
+        hood = self.getHood()
+        if hood.id == GoofySpeedway or hood.id == OutdoorZone
+            base.camLens.setFar(SpeedwayCameraFar)
+        else:
+            base.camLens.setFar(DefaultCameraFar)
 
     def postShow(self, eventId):
         if eventId == JULY4_FIREWORKS:
