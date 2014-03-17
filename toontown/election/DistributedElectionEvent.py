@@ -83,9 +83,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             
         # Find FlippyStand's collision to give people pies.
         # The new animated model doesn't have any collisions, so this needs to be replaced with a collision box. Harv did it once, just need to look back in the commit history.
-        #self.pieCollision = flippyStand.find('**/FlippyCollision')
-        #self.pieCollision.setScale(7.83, 4.36, 9.41)
-        #self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        cs = CollisionBox(Point3(7, 0, 0), 12, 5, 18)
+        self.pieCollision = self.flippyStand.attachNewNode(CollisionNode('wheelbarrow_collision'))
+        self.pieCollision.node().addSolid(cs)
+        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
         self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -115,11 +116,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyPhrase = None
         self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, self.phraseSaidToFlippy)
         self.flippyStand.loop('idle') # Comment this out to see the proper positioning for pies
-        
+
     def stopInteractiveFlippy(self):
         self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
         self.interactiveOn = False
-    
+
     def phraseSaidToFlippy(self, phraseId):
         # Check distance...
         if self.flippy.nametag.getChat() != '':
@@ -168,11 +169,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def delete(self):
         self.demand('Off', 0.)
         
-        self.ignore('enter' + self.pieCollision.node().getName())
-        
         # Clean up everything...
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
+        self.ignore('enter' + self.pieCollision.node().getName())
 
         DistributedObject.delete(self)
     
