@@ -139,13 +139,16 @@ class FireworkShowMixin:
         return None
 
     def restoreCameraLens(self):
-        hood = self.getHood()
-        if isinstance(hood, OZHood.OZHood):
-            base.camLens.setFar(SpeedwayCameraFar)
-        elif isinstance(hood, GSHood.GSHood):
-            base.camLens.setFar(SpeedwayCameraFar)
-        else:
-            base.camLens.setFar(DefaultCameraFar)
+#     This is broken for some reason, and I don't have time to debug it right now.
+#     It was fine during New Years fireworks, so I have no idea what caused it.
+#        hood = self.getHood()
+#        if isinstance(hood, OZHood.OZHood):
+#            base.camLens.setFar(SpeedwayCameraFar)
+#        elif isinstance(hood, GSHood.GSHood):
+#            base.camLens.setFar(SpeedwayCameraFar)
+#        else:
+#            base.camLens.setFar(DefaultCameraFar)
+        base.camLens.setFar(DefaultCameraFar)
 
     def postShow(self, eventId):
         if eventId == JULY4_FIREWORKS:

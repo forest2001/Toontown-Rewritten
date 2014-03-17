@@ -58,9 +58,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyStand.exposeJoint(None,"modelRoot", "LInnerShoulder")
         flippyTable = self.flippyStand.find('**/LInnerShoulder')
         self.flippyStand.exposeJoint(None,"modelRoot", "Box_Joint")
-        wheelbarrowJoint = self.flippyStand.find('**/Box_Joint')
+        wheelbarrowJoint = self.flippyStand.find('**/Box_Joint').attachNewNode('Pie_Joint')
         wheelbarrow = self.flippyStand.find('**/Box')
-        wheelbarrow.setPosHprScale(-2.36, 0.00, 1.83, 0.00, 0.00, 6.34, 1.14, 1.50, 0.93)
+        wheelbarrow.setPosHprScale(-3.90, 0.00, 1.83, 0.00, 0.00, 6.34, 1.14, 1.50, 0.93)
         
         slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
         slappyStand.reparentTo(self.showFloor)
