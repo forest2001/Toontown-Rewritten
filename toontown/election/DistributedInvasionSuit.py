@@ -29,6 +29,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackDamage = 0
         self.msStompLoop = None
         self.shakerRadialAttack = None
+        self.exploding = False
 
     def delete(self):
         self.demand('Off')
@@ -174,6 +175,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._stunInterval.finish()
 
     def enterExplode(self, time):
+        self.exploding = True
         # We're done with our suit. Let's get rid of him and load an actor for the explosion
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
@@ -355,7 +357,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def __checkToonsInRadius(self, task):
         toon = base.localAvatar
         if toon:
-            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
+            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius and not self.exploding:
                 if toon.hp > 0:
                     if not toon.isStunned:
                         self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
