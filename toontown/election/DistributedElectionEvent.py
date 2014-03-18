@@ -60,7 +60,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyStand.exposeJoint(None,"modelRoot", "Box_Joint")
         wheelbarrowJoint = self.flippyStand.find('**/Box_Joint').attachNewNode('Pie_Joint')
         wheelbarrow = self.flippyStand.find('**/Box')
-        wheelbarrow.setPosHprScale(-3.90, 0.00, 1.83, 0.00, 0.00, 6.34, 1.14, 1.50, 0.93)
+        wheelbarrow.setPosHprScale(-2.39, 0.00, 1.77, 0.00, 0.00, 6.00, 1.14, 1.54, 0.93)
         
         slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
         slappyStand.reparentTo(self.showFloor)
@@ -78,7 +78,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             pieModel = pie.copyTo(wheelbarrowJoint)
             pieModel.setPosHprScale(*pieSettings)
         # This currently causes placement problems with the animation
-        wheelbarrowJoint.setPosHprScale(2.51, 0.0, 1.0, 270.0, 344.74, 0.0, 1.47, 1.12, 1.0)
+        wheelbarrowJoint.setPosHprScale(3.94, 0.00, 1.06, 270.00, 344.74, 0.00, 1.43, 1.12, 1.0)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
             
         # Find FlippyStand's collision to give people pies.
