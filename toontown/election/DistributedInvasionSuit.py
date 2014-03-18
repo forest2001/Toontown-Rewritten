@@ -200,7 +200,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
         gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
         cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
-        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack, cleanupTrack)
+        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
         explodeTrack.start(time)
 
     def enterAttack(self, time):
