@@ -24,14 +24,15 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.toons = []
         self.sadToons = []
         self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
+        self.invasionOn = False
 
     def announceGenerate(self):
-        self.sendUpdate('startInvasion', [])
+        self.b_setInvasionStarted(True)
         self.demand('BeginWave', 0)
         
         # Kill all the butterflies in Toontown Central.
-        for butterfly in self.air.hoods[0].butterflies:
-            butterfly.requestDelete()
+        #for butterfly in self.air.hoods[0].butterflies:
+            #butterfly.requestDelete()
 
         # Start up the "which Toons are in the area" tracking.
         for toon in self.air.doId2do.values():
@@ -42,6 +43,19 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             self._handleToonEnter(toon)
         self.accept('toon-entered-%s' % self.zoneId, self._handleToonEnter)
         self.accept('toon-left-%s' % self.zoneId, self._handleToonExit)
+        
+    def b_setInvasionStarted(self, started):
+        self.setInvasionStarted(started)
+        self.d_setInvasionStarted(started)
+        
+    def setInvasionStarted(self, started):
+        self.invasionOn = started
+        
+    def d_setInvasionStarted(self, started):
+        self.sendUpdate('setInvasionStarted', [started])
+        
+    def getInvasionStarted(self):
+        return self.invasionOn
 
     def _handleToonEnter(self, toon):
         if toon not in self.toons:
@@ -278,7 +292,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterVictory(self):
-        self.sendUpdate('finishInvasion', [])
+        self.b_setInvasionStatus(False)
 
     def enterOff(self):
         self.__deleteSuits()

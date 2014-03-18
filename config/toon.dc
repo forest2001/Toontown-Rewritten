@@ -997,8 +997,7 @@ dclass DistributedSafezoneInvasion : DistributedObject {
   hitToon(uint32 avId) clsend airecv;
   hitSuit(uint32 avId) clsend airecv;
   takeDamage(uint8 damage) clsend airecv;
-  startInvasion() broadcast;
-  finishInvasion() broadcast;
+  setInvasionStarted(bool started) required broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {
