@@ -195,18 +195,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterEvent(self, offset):
         self.eventInterval = Sequence(
             Func(base.cr.playGame.hood.loader.music.stop),
-            Wait(3),
-            Func(self.enterBegin, offset),
-            Wait(10),
-            #Func(self.enterAlecSpeech, offset),
-            #Wait(140),
-            Func(self.enterVoteBuildup, offset),
-            Wait(12),
-            Func(self.enterWinnerAnnounce, offset),
-            Wait(12),
-            Func(self.enterCogLanding, offset),
-            Wait(80),
-            Func(self.enterInvasion, offset),
+            # Just keeping this sequence here in case we need it in the future
+            # If it's election day and this isn't being used, remove it.
         )
         self.eventInterval.start()
         self.eventInterval.setT(offset)

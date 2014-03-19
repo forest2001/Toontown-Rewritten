@@ -74,7 +74,6 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     
     def enterElectionIdle(self, offset):
         # Slappy is off for the election, but he left his balloon parked in TTC.
-        # When Slappy dies, we'll see this falling out of the sky.
         self.balloon.setPos(*ElectionGlobals.BalloonElectionPosition)
         self.balloon.setH(283)
         self.balloonElectionIdle = Sequence(
@@ -82,6 +81,16 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             self.balloon.posInterval(3, (166.5, 64.0, 53.0), blendType='easeInOut'),
         )
         self.balloonElectionIdle.loop()
+        self.balloonElectionIdle.setT(offset)
+        
+    def enterElectionCrashing(self, offset):
+        # Slappy has gone sad, and in turn his balloon has ran out of silliness.
+        # It's tumbling down behind Toon Hall.
+        self.balloonElectionFall = Sequence(
+            self.balloon.posHprInterval(17, (200.0, 20.0, 0.0), (105, -5, -5), blendType='easeInOut'),
+            Func(self.balloon.hide)
+        )
+        self.balloonElectionFall.start()
         self.balloonElectionIdle.setT(offset)
 
 

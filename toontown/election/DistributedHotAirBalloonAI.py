@@ -41,6 +41,9 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
 
     def enterElectionIdle(self):
         pass
+        
+    def enterElectionCrashing(self):
+        pass
 
     def requestEnter(self):
         avId = self.air.getAvatarIdFromSender()

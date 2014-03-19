@@ -20,7 +20,8 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.air = air
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.pieTypeAmount = [4, 20, 1]
-
+        self.balloon = None
+        
         # For the DistributedInvasionSuitAI
         self.master = InvasionMasterAI(self)
         self.toons = []
@@ -56,8 +57,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def enterIdle(self):
         # Generate Slappy's Hot Air Balloon!
-        self.balloon = DistributedHotAirBalloonAI(self.air)
-        self.balloon.generateWithRequired(self.zoneId)
+        if self.balloon is None:
+            # Pump some self.air into Slappy's Balloon
+            self.balloon = DistributedHotAirBalloonAI(self.air)
+            self.balloon.generateWithRequired(self.zoneId)
         self.balloon.b_setState('ElectionIdle')
 
     def enterEvent(self):
@@ -65,9 +68,23 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         if event is None:
             event = DistributedElectionEventAI(simbase.air)
             event.generateWithRequired(2000)
+        if self.balloon is None:
+            # Pump some self.air into Slappy's Balloon
+            self.balloon = DistributedHotAirBalloonAI(self.air)
+            self.balloon.generateWithRequired(self.zoneId)
         self.eventSequence = Sequence(
-            Wait(260),
-            Func(event.b_setState, 'Invasion'),
+            Wait(3),
+            Func(event.b_setState, 'Begin'),
+            Wait(10),
+            #Func(event.b_setState, 'AlecSpeech'),
+            #Wait(140),
+            Func(event.b_setState, 'VoteBuildup'),
+            Wait(12),
+            Func(event.b_setState, 'WinnerAnnounce'),
+            Wait(12),
+            Func(event.b_setState, 'CogLanding'),
+            Wait(90),
+            Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()
 
@@ -78,7 +95,11 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         pass
 
     def enterCogLanding(self):
-        pass
+        self.landingSequence = Sequence(
+            Wait(65),
+            Func(self.balloon.b_setState, 'ElectionCrashing')
+        )
+        self.landingSequence.start()
 
     def enterInvasion(self):
         invasion = simbase.air.doFind('SafezoneInvasion')
