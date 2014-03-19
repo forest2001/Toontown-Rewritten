@@ -355,17 +355,19 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     # Move Shaker
     def __checkToonsInRadius(self, task):
+        if self.exploding:
+            return task.done
+        
         toon = base.localAvatar
         if toon:
-            if not self.exploding:
-                if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
-                    if toon.hp > 0:
-                        if not toon.isStunned:
-                            self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
-                            self.setToonStunned(toon, True)
-                    else:
-                        # Dont try and enable avatar controls if a toon is sad
-                        taskMgr.remove('EnableAvatarControls')
+            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
+                if toon.hp > 0:
+                    if not toon.isStunned:
+                        self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
+                        self.setToonStunned(toon, True)
+                else:
+                    # Dont try and enable avatar controls if a toon is sad
+                    taskMgr.remove('EnableAvatarControls')
         return task.cont
 
     def d_takeShakerDamage(self, damage, toon):
