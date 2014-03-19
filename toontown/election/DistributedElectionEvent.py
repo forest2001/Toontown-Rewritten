@@ -62,9 +62,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         wheelbarrow = self.flippyStand.find('**/Box')
         wheelbarrow.setPosHprScale(-2.39, 0.00, 1.77, 0.00, 0.00, 6.00, 1.14, 1.54, 0.93)
         
-        slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
-        slappyStand.reparentTo(self.showFloor)
-        slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
+        self.slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
+        self.slappyStand.reparentTo(self.showFloor)
+        self.slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
 
         #Let's give FlippyStand a bunch of pies.
         # Pies on/around the stand.
@@ -80,6 +80,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         # This currently causes placement problems with the animation
         wheelbarrowJoint.setPosHprScale(3.94, 0.00, 1.06, 270.00, 344.74, 0.00, 1.43, 1.12, 1.0)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
+        self.splashSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_paint_splash.ogg')
             
         # Find FlippyStand's collision to give people pies.
         # The new animated model doesn't have any collisions, so this needs to be replaced with a collision box. Harv did it once, just need to look back in the commit history.
@@ -87,6 +88,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision = self.flippyStand.attachNewNode(CollisionNode('wheelbarrow_collision'))
         self.pieCollision.node().addSolid(cs)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        
+        csSlappy = CollisionBox(Point3(7, 0, 0), 12, 5, 18)
+        self.goopCollision = self.slappyStand.attachNewNode(CollisionNode('wheelbarrow_collision'))
+        self.goopCollision.node().addSolid(cs)
+        self.accept('enter' + self.goopCollision.node().getName(), self.handleSlappyCollisionSphereEnter)
 
         self.flippy = NPCToons.createLocalNPC(2001)
         #self.alec = NPCToons.createLocalNPC(2022)        
@@ -107,6 +113,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # We need to give them more pies! Send a request to the server.
             self.sendUpdate('wheelbarrowAvatarEnter', [])
             self.restockSfx.play()
+            
+    def handleSlappyCollisionSphereEnter(self, collEntry):
+        if base.localAvatar.savedCheesyEffect != 15:
+            # We need to give them more pies! Send a request to the server.
+            self.sendUpdate('slappyAvatarEnter', [])
+            self.splashSfx.play()
 
     def startInteractiveFlippy(self):
         self.flippy.reparentTo(self.showFloor)
