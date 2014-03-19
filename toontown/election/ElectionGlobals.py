@@ -39,6 +39,7 @@ SadMusic = 'phase_4/audio/bgm/EE_DiesandPies.ogg' #Played when Slappy dies and t
 ########################
 
 BalloonBasePosition = [-15, 33, 1.1]
+BalloonElectionPosition = [166.5, 64.0, 53.0]
 BalloonScale = 2.5
 
 # Let's give InteractiveFlippy some phrases to say.

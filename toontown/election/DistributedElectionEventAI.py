@@ -58,7 +58,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         # Generate Slappy's Hot Air Balloon!
         self.balloon = DistributedHotAirBalloonAI(self.air)
         self.balloon.generateWithRequired(self.zoneId)
-        self.balloon.b_setState('Waiting')
+        self.balloon.b_setState('ElectionIdle')
 
     def enterEvent(self):
         event = simbase.air.doFind('ElectionEvent')
