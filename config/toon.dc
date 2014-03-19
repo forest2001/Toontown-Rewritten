@@ -985,6 +985,8 @@ dclass DistributedElectionEvent : DistributedObject {
   setSuitPhrase(string phrase) clsend airecv;
   setSuitState(string state) clsend airecv;
   setSuitDamage(uint8 damage) clsend airecv;  
+  phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  flippySpeech(uint32 avId, uint16 phraseId) broadcast;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {

@@ -32,7 +32,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def setPieTypeAmount(self, type, num):
         # This is more for the invasion than the pre-invasion elections.
         self.pieTypeAmount = [type, num]
-    
+
     def wheelbarrowAvatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
@@ -43,9 +43,22 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             av.b_setPieType(self.pieTypeAmount[0])
             av.b_setNumPies(self.pieTypeAmount[1])
             av.b_setPieThrowType(self.pieTypeAmount[2])
+        self.sendUpdate('flippySpeech', [avId, 1]) # 1 = Pie Request
+
+    def phraseSaidToFlippy(self, phraseId):
+        # Someone said something (relavent) to Flippy!
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId, None)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
+            return
+        self.sendUpdate('flippySpeech', [avId, phraseId])
 
     def enterIdle(self):
-        pass
+        # Generate Slappy's Hot Air Balloon!
+        self.balloon = DistributedHotAirBalloonAI(self.air)
+        self.balloon.generateWithRequired(self.zoneId)
+        self.balloon.b_setState('Waiting')
 
     def enterEvent(self):
         event = simbase.air.doFind('ElectionEvent')
