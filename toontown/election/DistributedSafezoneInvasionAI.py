@@ -292,7 +292,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterVictory(self):
-        self.b_setInvasionStatus(False)
+        # self.b_setInvasionStatus(False)
+        self.b_setInvasionStarted(False)
 
     def enterOff(self):
         self.__deleteSuits()

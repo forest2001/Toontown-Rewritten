@@ -61,7 +61,7 @@ class DistributedSafezoneInvasion(DistributedObject):
             self.startCogSky()
             base.playMusic(self.musicEnter, looping=1, volume=1.0)
         elif not started and self.invasionOn:
-            self.stopCogSky()
+            self.delete() # Clean everything up
         else:
             return # We don't care about this change...
         self.invasionOn = started
