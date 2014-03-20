@@ -62,16 +62,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         wheelbarrow = self.flippyStand.find('**/Box')
         wheelbarrow.setPosHprScale(-2.39, 0.00, 1.77, 0.00, 0.00, 6.00, 1.14, 1.54, 0.93)
         
-        self.slappyStand = loader.loadModel('phase_4/models/events/election_slappyStand-static')
+        self.slappyStand = Actor.Actor('phase_4/models/events/election_slappyStand-mod', {'idle': 'phase_4/models/events/election_slappyStand-idle'})
         self.slappyStand.reparentTo(self.showFloor)
         self.slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
 
         #Let's give FlippyStand a bunch of pies.
         # Pies on/around the stand.
         pie = loader.loadModel('phase_3.5/models/props/tart')
-        #pie.reparentTo(flippyTable)
         pieS = pie.copyTo(flippyTable)
-        #pie.setPosHprScale(-2.8, -2.4, 6.1, 0, 355.24, 351.87, 2, 2.1, 1.6)
         pieS.setPosHprScale(-2.61, -0.37, -1.99, 355.60, 90.00, 4.09, 1.6, 1.6, 1.6)
         # Pies in the wheelbarrow.
         for pieSettings in ElectionGlobals.FlippyWheelbarrowPies:
@@ -89,23 +87,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision.node().addSolid(cs)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         
-        csSlappy = CollisionBox(Point3(7, 0, 0), 12, 5, 18)
-        self.goopCollision = self.slappyStand.attachNewNode(CollisionNode('wheelbarrow_collision'))
-        self.goopCollision.node().addSolid(cs)
+        csSlappy = CollisionBox(Point3(-4.2, 0, 0), 9.5, 5.5, 18)
+        self.goopCollision = self.slappyStand.attachNewNode(CollisionNode('goop_collision'))
+        self.goopCollision.node().addSolid(csSlappy)
         self.accept('enter' + self.goopCollision.node().getName(), self.handleSlappyCollisionSphereEnter)
 
         self.flippy = NPCToons.createLocalNPC(2001)
-        #self.alec = NPCToons.createLocalNPC(2022)        
-        #self.slappy = NPCToons.createLocalNPC(2021)
-        #self.flippy.reparentTo(self.showFloor)
-        #self.slappy.reparentTo(self.showFloor)
-        #self.alec.reparentTo(self.showFloor)
 
-        #self.suit = Suit.Suit()
-        #cogDNA = SuitDNA.SuitDNA()
-        #cogDNA.newSuit('ym')
-        #self.suit.setDNA(cogDNA)
-        #self.suit.reparentTo(self.showFloor)
+        self.flippyStand.loop('idle')
+        self.slappyStand.loop('idle')
         self.startInteractiveFlippy()
 
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
@@ -127,7 +117,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.interactiveOn = True
         self.flippyPhrase = None
         self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, self.phraseSaidToFlippy)
-        self.flippyStand.loop('idle') # Comment this out to see the proper positioning for pies
 
     def stopInteractiveFlippy(self):
         self.ignore(SpeedChatGlobals.SCStaticTextMsgEvent)
