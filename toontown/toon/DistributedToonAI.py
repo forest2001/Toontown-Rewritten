@@ -4470,6 +4470,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
         
+        if self.savedCheesyEffect != 0:
+            self.b_setCheesyEffect(0, 0, 0)
+        
 
         # I hate this, but here we go.......... Q_Q
         from toontown.chat import ResistanceChat

@@ -33,6 +33,14 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         av.b_setPieThrowType(self.pieTypeAmount[2])
         self.sendUpdate('flippySpeech', [avId, 1]) # 1 = Pie Request
         
+    def slappyAvatarEnter(self):
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId, None)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId, 'Got a request for Slappy\'s Cheesy Effect from a toon that isn\'t on the district!')
+            return
+        av.b_setCheesyEffect(15, 0, 0)
+        
     def phraseSaidToFlippy(self, phraseId):
         # Someone said something (relavent) to Flippy!
         avId = self.air.getAvatarIdFromSender()
