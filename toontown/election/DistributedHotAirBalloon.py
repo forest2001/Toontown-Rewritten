@@ -91,7 +91,7 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
             Func(self.balloon.hide)
         )
         self.balloonElectionFall.start()
-        self.balloonElectionIdle.setT(offset)
+        self.balloonElectionFall.setT(offset)
 
 
     def __handleToonEnter(self, collEntry):
