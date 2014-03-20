@@ -39,6 +39,13 @@ class DistributedSafezoneInvasion(DistributedObject):
     def delete(self):
         self.cr.invasion = None
         DistributedObject.delete(self)
+
+        # Fade out the cog sky
+        self.stopCogSky()
+
+        # Restart the TTC Music
+        base.cr.playGame.hood.loader.music.play()
+
         # We should check if the invasion is loaded first to be safe.
         if self.invasionOn:
             # These are only called if the sky is loaded
@@ -46,7 +53,6 @@ class DistributedSafezoneInvasion(DistributedObject):
             del self.cogSkyEnd
             del self.cogSkyBeginStage
             del self.cogSkyEndStage
-        self.sky.removeNode()
         del self.musicEnter
         self.ignoreAll()
     
@@ -60,32 +66,28 @@ class DistributedSafezoneInvasion(DistributedObject):
             return # We don't care about this change...
         self.invasionOn = started
 
-    def deleteInvasion(self):
-        self.stopCogSky()
-        base.stopMusic(self.musicEnter)
-
     def startCogSky(self):
         self.sky.reparentTo(camera)
-        # If this gets called again for some reason, no need for it to fade in again.
-        #if self.invasionOn:
-            #self.geom.setColor(Vec4(0.4, 0.4, 0.4, 1))
-            #self.showFloor.setColor(Vec4(0.4, 0.4, 0.4, 1))
-            #return
         self.fadeIn = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 1), startColorScale=Vec4(1, 1, 1, 0), blendType='easeInOut')
-        self.fadeOut = self.sky.colorScaleInterval(10.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
+        self.fadeOut = self.sky.colorScaleInterval(6.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
         self.cogSkyBegin = LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
-        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 9.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
         self.cogSkyBeginStage = LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
-        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 9.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
         self.fadeIn.start()
         self.cogSkyBegin.start()
         self.cogSkyBeginStage.start()
 
     def stopCogSky(self):
         if self.invasionOn:
-            self.cogSkyEnd.start()
-            self.cogSkyEndStage.start()
-            self.fadeOut.start()
+            cogSkySequence = Sequence(
+                Func(self.cogSkyEnd.start),
+                Func(self.cogSkyEndStage.start),
+                Func(self.fadeOut.start),
+                Wait(7),
+                Func(self.sky.removeNode) # Remove the sky node after the fade out
+                )
+            cogSkySequence.start()
 
     def __localPieSplat(self, pieCode, entry):
         if pieCode == ToontownGlobals.PieCodeToon:
