@@ -174,6 +174,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
         self.ignore('enter' + self.pieCollision.node().getName())
+        self.ignore('enter' + self.goopCollision.node().getName())
 
         DistributedObject.delete(self)
     
