@@ -2,6 +2,7 @@ from pandac.PandaModules import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToontownGlobals
+from otp.avatar import Emote
 import SafezoneInvasionGlobals
 
 class DistributedSafezoneInvasion(DistributedObject):
@@ -33,8 +34,11 @@ class DistributedSafezoneInvasion(DistributedObject):
         # Stop the music in case it wasn't already.
         base.cr.playGame.hood.loader.music.stop()
 
-        #Define the invasion music we'll need
+        # Define the invasion music we'll need
         self.musicEnter = base.loadMusic(SafezoneInvasionGlobals.InvasionMusicEnter)
+
+        # Victory Music
+        self.victoryMusic = base.loadMusic('phase_9/audio/bgm/CogHQ_finale.ogg')
 
     def delete(self):
         self.cr.invasion = None
@@ -44,7 +48,20 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.stopCogSky()
 
         # Restart the TTC Music
-        base.cr.playGame.hood.loader.music.play()
+        # base.cr.playGame.hood.loader.music.play()
+        base.playMusic(self.victoryMusic, looping=0, volume=0.9) 
+        victoryDanceDuration = (2 * 5.15)
+        self.victoryIval = Sequence(
+            Func(Emote.globalEmote.disableAll, base.localAvatar, 'dbattle, enterReward'),
+            Func(base.localAvatar.disableAvatarControls),
+            # Parallel(ActorInterval(base.localAvatar, 'victory', loop=1, duration=victoryDanceDuration)),
+            # Wait(victoryDanceDuration),
+            Func(base.localAvatar.b_setEmoteState, 6, 1.0),
+            Wait(5.15),
+            Func(Emote.globalEmote.releaseAll, base.localAvatar, 'dbattle, enterReward'),
+            Func(base.localAvatar.enableAvatarControls),
+            )
+        self.victoryIval.start()
 
         # We should check if the invasion is loaded first to be safe.
         if self.invasionOn:
