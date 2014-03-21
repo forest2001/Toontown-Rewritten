@@ -44,13 +44,23 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.cr.invasion = None
         DistributedObject.delete(self)
 
-        # Fade out the cog sky
-        self.stopCogSky()
+        # We should check if the invasion is loaded first to be safe.
+        if self.invasionOn:
+            # These are only called if the sky is loaded
+            del self.cogSkyBegin
+            del self.cogSkyEnd
+            del self.cogSkyBeginStage
+            del self.cogSkyEndStage
+            del self.musicEnter
+        self.ignoreAll()
+    
+    def endInvasion(self):
+        self.stopCogSky() # Done with the cog sky, we're all done with that
+            
+        base.playMusic(self.victoryMusic, looping=0, volume=0.9) # Cue the music
 
-        # Restart the TTC Music
-        # base.cr.playGame.hood.loader.music.play()
-        base.playMusic(self.victoryMusic, looping=0, volume=0.9) 
-        victoryDanceDuration = (2 * 5.15)
+        # Dance the night away
+        # victoryDanceDuration = (2 * 5.15)
         self.victoryIval = Sequence(
             Func(Emote.globalEmote.disableAll, base.localAvatar, 'dbattle, enterReward'),
             Func(base.localAvatar.disableAvatarControls),
@@ -59,26 +69,16 @@ class DistributedSafezoneInvasion(DistributedObject):
             Func(base.localAvatar.b_setEmoteState, 6, 1.0),
             Wait(5.15),
             Func(Emote.globalEmote.releaseAll, base.localAvatar, 'dbattle, enterReward'),
-            Func(base.localAvatar.enableAvatarControls),
+            Func(base.localAvatar.enableAvatarControls)
             )
         self.victoryIval.start()
 
-        # We should check if the invasion is loaded first to be safe.
-        if self.invasionOn:
-            # These are only called if the sky is loaded
-            del self.cogSkyBegin
-            del self.cogSkyEnd
-            del self.cogSkyBeginStage
-            del self.cogSkyEndStage
-        del self.musicEnter
-        self.ignoreAll()
-    
     def setInvasionStarted(self, started):
         if started and not self.invasionOn:
             self.startCogSky()
             base.playMusic(self.musicEnter, looping=1, volume=1.0)
         elif not started and self.invasionOn:
-            self.delete() # Clean everything up
+            self.endInvasion()
         else:
             return # We don't care about this change...
         self.invasionOn = started
