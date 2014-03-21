@@ -89,12 +89,32 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision.node().addSolid(cs)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
-        #Hi NPCs!
+        # Hi NPCs!
         self.alec = NPCToons.createLocalNPC(2022)
         self.slappy = NPCToons.createLocalNPC(2021)
         self.flippy = NPCToons.createLocalNPC(2001)
-        #Sometimes they all need to do the same thing.
+        # Sometimes they all need to do the same thing.
         self.characters = [self.alec, self.slappy, self.flippy]
+        # We need some Minor Characters too
+        self.surlee = NPCToons.createLocalNPC(20191)
+        # We want Surlee to use Prepostera's animation since he is the star, but Surlee is a different size.
+        # Since Disney didn't include Prepostera's animation for Surlee's size, we have to make him small an painstakingly scale him
+        self.surlee.useLOD(1000)
+        self.surlee.find('**/250').remove()
+        self.surlee.find('**/500').remove()
+        surleeLegs = self.surlee.find('**/legs')
+        surleeLegs.setScale(1, 1, 1.5)
+        surleeLegs.setZ(-0.26)
+        self.surlee.find('**/__Actor_torso').setZ(1.1)
+        self.surlee.find('**/torso-top').setPosHprScale(0.00, 0.00, -0.45, 0.00, 0.00, 0.00, 1.00, 0.98, 1.96)
+        self.surlee.find('**/__Actor_head').setZ(0.7)
+        self.surlee.find('**/neck').setZ(0.7)
+        self.surlee.find('**/sleeves').setZ(0.7)
+        self.surlee.find('**/arms').setZ(0.7)
+        self.surlee.find('**/hands').setZ(0.7)
+        self.surlee.find('**/joint_nameTag').setZ(0.7)
+        self.dimm = NPCToons.createLocalNPC(2018)
+        self.prepostera = NPCToons.createLocalNPC(2020)
 
         self.suit = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
@@ -190,7 +210,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
 
     def enterIdle(self, offset):
-        pass
+        # This is temporary so Surlee has a place to live for now. Preferably, he would come in through a tunnel or teleport in sometime before it starts.
+        self.surlee.reparentTo(self.showFloor)
+        self.surlee.addActive()
+        self.surlee.setPos(-22, 7, 0)
+        self.surlee.setH(110)
+        self.surlee.loop('scientistEmcee')
+        # TODO: Give Surlee some phrases to repeat while people wait for the election
+        
 
     def enterEvent(self, offset):
         self.eventInterval = Sequence(
@@ -206,6 +233,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         for character in self.characters:
             character.reparentTo(self.showFloor)
             character.setPosHpr(35, -0.3, 0, 90, 0, 0)
+            character.useLOD(1000)
             character.addActive()
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
 
