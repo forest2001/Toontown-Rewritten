@@ -69,12 +69,8 @@ class DistributedElectionCameraManager(DistributedObject):
         self.cameraIds = ids
         
     def _toggleCameraView(self):
-        self.winCam = Camera('cam')
-        camNP = NodePath(self.winCam)
-        camNP.reparentTo(self.cr.doId2do[self.mainCam])
-        base.win.getActiveDisplayRegion(0).setCamera(camNP)
-        self.cameraViewEnabled = True
-        
+        base.camera.setPosHpr(0,0,0,0,0,0)
+        base.camera.reparentTo(self.camera)
 @magicWord(category=CATEGORY_CAMERA)
 def cameraView():
     if not hasattr(base.cr, 'cameraManager'):
