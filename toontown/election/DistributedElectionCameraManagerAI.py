@@ -60,6 +60,23 @@ def cameras(cmd, args=''):
     
     args = args.split()
     camMgr = simbase.air.cameraManager
+    
+    if cmd == 'gib':
+        if len(args) != 1:
+            return 'I need to know how many cameras to gib!'
+        num = int(args[0])
+        if num <= 0:
+            return 'I can\'t gib you less than 1 camera.'
+        cameras = camMgr.ids
+        for i in range(num):
+            cam = DistributedElectionCameraAI(simbase.air)
+            cam.setState('Waiting', globalClockDelta.getRealNetworkTime(), 0, 0, 0, 0, 0, 0)
+            cam.generateWithRequired(2000)
+            cam.b_setPosHpr(0, 0, 0, 0, 0, 0)
+            cameras.append(cam.getDoId())
+        camMgr.b_setCameraIds(cameras)
+        return 'I gib %d cameras to you.' % num
+
 	
     if cmd == 'move':
         # A bunch of sanity checks...

@@ -48,6 +48,10 @@ class DistributedElectionCameraManager(DistributedObject):
         self.tv.find('**/screen').setTexture(ts, self.buffer.getTexture(), 1)
                 
     def disable(self):
+        self.camera.removeNode()
+        base.graphicsEngine.removeWindow(self.buffer)
+        self.prop.cleanup()
+        self.prop.removeNode()
         self.tv.removeNode()
         self.screen = None
         
