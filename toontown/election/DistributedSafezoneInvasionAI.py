@@ -316,6 +316,7 @@ def szInvasion(cmd, arg=''):
         else:
             return 'An invasion object already exists.'
     elif cmd == 'stop':
+        invasion.b_setInvasionStarted(False)
         invasion.requestDelete()
     elif cmd == 'spawn':
         invasion.spawnOne(arg)
