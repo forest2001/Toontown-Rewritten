@@ -9,6 +9,7 @@ import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
 import SafezoneInvasionGlobals
+import random
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -136,7 +137,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.b_setState('Idle')
 
     def attack(self, who):
-        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', SafezoneInvasionGlobals.StandardSuitDamage])
+        attacks = ['clip-on-tie', 'redtape']
+        self.sendUpdate('setAttackInfo', [who, random.choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
         self.b_setState('Attack')
 
     def __startWalkTimer(self):
