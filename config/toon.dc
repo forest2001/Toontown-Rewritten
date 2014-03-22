@@ -990,6 +990,7 @@ dclass DistributedElectionEvent : DistributedObject {
   setSuitState(string state) clsend airecv;
   setSuitDamage(uint8 damage) clsend airecv;  
   phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  saySurleePhrase(string phrase) broadcast;
   flippySpeech(uint32 avId, uint16 phraseId) broadcast;
 };
 

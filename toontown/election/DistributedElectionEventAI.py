@@ -11,6 +11,8 @@ from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
+import ElectionGlobals
+import random
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -63,6 +65,11 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
             return
         self.sendUpdate('flippySpeech', [avId, phraseId])
+
+    def saySurleePhrase(self, phrase = None):
+        if not phrase:
+            phrase = random.choice(ElectionGlobals.SurleeTips)
+        self.sendUpdate('saySurleePhrase', [phrase])
 
     def enterIdle(self):
         # Spawn some cameras
@@ -121,7 +128,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def enterInvasion(self):
         self.invasionSequence = Sequence(
             Wait(22),
-            Func(self.spawnInvasion)
+            Func(self.spawnInvasion),
+            Func(self.surleePhraseLoop.loop)
+        )
+        self.surleePhraseLoop = Sequence(
+            Wait(25),
+            Func(self.saySurleePhrase)
         )
         self.invasionSequence.start()
 
