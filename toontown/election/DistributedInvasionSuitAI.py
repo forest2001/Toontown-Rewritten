@@ -28,7 +28,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.lastMarchTime = 0.0
         self.__walkTimer = None
-        self.reachedFinalePoint = False
         self.finale = False
 
     def announceGenerate(self):
@@ -59,8 +58,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def __flyDownComplete(self, task):
         if self.invasion.state == 'Finale':
-            self.finale = True
-            self.finaleMarch = taskMgr.add(self.finaleMarch, self.uniqueName('FinaleMarch'))
+            self.b_setInvasionFinale(True)
+            # self.finaleMarch = taskMgr.add(self.finaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.walkTo(x, y) # Walk to Flippy
             return
@@ -138,14 +137,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self._delay.remove()
 
     def finaleMarch(self, task):
-        # This stupid ass broken whatever just does not want to work. 
-        # I've tried rounding, just checking if the y values are equal.
-        # zzz'z Cause im probably tired
         oldX, oldY = self.getCurrentPos()
         destinationX, destinationY = SafezoneInvasionGlobals.FinaleSuitDestination
         if (oldX is destinationX) and (oldY is destinationY):
             print('We\'re here! Lets attack')
-            self.reachedFinalePoint = True
             self.b_setState('Idle')
             self.d_sayFaceoffTaunt(True, 'Beat it pal!')
             return task.done
@@ -260,3 +255,16 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             return
 
         toon.takeDamage(damage)
+
+    def b_setInvasionFinale(self, finale):
+        self.setInvasionFinale(finale)
+        self.d_setInvasionFinale(finale)
+        
+    def setInvasionFinale(self, finale):
+        self.finale = finale
+        
+    def d_setInvasionFinale(self, finale):
+        self.sendUpdate('setInvasionFinale', [finale])
+        
+    def getInvasionFinale(self):
+        return self.finale

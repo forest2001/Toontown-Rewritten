@@ -783,6 +783,7 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   makeSkelecog() broadcast;
   
   takeShakerDamage(uint8 damage) clsend airecv;
+  setInvasionFinale(bool finale) required broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {

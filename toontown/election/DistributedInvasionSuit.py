@@ -30,6 +30,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.msStompLoop = None
         self.shakerRadialAttack = None
         self.exploding = False
+        self.invasionFinale = False
 
     def delete(self):
         self.demand('Off')
@@ -59,6 +60,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Movers and Shakers should stomp when walking
         if self.style.name == 'ms':
             animDict['walk'] = 'phase_5/models/char/suitB-stomp'
+            animDict['effort'] = 'phase_5/models/char/suitB-effort'
+ 
+        if self.style.name is 'tbc' and self.style.body is 'a':
+            animDict['effort'] = 'phase_6/models/char/suitA-effort'
+
         # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
@@ -67,6 +73,15 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
         return animDict
+
+    def setInvasionFinale(self, finale):
+        if finale and not self.invasionFinale:
+            self.makeSkelecog
+        elif not finale and self.invasionFinale:
+            pass
+        else:
+            return # We don't care about this change...
+        self.invasionFinale = finale
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
@@ -360,6 +375,18 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.setY(y)
 
         self.__placeOnGround()
+
+        if self.invasionFinale:
+            # Broken - I can't think this early in the morning
+            finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
+            newX = format(x, '0.1f')
+            if 29.0 <= newX <= 31.0:# and y >= finalY: # Check if it hit its destination
+                print('Reached final waypoint. Starting final Sequence')
+                self.sayFaceoffTaunt(True, 'Say something!')
+                self.setState('Idle')
+                ActorInterval(self, 'effort')
+                self.stopMoveTask()
+                return task.done
 
         return task.cont
 
