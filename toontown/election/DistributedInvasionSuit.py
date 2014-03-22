@@ -382,13 +382,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.__placeOnGround()
 
         if self.invasionFinale:
-            # Broken - I can't think this early in the morning
             finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
-            newX = format(x, '0.1f')
-            if 29.0 <= newX <= 31.0:# and y >= finalY: # Check if it hit its destination
+            if (finalX - 1.0 <= x <= finalX + 1.0) and (finalY - 1.0 <= y <= finalY + 1.0): # Check if it hit its destination
                 print('Reached final waypoint. Starting final Sequence')
                 self.sayFaceoffTaunt(True, 'Say something!')
-                self.setState('Idle')
+                self.setState('Idle', globalClockDelta.getRealNetworkTime())
                 ActorInterval(self, 'effort')
                 self.stopMoveTask()
                 return task.done
