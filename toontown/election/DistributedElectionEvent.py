@@ -9,6 +9,7 @@ from direct.task import Task
 from toontown.toon import NPCToons
 from toontown.suit import DistributedSuitBase, SuitDNA
 from toontown.toonbase import ToontownGlobals
+from toontown.battle import BattleProps
 from otp.margins.WhisperPopup import *
 import ElectionGlobals
 from DistributedElectionCameraManager import DistributedElectionCameraManager
@@ -497,6 +498,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47),
             ActorInterval(self.flippy, 'throw', startFrame=46, endFrame=33),
         )
+        self.pie = BattleProps.globalPropPool.getProp('creampie')
         self.cogSequence = Sequence(
             Parallel(Func(self.suit.reparentTo, render), Func(self.suit.addActive), Func(mtrack.start, offset)),
             Wait(3),
@@ -581,16 +583,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.suit.loop, 'neutral'),
             Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.suit.loop, 'walk'),
-            Parallel(Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout), self.suit.posInterval(2, (65, -7, 4.0))),
-            Func(self.suit.loop, 'neutral'),
-            Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout)),
+            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout),
+            Wait(2),
+            Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout), Func(self.pie.reparentTo, self.flippy.rightHand)),
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
-            Wait(2),
-            Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes)),
-            Func(self.flippy.loop, 'neutral'),
-            Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36))
+            Wait(1.5),
+            Parallel(Sequence(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.loop, 'neutral')), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes), Sequence(Wait(0.8), Func(self.pie.wrtReparentTo, render), Parallel(ProjectileInterval(self.pie, endPos=Point3(65, 3.6, 6.0), duration=0.7)))),
+            Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36), Func(self.pie.removeNode)) 
         )
         self.cogSequence.setT(offset)
         self.cogSequence.start()

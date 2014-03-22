@@ -97,7 +97,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
-            Wait(110),
+            Wait(120),
             Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()

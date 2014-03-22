@@ -388,7 +388,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
                 self.sayFaceoffTaunt(True, 'Say something!')
                 self.setState('Idle', globalClockDelta.getRealNetworkTime())
                 ActorInterval(self, 'effort')
-                self.stopMoveTask()
+                self.moveTask = None
                 return task.done
 
         return task.cont
