@@ -12,7 +12,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import BattleProps
 from otp.margins.WhisperPopup import *
 import ElectionGlobals
-from DistributedElectionCameraManager import DistributedElectionCameraManager
 from direct.directnotify import DirectNotifyGlobal
 from random import choice
 
@@ -304,7 +303,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.dimm.startBlink()
         self.dimm.loop('scientistWork')
         self.surleeIntroInterval = Sequence(
-            Wait(9),
+            Wait(10),
             Func(self.surlee.setChatAbsolute, 'Oh, uh, Hello! I suppose it\'s election time already?', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.surlee.setChatAbsolute, 'We\'re just minutes away from the most important event in the history of our town.', CFSpeech|CFTimeout),
@@ -316,6 +315,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout), 
             Wait(8),
             Func(self.surlee.setChatAbsolute, 'My fellow scientists of silliness, Professor Prepostera and Doctor Dimm, are over there tracking the amount of silliness being taken in from the campaign stands.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'At least, I think they are. You never know with those goofs.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'I hope you haven\'t been standing here long, because I\'m going to have to start repeating myself soon.', CFSpeech|CFTimeout),
         )
         self.surleeIntroInterval.loop()
         self.surleeIntroInterval.setT(offset)
@@ -599,6 +602,25 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.cogSequence.finish()
         del self.suit
 
+    def enterInvasion(self, offset):
+        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        self.surleeIntroInterval = Sequence(
+            Func(self.surleeR.loop, 'walk'),
+            Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
+            self.surleeR.posHprInterval(1, (-32, -15, 0), (30, 0, 0)),
+            Func(self.surleeR.loop, 'neutral'),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, 'Grab the pies, they seem to be the weakness of these...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, '..."Cogs."', CFSpeech|CFTimeout),
+            Wait(3),
+            Func(self.surleeR.setChatAbsolute, 'Now take up arms, there\'s more on the way!', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
+        )
+        self.surleeIntroInterval.start()
+        self.surleeIntroInterval.setT(offset)
+        
     def enterInvasion(self, offset):
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         self.surleeIntroInterval = Sequence(
