@@ -259,8 +259,8 @@ def loadDialog(level):
         for file in SuitDialogFiles:
             SuitDialogArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
-        SuitDialogArray.append(SuitDialogArray[2])
-        SuitDialogArray.append(SuitDialogArray[2])
+        SuitDialogArray.append(SuitDialogArray[0])
+        SuitDialogArray.append(SuitDialogArray[1])
 
 
 def loadSkelDialog():
@@ -939,6 +939,10 @@ class Suit(Avatar.Avatar):
         self.loseActor.setScale(self.scale)
         self.loseActor.setPos(self.getPos())
         self.loseActor.setHpr(self.getHpr())
+        self.collTube = CollisionTube(0, 0, 0.5, 0, 0, 4, 2)
+        self.collNode = CollisionNode('loseActor')
+        self.collNode.addSolid(self.collTube)
+        self.collNodePath = self.loseActor.attachNewNode(self.collNode)
         shadowJoint = self.loseActor.find('**/joint_shadow')
         dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
         dropShadow.setScale(0.45)
@@ -958,10 +962,15 @@ class Suit(Avatar.Avatar):
         model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
-        dropShadow = self.dropShadow
-        if not dropShadow.isEmpty():
-            dropShadow.reparentTo(hidden)
-        self.removePart('modelRoot')
+        # Remove all of the previous cog except for a few necessary joints
+        modelRoot = self.getGeomNode()
+        modelRoot.find('**/torso').removeNode()
+        modelRoot.find('**/arms').removeNode()
+        modelRoot.find('**/hands').removeNode()
+        modelRoot.find('**/legs').removeNode()
+        modelRoot.find('**/').removeNode() # These are feet
+        modelRoot.find('**/joint_head').removeNode()
+        # Now, to load our skelecog
         self.loadModel(model)
         self.loadAnims(anims)
         self.getGeomNode().setScale(self.scale * 1.0173)
@@ -983,10 +992,6 @@ class Suit(Avatar.Avatar):
         self.rightHand = self.find('**/joint_Rhold')
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagNull = self.find('**/joint_nameTag')
-        if not dropShadow.isEmpty():
-            dropShadow.setScale(0.75)
-            if not self.shadowJoint.isEmpty():
-                dropShadow.reparentTo(self.shadowJoint)
         self.loop(anim)
         self.isSkeleton = 1
 
@@ -1010,4 +1015,5 @@ class Suit(Avatar.Avatar):
             loadSkelDialog()
             return SkelSuitDialogArray
         else:
+            loadDialog(1)
             return SuitDialogArray

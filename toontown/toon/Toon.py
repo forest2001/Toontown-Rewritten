@@ -531,6 +531,7 @@ class Toon(Avatar.Avatar, ToonHead):
          State('CloseBook', self.enterCloseBook, self.exitCloseBook),
          State('TeleportOut', self.enterTeleportOut, self.exitTeleportOut),
          State('Died', self.enterDied, self.exitDied),
+         State('PlaygroundDied', self.enterPlaygroundDied, self.exitPlaygroundDied),
          State('TeleportedOut', self.enterTeleportedOut, self.exitTeleportedOut),
          State('TeleportIn', self.enterTeleportIn, self.exitTeleportIn),
          State('Emote', self.enterEmote, self.exitEmote),
@@ -1930,6 +1931,57 @@ class Toon(Avatar.Avatar, ToonHead):
             self.track = None
         Emote.globalEmote.releaseAll(self, 'exitDied')
         self.show()
+        return
+
+    def getPlaygroundDiedInterval(self, autoFinishTrack = 1):
+        sound = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
+        if hasattr(self, 'uniqueName'):
+            trackName = self.uniqueName('playgroundDied')
+        else:
+            trackName = 'playgroundDied'
+        ival = Sequence(Func(self.sadEyes), Func(self.blinkEyes), Track((0, ActorInterval(self, 'lose', startFrame=0, endFrame=89)), (2, SoundInterval(sound, node=self))), Func(self.blinkEyes), name=trackName, autoFinish=autoFinishTrack)
+        return ival
+
+    def enterPlaygroundDied(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
+        if self.ghostMode:
+            if callback:
+                callback(*extraArgs)
+            return
+        if self.isDisguised:
+            self.takeOffSuit()
+        self.playingAnim = 'lose'
+        Emote.globalEmote.disableAll(self, 'enterPlaygroundDied')
+        if self.isLocal():
+            autoFinishTrack = 0
+        else:
+            autoFinishTrack = 1
+        if hasattr(self, 'jumpLandAnimFixTask') and self.jumpLandAnimFixTask:
+            self.jumpLandAnimFixTask.remove()
+            self.jumpLandAnimFixTask = None
+        self.track = self.getPlaygroundDiedInterval(autoFinishTrack)
+        if callback:
+            self.track = Sequence(self.track, Func(callback, *extraArgs), autoFinish=autoFinishTrack)
+        self.track.start(ts)
+        self.setActiveShadow(0)
+        return
+
+    def finishPlaygroundDied(self, callback = None, extraArgs = []):
+        if self.track != None:
+            self.ignore(self.track.getName())
+            self.track.finish()
+            DelayDelete.cleanupDelayDeletes(self.track)
+            self.track = None
+        if callback:
+            callback(*extraArgs)
+        return
+
+    def exitPlaygroundDied(self):
+        if self.track != None:
+            self.ignore(self.track.getName())
+            self.track.finish()
+            DelayDelete.cleanupDelayDeletes(self.track)
+            self.track = None
+        Emote.globalEmote.releaseAll(self, 'exitPlaygroundDied')
         return
 
     def getTeleportInTrack(self):

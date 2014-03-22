@@ -2,12 +2,14 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
+from direct.task.Task import Task
 from otp.nametag.NametagConstants import *
 from toontown.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 from toontown.battle import BattleParticles, SuitBattleGlobals, BattleProps
 from InvasionSuitBase import InvasionSuitBase
+import random
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def __init__(self, cr):
@@ -25,10 +27,14 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackTarget = 0
         self.attackProp = ''
         self.attackDamage = 0
+        self.msStompLoop = None
+        self.shakerRadialAttack = None
+        self.exploding = False
+        self.invasionFinale = False
 
     def delete(self):
         self.demand('Off')
-
+        self.stopShakerRadiusAttack()
         self.stopMoveTask()
         DistributedSuitBase.delete(self)
 
@@ -45,20 +51,48 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         colNode = self.find('**/distAvatarCollNode*')
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
 
+        if self.style.name == 'ms':
+            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
+
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
+
+        # Movers and Shakers should stomp when walking
+        if self.style.name == 'ms':
+            animDict['walk'] = 'phase_5/models/char/suitB-stomp'
+            animDict['effort'] = 'phase_5/models/char/suitB-effort'
+ 
+        if self.style.name is 'tbc' and self.style.body is 'a':
+            animDict['effort'] = 'phase_6/models/char/suitA-effort'
+
+        # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
+            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-object'
         else:
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
+            animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
         return animDict
+
+    def setInvasionFinale(self, finale):
+        if finale and not self.invasionFinale:
+            self.makeSkelecog
+        elif not finale and self.invasionFinale:
+            pass
+        else:
+            return # We don't care about this change...
+        self.invasionFinale = finale
 
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
-        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
+        else:
+            x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
         self.setPos(x, y, z)
         self.setH(h)
+        
 
     def setHP(self, hp):
         currHP = getattr(self, 'currHP', 0)
@@ -77,9 +111,18 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.state != 'March':
             self.__moveToStaticPoint()
 
-    def sayFaceoffTaunt(self):
-        taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId)
-        self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
+    def sayFaceoffTaunt(self, custom = False, phrase = ""):
+        if custom == True:
+            self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
+        elif custom == False:
+            if random.random() < 0.2:
+                taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
+                self.setChatAbsolute(taunt, CFSpeech | CFTimeout)
+
+    def makeSkelecog(self):
+        self.setSkelecog(1)
+        self.corpMedallion.hide()
+        self.healthBar.show()
 
     def __moveToStaticPoint(self):
         x, y, h = self._staticPoint
@@ -97,7 +140,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.__placeOnGround()
 
     def enterFlyDown(self, time):
-        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
+        else:
+            x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
         self.mtrack = self.beginSupaFlyMove(Point3(x, y, z), 1, 'fromSky',
                                             walkAfterLanding=False)
@@ -112,8 +158,18 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.loop('neutral', 0)
 
     def enterMarch(self, time):
-        self.loop('walk', 0)
-        self.startMoveTask()
+        if self.style.name == 'ms':
+            self.msStartWalk = Sequence(
+                Func(self.play, 'walk', fromFrame=0, toFrame=22),
+                Wait(0.9),
+                Parallel(Func(self.startMoveTask), Func(self.loop, 'walk', fromFrame=22, toFrame=62)))
+            self.msStartWalk.start()
+            stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
+            self.msStompLoop = Sequence(SoundInterval(stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
+            self.msStompLoop.loop()
+        else:
+            self.loop('walk', 0)
+            self.startMoveTask()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
@@ -136,92 +192,145 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._stunInterval.finish()
 
     def enterExplode(self, time):
+        self.exploding = True
+        # We're done with our suit. Let's get rid of him and load an actor for the explosion
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
         self.stash()
 
-        # TODO: This needs to be cleaned up or changed entirely. Just thrown together right now.
-        self._explosionInterval = ActorInterval(loseActor, 'lose')
-        self.deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+        # Oh boy, time to load all of our explosion effects!
+        explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
+        deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
         BattleParticles.loadParticles()
         smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
         singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
         smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
         bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
-        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ()) #Z should be set by suit height
-        #smallGears.setPos(gearPoint)
-        #singleGear.setPos(gearPoint)
+        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ())
         smallGears.setDepthWrite(False)
         singleGear.setDepthWrite(False)
-        #smallGearExplosion.setPos(gearPoint)
-        #bigGearExplosion.setPos(gearPoint)
         smallGearExplosion.setDepthWrite(False)
         bigGearExplosion.setDepthWrite(False)
         explosionTrack = Sequence()
         explosionTrack.append(Wait(5.4))
         explosionTrack.append(self.createKapowExplosionTrack(loseActor))
-        self.gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-        self.gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
-        self._explosionInterval.start(time)
-        self.deathSoundTrack.start(time)
-        self.gears1Track.start(time)
-        self.gears2MTrack.start(time)
-
-    def exitExplode(self):
-        self._explosionInterval.finish()
-        self.cleanupLoseActor()
+        gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+        gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+        cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
+        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
+        explodeTrack.start(time)
 
     def enterAttack(self, time):
+        if self.style.name == 'ms':
+            self._attackInterval = self.makeShakerAttackTrack()
+            self._attackInterval.start(time)
+            return
         self._attackInterval = self.makeAttackTrack()
         self._attackInterval.start(time)
 
     def makeAttackTrack(self):
-        prop = BattleProps.globalPropPool.getProp(self.attackProp)
+        # TODO: Add more props than the tie. Possibly more animations.
+        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
+        self.propIsActor = True
+        animName = 'throw-paper'
+        x, y, z, h, p, r = (0.1, 0.2, -0.35, 0, 336, 0)
+        if self.attackProp == 'redtape':
+            animName = 'throw-object'
+            x,y,z,h,p,r = (0.24, 0.09, -0.38, -1.152, 86.581, -76.784)
+            self.propIsActor = False
+        elif self.attackProp == 'newspaper':
+            animName = 'throw-object'
+            self.propIsActor = False
+            x,y,z,h,p,r = (-0.07, 0.17, -0.13, 161.867, -33.149, -48.086)
+            self.prop.setScale(4)
+        elif self.attackProp == 'pink-slip':
+            self.propIsActor = False
+            x,y,z,h,p,r = (0.07, -0.06, -0.18, -172.075, -26.715, -89.131)
+            self.prop.setScale(5)
+        elif self.attackProp == 'power-tie':
+            self.propIsActor = False
+            x,y,z,h,p,r = (1.16, 0.24, 0.63, 171.561, 1.745, -163.443)
+            self.prop.setScale(4)
 
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
         colNode.setTag('damage', str(self.attackDamage))
 
-        bounds = prop.getBounds()
+        bounds = self.prop.getBounds()
         center = bounds.getCenter()
         radius = bounds.getRadius()
         sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
         sphere.setTangible(0)
         colNode.addSolid(sphere)
-        prop.attachNewNode(colNode)
+        self.prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
+
+        # Rotate the suit to look at the toon it is attacking
+        self.lookAtTarget()
+
+        if self.style.body in ['a', 'b']:
+            throwDelay = 3
+        elif self.style.body == 'c':
+            throwDelay = 2.3
 
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
             if not toon:
-                prop.cleanup()
-                prop.removeNode()
+                self.cleanupProp()
                 return
 
-            prop.wrtReparentTo(render)
+            self.lookAtTarget()
+
+            self.prop.wrtReparentTo(render)
 
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
-            distance = (prop.getPos() - hitPos).length()
+            distance = (self.prop.getPos() - hitPos).length()
             speed = 50.0
 
-            Sequence(prop.posInterval(distance/speed, hitPos),
-                     Func(prop.cleanup),
-                     Func(prop.removeNode)).start()
+            Sequence(self.prop.posInterval(distance/speed, hitPos),
+                     Func(self.cleanupProp)).start()
 
         track = Parallel(
-            ActorInterval(self, 'throw-paper'),
+            ActorInterval(self, animName),
             Track(
-                (0.0, Func(prop.reparentTo, self.getRightHand())),
-                (2.15, Func(throwProp)),
-                (10.0, Func(prop.cleanup)),
-                (10.0, Func(prop.removeNode)) # Ensure cleanup
+                (0.4, Func(self.prop.reparentTo, self.getRightHand())),
+                (0.0, Func(self.prop.setPosHpr, x, y, z, h, p, r)),
+                (0.0, Func(self.sayFaceoffTaunt)),
+                (throwDelay, Func(throwProp)),
+                (10.0, Func(self.cleanupProp))
             ),
         )
 
         return track
+        
+    def cleanupProp(self):
+        if self.propIsActor:
+            self.prop.cleanup()
+            self.prop.removeNode()
+        else:
+            self.prop.removeNode()
+
+    def makeShakerAttackTrack(self):
+        self.lookAtTarget()
+        track = Parallel(
+            ActorInterval(self, 'walk'),
+            Track(
+                (0.0, Func(self.sayFaceoffTaunt))
+            ),
+        )
+
+        return track
+
+    def lookAtTarget(self):
+        if not self.attackTarget:
+            return # No target to look at.
+        target = self.cr.doId2do.get(self.attackTarget)
+        if not target:
+            return # Target not found.
+        self.lookAt(target)
 
     def exitAttack(self):
         self._attackInterval.finish()
@@ -246,7 +355,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def exitMarch(self):
         self.loop('neutral', 0)
         self.stopMoveTask()
-
+        if self.msStompLoop:
+            self.msStompLoop.finish()
         self.__moveToStaticPoint()
 
     def startMoveTask(self):
@@ -259,12 +369,27 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.moveTask.remove()
             self.moveTask = None
 
+    def stopShakerRadiusAttack(self):
+        if self.shakerRadialAttack:
+            self.shakerRadialAttack.remove()
+            self.shakerRadialAttack = None
+
     def __move(self, task):
         x, y = self.getPosAt(globalClockDelta.localElapsedTime(self._lerpTimestamp))
         self.setX(x)
         self.setY(y)
 
         self.__placeOnGround()
+
+        if self.invasionFinale:
+            finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
+            if (finalX - 1.0 <= x <= finalX + 1.0) and (finalY - 1.0 <= y <= finalY + 1.0): # Check if it hit its destination
+                print('Reached final waypoint. Starting final Sequence')
+                self.sayFaceoffTaunt(True, 'Say something!')
+                self.setState('Idle', globalClockDelta.getRealNetworkTime())
+                ActorInterval(self, 'effort')
+                self.stopMoveTask()
+                return task.done
 
         return task.cont
 
@@ -278,3 +403,37 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
            getattr(self.shadowPlacer, 'shadowNodePath', None):
             self.setZ(self.shadowPlacer.shadowNodePath, 0.025)
         return task.done
+
+    # Move Shaker
+    def __checkToonsInRadius(self, task):
+        if self.exploding:
+            return task.done
+        
+        toon = base.localAvatar
+        if toon:
+            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
+                if toon.hp > 0:
+                    if not toon.isStunned:
+                        self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
+                        self.setToonStunned(toon, True)
+                else:
+                    # Dont try and enable avatar controls if a toon is sad
+                    taskMgr.remove('EnableAvatarControls')
+        return task.cont
+
+    def d_takeShakerDamage(self, damage, toon):
+        if toon.isStunned:
+            return
+        if toon.hp > 0:
+            if toon is base.localAvatar:
+                base.localAvatar.disableAvatarControls()
+                taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
+                toon.b_setEmoteState(12, 1.0)              
+                self.sendUpdate('takeShakerDamage', [damage])
+            taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
+
+    def setToonStunned(self, toon, stunned = False):
+        toon.isStunned = stunned
+        if stunned == False:
+            taskMgr.remove('ToonStunned')
+

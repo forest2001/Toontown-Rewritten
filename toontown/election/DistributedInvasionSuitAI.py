@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
+from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
@@ -8,6 +9,8 @@ from toontown.battle import SuitBattleGlobals
 import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
+import SafezoneInvasionGlobals
+import random
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -25,9 +28,13 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.lastMarchTime = 0.0
         self.__walkTimer = None
+        self.finale = False
 
     def announceGenerate(self):
-        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
+        if self.spawnPointId == 99:
+            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
+        else:
+            x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
 
         self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
@@ -38,15 +45,25 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.demand('Off')
 
         self.brain.stop()
-        self.invasion.suitDied(self)
+        try:
+            self.invasion.suitDied(self)
+        except Exception, e:
+            self.notify.debug('Exception: %s' % e)
 
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
-        self._delay = taskMgr.doMethodLater(SuitTimings.fromSky, self.__flyDownComplete,
+        self._delay = taskMgr.doMethodLater((SuitTimings.fromSky + 1.0), self.__flyDownComplete,
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
+        if self.invasion.state == 'Finale':
+            self.b_setInvasionFinale(True)
+            # self.finaleMarch = taskMgr.add(self.finaleMarch, self.uniqueName('FinaleMarch'))
+            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+            self.walkTo(x, y) # Walk to Flippy
+            return
+
         self.b_setState('Idle')
 
         if self.invasion.state != 'BeginWave':
@@ -71,8 +88,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.__stopWalkTimer()
 
     def enterAttack(self):
-        self._delay = taskMgr.doMethodLater(3.33, self.__attackDone,
-                                            self.uniqueName('attack'))
+        if self.brain.suit.dna.body in ['a', 'b']:
+            self._delay = taskMgr.doMethodLater(4.6, self.__attackDone,
+                                                self.uniqueName('attack'))
+        else:
+            self._delay = taskMgr.doMethodLater(3.3, self.__attackDone,
+                                                self.uniqueName('attack'))
 
     def __attackDone(self, task):
         self.brain.suitFinishedAttacking()
@@ -87,6 +108,11 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
                                             self.uniqueName('stunned'))
 
     def __unstun(self, task):
+        if self.finale:
+            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+            self.walkTo(x, y) # We continue walking to Flippy
+            return
+
         if self.currHP < 1:
             # We're dead!
             self.b_setState('Explode')
@@ -110,6 +136,16 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def exitExplode(self):
         self._delay.remove()
 
+    def finaleMarch(self, task):
+        oldX, oldY = self.getCurrentPos()
+        destinationX, destinationY = SafezoneInvasionGlobals.FinaleSuitDestination
+        if (oldX is destinationX) and (oldY is destinationY):
+            print('We\'re here! Lets attack')
+            self.b_setState('Idle')
+            self.d_sayFaceoffTaunt(True, 'Beat it pal!')
+            return task.done
+        return task.cont
+
     def walkTo(self, x, y):
         # Begin walking to a given point. It's OK to call this before the suit
         # finishes reaching its old waypoint; if that happens, the AI will
@@ -125,7 +161,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.b_setState('Idle')
 
     def attack(self, who):
-        self.sendUpdate('setAttackInfo', [who, 'clip-on-tie', 5])
+        attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
+        self.sendUpdate('setAttackInfo', [who, random.choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
         self.b_setState('Attack')
 
     def __startWalkTimer(self):
@@ -156,11 +193,18 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         hp = min(hp, self.currHP) # Don't take more damage than we have...
         self.b_setHP(self.currHP - hp)
 
+        if self.finale:
+            self.b_setHP(self.currHP + hp) # We dont want to big guy to die
+            return
+
         if self.state != 'Stunned':
             self.b_setState('Stunned')
 
-    def d_sayFaceoffTaunt(self):
-        self.sendUpdate('sayFaceoffTaunt', [])
+    def d_sayFaceoffTaunt(self, custom = False, phrase = ""):
+        self.sendUpdate('sayFaceoffTaunt', [custom, phrase])
+
+    def makeSkelecog(self):
+        self.sendUpdate('makeSkelecog', [])
 
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
@@ -202,3 +246,25 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def d_setStaticPoint(self, x, y, h):
         self.sendUpdate('setStaticPoint', [x, y, h])
+
+    def takeShakerDamage(self, damage):
+        avId = self.air.getAvatarIdFromSender()
+        toon = self.air.doId2do.get(avId)
+        if not toon:
+            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            return
+
+        toon.takeDamage(damage)
+
+    def b_setInvasionFinale(self, finale):
+        self.setInvasionFinale(finale)
+        self.d_setInvasionFinale(finale)
+        
+    def setInvasionFinale(self, finale):
+        self.finale = finale
+        
+    def d_setInvasionFinale(self, finale):
+        self.sendUpdate('setInvasionFinale', [finale])
+        
+    def getInvasionFinale(self):
+        return self.finale

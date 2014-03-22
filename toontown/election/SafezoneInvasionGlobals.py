@@ -1,4 +1,13 @@
 
+# The Spawnpoint of the first cog to land
+FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
+FirstSuitType = 'ym'
+
+# The destination of the Finale suit
+FinaleSuitDestination = (30.0, 3.6)
+
+# Spawn points for the Invasion Minigame
+# There are currently 18 spawnpoints
 SuitSpawnPoints = [
     #   X       Y     Z     H
     ( -59.0,  70.0,   0.0,-149.0),
@@ -10,33 +19,96 @@ SuitSpawnPoints = [
     (  10.0, -81.5,   2.5,  45.0),
     ( -55.1, -35.0,  -3.7, -60.0),
     ( -66.7,  87.8,   0.5,-150.0),
+    ( -91.7,  88.8,  -0.7,-140.0),
+    (  29.7, 139.8,   2.5, -70.0),
+    (  90.0, 106.0,   2.5,-100.0),
+    (-127.5,  56.3,   0.5,  30.0),
+    (-104.6,  51.0,  0.02, -30.0),
+    (-111.3, -67.0,   0.5,  40.0),
+    ( 135.0, -98.0,   2.5,-130.0),
+    ( 121.6, -52.8,   2.5,  80.0),
+    (  46.1,-114.8,   2.5,  60.0),
+    (-113.6,  20.0,  0.03,  55.0),
 ]
 
 SuitWaves = [
-    # Suits in a wave can't exceed spawn points.
+    [('tbc', 0)]
+]
+
+SuitWaves2 = [
+    # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
+    # TODO: Do full wave setup
 
     # WAVE 1:
-    ['f', 'bf'],
-    ['sc', 'cc', 'sc'], #Wait Wave
-    ['f', 'bf', 'sc', 'cc', 'f', 'bf', 'sc', 'cc', 'sc'],
+    [('f', 0), ('bf', 1), ('f', 0), ('f', 0), ('cc', 0), ('sc', 0), ('sc', 1), ('bf', 0), ('cc', 1)],
+    [('sc', 1), ('cc', 1), ('bf', 0), ('sc', 0), ('f', 1), ('bf', 1)], # Wait Wave
+    [('f', 1), ('bf', 0), ('sc', 0), ('cc', 0), ('f', 0), ('bf', 1), ('sc', 0), ('cc', 1), ('sc', 0), ('f', 0), ('bf', 1), ('bf', 0), ('f', 1), ('bf', 0)], # Intermission Wave
 
     # WAVE 2:
-    ['pp', 'ym', 'pp']
+    [('pp', 0), ('dt', 0), ('cc', 1), ('tm', 0), ('bf', 2), ('b', 0), ('p', 1)],
+    [('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 0), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 1), ('bf', 1), ('p', 0)], # Wait Wave
+    [('p', 1), ('b', 0), ('b', 1), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 2), ('bf', 2), ('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 3)], # Intermission Wave
+
+    # WAVE 3:
+    [('ym', 0), ('dt', 0), ('tw', 0), ('nd', 0), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1)],
+    [('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('dt', 1)], # Wait Wave
+    [('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3)], # Intermission Wave
+
+    # WAVE 4:
+    [('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0), ('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0)],
+    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1)], # Wait Wave
+    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2)], # Intermission Wave
+
+    # WAVE 5:
+    [('ds', 0), ('bs', 0), ('nc', 0), ('ms', 0), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1)],
+    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2)], # Wait Wave
+    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2)], # Intermission Wave
+
+    # WAVE 6:
+    [('hh', 0), ('sd', 0), ('mb', 0), ('tf', 0), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1)],
+    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2)], # Wait Wave
+    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2)], # Intermission Wave
+
+    # WAVE 7:
+    [('cr', 0), ('le', 0), ('ls', 0), ('m', 0), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1)],
+    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2)], # Wait Wave
+    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2)], # Intermission Wave
+
+    # WAVE 8:
+    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
+    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
+    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+
+    # WAVE 9: The Final Wave
+    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
+    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
+    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
 # Once the suits are destroyed, the next wave will spawn again instantly with no intermission.
-SuitWaitWaves = [1, 4, 7, 10]
+SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
+
 # These waves have a 20 second intermission period after all suits are destroyed.
-SuitIntermissionWaves = [2, 5, 8, 11]
+SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
+
+# These are the last waves that start turning cogs into Skelcogs.
+SuitSkelecogWaves = [24]
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10
 # How long does the intermission last?
 IntermissionTime = 20
 
+# How much damage does a suit's attack do?
+StandardSuitDamage = 5
+
+# How much damage does a Move and Shaker's attack do?
+MoveShakerDamageRadius = 3
+MoveShakerRadius = 30
+MoveShakerStunTime = 5.0
 
 # How much healing does a pie on a Toon do?
 ToonHealAmount = 1
@@ -44,3 +116,6 @@ ToonHealAmount = 1
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
+
+# Leave Toontown Central Alert
+LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."

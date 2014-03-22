@@ -47,7 +47,10 @@ from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
 from toontown.safezone import DistributedDGFlower/AI
 from toontown.election import DistributedElectionEvent/AI
+from toontown.election import DistributedHotAirBalloon/AI
 from toontown.election import DistributedSafezoneInvasion/AI
+from toontown.election import DistributedElectionCamera/AI
+from toontown.election import DistributedElectionCameraManager/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
@@ -776,7 +779,11 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
 
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
 
-  sayFaceoffTaunt() broadcast;
+  sayFaceoffTaunt(bool custom, string phrase) broadcast;
+  makeSkelecog() broadcast;
+  
+  takeShakerDamage(uint8 damage) clsend airecv;
+  setInvasionFinale(bool finale) required broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {
@@ -977,12 +984,38 @@ dclass DistributedDGFlower : DistributedObject {
 dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
+  slappyAvatarEnter() clsend airecv;
+  requestSuit() clsend airecv;
+  setSuitPhrase(string phrase) clsend airecv;
+  setSuitState(string state) clsend airecv;
+  setSuitDamage(uint8 damage) clsend airecv;  
+  phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  flippySpeech(uint32 avId, uint16 phraseId) broadcast;
+};
+
+dclass DistributedElectionCamera : DistributedNode
+{
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
+  
+};
+
+dclass DistributedElectionCameraManager : DistributedObject
+{
+  setMainCamera(uint32 doId) required broadcast ram;
+  setCameraIds(uint32[]) required broadcast ram;
+};
+
+dclass DistributedHotAirBalloon : DistributedObject {
+  setState(string state, int32 timestamp, uint32 avId) required broadcast ram;
+  requestEnter() clsend airecv;
+  setFlightPath(uint8 flightPathIndex) required broadcast ram;
 };
 
 dclass DistributedSafezoneInvasion : DistributedObject {
   hitToon(uint32 avId) clsend airecv;
   hitSuit(uint32 avId) clsend airecv;
   takeDamage(uint8 damage) clsend airecv;
+  setInvasionStarted(bool started) required broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {

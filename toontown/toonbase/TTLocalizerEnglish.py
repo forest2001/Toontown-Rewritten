@@ -2029,6 +2029,7 @@ TeleportPanelUnavailableHood = '%s is not available right now; try again later.'
 TeleportPanelDenySelf = "You can't go to yourself!"
 TeleportPanelOtherShard = "%(avName)s is in district %(shardName)s, and you're in district %(myShardName)s.  Do you want to switch to %(shardName)s?"
 TeleportPanelBusyShard = '%(avName)s is in a full District. Playing in a full District can severely slow down game performance. Are you sure you want to switch districts?'
+TeleportPanelFullShard = 'That District is bursting with toons! You and your friend should move to a less busy one.'
 BattleBldgBossTaunt = "I'm the boss."
 CogdoBattleBldgBossTaunt = "I don't take meetings with Toons."
 FactoryBossTaunt = "I'm the Foreman."
@@ -8297,14 +8298,20 @@ PetTrait2descriptions = {'hungerThreshold': ('Always Hungry',
                         'Sometimes Affectionate',
                         'Often Affectionate',
                         'Always Affectionate')}
-FireworksInstructions = lToonHQ + ': Look up using the "Page Up" key to see the show!'
+FireworksInstructions = 'Flippy: Look up using the "Page Up" key to see, or hop in Slappy\'s Balloon for a ride over the sky!'
 startFireworksResponse = "Usage: startFireworksShow ['num']\n                                         'num' = %s - New Years\n                                         %s - Party Summer \n                                         %s - 4th of July"
-FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
-FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
-FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
-FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
-FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
-FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
+#FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
+#FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
+#FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
+#FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
+#FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
+#FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
+FireworksJuly4Beginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+FireworksJuly4Ending = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+FireworksNewYearsEveBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+FireworksNewYearsEveEnding =  'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+FireworksComboBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+FireworksComboEnding = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
 BlockerTitle = 'LOADING TOONTOWN...'
 BlockerLoadingTexts = ['Rewriting history',
  'Baking pie crusts',

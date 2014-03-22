@@ -277,7 +277,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
-                    
+                
                 if zoneId == ToontownGlobals.GoofySpeedway:
                     tpAccess = self.getTeleportAccess()
                     if not ToontownGlobals.GoofySpeedway in tpAccess:
@@ -2731,10 +2731,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.notify.debug('Toon-up for ' + self.name)
       #Slappy's Alpha Only Unite
         elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
-            self.b_setPieType(4)
-            self.b_setNumPies(20)
-            self.b_setPieThrowType(1)
-            self.notify.debug('Alpha Pie Restock for ' + self.name)
+            if self.hp > 0:
+                self.b_setPieType(4)
+                self.b_setNumPies(20)
+                self.b_setPieThrowType(1)
+                self.notify.debug('Alpha Pie Restock for ' + self.name)
 #        elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
 #            self.inventory.NPCMaxOutInv(msgValue)
 #            self.d_setInventory(self.inventory.makeNetString())
@@ -4423,6 +4424,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
 
+        # Spawn in TTC for Doomsday
+        if simbase.config.GetBool('want-doomsday', True):
+            self.b_setDefaultZone(ToontownGlobals.ToontownCentral)
+
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
 
@@ -4469,6 +4474,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
+        
+        if self.savedCheesyEffect != 0:
+            self.b_setCheesyEffect(0, 0, 0)
         
 
         # I hate this, but here we go.......... Q_Q

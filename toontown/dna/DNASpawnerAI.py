@@ -43,6 +43,8 @@ class DNASpawnerAI:
         
     def _createObjects(self, group, zone):
         if group.getName()[:13] == 'fishing_pond_':
+            if simbase.config.GetBool('want-doomsday', True):
+                return
             visGroup = group.getVisGroup()
             pondZone = 0
             if visGroup is None:
@@ -293,6 +295,8 @@ class DNASpawnerAI:
                     startingBlock.generateWithRequired(zone)
                     pad.addStartingBlock(startingBlock)
         if group.getName()[:15] == 'prop_party_gate':
+            if simbase.config.GetBool('want-doomsday', True):
+                return
             gate = DistributedPartyGateAI(simbase.air)
             gate.setArea(zone)
             gate.generateWithRequired(zone)
