@@ -130,7 +130,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
         #    newColor = POP_COLORS[1]
         #else:
         #    newColor = POP_COLORS[2]
-        #return newColor
+        return newColor
 
     def getPopText(self, pop):
         if pop <= self.lowPop:
