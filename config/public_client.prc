@@ -13,7 +13,7 @@ default-model-extension .bam
 
 cog-thief-ortho 0
 
-show-total-population #t
+show-total-population #f
 want-mat-all-tailors #t
 
 # For alpha, we have to disable a few features for now.

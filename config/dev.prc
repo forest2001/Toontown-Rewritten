@@ -16,7 +16,7 @@ default-model-extension .bam
 
 cog-thief-ortho 0
 
-show-total-population #t
+show-total-population #f
 want-mat-all-tailors #t
 want-tailor-jellybeans #t
 
