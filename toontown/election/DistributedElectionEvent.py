@@ -444,14 +444,22 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.setChatAbsolute, 'Well said, the both of you!', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.alec.setChatAbsolute, 'Ooh, I\'m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
-            Wait(10),
-            Func(self.alec.setChatAbsolute, 'Hmm, I\'m not sure if you are. Let me ask again: Are you toons ready to hear the winners?!', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.alec.setChatAbsolute, 'Normally, at this time I\'d pull my GRAND ELECTORAL LEVER to start up these two spinners, which would then count down and announce the votes in an amazing buildup!', CFSpeech|CFTimeout),
             Wait(8),
-            Func(self.alec.setChatAbsolute, 'WOAH! Woah! No need to yell! I\'m right here, I get it. You guys want to hear them.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.alec.setChatAbsolute, 'So, without further ado...', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, '...But thanks to SOME certain toons who like to play with Cakes and Fireworks, they\'re broken.', CFSpeech|CFTimeout),
             Wait(4),
-            Func(self.alec.setChatAbsolute, 'I will now pull the GRAND ELECTORAL LEVER!', CFSpeech|CFTimeout),
+            Func(self.flippy.setChatAbsolute, 'Err- heh..', CFSpeech|CFTimeout),
+            Wait(0.4),
+            Func(self.slappy.setChatAbsolute, 'Yeahhh, about that...', CFSpeech|CFTimeout),
+            Wait(4),
+            Func(self.alec.setChatAbsolute, 'Hrmph. Instead, however, I have the honor of announcing the votes myself.', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.alec.setChatAbsolute, 'After counting over 10,000 registered votes...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.alec.setChatAbsolute, 'The totals ended up being 5,437 to 4,821. I\'ve honestly never seen an election so close!', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.alec.setChatAbsolute, 'The real question is, who did the votes belong to? Let\'s find out, shall we?', CFSpeech|CFTimeout),
         )
         self.alecSpeech.start()
         self.alecSpeech.setT(offset)
@@ -463,6 +471,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         musicAnnouncement = base.loadMusic(ElectionGlobals.AnnouncementMusic)
         self.buildupSequence = Sequence(
             Func(self.alec.setChatAbsolute, 'And the winner is...', CFSpeech|CFTimeout),
+            Wait(4),
+            Func(self.alec.setChatAbsolute, 'With 5,437 votes from Toons worldwide...', CFSpeech|CFTimeout),
             Wait(4),
             Func(base.playMusic, musicAnnouncement, looping=0, volume=0.8),
             Wait(1),
