@@ -108,28 +108,27 @@ class ShardPage(ShtikerPage.ShtikerPage):
         return (shardButtonParent, shardButtonR, shardButtonL)
 
     def getPopColor(self, pop):
-        #temporary japanmode!
-        #if base.cr.productName == 'JP':
-        if pop < self.midPop:
-            color1 = POP_COLORS_NTT[0]
-            color2 = POP_COLORS_NTT[1]
-            popRange = self.midPop - self.lowPop
-            pop = pop - self.lowPop
+        if base.cr.productName == 'JP':
+            if pop < self.midPop:
+                color1 = POP_COLORS_NTT[0]
+                color2 = POP_COLORS_NTT[1]
+                popRange = self.midPop - self.lowPop
+                pop = pop - self.lowPop
+            else:
+                color1 = POP_COLORS_NTT[1]
+                color2 = POP_COLORS_NTT[2]
+                popRange = self.highPop - self.midPop
+                pop = pop - self.midPop
+            popPercent = pop / float(popRange)
+            if popPercent > 1:
+                popPercent = 1
+            newColor = color2 * popPercent + color1 * (1 - popPercent)
+        elif pop <= self.lowPop:
+            newColor = POP_COLORS[0]
+        elif pop <= self.midPop:
+            newColor = POP_COLORS[1]
         else:
-            color1 = POP_COLORS_NTT[1]
-            color2 = POP_COLORS_NTT[2]
-            popRange = self.highPop - self.midPop
-            pop = pop - self.midPop
-        popPercent = pop / float(popRange)
-        if popPercent > 1:
-            popPercent = 1
-        newColor = color2 * popPercent + color1 * (1 - popPercent)
-        #elif pop <= self.lowPop:
-        #    newColor = POP_COLORS[0]
-        #elif pop <= self.midPop:
-        #    newColor = POP_COLORS[1]
-        #else:
-        #    newColor = POP_COLORS[2]
+            newColor = POP_COLORS[2]
         return newColor
 
     def getPopText(self, pop):
