@@ -36,10 +36,6 @@ SuitSpawnPoints = [
 ]
 
 SuitWaves = [
-    [('tbc', 0)]
-]
-
-SuitWaves2 = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
