@@ -10,7 +10,7 @@ import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
 import SafezoneInvasionGlobals
-import random
+from random import choice
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -109,8 +109,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def __unstun(self, task):
         if self.finale:
-            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
-            self.walkTo(x, y) # We continue walking to Flippy
+            if self.currHP < 1:
+                self.b_setState('Explode') # Done with him
             return
 
         if self.currHP < 1:
@@ -198,7 +198,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def attack(self, who):
         attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
-        self.sendUpdate('setAttackInfo', [who, random.choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
+        self.sendUpdate('setAttackInfo', [who, choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
         self.b_setState('Attack')
 
     def __startWalkTimer(self):
