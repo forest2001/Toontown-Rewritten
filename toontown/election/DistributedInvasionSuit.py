@@ -212,79 +212,27 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             return
         self._attackInterval = self.makeAttackTrack()
         self._attackInterval.start(time)
-        
-    def makeTapeTrack(self):
-        prop = BattleProps.globalPropPool.getProp('redtape')
-
-        # Prop collisions:
-        colNode = CollisionNode('SuitAttack')
-        colNode.setTag('damage', str(self.attackDamage))
-
-        bounds = prop.getBounds()
-        center = bounds.getCenter()
-        radius = bounds.getRadius()
-        sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
-        sphere.setTangible(0)
-        colNode.addSolid(sphere)
-        prop.attachNewNode(colNode)
-
-        toonId = self.attackTarget
-
-        # Rotate the suit to look at the toon it is attacking
-        self.lookAtTarget()
-
-        if self.style.body in ['a', 'b']:
-            throwDelay = 3
-        elif self.style.body == 'c':
-            throwDelay = 2.3
-
-        def throwProp():
-            toon = self.cr.doId2do.get(toonId)
-            if not toon:
-                prop.removeNode()
-                return
-
-            self.lookAtTarget()
-
-            prop.wrtReparentTo(render)
-
-            hitPos = toon.getPos() + Vec3(0, 0, 2.5)
-            distance = (prop.getPos() - hitPos).length()
-            speed = 50.0
-
-            Sequence(prop.posInterval(distance/speed, hitPos),
-                     Func(prop.removeNode)).start()
-
-        track = Parallel(
-            ActorInterval(self, 'throw-object'),
-            Track(
-                (0.4, Func(prop.reparentTo, self.getRightHand())),
-                (0.0, Func(prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
-                (0.0, Func(self.sayFaceoffTaunt)),
-                (throwDelay, Func(throwProp)),
-                (10.0, Func(prop.removeNode)) # Ensure cleanup
-            ),
-        )
-
-        return track
-
 
     def makeAttackTrack(self):
         # TODO: Add more props than the tie. Possibly more animations.
+        self.propIsActor = True
+        animName = 'throw-paper'
         if self.attackProp == 'redtape':
-            return self.makeTapeTrack()
+            animName = 'throw-object'
+            self.propIsActor = False
+        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
 
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
         colNode.setTag('damage', str(self.attackDamage))
 
-        bounds = prop.getBounds()
+        bounds = self.prop.getBounds()
         center = bounds.getCenter()
         radius = bounds.getRadius()
         sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
         sphere.setTangible(0)
         colNode.addSolid(sphere)
-        prop.attachNewNode(colNode)
+        self.prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
 
@@ -299,35 +247,38 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
             if not toon:
-                prop.cleanup()
-                prop.removeNode()
+                self.prop.cleanup()
+                self.prop.removeNode()
                 return
 
             self.lookAtTarget()
 
-            prop.wrtReparentTo(render)
+            self.prop.wrtReparentTo(render)
 
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
             distance = (prop.getPos() - hitPos).length()
             speed = 50.0
 
             Sequence(prop.posInterval(distance/speed, hitPos),
-                     Func(prop.cleanup),
-                     Func(prop.removeNode)).start()
+                     Func(self.cleanupProp)).start()
 
         track = Parallel(
-            ActorInterval(self, 'throw-paper'),
+            ActorInterval(self, animName),
             Track(
-                (0.4, Func(prop.reparentTo, self.getRightHand())),
-                (0.0, Func(prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
+                (0.4, Func(self.prop.reparentTo, self.getRightHand())),
+                (0.0, Func(self.prop.setPosHpr, 0.1, 0.2, -0.35, 0, 336, 0)),
                 (0.0, Func(self.sayFaceoffTaunt)),
                 (throwDelay, Func(throwProp)),
-                (10.0, Func(prop.cleanup)),
-                (10.0, Func(prop.removeNode)) # Ensure cleanup
+                (10.0, Func(self.cleanupProp))
             ),
         )
 
         return track
+        
+    def cleanupProp(self):
+        if self.propIsActor:
+            self.prop.cleanup()
+            self.prop.removeNode()
 
     def makeShakerAttackTrack(self):
         self.lookAtTarget()
