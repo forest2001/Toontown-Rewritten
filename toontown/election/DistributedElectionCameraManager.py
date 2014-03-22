@@ -46,7 +46,7 @@ class DistributedElectionCameraManager(DistributedObject):
         propJoint = self.tv.find('**/topSphere')
         self.prop.reparentTo(propJoint)
         self.prop.loop('propeller', fromFrame=0, toFrame=8)
-        self.prop.setZ(2)
+        self.prop.setPos(0, 1, 2)
         self.prop.setScale(2.0, 1.5, 1.0)
 
         self.buffer = base.win.makeTextureBuffer("tv", 512, 256)

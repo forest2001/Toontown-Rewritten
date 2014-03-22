@@ -52,7 +52,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
         rope.setScale(2, 2, 2)
         rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
-        #rope.find('**/collide').remove() #This is handy for positioning
 
         #Campaign stands
         self.flippyStand = Actor.Actor('phase_4/models/events/election_flippyStand-mod', {'idle': 'phase_4/models/events/election_flippyStand-idle'})
@@ -321,15 +320,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterPreShow(self, offset):
         # And now for the Pre-election sequence
         self.surleeLeaveInterval = Sequence(
-            #Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.', whisperType=WTSystem),
-            #Wait(5),
-            #Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.', whisperType=WhisperPopup.WTSystem),
-            #Wait(2),
+            Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.', whisperType=WTSystem),
+            Wait(5),
+            Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.', whisperType=WhisperPopup.WTSystem),
+            Wait(2),
             # Let's do a quick swap for the real Surlee, now that his animation is done
             Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.reparentTo, self.showFloor), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
-            #Wait(3),
-            #Func(self.surleeR.setChatAbsolute, 'Hrm, you heard the HQ. I better get out of the way before Alec arrives.', CFSpeech|CFTimeout),
-            #Wait(1),
+            Wait(3),
+            Func(self.surleeR.setChatAbsolute, 'Hrm, you heard the HQ. I better get out of the way before Alec arrives.', CFSpeech|CFTimeout),
+            Wait(1),
             Parallel(Func(self.surleeR.loop, 'walk'), self.surleeR.posHprInterval(4, (-20, 0, 0), (190, 0, 0)), Func(base.cr.cameraManager.tvFlyIn.start)),
             # TV Flies down behind Surlee
             Parallel(Func(self.surleeR.loop, 'neutral'), self.surleeR.head.hprInterval(1, (75, 30, 0), blendType='easeInOut')),
@@ -513,7 +512,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(5),
             Func(self.suit.setChatAbsolute, 'President, you say? Just the Toon I need to speak with.', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on those cameras.", CFSpeech|CFTimeout),
+            Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on that TV.", CFSpeech|CFTimeout),
             Wait(5),
             Func(self.suit.setChatAbsolute, 'Yes. Now as I began to-', CFSpeech|CFTimeout),
             Wait(1),
@@ -549,13 +548,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.loop, 'neutral'),
             Parallel(Func(self.flippy.setChatAbsolute, "What have you done?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'run')),
             self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)),
-            Func(self.flippy.play, 'jump'),
             Wait(0.45),
+            Func(self.flippy.play, 'jump'),
             self.flippy.posInterval(0.2, (-7.5, -9.2, 3.5)),
             self.flippy.posHprInterval(0.4, (-14, -9, 0), (50, 0, 0)),
             Wait(0.2),
             Func(self.flippy.loop, 'run'),
-            self.flippy.posHprInterval(1, (-15, -1, 0), (0, 0, 0)),
+            Func(self.suit.loop, 'walk'),
+            Parallel(self.suit.hprInterval(1, (180, 0, 0)), self.flippy.posHprInterval(1, (-15, -1, 0), (0, 0, 0))),
+            Func(self.suit.loop, 'neutral'),
             Parallel(Func(self.flippy.setChatAbsolute, "Where did you send him?! Where is he?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'neutral')),
             Wait(2.5),
             Func(self.alec.setChatAbsolute, "Flippy, NO! Get away from it!", CFSpeech|CFTimeout),
@@ -563,20 +564,22 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
             Wait(4),
             Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout),
-            Wait(4),
+            Wait(3),
             Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
             Func(self.flippy.loop, 'neutral'),
             Wait(1.5),
-            Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout),
-            Wait(1.5),
+            Func(self.suit.loop, 'walk'),
+            Parallel(Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout), self.suit.posInterval(2, (65, -1, 4.0))),
+            Func(self.suit.loop, 'neutral'),
             Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout),
-            Wait(2),
+            Func(self.suit.loop, 'walk'),
+            Parallel(Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout), self.suit.posInterval(2, (65, -7, 4.0))),
+            Func(self.suit.loop, 'neutral'),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout)),
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
-            Wait(1.5),
+            Wait(2),
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes)),
             Func(self.flippy.loop, 'neutral'),
             Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36))
@@ -589,7 +592,22 @@ class DistributedElectionEvent(DistributedObject, FSM):
         del self.suit
 
     def enterInvasion(self, offset):
-        pass
+        self.surleeIntroInterval = Sequence(
+            Func(self.surleeR.loop, 'walk'),
+            Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
+            self.surleeR.posHprInterval(1, (-32, -15, 0), (30, 0, 0)),
+            Func(self.surleeR.loop, 'neutral'),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, 'Grab the pies, they seem to be the weakness of these...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, '..."Cogs."', CFSpeech|CFTimeout),
+            Wait(3),
+            Func(self.surleeR.setChatAbsolute, 'Now take up arms, there\'s more on the way!', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
+        )
+        self.surleeIntroInterval.start()
+        self.surleeIntroInterval.setT(offset)
 
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])

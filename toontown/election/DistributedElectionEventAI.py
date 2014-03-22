@@ -87,7 +87,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             self.balloon.generateWithRequired(self.zoneId)
         self.eventSequence = Sequence(
             Func(event.b_setState, 'PreShow'),
-            Wait(30),
+            Wait(34),
             Func(event.b_setState, 'Begin'),
             Wait(10),
             #Func(event.b_setState, 'AlecSpeech'),
@@ -97,7 +97,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
-            Wait(90),
+            Wait(110),
             Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()
@@ -119,16 +119,23 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.landingSequence.start()
 
     def enterInvasion(self):
-        invasion = simbase.air.doFind('SafezoneInvasion')
-        if invasion is None:
-            invasion = DistributedSafezoneInvasionAI(simbase.air)
-            invasion.generateWithRequired(2000)
+        self.invasionSequence = Sequence(
+            Wait(22),
+            Func(self.spawnInvasion)
+        )
+        self.invasionSequence.start()
 
     def enterFlippyRunning(self):
         pass
 
     def enterFlippyWaving(self):
         pass
+
+    def spawnInvasion(self):
+        invasion = simbase.air.doFind('SafezoneInvasion')
+        if invasion is None:
+            invasion = DistributedSafezoneInvasionAI(simbase.air)
+            invasion.generateWithRequired(2000)
 
     def setState(self, state):
         self.demand(state)

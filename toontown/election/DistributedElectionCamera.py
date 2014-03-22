@@ -26,5 +26,12 @@ class DistributedElectionCamera(DistributedNode):
         time = dist/10.0
         elapsed = globalClockDelta.localElapsedTime(ts)
         self.setHpr(h, p, 0)
-        movement = self.posInterval(time-elapsed, Point3(x, y, z))
+        idleInterval = Sequence(
+            self.posInterval(2.5, (x, y, z + 0.5), startPos=(x, y, z), blendType='easeInOut'),
+            self.posInterval(2.5, (x, y, z), blendType='easeInOut'),
+        )
+        movement = Sequence(
+            self.posInterval(time-elapsed, Point3(x, y, z)),
+            Func(idleInterval.loop)
+        )
         movement.start()
