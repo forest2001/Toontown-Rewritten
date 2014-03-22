@@ -647,8 +647,21 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(5),
             Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
         )
+        self.alecRunAway = Sequence(
+            Parallel(Func(self.alec.loop, 'walk')),
+            self.alec.posInterval(2, (-4.5, -0.14, 3.13)),
+            self.alec.posInterval(2, (4.2, -0.25, 3.13)),
+            self.alec.posInterval(3, (12.96, -0.38, 0)),
+            Func(self.alec.loop, 'neutral'),
+        )
         self.surleeIntroInterval.start()
         self.surleeIntroInterval.setT(offset)
+        self.alecRunAway.start()
+        self.alecRunAway.setT(offset)
+
+    def enterWrapUp(self, offset):
+        #Flippy runs onto the stage and throws a pie
+        pass
 
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
