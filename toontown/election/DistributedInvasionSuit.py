@@ -62,8 +62,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
+            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-object'
         else:
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
+            animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
         return animDict
 
     def setSpawnPoint(self, spawnPointId):
@@ -215,12 +217,22 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def makeAttackTrack(self):
         # TODO: Add more props than the tie. Possibly more animations.
+        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
         self.propIsActor = True
         animName = 'throw-paper'
         if self.attackProp == 'redtape':
             animName = 'throw-object'
             self.propIsActor = False
-        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
+        elif self.attackProp == 'newspaper':
+            animName = 'throw-object'
+            self.propIsActor = False
+            self.prop.setScale(4)
+        elif self.attackProp == 'pink-slip':
+            self.propIsActor = False
+            self.prop.setScale(5)
+        elif self.attackProp == 'power-tie':
+            self.propIsActor = False
+            self.prop.setScale(4)
 
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
@@ -247,8 +259,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
             if not toon:
-                self.prop.cleanup()
-                self.prop.removeNode()
+                self.cleanupProp()
                 return
 
             self.lookAtTarget()
@@ -256,10 +267,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.prop.wrtReparentTo(render)
 
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
-            distance = (prop.getPos() - hitPos).length()
+            distance = (self.prop.getPos() - hitPos).length()
             speed = 50.0
 
-            Sequence(prop.posInterval(distance/speed, hitPos),
+            Sequence(self.prop.posInterval(distance/speed, hitPos),
                      Func(self.cleanupProp)).start()
 
         track = Parallel(
@@ -278,6 +289,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def cleanupProp(self):
         if self.propIsActor:
             self.prop.cleanup()
+            self.prop.removeNode()
+        else:
             self.prop.removeNode()
 
     def makeShakerAttackTrack(self):

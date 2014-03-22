@@ -166,7 +166,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.b_setState('Idle')
 
     def attack(self, who):
-        attacks = ['clip-on-tie', 'redtape']
+        attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
         self.sendUpdate('setAttackInfo', [who, random.choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
         self.b_setState('Attack')
 
