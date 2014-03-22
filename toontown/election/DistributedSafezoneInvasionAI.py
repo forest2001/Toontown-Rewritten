@@ -126,11 +126,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             # N.B. this is NOT suspicious as it can happen as a result of a race condition
             return
 
-        # if self.state == 'Finale':
-        #     print('Take a damage of 1')
-        #     suit.takeDamage(1)
-        #     return
-
         # How much damage does this Throw gag do?
         pieDamageEntry = ToontownBattleGlobals.AvPropDamage[ToontownBattleGlobals.THROW_TRACK][toon.pieType]
         (pieDamage, pieGroupDamage), _ = pieDamageEntry
@@ -198,7 +193,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def suitDied(self, suit):
         if self.state == 'Finale':
-            print('Won the Finale!') 
             self.suits.remove(suit)
             self.demand('Victory')
             return
@@ -304,7 +298,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterFinale(self):
-        print('Enter Finale')
         taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-suit-%s' % 'tbc'), extraArgs=[])
     
     def spawnFinaleSuit(self):
