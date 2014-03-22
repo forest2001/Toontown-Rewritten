@@ -5,6 +5,7 @@ from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from otp.ai.MagicWordGlobal import *
 from toontown.election.DistributedHotAirBalloonAI import DistributedHotAirBalloonAI
+from DistributedElectionCameraManagerAI import DistributedElectionCameraManagerAI
 from DistributedSafezoneInvasionAI import DistributedSafezoneInvasionAI
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
@@ -56,6 +57,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.sendUpdate('flippySpeech', [avId, phraseId])
 
     def enterIdle(self):
+        # Spawn some cameras
+        if not hasattr(simbase.air, 'cameraManager'):
+            camMgr = DistributedElectionCameraManagerAI(simbase.air)
+            camMgr.spawnManager()
         # Generate Slappy's Hot Air Balloon!
         if self.balloon is None:
             # Pump some self.air into Slappy's Balloon
@@ -73,7 +78,8 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             self.balloon = DistributedHotAirBalloonAI(self.air)
             self.balloon.generateWithRequired(self.zoneId)
         self.eventSequence = Sequence(
-            Wait(3),
+            Func(event.b_setState, 'PreShow'),
+            Wait(30),
             Func(event.b_setState, 'Begin'),
             Wait(10),
             #Func(event.b_setState, 'AlecSpeech'),
@@ -87,6 +93,9 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()
+
+    def enterPreShow(self):
+        pass
 
     def enterBegin(self):
         pass

@@ -9,7 +9,9 @@ from direct.task import Task
 from toontown.toon import NPCToons
 from toontown.suit import DistributedSuitBase, SuitDNA
 from toontown.toonbase import ToontownGlobals
+from otp.margins.WhisperPopup import *
 import ElectionGlobals
+from DistributedElectionCameraManager import DistributedElectionCameraManager
 from direct.directnotify import DirectNotifyGlobal
 from random import choice
 
@@ -112,7 +114,16 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surlee.find('**/sleeves').setZ(0.7)
         self.surlee.find('**/arms').setZ(0.7)
         self.surlee.find('**/hands').setZ(0.7)
-        self.surlee.find('**/joint_nameTag').setZ(0.7)
+        self.surlee.setPos(-22, 7, 0)
+        self.surlee.setH(110)
+        # And now for the real Surlee
+        self.surleeR = NPCToons.createLocalNPC(2019)
+        self.surleeR.useLOD(1000)
+        self.surleeR.setPos(-22, 7, 0)
+        self.surleeR.setH(110)
+        self.surleeR.head = self.surleeR.find('**/__Actor_head')
+        self.surleeR.initializeBodyCollisions('toon')
+        # And his buddies
         self.dimm = NPCToons.createLocalNPC(2018)
         self.prepostera = NPCToons.createLocalNPC(2020)
 
@@ -213,20 +224,66 @@ class DistributedElectionEvent(DistributedObject, FSM):
         # This is temporary so Surlee has a place to live for now. Preferably, he would come in through a tunnel or teleport in sometime before it starts.
         self.surlee.reparentTo(self.showFloor)
         self.surlee.addActive()
-        self.surlee.setPos(-22, 7, 0)
-        self.surlee.setH(110)
+        self.surlee.startBlink()
         self.surlee.loop('scientistEmcee')
-        # TODO: Give Surlee some phrases to repeat while people wait for the election
-        
+        self.surleeIntroInterval = Sequence(
+            Wait(9),
+            Func(self.surlee.setChatAbsolute, 'Oh, uh, Hello! I suppose it\'s election time already?', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.surlee.setChatAbsolute, 'We\'re just minutes away from the most important event in the history of our town.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'Alec Tinn is inside Toon Hall right now with the two candidates preparing for the announcement.', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'When the clock strikes two we\'ll see them march through those doors and onto the stage. Are you toons ready?', CFSpeech|CFTimeout),
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout), 
+            Wait(8),
+            Func(self.surlee.setChatAbsolute, 'My fellow scientists of silliness, Professor Prepostera and Doctor Dimm, are over there tracking the amount of silliness being taken in from the campaign stands.', CFSpeech|CFTimeout),
+        )
+        self.surleeIntroInterval.loop()
+        self.surleeIntroInterval.setT(offset)
+
+    def exitIdle(self):
+        self.surleeIntroInterval.finish()
 
     def enterEvent(self, offset):
-        self.eventInterval = Sequence(
-            Func(base.cr.playGame.hood.loader.music.stop),
-            # Just keeping this sequence here in case we need it in the future
-            # If it's election day and this isn't being used, remove it.
+        base.cr.playGame.hood.loader.music.stop()
+
+    def enterPreShow(self, offset):
+        # And now for the Pre-election sequence
+        self.surleeLeaveInterval = Sequence(
+            #Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.', whisperType=WTSystem),
+            #Wait(5),
+            #Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.', whisperType=WhisperPopup.WTSystem),
+            #Wait(2),
+            # Let's do a quick swap for the real Surlee, now that his animation is done
+            Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.reparentTo, self.showFloor), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
+            #Wait(3),
+            #Func(self.surleeR.setChatAbsolute, 'Hrm, you heard the HQ. I better get out of the way before Alec arrives.', CFSpeech|CFTimeout),
+            #Wait(1),
+            Parallel(Func(self.surleeR.loop, 'walk'), self.surleeR.posHprInterval(4, (-20, 0, 0), (190, 0, 0)), Func(base.cr.cameraManager.tvFlyIn.start)),
+            # TV Flies down behind Surlee
+            Parallel(Func(self.surleeR.loop, 'neutral'), self.surleeR.head.hprInterval(1, (75, 30, 0), blendType='easeInOut')),
+            Wait(1),
+            Func(self.surleeR.setChatAbsolute, 'Oh, do you like it? Designed it myself. Don\'t worry about getting close to the ropes; the TV will be showing a live feed for everyone to get a great view.', CFSpeech|CFTimeout),
+            Func(self.surleeR.loop, 'walk'),
+            Parallel(self.surleeR.hprInterval(1, (80, 0, 0)), self.surleeR.head.hprInterval(1, (0, 0, 0), blendType='easeInOut')),
+            Func(self.surleeR.loop, 'neutral'),
+            Wait(8),
+            Func(self.surleeR.setChatAbsolute, 'I know you all will keep trying to jump on top of each other for a better view anyway, though, so try not to hurt anyone.', CFSpeech|CFTimeout),
+            Wait(3),
+            Func(self.surleeR.loop, 'run'),
+            self.surleeR.posHprInterval(2, (-17, -7, 0), (180, 0, 0)),
+            self.surleeR.posHprInterval(1.5, (-15, -15, 0), (190, 0, 0)),
+            Func(self.surleeR.loop, 'walk'),
+            self.surleeR.posHprInterval(2, (-20, -18, 0), (90, 0, 0)),
+            self.surleeR.posHprInterval(3.5, (-32, -19, 0), (35, 0, 0)),
+            self.surleeR.posHprInterval(1, (-34, -17, 0), (0, 0, 0)),
+            self.surleeR.posHprInterval(1.5, (-32, -15, 0), (-40, 0, 0)),
+            Func(self.surleeR.loop, 'neutral')
         )
-        self.eventInterval.start()
-        self.eventInterval.setT(offset)
+        self.surleeLeaveInterval.start()
+        self.surleeLeaveInterval.setT(offset)
 
     def enterBegin(self, offset):
         # Oh boy, here come the candidates
@@ -235,6 +292,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             character.setPosHpr(35, -0.3, 0, 90, 0, 0)
             character.useLOD(1000)
             character.addActive()
+            character.startBlink()
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
 
         self.alecHallInterval = Sequence(
@@ -367,7 +425,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Parallel(Func(self.suit.reparentTo, render), Func(self.suit.addActive), Func(mtrack.start, offset)),
             Wait(3),
             Func(self.slappy.setChatAbsolute, 'I will ensure- Uhh...', CFSpeech|CFTimeout),
-            Wait(5),
+            Wait(2),
+            Func(self.surleeR.sadEyes),
+            Wait(3),
             Func(self.alec.setChatAbsolute, 'Wha- What is that...?', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.slappy.setChatAbsolute, 'Err... Hey there, fella!', CFSpeech|CFTimeout),
@@ -448,7 +508,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
             Wait(1.5),
-            Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout)),
+            Parallel(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes)),
             Func(self.flippy.loop, 'neutral'),
             Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36))
         )

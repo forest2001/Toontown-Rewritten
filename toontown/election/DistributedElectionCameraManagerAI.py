@@ -10,7 +10,19 @@ class DistributedElectionCameraManagerAI(DistributedObjectAI):
         self.air.cameraManager = self
         
         self.mainCamera = 0
-        
+
+    def spawnManager(self):
+        cameras = []
+        for cameraId in range(5):
+            cam = DistributedElectionCameraAI(simbase.air)
+            cam.setState('Waiting', globalClockDelta.getRealNetworkTime(), 0, 0, 10, -90, -5, 0)
+            cam.generateWithRequired(2000)
+            cam.b_setPosHpr(0, 0, 10, -90, -5, 0)
+            cameras.append(cam.getDoId())
+        self.setMainCamera(cameras[0])
+        self.setCameraIds(cameras)
+        self.generateWithRequired(2000)
+ 
     def getMainCamera(self):
         return self.mainCamera
         
@@ -45,17 +57,8 @@ def cameras(cmd, args=''):
     if cmd == 'spawn':
         if hasattr(simbase.air, 'cameraManager'):
             return "A Camera Manager already exists!"
-        cameras = []
-        for cameraId in range(5):
-            cam = DistributedElectionCameraAI(simbase.air)
-            cam.setState('Waiting', globalClockDelta.getRealNetworkTime(), 0, 0, 0, 0, 0, 0)
-            cam.generateWithRequired(2000)
-            cam.b_setPosHpr(0, 0, 0, 0, 0, 0)
-            cameras.append(cam.getDoId())
         camMgr = DistributedElectionCameraManagerAI(simbase.air)
-        camMgr.setMainCamera(cameras[0])
-        camMgr.setCameraIds(cameras)
-        camMgr.generateWithRequired(2000)
+        camMgr.spawnManager()
         return "Camera Manager has been spawned successfully."
     
     args = args.split()

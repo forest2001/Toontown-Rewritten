@@ -17,6 +17,7 @@ class DistributedElectionCameraManager(DistributedObject):
         self.mainCam = 0
         self.cameraIds = []
         self.cameraViewEnabled = False
+
     def generate(self):
         DistributedObject.generate(self)
 
@@ -24,19 +25,28 @@ class DistributedElectionCameraManager(DistributedObject):
         # This will probably be moved somewhere else once we get it into the scripted sequence
         self.tv = loader.loadModel('phase_4/models/events/tv')
         self.tv.reparentTo(render)
-        self.tv.setPosHprScale(87.85, -0.25, 21.0, 270.0, 0.0, 0.0, 1.5, 1.5, 1.5)
+        self.tv.setPosHprScale(87.85, -0.25, 40.0, 270.0, 0.0, 0.0, 1.5, 1.5, 1.5)
+        self.tv.hide()
+
         self.tvIdle = Sequence(
             self.tv.posInterval(2.5, (87.85, -0.25, 22.0), blendType='easeInOut'),
             self.tv.posInterval(2.5, (87.85, -0.25, 21.0), blendType='easeInOut'),
         )
-        self.tvIdle.loop()
+        self.tvFlyIn = Sequence(
+            Func(self.tv.show),
+            Func(self.tv.setTransparency, 1),
+            Parallel(self.tv.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 1), startColorScale=VBase4(1, 1, 1, 0)), self.tv.posInterval(4, (87.85, -0.25, 20.0), blendType='easeInOut')),
+            Func(self.tv.setTransparency, 0),
+            self.tv.posInterval(2, (87.85, -0.25, 21.0)),
+            Func(self.tvIdle.loop)
+        )
 
         # Attach a cog's propeller onto the TV. Foreshadowing!
         self.prop = BattleProps.globalPropPool.getProp('propeller')
         propJoint = self.tv.find('**/topSphere')
         self.prop.reparentTo(propJoint)
         self.prop.loop('propeller', fromFrame=0, toFrame=8)
-        self.prop.setZ(1.5)
+        self.prop.setZ(2)
         self.prop.setScale(2.0, 1.5, 1.0)
 
         self.buffer = base.win.makeTextureBuffer("tv", 512, 256)
@@ -54,7 +64,7 @@ class DistributedElectionCameraManager(DistributedObject):
         self.prop.removeNode()
         self.tv.removeNode()
         self.screen = None
-        
+
     def setMainCamera(self, new):
         self.mainCam = new
         if self.mainCam != 0:
