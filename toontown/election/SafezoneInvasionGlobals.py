@@ -83,10 +83,11 @@ SuitWaves = [
 # On these waves, no more waves will spawn until all suits are destroyed.
 # Once the suits are destroyed, the next wave will spawn again instantly with no intermission.
 SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
+
 # These waves have a 20 second intermission period after all suits are destroyed.
 SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
-# These are the last waves that start turning cogs into Skebwcogs.
-# TODO: Stick Skelecogs to the floor
+
+# These are the last waves that start turning cogs into Skelcogs.
 SuitSkelecogWaves = [24]
 
 # This should be at least 6.5 (the suit fly-down time)
