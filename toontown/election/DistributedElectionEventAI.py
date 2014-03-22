@@ -125,12 +125,6 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         )
         self.invasionSequence.start()
 
-    def enterFlippyRunning(self):
-        pass
-
-    def enterFlippyWaving(self):
-        pass
-
     def spawnInvasion(self):
         invasion = simbase.air.doFind('SafezoneInvasion')
         if invasion is None:

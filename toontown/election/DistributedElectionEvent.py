@@ -93,7 +93,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         csSlappy = CollisionBox(Point3(-4.2, 0, 0), 9.5, 5.5, 18)
         self.goopCollision = self.slappyStand.attachNewNode(CollisionNode('goop_collision'))
         self.goopCollision.node().addSolid(csSlappy)
-        self.accept('enter' + self.goopCollision.node().getName(), self.handleSlappyCollisionSphereEnter)
 
         # Hi NPCs!
         self.alec = NPCToons.createLocalNPC(2022)
@@ -179,13 +178,22 @@ class DistributedElectionEvent(DistributedObject, FSM):
         placeholder1.setScale(render, 1.0)
         placeholder1.setPos(0, 0, 0.1)
 
+        self.surlee.reparentTo(self.showFloor)
+        self.surleeR.reparentTo(self.showFloor)
+        self.prepostera.reparentTo(self.showFloor)
+        self.dimm.reparentTo(self.showFloor)
+        self.surlee.hide()
+        self.surleeR.hide()
+        self.prepostera.hide()
+        self.dimm.hide()
+
         self.suit = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('ym')
         self.suit.setDNA(suitDNA)
         self.suit.setDisplayName('Yesman\nBossbot\nLevel 3')
         self.suit.setPickable(0)
-        
+
         self.flippyStand.loop('idle')
         self.slappyStand.loop('idle')
 
@@ -265,7 +273,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
         self.ignore('enter' + self.pieCollision.node().getName())
-        self.ignore('enter' + self.goopCollision.node().getName())
+        
 
         DistributedObject.delete(self)
     
@@ -282,15 +290,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def enterIdle(self, offset):
         # Spawn Surlee and Friends
-        self.surlee.reparentTo(self.showFloor)
+        self.surlee.show()
         self.surlee.addActive()
         self.surlee.startBlink()
         self.surlee.loop('scientistEmcee')
-        self.prepostera.reparentTo(self.showFloor)
+        self.prepostera.show()
         self.prepostera.addActive()
         self.prepostera.startBlink()
         self.prepostera.loop('scientistWork')
-        self.dimm.reparentTo(self.showFloor)
+        self.dimm.show()
         self.dimm.addActive()
         self.dimm.startBlink()
         self.dimm.loop('scientistWork')
@@ -325,7 +333,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.', whisperType=WhisperPopup.WTSystem),
             Wait(2),
             # Let's do a quick swap for the real Surlee, now that his animation is done
-            Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.reparentTo, self.showFloor), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
+            Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.show), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
             Wait(3),
             Func(self.surleeR.setChatAbsolute, 'Hrm, you heard the HQ. I better get out of the way before Alec arrives.', CFSpeech|CFTimeout),
             Wait(1),
@@ -362,7 +370,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             character.addActive()
             character.startBlink()
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
-
+        self.ignore('enter' + self.pieCollision.node().getName())
         self.alecHallInterval = Sequence(
             Parallel(Func(self.alec.loop, 'walk'), Func(base.playMusic, musicIntro, looping=0, volume=0.8)),
             self.alec.posInterval(3, (12.96, -0.38, 0)),
@@ -592,6 +600,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         del self.suit
 
     def enterInvasion(self, offset):
+        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         self.surleeIntroInterval = Sequence(
             Func(self.surleeR.loop, 'walk'),
             Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
@@ -611,75 +620,3 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
-
-    def enterFlippyRunning(self, offset):
-        # First, put Flippy at a start position:
-        self.flippy.setPos(0, -10, 0)
-        self.flippy.setHpr(0, 0, 0)           
-
-        self.interval = Sequence(
-            # Flippy runs toward the bank:
-            Func(self.flippy.loop, 'run'),
-            self.flippy.posInterval(2.5, (0, 10, 0)),
-
-            # He stops, admires it:
-            Func(self.flippy.loop, 'neutral'),
-            Wait(2.5),
-            Func(self.flippy.setChatAbsolute, 'My, what a lovely bank!', CFSpeech|CFTimeout),
-            Wait(5),
-
-            # Now he turns around:
-            Func(self.flippy.loop, 'walk'),
-            self.flippy.hprInterval(2.5, (180, 0, 0)),
-
-            # Now he runs toward the library:
-            Func(self.flippy.loop, 'run'),
-            self.flippy.posInterval(2.5, (0, -10, 0)),
-
-            # He stops, admires it:
-            Func(self.flippy.loop, 'neutral'),
-            Wait(2.5),
-            Func(self.flippy.setChatAbsolute, 'The library is kind of ugly though. :(', CFSpeech|CFTimeout),
-            Wait(5),
-
-            # Now he turns back to prepare to head to the bank:
-            Func(self.flippy.loop, 'walk'),
-            self.flippy.hprInterval(2.5, (0, 0, 0)),
-        )
-
-        self.interval.loop()
-
-        # This fast-fowards the interval to the proper time-offset, so that
-        # people entering the area while the state is running can catch up.
-        self.interval.setT(offset)
-
-    def exitFlippyRunning(self):
-        # Return back to a "neutral state"
-        self.interval.finish()
-        self.flippy.loop('neutral')
-        self.flippy.setChatAbsolute('', 0)
-        self.flippy.setPos(0, 0, 0)
-        self.flippy.setHpr(0, 0, 0)
-
-    def enterFlippyWaving(self, offset):
-        self.flippy.loop('wave')
-        self.flippy.setPos(0, -10, 0)
-        self.flippy.setHpr(90, 0, 0)
-        self.slappy.loop('bow')
-        self.slappy.setPos(0, 10, 0)
-        self.slappy.setHpr(90, 0, 0)
-        self.alec.setPos(-5, 0, 0)
-        self.alec.setHpr(90, 0, 0)
-        self.suit.loop('neutral')
-        self.suit.setPos(5, 0, 0)
-        self.suit.setHpr(90, 0, 0)
-
-    def exitFlippyWaving(self):
-        self.flippy.loop('neutral')
-        self.flippy.setPos(0, -10, 0)
-        self.flippy.setHpr(90, 0, 0)
-        self.slappy.loop('neutral')
-        self.flippy.setPos(0, 10, 0)
-        self.flippy.setHpr(90, 0, 0)
-        self.alec.setPos(-5, 0, 0)
-        self.alec.setHpr(90, 0, 0)         

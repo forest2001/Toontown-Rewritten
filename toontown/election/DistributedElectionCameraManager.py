@@ -23,7 +23,7 @@ class DistributedElectionCameraManager(DistributedObject):
 
         # Load the TV, and give it a nice idle animation.
         # This will probably be moved somewhere else once we get it into the scripted sequence
-        self.tv = loader.loadModel('phase_4/models/events/tv')
+        self.tv = loader.loadModel('phase_4/models/events/election_tv')
         self.tv.reparentTo(render)
         self.tv.setPosHprScale(87.85, -0.25, 40.0, 270.0, 0.0, 0.0, 1.5, 1.5, 1.5)
         self.tv.hide()
