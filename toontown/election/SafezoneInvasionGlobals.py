@@ -3,6 +3,9 @@
 FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
 FirstSuitType = 'ym'
 
+# The destination of the Finale suit
+FinaleSuitDestination = (30.0, 3.6)
+
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints
 SuitSpawnPoints = [
@@ -29,6 +32,10 @@ SuitSpawnPoints = [
 ]
 
 SuitWaves = [
+    [('tbc', 0)]
+]
+
+SuitWaves2 = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.

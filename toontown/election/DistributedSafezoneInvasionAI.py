@@ -126,6 +126,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             # N.B. this is NOT suspicious as it can happen as a result of a race condition
             return
 
+        # if self.state == 'Finale':
+        #     print('Take a damage of 1')
+        #     suit.takeDamage(1)
+        #     return
+
         # How much damage does this Throw gag do?
         pieDamageEntry = ToontownBattleGlobals.AvPropDamage[ToontownBattleGlobals.THROW_TRACK][toon.pieType]
         (pieDamage, pieGroupDamage), _ = pieDamageEntry
@@ -192,6 +197,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
                     self.sadToons.remove(toon) # Remove the sad toon
 
     def suitDied(self, suit):
+        if self.state == 'Finale':
+            print('Won the Finale!') 
+            self.suits.remove(suit)
+            return
+
         if suit not in self.suits:
             self.notify.warning('suitDied called twice for same suit!')
             return
@@ -206,7 +216,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Was this the last wave?
         if self.lastWave:
-            self.demand('Victory')
+            # self.demand('Victory')
+            self.demand('Finale')
         # Should we spawn this one immidiately?
         elif self.waveNumber in SafezoneInvasionGlobals.SuitWaitWaves:
             self.demand('BeginWave', self.waveNumber + 1)
@@ -290,6 +301,20 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def exitIntermission(self):
         self._delay.remove()
+
+    def enterFinale(self):
+        print('Enter Finale')
+        taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-suit-%s' % 'tbc'), extraArgs=[])
+    
+    def spawnFinaleSuit(self):
+        suit = DistributedInvasionSuitAI(self.air, self)
+        suit.dna.newSuit('tbc')
+        suit.setSpawnPoint(3) # Point 3 is in front of the MML tunnel
+        suit.setLevel(4) # Give it the highest level we can. Requires 200 damage to defeat
+        suit.generateWithRequired(self.zoneId)
+        suit.makeSkelecog()
+        suit.b_setState('FlyDown')
+        self.suits.append(suit)
 
     def enterVictory(self):
         # self.b_setInvasionStatus(False)

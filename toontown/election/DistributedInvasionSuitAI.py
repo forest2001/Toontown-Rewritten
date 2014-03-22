@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
+from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.suit import SuitTimings
@@ -27,6 +28,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.lastMarchTime = 0.0
         self.__walkTimer = None
+        self.reachedFinalePoint = False
+        self.finale = False
 
     def announceGenerate(self):
         if self.spawnPointId == 99:
@@ -55,6 +58,13 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
+        if self.invasion.state == 'Finale':
+            self.finale = True
+            self.finaleMarch = taskMgr.add(self.finaleMarch, self.uniqueName('FinaleMarch'))
+            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+            self.walkTo(x, y) # Walk to Flippy
+            return
+
         self.b_setState('Idle')
 
         if self.invasion.state != 'BeginWave':
@@ -99,6 +109,11 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
                                             self.uniqueName('stunned'))
 
     def __unstun(self, task):
+        if self.finale:
+            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+            self.walkTo(x, y) # We continue walking to Flippy
+            return
+
         if self.currHP < 1:
             # We're dead!
             self.b_setState('Explode')
@@ -121,6 +136,20 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def exitExplode(self):
         self._delay.remove()
+
+    def finaleMarch(self, task):
+        # This stupid ass broken whatever just does not want to work. 
+        # I've tried rounding, just checking if the y values are equal.
+        # zzz'z Cause im probably tired
+        oldX, oldY = self.getCurrentPos()
+        destinationX, destinationY = SafezoneInvasionGlobals.FinaleSuitDestination
+        if (oldX is destinationX) and (oldY is destinationY):
+            print('We\'re here! Lets attack')
+            self.reachedFinalePoint = True
+            self.b_setState('Idle')
+            self.d_sayFaceoffTaunt(True, 'Beat it pal!')
+            return task.done
+        return task.cont
 
     def walkTo(self, x, y):
         # Begin walking to a given point. It's OK to call this before the suit
@@ -168,6 +197,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         hp = min(hp, self.currHP) # Don't take more damage than we have...
         self.b_setHP(self.currHP - hp)
+
+        if self.finale:
+            self.b_setHP(self.currHP + hp) # We dont want to big guy to die
+            return
 
         if self.state != 'Stunned':
             self.b_setState('Stunned')
