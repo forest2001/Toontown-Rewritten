@@ -4,7 +4,11 @@ FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
 FirstSuitType = 'ym'
 
 # The destination of the Finale suit
-FinaleSuitDestination = (30.0, 3.6)
+# Spawns at (-23.7, -83.1, 0.5, 0.0),
+FinaleSuitPointA = (-117.9, 27.6)
+FinaleSuitPointB = (-77.2, -63.7)
+FinaleSuitPointC = (-13.98, -11.3)
+FinaleSuitDestination = (29.3, -5.0)
 
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints

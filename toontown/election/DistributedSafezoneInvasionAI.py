@@ -200,6 +200,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         if self.state == 'Finale':
             print('Won the Finale!') 
             self.suits.remove(suit)
+            self.demand('Victory')
             return
 
         if suit not in self.suits:
@@ -316,6 +317,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.b_setState('FlyDown')
         self.suits.append(suit)
 
+    def winFinale(self):
+        if self.state == 'Finale':
+            for suit in self.suits:
+                suit.b_setState('Explode')
+
     def enterVictory(self):
         # self.b_setInvasionStatus(False)
         self.b_setInvasionStarted(False)
@@ -349,3 +355,5 @@ def szInvasion(cmd, arg=''):
         invasion.demand('BeginWave', int(arg))
     elif cmd == 'endWave':
         invasion.waveWon()
+    elif cmd == 'winFinale':
+        invasion.winFinale()
