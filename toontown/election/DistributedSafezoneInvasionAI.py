@@ -6,6 +6,7 @@ from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 import SafezoneInvasionGlobals
+from DistributedElectionEventAI import DistributedElectionEventAI
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownBattleGlobals
 
@@ -226,6 +227,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # regular intervals until the quota for the wave is met.
         self.waveNumber = waveNumber
 
+        if self.waveNumber == 24:
+            election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
+
         # Reset spawnpoints:
         self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
 
@@ -286,6 +290,27 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a
         # pause in the action until the next wave.
+        election = DistributedElectionEventAI(simbase.air)
+        if self.waveNumber == 2:
+            election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve got a little break to regroup before they come back.')
+        elif self.waveNumber == 5:
+            election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!')
+        elif self.waveNumber == 8:
+            election.saySurleePhrase('They\'re getting stronger with each wave... This isn\'t good.')
+        elif self.waveNumber == 11:
+            election.saySurleePhrase('I\'ve been keeping track of the wave intervals, and we seem to have about 20 seconds between each wave. Hang on tight.')
+        elif self.waveNumber == 14:
+            election.saySurleePhrase('Stay happy, toons! We can do this!')
+        elif self.waveNumber == 17:
+            election.saySurleePhrase('We\'re losing toons fast, but our motivation is still high. Don\'t let these metal menaces take over our town!')
+        elif self.waveNumber == 20:
+            election.saySurleePhrase('These next ones are the hardest yet. Flippy, do you have any bigger pies? We\'re going to need them soon.')
+        elif self.waveNumber == 23:
+            election.saySurleePhrase('Oof... I... I think we made it. Those must have been the last ones.')
+        elif self.waveNumber == 26:
+            election.saySurleePhrase('I think this is it, toons. They\'re sending in the boss!')
+
+
         self._delay = taskMgr.doMethodLater(SafezoneInvasionGlobals.IntermissionTime,
                                             self.__endIntermission,
                                             self.uniqueName('intermission'))

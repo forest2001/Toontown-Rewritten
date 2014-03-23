@@ -85,10 +85,10 @@ SuitWaves2 = [
     [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
     [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 
-    # WAVE 9: The Final Wave
-    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
-    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
-    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+    # WAVE 9: THE FINAL WAVE
+    [('tbc', 2), ('bw', 1), ('rb', 3), ('mh', 3), ('tbc', 1), ('bw', 1), ('rb', 2), ('mh', 4)],
+    [('tbc', 4), ('bw', 1), ('rb', 4), ('mh', 1), ('tbc', 3)], # Wait Wave
+    [('tbc', 4), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 4), ('mh', 4), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
@@ -99,7 +99,7 @@ SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
 SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
 
 # These are the last waves that start turning cogs into Skelcogs.
-SuitSkelecogWaves = [24]
+SuitSkelecogWaves = [24, 25, 26]
 
 # This should be at least 6.5 (the suit fly-down time)
 WaveBeginningTime = 10

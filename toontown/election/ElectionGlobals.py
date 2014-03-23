@@ -44,6 +44,7 @@ SurleeTips = [
     'That\'s what I\'m talking about. Keep at it!',
     'Flippy, we need more pies over here. They\'re flying out quick.',
     'Doctor Dimm, have you had any luck on Slappy\'s stand?',
+    'Keep a close eye on your pie count, it can run out fast.'
 ]
 
 ########################
