@@ -31,6 +31,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.shakerRadialAttack = None
         self.exploding = False
         self.invasionFinale = False
+        self._attackInterval = None
 
     def delete(self):
         self.demand('Off')
@@ -192,6 +193,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._stunInterval.finish()
 
     def enterExplode(self, time):
+        if self._attackInterval:
+            self._attackInterval.finish()
         self.exploding = True
         # We're done with our suit. Let's get rid of him and load an actor for the explosion
         loseActor = self.getLoseActor()
