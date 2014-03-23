@@ -104,7 +104,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
-            Wait(120),
+            Wait(117),
             Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()
@@ -126,14 +126,14 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.landingSequence.start()
 
     def enterInvasion(self):
-        self.invasionSequence = Sequence(
-            Wait(22),
-            Func(self.spawnInvasion),
-            Func(self.surleePhraseLoop.loop)
-        )
         self.surleePhraseLoop = Sequence(
             Wait(25),
             Func(self.saySurleePhrase)
+        )
+        self.invasionSequence = Sequence(
+            Wait(22),
+            Func(self.spawnInvasion),
+            Func(self.surleePhraseLoop.loop)                        
         )
         self.invasionSequence.start()
 

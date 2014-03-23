@@ -6,7 +6,7 @@ from otp.ai.MagicWordGlobal import *
 from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 import SafezoneInvasionGlobals
-from DistributedElectionEventAI import DistributedElectionEventAI
+import DistributedElectionEventAI
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownBattleGlobals
 
@@ -290,7 +290,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def enterIntermission(self):
         # This state is entered after a wave is successfully over. There's a
         # pause in the action until the next wave.
-        election = DistributedElectionEventAI(simbase.air)
+        election = DistributedElectionEventAI.DistributedElectionEventAI(simbase.air)
         if self.waveNumber == 2:
             election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve got a little break to regroup before they come back.')
         elif self.waveNumber == 5:
