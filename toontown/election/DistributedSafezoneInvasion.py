@@ -3,6 +3,8 @@ from direct.distributed.DistributedObject import DistributedObject
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToontownGlobals
 from otp.avatar import Emote
+from toontown.toontowngui import TTDialog
+import webbrowser
 import SafezoneInvasionGlobals
 
 class DistributedSafezoneInvasion(DistributedObject):
@@ -69,8 +71,9 @@ class DistributedSafezoneInvasion(DistributedObject):
             Func(base.localAvatar.b_setEmoteState, 6, 1.0),
             Wait(5.15),
             Func(Emote.globalEmote.releaseAll, base.localAvatar, 'dbattle, enterReward'),
-            Func(base.localAvatar.enableAvatarControls),
-            Func(self.delete) # Might as well clean up
+            # Func(base.localAvatar.enableAvatarControls),
+            Func(self.showThanks)
+            # Func(self.delete) # Might as well clean up
             )
         self.victoryIval.start()
 
@@ -106,6 +109,21 @@ class DistributedSafezoneInvasion(DistributedObject):
                 Func(self.sky.removeNode) # Remove the sky node after the fade out
                 )
             cogSkySequence.start()
+
+    def showThanks(self):
+        self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.Thanks, style=TTDialog.Acknowledge,
+            suppressKeys=True)
+        self.confirm.show()
+        self.accept('confirmDone', self.handleConfirm)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            webbrowser.open('http://toontownrewritten.com')
+            abort() # Crash bam boom!
 
     def __localPieSplat(self, pieCode, entry):
         if pieCode == ToontownGlobals.PieCodeToon:

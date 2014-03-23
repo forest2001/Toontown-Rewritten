@@ -119,3 +119,5 @@ InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into sep
 
 # Leave Toontown Central Alert
 LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."
+
+Thanks = "Thank you so much for attending the elections! We'd like to thank you all for supporting us! See you all soon!"
