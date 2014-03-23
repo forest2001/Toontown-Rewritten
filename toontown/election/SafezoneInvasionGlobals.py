@@ -36,10 +36,6 @@ SuitSpawnPoints = [
 ]
 
 SuitWaves = [
-    [('tbc', 0)]
-]
-
-SuitWaves2 = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
@@ -123,3 +119,5 @@ InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into sep
 
 # Leave Toontown Central Alert
 LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."
+
+Thanks = "Thank you so much for attending the elections! We'd like to thank you all for supporting us! See you all soon!"
