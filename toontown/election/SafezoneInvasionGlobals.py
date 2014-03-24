@@ -7,6 +7,17 @@ FirstSuitType = 'ym'
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
 
+# Add a few phrases for the cog to say
+FinaleSuitPhrases = [
+    "You can call me Jack.",
+    "You're headed for trouble if you keep that up.",
+    "I'm prepared to close this deal quickly.",
+    "Relax, you'll find this is for the best.",
+    "At this rate I'll need to liquidate toons from the picture.",
+    "Grate timing, I was just about to send my Flunkies.",
+    "I've been planning on running into you."
+]
+
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints
 SuitSpawnPoints = [

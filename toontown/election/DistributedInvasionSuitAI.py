@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
+from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
@@ -29,6 +30,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.lastMarchTime = 0.0
         self.__walkTimer = None
         self.finale = False
+        self.phraseSequence = None
 
     def announceGenerate(self):
         if self.spawnPointId == 99:
@@ -62,6 +64,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)
+            self.beginPhraseSequence()
             return
 
         self.b_setState('Idle')
@@ -136,15 +139,24 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def exitExplode(self):
         self._delay.remove()
 
+    def beginPhraseSequence(self):
+        self.phraseSequence = Sequence(
+            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[0]),
+            Wait(5),
+            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[1]),
+            Wait(4),
+            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
+        )
+        self.phraseSequence.start()
+
     def enterFinaleMarch(self, task):
         oldX, oldY = self.getCurrentPos()
 
         # Final Destination
         finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
         if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, 'I\'m here, Bitch!')
+            self.d_sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[6])
             self.idle()
-            # self.b_setState('Attack')
             return task.done
         return task.cont
 
