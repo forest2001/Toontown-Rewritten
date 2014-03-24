@@ -59,9 +59,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def __flyDownComplete(self, task):
         if self.invasion.state == 'Finale':
             self.b_setInvasionFinale(True)
-            self.finaleMarch = taskMgr.add(self.finaleMarch, self.uniqueName('FinaleMarch'))
-            x, y = SafezoneInvasionGlobals.FinaleSuitPointA
-            self.walkTo(x, y) # Move to Point A
+            self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
+            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+            self.brain.navigateTo(x, y)
             return
 
         self.b_setState('Idle')
@@ -136,49 +136,15 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def exitExplode(self):
         self._delay.remove()
 
-    def finaleMarch(self, task):
+    def enterFinaleMarch(self, task):
         oldX, oldY = self.getCurrentPos()
-
-        # This just makes me cringe :(
-
-        # Point A
-        finalX, finalY = SafezoneInvasionGlobals.FinaleSuitPointA
-        if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, 'Say something!')
-            
-            # Move on to B
-            x, y = SafezoneInvasionGlobals.FinaleSuitPointB
-            self.walkTo(x, y)
-            # task.delayTime += 1
-            return task.again
-
-        # Point B
-        finalX, finalY = SafezoneInvasionGlobals.FinaleSuitPointB
-        if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, 'Say something!')
-            
-            # Move on to C
-            x, y = SafezoneInvasionGlobals.FinaleSuitPointC
-            self.walkTo(x, y)
-            # task.delayTime += 1
-            return task.again
-
-        # Point C
-        finalX, finalY = SafezoneInvasionGlobals.FinaleSuitPointC
-        if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, 'Say something!')
-            
-            # Move on to C
-            x, y = SafezoneInvasionGlobals.FinaleSuitDestination
-            self.walkTo(x, y)
-            # task.delayTime += 1
-            return task.again
 
         # Final Destination
         finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
         if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, 'Say something!')
+            self.d_sayFaceoffTaunt(True, 'I\'m here, Bitch!')
             self.idle()
+            # self.b_setState('Attack')
             return task.done
         return task.cont
 
