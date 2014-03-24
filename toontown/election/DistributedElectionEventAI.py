@@ -110,7 +110,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.eventSequence.start()
 
     def enterPreShow(self):
-        pass
+        self.showAnnounceInterval = Sequence(
+            Func(self.sendGlobalUpdate, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.'),
+            Wait(5),
+            Func(self.sendGlobalUpdate, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.')
+        )
+        self.showAnnounceInterval.start()
 
     def enterBegin(self):
         pass
@@ -167,6 +172,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.suit.setLevel(0)
         self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
         self.suit.takeDamage(hp)
+
+    def sendGlobalUpdate(self, text):
+        for doId in simbase.air.doId2do:
+            if str(doId)[:2] == '10': # Are they a real player?
+                do = simbase.air.doId2do.get(doId)
+                do.d_setSystemMessage(0, text)
 
 @magicWord()
 def election(state):

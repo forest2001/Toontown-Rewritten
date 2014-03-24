@@ -20,6 +20,7 @@ from otp.speedchat import SpeedChatGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEvent")
+    deferFor = 1
     
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
@@ -197,6 +198,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyStand.loop('idle')
         self.slappyStand.loop('idle')
 
+        if base.config.GetBool('want-doomsday', False):
+            # If it's Doomsday, let's get our actors set up.
+            self.prepostera.show()
+            self.prepostera.addActive()
+            self.prepostera.startBlink()
+            self.prepostera.loop('scientistWork')
+            self.dimm.show()
+            self.dimm.addActive()
+            self.dimm.startBlink()
+            self.dimm.loop('scientistWork')
+
     def handleWheelbarrowCollisionSphereEnter(self, collEntry):
         if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
             # We need to give them more pies! Send a request to the server.
@@ -294,14 +306,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surlee.addActive()
         self.surlee.startBlink()
         self.surlee.loop('scientistEmcee')
-        self.prepostera.show()
-        self.prepostera.addActive()
-        self.prepostera.startBlink()
-        self.prepostera.loop('scientistWork')
-        self.dimm.show()
-        self.dimm.addActive()
-        self.dimm.startBlink()
-        self.dimm.loop('scientistWork')
         self.surleeIntroInterval = Sequence(
             Wait(10),
             Func(self.surlee.setChatAbsolute, 'Oh, uh, Hello! I suppose it\'s election time already?', CFSpeech|CFTimeout),
@@ -332,10 +336,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterPreShow(self, offset):
         # And now for the Pre-election sequence
         self.surleeLeaveInterval = Sequence(
-            Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.', whisperType=WTSystem),
-            Wait(5),
-            Func(base.localAvatar.setSystemMessage, 0, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.', whisperType=WhisperPopup.WTSystem),
-            Wait(2),
+            Wait(7),
             # Let's do a quick swap for the real Surlee, now that his animation is done
             Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.show), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
             Wait(3),
