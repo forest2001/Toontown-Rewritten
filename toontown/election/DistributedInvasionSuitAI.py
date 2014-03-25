@@ -29,6 +29,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.lastMarchTime = 0.0
         self.__walkTimer = None
         self.finale = False
+        self._explodeDelay = None
 
     def announceGenerate(self):
         if self.spawnPointId == 99:
