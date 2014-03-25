@@ -69,7 +69,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
-            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-object'
+            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-paper'
         else:
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())

@@ -65,7 +65,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         wheelbarrow = self.flippyStand.find('**/Box')
         wheelbarrow.setPosHprScale(-2.39, 0.00, 1.77, 0.00, 0.00, 6.00, 1.14, 1.54, 0.93)
 
-        self.slappyStand = Actor.Actor('phase_4/models/events/election_slappyStand-mod', {'idle': 'phase_4/models/events/election_slappyStand-idle'})
+        self.slappyStand = Actor.Actor('phase_4/models/events/election_slappyStand-mod', {
+          'idle': 'phase_4/models/events/election_slappyStand-idle',
+          'watch-idle': 'phase_4/models/events/election_slappyStand-watch-idle',
+          'sad': 'phase_4/models/events/election_slappyStand-reaction',
+          'sad-idle': 'phase_4/models/events/election_slappyStand-reaction-idle'
+        })
         self.slappyStand.reparentTo(self.showFloor)
         self.slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
 
@@ -301,7 +306,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
 
     def enterIdle(self, offset):
-        # Spawn Surlee and Friends
+        # We're waiting for the election to start, so Surlee comes by to keep us occupied during his studies of "sillyness".
         self.surlee.show()
         self.surlee.addActive()
         self.surlee.startBlink()
@@ -375,6 +380,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             character.addActive()
             character.startBlink()
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
+        self.slappyStand.loop('watch-idle')
         self.ignore('enter' + self.pieCollision.node().getName())
         self.alecHallInterval = Sequence(
             Parallel(Func(self.alec.loop, 'walk'), Func(base.playMusic, musicIntro, looping=0, volume=0.8)),
@@ -414,8 +420,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyHallInterval.finish()
 
     def enterAlecSpeech(self, offset):
-        # For some reason, the sound only plays on their first message. Can anyone look into that?
+        # TODO: This was written on the spot and needs to be more interesting.
         self.alecSpeech = Sequence(
+            # Alec drones on about how much he loves elections, the candidates give their speeches
             Func(self.alec.setChatAbsolute, 'Hellooo Toontown~!', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.alec.setChatAbsolute, 'As many of you know, I\'m your Hilarious Host and Eccentric Elector: Alec Tinn!', CFSpeech|CFTimeout),
@@ -471,12 +478,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterVoteBuildup(self, offset):
         musicAnnouncement = base.loadMusic(ElectionGlobals.AnnouncementMusic)
         self.buildupSequence = Sequence(
+            # Alec builds up some hype before...
             Func(self.alec.setChatAbsolute, 'And the winner is...', CFSpeech|CFTimeout),
             Wait(4),
             Func(self.alec.setChatAbsolute, 'With 5,437 votes from Toons worldwide...', CFSpeech|CFTimeout),
             Wait(4),
             Func(base.playMusic, musicAnnouncement, looping=0, volume=0.8),
             Wait(1),
+            # Slappy's victory!
             Func(self.alec.setChatAbsolute, 'SLAPPYYYY~ QUACKINTOSH!', CFSpeech|CFTimeout),
             Wait(2),
             ActorInterval(self.slappy, 'good-putt'),
@@ -508,9 +517,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         musicSad = base.loadMusic(ElectionGlobals.SadMusic)
         sfxSad = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
         mtrack = self.suit.beginSupaFlyMove(Point3(65, 3.6, 4.0), 1, 'fromSky', walkAfterLanding=False)
-        self.pieHold = Sequence(
-            ActorInterval(self.flippy, 'throw', startFrame=32, endFrame=47),
-            ActorInterval(self.flippy, 'throw', startFrame=46, endFrame=33),
+        self.slappyStandDie = Sequence(
+            ActorInterval(self.slappyStand, 'sad'),
+            ActorInterval(self.flippy, 'sad-idle')
         )
         self.pie = BattleProps.globalPropPool.getProp('creampie')
         self.cogSequence = Sequence(
@@ -518,6 +527,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(3),
             Func(self.slappy.setChatAbsolute, 'I will ensure- Uhh...', CFSpeech|CFTimeout),
             Wait(2),
+            # The cog has landed. Surlee knows what's coming.
             Func(self.surleeR.sadEyes),
             Wait(3),
             Func(self.alec.setChatAbsolute, 'Wha- What is that...?', CFSpeech|CFTimeout),
@@ -556,12 +566,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(6),
             Func(self.suit.setChatAbsolute, 'However, you seem to need a smear of Positive Reinforcement.', CFSpeech|CFTimeout),
             Wait(5),
+            # Mother of Walt, he's dead
             Func(self.slappy.play, 'lose'),
             Wait(2),
             Func(base.playSfx, sfxSad, volume=0.6),
             Wait(1.8),
             Func(base.playMusic, musicSad, looping=0),
             Wait(0.5),
+            Parallel(Func(self.slappyStandDie.start), Func(self.slappyStandDie.setT, offset)),
             Func(self.flippy.setChatAbsolute, "Slappy, NO!", CFSpeech|CFTimeout),
             Wait(0.5),
             Func(self.alec.setChatAbsolute, "Oh my goodness- he...", CFSpeech|CFTimeout),
@@ -570,6 +582,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Parallel(Func(self.alec.setChatAbsolute, "No. Nonono, no. This isn't happening.", CFSpeech|CFTimeout), Func(self.alec.loop, 'walk')),
             Parallel(self.alec.posInterval(2, (-1.5, -0.14, 3.13))),
             Func(self.alec.loop, 'neutral'),
+            # Flippy isn't happy at all, he's going histerical
             Parallel(Func(self.flippy.setChatAbsolute, "What have you done?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'run')),
             self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)),
             Wait(0.45),
@@ -587,6 +600,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(6),
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
             Wait(4),
+            # The Yesman has found a new business partner
             Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout),
             Wait(3),
             Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
@@ -599,6 +613,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.flippy.loop, 'neutral'),
             Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout),
             Wait(2),
+            # Flippy makes a last minute attempt to try and slow him down. It... kills him?
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout), Func(self.pie.reparentTo, self.flippy.rightHand)),
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
@@ -616,6 +631,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterInvasion(self, offset):
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         self.surleeIntroInterval = Sequence(
+            # Everyone is stunned by the explosion, but Surlee knows what is to come. He grabs their attention as the cogs begin landing
             Func(self.surleeR.loop, 'walk'),
             Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
             self.surleeR.posHprInterval(1, (-32, -15, 0), (30, 0, 0)),
@@ -631,46 +647,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         )
         self.surleeIntroInterval.start()
         self.surleeIntroInterval.setT(offset)
-        
-    def enterInvasion(self, offset):
-        self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
-        self.surleeIntroInterval = Sequence(
-            Func(self.surleeR.loop, 'walk'),
-            Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
-            self.surleeR.posHprInterval(1, (-32, -15, 0), (30, 0, 0)),
-            Func(self.surleeR.loop, 'neutral'),
-            Wait(5),
-            Func(self.surleeR.setChatAbsolute, 'Grab the pies, they seem to be the weakness of these...', CFSpeech|CFTimeout),
-            Wait(5),
-            Func(self.surleeR.setChatAbsolute, '..."Cogs."', CFSpeech|CFTimeout),
-            Wait(3),
-            Func(self.surleeR.setChatAbsolute, 'Now take up arms, there\'s more on the way!', CFSpeech|CFTimeout),
-            Wait(5),
-            Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surleeR.setChatAbsolute, 'Flippy, come down here with me. We\'re going to need your and your stand\'s help to get through this.', CFSpeech|CFTimeout),
-            
-        )
-        self.alecRunAway = Sequence(
-            Func(self.alec.loop, 'walk'),
-            self.alec.posInterval(2, (-4.5, -0.14, 3.13)),
-            self.alec.posInterval(2, (4.2, -0.25, 3.13)),
-            Func(self.alec.loop, 'neutral'),
-            Wait(3),
-            Func(self.alec.loop, 'run'),
-            self.alec.posHprInterval(2, (12.96, -0.38, 0), (0, 0, 0)),
-            Func(self.alec.loop, 'neutral'),
-        )
-        self.surleeIntroInterval.start()
-        self.surleeIntroInterval.setT(offset)
-        self.alecRunAway.start()
-        self.alecRunAway.setT(offset)
 
     def saySurleePhrase(self, phrase):
         self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout)
 
     def enterWrapUp(self, offset):
-        #Flippy runs onto the stage and throws a pie
+        #Flippy runs onto the stage and throws a pie at the boss, killing him
         pass
 
     def setSuitDamage(self, hp):

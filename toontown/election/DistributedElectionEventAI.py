@@ -100,7 +100,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'AlecSpeech'),
             Wait(155),
             Func(event.b_setState, 'VoteBuildup'),
-            Wait(12),
+            Wait(16),
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
@@ -136,7 +136,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(self.saySurleePhrase)
         )
         self.invasionSequence = Sequence(
-            Wait(22),
+            Wait(20),
             Func(self.spawnInvasion),
             Func(self.surleePhraseLoop.loop)                        
         )
