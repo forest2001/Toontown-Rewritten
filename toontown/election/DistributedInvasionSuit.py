@@ -62,14 +62,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.style.name == 'ms':
             animDict['walk'] = 'phase_5/models/char/suitB-stomp'
             animDict['effort'] = 'phase_5/models/char/suitB-effort'
- 
-        if self.style.name is 'tbc' and self.style.body is 'a':
-            animDict['effort'] = 'phase_6/models/char/suitA-effort'
 
         # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
-            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-paper'
+            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-object'
         else:
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
@@ -77,7 +74,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def setInvasionFinale(self, finale):
         if finale and not self.invasionFinale:
-            self.makeSkelecog
+            if not self.isSkelecog:
+                self.makeSkelecog()
+            self.setDisplayName(SafezoneInvasionGlobals.FinaleSuitName)
         elif not finale and self.invasionFinale:
             pass
         else:

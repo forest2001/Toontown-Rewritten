@@ -58,12 +58,14 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
+        if self.invasion.state == 'Finale':
+            self.b_setInvasionFinale(True)
+            
         self._delay = taskMgr.doMethodLater((SuitTimings.fromSky + 1.0), self.__flyDownComplete,
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
         if self.invasion.state == 'Finale':
-            self.b_setInvasionFinale(True)
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)

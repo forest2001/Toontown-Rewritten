@@ -7,6 +7,9 @@ FirstSuitType = 'ym'
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
 
+# Lets give the Finale suit a special name
+FinaleSuitName = 'Director Of XXX\nDirector\nLevel 100'
+
 # Add a few phrases for the cog to say
 FinaleSuitPhrases = [
     "You can call me Jack.",
