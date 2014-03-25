@@ -4922,3 +4922,17 @@ def givePies(pieType, numPies=0):
         return "numPies value out of range (0-99)"
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
+    
+@magicWord(category=CATEGORY_MODERATION, types=[int])
+def locate(avIdShort=0):
+    if avIdShort <= 0:
+        return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
+    avIdFull = 400000000 - (300000000 - avIdShort)
+    av = simbase.air.doId2do.get(avIdFull, None)
+    if not av:
+        return "Could not find the avatar on the current AI."
+    zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
+    where = hoodNameMap.get(ZoneUtil.getCanonicalHoodId(zoneId), None)[2]
+    if not where:
+        return "ZoneUtil returned an invalid hoodId from getCanonicalHoodId."
+    return "%s has been located at %s. [zoneId: %d]" % (av.getName(), where, zoneId)
