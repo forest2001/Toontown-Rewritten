@@ -32,6 +32,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.exploding = False
         self.invasionFinale = False
         self._attackInterval = None
+        self.phraseSequence = None
 
     def delete(self):
         self.demand('Off')
@@ -83,6 +84,20 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             return # We don't care about this change...
         self.invasionFinale = finale
 
+    def enterFinalePhrases(self, offset):
+        self.phraseSequence = Sequence(
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[0]),
+            Wait(5),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[1]),
+            Wait(4),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
+        )
+        self.phraseSequence.setT(offset)
+        self.phraseSequence.start()
+
+    def exitFinalePhrases(self):
+        self.phraseSequence.finish()
+
     def setSpawnPoint(self, spawnPointId):
         self.spawnPointId = spawnPointId
         if self.spawnPointId == 99:
@@ -92,7 +107,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.freezeLerp(x, y)
         self.setPos(x, y, z)
         self.setH(h)
-        
 
     def setHP(self, hp):
         currHP = getattr(self, 'currHP', 0)

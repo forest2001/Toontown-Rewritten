@@ -1,6 +1,5 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
-from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
@@ -30,7 +29,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.lastMarchTime = 0.0
         self.__walkTimer = None
         self.finale = False
-        self.phraseSequence = None
 
     def announceGenerate(self):
         if self.spawnPointId == 99:
@@ -66,10 +64,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def __flyDownComplete(self, task):
         if self.invasion.state == 'Finale':
+            self.b_setState('FinalePhrases')
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)
-            self.beginPhraseSequence()
             return
 
         self.b_setState('Idle')
@@ -143,17 +141,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def exitExplode(self):
         pass
-        # self._explodeDelay.remove() # Culprit for invisi-suits
 
-    def beginPhraseSequence(self):
-        self.phraseSequence = Sequence(
-            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[0]),
-            Wait(5),
-            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[1]),
-            Wait(4),
-            Func(self.d_sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
-        )
-        self.phraseSequence.start()
+    def enterFinalePhrases(self):
+        pass
+
+    def exitFinalePhrases(self):
+        pass
 
     def enterFinaleMarch(self, task):
         oldX, oldY = self.getCurrentPos()
