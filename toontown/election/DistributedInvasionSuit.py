@@ -59,16 +59,17 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
 
-        # Movers and Shakers should stomp when walking
         if self.style.name == 'ms':
+            # Movers and Shakers should stomp instead of walk
             animDict['walk'] = 'phase_5/models/char/suitB-stomp'
             animDict['effort'] = 'phase_5/models/char/suitB-effort'
 
-        # Suit C's throw animation is in a different phase
         if self.style.body == 'c':
+            # Suit C's (Flunky, etc.) animations are located in phase_3.5, because of the tutorial.
             animDict['throw-paper'] = 'phase_3.5/models/char/suitC-throw-paper'
-            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-object'
+            animDict['throw-object'] = 'phase_3.5/models/char/suitC-throw-paper'
         else:
+            # The rest of the suit animations are in phase_5, for the most part.
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
         return animDict
