@@ -52,6 +52,9 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         except Exception, e:
             self.notify.debug('Exception: %s' % e)
 
+        if self._explodeDelay:
+            self._explodeDelay.remove()
+
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
@@ -130,14 +133,15 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self._delay.remove()
 
     def enterExplode(self):
-        self._delay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
+        self._explodeDelay = taskMgr.doMethodLater(SuitTimings.suitDeath, self.__exploded,
                                             self.uniqueName('explode'))
 
     def __exploded(self, task):
         self.requestDelete()
 
     def exitExplode(self):
-        self._delay.remove()
+        pass
+        # self._explodeDelay.remove() # Culprit for invisi-suits
 
     def beginPhraseSequence(self):
         self.phraseSequence = Sequence(
