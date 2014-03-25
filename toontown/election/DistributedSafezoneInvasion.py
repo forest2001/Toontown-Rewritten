@@ -71,8 +71,8 @@ class DistributedSafezoneInvasion(DistributedObject):
             Func(base.localAvatar.b_setEmoteState, 6, 1.0),
             Wait(5.15),
             Func(Emote.globalEmote.releaseAll, base.localAvatar, 'dbattle, enterReward'),
-            # Func(base.localAvatar.enableAvatarControls),
-            Func(self.showThanks)
+            Func(base.localAvatar.enableAvatarControls),
+            # Func(self.showThanks)
             # Func(self.delete) # Might as well clean up
             )
         self.victoryIval.start()
