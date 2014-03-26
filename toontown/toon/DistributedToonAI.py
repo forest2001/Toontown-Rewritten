@@ -4938,6 +4938,7 @@ def locate(avIdShort=0, returnType=''):
     # Get the avatar's location.
     zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
     trueZoneId = zoneId
+    interior = False
     
     if returnType == 'zone':
         # The avatar that called the MagicWord wants a zoneId... Provide them with the untouched zoneId.
@@ -4951,6 +4952,7 @@ def locate(avIdShort=0, returnType=''):
         # If we're in an interior, we want to fetch the street/playground zone, since there isn't
         # any mapping for interiorId -> shop name (afaik).
         zoneId -= 500
+        interior = True
     
     if ZoneUtil.isPlayground(zoneId):
         # If it's a playground, TTG contains a map of all hoodIds -> playground names.
@@ -4962,4 +4964,7 @@ def locate(avIdShort=0, returnType=''):
 
     if not where:
         return "Failed to map the zoneId %d [trueZoneId: %d] to a location..." % (zoneId, trueZoneId)
+    
+    if interior:
+        return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
