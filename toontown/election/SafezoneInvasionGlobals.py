@@ -110,27 +110,22 @@ SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
 # These are the last waves that start turning cogs into Skelcogs.
 SuitSkelecogWaves = [24, 25, 26]
 
-# This should be at least 6.5 (the suit fly-down time)
-WaveBeginningTime = 10
-# How long does the intermission last?
-IntermissionTime = 20
+WaveBeginningTime = 10 # This should be at least 6.5 (the suit fly-down time)
+IntermissionTime = 20 # How long does the intermission last?
 
-# How much damage does a suit's attack do?
-StandardSuitDamage = 5
+StandardSuitDamage = 5 # How much damage does a standard suit's attack do?
+MoveShakerDamageRadius = 3 # How much damage does a Move and Shaker's attack do?
+MoveShakerRadius = 20 # And it's attack radius?
+MoveShakerStunTime = 5.0 # Once hit by a Mover and Shaker, how long do toons have before hit again?
 
-# How much damage does a Move and Shaker's attack do?
-MoveShakerDamageRadius = 3
-MoveShakerRadius = 30
-MoveShakerStunTime = 5.0
-
-# How much healing does a pie on a Toon do?
-ToonHealAmount = 1
+ToonHealAmount = 1 # How much healing does a pie on a Toon do?
 
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
 
-# Leave Toontown Central Alert
+# This message is displayed upon trying to leave Toontown Central
 LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."
 
+# A message for Anth's credit sequence. Might end up unused.
 Thanks = "Thank you so much for attending the elections! We'd like to thank you all for supporting us! See you all soon!"

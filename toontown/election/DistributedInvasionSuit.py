@@ -27,16 +27,24 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.attackTarget = 0
         self.attackProp = ''
         self.attackDamage = 0
-        self.msStompLoop = None
-        self.shakerRadialAttack = None
         self.exploding = False
         self.invasionFinale = False
         self._attackInterval = None
         self.phraseSequence = None
 
+        # Get a few things defined for our Shakers
+        self.shakerRadialAttack = None
+        self.stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
+        self.msStartStomp = Sequence(
+            Func(self.play, 'walk', fromFrame=0, toFrame=22),
+            Wait(0.9),
+            Func(self.loop, 'walk', fromFrame=22, toFrame=62)
+        )
+        self.msSoundLoop = Sequence(SoundInterval(self.stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
+
     def delete(self):
         self.demand('Off')
-        self.stopShakerRadiusAttack()
+        self.stopShakerRadialAttack()
         self.stopMoveTask()
         DistributedSuitBase.delete(self)
 
@@ -52,9 +60,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         # Set ourselves up for a good pieing:
         colNode = self.find('**/distAvatarCollNode*')
         colNode.setTag('pieCode', str(ToontownGlobals.PieCodeInvasionSuit))
-
-        if self.style.name == 'ms':
-            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
 
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
@@ -179,17 +184,12 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def enterMarch(self, time):
         if self.style.name == 'ms':
-            self.msStartWalk = Sequence(
-                Func(self.play, 'walk', fromFrame=0, toFrame=22),
-                Wait(0.9),
-                Parallel(Func(self.startMoveTask), Func(self.loop, 'walk', fromFrame=22, toFrame=62)))
-            self.msStartWalk.start()
-            stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
-            self.msStompLoop = Sequence(SoundInterval(stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
-            self.msStompLoop.loop()
+            self.msStartStomp.start(time)
+            self.msSoundLoop.loop(time)
+            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
         else:
             self.loop('walk', 0)
-            self.startMoveTask()
+        self.startMoveTask()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
@@ -246,8 +246,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def enterAttack(self, time):
         if self.style.name == 'ms':
-            self._attackInterval = self.makeShakerAttackTrack()
-            self._attackInterval.start(time)
+            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
+            self.msStartStomp.start(time)
+            self.msSoundLoop.loop(time)
             return
         self._attackInterval = self.makeAttackTrack()
         self._attackInterval.start(time)
@@ -335,17 +336,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         else:
             self.prop.removeNode()
 
-    def makeShakerAttackTrack(self):
-        self.lookAtTarget()
-        track = Parallel(
-            ActorInterval(self, 'walk'),
-            Track(
-                (0.0, Func(self.sayFaceoffTaunt))
-            ),
-        )
-
-        return track
-
     def lookAtTarget(self):
         if not self.attackTarget:
             return # No target to look at.
@@ -355,7 +345,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.lookAt(target)
 
     def exitAttack(self):
-        self._attackInterval.finish()
+        if self._attackInterval:
+            self._attackInterval.finish()
+        if self.msStartStomp.isPlaying():
+            self.msStartStomp.finish()
+        if self.msSoundLoop.isPlaying():
+            self.msSoundLoop.finish()
+        self.stopShakerRadialAttack()
 
     def setAttackInfo(self, targetId, attackProp, attackDamage):
         self.attackTarget = targetId
@@ -375,10 +371,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval.start()
 
     def exitMarch(self):
+        if self.msStartStomp.isPlaying():
+            self.msStartStomp.finish()
+        if self.msSoundLoop.isPlaying():
+            self.msSoundLoop.finish()
         self.loop('neutral', 0)
         self.stopMoveTask()
-        if self.msStompLoop:
-            self.msStompLoop.finish()
+        self.stopShakerRadialAttack()
         self.__moveToStaticPoint()
 
     def startMoveTask(self):
@@ -391,7 +390,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.moveTask.remove()
             self.moveTask = None
 
-    def stopShakerRadiusAttack(self):
+    def stopShakerRadialAttack(self):
         if self.shakerRadialAttack:
             self.shakerRadialAttack.remove()
             self.shakerRadialAttack = None
@@ -426,8 +425,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
                 if toon.hp > 0:
                     if not toon.isStunned:
-                        self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
-                        self.setToonStunned(toon, True)
+                        if not getattr(localAvatar.controlManager.currentControls, 'isAirborne', 0):
+                            self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
                 else:
                     # Dont try and enable avatar controls if a toon is sad
                     taskMgr.remove('EnableAvatarControls')
@@ -436,16 +435,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def d_takeShakerDamage(self, damage, toon):
         if toon.isStunned:
             return
-        if toon.hp > 0:
-            if toon is base.localAvatar:
-                base.localAvatar.disableAvatarControls()
-                taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
-                toon.b_setEmoteState(12, 1.0)              
+        if toon is base.localAvatar:
+            if toon.hp > 0:
                 self.sendUpdate('takeShakerDamage', [damage])
-            taskMgr.doMethodLater(SafezoneInvasionGlobals.MoveShakerStunTime, self.setToonStunned, 'ToonStunned', extraArgs = [toon, False])
-
-    def setToonStunned(self, toon, stunned = False):
-        toon.isStunned = stunned
-        if stunned == False:
-            taskMgr.remove('ToonStunned')
+                # Check if he still has more than 0 after taking damage
+                if toon.hp > 0:
+                    base.localAvatar.disableAvatarControls()
+                    taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
+                    toon.b_setEmoteState(12, 1.0)
+                    toon.stunToon()
 
