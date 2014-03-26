@@ -242,6 +242,10 @@ class DistributedTwoDGame(DistributedMinigame):
         self.showScoreTrack = Parallel(lerpTrack, self.getElevatorCloseTrack(), Sequence(Wait(ToonBlitzGlobals.ShowScoresDuration), Func(self.gameOver)))
         self.showScoreTrack.start()
 
+        #For the Alpha Blueprint ARG
+        if base.config.GetBool('want-blueprint4-ARG', False):
+            MinigameGlobals.generateDebugARGPhrase()
+
     def exitShowScores(self):
         self.showScoreTrack.pause()
         del self.showScoreTrack

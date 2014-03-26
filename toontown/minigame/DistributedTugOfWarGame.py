@@ -943,6 +943,9 @@ class DistributedTugOfWarGame(DistributedMinigame):
         if self.gameFSM.getCurrentState().getName() == 'cleanup' or not self.randomNumGen:
             return
         if self.suit:
+            #For the Alpha Blueprint ARG
+            if base.config.GetBool('want-blueprint4-ARG', False):
+                MinigameGlobals.generateDebugARGPhrase()
             if self.suitId in winners:
                 newPos = VBase3(2.65, 18, 0.1)
                 randInt = self.randomNumGen.randrange(0, 10)

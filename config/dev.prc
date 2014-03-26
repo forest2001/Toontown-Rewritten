@@ -32,3 +32,6 @@ want-doomsday #f
 force-holiday-decorations 6
 want-old-fireworks #t
 want-instant-parties #t
+
+# Only for Manufacturing Machine ARG
+want-blueprint4-ARG #t

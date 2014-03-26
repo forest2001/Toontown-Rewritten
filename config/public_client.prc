@@ -45,5 +45,8 @@ vfs-mount phase_13.mf /
 
 audio-library-name p3openal_audio
 
-#TODO: FIX NEW FIREWORKS!
+# TODO: FIX NEW FIREWORKS!
 want-old-fireworks #t
+
+# Only for Manufacturing Machine ARG
+want-blueprint4-ARG #t
