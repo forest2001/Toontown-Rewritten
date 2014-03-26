@@ -82,6 +82,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.setDisplayName(SafezoneInvasionGlobals.FinaleSuitName)
             self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
             self.setScale(1.1)
+            self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
         elif not finale and self.invasionFinale:
             pass
         else:

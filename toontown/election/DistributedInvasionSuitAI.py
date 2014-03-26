@@ -32,14 +32,14 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self._explodeDelay = None
 
     def announceGenerate(self):
-        if self.spawnPointId == 99:
-            x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
-        else:
-            x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
+        x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
 
-        self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
-                          SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
+        if self.invasion.state == 'Finale':
+            self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
+        else:
+            self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
+                              SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
 
     def delete(self):
         DistributedSuitBaseAI.delete(self)

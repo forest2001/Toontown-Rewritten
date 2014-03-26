@@ -4,7 +4,7 @@ FinaleSuitDestination = (29.3, -5.0)
 
 # Lets give the Finale suit a special name
 # This one is surprisingly fitting, because of the election -- http://en.wikipedia.org/wiki/Ambush_marketing
-FinaleSuitName = 'Director of\n Ambush Marketing'
+FinaleSuitName = 'Director of\nAmbush Marketing\nSupervisor\nLevel 50'
 
 # Add a few phrases for the cog to say
 FinaleSuitPhrases = [
