@@ -1,24 +1,27 @@
-
-# The Spawnpoint of the first cog to land
-FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
-FirstSuitType = 'ym'
-
 # The position of the Finale suit
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
 
 # Lets give the Finale suit a special name
-FinaleSuitName = 'Director Of XXX\nDirector\nLevel 100'
+# This one is surprisingly fitting, because of the election -- http://en.wikipedia.org/wiki/Ambush_marketing
+FinaleSuitName = 'Director of\n Ambush Marketing'
 
 # Add a few phrases for the cog to say
 FinaleSuitPhrases = [
-    "You can call me Jack.",
-    "You're headed for trouble if you keep that up.",
+    # The Director has landed
+    "Apparently our marketing strategies haven't exactly appealed to you \"Toons\". I've been sent in to give you an offer that you can't refuse.",
+    "I suppose you could say that \"I'm the boss.\"",
+    # Time to find Flippy, we'll do some brainstorming along the way
+    "I'll be needing to speak with your President directly."
     "I'm prepared to close this deal quickly.",
     "Relax, you'll find this is for the best.",
     "At this rate I'll need to liquidate toons from the picture.",
-    "Grate timing, I was just about to send my Flunkies.",
-    "I've been planning on running into you."
+    "I assure you that you'll find no greater offer.",
+    "The Chairman won't be happy until you are.",
+    # We arrive at Flippy
+    "Ah, finally. The toon I've been searching for.",
+    "I hope you won't pull out of the deal like your predecessor.",
+    "Don't worry, he is in safe keeping now."
 ]
 
 # Spawn points for the Invasion Minigame
@@ -50,7 +53,6 @@ SuitWaves = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
-    # TODO: Do full wave setup
 
     # WAVE 1:
     [('f', 0), ('bf', 1), ('f', 0), ('f', 0), ('cc', 0), ('sc', 0), ('sc', 1), ('bf', 0), ('cc', 1)],

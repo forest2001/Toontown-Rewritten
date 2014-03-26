@@ -78,7 +78,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if finale and not self.invasionFinale:
             if not self.isSkelecog:
                 self.makeSkelecog()
+            self.nametag.setWordwrap(10.0)
             self.setDisplayName(SafezoneInvasionGlobals.FinaleSuitName)
+            self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
+            self.setScale(1.1)
         elif not finale and self.invasionFinale:
             pass
         else:
@@ -87,6 +90,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def enterFinalePhrases(self, offset):
         self.phraseSequence = Sequence(
+            Wait(6.5),
             Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[0]),
             Wait(5),
             Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[1]),

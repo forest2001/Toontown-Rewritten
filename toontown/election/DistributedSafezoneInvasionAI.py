@@ -323,11 +323,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterFinale(self):
-        taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-suit-%s' % 'tbc'), extraArgs=[])
+        taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-suit-finale'), extraArgs=[])
     
     def spawnFinaleSuit(self):
         suit = DistributedInvasionSuitAI(self.air, self)
-        suit.dna.newSuit('tbc')
+        suit.dna.newSuit('ls')
         suit.setSpawnPoint(3) # Point 3 is in front of the MML tunnel
         suit.setLevel(4) # Give it the highest level we can. Requires 200 damage to defeat
         suit.generateWithRequired(self.zoneId)
