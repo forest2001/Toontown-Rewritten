@@ -4923,16 +4923,43 @@ def givePies(pieType, numPies=0):
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
     
-@magicWord(category=CATEGORY_MODERATION, types=[int])
-def locate(avIdShort=0):
+@magicWord(category=CATEGORY_MODERATION, types=[int, str])
+def locate(avIdShort=0, returnType=''):
+    """Locate an avatar anywhere on the [CURRENT] AI."""
+    # TODO: Use Astron msgs to get location of avId from anywhere in the Astron cyber-space.
+    # NOTE: The avIdShort concept needs changing, especially when we start entering 200000000's for avIds
     if avIdShort <= 0:
         return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
     avIdFull = 400000000 - (300000000 - avIdShort)
     av = simbase.air.doId2do.get(avIdFull, None)
     if not av:
         return "Could not find the avatar on the current AI."
+    
+    # Get the avatar's location.
     zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
-    where = hoodNameMap.get(ZoneUtil.getCanonicalHoodId(zoneId), None)[2]
+    trueZoneId = zoneId
+    
+    if returnType == 'zone':
+        # The avatar that called the MagicWord wants a zoneId... Provide them with the untouched zoneId.
+        return "%s is in zoneId %d." % (av.getName(), trueZoneId)
+        
+    if returnType == 'playground':
+        # The avatar that called the MagicWord wants the playground name that the avatar is currently in.
+        zoneId = ZoneUtil.getCanonicalHoodId(zoneId)
+    
+    if ZoneUtil.isInterior(zoneId):
+        # If we're in an interior, we want to fetch the street/playground zone, since there isn't
+        # any mapping for interiorId -> shop name (afaik).
+        zoneId -= 500
+    
+    if ZoneUtil.isPlayground(zoneId):
+        # If it's a playground, TTG contains a map of all hoodIds -> playground names.
+        where = ToontownGlobals.hoodNameMap.get(zoneId, None)
+    else:
+        # If it's not a playground, the TTL contains a list of all streetId -> street names.
+        zoneId = zoneId - zoneId % 100 # This essentially truncates the last 2 digits.
+        where = TTLocalizer.GlobalStreetNames.get(zoneId, None)
+
     if not where:
-        return "ZoneUtil returned an invalid hoodId from getCanonicalHoodId."
-    return "%s has been located at %s. [zoneId: %d]" % (av.getName(), where, zoneId)
+        return "Failed to map the zoneId %d [trueZoneId: %d] to a location..." % (zoneId, trueZoneId)
+    return "%s has been located %s %s." % (av.getName(), where[1], where[2])
