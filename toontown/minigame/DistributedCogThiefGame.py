@@ -899,7 +899,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             self.resultIval = Parallel(textTrack, soundTrack)
             self.resultIval.start()
             #For the Alpha Blueprint ARG
-            if base.config.getBool('want-blueprint4-ARG', False):
+            if base.config.GetBool('want-blueprint4-ARG', False):
                 MinigameGlobals.generateDebugARGPhrase()
 
     def __genText(self, text):
