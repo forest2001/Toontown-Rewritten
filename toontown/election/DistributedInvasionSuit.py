@@ -32,6 +32,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._attackInterval = None
         self.phraseSequence = None
 
+        self.finaleAttackWarning = loader.loadSfx('phase_5/audio/sfx/AA_sound_aoogah.ogg')
+        self.quakeLiftSfx = loader.loadSfx('phase_5/audio/sfx/General_throw_miss.ogg')
+        self.quakeLandSfx = loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+
         # Get a few things defined for our Shakers
         self.shakerRadialAttack = None
         self.stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
@@ -77,6 +81,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             # The rest of the suit animations are in phase_5, for the most part.
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
+            animDict['jump'] = 'phase_6/models/char/suit%s-jump' % (self.style.body.upper())
         return animDict
 
     def setInvasionFinale(self, finale):
@@ -86,7 +91,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.nametag.setWordwrap(10.0)
             self.setDisplayName(SafezoneInvasionGlobals.FinaleSuitName)
             self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
-            self.setScale(1.1)
+            self.setScale(1.5)
             self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
         elif not finale and self.invasionFinale:
             pass
@@ -423,14 +428,35 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         toon = base.localAvatar
         if toon:
             if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
-                if toon.hp > 0:
-                    if not toon.isStunned:
-                        if not getattr(localAvatar.controlManager.currentControls, 'isAirborne', 0):
-                            self.d_takeShakerDamage(SafezoneInvasionGlobals.MoveShakerDamageRadius, toon)
-                else:
-                    # Dont try and enable avatar controls if a toon is sad
-                    taskMgr.remove('EnableAvatarControls')
+                self.attackToon(toon, SafezoneInvasionGlobals.MoveShakerDamageRadius)
         return task.cont
+
+    # Finale Suit
+    def enterFinaleAttack(self, offset):
+        self.finaleAttackSequence = Sequence(
+            Func(base.playSfx, self.finaleAttackWarning),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[5]),
+            Wait(1.3),
+            Parallel(Func(self.loop, 'jump', fromFrame=0, toFrame=32), SoundInterval(self.quakeLiftSfx, duration=1.1, node=self)),
+            Func(self.attackToon, base.localAvatar, SafezoneInvasionGlobals.FinaleSuitAttackDamage),
+            SoundInterval(self.quakeLandSfx, duration=1.9)
+            )
+        self.finaleAttackSequence.setT(offset)
+        self.finaleAttackSequence.start()
+
+    def exitFinaleAttack(self):
+        self.finaleAttackSequence.finish()
+
+    # Attacking
+    def attackToon(self, toon, damage):
+        if not getattr(localAvatar.controlManager.currentControls, 'isAirborne', 0):
+            if toon.hp > 0:
+                if not toon.isStunned:
+                    self.d_takeShakerDamage(damage, toon)
+                    toon.stunToon()
+            else:
+                # Dont try and enable avatar controls if a toon is sad
+                taskMgr.remove('EnableAvatarControls')
 
     def d_takeShakerDamage(self, damage, toon):
         if toon.isStunned:

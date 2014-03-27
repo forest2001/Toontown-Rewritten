@@ -24,6 +24,9 @@ FinaleSuitPhrases = [
     "Don't worry, he is in safe keeping now."
 ]
 
+FinaleSuitAttackDamage = 10
+FinaleSuitAttackDelay = 10 # Wait 10 seconds before jumping again
+
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints
 SuitSpawnPoints = [

@@ -69,6 +69,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)
+            self.finaleAttack = taskMgr.doMethodLater(3, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleAttack'])
             return
 
         self.b_setState('Idle')
@@ -93,6 +94,21 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.freezeLerp(x, y)
 
         self.__stopWalkTimer()
+
+    def enterFinaleAttack(self):
+        self.brain.stop()
+        self._delay = taskMgr.doMethodLater(5.5, self.__finaleAttackDone, self.uniqueName('FinaleAttackExit'))
+
+    def __finaleAttackDone(self, task):
+        x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+        self.brain.navigateTo(x, y)
+
+        # Is there a better way of doing this?
+        self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleAttack'])
+        return task.done
+
+    def exitFinaleAttack(self):
+        self._delay.remove()
 
     def enterAttack(self):
         if self.brain.suit.dna.body in ['a', 'b']:
@@ -157,6 +173,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
             self.d_sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[6])
             self.idle()
+            self.finaleAttack.remove()
+            taskMgr.remove('FinaleAttack-Later')
             return task.done
         return task.cont
 

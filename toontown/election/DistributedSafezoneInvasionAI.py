@@ -328,8 +328,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def spawnFinaleSuit(self):
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit('ls')
-        suit.setSpawnPoint(3) # Point 3 is in front of the MML tunnel
-        suit.setLevel(4) # Give it the highest level we can. Requires 200 damage to defeat
+        suit.setSpawnPoint(1) # Point 1 is in front of the trolly
+        suit.setLevel(4) # Give it the highest level we can. Requires 200 damage for a level 12, 156 for a level 11
         suit.generateWithRequired(self.zoneId)
         suit.makeSkelecog()
         suit.b_setState('FlyDown')
