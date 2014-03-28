@@ -437,7 +437,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             Func(base.playSfx, self.finaleAttackWarning),
             Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[5]),
             Wait(1.3),
-            Parallel(Func(self.loop, 'jump', fromFrame=0, toFrame=32), SoundInterval(self.quakeLiftSfx, duration=1.1, node=self)),
+            Parallel(Func(self.play, 'jump', fromFrame=0, toFrame=35), SoundInterval(self.quakeLiftSfx, duration=1.1, node=self), Func(self.play, 'jump', fromFrame=97, toFrame=138)),
             Func(self.attackToon, base.localAvatar, SafezoneInvasionGlobals.FinaleSuitAttackDamage),
             SoundInterval(self.quakeLandSfx, duration=1.9)
             )
