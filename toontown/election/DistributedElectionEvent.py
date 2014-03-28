@@ -74,7 +74,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.slappyStand.reparentTo(self.showFloor)
         self.slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
 
-        #Let's give FlippyStand a bunch of pies.
+        # Let's give FlippyStand a bunch of pies.
         # Pies on/around the stand.
         pie = loader.loadModel('phase_3.5/models/props/tart')
         pieS = pie.copyTo(flippyTable)
@@ -83,7 +83,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         for pieSettings in ElectionGlobals.FlippyWheelbarrowPies:
             pieModel = pie.copyTo(wheelbarrowJoint)
             pieModel.setPosHprScale(*pieSettings)
-        # This currently causes placement problems with the animation
         wheelbarrowJoint.setPosHprScale(3.94, 0.00, 1.06, 270.00, 344.74, 0.00, 1.43, 1.12, 1.0)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
         self.splashSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_paint_splash.ogg')
@@ -106,133 +105,170 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippy = NPCToons.createLocalNPC(2001)
         # Sometimes they all need to do the same thing.
         self.characters = [self.alec, self.slappy, self.flippy]
-        # We need some Minor Characters too
-        self.surlee = NPCToons.createLocalNPC(20191)
-        # We want Surlee to use Prepostera's animation since he is the star, but Surlee is a different size.
-        # Since Disney didn't include Prepostera's animation for Surlee's size, we have to make him small an painstakingly scale him
-        self.surlee.useLOD(1000)
-        self.surlee.find('**/250').remove()
-        self.surlee.find('**/500').remove()
-        surleeLegs = self.surlee.find('**/legs')
-        surleeLegs.setScale(1, 1, 1.5)
-        surleeLegs.setZ(-0.26)
-        self.surlee.find('**/__Actor_torso').setZ(1.1)
-        self.surlee.find('**/torso-top').setPosHprScale(0.00, 0.00, -0.45, 0.00, 0.00, 0.00, 1.00, 0.98, 1.96)
-        self.surlee.find('**/__Actor_head').setZ(0.7)
-        self.surlee.find('**/neck').setZ(0.7)
-        self.surlee.find('**/sleeves').setZ(0.7)
-        self.surlee.find('**/arms').setZ(0.7)
-        self.surlee.find('**/hands').setZ(0.7)
-        self.surlee.setPos(-22, 7, 0)
-        self.surlee.setH(110)
-        rHand = self.surlee.find('**/def_joint_right_hold')
-        clipBoard = loader.loadModel('phase_4/models/props/tt_m_prp_acs_clipboard')
-        placeholder = rHand.attachNewNode('ClipBoard')
-        clipBoard.instanceTo(placeholder)
-        placeholder.setH(180)
-        placeholder.setScale(render, 1.0)
-        placeholder.setPos(0.5, 0.6, -0.1)
-        placeholder.setScale(1.3)
-        # And now for the real Surlee
-        self.surleeR = NPCToons.createLocalNPC(2019)
-        self.surleeR.useLOD(1000)
-        self.surleeR.setPos(-22, 7, 0)
-        self.surleeR.setH(110)
-        self.surleeR.head = self.surleeR.find('**/__Actor_head')
-        self.surleeR.initializeBodyCollisions('toon')
-        # Now the same for Prepostera
-        self.prepostera = NPCToons.createLocalNPC(20201)
-        self.prepostera.useLOD(1000)
-        self.prepostera.find('**/250').remove()
-        self.prepostera.find('**/500').remove()
-        preposteraLegs = self.prepostera.find('**/legs')
-        preposteraLegs.setScale(1, 1, 0.5)
-        self.prepostera.find('**/__Actor_torso').setZ(-0.9)
-        self.prepostera.find('**/torso-top').setPosHprScale(0.00, 0.00, 0.2, 0.00, 0.00, 0.00, 1.00, 0.98, 0.5)
-        self.prepostera.find('**/__Actor_head').setZ(-0.7)
-        self.prepostera.find('**/neck').setZ(-0.7)
-        self.prepostera.find('**/sleeves').setZ(-0.7)
-        preposteraArms = self.prepostera.find('**/arms')
-        preposteraArms.setZ(-0.4)
-        preposteraArms.setScale(1, 1, 0.8)
-        preposteraHands = self.prepostera.find('**/hands')
-        preposteraHands.setZ(-0.4)
-        preposteraHands.setScale(1, 1, 0.8)
-        self.prepostera.setPos(-70, 10, 0.0)
-        self.prepostera.setH(-50)
-        self.prepostera.initializeBodyCollisions('toon')
-        rHand = self.prepostera.find('**/def_joint_right_hold')
-        clipBoard = loader.loadModel('phase_4/models/props/tt_m_prp_acs_clipboard')
-        placeholder = rHand.attachNewNode('ClipBoard')
-        clipBoard.instanceTo(placeholder)
-        placeholder.setH(180)
-        placeholder.setScale(render, 1.0)
-        placeholder.setPos(0, -0.3, 0.3)
-        # And his buddies
-        self.dimm = NPCToons.createLocalNPC(2018)
-        self.dimm.useLOD(1000)
-        self.dimm.find('**/250').remove()
-        self.dimm.find('**/500').remove()
-        self.dimm.setPos(-72.36, 10.46, 0.00)
-        self.dimm.setH(-50)
-        self.dimm.initializeBodyCollisions('toon')
-        rHand1 = self.dimm.find('**/def_joint_right_hold')
-        sillyReader = loader.loadModel('phase_4/models/props/tt_m_prp_acs_sillyReader')
-        placeholder1 = rHand1.attachNewNode('SillyReader')
-        sillyReader.instanceTo(placeholder1)
-        placeholder1.setH(180)
-        placeholder1.setScale(render, 1.0)
-        placeholder1.setPos(0, 0, 0.1)
-
-        self.surlee.reparentTo(self.showFloor)
-        self.surleeR.reparentTo(self.showFloor)
-        self.prepostera.reparentTo(self.showFloor)
-        self.dimm.reparentTo(self.showFloor)
-        self.surlee.hide()
-        self.surleeR.hide()
-        self.prepostera.hide()
-        self.dimm.hide()
-
-        self.suit = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('ym')
-        self.suit.setDNA(suitDNA)
-        self.suit.setDisplayName('Yesman\nBossbot\nLevel 3')
-        self.suit.setPickable(0)
 
         self.flippyStand.loop('idle')
         self.slappyStand.loop('idle')
 
-        # Cog speeches, for when we want to manually define it
-        phasePath = 'phase_3.5/audio/dial/'
-        self.speechMurmurSfx = loader.loadSfx(phasePath + 'COG_VO_murmur.ogg')
-        self.speechStatementSfx = loader.loadSfx(phasePath + 'COG_VO_statement.ogg')
-        self.speechQuestionSfx = loader.loadSfx(phasePath + 'COG_VO_question.ogg')
-        self.speechGruntSfx = loader.loadSfx(phasePath + 'COG_VO_grunt.ogg')
-
+        # If it's Doomsday, let's get our actors set up.
         if base.config.GetBool('want-doomsday', False):
-            # If it's Doomsday, let's get our actors set up.
-            self.prepostera.show()
+            self.surlee = NPCToons.createLocalNPC(20191)
+            # We want Surlee to use Prepostera's animation since he is the star of the PreShow, but Surlee is a different size.
+            # Since Disney didn't include Prepostera's animation for Surlee's size, we have to make him small an painstakingly scale him
+            self.surlee.useLOD(1000)
+            self.surlee.find('**/250').remove()
+            self.surlee.find('**/500').remove()
+            surleeLegs = self.surlee.find('**/legs')
+            surleeLegs.setScale(1, 1, 1.5)
+            surleeLegs.setZ(-0.26)
+            self.surlee.find('**/__Actor_torso').setZ(1.1)
+            self.surlee.find('**/torso-top').setPosHprScale(0.00, 0.00, -0.45, 0.00, 0.00, 0.00, 1.00, 0.98, 1.96)
+            self.surlee.find('**/__Actor_head').setZ(0.7)
+            self.surlee.find('**/neck').setZ(0.7)
+            self.surlee.find('**/sleeves').setZ(0.7)
+            self.surlee.find('**/arms').setZ(0.7)
+            self.surlee.find('**/hands').setZ(0.7)
+            self.surlee.setPos(-22, 7, 0)
+            self.surlee.setH(110)
+            rHand = self.surlee.find('**/def_joint_right_hold')
+            clipBoard = loader.loadModel('phase_4/models/props/tt_m_prp_acs_clipboard')
+            placeholder = rHand.attachNewNode('ClipBoard')
+            clipBoard.instanceTo(placeholder)
+            placeholder.setH(180)
+            placeholder.setScale(render, 1.0)
+            placeholder.setPos(0.5, 0.6, -0.1)
+            placeholder.setScale(1.3)
+            # And now for the real Surlee
+            self.surleeR = NPCToons.createLocalNPC(2019)
+            self.surleeR.useLOD(1000)
+            self.surleeR.setPos(-22, 7, 0)
+            self.surleeR.setH(110)
+            self.surleeR.head = self.surleeR.find('**/__Actor_head')
+            self.surleeR.initializeBodyCollisions('toon')
+            # Now the same for Prepostera
+            self.prepostera = NPCToons.createLocalNPC(20201)
+            self.prepostera.useLOD(1000)
+            self.prepostera.find('**/250').remove()
+            self.prepostera.find('**/500').remove()
+            preposteraLegs = self.prepostera.find('**/legs')
+            preposteraLegs.setScale(1, 1, 0.5)
+            self.prepostera.find('**/__Actor_torso').setZ(-0.9)
+            self.prepostera.find('**/torso-top').setPosHprScale(0.00, 0.00, 0.2, 0.00, 0.00, 0.00, 1.00, 0.98, 0.5)
+            self.prepostera.find('**/__Actor_head').setZ(-0.7)
+            self.prepostera.find('**/neck').setZ(-0.7)
+            self.prepostera.find('**/sleeves').setZ(-0.7)
+            preposteraArms = self.prepostera.find('**/arms')
+            preposteraArms.setZ(-0.4)
+            preposteraArms.setScale(1, 1, 0.8)
+            preposteraHands = self.prepostera.find('**/hands')
+            preposteraHands.setZ(-0.4)
+            preposteraHands.setScale(1, 1, 0.8)
+            self.prepostera.setPos(-70, 10, 0.0)
+            self.prepostera.setH(-50)
+            self.prepostera.initializeBodyCollisions('toon')
+            rHand = self.prepostera.find('**/def_joint_right_hold')
+            clipBoard = loader.loadModel('phase_4/models/props/tt_m_prp_acs_clipboard')
+            placeholder = rHand.attachNewNode('ClipBoard')
+            clipBoard.instanceTo(placeholder)
+            placeholder.setH(180)
+            placeholder.setScale(render, 1.0)
+            placeholder.setPos(0, -0.3, 0.3)
+            # And his buddies
+            self.dimm = NPCToons.createLocalNPC(2018)
+            self.dimm.useLOD(1000)
+            self.dimm.find('**/250').remove()
+            self.dimm.find('**/500').remove()
+            self.dimm.setPos(-72.36, 10.46, 0.00)
+            self.dimm.setH(-50)
+            self.dimm.initializeBodyCollisions('toon')
+            rHand1 = self.dimm.find('**/def_joint_right_hold')
+            sillyReader = loader.loadModel('phase_4/models/props/tt_m_prp_acs_sillyReader')
+            placeholder1 = rHand1.attachNewNode('SillyReader')
+            sillyReader.instanceTo(placeholder1)
+            placeholder1.setH(180)
+            placeholder1.setScale(render, 1.0)
+            placeholder1.setPos(0, 0, 0.1)
+
+            self.surlee.reparentTo(self.showFloor)
+            self.surleeR.reparentTo(self.showFloor)
+            self.prepostera.reparentTo(self.showFloor)
+            self.dimm.reparentTo(self.showFloor)
+            self.surlee.hide()
+            self.surleeR.hide()
             self.prepostera.addActive()
             self.prepostera.startBlink()
             self.prepostera.loop('scientistWork')
-            self.dimm.show()
             self.dimm.addActive()
             self.dimm.startBlink()
             self.dimm.loop('scientistWork')
 
-    def handleWheelbarrowCollisionSphereEnter(self, collEntry):
-        if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
-            # We need to give them more pies! Send a request to the server.
-            self.sendUpdate('wheelbarrowAvatarEnter', [])
-            self.restockSfx.play()
-            
-    def handleSlappyCollisionSphereEnter(self, collEntry):
-        if base.localAvatar.savedCheesyEffect != 15:
-            # We need to give them more pies! Send a request to the server.
-            self.sendUpdate('slappyAvatarEnter', [])
-            self.splashSfx.play()
+            # The first cog created, as seen in the original intro video - a Yesman
+            self.suit = DistributedSuitBase.DistributedSuitBase(cr)
+            suitDNA = SuitDNA.SuitDNA()
+            suitDNA.newSuit('ym')
+            self.suit.setDNA(suitDNA)
+            self.suit.setDisplayName('Yesman\nBossbot\nLevel 3')
+            self.suit.setPickable(0)
 
+            # Cog speeches, for when we want to manually define it
+            phasePath = 'phase_3.5/audio/dial/'
+            self.speechMurmurSfx = loader.loadSfx(phasePath + 'COG_VO_murmur.ogg')
+            self.speechStatementSfx = loader.loadSfx(phasePath + 'COG_VO_statement.ogg')
+            self.speechQuestionSfx = loader.loadSfx(phasePath + 'COG_VO_question.ogg')
+            self.speechGruntSfx = loader.loadSfx(phasePath + 'COG_VO_grunt.ogg')
+
+    def enterOff(self, offset):
+        base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
+        self.showFloor.reparentTo(hidden)
+
+    def exitOff(self):
+        self.showFloor.reparentTo(render)
+
+    def delete(self):
+        self.demand('Off', 0.)
+
+        # Clean up everything...
+        self.showFloor.removeNode()
+        self.stopInteractiveFlippy()
+        self.ignore('enter' + self.pieCollision.node().getName())
+        DistributedObject.delete(self)
+
+
+    '''
+     PRE-ELECTION CAMPAIGNS
+       These bits are for things used before Election Day, and mostly unrelated to the Election Sequence.
+    '''
+    def enterIdle(self, offset):
+        if base.config.GetBool('want-doomsday', False):
+            # We're waiting for the election to start, so Surlee comes by to keep us occupied during his studies of "sillyness".
+            self.surlee.show()
+            self.surlee.addActive()
+            self.surlee.startBlink()
+            self.surlee.loop('scientistEmcee')
+            self.surleeIntroInterval = Sequence(
+                Wait(10),
+                Func(self.surlee.setChatAbsolute, 'Oh, uh, Hello! I suppose it\'s election time already?', CFSpeech|CFTimeout),
+                Wait(5),
+                Func(self.surlee.setChatAbsolute, 'We\'re just minutes away from the most important event in the history of our town.', CFSpeech|CFTimeout),
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'Alec Tinn is inside Toon Hall right now with the two candidates preparing for the announcement.', CFSpeech|CFTimeout),
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'When the clock strikes two we\'ll see them march through those doors and onto the stage. Are you toons ready?', CFSpeech|CFTimeout),
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout), 
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'My fellow scientists of silliness, Professor Prepostera and Doctor Dimm, are over there tracking the amount of silliness being taken in from the campaign stands.', CFSpeech|CFTimeout),
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'At least, I think they are. You never know with those goofs.', CFSpeech|CFTimeout),
+                Wait(8),
+                Func(self.surlee.setChatAbsolute, 'I hope you haven\'t been standing here long, because I\'m going to have to start repeating myself soon.', CFSpeech|CFTimeout),
+            )
+            self.surleeIntroInterval.loop()
+            self.surleeIntroInterval.setT(offset)
+
+    def exitIdle(self):
+        if base.config.GetBool('want-doomsday', False):
+            self.surleeIntroInterval.finish()
+    
     def startInteractiveFlippy(self):
         self.flippy.reparentTo(self.showFloor)
         self.flippy.setPosHpr(-40.6, -18.5, 0.01, 20, 0, 0)
@@ -288,60 +324,29 @@ class DistributedElectionEvent(DistributedObject, FSM):
                     # prevent this...
                     taskMgr.doMethodLater(ElectionGlobals.FlippyDelayResponse, self.flippy.setChatAbsolute, 'interactive-flippy-chat-task',
                                           extraArgs = [ElectionGlobals.FlippyPhrases[index].replace("__NAME__", av.getName()), CFSpeech | CFTimeout])
-                    return 
+                    return
 
-    def delete(self):
-        self.demand('Off', 0.)
-        
-        # Clean up everything...
-        self.showFloor.removeNode()
-        self.stopInteractiveFlippy()
-        self.ignore('enter' + self.pieCollision.node().getName())
-        
+    def handleWheelbarrowCollisionSphereEnter(self, collEntry):
+        if base.localAvatar.numPies >= 0 and base.localAvatar.numPies < 20:
+            # We need to give them more pies! Send a request to the server.
+            self.sendUpdate('wheelbarrowAvatarEnter', [])
+            self.restockSfx.play()
 
-        DistributedObject.delete(self)
-    
-    def setState(self, state, timestamp):
-        self.request(state, globalClockDelta.localElapsedTime(timestamp))
-
-    def enterOff(self, offset):
-        base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
-        self.showFloor.reparentTo(hidden)
-
-    def exitOff(self):
-        self.showFloor.reparentTo(render)
+    def handleSlappyCollisionSphereEnter(self, collEntry):
+        if base.localAvatar.savedCheesyEffect != 15:
+            # Splash some of Slappy's green goop on them
+            self.sendUpdate('slappyAvatarEnter', [])
+            self.splashSfx.play()
 
 
-    def enterIdle(self, offset):
-        # We're waiting for the election to start, so Surlee comes by to keep us occupied during his studies of "sillyness".
-        self.surlee.show()
-        self.surlee.addActive()
-        self.surlee.startBlink()
-        self.surlee.loop('scientistEmcee')
-        self.surleeIntroInterval = Sequence(
-            Wait(10),
-            Func(self.surlee.setChatAbsolute, 'Oh, uh, Hello! I suppose it\'s election time already?', CFSpeech|CFTimeout),
-            Wait(5),
-            Func(self.surlee.setChatAbsolute, 'We\'re just minutes away from the most important event in the history of our town.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'Alec Tinn is inside Toon Hall right now with the two candidates preparing for the announcement.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'When the clock strikes two we\'ll see them march through those doors and onto the stage. Are you toons ready?', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout), 
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'My fellow scientists of silliness, Professor Prepostera and Doctor Dimm, are over there tracking the amount of silliness being taken in from the campaign stands.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'At least, I think they are. You never know with those goofs.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.surlee.setChatAbsolute, 'I hope you haven\'t been standing here long, because I\'m going to have to start repeating myself soon.', CFSpeech|CFTimeout),
-        )
-        self.surleeIntroInterval.loop()
-        self.surleeIntroInterval.setT(offset)
-
-    def exitIdle(self):
-        self.surleeIntroInterval.finish()
-
+    '''
+     ELETION DAY SEQUENCE
+       Next up we have the things that relate to the election sequence, which is controlled by both the AI and client.
+       The AI has the global timer, which will fire off which state should be played and when. Sort of like checkpoints.
+       The client has the sequences themselves, though, just in case anyone has any network lag when watching it.
+       The client also shoots a message to the AI to ask how much time has elapsed since the sequence started so that late-joining clients can stay in sync with the sequence.
+       Get ready, this code is a doozy to read. Lots of sequences.
+    '''
     def enterEvent(self, offset):
         base.cr.playGame.hood.loader.music.stop()
 
@@ -655,12 +660,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeIntroInterval.start()
         self.surleeIntroInterval.setT(offset)
 
-    def saySurleePhrase(self, phrase):
-        self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout)
+    def exitInvasion(self):
+        self.surleeIntroInterval.finish()
 
     def enterWrapUp(self, offset):
         #Flippy runs onto the stage and throws a pie at the boss, killing him
         pass
 
+
+    '''
+     ELETION DAY MISC.
+       Just a few other bits and pieces we need for Election Day, unrelated to the main sequence.
+    '''
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
+
+    def saySurleePhrase(self, phrase):
+        self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout)
+        
+    def setState(self, state, timestamp):
+        self.request(state, globalClockDelta.localElapsedTime(timestamp))
