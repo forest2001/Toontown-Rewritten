@@ -467,7 +467,11 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
                 # Check if he still has more than 0 after taking damage
                 if toon.hp > 0:
                     base.localAvatar.disableAvatarControls()
-                    taskMgr.doMethodLater(1.5, base.localAvatar.enableAvatarControls, 'EnableAvatarControls', extraArgs = [])
+                    taskMgr.doMethodLater(1.5, self.enableAvatarControls, 'EnableAvatarControls', extraArgs = [toon])
                     toon.b_setEmoteState(12, 1.0)
                     toon.stunToon()
+
+    def enableAvatarControls(self, toon):
+        if toon.hp > 0:
+            base.localAvatar.enableAvatarControls()
 
