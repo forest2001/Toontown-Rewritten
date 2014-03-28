@@ -31,8 +31,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.invasionFinale = False
         self._attackInterval = None
         self.phraseSequence = None
+        self.finaleBrainstormSequence = None
 
         # For the Director's attacks
+        self.brainstormSfx = loader.loadSfx('phase_5/audio/sfx/SA_brainstorm.ogg')
         self.quakeLiftSfx = loader.loadSfx('phase_5/audio/sfx/General_throw_miss.ogg')
         self.quakeLandSfx = loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
 
@@ -73,7 +75,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.style.name == 'ms':
             # Movers and Shakers should stomp instead of walk
             animDict['walk'] = 'phase_5/models/char/suitB-stomp'
+
+        if self.style.body == 'b':
             animDict['effort'] = 'phase_5/models/char/suitB-effort'
+            animDict['jump'] = 'phase_6/models/char/suitB-jump'
 
         if self.style.body == 'c':
             # Suit C's (Flunky, etc.) animations are located in phase_3.5, because of the tutorial.
@@ -83,7 +88,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             # The rest of the suit animations are in phase_5, for the most part.
             animDict['throw-paper'] = 'phase_5/models/char/suit%s-throw-paper' % (self.style.body.upper())
             animDict['throw-object'] = 'phase_5/models/char/suit%s-throw-object' % (self.style.body.upper())
-            animDict['jump'] = 'phase_6/models/char/suit%s-jump' % (self.style.body.upper())
         return animDict
         
     def delete(self):
@@ -425,7 +429,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def __checkToonsInRadius(self, task):
         if self.exploding:
             return task.done
-        
+
         toon = base.localAvatar
         if toon:
             if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
@@ -459,7 +463,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
             self.nametag.setWordwrap(10.0)
             self.setDisplayName(SafezoneInvasionGlobals.FinaleSuitName)
             self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
-            self.setScale(1.5)
+            self.setScale(1.1)
             self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
         elif not finale and self.invasionFinale:
             pass
@@ -481,6 +485,44 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def exitFinalePhrases(self):
         self.phraseSequence.finish()
+
+    def enterFinaleBrainstormAttack(self, offset):
+        if Vec3(base.localAvatar.getPos(self)).length() <= 40:
+            # Currently, the cloud only forms over the local toon.
+            # Preferably it would form over all toons in the area, but I'm not sure how to go about doing that.
+            # That may not be good for performance either.
+            braincloud = BattleProps.globalPropPool.getProp('stormcloud')
+            braincloud.reparentTo(base.localAvatar)
+            braincloud.setScale(0)
+            braincloud.setZ(6)
+            brainstorm = BattleParticles.createParticleEffect(name='BrainStorm')
+            brainstorm.setDepthWrite(False)
+
+            def __checkNearCloud(task):
+                if Vec3(base.localAvatar.getPos(braincloud)).length() <= 5:
+                    self.applyShakeAttack(base.localAvatar, SafezoneInvasionGlobals.FinaleSuitAttackDamage)
+
+            self.finaleBrainstormSequence = Sequence(
+                braincloud.scaleInterval(3, (3.5, 3.5, 2.5)),
+                Parallel(
+                    Func(base.playSfx, self.brainstormSfx),
+                    Func(braincloud.wrtReparentTo, render),
+                    ParticleInterval(brainstorm, braincloud, worldRelative=0, duration=4.3, cleanup=True)
+                ),
+                Wait(1),
+                braincloud.scaleInterval(1, (0.0, 0.0, 0.0)),
+            )
+            taskMgr.doMethodLater(4, __checkNearCloud, 'CheckNearBraincloud')
+            self.finaleBrainstormSequence.setT(offset)
+            self.finaleBrainstormSequence.start()
+
+        self.sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
+        self.play('effort')
+
+    def exitFinaleBrainstormAttack(self):
+        if self.finaleBrainstormSequence:
+            self.finaleBrainstormSequence.finish()
+            self.finaleBrainstormSequence = None
         
     def enterFinaleStompAttack(self, offset):
         self.finaleAttackJump = Sequence(

@@ -10,7 +10,7 @@ import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
 import SafezoneInvasionGlobals
-from random import choice
+from random import random, choice
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -87,7 +87,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)
-            self.stompAttack = taskMgr.doMethodLater(3, self.b_setState, 'StompAttack-Later' , extraArgs = ['FinaleStompAttack'])
+            self.finaleAttack = taskMgr.doMethodLater(3, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
             return
 
         self.b_setState('Idle')
@@ -300,17 +300,30 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def enterFinalePhrases(self):
         pass
 
+    def doFinaleAttack(self, task):
+        if random() < 0.5:
+            self.b_setState('FinaleBrainstormAttack')
+        else:
+            self.b_setState('FinaleStompAttack')
+
+    def enterFinaleBrainstormAttack(self):
+        self.brain.stop()
+        self._stormDelay = taskMgr.doMethodLater(10.0, self.__finaleAttackDone, self.uniqueName('BrainstormAttackExit'))
+
+    def exitFinaleBrainstormAttack(self):
+        self._stormDelay.remove()
+
     def enterFinaleStompAttack(self):
         self.brain.stop()
-        self._delay = taskMgr.doMethodLater(5.5, self.__finaleAttackDone, self.uniqueName('StompAttackExit'))
+        self._stompDelay = taskMgr.doMethodLater(5.5, self.__finaleAttackDone, self.uniqueName('StompAttackExit'))
+
+    def exitFinaleStompAttack(self):
+        self._stompDelay.remove()
 
     def __finaleAttackDone(self, task):
         x, y = SafezoneInvasionGlobals.FinaleSuitDestination
         self.brain.navigateTo(x, y)
 
         # Is there a better way of doing this?
-        self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleStompAttack'])
+        self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
         return task.done
-
-    def exitFinaleStompAttack(self):
-        self._delay.remove()
