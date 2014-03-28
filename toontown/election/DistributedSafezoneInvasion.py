@@ -69,12 +69,28 @@ class DistributedSafezoneInvasion(DistributedObject):
             del self.beginSkySequence
             del self.endSkySequence
         self.ignoreAll()
-    
+
+
+    '''
+     INVASION-RELATED
+       We don't really have much to do here except for cueing the music and setting the stage.
+       Most of the invasion itself is handled in the DSafezoneInvasionAI.
+    '''
+    def setInvasionStarted(self, started):
+        if started and not self.invasionOn:
+            # self.startCogSky()
+            self.sky.reparentTo(camera)
+            self.beginSkySequence.start()
+            base.playMusic(self.musicEnter, looping=1, volume=1.0)
+        elif not started and self.invasionOn:
+            self.endInvasion()
+        else:
+            return # We don't care about this change...
+        self.invasionOn = started
+
     def endInvasion(self):
         self.endSkySequence.start() # Done with the cog sky, we're all done with that
-
         base.playMusic(self.victoryMusic, looping=0, volume=0.9) # Cue the music
-
         # Dance the night away
         # victoryDanceDuration = (2 * 5.15)
         self.victoryIval = Sequence(
@@ -88,18 +104,6 @@ class DistributedSafezoneInvasion(DistributedObject):
             # Func(self.delete) # Might as well clean up
             )
         self.victoryIval.start()
-
-    def setInvasionStarted(self, started):
-        if started and not self.invasionOn:
-            # self.startCogSky()
-            self.sky.reparentTo(camera)
-            self.beginSkySequence.start()
-            base.playMusic(self.musicEnter, looping=1, volume=1.0)
-        elif not started and self.invasionOn:
-            self.endInvasion()
-        else:
-            return # We don't care about this change...
-        self.invasionOn = started
 
     def startCogSky(self):
         self.fadeIn.start()
@@ -139,7 +143,7 @@ class DistributedSafezoneInvasion(DistributedObject):
                 return
             doId = int(avatarDoId)
             if doId != localAvatar.doId:
-                self.d_hitToon(doId)
+                self.d_pieHitToon(doId)
         elif pieCode == ToontownGlobals.PieCodeInvasionSuit:
             avatarDoId = entry.getIntoNodePath().getNetTag('avatarDoId')
             if avatarDoId == '':
@@ -147,17 +151,17 @@ class DistributedSafezoneInvasion(DistributedObject):
                 return
             doId = int(avatarDoId)
             if doId != localAvatar.doId:
-                self.d_hitSuit(doId)
-
-    def d_hitToon(self, doId):
-        self.sendUpdate('hitToon', [doId])
-
-    def d_hitSuit(self, doId):
-        self.sendUpdate('hitSuit', [doId])
+                self.d_pieHitSuit(doId)
 
     def __localToonHit(self, entry):
         damage = int(entry.getIntoNode().getTag('damage'))
         self.d_takeDamage(damage)
+
+    def d_pieHitToon(self, doId):
+        self.sendUpdate('pieHitToon', [doId])
+
+    def d_pieHitSuit(self, doId):
+        self.sendUpdate('pieHitSuit', [doId])
 
     def d_takeDamage(self, damage):
         self.sendUpdate('takeDamage', [damage])

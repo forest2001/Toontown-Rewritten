@@ -1013,8 +1013,8 @@ dclass DistributedHotAirBalloon : DistributedObject {
 };
 
 dclass DistributedSafezoneInvasion : DistributedObject {
-  hitToon(uint32 avId) clsend airecv;
-  hitSuit(uint32 avId) clsend airecv;
+  pieHitToon(uint32 avId) clsend airecv;
+  pieHitSuit(uint32 avId) clsend airecv;
   takeDamage(uint8 damage) clsend airecv;
   setInvasionStarted(bool started) required broadcast ram;
 };
