@@ -152,6 +152,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             self.demand('Intermission')
 
     def enterIntermission(self):
+        # This will tell us when to start the next wave
+        self._delay = taskMgr.doMethodLater(SafezoneInvasionGlobals.IntermissionTime,
+                                            self.__endIntermission,
+                                            self.uniqueName('intermission'))
+
         # This state is entered after a wave is successfully over. There's a
         # pause in the action until the next wave.
         election = DistributedElectionEventAI.DistributedElectionEventAI(simbase.air)
@@ -176,11 +181,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         elif self.waveNumber == 26:
             election.saySurleePhrase('I think this is it, toons. They\'re sending in the boss!')
 
-        # This will tell us when to start the next wave
-        self._delay = taskMgr.doMethodLater(SafezoneInvasionGlobals.IntermissionTime,
-                                            self.__endIntermission,
-                                            self.uniqueName('intermission'))
-
     def __endIntermission(self, task):
         self.demand('BeginWave', self.waveNumber + 1)
         self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
@@ -189,9 +189,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterFinale(self):
-        taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-suit-finale'), extraArgs=[])
+        self._delay = taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-finale-suit'))
     
-    def spawnFinaleSuit(self):
+    def spawnFinaleSuit(self, task):
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit('ls')
         suit.setSpawnPoint(1) # Point 1 is in front of the trolly
@@ -212,6 +212,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         if self.state == 'Finale':
             for suit in self.suits:
                 suit.b_setState('Explode')
+
+    def exitFinale(self):
+        self._delay.remove()
 
     def enterVictory(self):
         self.b_setInvasionStarted(False)
