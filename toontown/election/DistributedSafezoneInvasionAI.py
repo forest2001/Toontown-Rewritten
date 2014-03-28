@@ -171,7 +171,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Is this a skelecog wave?
         if self.waveNumber in SafezoneInvasionGlobals.SuitSkelecogWaves:
-            suit.makeSkelecog()
+            suit.d_makeSkelecog()
 
         # Now send 'em in!
         suit.b_setState('FlyDown')
@@ -333,7 +333,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.setSpawnPoint(1) # Point 1 is in front of the trolly
         suit.setLevel(4) # Give it the highest level we can. Requires 200 damage for a level 12, 156 for a level 11
         suit.generateWithRequired(self.zoneId)
-        suit.makeSkelecog()
+        suit.d_makeSkelecog()
         suit.b_setState('FlyDown')
         self.suits.append(suit)
 

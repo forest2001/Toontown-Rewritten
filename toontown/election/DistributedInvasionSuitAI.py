@@ -36,7 +36,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.freezeLerp(x, y)
 
         if self.invasion.state == 'Finale':
-            self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
+            self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Boss should walk slower than other high-level cogs
         else:
             self.walkSpeed = (ToontownGlobals.SuitWalkSpeed *
                               SuitBattleGlobals.SuitSizes[self.dna.name] / 4.0)
@@ -54,6 +54,24 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if self._explodeDelay:
             self._explodeDelay.remove()
 
+
+    '''
+     STANDARD COGS                                                                                         
+       The cogs have three main states: March, Attack, and Idle.                                              
+       Standard Cogs find a toon to attack, then March towards them until the toon is gone or they have died. 
+    '''
+    def start(self):
+        # Start the brain, if it hasn't been started already:
+        self.brain.start()
+
+    def idle(self):
+        self.b_setState('Idle')
+
+    def enterIdle(self):
+        # We do nothing. We wait for the invasion manager to shift into the
+        # 'Wave' state, and we all begin marching at once.
+        pass
+
     def enterFlyDown(self):
         # We set a delay to wait for the Cog to finish flying down, then switch
         # states.
@@ -69,7 +87,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
             self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
             x, y = SafezoneInvasionGlobals.FinaleSuitDestination
             self.brain.navigateTo(x, y)
-            self.finaleAttack = taskMgr.doMethodLater(3, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleAttack'])
+            self.stompAttack = taskMgr.doMethodLater(3, self.b_setState, 'StompAttack-Later' , extraArgs = ['FinaleStompAttack'])
             return
 
         self.b_setState('Idle')
@@ -80,10 +98,32 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def exitFlyDown(self):
         self._delay.remove()
 
-    def enterIdle(self):
-        # We do nothing. We wait for the invasion manager to shift into the
-        # 'Wave' state, and we all begin marching at once.
-        pass
+    def walkTo(self, x, y):
+        # Begin walking to a given point. It's OK to call this before the suit
+        # finishes reaching its old waypoint; if that happens, the AI will
+        # calculate the suit's current position and walk from there.
+        oldX, oldY = self.getCurrentPos()
+        self.b_setMarchLerp(oldX, oldY, x, y)
+        self.__startWalkTimer()
+
+        if self.state != 'March':
+            self.b_setState('March')
+
+    def __startWalkTimer(self):
+        self.__stopWalkTimer()
+        self.__walkTimer = taskMgr.doMethodLater(self._lerpDelay, self.__walkTimerOver,
+                                                 self.uniqueName('walkTimer'))
+
+    def __stopWalkTimer(self):
+        if self.__walkTimer:
+            self.__walkTimer.remove()
+            self.__walkTimer = None
+
+    def __walkTimerOver(self, task):
+        if self.state != 'March':
+            self.notify.warning('Walk timer ran out, but not in March state!')
+            return
+        self.brain.suitFinishedWalking()
 
     def enterMarch(self):
         pass
@@ -95,20 +135,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         self.__stopWalkTimer()
 
-    def enterFinaleAttack(self):
-        self.brain.stop()
-        self._delay = taskMgr.doMethodLater(5.5, self.__finaleAttackDone, self.uniqueName('FinaleAttackExit'))
-
-    def __finaleAttackDone(self, task):
-        x, y = SafezoneInvasionGlobals.FinaleSuitDestination
-        self.brain.navigateTo(x, y)
-
-        # Is there a better way of doing this?
-        self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleAttack'])
-        return task.done
-
-    def exitFinaleAttack(self):
-        self._delay.remove()
+    def attack(self, who):
+        attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
+        self.sendUpdate('setAttackInfo', [who, choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
+        self.b_setState('Attack')
 
     def enterAttack(self):
         if self.brain.suit.dna.body in ['a', 'b']:
@@ -124,6 +154,23 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def exitAttack(self):
         self._delay.remove()
+
+    def getAttackInfo(self):
+        return (0, '', 0) # This is only set dynamically.
+
+    def takeDamage(self, hp):
+        if self.state == 'FlyDown':
+            return # We can't/shouldn't take damage in this state.
+
+        hp = min(hp, self.currHP) # Don't take more damage than we have...
+        self.b_setHP(self.currHP - hp)
+
+        if self.finale:
+            self.b_setHP(self.currHP + hp) # We dont want to big guy to die
+            return
+
+        if self.state != 'Stunned':
+            self.b_setState('Stunned')
 
     def enterStunned(self):
         self.brain.stop()
@@ -159,85 +206,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def exitExplode(self):
         pass
 
-    def enterFinalePhrases(self):
-        pass
-
-    def exitFinalePhrases(self):
-        pass
-
-    def enterFinaleMarch(self, task):
-        oldX, oldY = self.getCurrentPos()
-
-        # Final Destination
-        finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
-        if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
-            self.d_sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[6])
-            self.idle()
-            self.finaleAttack.remove()
-            taskMgr.remove('FinaleAttack-Later')
-            return task.done
-        return task.cont
-
-    def walkTo(self, x, y):
-        # Begin walking to a given point. It's OK to call this before the suit
-        # finishes reaching its old waypoint; if that happens, the AI will
-        # calculate the suit's current position and walk from there.
-        oldX, oldY = self.getCurrentPos()
-        self.b_setMarchLerp(oldX, oldY, x, y)
-        self.__startWalkTimer()
-
-        if self.state != 'March':
-            self.b_setState('March')
-
-    def idle(self):
-        self.b_setState('Idle')
-
-    def attack(self, who):
-        attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
-        self.sendUpdate('setAttackInfo', [who, choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
-        self.b_setState('Attack')
-
-    def __startWalkTimer(self):
-        self.__stopWalkTimer()
-        self.__walkTimer = taskMgr.doMethodLater(self._lerpDelay, self.__walkTimerOver,
-                                                 self.uniqueName('walkTimer'))
-
-    def __stopWalkTimer(self):
-        if self.__walkTimer:
-            self.__walkTimer.remove()
-            self.__walkTimer = None
-
-    def __walkTimerOver(self, task):
-        if self.state != 'March':
-            self.notify.warning('Walk timer ran out, but not in March state!')
-            return
-
-        self.brain.suitFinishedWalking()
-
-    def start(self):
-        # Start the brain, if it hasn't been started already:
-        self.brain.start()
-
-    def takeDamage(self, hp):
-        if self.state == 'FlyDown':
-            return # We can't/shouldn't take damage in this state.
-
-        hp = min(hp, self.currHP) # Don't take more damage than we have...
-        self.b_setHP(self.currHP - hp)
-
-        if self.finale:
-            self.b_setHP(self.currHP + hp) # We dont want to big guy to die
-            return
-
-        if self.state != 'Stunned':
-            self.b_setState('Stunned')
-
-    def d_sayFaceoffTaunt(self, custom = False, phrase = ""):
-        self.sendUpdate('sayFaceoffTaunt', [custom, phrase])
-
-    def makeSkelecog(self):
-        self.sendUpdate('makeSkelecog', [])
-
     def getCurrentPos(self):
         return self.getPosAt(globalClock.getRealTime() - self.lastMarchTime)
 
@@ -246,9 +214,6 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def getSpawnPoint(self):
         return self.spawnPointId
-
-    def getAttackInfo(self):
-        return (0, '', 0) # This is only set dynamically.
 
     def setMarchLerp(self, x1, y1, x2, y2):
         self.setLerpPoints(x1, y1, x2, y2)
@@ -261,6 +226,15 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def b_setMarchLerp(self, x1, y1, x2, y2):
         self.setMarchLerp(x1, y1, x2, y2)
         self.d_setMarchLerp(x1, y1, x2, y2)
+
+    def d_setStaticPoint(self, x, y, h):
+        self.sendUpdate('setStaticPoint', [x, y, h])
+
+    def d_sayFaceoffTaunt(self, custom = False, phrase = ""):
+        self.sendUpdate('sayFaceoffTaunt', [custom, phrase])
+
+    def d_makeSkelecog(self):
+        self.sendUpdate('makeSkelecog', [])
 
     def setState(self, state):
         self.demand(state)
@@ -276,9 +250,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def getState(self):
         return (self.state, self.stateTime)
 
-    def d_setStaticPoint(self, x, y, h):
-        self.sendUpdate('setStaticPoint', [x, y, h])
 
+    '''
+     MOVER AND SHAKERS
+       Mover and Shakers are the same as standard cogs, though they stomp the ground as they march.
+       Toons within a certain radius of them will lose laff, forcing them to hit them from a distance.
+    '''
     def takeShakerDamage(self, damage):
         avId = self.air.getAvatarIdFromSender()
         toon = self.air.doId2do.get(avId)
@@ -288,6 +265,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
         toon.takeDamage(damage)
 
+
+    '''
+     THE INVASION FINALE
+      To end the invasion, we send in the Boss of it. He brainstorms ideas and occasionally loses his temper.
+      The appears to take damage but actually takes none, as his death is a scripted sequence.
+    '''
     def b_setInvasionFinale(self, finale):
         self.setInvasionFinale(finale)
         self.d_setInvasionFinale(finale)
@@ -300,3 +283,34 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         
     def getInvasionFinale(self):
         return self.finale
+
+    def enterFinaleMarch(self, task):
+        oldX, oldY = self.getCurrentPos()
+
+        # Final Destination
+        finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
+        if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
+            self.d_sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[6])
+            self.idle()
+            self.finaleAttack.remove()
+            taskMgr.remove('FinaleAttack-Later')
+            return task.done
+        return task.cont
+
+    def enterFinalePhrases(self):
+        pass
+
+    def enterFinaleStompAttack(self):
+        self.brain.stop()
+        self._delay = taskMgr.doMethodLater(5.5, self.__finaleAttackDone, self.uniqueName('StompAttackExit'))
+
+    def __finaleAttackDone(self, task):
+        x, y = SafezoneInvasionGlobals.FinaleSuitDestination
+        self.brain.navigateTo(x, y)
+
+        # Is there a better way of doing this?
+        self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.b_setState, 'FinaleAttack-Later' , extraArgs = ['FinaleStompAttack'])
+        return task.done
+
+    def exitFinaleStompAttack(self):
+        self._delay.remove()
