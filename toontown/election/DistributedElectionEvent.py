@@ -203,6 +203,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyStand.loop('idle')
         self.slappyStand.loop('idle')
 
+        # Cog speeches, for when we want to manually define it
+        phasePath = 'phase_3.5/audio/dial/'
+        self.speechMurmurSfx = loader.loadSfx(phasePath + 'COG_VO_murmur.ogg')
+        self.speechStatementSfx = loader.loadSfx(phasePath + 'COG_VO_statement.ogg')
+        self.speechQuestionSfx = loader.loadSfx(phasePath + 'COG_VO_question.ogg')
+        self.speechGruntSfx = loader.loadSfx(phasePath + 'COG_VO_grunt.ogg')
+
         if base.config.GetBool('want-doomsday', False):
             # If it's Doomsday, let's get our actors set up.
             self.prepostera.show()
@@ -544,15 +551,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(0.5),
             Func(self.slappy.setChatAbsolute, 'My name is Slappy, the newly elected President of the Toon Council in this Toonerrific Town.', CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.suit.setChatAbsolute, 'President, you say? Just the Toon I need to speak with.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'President, you say? Just the Toon I need to speak with.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(5),
             Func(self.slappy.setChatAbsolute, "Boy, that's some propeller you have there! You know, it looks a lot like the one on that TV.", CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.suit.setChatAbsolute, 'Yes. Now as I began to-', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'Yes. Now as I began to-', CFSpeech|CFTimeout, dialogue = self.speechQuestionSfx),
             Wait(1),
             Func(self.slappy.setChatAbsolute, "Ooh, and the suit too. Where did you come from, anyway? It can't be Loony Labs, they're off today.", CFSpeech|CFTimeout),
             Wait(5),
-            Func(self.suit.setChatAbsolute, 'See here, Toon. I am-', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'See here, Toon. I am-', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(1),
             Func(self.slappy.setChatAbsolute, "No, don't tell me. Let me guess. Errrr... Montana. Final answer. No, no, nevermind. They wouldn't have that fancy of a suit there. Hrmm...", CFSpeech|CFTimeout),
             Wait(1),
@@ -560,11 +567,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ActorInterval(self.slappy, 'think', startFrame=46, endFrame=0),
             Func(self.slappy.loop, 'neutral'),
             Wait(1),
-            Func(self.suit.setChatAbsolute, 'STOP!', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'STOP!', CFSpeech|CFTimeout, dialogue = self.speechGruntSfx),
             Wait(4),
-            Func(self.suit.setChatAbsolute, 'I like your lingo, Toon. You know how to schmooze.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'I like your lingo, Toon. You know how to schmooze.', CFSpeech|CFTimeout, dialogue = self.speechMurmurSfx),
             Wait(6),
-            Func(self.suit.setChatAbsolute, 'However, you seem to need a smear of Positive Reinforcement.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'However, you seem to need a smear of Positive Reinforcement.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(5),
             # Mother of Walt, he's dead
             Func(self.slappy.play, 'lose'),
@@ -601,22 +608,22 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
             Wait(4),
             # The Yesman has found a new business partner
-            Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(3),
             Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
             Func(self.flippy.loop, 'neutral'),
             Wait(1.5),
             Func(self.suit.loop, 'walk'),
-            Parallel(Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout), self.suit.posInterval(2, (65, -1, 4.0))),
+            Parallel(Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout, dialogue = self.speechMurmurSfx), self.suit.posInterval(2, (65, -1, 4.0))),
             Func(self.suit.loop, 'neutral'),
             Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(2),
             # Flippy makes a last minute attempt to try and slow him down. It... kills him?
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout), Func(self.pie.reparentTo, self.flippy.rightHand)),
             Wait(1),
-            Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout),
+            Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(1.5),
             Parallel(Sequence(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.loop, 'neutral')), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes), Sequence(Wait(0.8), Func(self.pie.wrtReparentTo, render), Parallel(ProjectileInterval(self.pie, endPos=Point3(65, -1, 4.0), duration=0.7)))),
             Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36), Func(self.pie.removeNode)) 

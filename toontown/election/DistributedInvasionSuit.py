@@ -32,9 +32,17 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._attackInterval = None
         self.phraseSequence = None
 
-        self.finaleAttackWarning = loader.loadSfx('phase_5/audio/sfx/AA_sound_aoogah.ogg')
+        # For the Director's attacks
         self.quakeLiftSfx = loader.loadSfx('phase_5/audio/sfx/General_throw_miss.ogg')
         self.quakeLandSfx = loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+
+        # Cog speeches, for when we want to manually define it
+        phasePath = 'phase_3.5/audio/dial/'
+        self.speechMurmurSfx = loader.loadSfx(phasePath + 'COG_VO_murmur.ogg')
+        self.speechStatementSfx = loader.loadSfx(phasePath + 'COG_VO_statement.ogg')
+        self.speechQuestionSfx = loader.loadSfx(phasePath + 'COG_VO_question.ogg')
+        self.speechGruntSfx = loader.loadSfx(phasePath + 'COG_VO_grunt.ogg') # This one is currently the only one used in this file. Remove the rest if they aren't used before deploying.
+
 
         # Get a few things defined for our Shakers
         self.shakerRadialAttack = None
@@ -141,9 +149,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         if self.state != 'March':
             self.__moveToStaticPoint()
 
-    def sayFaceoffTaunt(self, custom = False, phrase = ""):
+    def sayFaceoffTaunt(self, custom = False, phrase = "", dialogue = None):
         if custom == True:
-            self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
+            self.setChatAbsolute(phrase, CFSpeech | CFTimeout, dialogue)
         elif custom == False:
             if random.random() < 0.2:
                 taunt = SuitBattleGlobals.getFaceoffTaunt(self.getStyleName(), self.doId, randomChoice = True)
@@ -433,18 +441,26 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     # Finale Suit
     def enterFinaleAttack(self, offset):
+        self.finaleAttackJump = Sequence(
+            ActorInterval(self, 'jump', startFrame=0, endFrame=18),
+            Func(base.playSfx, self.quakeLiftSfx),
+            ActorInterval(self, 'jump', startFrame=18, endFrame=20),
+            ActorInterval(self, 'jump', startFrame=97, endFrame=111),
+            Func(base.playSfx, self.quakeLandSfx),
+            ActorInterval(self, 'jump', startFrame=112, endFrame=138),
+        )
         self.finaleAttackSequence = Sequence(
-            Func(base.playSfx, self.finaleAttackWarning),
-            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[5]),
-            Wait(1.3),
-            Parallel(Func(self.play, 'jump', fromFrame=0, toFrame=35), SoundInterval(self.quakeLiftSfx, duration=1.1, node=self), Func(self.play, 'jump', fromFrame=97, toFrame=138)),
+            Func(self.sayFaceoffTaunt, True, 'ENOUGH!', dialogue = self.speechGruntSfx),
+            Wait(1.25),
+            Func(self.finaleAttackJump.start, offset),
+            Wait(1.5),
             Func(self.attackToon, base.localAvatar, SafezoneInvasionGlobals.FinaleSuitAttackDamage),
-            SoundInterval(self.quakeLandSfx, duration=1.9)
             )
         self.finaleAttackSequence.setT(offset)
         self.finaleAttackSequence.start()
 
     def exitFinaleAttack(self):
+        self.finaleAttackJump.finish()
         self.finaleAttackSequence.finish()
 
     # Attacking
