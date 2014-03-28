@@ -33,6 +33,16 @@ class DistributedSafezoneInvasion(DistributedObject):
         ce = CompassEffect.make(NodePath(), CompassEffect.PRot | CompassEffect.PZ)
         self.sky.node().setEffect(ce)
 
+        self.fadeIn = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 1), startColorScale=Vec4(1, 1, 1, 0), blendType='easeInOut')
+        self.cogSkyBegin = LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
+        self.cogSkyBeginStage = LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
+        self.beginSkySequence = Sequence(Func(self.fadeIn.start), Func(self.cogSkyBegin.start), Func(self.cogSkyBeginStage.start))
+
+        self.fadeOut = self.sky.colorScaleInterval(6.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
+        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
+        self.endSkySequence = Sequence(Func(self.fadeOut.start), Func(self.cogSkyEnd.start), Func(self.cogSkyEndStage.start), Wait(7), Func(self.sky.removeNode))
+
         # Stop the music in case it wasn't already.
         base.cr.playGame.hood.loader.music.stop()
 
@@ -49,16 +59,20 @@ class DistributedSafezoneInvasion(DistributedObject):
         # We should check if the invasion is loaded first to be safe.
         if self.invasionOn:
             # These are only called if the sky is loaded
+            del self.fadeIn
+            del self.fadeOut
             del self.cogSkyBegin
             del self.cogSkyEnd
             del self.cogSkyBeginStage
             del self.cogSkyEndStage
             del self.musicEnter
+            del self.beginSkySequence
+            del self.endSkySequence
         self.ignoreAll()
     
     def endInvasion(self):
-        self.stopCogSky() # Done with the cog sky, we're all done with that
-            
+        self.endSkySequence.start() # Done with the cog sky, we're all done with that
+
         base.playMusic(self.victoryMusic, looping=0, volume=0.9) # Cue the music
 
         # Dance the night away
@@ -66,8 +80,6 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.victoryIval = Sequence(
             Func(Emote.globalEmote.disableAll, base.localAvatar, 'dbattle, enterReward'),
             Func(base.localAvatar.disableAvatarControls),
-            # Parallel(ActorInterval(base.localAvatar, 'victory', loop=1, duration=victoryDanceDuration)),
-            # Wait(victoryDanceDuration),
             Func(base.localAvatar.b_setEmoteState, 6, 1.0),
             Wait(5.15),
             Func(Emote.globalEmote.releaseAll, base.localAvatar, 'dbattle, enterReward'),
@@ -79,7 +91,9 @@ class DistributedSafezoneInvasion(DistributedObject):
 
     def setInvasionStarted(self, started):
         if started and not self.invasionOn:
-            self.startCogSky()
+            # self.startCogSky()
+            self.sky.reparentTo(camera)
+            self.beginSkySequence.start()
             base.playMusic(self.musicEnter, looping=1, volume=1.0)
         elif not started and self.invasionOn:
             self.endInvasion()
@@ -88,13 +102,6 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.invasionOn = started
 
     def startCogSky(self):
-        self.sky.reparentTo(camera)
-        self.fadeIn = self.sky.colorScaleInterval(5.0, Vec4(1, 1, 1, 1), startColorScale=Vec4(1, 1, 1, 0), blendType='easeInOut')
-        self.fadeOut = self.sky.colorScaleInterval(6.0, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1), blendType='easeInOut')
-        self.cogSkyBegin = LerpColorScaleInterval(self.geom, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
-        self.cogSkyEnd = LerpColorScaleInterval(self.geom, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
-        self.cogSkyBeginStage = LerpColorScaleInterval(self.showFloor, 6.0, Vec4(0.4, 0.4, 0.4, 1), blendType='easeInOut')
-        self.cogSkyEndStage = LerpColorScaleInterval(self.showFloor, 7.0, Vec4(1, 1, 1, 1), blendType='easeInOut') 
         self.fadeIn.start()
         self.cogSkyBegin.start()
         self.cogSkyBeginStage.start()
@@ -108,7 +115,6 @@ class DistributedSafezoneInvasion(DistributedObject):
                 Wait(7),
                 Func(self.sky.removeNode) # Remove the sky node after the fade out
                 )
-            cogSkySequence.start()
 
     def showThanks(self):
         self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.Thanks, style=TTDialog.Acknowledge,
