@@ -780,7 +780,7 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
 
   sayFaceoffTaunt(bool custom, string phrase) broadcast;
-  makeSkelecog() broadcast;
+  makeSkelecog() broadcast ram;
   
   takeShakerDamage(uint8 damage) clsend airecv;
   setInvasionFinale(bool finale) required broadcast ram;

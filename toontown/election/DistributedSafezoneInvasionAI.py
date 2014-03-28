@@ -245,12 +245,6 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             # Thats just mean
             self.checkToonHp()
 
-        # Check if it's a skelecog wave
-        if self.waveNumber in SafezoneInvasionGlobals.SuitSkelecogWaves:
-            for suit in self.suits:
-                if not suit.isSkelecog:
-                    suit.d_makeSkelecog()
-
     def _handleToonExit(self, toon):
         if toon in self.toons:
             self.toons.remove(toon)
