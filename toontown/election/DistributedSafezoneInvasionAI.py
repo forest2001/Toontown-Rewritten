@@ -266,7 +266,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             toon.takeDamage(toon.hp)
         else:
             toon.takeDamage(damage)
-        toon.takeDamage(damage)
+            
         self.checkToonHp()
 
     def pieHitToon(self, doId):
