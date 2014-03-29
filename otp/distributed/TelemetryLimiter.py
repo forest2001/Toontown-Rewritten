@@ -99,13 +99,14 @@ class TLGatherAllAvs(DirectObject):
             base.cr.telemetryLimiter.addObj(av)
 
     def _handlePlayerLeave(self, av):
-        if av is not localAvatar and base.cr.telemetryLimiter.hasObj(av):
+        if av is not localAvatar and base.cr.telemetryLimiter.hasObj(av) and av.doId in self._avId2limits:
             base.cr.telemetryLimiter.removeObj(av)
             for limit in self._avId2limits[av.doId]:
                 av.removeTelemetryLimit(limit)
 
             del self._avId2limits[av.doId]
-            del self._avs[av.doId]
+            if av.doId in self._avs:
+                del self._avs[av.doId]
 
     def destroy(self):
         self.ignoreAll()
