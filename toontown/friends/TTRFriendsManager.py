@@ -101,3 +101,6 @@ class TTRFriendsManager(DistributedObjectGlobal):
         if not hasattr(base.localAvatar, 'setWhisperSCEmoteFrom'):
             return
         base.localAvatar.setWhisperSCEmoteFrom(fromId, emoteId)
+        
+    def receiveTalkWhisper(self, fromId, message):
+        base.localAvatar.setTalkWhisper(fromId, 0, '', message, [], 0)
