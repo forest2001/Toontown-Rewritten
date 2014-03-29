@@ -285,3 +285,11 @@ def toga2d():
         aspect2d.show()
     else:
         aspect2d.hide()
+        
+@magicWord(category=CATEGORY_GUI)
+def placer():
+    base.camera.place()
+    
+@magicWord(category=CATEGORY_GUI)
+def explorer():
+    base.render.explore()
