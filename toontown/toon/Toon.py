@@ -1939,7 +1939,7 @@ class Toon(Avatar.Avatar, ToonHead):
             trackName = self.uniqueName('playgroundDied')
         else:
             trackName = 'playgroundDied'
-        ival = Sequence(Func(self.sadEyes), Func(self.blinkEyes), Track((0, ActorInterval(self, 'lose', startFrame=0, endFrame=89)), (2, SoundInterval(sound, node=self))), Func(self.blinkEyes), name=trackName, autoFinish=autoFinishTrack)
+        ival = Sequence(Func(self.sadEyes), Func(self.blinkEyes), Track((0, ActorInterval(self, 'lose', startFrame=0, endFrame=89)), (2, Func(base.playSfx, sound, node=self))), Func(self.blinkEyes), Func(self.normalEyes), name=trackName, autoFinish=autoFinishTrack)
         return ival
 
     def enterPlaygroundDied(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
