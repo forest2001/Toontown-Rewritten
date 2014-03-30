@@ -546,6 +546,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if self.dna.headColor not in allowedColors:
                 self.dna.headColor = allowedColors[0]
                 changed = True
+            if not simbase.config.GetBool('want-glove-colors', False) and self.dna.gloveColor != 0:
+                self.dna.gloveColor = 0
+                change = True
             if changed:
                 self.d_setDNAString(self.dna.makeNetString())
         return not changed
