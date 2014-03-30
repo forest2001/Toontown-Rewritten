@@ -23,6 +23,13 @@ class MMSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
             hq = self.geom.find('**/*toon_landmark_hqMM_DNARoot')
             hq.wrtReparentTo(self.piano)
 
+        # This fixes the wall in MML next to the party hat with a missing collision.
+        # It should really be done in the model, but this will work just as well until we can fix it in the model itself.
+        cp = CollisionBox(Point3(7, 0, 0), 17.65, 0.5, 23.95)
+        self.wallfix = base.render.attachNewNode(CollisionNode('wallhole_collision'))
+        self.wallfix.node().addSolid(cp)
+        self.wallfix.setPos(-99.70, -35, 6.0)
+
     def unload(self):
         SafeZoneLoader.SafeZoneLoader.unload(self)
         del self.piano

@@ -40,6 +40,14 @@ class DDSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.bellSound = base.loadSfx('phase_6/audio/sfx/SZ_DD_shipbell.ogg')
         self.waterSound = base.loadSfx('phase_6/audio/sfx/SZ_DD_waterlap.ogg')
 
+        # This fixes the wall in Donald's Dock with a missing collision.
+        # This should really be done in the model, but it will work just as well until we can fix it in the model itself.
+        cp = CollisionBox(Point3(7, 0, 0), 12, 0.5, 18)
+        self.wallfix = base.render.attachNewNode(CollisionNode('wallhole_collision'))
+        self.wallfix.node().addSolid(cp)
+        self.wallfix.setPos(75.20, 84.10, 0.0)
+        self.wallfix.setH(271)
+
     def unload(self):
         SafeZoneLoader.SafeZoneLoader.unload(self)
         del self.seagullSound
