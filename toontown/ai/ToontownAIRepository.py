@@ -36,6 +36,9 @@ import time
 from otp.ai.MagicWordGlobal import *
 from toontown.parties import PartyGlobals
 
+# AprilToons, bitches!
+from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
+
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
         ToontownInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
@@ -123,6 +126,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.partyManager = DistributedPartyManagerAI(self)
         self.partyManager.generateWithRequired(2)
+        
+        self.aprilToonsMgr = DistributedAprilToonsMgrAI(self)
+        self.aprilToonsMgr.generateWithRequired(2)
 
         # setup our view of the global party manager ud
         self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
