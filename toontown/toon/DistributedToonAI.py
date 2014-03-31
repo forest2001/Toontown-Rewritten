@@ -264,6 +264,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if self.air.aprilToonsMgr.isEventActive('random-toon-dialogues'):
                     # Give them a random animal sound.
                     self.b_setAnimalSound(random.randint(0, 8))
+                if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+                    # Start a loop for random toon effects.
+                    taskMgr.doMethodLater(random.randint(5, 300), self.randomToonEffects, self.uniqueName('random-toon-effects'))
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4439,6 +4442,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         
     def getAnimalSound(self):
         return self.animalSound
+        
+    def randomToonEffects(self, task):
+        if self is None or not hasattr(self.air, 'aprilToonsMgr'):
+            # Object deleted.
+            return
+        if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+            effects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16]
+            self.b_setCheesyEffect(random.choice(effects), 0, 0)
+        return task.again
 
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
