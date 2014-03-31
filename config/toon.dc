@@ -624,6 +624,8 @@ dclass DistributedToon : DistributedPlayer {
   requestPing(uint32) airecv ownsend;
   ping(char [0-1024]);
   pingresp(char [0-1024]) airecv ownsend;
+  
+  setAnimalSound(uint8 index) ram broadcast ownrecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {

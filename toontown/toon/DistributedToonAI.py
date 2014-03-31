@@ -4422,10 +4422,26 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
 
+    def setAnimalSound(self, index):
+        self.animalSound = index
+        
+    def d_setAnimalSound(self, index):
+        self.sendUpdate('setAnimalSound', [index])
+        
+    def b_setAnimalSound(self, index):
+        self.setAnimalSound(index)
+        self.d_setAnimalSound(index)
+        
+    def getAnimalSound(self):
+        return self.animalSound
+
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
-
+        
+        # Give them a random animal sound.
+        self.b_setAnimalSound(random.randint(0, 8))
+        
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
 
