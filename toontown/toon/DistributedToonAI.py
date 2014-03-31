@@ -259,6 +259,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
             self.applyAlphaModifications()
+            
+            if hasattr(self.air, 'aprilToonsMgr'):
+                if self.air.aprilToonsMgr.isEventActive('random-toon-dialogues'):
+                    # Give them a random animal sound.
+                    self.b_setAnimalSound(random.randint(0, 8))
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4439,9 +4444,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
         
-        # Give them a random animal sound.
-        self.b_setAnimalSound(random.randint(0, 8))
-        
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
 
@@ -4846,7 +4848,8 @@ def dna(part, value):
         dna.armColor = value
         dna.legColor = value
     elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
-        return "DNA: Change of glove colors are not allowed."
+        if not simbase.config.GetBool('want-glove-colors', False):
+            return "DNA: Change of glove colors are not allowed."
         # If you ever want to be able to edit gloves, feel free to comment out this return.
         # However, since DToonAI checks ToonDNA, this would be impossible unless changes
         # are made.
