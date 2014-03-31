@@ -171,6 +171,7 @@ from toontown.coghq import DistributedSinkingPlatform/AI
 from toontown.suit import DistributedGoon/AI
 from toontown.suit import DistributedGridGoon/AI
 from toontown.coghq import BattleBlocker/AI
+from toontown.ai import DistributedAprilToonsMgr/AI
 from toontown.ai import DistributedBlackCatMgr/AI
 from toontown.ai import DistributedPolarBearMgr/AI
 from toontown.ai import DistributedPolarPlaceEffectMgr/AI
@@ -2450,6 +2451,10 @@ dclass DistributedPet : DistributedSmoothNode {
 
 dclass DistributedPetProxy : DistributedPet {
   setDominantMood(string) broadcast ram;
+};
+
+dclass DistributedAprilToonsMgr : DistributedObject {
+
 };
 
 dclass DistributedBlackCatMgr : DistributedObject {
