@@ -266,7 +266,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                     self.b_setAnimalSound(random.randint(0, 8))
                 if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
                     # Start a loop for random toon effects.
-                    taskMgr.doMethodLater(random.randint(5, 300), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                    taskMgr.doMethodLater(random.randint(3, 60), self.randomToonEffects, self.uniqueName('random-toon-effects'))
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4448,7 +4448,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # Object deleted.
             return
         if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
-            effects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16]
+            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11, 16]
             self.b_setCheesyEffect(random.choice(effects), 0, 0)
         return task.again
 
