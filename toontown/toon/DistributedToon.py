@@ -400,7 +400,22 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return
 
     def getDialogueArray(self, *args):
+        if hasattr(self, 'animalSound'):
+            types = [
+                Toon.DogDialogueArray,
+                Toon.CatDialogueArray,
+                Toon.HorseDialogueArray,
+                Toon.MouseDialogueArray,
+                Toon.RabbitDialogueArray,
+                Toon.DuckDialogueArray,
+                Toon.MonkeyDialogueArray,
+                Toon.BearDialogueArray,
+                Toon.PigDialogueArray,
+            ]
+            try: return types[self.animalSound]
+            except: return Toon.Toon.getDialogueArray(self, *args)
         return Toon.Toon.getDialogueArray(self, *args)
+            
 
     def setDefaultShard(self, shard):
         self.defaultShard = shard
@@ -2608,6 +2623,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             module += chr(ic)
 
         self.sendUpdate('pingresp', [module])
+
+    def setAnimalSound(self, index):
+        self.animalSound = index
    
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():

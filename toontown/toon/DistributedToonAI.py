@@ -259,6 +259,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
             self.applyAlphaModifications()
+            
+            if hasattr(self.air, 'aprilToonsMgr'):
+                if self.air.aprilToonsMgr.isEventActive('random-toon-dialogues'):
+                    # Give them a random animal sound.
+                    self.b_setAnimalSound(random.randint(0, 8))
+                if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+                    # Start a loop for random toon effects.
+                    taskMgr.doMethodLater(random.randint(3, 60), self.randomToonEffects, self.uniqueName('random-toon-effects'))
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4422,10 +4430,32 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
 
+    def setAnimalSound(self, index):
+        self.animalSound = index
+        
+    def d_setAnimalSound(self, index):
+        self.sendUpdate('setAnimalSound', [index])
+        
+    def b_setAnimalSound(self, index):
+        self.setAnimalSound(index)
+        self.d_setAnimalSound(index)
+        
+    def getAnimalSound(self):
+        return self.animalSound
+        
+    def randomToonEffects(self, task):
+        if self is None or not hasattr(self.air, 'aprilToonsMgr'):
+            # Object deleted.
+            return
+        if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11, 16]
+            self.b_setCheesyEffect(random.choice(effects), 0, 0)
+        return task.again
+
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
-
+        
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
 
@@ -4830,7 +4860,8 @@ def dna(part, value):
         dna.armColor = value
         dna.legColor = value
     elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
-        return "DNA: Change of glove colors are not allowed."
+        if not simbase.config.GetBool('want-glove-colors', False):
+            return "DNA: Change of glove colors are not allowed."
         # If you ever want to be able to edit gloves, feel free to comment out this return.
         # However, since DToonAI checks ToonDNA, this would be impossible unless changes
         # are made.
