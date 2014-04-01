@@ -7,6 +7,7 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
         self.events = {
             'random-toon-dialogues' : True,
             'random-toon-effects' : True,
+            'estate-low-gravity' : True,
         }
     
     def getEvents(self):
