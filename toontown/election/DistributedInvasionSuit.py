@@ -24,6 +24,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._turnInterval = None
         self._staticPoint = (0, 0, 0)
 
+        self.explodeTrack = None
+
         self.attackTarget = 0
         self.attackProp = ''
         self.attackDamage = 0
@@ -287,17 +289,24 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
     def enterExplode(self, time):
         if self._attackInterval:
             self._attackInterval.finish()
+
+        # We're done with this guy
+        self.stash()
+
+        # Are we exploding?
         self.exploding = True
-        # We're done with our suit. Let's get rid of him and load an actor for the explosion
+
+        # Lets create a specific actor for the explosion and load the explosion stuff
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-        self.stash()
 
         # Oh boy, time to load all of our explosion effects!
         explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
         deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+        
+        # Load the particles for the explosion
         BattleParticles.loadParticles()
         smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
         singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -308,14 +317,25 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         singleGear.setDepthWrite(False)
         smallGearExplosion.setDepthWrite(False)
         bigGearExplosion.setDepthWrite(False)
+
+        # Create the explosion track
         explosionTrack = Sequence()
         explosionTrack.append(Wait(5.4))
         explosionTrack.append(self.createKapowExplosionTrack(loseActor))
+
         gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
         gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+        
+        # Cleanup
         cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
-        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
-        explodeTrack.start(time)
+
+        # Blow the sucker up
+        self.explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
+        self.explodeTrack.start()
+        self.explodeTrack.setT(time)
+
+    def exitExplode(self):
+        self.explodeTrack.finish()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
