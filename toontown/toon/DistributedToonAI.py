@@ -4448,7 +4448,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # Object deleted.
             return
         if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
-            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11, 16]
+            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11]
             self.b_setCheesyEffect(random.choice(effects), 0, 0)
         return task.again
 
