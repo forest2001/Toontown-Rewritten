@@ -8,6 +8,8 @@ import webbrowser
 import SafezoneInvasionGlobals
 
 class DistributedSafezoneInvasion(DistributedObject):
+    deferFor = 1
+
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         
