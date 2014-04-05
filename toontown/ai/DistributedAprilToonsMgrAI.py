@@ -8,11 +8,12 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
             'random-toon-dialogues' : True,
             'random-toon-effects' : True,
             'estate-low-gravity' : True,
+            'global-low-gravity' : True,
         }
-    
+
     def getEvents(self):
         return self.events
-        
+
     def isEventActive(self, event):
         if not self.air.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
@@ -25,6 +26,7 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
     def setEventActive(self, event, active):
         if event in self.getEvents():
             self.events[event] = active
+            self.sendUpdate('setEventActive', [event, active])
             return True
         return False
 
