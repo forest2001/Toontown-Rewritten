@@ -4775,8 +4775,8 @@ def togGM():
 def ghost():
     """Set toon to invisible. (Access 400+ can invoke on anyone)"""
     av = spellbook.getTarget() if spellbook.getInvoker().getAdminAccess() >= 400 else spellbook.getInvoker()
-    if av.ghostMode == 0:
-        av.b_setGhostMode(2)
+    if av.ghostMode == 0 and av.getAdminAccess() < 300:
+        av.b_setGhostMode(1 if av.getAdminAcecss() < 300 else 2)
         return 'Time to ninja! Enabled ghost for %s' % av.getName()
     else:
         av.b_setGhostMode(0)
