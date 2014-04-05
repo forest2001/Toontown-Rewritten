@@ -17,6 +17,7 @@ from toontown.pets import PetTutorial
 from direct.controls.GravityWalker import GravityWalker
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs, TLNull
 import HouseGlobals
+from toontown.toonbase import AprilToonsGlobals
 
 class Estate(Place.Place):
     notify = DirectNotifyGlobal.directNotify.newCategory('Estate')
@@ -131,7 +132,7 @@ class Estate(Place.Place):
 
         self.loader.geom.reparentTo(render)
         if hasattr(base.cr, 'aprilToonsMgr'):
-            if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+            if base.cr.aprilToonsMgr.isEventActive(AprilToonsGlobals.ESTATE_LOW_GRAVITY):
                 self.startAprilToonsControls()
         self.accept('doorDoneEvent', self.handleDoorDoneEvent)
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
@@ -366,7 +367,7 @@ class Estate(Place.Place):
             self.walkStateData.fsm.request('walking')
         self.toonSubmerged = 0
         if hasattr(base.cr, 'aprilToonsMgr'):
-            if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
+            if base.cr.aprilToonsMgr.isEventActive(AprilToonsGlobals.GLOBAL_LOW_GRAVITY):
                 self.startAprilToonsControls()
 
     def __setUnderwaterFog(self):

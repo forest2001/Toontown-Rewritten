@@ -1,46 +1,34 @@
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from otp.ai.MagicWordGlobal import *
 from direct.task import Task
+from toontown.toonbase import AprilToonsGlobals
 
 class DistributedAprilToonsMgrAI(DistributedObjectAI):  
-    # Temp globals.
-    RANDOM_CE_MIN_TIME = 3
-    RANDOM_CE_MAX_TIME = 60
-    
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
-        self.events = {
-            'random-toon-dialogues' : True,
-            'random-toon-effects' : True,
-            'estate-low-gravity' : True,
-            'global-low-gravity' : True,
-        }
+        self.events = []
     
     def getEvents(self):
         return self.events
     
-    def isEventActive(self, event):
+    def isEventActive(self, eventId):
         if not self.air.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
             # false regardless.
             return False
-        return self.events.get(event, False)
+        return eventId in self.events
     
     def requestEventsList(self):
         avId = self.air.getAvatarIdFromSender()
-        activeEvents = []
-        inactiveEvents = []
-        for event, active in self.events.iteritems():
-            if active:
-                activeEvents.append(event)
-            else:
-                inactiveEvents.append(event)
-        self.sendUpdateToAvatarId(avId, 'requestEventsListResp', [activeEvents, inactiveEvents])
+        self.sendUpdateToAvatarId(avId, 'requestEventsListResp', [self.getEvents()])
     
-    def setEventActive(self, event, active):
-        if event in self.getEvents():
-            self.events[event] = active
-            self.sendUpdate('setEventActive', [event, active])
+    def toggleEvent(self, eventId):
+        if eventId in self.getEvents():
+            del self.getEvents()[eventId]
+            self.sendUpdate('setEventActive', [eventId, False])
+        else:
+            self.getEvents().append(eventId)
+            self.sendUpdate('setEventActive', [eventId, True])
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, str])
 def apriltoons(event, active):
@@ -63,7 +51,7 @@ def randomce():
     enabledOrDisabled = "enabled" if av.wantRandomEffects else "disabled"
     if av.wantRandomEffects:
         # Start a task which loops to give the effect(s).
-        taskMgr.doMethodLater(random.randint(mgr.RANDOM_CE_MIN_TIME, mgr.RANDOM_CE_MAX_TIME), av.randomToonEffects, av.uniqueName('random-toon-effects'))
+        taskMgr.doMethodLater(random.randint(AprilToonsGlobals.RANDOM_CE_MIN_TIME, AprilToonsGlobals.RANDOM_CE_MAX_TIME), av.randomToonEffects, av.uniqueName('random-toon-effects'))
     else:
         av.b_setCheesyEffect(0, 0, 0)
     return "random-toon-effects %s for %s." % (enabledOrDisabled, av.getName())
