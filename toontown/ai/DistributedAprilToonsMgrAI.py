@@ -10,25 +10,32 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
             'estate-low-gravity' : True,
             'global-low-gravity' : True,
         }
-
+    
     def getEvents(self):
         return self.events
-
+    
     def isEventActive(self, event):
         if not self.air.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
             # false regardless.
             return False
-        if event in self.events:
-            return self.events.get(event)
-        return False
-        
+        return self.events.get(event, False)
+    
+    def requestEventsList(self):
+        avId = self.air.getAvatarIdFromSender()
+        activeEvents = []
+        inactiveEvents = []
+        for event, active in self.events.iteritems():
+            if active:
+                activeEvents.append(event)
+            else:
+                inactiveEvents.append(event)
+        self.sendUpdateToAvatarId(avId, 'requestEventsListResp', [activeEvents, inactiveEvents])
+    
     def setEventActive(self, event, active):
         if event in self.getEvents():
             self.events[event] = active
             self.sendUpdate('setEventActive', [event, active])
-            return True
-        return False
 
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, str])
 def apriltoons(event, active):

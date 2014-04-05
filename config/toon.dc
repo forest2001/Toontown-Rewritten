@@ -2457,7 +2457,8 @@ dclass DistributedPetProxy : DistributedPet {
 
 dclass DistributedAprilToonsMgr : DistributedObject {
   setEventActive(string, bool) broadcast;
-  getEvents() airecv clsend;
+  requestEventsList() clsend airecv;
+  requestEventsListResp(string [], string []) broadcast;
 };
 
 dclass DistributedBlackCatMgr : DistributedObject {
