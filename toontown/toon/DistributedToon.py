@@ -257,6 +257,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.announceGenerate(self)
         if self.animFSM.getCurrentState().getName() == 'off':
             self.setAnimState('neutral')
+        if hasattr(base.cr, 'aprilToonsMgr'):
+            if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
+                self.startAprilToonsControls()
 
     def _handleClientCleanup(self):
         if self.track != None:
@@ -1803,6 +1806,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         def __petDetailsLoaded(self, pet):
             self.petDNA = pet.style
+
+    def startAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
+
+    def stopAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
 
     def trickOrTreatTargetMet(self, beanAmount):
         if self.effect:
