@@ -6,6 +6,7 @@ class DistributedAprilToonsMgr(DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
+        cr.aprilToonsMgr = self
         self.events = {}
 
     def announceGenerate(self):
@@ -15,6 +16,7 @@ class DistributedAprilToonsMgr(DistributedObject):
     def d_requestEventsList(self):
         self.notify.debug("Requesting events list from AI.")
         self.sendUpdate('requestEventsList', [])
+        self.checkActiveEvents()
         
     def requestEventsListResp(self, activeEvents, inactiveEvents):
         self.notify.debug("Got events list response from AI.")
@@ -26,16 +28,20 @@ class DistributedAprilToonsMgr(DistributedObject):
     def isEventActive(self, event):
         # NOTE: Possible race condition where the client checks for if an event is active
         # *before* it gets a response from the AI.
-    
         if not base.cr.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
             # false regardless.
             return False
-            
+
         return self.events.get(event, False)
 
     def setEventActive(self, event, active):
         if event in self.getEvents():
             self.events[event] = active
+            self.checkActiveEvents()
             return True
         return False
+
+    def checkActiveEvents(self):
+        if self.isEventActive('global-low-gravity'):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
