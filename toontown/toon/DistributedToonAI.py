@@ -266,7 +266,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                     self.b_setAnimalSound(random.randint(0, 8))
                 if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
                     # Start a loop for random toon effects.
-                    taskMgr.doMethodLater(random.randint(3, 60), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                    self.wantRandomEffects = True
+                    taskMgr.doMethodLater(random.randint(self.air.aprilToonsMgr.RANDOM_CE_MIN_TIME, self.air.aprilToonsMgr.RANDOM_CE_MAX_TIME), self.randomToonEffects, self.uniqueName('random-toon-effects'))
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4447,10 +4448,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self is None or not hasattr(self.air, 'aprilToonsMgr'):
             # Object deleted.
             return
+        if not self.wantRandomEffects:
+            # Admin manually disabled this via MagicWord.
+            return
         if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
             effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11]
             self.b_setCheesyEffect(random.choice(effects), 0, 0)
-        task.delayTime = random.randint(3, 60)
+        task.delayTime = random.randint(self.air.aprilToonsMgr.RANDOM_CE_MIN_TIME, self.air.aprilToonsMgr.RANDOM_CE_MAX_TIME)
         return task.again
 
     def applyAlphaModifications(self):
@@ -4491,7 +4495,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
 
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
-        if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
+        if self.savedCheesyEffect in [16, 17, 18]:
             self.b_setCheesyEffect(0, 0, 0)
         
         # Remove effects and accessories from non-admins.
@@ -4503,10 +4507,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
-        
-        if self.savedCheesyEffect != 0:
-            self.b_setCheesyEffect(0, 0, 0)
-        
 
         # I hate this, but here we go.......... Q_Q
         from toontown.chat import ResistanceChat
