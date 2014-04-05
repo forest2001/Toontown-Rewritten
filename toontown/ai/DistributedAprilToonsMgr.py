@@ -6,25 +6,33 @@ class DistributedAprilToonsMgr(DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
-        self.events = None
+        self.events = {}
 
-
-    def getEvents(self):
-        return self.events
+    def announceGenerate(self):
+        DistributedObject.announceGenerate(self)
+        self.d_requestEventsList()
+        
+    def d_requestEventsList(self):
+        self.notify.debug("Requesting events list from AI.")
+        self.sendUpdate('requestEventsList', [])
+        
+    def requestEventsListResp(self, activeEvents, inactiveEvents):
+        self.notify.debug("Got events list response from AI.")
+        for event in activeEvents:
+            self.events[event] = True
+        for event in inactiveEvents:
+            self.events[event] = False
 
     def isEventActive(self, event):
+        # NOTE: Possible race condition where the client checks for if an event is active
+        # *before* it gets a response from the AI.
+    
         if not base.cr.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
             # false regardless.
             return False
-
-        if self.events == None:
-            self.events = self.sendUpdate('getEvents', [])
-            self.notify.debug('Pinged the server to ask for April Toons events. Got events %s' % self.events)
-
-        if event in self.events:
-            return self.events.get(event)
-        return False
+            
+        return self.events.get(event, False)
 
     def setEventActive(self, event, active):
         if event in self.getEvents():
