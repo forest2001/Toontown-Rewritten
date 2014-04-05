@@ -130,7 +130,9 @@ class Estate(Place.Place):
             self.loader.enterAnimatedProps(i)
 
         self.loader.geom.reparentTo(render)
-        self.startAprilFoolsControls()
+        if hasattr(base.cr, 'aprilToonsMgr'):
+            if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+                self.startAprilToonsControls()
         self.accept('doorDoneEvent', self.handleDoorDoneEvent)
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
         self.fsm.request(requestStatus['how'], [requestStatus])
@@ -145,7 +147,7 @@ class Estate(Place.Place):
 
     def exit(self):
         base.localAvatar.stopChat()
-        self.stopAprilFoolsControls()
+        self.stopAprilToonsControls()
         self._telemLimiter.destroy()
         del self._telemLimiter
         if hasattr(self, 'fsm'):
@@ -363,7 +365,9 @@ class Estate(Place.Place):
         if hasattr(self, 'walkStateData'):
             self.walkStateData.fsm.request('walking')
         self.toonSubmerged = 0
-        self.startAprilFoolsControls()
+        if hasattr(base.cr, 'aprilToonsMgr'):
+            if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
+                self.startAprilToonsControls()
 
     def __setUnderwaterFog(self):
         if base.wantFog:
