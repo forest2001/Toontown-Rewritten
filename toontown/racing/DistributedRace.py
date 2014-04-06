@@ -716,17 +716,17 @@ class DistributedRace(DistributedObject.DistributedObject):
 
     def loadUrbanTrack(self):
         self.dnaStore = DNAStorage()
-        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_town.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage_TT.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_TT_town.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR_town.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL.dna')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL_town.dna')
-        dnaFile = 'phase_6/dna/urban_track_town.dna'
+        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_town.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage_TT.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_TT_town.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR_town.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL.xml')
+        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL_town.xml')
+        dnaFile = 'phase_6/dna/urban_track_town.xml'
         if self.trackId in (RaceGlobals.RT_Urban_2, RaceGlobals.RT_Urban_2_rev):
-            dnaFile = 'phase_6/dna/urban_track_town_B.dna'
+            dnaFile = 'phase_6/dna/urban_track_town_B.xml'
         node = loader.loadDNAFile(self.dnaStore, dnaFile)
         self.townGeom = self.geom.attachNewNode(node)
         self.townGeom.findAllMatches('**/+CollisionNode').stash()

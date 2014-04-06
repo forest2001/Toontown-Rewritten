@@ -9,8 +9,8 @@ class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = DGPlayground.DGPlayground
         self.musicFile = 'phase_8/audio/bgm/DG_nbrhood.ogg'
         self.activityMusicFile = 'phase_8/audio/bgm/DG_SZ.ogg'
-        self.dnaFile = 'phase_8/dna/daisys_garden_sz.dna'
-        self.safeZoneStorageDNAFile = 'phase_8/dna/storage_DG_sz.dna'
+        self.dnaFile = 'phase_8/dna/daisys_garden_sz.xml'
+        self.safeZoneStorageDNAFile = 'phase_8/dna/storage_DG_sz.xml'
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)

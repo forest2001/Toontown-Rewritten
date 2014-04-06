@@ -9,12 +9,12 @@ class TTTownLoader(TownLoader.TownLoader):
         self.streetClass = TTStreet.TTStreet
         self.musicFile = 'phase_3.5/audio/bgm/TC_SZ.ogg'
         self.activityMusicFile = 'phase_3.5/audio/bgm/TC_SZ_activity.ogg'
-        self.townStorageDNAFile = 'phase_5/dna/storage_TT_town.dna'
+        self.townStorageDNAFile = 'phase_5/dna/storage_TT_town.xml'
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
         Suit.loadSuits(1)
-        dnaFile = 'phase_5/dna/toontown_central_' + str(self.canonicalBranchZone) + '.dna'
+        dnaFile = 'phase_5/dna/toontown_central_' + str(self.canonicalBranchZone) + '.xml'
         self.createHood(dnaFile)
 
     def unload(self):

@@ -15,11 +15,11 @@ class TTHood(ToonHood.ToonHood):
         self.id = ToontownCentral
         self.townLoaderClass = TTTownLoader.TTTownLoader
         self.safeZoneLoaderClass = TTSafeZoneLoader.TTSafeZoneLoader
-        self.storageDNAFile = 'phase_4/dna/storage_TT.dna'
-        self.holidayStorageDNADict = {WINTER_DECORATIONS: ['phase_4/dna/winter_storage_TT.dna', 'phase_4/dna/winter_storage_TT_sz.dna'],
-         WACKY_WINTER_DECORATIONS: ['phase_4/dna/winter_storage_TT.dna', 'phase_4/dna/winter_storage_TT_sz.dna'],
-         HALLOWEEN_PROPS: ['phase_4/dna/halloween_props_storage_TT.dna', 'phase_4/dna/halloween_props_storage_TT_sz.dna'],
-         SPOOKY_PROPS: ['phase_4/dna/halloween_props_storage_TT.dna', 'phase_4/dna/halloween_props_storage_TT_sz.dna']}
+        self.storageDNAFile = 'phase_4/dna/storage_TT.xml'
+        self.holidayStorageDNADict = {WINTER_DECORATIONS: ['phase_4/dna/winter_storage_TT.xml', 'phase_4/dna/winter_storage_TT_sz.xml'],
+         WACKY_WINTER_DECORATIONS: ['phase_4/dna/winter_storage_TT.xml', 'phase_4/dna/winter_storage_TT_sz.xml'],
+         HALLOWEEN_PROPS: ['phase_4/dna/halloween_props_storage_TT.xml', 'phase_4/dna/halloween_props_storage_TT_sz.xml'],
+         SPOOKY_PROPS: ['phase_4/dna/halloween_props_storage_TT.xml', 'phase_4/dna/halloween_props_storage_TT_sz.xml']}
         self.skyFile = 'phase_3.5/models/props/TT_sky'
         self.spookySkyFile = 'phase_3.5/models/props/BR_sky'
         self.titleColor = (1.0, 0.5, 0.4, 1.0)

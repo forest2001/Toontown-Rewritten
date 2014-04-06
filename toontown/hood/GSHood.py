@@ -11,10 +11,10 @@ class GSHood(ToonHood.ToonHood):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
         self.id = GoofySpeedway
         self.safeZoneLoaderClass = GSSafeZoneLoader.GSSafeZoneLoader
-        self.storageDNAFile = 'phase_6/dna/storage_GS.dna'
-        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_GS.dna'],
-         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_GS.dna'],
-         CRASHED_LEADERBOARD: ['phase_6/dna/crashed_leaderboard_storage_GS.dna']}
+        self.storageDNAFile = 'phase_6/dna/storage_GS.xml'
+        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_GS.xml'],
+         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_GS.xml'],
+         CRASHED_LEADERBOARD: ['phase_6/dna/crashed_leaderboard_storage_GS.xml']}
         self.skyFile = 'phase_3.5/models/props/TT_sky'
         self.spookySkyFile = 'phase_3.5/models/props/BR_sky'
         self.titleColor = (1.0, 0.5, 0.4, 1.0)

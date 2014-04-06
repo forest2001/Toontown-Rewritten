@@ -230,8 +230,8 @@ class TownLoader(StateData.StateData):
 
     def createHood(self, dnaFile, loadStorage = 1):
         if loadStorage:
-            loader.loadDNAFile(self.hood.dnaStore, 'phase_5/dna/storage_town.dna')
-            self.notify.debug('done loading %s' % 'phase_5/dna/storage_town.dna')
+            loader.loadDNAFile(self.hood.dnaStore, 'phase_5/dna/storage_town.xml')
+            self.notify.debug('done loading %s' % 'phase_5/dna/storage_town.xml')
             loader.loadDNAFile(self.hood.dnaStore, self.townStorageDNAFile)
             self.notify.debug('done loading %s' % self.townStorageDNAFile)
         node = loader.loadDNAFile(self.hood.dnaStore, dnaFile)

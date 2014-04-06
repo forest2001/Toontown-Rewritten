@@ -12,8 +12,8 @@ class TTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = TTPlayground.TTPlayground
         self.musicFile = 'phase_4/audio/bgm/TC_nbrhood.ogg'
         self.activityMusicFile = 'phase_3.5/audio/bgm/TC_SZ_activity.ogg'
-        self.dnaFile = 'phase_4/dna/toontown_central_sz.dna'
-        self.safeZoneStorageDNAFile = 'phase_4/dna/storage_TT_sz.dna'
+        self.dnaFile = 'phase_4/dna/toontown_central_sz.xml'
+        self.safeZoneStorageDNAFile = 'phase_4/dna/storage_TT_sz.xml'
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)

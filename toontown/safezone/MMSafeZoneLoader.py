@@ -10,8 +10,8 @@ class MMSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = MMPlayground.MMPlayground
         self.musicFile = 'phase_6/audio/bgm/MM_nbrhood.ogg'
         self.activityMusicFile = 'phase_6/audio/bgm/MM_SZ_activity.ogg'
-        self.dnaFile = 'phase_6/dna/minnies_melody_land_sz.dna'
-        self.safeZoneStorageDNAFile = 'phase_6/dna/storage_MM_sz.dna'
+        self.dnaFile = 'phase_6/dna/minnies_melody_land_sz.xml'
+        self.safeZoneStorageDNAFile = 'phase_6/dna/storage_MM_sz.xml'
 
     def load(self):
         print 'loading MM safezone'

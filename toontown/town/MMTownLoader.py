@@ -9,12 +9,12 @@ class MMTownLoader(TownLoader.TownLoader):
         self.streetClass = MMStreet.MMStreet
         self.musicFile = 'phase_6/audio/bgm/MM_SZ.ogg'
         self.activityMusicFile = 'phase_6/audio/bgm/MM_SZ_activity.ogg'
-        self.townStorageDNAFile = 'phase_6/dna/storage_MM_town.dna'
+        self.townStorageDNAFile = 'phase_6/dna/storage_MM_town.xml'
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
         Suit.loadSuits(2)
-        dnaFile = 'phase_6/dna/minnies_melody_land_' + str(self.canonicalBranchZone) + '.dna'
+        dnaFile = 'phase_6/dna/minnies_melody_land_' + str(self.canonicalBranchZone) + '.xml'
         self.createHood(dnaFile)
 
     def unload(self):

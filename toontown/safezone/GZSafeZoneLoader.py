@@ -19,8 +19,8 @@ class GZSafeZoneLoader(SafeZoneLoader):
         SafeZoneLoader.__init__(self, hood, parentFSM, doneEvent)
         self.musicFile = 'phase_6/audio/bgm/GZ_SZ.ogg'
         self.activityMusicFile = 'phase_6/audio/bgm/GS_KartShop.ogg'
-        self.dnaFile = 'phase_6/dna/golf_zone_sz.dna'
-        self.safeZoneStorageDNAFile = 'phase_6/dna/storage_GZ_sz.dna'
+        self.dnaFile = 'phase_6/dna/golf_zone_sz.xml'
+        self.safeZoneStorageDNAFile = 'phase_6/dna/storage_GZ_sz.xml'
         del self.fsm
         self.fsm = ClassicFSM.ClassicFSM('SafeZoneLoader', [State.State('start', self.enterStart, self.exitStart, ['quietZone', 'playground', 'toonInterior']),
          State.State('playground', self.enterPlayground, self.exitPlayground, ['quietZone', 'golfcourse']),

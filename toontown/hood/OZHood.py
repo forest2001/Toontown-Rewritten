@@ -11,9 +11,9 @@ class OZHood(ToonHood.ToonHood):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
         self.id = OutdoorZone
         self.safeZoneLoaderClass = OZSafeZoneLoader.OZSafeZoneLoader
-        self.storageDNAFile = 'phase_6/dna/storage_OZ.dna'
-        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_OZ.dna'],
-         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_OZ.dna']}
+        self.storageDNAFile = 'phase_6/dna/storage_OZ.xml'
+        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_OZ.xml'],
+         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_OZ.xml']}
         self.skyFile = 'phase_3.5/models/props/TT_sky'
         self.spookySkyFile = 'phase_3.5/models/props/BR_sky'
         self.titleColor = (1.0, 0.5, 0.4, 1.0)

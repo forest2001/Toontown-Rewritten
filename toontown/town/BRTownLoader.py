@@ -9,12 +9,12 @@ class BRTownLoader(TownLoader.TownLoader):
         self.streetClass = BRStreet.BRStreet
         self.musicFile = 'phase_8/audio/bgm/TB_SZ.ogg'
         self.activityMusicFile = 'phase_8/audio/bgm/TB_SZ_activity.ogg'
-        self.townStorageDNAFile = 'phase_8/dna/storage_BR_town.dna'
+        self.townStorageDNAFile = 'phase_8/dna/storage_BR_town.xml'
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
         Suit.loadSuits(3)
-        dnaFile = 'phase_8/dna/the_burrrgh_' + str(self.canonicalBranchZone) + '.dna'
+        dnaFile = 'phase_8/dna/the_burrrgh_' + str(self.canonicalBranchZone) + '.xml'
         self.createHood(dnaFile)
 
     def unload(self):

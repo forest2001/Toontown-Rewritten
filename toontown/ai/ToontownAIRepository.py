@@ -182,7 +182,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         else:
             phase = ToontownGlobals.streetPhaseMap[hoodId]
 
-        return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)
+        return 'phase_%s/dna/%s_%s.xml' % (phase, hood, zoneId)
 
     def loadDNA(self, filename):
         with open('resources/' + filename) as f:

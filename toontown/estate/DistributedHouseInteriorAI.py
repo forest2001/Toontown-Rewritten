@@ -8,12 +8,12 @@ from toontown.dna.DNAParser import *
 
 # The house interior DNA files for each
 houseInteriors = [
-    'phase_5.5/dna/house_interior3.dna',
-    'phase_5.5/dna/house_interior4.dna',
-    'phase_5.5/dna/house_interior5.dna',
-    'phase_5.5/dna/house_interior7.dna',
-    'phase_5.5/dna/house_interior8.dna',
-    'phase_5.5/dna/house_interior10.dna',
+    'phase_5.5/dna/house_interior3.xml',
+    'phase_5.5/dna/house_interior4.xml',
+    'phase_5.5/dna/house_interior5.xml',
+    'phase_5.5/dna/house_interior7.xml',
+    'phase_5.5/dna/house_interior8.xml',
+    'phase_5.5/dna/house_interior10.xml',
 ]
 
 defaultWindows = [

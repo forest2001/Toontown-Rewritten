@@ -142,17 +142,17 @@ class PlayGame(StateData.StateData):
 
     def loadDnaStoreTutorial(self):
         self.dnaStore = DNAStorage()
-        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_tutorial.dna')
-        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
+        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_tutorial.xml')
+        loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.xml')
 
     def loadDnaStore(self):
         if not hasattr(self, 'dnaStore'):
             self.dnaStore = DNAStorage()
-            loadDNAFile(self.dnaStore, 'phase_4/dna/storage.dna')
+            loadDNAFile(self.dnaStore, 'phase_4/dna/storage.xml')
             self.dnaStore.storeFont('humanist', ToontownGlobals.getInterfaceFont())
             self.dnaStore.storeFont('mickey', ToontownGlobals.getSignFont())
             self.dnaStore.storeFont('suit', ToontownGlobals.getSuitFont())
-            loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.dna')
+            loadDNAFile(self.dnaStore, 'phase_3.5/dna/storage_interior.xml')
 
     def unloadDnaStore(self):
         if hasattr(self, 'dnaStore'):

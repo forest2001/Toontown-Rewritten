@@ -11,9 +11,9 @@ class GZHood(ToonHood.ToonHood):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
         self.id = GolfZone
         self.safeZoneLoaderClass = GZSafeZoneLoader.GZSafeZoneLoader
-        self.storageDNAFile = 'phase_6/dna/storage_GZ.dna'
-        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_GZ.dna'],
-         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_GZ.dna']}
+        self.storageDNAFile = 'phase_6/dna/storage_GZ.xml'
+        self.holidayStorageDNADict = {HALLOWEEN_PROPS: ['phase_6/dna/halloween_props_storage_GZ.xml'],
+         SPOOKY_PROPS: ['phase_6/dna/halloween_props_storage_GZ.xml']}
         self.skyFile = 'phase_3.5/models/props/TT_sky'
         self.spookySkyFile = 'phase_3.5/models/props/BR_sky'
         self.titleColor = (1.0, 0.5, 0.4, 1.0)
