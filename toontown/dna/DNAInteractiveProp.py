@@ -1,14 +1,13 @@
-from DNAProp import DNAProp
+from DNAAnimProp import DNAAnimProp
 from DNAParser import *
 from panda3d.core import *
 
-class DNAInteractiveProp(DNAProp):
+class DNAInteractiveProp(DNAAnimProp):
     TAG = 'interactive_prop'
 
     def __init__(self, name, code, anim, cell_id='0'):
-        DNAProp.__init__(self, name, code)
+        DNAAnimProp.__init__(self, name, code, anim)
 
-        self.anim = anim
         self.cell_id = int(cell_id)
 
 

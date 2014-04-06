@@ -16,6 +16,7 @@ import DNANode
 import DNAVisGroup
 
 import DNAProp
+import DNAAnimProp
 import DNAInteractiveProp
 import DNAFlatBuilding
 import DNALandmarkBuilding
