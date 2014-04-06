@@ -13,7 +13,7 @@ from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHo
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
-from toontown.dna.DNAParser import loadDNAFileAI
+from toontown.dna import DNAParser
 
 #friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -184,5 +184,8 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)
 
-    def loadDNAFileAI(self, dnastore, filename):
-        return loadDNAFileAI(dnastore, filename)
+    def loadDNA(self, filename):
+        with open('resources/' + filename) as f:
+            tree = DNAParser.parse(f)
+
+        return tree

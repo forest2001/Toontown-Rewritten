@@ -2,7 +2,8 @@ from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.showbase import Loader
 from toontown.toontowngui import ToontownLoadingScreen
-from toontown.dna.DNAParser import *
+from toontown.dna import DNAParser
+from direct.stdpy.file import open
 
 class ToontownLoader(Loader.Loader):
     TickPeriod = 0.2
@@ -19,8 +20,16 @@ class ToontownLoader(Loader.Loader):
         del self.loadingScreen
         Loader.Loader.destroy(self)
 
-    def loadDNAFile(self, dnastore, filename):
-        return loadDNAFile(dnastore, filename)
+    def loadDNA(self, filename):
+        if __debug__:
+            filename = 'resources/' + filename
+        else:
+            filename = '/' + filename
+
+        with open(filename, 'r') as f:
+            tree = DNAParser.parse(f)
+
+        return tree
 
     def beginBulkLoad(self, name, label, range, gui, tipCategory):
         self._loadStartT = globalClock.getRealTime()
