@@ -51,6 +51,7 @@ from toontown.friends import FriendHandle
 import time
 import operator
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
+from direct.controls.GravityWalker import GravityWalker
 from toontown.distributed import DelayDelete
 from otp.otpbase import OTPLocalizer
 import random
@@ -257,6 +258,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.announceGenerate(self)
         if self.animFSM.getCurrentState().getName() == 'off':
             self.setAnimState('neutral')
+        # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
+        #if hasattr(base.cr, 'aprilToonsMgr'):
+            #if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
+                #self.startAprilToonsControls()
+        if base.config.GetBool('want-april-toons'):
+            self.startAprilToonsControls()
 
     def _handleClientCleanup(self):
         if self.track != None:
@@ -1036,6 +1043,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def getMaxCarry(self):
         return self.maxCarry
+
+    def startAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
+
+    def stopAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
 
     def setCheesyEffect(self, effect, hoodId, expireTime):
         self.savedCheesyEffect = effect

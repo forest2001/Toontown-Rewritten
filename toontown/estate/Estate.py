@@ -14,7 +14,6 @@ from direct.showbase import PythonUtil
 from toontown.hood import Place
 from toontown.hood import SkyUtil
 from toontown.pets import PetTutorial
-from direct.controls.GravityWalker import GravityWalker
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs, TLNull
 import HouseGlobals
 
@@ -130,24 +129,19 @@ class Estate(Place.Place):
             self.loader.enterAnimatedProps(i)
 
         self.loader.geom.reparentTo(render)
-        if hasattr(base.cr, 'aprilToonsMgr'):
-            if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
-                self.startAprilToonsControls()
+        # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
+        #if hasattr(base.cr, 'aprilToonsMgr'):
+            #if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+                #base.localAvatar.startAprilToonsControls()
+        if base.config.GetBool('want-april-toons'):
+            base.localAvatar.startAprilToonsControls()
         self.accept('doorDoneEvent', self.handleDoorDoneEvent)
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
         self.fsm.request(requestStatus['how'], [requestStatus])
 
-    def startAprilFoolsControls(self):
-        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
-            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
-
-    def stopAprilFoolsControls(self):
-        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
-            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
-
     def exit(self):
         base.localAvatar.stopChat()
-        self.stopAprilToonsControls()
+        base.localAvatar.stopAprilToonsControls()
         self._telemLimiter.destroy()
         del self._telemLimiter
         if hasattr(self, 'fsm'):
@@ -365,9 +359,12 @@ class Estate(Place.Place):
         if hasattr(self, 'walkStateData'):
             self.walkStateData.fsm.request('walking')
         self.toonSubmerged = 0
-        if hasattr(base.cr, 'aprilToonsMgr'):
-            if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
-                self.startAprilToonsControls()
+        # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
+        #if hasattr(base.cr, 'aprilToonsMgr'):
+            #if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+                #base.localAvatar.startAprilToonsControls()
+        if base.config.GetBool('want-april-toons'):
+            base.localAvatar.startAprilToonsControls()
 
     def __setUnderwaterFog(self):
         if base.wantFog:
