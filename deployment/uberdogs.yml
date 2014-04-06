@@ -1,0 +1,44 @@
+uberdogs:
+    - class: CentralLogger
+      id: 4688
+      anonymous: false
+
+    - class: ClientServicesManager
+      id: 4665
+      anonymous: true
+
+    - class: ChatAgent
+      id: 4681
+      anonymous: false
+
+    - class: FriendManager
+      id: 4501
+      anonymous: false
+
+    - class: AvatarFriendsManager
+      id: 4686
+      anonymous: false
+
+    - class: PlayerFriendsManager
+      id: 4687
+      anonymous: false
+    
+    - class: TTRFriendsManager
+      id: 4666
+      anonymous: false
+
+    - class: TTSpeedchatRelay
+      id: 4712
+      anonymous: false
+
+    - class: DistributedDeliveryManager
+      id: 4683
+      anonymous: false
+
+    - class: TTCodeRedemptionMgr
+      id: 4695
+      anonymous: false
+
+    - class: GlobalPartyManager
+      id: 4477
+      anonymous: false
