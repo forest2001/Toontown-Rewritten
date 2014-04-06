@@ -4779,7 +4779,7 @@ def togGM():
 @magicWord(category=CATEGORY_MODERATION)
 def ghost():
     """Set toon to invisible. (Access 400+ can invoke on anyone)"""
-    av = spellbook.getTarget() if spellbook.getInvoker().getAdminAccess() >= 400 else spellbook.getInvoker()
+    av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 400 else spellbook.getInvoker()
     if av.ghostMode == 0:
         av.b_setGhostMode(1 if av.getAdminAccess() < 300 else 2)
         return 'Time to ninja! Enabled ghost for %s' % av.getName()
