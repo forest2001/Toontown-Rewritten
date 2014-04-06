@@ -12,6 +12,6 @@ class DNAFlatBuilding(DNAGroup):
         self.width = float(width)
 
     def _makeNode(self, storage, parent):
-        pass # TODO
+        return parent.attachNewNode(self.id)
 
 registerElement(DNAFlatBuilding)

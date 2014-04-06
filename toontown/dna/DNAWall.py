@@ -13,6 +13,17 @@ class DNAWall(DNASceneElement):
         self.height = float(height)
 
     def _makeNode(self, storage, parent):
-        pass # TODO
+        node = storage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNAWall uses unknown code %s' % self.code)
+
+        buildingHeight = parent.getPythonTag('wall_height') or 0.0
+
+        wall = node.copyTo(parent)
+        wall.setScale(self._parent.width, 1, self.height)
+        wall.setZ(buildingHeight)
+        parent.setPythonTag('wall_height', buildingHeight + self.height)
+
+        return wall
 
 registerElement(DNAWall)
