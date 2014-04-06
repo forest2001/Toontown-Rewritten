@@ -16,15 +16,17 @@ import DNANode
 import DNAVisGroup
 
 import DNAProp
+import DNAInteractiveProp
 import DNAFlatBuilding
 import DNALandmarkBuilding
 import DNAWall
 import DNADoor
+import DNAFlatDoor
 import DNAWindows
 import DNACornice
 import DNASign
 import DNAGraphic
-
+import DNAStreet
 
 # Scene properties:
 import DNAPos
@@ -37,3 +39,9 @@ import DNAScale
 import DNABaseline
 import DNAText
 import DNATitle
+import DNATexture
+
+# Scene data:
+import DNAStoreSuitPoint
+import DNASuitEdge
+import DNABattleCell
