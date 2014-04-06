@@ -1,10 +1,9 @@
 from pandac.PandaModules import *
-from toontown.toonbase.ToontownGlobals import *
-from direct.distributed.ClockDelta import *
-from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPGlobals
+from otp.otpbase import OTPLocalizer
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
+from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
@@ -40,7 +39,7 @@ from toontown.estate import FlowerCollection
 from toontown.estate import FlowerBasket
 from toontown.estate import GardenGlobals
 from toontown.estate import DistributedGagTree
-from toontown.golf import GolfGlobals
+from toontown.estate import GardenDropGame
 from toontown.parties.PartyGlobals import InviteStatus, PartyStatus
 from toontown.parties.PartyInfo import PartyInfo
 from toontown.parties.InviteInfo import InviteInfo
@@ -48,20 +47,19 @@ from toontown.parties.PartyReplyInfo import PartyReplyInfoBase
 from toontown.parties.SimpleMailBase import SimpleMailBase
 from toontown.parties import PartyGlobals
 from toontown.friends import FriendHandle
-import time
-import operator
+from toontown.golf import GolfGlobals
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
 from direct.controls.GravityWalker import GravityWalker
 from toontown.distributed import DelayDelete
-from otp.otpbase import OTPLocalizer
+from otp.ai.MagicWordGlobal import *
+import time
+import operator
 import random
 import copy
 if base.wantKarts:
     from toontown.racing.KartDNA import *
 if (__debug__):
     import pdb
-from otp.ai.MagicWordGlobal import *
-from toontown.estate import GardenDropGame
 
 class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
@@ -113,7 +111,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
          0,
          0,
          0]
-        self.savedCheesyEffect = CENormal
+        self.savedCheesyEffect = ToontownGlobals.CENormal
         self.savedCheesyHoodId = 0
         self.savedCheesyExpireTime = 0
         if hasattr(base, 'wantPets') and base.wantPets:
@@ -436,7 +434,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.defaultZone = ToontownCentral
             return
 
-        if ZoneUtil.getCanonicalHoodId(zoneId) == FunnyFarm:
+        if ZoneUtil.getCanonicalHoodId(zoneId) == ToontownGlobals.FunnyFarm:
             self.defaultZone = ToontownCentral
             return
         if not base.cr.isPaid() or launcher and not launcher.getPhaseComplete(hoodPhase):
@@ -1074,7 +1072,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         effect = self.savedCheesyEffect
         hoodId = self.savedCheesyHoodId
         if not self.cr.areCheesyEffectsAllowed():
-            effect = CENormal
+            effect = ToontownGlobals.CENormal
         if hoodId != 0:
             try:
                 currentHoodId = base.cr.playGame.hood.id
@@ -1083,9 +1081,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
             if hoodId == 1:
                 if currentHoodId == ToontownGlobals.ToontownCentral:
-                    effect = CENormal
+                    effect = ToontownGlobals.CENormal
             elif currentHoodId != None and currentHoodId != hoodId:
-                effect = CENormal
+                effect = ToontownGlobals.CENormal
         if self.ghostMode:
             effect = CEGhost
         self.applyCheesyEffect(effect, lerpTime=lerpTime)
