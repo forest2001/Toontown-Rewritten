@@ -11,6 +11,6 @@ class DNAColor(DNAPropertyElement):
         self.color = (float(r), float(g), float(b), float(a))
 
     def _apply(self, parent):
-        parent.setColor(self.color)
+        parent.setColorScale(self.color)
 
 registerElement(DNAColor)
