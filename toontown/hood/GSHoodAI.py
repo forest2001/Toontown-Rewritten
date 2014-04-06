@@ -1,5 +1,4 @@
 from toontown.hood import HoodAI
-from toontown.dna.DNAParser import DNAData
 from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
 from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
 from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI, DistributedViewingBlockAI

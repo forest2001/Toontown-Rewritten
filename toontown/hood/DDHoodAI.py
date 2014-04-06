@@ -3,7 +3,6 @@ from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone.DistributedBoatAI import DistributedBoatAI
 from toontown.toon import NPCToons
 from HoodAI import HoodAI
-from toontown.dna.DNAParser import DNAStorage
 
 class DDHoodAI(HoodAI):
     HOOD = ToontownGlobals.DonaldsDock

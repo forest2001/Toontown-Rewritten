@@ -1,5 +1,4 @@
 from toontown.hood.HoodAI import *
-from toontown.dna.DNAParser import DNAData
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedGolfKartAI import DistributedGolfKartAI
 from toontown.golf import GolfGlobals
