@@ -77,14 +77,15 @@ class SafeZoneLoader(StateData.StateData):
         self.holidayPropTransforms = {}
         self.animPropDict = {}'''
         if self.safeZoneStorageDNAFile:
-            loadDNAFile(self.hood.dnaStore, self.safeZoneStorageDNAFile)
-        node = loadDNAFile(self.hood.dnaStore, dnaFile)
+            loader.loadDNA(self.safeZoneStorageDNAFile).store(self.hood.dnaStore)
+        sceneTree = loader.loadDNA(dnaFile)
+        node = sceneTree.generate(self.hood.dnaStore)
         if node.getNumParents() == 1:
             self.geom = NodePath(node.getParent(0))
             self.geom.reparentTo(hidden)
         else:
             self.geom = hidden.attachNewNode(node)
-        self.makeDictionaries(self.hood.dnaStore)
+        self.makeDictionaries(sceneTree)
         self.createAnimatedProps(self.nodeList)
         self.holidayPropTransforms = {}
         npl = self.geom.findAllMatches('**/=DNARoot=holiday_prop')
@@ -98,21 +99,17 @@ class SafeZoneLoader(StateData.StateData):
         if gsg:
             self.geom.prepareScene(gsg)
 
-    def makeDictionaries(self, dnaStore):
+    def makeDictionaries(self, sceneTree):
+        sceneData = sceneTree.getData()
+
         self.nodeList = []
-        for i in range(dnaStore.getNumDNAVisGroups()):
-            groupFullName = dnaStore.getDNAVisGroupName(i)
-            groupName = base.cr.hoodMgr.extractGroupName(groupFullName)
-            groupNode = self.geom.find('**/' + groupFullName)
+        for visgroup in sceneData.visgroups:
+            groupNode = self.geom.find('**/' + visgroup.name)
             if groupNode.isEmpty():
                 self.notify.error('Could not find visgroup')
             self.nodeList.append(groupNode)
 
         self.removeLandmarkBlockNodes()
-        self.hood.dnaStore.resetPlaceNodes()
-        self.hood.dnaStore.resetDNAGroups()
-        self.hood.dnaStore.resetDNAVisGroups()
-        self.hood.dnaStore.resetDNAVisGroupsAI()
 
     def removeLandmarkBlockNodes(self):
         npc = self.geom.findAllMatches('**/suit_building_origin')

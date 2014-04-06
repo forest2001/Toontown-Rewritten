@@ -20,3 +20,12 @@ class DNASceneElement(DNAElement):
 
     def _makeNode(self, storage, parent):
         pass # Overridable by subclass
+
+    def _getData(self, data):
+        self._storeData(data)
+
+        for child in self._children:
+            child._getData(data)
+
+    def _storeData(self, data):
+        pass # Also overridable by subclass.

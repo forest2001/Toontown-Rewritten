@@ -11,4 +11,8 @@ class DNAVisGroup(DNAGroup):
         self.zone = zone
         self.vis = vis.split()
 
+    def _storeData(self, data):
+        # Store the VisGroup's existence into the DNASceneData:
+        data.visgroups.append(self)
+
 registerElement(DNAVisGroup)
