@@ -1085,7 +1085,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             elif currentHoodId != None and currentHoodId != hoodId:
                 effect = ToontownGlobals.CENormal
         if self.ghostMode:
-            effect = CEGhost
+            effect = ToontownGlobals.CEGhost
         self.applyCheesyEffect(effect, lerpTime=lerpTime)
         return
 
