@@ -1,6 +1,7 @@
 import xml.sax
 
-class DNAParseError(Exception): pass
+class DNAError(Exception): pass
+class DNAParseError(DNAError): pass
 
 elementRegistry = {}
 def registerElement(element):

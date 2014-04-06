@@ -13,6 +13,9 @@ class DNALandmarkBuilding(DNAGroup):
         self.type = type
 
     def _makeNode(self, storage, parent):
-        pass # TODO
+        node = storage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNALandmarkBuilding uses unknown code %s' % self.code)
+        return node.copyTo(parent)
 
 registerElement(DNALandmarkBuilding)
