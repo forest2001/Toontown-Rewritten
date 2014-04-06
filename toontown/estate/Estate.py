@@ -131,7 +131,7 @@ class Estate(Place.Place):
         self.loader.geom.reparentTo(render)
         # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
         #if hasattr(base.cr, 'aprilToonsMgr'):
-            #if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+            #if self.isEventActive(AprilToonsGlobals.EventEstateGravity):
                 #base.localAvatar.startAprilToonsControls()
         if base.config.GetBool('want-april-toons'):
             base.localAvatar.startAprilToonsControls()
@@ -361,7 +361,7 @@ class Estate(Place.Place):
         self.toonSubmerged = 0
         # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
         #if hasattr(base.cr, 'aprilToonsMgr'):
-            #if base.cr.aprilToonsMgr.isEventActive('estate-low-gravity'):
+            #if self.isEventActive(AprilToonsGlobals.EventEstateGravity):
                 #base.localAvatar.startAprilToonsControls()
         if base.config.GetBool('want-april-toons'):
             base.localAvatar.startAprilToonsControls()

@@ -1,5 +1,7 @@
 from direct.distributed.DistributedObject import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
+from toontown.toonbase.AprilToonsGlobals import *
+from toontown.toonbase import ToontownGlobals
 
 class DistributedAprilToonsMgr(DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('AprilToonsMgr')
@@ -7,7 +9,7 @@ class DistributedAprilToonsMgr(DistributedObject):
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         cr.aprilToonsMgr = self
-        self.events = {}
+        self.events = []
 
     def announceGenerate(self):
         DistributedObject.announceGenerate(self)
@@ -16,32 +18,26 @@ class DistributedAprilToonsMgr(DistributedObject):
     def d_requestEventsList(self):
         self.notify.debug("Requesting events list from AI.")
         self.sendUpdate('requestEventsList', [])
-        self.checkActiveEvents()
         
-    def requestEventsListResp(self, activeEvents, inactiveEvents):
-        self.notify.debug("Got events list response from AI.")
-        for event in activeEvents:
-            self.events[event] = True
-        for event in inactiveEvents:
-            self.events[event] = False
+    def requestEventsListResp(self, eventIds):
+        self.events = eventIds
+        self.checkActiveEvents()
 
-    def isEventActive(self, event):
+    def isEventActive(self, eventId):
         # NOTE: Possible race condition where the client checks for if an event is active
         # *before* it gets a response from the AI.
         if not base.cr.config.GetBool('want-april-toons', False):
             # If this DO is generated but we don't want april toons, always return
             # false regardless.
             return False
+        return eventId in self.events
 
-        return self.events.get(event, False)
-
-    def setEventActive(self, event, active):
-        if event in self.getEvents():
-            self.events[event] = active
-            self.checkActiveEvents()
-            return True
-        return False
+    def setEventActive(self, eventId, active):
+        if active and eventId not in self.events:
+            self.events.append(eventId)
+        elif not active and eventId in self.events:
+            del self.events[eventId]
 
     def checkActiveEvents(self):
-        if self.isEventActive('global-low-gravity'):
+        if self.isEventActive(EventGlobalGravity):
             base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)

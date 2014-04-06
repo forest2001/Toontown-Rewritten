@@ -54,6 +54,9 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 import shlex
 
+# April Toons imports
+from toontown.toonbase import AprilToonsGlobals
+
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -238,11 +241,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self._checkOldGMName()
             messenger.send('avatarEntered', [self])
         if hasattr(self, 'gameAccess') and self.gameAccess != 2:
-            # Disabled for Party Hats
-            #if self.hat[0] != 0:
-            #    self.replaceItemInAccessoriesList(ToonDNA.HAT, 0, 0, 0, self.hat[0], self.hat[1], self.hat[2])
-            #    self.b_setHatList(self.hatList)
-            #    self.b_setHat(0, 0, 0)
+            if self.hat[0] != 0:
+                self.replaceItemInAccessoriesList(ToonDNA.HAT, 0, 0, 0, self.hat[0], self.hat[1], self.hat[2])
+                self.b_setHatList(self.hatList)
+                self.b_setHat(0, 0, 0)
             if self.glasses[0] != 0:
                 self.replaceItemInAccessoriesList(ToonDNA.GLASSES, 0, 0, 0, self.glasses[0], self.glasses[1], self.glasses[2])
                 self.b_setGlassesList(self.glassesList)
@@ -262,14 +264,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.applyAlphaModifications()
             
             if hasattr(self.air, 'aprilToonsMgr'):
-                if self.air.aprilToonsMgr.isEventActive('random-toon-dialogues'):
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomDialogue):
                     # Give them a random animal sound.
                     self.b_setAnimalSound(random.randint(0, 8))
-                if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
                     # Start a loop for random toon effects.
                     self.wantRandomEffects = True
-                    taskMgr.doMethodLater(random.randint(self.air.aprilToonsMgr.RANDOM_CE_MIN_TIME, self.air.aprilToonsMgr.RANDOM_CE_MAX_TIME), self.randomToonEffects, self.uniqueName('random-toon-effects'))
-                if self.air.aprilToonsMgr.isEventActive('sir-max-birthday'):
+                    taskMgr.doMethodLater(random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventSirMaxBirthday):
                     # This should be changed in the future
                     self.b_setHat(12, 0, 0)
 
@@ -4455,10 +4457,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not self.wantRandomEffects:
             # Admin manually disabled this via MagicWord.
             return
-        if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
-            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11]
-            self.b_setCheesyEffect(random.choice(effects), 0, 0)
-        task.delayTime = random.randint(self.air.aprilToonsMgr.RANDOM_CE_MIN_TIME, self.air.aprilToonsMgr.RANDOM_CE_MAX_TIME)
+        if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
+            self.b_setCheesyEffect(random.choice(AprilToonsGlobals.RandomCheesyList), 0, 0)
+        task.delayTime = random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime)
         return task.again
 
     def applyAlphaModifications(self):

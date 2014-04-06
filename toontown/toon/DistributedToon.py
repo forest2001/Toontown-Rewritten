@@ -258,7 +258,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.setAnimState('neutral')
         # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
         #if hasattr(base.cr, 'aprilToonsMgr'):
-            #if base.cr.aprilToonsMgr.isEventActive('global-low-gravity'):
+            #if self.isEventActive(AprilToonsGlobals.EventGlobalGravity):
                 #self.startAprilToonsControls()
         if base.config.GetBool('want-april-toons'):
             self.startAprilToonsControls()
@@ -763,7 +763,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         pivotNode.setHpr(0, 0, 0)
         pivotY = pivotNode.getY(tunnelOrigin)
         endY = 5.0
-        straightLerpDur = abs(endY - pivotY) / ToonForwardSpeed
+        straightLerpDur = abs(endY - pivotY) / ToontownGlobals.ToonForwardSpeed
         pivotDur = 2.0
         pivotLerpDur = pivotDur * (90.0 / self.pivotAngle)
         self.reparentTo(pivotNode)
@@ -815,7 +815,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         pivotNode.setPos(*self.tunnelPivotPos)
         pivotNode.setHpr(0, 0, 0)
         pivotY = pivotNode.getY(tunnelOrigin)
-        straightLerpDur = abs(startY - pivotY) / ToonForwardSpeed
+        straightLerpDur = abs(startY - pivotY) / ToontownGlobals.ToonForwardSpeed
         pivotDur = 2.0
         pivotLerpDur = pivotDur * (90.0 / self.pivotAngle)
 
