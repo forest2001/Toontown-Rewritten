@@ -11,7 +11,7 @@ from direct.distributed import DistributedObject
 from direct.fsm import State
 import random
 import ToonInteriorColors
-from toontown.dna.DNAParser import DNADoor
+from toontown.dna.DNADoor import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.toon import ToonDNA
 from toontown.toon import ToonHead

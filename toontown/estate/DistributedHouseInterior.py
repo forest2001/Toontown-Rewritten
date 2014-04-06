@@ -13,7 +13,7 @@ from toontown.catalog import CatalogWallpaperItem
 from toontown.catalog import CatalogFlooringItem
 from toontown.catalog import CatalogMouldingItem
 from toontown.catalog import CatalogWainscotingItem
-from toontown.dna.DNAParser import DNADoor
+from toontown.dna.DNADoor import DNADoor
 WindowPlugNames = ('**/windowcut_a*', '**/windowcut_b*', '**/windowcut_c*', '**/windowcut_d*', '**/windowcut_e*', '**/windowcut_f*')
 RoomNames = ('**/group2', '**/group1')
 WallNames = ('ceiling*', 'wall_side_middle*', 'wall_front_middle*', 'windowcut_*')

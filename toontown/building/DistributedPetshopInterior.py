@@ -6,7 +6,7 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.actor import Actor
 import ToonInteriorColors
-from toontown.dna.DNAParser import DNADoor
+from toontown.dna.DNADoor import DNADoor
 from toontown.hood import ZoneUtil
 
 class DistributedPetshopInterior(DistributedObject.DistributedObject):
