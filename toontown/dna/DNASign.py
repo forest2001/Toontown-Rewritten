@@ -11,6 +11,13 @@ class DNASign(DNAGroup):
         self.code = code
 
     def _makeNode(self, storage, parent):
-        pass # TODO
+        node = storage.findNode(self.code) or NodePath(self.name)
+
+        parentSignOrigin = parent.find('**/*sign_origin') or parent
+        sign = node.copyTo(parentSignOrigin)
+
+        sign.setDepthOffset(50)
+
+        return sign
 
 registerElement(DNASign)

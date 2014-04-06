@@ -44,3 +44,9 @@ class DNAStorage:
 
     def findNode(self, code):
         return self.find('node', code)
+
+    def findFont(self, code):
+        return self.find('font', code)
+
+    def findTexture(self, code):
+        return self.find('texture', code)

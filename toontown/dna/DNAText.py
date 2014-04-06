@@ -1,4 +1,5 @@
 from DNASceneElement import DNASceneElement
+from DNATypesetter import DNATypesetter
 from DNAParser import *
 from panda3d.core import *
 
@@ -14,8 +15,12 @@ class DNAText(DNASceneElement):
     def handleText(self, text):
         self.text = text
 
-
     def _makeNode(self, storage, parent):
-        pass # TODO
+        typesetter = DNATypesetter(self._parent, storage)
+
+        np = typesetter.generate(self.text)
+        if np:
+            np.reparentTo(parent)
+            return np
 
 registerElement(DNAText)
