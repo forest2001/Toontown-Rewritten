@@ -1,13 +1,12 @@
-from DNASceneElement import DNASceneElement
+from DNAGroup import DNAGroup
 from DNAParser import *
 from panda3d.core import *
 
-class DNAFlatBuilding(DNASceneElement):
+class DNAFlatBuilding(DNAGroup):
     TAG = 'flat_building'
-    PARENTS = ['group', 'node', 'visgroup']
 
     def __init__(self, id, width="0"):
-        DNASceneElement.__init__(self)
+        DNAGroup.__init__(self, id)
 
         self.id = id
         self.width = float(width)

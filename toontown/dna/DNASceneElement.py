@@ -9,10 +9,12 @@ class DNASceneElement(DNAElement):
 
     def _generate(self, storage, parent):
         node = self._makeNode(storage, parent)
-        node.setTag('DNARoot', self.TAG)
-        node.setTag('DNACode', self.code)
 
         if node:
+            node.setTag('DNARoot', self.TAG)
+            if self.code is not None:
+                node.setTag('DNACode', self.code)
+
             for child in self._children:
                 child._generate(storage, node)
 

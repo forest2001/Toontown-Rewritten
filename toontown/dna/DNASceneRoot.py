@@ -20,6 +20,6 @@ class DNASceneRoot(DNASceneElement):
         scene = NodePath('scene')
         for child in self._children:
             child._generate(storage, scene)
-        return scene
+        return scene.node()
 
 registerElement(DNASceneRoot)

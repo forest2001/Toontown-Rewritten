@@ -1,20 +1,18 @@
-from DNASceneElement import DNASceneElement
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNAProp(DNASceneElement):
+class DNAProp(DNANode):
     TAG = 'prop'
-    PARENTS = ['group', 'node', 'visgroup', 'prop', 'landmark_building']
 
     def __init__(self, name, code):
-        DNASceneElement.__init__(self)
+        DNANode.__init__(self, name)
 
         self.name = name
         self.code = code
 
     def _makeNode(self, storage, parent):
-        node = storage.requestNode(self.code).copyTo(parent)
-        node.setName(self.name)
+        node = storage.findNode(self.code).copyTo(parent)
         return node
 
 

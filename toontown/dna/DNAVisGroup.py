@@ -1,18 +1,14 @@
-from DNASceneElement import DNASceneElement
+from DNAGroup import DNAGroup
 from DNAParser import *
 from panda3d.core import *
 
-class DNAVisGroup(DNASceneElement):
+class DNAVisGroup(DNAGroup):
     TAG = 'visgroup'
-    PARENTS = ['group']
 
     def __init__(self, zone, vis=''):
-        DNASceneElement.__init__(self)
+        DNAGroup.__init__(self, zone)
 
         self.zone = zone
         self.vis = vis.split()
-
-    def _makeNode(self, storage, parent):
-        return parent.attachNewNode(self.name)
 
 registerElement(DNAVisGroup)
