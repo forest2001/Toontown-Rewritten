@@ -33,13 +33,13 @@ class DNAStorage:
             del self._typecode2entity[(purge.type, purge.code)]
 
     # Helpers for the above:
-    def storeNode(self, node, code, scope):
+    def storeNode(self, node, code, scope='global'):
         self.store(node, 'node', code, scope)
 
-    def storeFont(self, font, code, scope):
+    def storeFont(self, font, code, scope='global'):
         self.store(font, 'font', code, scope)
 
-    def storeTexture(self, texture, code, scope):
+    def storeTexture(self, texture, code, scope='global'):
         self.store(texture, 'texture', code, scope)
 
     def findNode(self, code):
