@@ -12,8 +12,9 @@ class DNAProp(DNANode):
         self.code = code
 
     def _makeNode(self, storage, parent):
-        node = storage.findNode(self.code).copyTo(parent)
-        return node
+        node = storage.findNode(self.code)
+        if node:
+            return node.copyTo(parent)
 
 
 registerElement(DNAProp)
