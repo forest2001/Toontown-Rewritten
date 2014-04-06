@@ -238,10 +238,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self._checkOldGMName()
             messenger.send('avatarEntered', [self])
         if hasattr(self, 'gameAccess') and self.gameAccess != 2:
-            if self.hat[0] != 0:
-                self.replaceItemInAccessoriesList(ToonDNA.HAT, 0, 0, 0, self.hat[0], self.hat[1], self.hat[2])
-                self.b_setHatList(self.hatList)
-                self.b_setHat(0, 0, 0)
+            # Disabled for Party Hats
+            #if self.hat[0] != 0:
+            #    self.replaceItemInAccessoriesList(ToonDNA.HAT, 0, 0, 0, self.hat[0], self.hat[1], self.hat[2])
+            #    self.b_setHatList(self.hatList)
+            #    self.b_setHat(0, 0, 0)
             if self.glasses[0] != 0:
                 self.replaceItemInAccessoriesList(ToonDNA.GLASSES, 0, 0, 0, self.glasses[0], self.glasses[1], self.glasses[2])
                 self.b_setGlassesList(self.glassesList)
@@ -268,6 +269,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                     # Start a loop for random toon effects.
                     self.wantRandomEffects = True
                     taskMgr.doMethodLater(random.randint(self.air.aprilToonsMgr.RANDOM_CE_MIN_TIME, self.air.aprilToonsMgr.RANDOM_CE_MAX_TIME), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                if self.air.aprilToonsMgr.isEventActive('sir-max-birthday'):
+                    # This should be changed in the future
+                    self.b_setHat(12, 0, 0)
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])

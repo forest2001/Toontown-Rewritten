@@ -10,10 +10,11 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.events = {
-            'random-toon-dialogues' : True,
-            'random-toon-effects' : True,
-            'estate-low-gravity' : True,
-            'global-low-gravity' : True,
+            'random-toon-dialogues' : True,    # Scrambles the dialogue SFX of toons
+            'random-toon-effects' : True,      # Random cheesy effects (non-poof) are applied to the toon at random intervals
+            'estate-low-gravity' : True,       # Enables low gravity in estates
+            'global-low-gravity' : True,       # Enables low gravity everywhere
+            'sir-max-birthday' : True,         # To be used on Sir Max's birthday (April 6th)
         }
     
     def getEvents(self):
