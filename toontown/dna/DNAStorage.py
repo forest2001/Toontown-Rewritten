@@ -11,6 +11,10 @@ class DNAStorage:
     def __init__(self):
         self._typecode2entry = {}
 
+        # For the special case below:
+        self._dcsNode = NodePath(ModelNode(''))
+        self._dcsNode.node().setPreserveTransform(ModelNode.PTNet)
+
     def store(self, entity, type, code, scope):
         entry = DNAStorageEntry(entity, type, code, scope)
         self._typecode2entry[(type, code)] = entry
@@ -43,6 +47,10 @@ class DNAStorage:
         self.store(texture, 'texture', code, scope)
 
     def findNode(self, code):
+        if code == 'DCS':
+            # This is a special case. Nodes with the "DCS" code are used to
+            # indicate a transformation location.
+            return self._dcsNode
         return self.find('node', code)
 
     def findFont(self, code):
