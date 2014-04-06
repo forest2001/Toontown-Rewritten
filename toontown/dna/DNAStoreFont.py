@@ -14,6 +14,6 @@ class DNAStoreFont(DNAStorageElement):
 
     def _store(self, storage):
         font = loader.loadFont(self.path)
-        storage.storeFont(self.code, font, self.getScope())
+        storage.storeFont(font, self.code, self.getScope())
 
 registerElement(DNAStoreFont)
