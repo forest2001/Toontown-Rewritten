@@ -9,14 +9,14 @@ class SuitLegList:
         self.blockNumber = 0
         self.legs = []
         i = 0
-        self.legs.append(SuitLeg(path.getPoint(0), path.getPoint(0), path.getPoint(0).parent.zone, SuitLeg.TFromSky))
+        self.legs.append(SuitLeg(path.getPoint(0), path.getPoint(0), SuitLeg.TFromSky))
         while i+1 < path.getNumPoints():
             point = path.getPoint(i)
             point2 = path.getPoint(i+1)
-            self.legs.append(SuitLeg(point, point2, point.parent.zone, SuitLeg.TWalk))
+            self.legs.append(SuitLeg(point, point2, SuitLeg.TWalk))
             i += 1
         endPoint = path.getPoint(path.getNumPoints()-1)
-        self.legs.append(SuitLeg(endPoint, endPoint, endPoint.parent.zone, SuitLeg.TToSky))
+        self.legs.append(SuitLeg(endPoint, endPoint, SuitLeg.TToSky))
 
     def getStartTime(self, index):
         time = 0
@@ -43,7 +43,7 @@ class SuitLegList:
         return len(self.legs)
 
     def getZoneId(self, legNum):
-        return self.legs[legNum].zone
+        return self.legs[legNum].getZone()
 
     def getType(self, legNum):
         return self.legs[legNum].getType()
@@ -86,13 +86,12 @@ class SuitLeg:
       9 : 'ToCoghq',
       10 : 'Off'
     }
-    def __init__(self, pointA, pointB, zone, type):
+    def __init__(self, pointA, pointB, type):
         self.pointA = pointA
         self.pointB = pointB
         self.posA = pointA.getPos()
         self.posB = pointB.getPos()
         self.type = type
-        self.zone = zone
     def getLegTime(self):
         if self.type == SuitLeg.TWalk:
             return (self.posA-self.posB).length()/ToontownGlobals.SuitWalkSpeed
@@ -108,6 +107,8 @@ class SuitLeg:
         pos = self.getPosB()-self.getPosA()
         pos = self.getPosA() + pos*(time/self.getLegTime())
         return pos
+    def getZone(self):
+        return self.pointA.zone
     @staticmethod
     def getTypeName(type):
         return SuitLeg.TypeToName[type]
