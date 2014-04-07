@@ -528,17 +528,17 @@ class SuitPlannerBase:
         self.cellToGagBonusDict = {}
         vgs = DNAUtil.getVisGroups(self.dnaStore)
         for vg in vgs:
-            zoneId = int(self.extractGroupName(vg.getName()))
-            if vg.getNumBattleCells() == 1:
-                battleCell = vg.getBattleCell(0)
-                self.battlePosDict[zoneId] = vg.getBattleCell(0).getPos()
-            elif vg.getNumBattleCells() > 1:
+            zoneId = int(self.extractGroupName(vg.zone))
+            bcs = DNAUtil.getChildrenOfType(vg, DNABattleCell.DNABattleCell)
+            if len(bcs) == 1:
+                battleCell = bcs[0]
+                self.battlePosDict[zoneId] = bcs[0].getPos()
+            elif len(bcs) > 1:
                 self.notify.warning('multiple battle cells for zone: %d' % zoneId)
-                self.battlePosDict[zoneId] = vg.getBattleCell(0).getPos()
+                self.battlePosDict[zoneId] = bcs[0].getPos()
             if True:
-                for i in range(vg.getNumChildren()):
-                    childDnaGroup = vg.at(i)
-                    if isinstance(childDnaGroup, DNAInteractiveProp):
+                for childDnaGroup in vg.children:
+                    if isinstance(childDnaGroup, DNAInteractiveProp.DNAInteractiveProp):
                         self.notify.debug('got interactive prop %s' % childDnaGroup)
                         battleCellId = childDnaGroup.getCellId()
                         if battleCellId == -1:

@@ -7,6 +7,16 @@ def getVisGroups(root):
     return visGroups
 def r_getVisGroups(root, list):
     for child in root.children:
-        if type(child) == DNAVisGroup:
+        if isinstance(child, DNAVisGroup):
+            list.append(child)
+        r_getVisGroups(child, list)
+
+def getChildrenOfType(root, type):
+    list = []
+    r_getChildrenOfType(root, type, list)
+    return list
+def r_getChildrenOfType(root, type, list):
+    for child in root.children:
+        if isinstance(child, type):
             list.append(child)
         r_getVisGroups(child, list)
