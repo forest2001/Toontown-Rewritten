@@ -97,7 +97,7 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         adjacent = self.dnaStore.getData().getAdjacentPoints(p)
         numPoints = adjacent.getNumPoints()
         for i in range(numPoints):
-            q = adjacent.getPointIndex(i)
+            q = adjacent.getPoint(i)
             pp = p.getPos()
             qp = q.getPos()
             v = Vec3(qp - pp)
