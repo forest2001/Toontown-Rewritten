@@ -11,9 +11,10 @@ class DNABattleCell(DNASceneElement):
 
         self.width = float(width)
         self.height = float(height)
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
+        self.pos = Point3(float(x), float(y), float(z))
+
+    def getPos(self):
+        return self.pos
 
     # TODO: Put stuff in the data pass.
 
