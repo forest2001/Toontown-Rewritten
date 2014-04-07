@@ -25,6 +25,7 @@ want-doomsday #f
 
 want-karts #t
 force-holiday-decorations 6
+want-april-toons #t
 
 model-path /
 model-cache-models #f
