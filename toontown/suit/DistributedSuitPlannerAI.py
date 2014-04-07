@@ -18,6 +18,7 @@ import math
 import time
 import random
 from SuitLegList import *
+from toontown.dna import *
 
 class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlannerBase.SuitPlannerBase):
     CogdoPopFactor = config.GetFloat('cogdo-pop-factor', 1.5)
@@ -719,7 +720,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 while i >= 0:
                     pi = points.getPointIndex(i)
                     point = self.pointIndexes[pi]
-                    if point.getPointType() == DNASuitPoint.STREETPOINT:
+                    if point.getPointType() == DNAStoreSuitPoint.STREETPOINT:
                         pointList.append(point)
                     i -= 1
 
@@ -906,7 +907,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         pi = path.getPointIndex(i)
         point = self.pointIndexes[pi]
         adjacentPoint = self.pointIndexes[path.getPointIndex(i + 1)]
-        while point.getPointType() == DNASuitPoint.FRONTDOORPOINT or point.getPointType() == DNASuitPoint.SIDEDOORPOINT:
+        while point.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT or point.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
             i += 1
             lastPi = pi
             pi = path.getPointIndex(i)
