@@ -15,7 +15,7 @@ class DNASceneElement(DNAElement):
             if self.code is not None:
                 node.setTag('DNACode', self.code)
 
-            for child in self._children:
+            for child in self.children:
                 child._generate(storage, node)
 
     def _makeNode(self, storage, parent):
@@ -24,7 +24,7 @@ class DNASceneElement(DNAElement):
     def _getData(self, data):
         self._storeData(data)
 
-        for child in self._children:
+        for child in self.children:
             child._getData(data)
 
     def _storeData(self, data):

@@ -20,7 +20,7 @@ class DNAWall(DNANode):
         buildingHeight = parent.getPythonTag('wall_height') or 0.0
 
         wall = node.copyTo(parent)
-        wall.setScale(self._parent.width, 1, self.height)
+        wall.setScale(self.parent.width, 1, self.height)
         wall.setZ(buildingHeight)
         parent.setPythonTag('wall_height', buildingHeight + self.height)
 

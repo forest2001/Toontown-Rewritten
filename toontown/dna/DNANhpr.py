@@ -1,16 +1,10 @@
-from DNAPropertyElement import DNAPropertyElement
+from DNAHpr import DNAHpr
 from DNAParser import *
 from panda3d.core import *
 
-class DNANhpr(DNAPropertyElement):
+class DNANhpr(DNAHpr):
     TAG = 'nhpr'
 
-    def __init__(self, h="0", p="0", r="0"):
-        DNAPropertyElement.__init__(self)
-
-        self.hpr = (float(h), float(p), float(r))
-
-    def _apply(self, parent):
-        parent.setHpr(self.hpr)
+    # Really not sure how this differs... ???
 
 registerElement(DNANhpr)

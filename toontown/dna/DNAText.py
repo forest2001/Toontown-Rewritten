@@ -16,7 +16,7 @@ class DNAText(DNASceneElement):
         self.text = text
 
     def _makeNode(self, storage, parent):
-        typesetter = DNATypesetter(self._parent, storage)
+        typesetter = DNATypesetter(self.parent, storage)
 
         np = typesetter.generate(self.text)
         if np:

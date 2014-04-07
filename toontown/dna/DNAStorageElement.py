@@ -10,8 +10,8 @@ class DNAStorageElement(DNAElement):
     def getScope(self):
         if self.scope is not None:
             return self.scope
-        elif self._parent is not None:
-            return self._parent
+        elif self.parent is not None:
+            return self.parent
         else:
             raise DNAParseError('No scope defined')
 
@@ -22,7 +22,7 @@ class DNAStorageElement(DNAElement):
         
         self._store(storage)
 
-        for child in self._children:
+        for child in self.children:
             child.store(storage)
 
     def _store(self, storage):

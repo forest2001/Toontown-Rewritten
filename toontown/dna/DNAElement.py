@@ -3,17 +3,20 @@ class DNAElement:
     PARENTS = []
 
     def __init__(self):
-        self._parent = None
-        self._children = []
+        self.parent = None
+        self.children = []
 
     def reparentTo(self, parent):
-        if self._parent:
-            self._parent._children.remove(self)
+        if self.parent:
+            self.parent.children.remove(self)
 
-        self._parent = parent
+        self.parent = parent
 
         if parent:
-            self._parent._children.append(self)
+            self.parent.children.append(self)
 
     def handleText(self, chars):
         pass
+
+    def findChildren(self, type):
+        return [child for child in self.children if isinstance(child, type)]

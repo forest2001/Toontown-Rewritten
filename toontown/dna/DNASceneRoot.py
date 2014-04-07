@@ -19,7 +19,7 @@ class DNASceneRoot(DNASceneElement):
         """
 
         scene = NodePath('scene')
-        for child in self._children:
+        for child in self.children:
             child._generate(storage, scene)
         return scene.node()
 
@@ -30,7 +30,7 @@ class DNASceneRoot(DNASceneElement):
         """
 
         data = DNASceneData()
-        for child in self._children:
+        for child in self.children:
             child._getData(data)
         return data
 
