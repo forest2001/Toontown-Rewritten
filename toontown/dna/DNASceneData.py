@@ -58,10 +58,10 @@ class DNASuitGraph:
             if depth > minPathLen:
                 pointDeque.append(point)
                 return True
-        edges = self.getEdgesFrom(point.getIndex())
+        edges = self.getEdgesFrom(point)
         for edge in edges:
-            if self.suitGraph.getPointFromIndex(edge.b) != point and not self.suitGraph.getPointFromIndex(edge.b) in pointDeque:
-                pointDeque.append(self.suitGraph.getPointFromIndex(edge.b))
+            if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque:
+                pointDeque.append(self.getPointFromIndex(edge.b))
                 if self.getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
                     return True
         return False
