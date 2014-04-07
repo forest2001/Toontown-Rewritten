@@ -1,4 +1,5 @@
 from DNAParser import *
+from DNASuitPath import DNASuitPath
 
 class DNASuitGraph:
     def __init__(self, points, edges):
@@ -28,6 +29,9 @@ class DNASuitGraph:
     def getEdgesTo(self, point):
         return self._point2inboundEdges.get(point, [])
 
+    def getPointFromIndex(self, index):
+        return self._pointId2point[index]
+
 class DNASceneData:
     def __init__(self):
         self.visgroups = []
@@ -38,3 +42,11 @@ class DNASceneData:
 
     def update(self):
         self.suitGraph = DNASuitGraph(self.suitPoints, self.suitEdges)
+
+    def getAdjacentPoints(self, point):
+        path = DNASuitPath()
+        edges = self.suitGraph.getEdgesFrom(point)
+        for edge in edges:
+            print edge.b
+            path.addPoint(self.suitGraph.getPointFromIndex(edge.b))
+        return path
