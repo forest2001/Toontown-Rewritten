@@ -97,6 +97,7 @@ class Street(BattlePlace.BattlePlace):
         self.elevatorDoneEvent = 'elevatorDone'
         self.eventLights = []
         self.visInterestHandle = None
+        self.zoneInterestHandle = None
         self.visZones = []
         self.visInterestChanged = False
 
@@ -165,6 +166,8 @@ class Street(BattlePlace.BattlePlace):
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
         self.enterZone(requestStatus['zoneId'])
         self.tunnelOriginList = base.cr.hoodMgr.addLinkTunnelHooks(self, self.loader.nodeList, self.zoneId)
+        if self.zoneId:
+            self.zoneInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, [self.zoneId-(self.zoneId%100)], 'global_streetVis')
         self.fsm.request(requestStatus['how'], [requestStatus])
         self.replaceStreetSignTextures()
         return
@@ -188,6 +191,8 @@ class Street(BattlePlace.BattlePlace):
         base.localAvatar.setOnLevelGround(0)
         if not self.visInterestHandle is None:
             base.cr.removeInterest(self.visInterestHandle)
+        if not self.zoneInterestHandle is None:
+            base.cr.removeInterest(self.zoneInterestHandle)
 
     def load(self):
         BattlePlace.BattlePlace.load(self)
