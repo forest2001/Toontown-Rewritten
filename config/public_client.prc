@@ -25,6 +25,7 @@ want-doomsday #f
 
 want-karts #t
 force-holiday-decorations 6
+want-april-toons #t
 
 model-path /
 model-cache-models #f
@@ -47,6 +48,3 @@ audio-library-name p3openal_audio
 
 # TODO: FIX NEW FIREWORKS!
 want-old-fireworks #t
-
-# Only for Manufacturing Machine ARG
-want-blueprint4-ARG #t

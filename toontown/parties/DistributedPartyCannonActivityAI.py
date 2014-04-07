@@ -23,7 +23,6 @@ class DistributedPartyCannonActivityAI(DistributedPartyActivityAI):
             self.air.writeServerEvent('suspicious',avId,'Toon tried to land while not playing the cannon activity!')
             return
         self.toonsPlaying.remove(avId)
-        self.sendUpdate('setMovie', [PartyGlobals.CANNON_MOVIE_LANDED, avId])
         reward = self.cloudsHit[avId] * PartyGlobals.CannonJellyBeanReward
         if reward > PartyGlobals.CannonMaxTotalReward:
             reward = PartyGlobals.CannonMaxTotalReward
@@ -35,6 +34,7 @@ class DistributedPartyCannonActivityAI(DistributedPartyActivityAI):
         # Ideally, we shouldn't even be passing strings that *should* be localized.
         self.sendUpdateToAvatarId(avId, 'showJellybeanReward', [reward, av.getMoney(), TTLocalizer.PartyCannonResults % (reward, self.cloudsHit[avId])])
         av.addMoney(reward)
+        self.sendUpdate('setMovie', [PartyGlobals.CANNON_MOVIE_LANDED, avId])
         del self.cloudsHit[avId]
 
     def b_setCannonWillFire(self, cannonId, rot, angle, toonId):

@@ -169,7 +169,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             hp = fields['setHp'][0]
             maxHp = fields['setMaxHp'][0]
             defaultShard = fields['setDefaultShard'][0]
-            lastHood = fields['setLastHood'][0]
+            lastHood = 2000 if fields['setLastHood'][0] in [10000, 11000, 12000, 13000] else fields['setLastHood'][0]
             dnaString =  fields['setDNAString'][0]
             experience = fields['setExperience'][0]
             trackBonusLevel = fields['setTrackBonusLevel'][0]

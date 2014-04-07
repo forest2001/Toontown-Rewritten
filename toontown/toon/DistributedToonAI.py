@@ -54,6 +54,9 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 import shlex
 
+# April Toons imports
+from toontown.toonbase import AprilToonsGlobals
+
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -261,12 +264,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.applyAlphaModifications()
             
             if hasattr(self.air, 'aprilToonsMgr'):
-                if self.air.aprilToonsMgr.isEventActive('random-toon-dialogues'):
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomDialogue):
                     # Give them a random animal sound.
                     self.b_setAnimalSound(random.randint(0, 8))
-                if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
                     # Start a loop for random toon effects.
-                    taskMgr.doMethodLater(random.randint(3, 60), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                    self.wantRandomEffects = True
+                    taskMgr.doMethodLater(random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime), self.randomToonEffects, self.uniqueName('random-toon-effects'))
+                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventSirMaxBirthday):
+                    # This should be changed in the future
+                    self.b_setHat(12, 0, 0)
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -4447,9 +4454,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self is None or not hasattr(self.air, 'aprilToonsMgr'):
             # Object deleted.
             return
-        if self.air.aprilToonsMgr.isEventActive('random-toon-effects'):
-            effects = [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 11, 11, 16]
-            self.b_setCheesyEffect(random.choice(effects), 0, 0)
+        if not self.wantRandomEffects:
+            # Admin manually disabled this via MagicWord.
+            return
+        if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
+            self.b_setCheesyEffect(random.choice(AprilToonsGlobals.RandomCheesyList), 0, 0)
+        task.delayTime = random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime)
         return task.again
 
     def applyAlphaModifications(self):
@@ -4490,7 +4500,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
 
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
-        if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
+        if self.savedCheesyEffect in [16, 17, 18]:
             self.b_setCheesyEffect(0, 0, 0)
         
         # Remove effects and accessories from non-admins.
@@ -4502,10 +4512,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
-        
-        if self.savedCheesyEffect != 0:
-            self.b_setCheesyEffect(0, 0, 0)
-        
 
         # I hate this, but here we go.......... Q_Q
         from toontown.chat import ResistanceChat
@@ -4772,12 +4778,14 @@ def togGM():
             
 @magicWord(category=CATEGORY_MODERATION)
 def ghost():
-    """Set toon to invisible."""
-    if spellbook.getInvoker().ghostMode == 0:
-        spellbook.getInvoker().b_setGhostMode(2)
-        return 'Time to ninja!'
+    """Set toon to invisible. (Access 400+ can invoke on anyone)"""
+    av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 400 else spellbook.getInvoker()
+    if av.ghostMode == 0:
+        av.b_setGhostMode(1 if av.getAdminAccess() < 300 else 2)
+        return 'Time to ninja! Enabled ghost for %s' % av.getName()
     else:
-        spellbook.getInvoker().b_setGhostMode(0)
+        av.b_setGhostMode(0)
+        return 'Disabled ghost for %s' % av.getName()
         
 @magicWord(category=CATEGORY_MODERATION)
 def badName():

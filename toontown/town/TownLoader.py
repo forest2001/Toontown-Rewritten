@@ -60,39 +60,39 @@ class TownLoader(StateData.StateData):
         self.townBattle = TownBattle.TownBattle(self.townBattleDoneEvent)
         self.townBattle.load()
 
-        self.npc = NPCToons.createLocalNPC(91915)
-        self.npc.reparentTo(base.localAvatar)
-        self.npc.setZ(30)
-        self.npc.hide()
-        self.piano = loader.loadModel('phase_5/models/props/piano-mod.bam')
-        self.piano.setZ(250)
-        self.piano.setHpr(0, 90, 0)
-        self.piano.reparentTo(base.localAvatar)
-        self.piano.setScale(0)
-        self.pianoSfx = base.loadSfx('phase_5/audio/sfx/AA_drop_piano.ogg')
-        self.dropSfx = base.loadSfx('phase_5/audio/sfx/cogbldg_drop.ogg')
-        self.pianoDropSound = Sequence(
-            Func(base.playSfx, self.dropSfx),
-            Wait(6.7),
-            Func(base.playSfx, self.pianoSfx),
-            Parallel(Func(base.localAvatar.disableAvatarControls), Func(base.localAvatar.b_setAnimState, 'Squish')),
-            Wait(2.5),
-            Func(self.pianoSfx.stop)
-        )
-        self.pianoDropSequence = Sequence(
-            Wait(randint(10, 60)),
-            Func(self.pianoDropSound.start),
-            Parallel(self.piano.scaleInterval(1, (3, 3, 3)), self.piano.posInterval(7, (0, 0, 0))),
-            self.piano.posInterval(0.1, (0, 0, 0.5)),
-            self.piano.posInterval(0.1, (0, 0, 0)),
-            Wait(0.4),
-            Parallel(Func(self.npc.addActive), Func(self.npc.setChatAbsolute, 'Whoops! My bad!', CFSpeech|CFTimeout)),
-            self.piano.scaleInterval(1, (0, 0, 0)),
-            Func(base.localAvatar.enableAvatarControls),
-            Wait(5),
-            Func(self.npc.removeActive)
-        )
-        self.pianoDropSequence.loop()
+        if base.config.GetBool('want-april-toons', 0):
+            self.npc = NPCToons.createLocalNPC(91915)
+            self.npc.reparentTo(base.localAvatar)
+            self.npc.setZ(30)
+            self.npc.hide()
+            self.piano = loader.loadModel('phase_5/models/props/piano-mod.bam')
+            self.piano.setZ(250)
+            self.piano.setHpr(0, 90, 0)
+            self.piano.reparentTo(base.localAvatar)
+            self.piano.setScale(0)
+            self.pianoSfx = base.loadSfx('phase_5/audio/sfx/AA_drop_piano.ogg')
+            self.dropSfx = base.loadSfx('phase_5/audio/sfx/cogbldg_drop.ogg')
+            self.pianoDropSound = Sequence(
+                Func(base.playSfx, self.dropSfx),
+                Wait(6.7),
+                Func(base.playSfx, self.pianoSfx),
+                Func(base.localAvatar.b_setAnimState, 'Squish'),
+                Wait(2.5),
+                Func(self.pianoSfx.stop)
+            )
+            self.pianoDropSequence = Sequence(
+                Wait(randint(10, 60)),
+                Func(self.pianoDropSound.start),
+                Parallel(self.piano.scaleInterval(1, (3, 3, 3)), self.piano.posInterval(7, (0, 0, 0))),
+                self.piano.posInterval(0.1, (0, 0, 0.5)),
+                self.piano.posInterval(0.1, (0, 0, 0)),
+                Wait(0.4),
+                Parallel(Func(self.npc.addActive), Func(self.npc.setChatAbsolute, 'Whoops! My bad!', CFSpeech|CFTimeout)),
+                self.piano.scaleInterval(1, (0, 0, 0)),
+                Wait(5),
+                Func(self.npc.removeActive)
+            )
+            self.pianoDropSequence.loop()
 
     def unload(self):
         self.unloadBattleAnims()
@@ -125,14 +125,15 @@ class TownLoader(StateData.StateData):
         cleanupDialog('globalDialog')
         ModelPool.garbageCollect()
         TexturePool.garbageCollect()
-        self.pianoDropSequence.finish()
-        self.pianoDropSound.finish()
-        del self.pianoDropSequence
-        del self.pianoDropSound
-        self.piano.removeNode()
-        del self.pianoSfx
-        del self.dropSfx
-        del self.npc
+        if base.config.GetBool('want-april-toons', 0):
+            self.pianoDropSequence.finish()
+            self.pianoDropSound.finish()
+            del self.pianoDropSequence
+            del self.pianoDropSound
+            self.piano.removeNode()
+            del self.pianoSfx
+            del self.dropSfx
+            del self.npc
 
     def enter(self, requestStatus):
         teleportDebug(requestStatus, 'TownLoader.enter(%s)' % requestStatus)
