@@ -535,7 +535,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.air = air
         self.zoneId = zoneId
         self.canonicalZoneId = ZoneUtil.getCanonicalZoneId(zoneId)
-        if simbase.air.wantCogdominiums:
+        if simbase.config.GetBool('want-cogdos', False):
             if not hasattr(self.__class__, 'CogdoPopAdjusted'):
                 self.__class__.CogdoPopAdjusted = True
                 for index in xrange(len(self.SuitHoodInfo)):
@@ -568,7 +568,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.setupDNA()
         if self.notify.getDebug():
             self.notify.debug('Creating a building manager AI in zone' + str(self.zoneId))
-        self.buildingMgr = self.air.buildingManagers.get(self.zoneId)
+        #TODO: implement buildingMgr
+        #self.buildingMgr = self.air.buildingManagers.get(self.zoneId)
+        self.buildingMgr = None
         if self.buildingMgr:
             blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks = self.buildingMgr.getDNABlockLists()
             for currBlock in blocks:
@@ -579,7 +581,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 bldg = self.buildingMgr.getBuilding(currBlock)
                 bldg.setSuitPlannerExt(self)
 
-        self.dnaStore.resetBlockNumbers()
         self.initBuildingsAndPoints()
         numSuits = simbase.config.GetInt('suit-count', -1)
         if numSuits >= 0:
@@ -784,7 +785,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     del self.pendingBuildingHeights[0]
                     self.pendingBuildingHeights.append(buildingHeight)
         if suitName == None:
-            suitName, skelecog = self.air.suitInvasionManager.getInvadingCog()
+            #TODO: suitInvasionManager
+            #suitName, skelecog = self.air.suitInvasionManager.getInvadingCog()
+            skelecog = False
             if suitName == None:
                 suitName = self.defaultSuitName
         if suitType == None and suitName != None:
@@ -922,7 +925,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if adjacentPoint != None:
             return self.battleCollision(point, adjacentPoint)
         else:
-            points = self.dnaStore.getAdjacentPoints(point)
+            points = self.dnaStore.getData().getAdjacentPoints(point)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -934,7 +937,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def battleCollision(self, point, adjacentPoint):
-        zoneName = self.dnaStore.getSuitEdgeZone(point.getIndex(), adjacentPoint.getIndex())
+        zoneName = self.dnaStore.getData().getConnectingEdge(point, adjacentPoint).parent.zone
         zoneId = int(self.extractGroupName(zoneName))
         return self.battleMgr.cellHasBattle(zoneId)
 

@@ -587,7 +587,7 @@ class SuitPlannerBase:
         return None
 
     def genPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        return self.dnaStore.getSuitPath(startPoint, endPoint, minPathLen, maxPathLen)
+        return self.dnaStore.getData().suitGraph.getSuitPath(startPoint, endPoint, minPathLen, maxPathLen)
 
     def getDnaStore(self):
         return self.dnaStore

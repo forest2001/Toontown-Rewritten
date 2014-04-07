@@ -14,6 +14,7 @@ from toontown.building import FADoorCodes
 import DistributedSuitBaseAI
 from toontown.hood import ZoneUtil
 import random
+from SuitLegList import *
 
 class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
     SUIT_BUILDINGS = simbase.config.GetBool('want-suit-buildings', 1)
