@@ -18,9 +18,7 @@ class DNAStoreSuitPoint(DNASceneElement):
 
         self.id = int(id)
         self.type = type
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
+        self.pos = Point3(float(x), float(y), float(z))
         self.building = building and int(building)
 
     def getPointType(self):
@@ -28,6 +26,9 @@ class DNAStoreSuitPoint(DNASceneElement):
 
     def getIndex(self):
         return self.id
+
+    def getPos(self):
+        return self.pos
 
     def _storeData(self, data):
         data.suitPoints.append(self)
