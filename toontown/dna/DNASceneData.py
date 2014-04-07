@@ -1,5 +1,6 @@
 from DNAParser import *
 from DNASuitPath import DNASuitPath
+from collections import deque
 
 class DNASuitGraph:
     def __init__(self, points, edges):
@@ -32,6 +33,39 @@ class DNASuitGraph:
     def getPointFromIndex(self, index):
         return self._pointId2point[index]
 
+    def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
+        if minPathLen > 1:
+            pointDeque = deque()
+            pointDeque.append(startPoint)
+            if self.getSuitPathBreadthFirst(0, pointDeque, endPoint, minPathLen, maxPathLen):
+                path = DNASuitPath()
+                for i in range(len(pointDeque)):
+                    point = pointDeque.popleft()
+                    path.addPoint(point)
+                return path
+        else:
+            path = DNASuitPath()
+            path.addPoint(startPoint)
+            path.addPoint(endPoint)
+            return path
+
+    def getSuitPathBreadthFirst(self, depth, pointDeque, endPoint, minPathLen, maxPathLen):
+        point = pointDeque.pop()
+        pointDeque.append(point)
+        if depth > maxPathLen:
+            return False
+        if point == endPoint:
+            if depth > minPathLen:
+                pointDeque.append(point)
+                return True
+        edges = self.getEdgesFrom(point.getIndex())
+        for edge in edges:
+            if self.suitGraph.getPointFromIndex(edge.b) != point and not self.suitGraph.getPointFromIndex(edge.b) in pointDeque:
+                pointDeque.append(self.suitGraph.getPointFromIndex(edge.b))
+                if self.getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
+                    return True
+        return False
+
 class DNASceneData:
     def __init__(self):
         self.visgroups = []
@@ -47,6 +81,13 @@ class DNASceneData:
         path = DNASuitPath()
         edges = self.suitGraph.getEdgesFrom(point)
         for edge in edges:
-            print edge.b
             path.addPoint(self.suitGraph.getPointFromIndex(edge.b))
         return path
+
+    def getConnectingEdge(self, pointA, pointB):
+        for edge in self.suitEdges:
+            a = self.suitGraph.getPointFromIndex(edge.a)
+            b = self.suitGraph.getPointFromIndex(edge.b)
+            if (a == pointA and b == pointB) or (a == pointB and b == pointA):
+                return edge
+        return None
