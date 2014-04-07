@@ -1,4 +1,4 @@
-from toontown.dna.DNASpawnerAI import DNASpawnerAI
+#from toontown.dna.DNASpawnerAI import DNASpawnerAI
 from toontown.suit.DistributedSuitPlannerAI import DistributedSuitPlannerAI
 
 class StreetAI:
@@ -13,10 +13,17 @@ class StreetAI:
     def __init__(self, air, zoneId):
         self.air = air
         self.zoneId = zoneId
+        
+        self.sp = DistributedSuitPlannerAI(self.air, self.zoneId)
+        self.sp.generateWithRequired(self.zoneId)
+        self.sp.d_setZoneId(self.zoneId)
+        self.sp.initTasks()
+        
 
-        self.spawnObjects()
+        #self.spawnObjects()
     
     def spawnObjects(self):
+        return
         filename = self.air.genDNAFileName(self.zoneId)
 
         DNASpawnerAI().spawnObjects(filename, self.zoneId)

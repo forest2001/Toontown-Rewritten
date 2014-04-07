@@ -6,7 +6,7 @@ from toontown.safezone import TreasureGlobals
 from toontown.town.StreetAI import StreetAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 
-from toontown.dna.DNASpawnerAI import DNASpawnerAI
+#from toontown.dna.DNASpawnerAI import DNASpawnerAI
 
 class HoodAI:
     """
@@ -53,6 +53,7 @@ class HoodAI:
         self.treasurePlanner.start()
 
     def spawnObjects(self):
+        return
         filename = self.air.genDNAFileName(self.safezone)
 
         DNASpawnerAI().spawnObjects(filename, self.safezone)
