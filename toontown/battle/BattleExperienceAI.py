@@ -182,7 +182,8 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
         toon.d_setInventory(toon.inventory.makeNetString())
         toon.b_setAnimState('victory', 1)
 
-        if simbase.air.config.GetBool('battle-passing-no-credit', True):
+        #TODO: all dese managers
+        '''if simbase.air.config.GetBool('battle-passing-no-credit', True):
             if helpfulToons and toon.doId in helpfulToons:
                 simbase.air.questManager.toonKilledCogs(toon, suitsKilled, zoneId, activeToonList)
                 simbase.air.cogPageManager.toonKilledCogs(toon, suitsKilled, zoneId)
@@ -190,6 +191,6 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
                 BattleExperienceAINotify.debug('toon=%d unhelpful not getting killed cog quest credit' % toon.doId)
         else:
             simbase.air.questManager.toonKilledCogs(toon, suitsKilled, zoneId, activeToonList)
-            simbase.air.cogPageManager.toonKilledCogs(toon, suitsKilled, zoneId)
+            simbase.air.cogPageManager.toonKilledCogs(toon, suitsKilled, zoneId)'''
 
     return
