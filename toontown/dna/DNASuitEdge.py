@@ -12,6 +12,7 @@ class DNASuitEdge(DNASceneElement):
         self.a = int(a)
         self.b = int(b)
 
-    # TODO: Put stuff in the data pass.
+    def _storeData(self, data):
+        data.suitEdges.append(self)
 
 registerElement(DNASuitEdge)

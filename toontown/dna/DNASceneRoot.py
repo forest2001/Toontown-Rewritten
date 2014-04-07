@@ -10,7 +10,7 @@ class DNASceneRoot(DNASceneElement):
     def __init__(self, zone=None):
         DNASceneElement.__init__(self)
 
-        self.zone = zone
+        self.zone = int(zone)
 
     def generate(self, storage):
         """
@@ -32,6 +32,7 @@ class DNASceneRoot(DNASceneElement):
         data = DNASceneData()
         for child in self.children:
             child._getData(data)
+        data.update()
         return data
 
 registerElement(DNASceneRoot)

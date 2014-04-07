@@ -16,6 +16,7 @@ class DNAStoreSuitPoint(DNASceneElement):
         self.z = float(z)
         self.building = building and int(building)
 
-    # TODO: Put stuff in the data pass.
+    def _storeData(self, data):
+        data.suitPoints.append(self)
 
 registerElement(DNAStoreSuitPoint)
