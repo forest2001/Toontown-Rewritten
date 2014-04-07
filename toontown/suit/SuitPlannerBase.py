@@ -7,6 +7,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.hood import HoodUtil
 from toontown.building import SuitBuildingGlobals
+from toontown.dna import *
 
 class SuitPlannerBase:
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitPlannerBase')
@@ -489,13 +490,13 @@ class SuitPlannerBase:
     def setupDNA(self):
         if self.dnaStore:
             return None
-        self.dnaStore = DNAStorage()
         dnaFileName = self.genDNAFileName()
         try:
-            simbase.air.loadDNAFileAI(self.dnaStore, dnaFileName)
-        except:
-            loader.loadDNAFileAI(self.dnaStore, dnaFileName)
-
+            f = open(dnaFileName, "r")
+        except IOError:
+            f = open('resources/' + dnaFileName, "r")
+        self.dnaStore = DNAParser.parse(f)
+        f.close()
         self.initDNAInfo()
         return None
 
@@ -523,13 +524,10 @@ class SuitPlannerBase:
         return groupFullName.split(':', 1)[0]
 
     def initDNAInfo(self):
-        numGraphs = self.dnaStore.discoverContinuity()
-        if numGraphs != 1:
-            self.notify.info('zone %s has %s disconnected suit paths.' % (self.zoneId, numGraphs))
         self.battlePosDict = {}
         self.cellToGagBonusDict = {}
-        for i in range(self.dnaStore.getNumDNAVisGroupsAI()):
-            vg = self.dnaStore.getDNAVisGroupAI(i)
+        vgs = DNAUtil.getVisGroups(self.dnaStore)
+        for vg in vgs:
             zoneId = int(self.extractGroupName(vg.getName()))
             if vg.getNumBattleCells() == 1:
                 battleCell = vg.getBattleCell(0)
@@ -554,22 +552,16 @@ class SuitPlannerBase:
                                 if propType in ToontownBattleGlobals.PropTypeToTrackBonus:
                                     trackBonus = ToontownBattleGlobals.PropTypeToTrackBonus[propType]
                                     self.cellToGagBonusDict[zoneId] = trackBonus
-
-        self.dnaStore.resetDNAGroups()
-        self.dnaStore.resetDNAVisGroups()
-        self.dnaStore.resetDNAVisGroupsAI()
         self.streetPointList = []
         self.frontdoorPointList = []
         self.sidedoorPointList = []
         self.cogHQDoorPointList = []
-        numPoints = self.dnaStore.getNumSuitPoints()
-        for i in range(numPoints):
-            point = self.dnaStore.getSuitPointAtIndex(i)
-            if point.getPointType() == DNASuitPoint.FRONTDOORPOINT:
+        for point in self.dnaStore.getData().suitPoints:
+            if point.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT:
                 self.frontdoorPointList.append(point)
-            elif point.getPointType() == DNASuitPoint.SIDEDOORPOINT:
+            elif point.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
                 self.sidedoorPointList.append(point)
-            elif point.getPointType() == DNASuitPoint.COGHQINPOINT or point.getPointType() == DNASuitPoint.COGHQOUTPOINT:
+            elif point.getPointType() == DNAStoreSuitPoint.COGHQINPOINT or point.getPointType() == DNAStoreSuitPoint.COGHQOUTPOINT:
                 self.cogHQDoorPointList.append(point)
             else:
                 self.streetPointList.append(point)
