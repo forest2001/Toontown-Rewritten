@@ -22,6 +22,8 @@ import DistributedSuitBase
 from otp.otpbase import OTPLocalizer
 import random
 from SuitLegList import *
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 STAND_OUTSIDE_DOOR = 2.5
 BATTLE_IGNORE_TIME = 6
 BATTLE_WAIT_TIME = 3

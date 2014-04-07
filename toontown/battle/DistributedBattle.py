@@ -13,6 +13,8 @@ from otp.avatar import Emote
 import SuitBattleGlobals
 from toontown.distributed import DelayDelete
 import random
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class DistributedBattle(DistributedBattleBase.DistributedBattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattle')

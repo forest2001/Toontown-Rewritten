@@ -19,6 +19,8 @@ from toontown.toon.Toon import teleportDebug
 from toontown.estate import HouseGlobals
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 visualizeZones = base.config.GetBool('visualize-zones', 0)
 
 class Street(BattlePlace.BattlePlace):
@@ -112,7 +114,7 @@ class Street(BattlePlace.BattlePlace):
         base.localAvatar.setGeom(self.loader.geom)
         base.localAvatar.setOnLevelGround(1)
         self._telemLimiter = TLGatherAllAvs('Street', RotationLimitToH)
-        #NametagGlobals.setMasterArrowsOn(arrowsOn) #TODO: fix me cfsworks
+        NametagGlobals.setMasterArrowsOn(arrowsOn) #TODO: fix me cfsworks
 
         def __lightDecorationOn__():
             geom = base.cr.playGame.getPlace().loader.geom
@@ -184,7 +186,7 @@ class Street(BattlePlace.BattlePlace):
                 light.reparentTo(hidden)
 
         newsManager = base.cr.newsManager
-        #NametagGlobals.setMasterArrowsOn(0) #TODO: cfsworks fix me plx
+        NametagGlobals.setMasterArrowsOn(0) #TODO: cfsworks fix me plx
         self.loader.hood.stopSky()
         self.loader.music.stop()
         base.localAvatar.setGeom(render)
