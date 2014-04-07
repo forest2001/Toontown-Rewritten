@@ -10,5 +10,11 @@ class DNAInteractiveProp(DNAAnimProp):
 
         self.cell_id = int(cell_id)
 
+    def _makeNode(self, parent, storage):
+        node = DNAAnimProp._makeNode(self, parent, storage)
+
+        node.setTag('DNACellIndex', str(self.cell_id))
+
+        return node
 
 registerElement(DNAInteractiveProp)
