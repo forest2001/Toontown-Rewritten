@@ -29,4 +29,7 @@ class DNANode(DNAGroup):
     def getColor(self):
         return self.__getAttribute(DNAColor, 'color', (1.0, 1.0, 1.0, 1.0))
 
+    def _postGenerate(self, node):
+        node.flattenStrong()
+
 registerElement(DNANode)
