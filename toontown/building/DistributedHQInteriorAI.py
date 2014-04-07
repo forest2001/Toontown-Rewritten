@@ -1,33 +1,48 @@
+from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
-from direct.distributed.DistributedObjectAI import DistributedObjectAI
 import cPickle
 
+class DistributedHQInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
-class DistributedHQInteriorAI(DistributedObjectAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHQInteriorAI")
-
-    def __init__(self, air):
-        DistributedObjectAI.__init__(self, air)
-        self.isTutorial = False
-        self.zoneId = 0
-        self.block = 0
-        self.leaderData = cPickle.dumps(([], [], []))
-
-    def setZoneIdAndBlock(self, zoneId, block):
-        self.zoneId = zoneId
+    def __init__(self, block, air, zoneId):
+        DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.block = block
+        self.zoneId = zoneId
+        self.tutorial = 0
+        self.isDirty = False
+        self.accept('leaderboardChanged', self.leaderboardChanged)
+        self.accept('leaderboardFlush', self.leaderboardFlush)
 
-    def setLeaderBoard(self, leaderData):
-        self.leaderData = leaderData
-
-    def setTutorial(self, isTutorial):
-        self.isTutorial = False
+    def delete(self):
+        self.ignore('leaderboardChanged')
+        self.ignore('leaderboardFlush')
+        self.ignore('setLeaderBoard')
+        self.ignore('AIStarted')
+        DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def getZoneIdAndBlock(self):
-        return (self.zoneId, self.block)
+        r = [self.zoneId, self.block]
+        return r
+
+    def leaderboardChanged(self):
+        self.isDirty = True
+
+    def leaderboardFlush(self):
+        if self.isDirty:
+            self.sendNewLeaderBoard()
+
+    def sendNewLeaderBoard(self):
+        if self.air:
+            self.isDirty = False
+            self.sendUpdate('setLeaderBoard', [cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)])
 
     def getLeaderBoard(self):
-        return self.leaderData
+        return cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)
 
     def getTutorial(self):
-        return self.isTutorial
+        return self.tutorial
+
+    def setTutorial(self, flag):
+        if self.tutorial != flag:
+            self.tutorial = flag
+            self.sendUpdate('setTutorial', [self.tutorial])
