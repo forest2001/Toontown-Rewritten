@@ -6,18 +6,17 @@ class SuitLegList:
         self.suitLegType = 0
         self.startTime = 0.0
         self.legTime = 0.0
-        self.zoneId = 0
         self.blockNumber = 0
         self.legs = []
         i = 0
-        self.legs.append(SuitLeg(path.getPoint(0).getPos(), path.getPoint(0).getPos(), SuitLeg.FromSky))
+        self.legs.append(SuitLeg(path.getPoint(0), path.getPoint(0), path.getPoint(0).parent.zone, SuitLeg.TFromSky))
         while i+1 < path.getNumPoints():
             point = path.getPoint(i)
             point2 = path.getPoint(i+1)
-            self.legs.append(SuitLeg(point.getPos(), point2.getPos(), SuitLeg.Walk))
+            self.legs.append(SuitLeg(point, point2, point.parent.zone, SuitLeg.TWalk))
             i += 1
         endPoint = path.getPoint(path.getNumPoints()-1)
-        self.legs.append(SuitLeg(endPoint.getPos(), endPoint.getPos(), SuitLeg.ToSky))
+        self.legs.append(SuitLeg(endPoint, endPoint, endPoint.parent.zone, SuitLeg.TToSky))
 
     def getStartTime(self, index):
         time = 0
@@ -43,6 +42,22 @@ class SuitLegList:
     def getNumLegs(self):
         return len(self.legs)
 
+    def getZoneId(self, legNum):
+        return self.legs[legNum].zone
+
+    def getType(self, legNum):
+        return self.legs[legNum].getType()
+
+    def isPointInRange(self, point, startTime, endTime):
+        leg = self.getLegIndexAtTime(startTime, 0)
+        time = startTime
+        while time < endTime:
+            if self[leg].pointA == point or self[leg].pointB == point:
+                return True
+            time += self[leg].getLegTime()
+            leg += 1
+        return False
+
     def __getitem__(self, key):
         return self.legs[key]
 
@@ -55,8 +70,8 @@ class SuitLeg:
     TFromSuitBuilding = 5
     TToSuitBuilding = 6
     TToToonBuilding = 7
-    TFromCogHQ = 8
-    TToCogHQ = 9
+    TFromCoghq = 8
+    TToCoghq = 9
     TOff = 10
     TypeToName = {
       0 : 'WalkFromStreet',
@@ -67,20 +82,23 @@ class SuitLeg:
       5 : 'FromSuitBuilding',
       6 : 'ToSuitBuilding',
       7 : 'ToToonBuilding',
-      8 : 'FromCogHQ',
-      9 : 'ToCogHQ',
+      8 : 'FromCoghq',
+      9 : 'ToCoghq',
       10 : 'Off'
     }
-    def __init__(self, posA, posB, type):
-        self.posA = posA
-        self.posB = posB
+    def __init__(self, pointA, pointB, zone, type):
+        self.pointA = pointA
+        self.pointB = pointB
+        self.posA = pointA.getPos()
+        self.posB = pointB.getPos()
         self.type = type
+        self.zone = zone
     def getLegTime(self):
-        if self.type == SuitLeg.Walk:
+        if self.type == SuitLeg.TWalk:
             return (self.posA-self.posB).length()/ToontownGlobals.SuitWalkSpeed
-        elif self.type == SuitLeg.FromSky:
+        elif self.type == SuitLeg.TFromSky:
             return SuitTimings.fromSky
-        elif self.type == SuitLeg.ToSky:
+        elif self.type == SuitLeg.TToSky:
             return SuitTimings.toSky
     def getPosA(self):
         return self.posA
