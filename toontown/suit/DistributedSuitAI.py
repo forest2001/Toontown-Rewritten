@@ -260,7 +260,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
     def __enterZone(self, zoneId):
         if zoneId != self.zoneId:
             self.sp.zoneChange(self, self.zoneId, zoneId)
-            self.air.sendSetZone(self, zoneId)
+            self.setLocation(self.parentId, zoneId)
             self.zoneId = zoneId
             if self.pathState == 1:
                 self.sp.checkForBattle(zoneId, self)
