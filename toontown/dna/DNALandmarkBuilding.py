@@ -1,12 +1,12 @@
-from DNAGroup import DNAGroup
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNALandmarkBuilding(DNAGroup):
+class DNALandmarkBuilding(DNANode):
     TAG = 'landmark_building'
 
     def __init__(self, id, code, type=None):
-        DNAGroup.__init__(self, id)
+        DNANode.__init__(self, id)
 
         self.id = id
         self.code = code

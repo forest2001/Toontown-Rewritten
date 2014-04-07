@@ -1,13 +1,13 @@
-from DNASceneElement import DNASceneElement
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNABaseline(DNASceneElement):
+class DNABaseline(DNANode):
     TAG = 'baseline'
     PARENTS = ['sign']
 
     def __init__(self, code=None, flags='', wiggle='0', stumble='0', indent='0', stomp='0', kern='0', width='0', height='0'):
-        DNASceneElement.__init__(self)
+        DNANode.__init__(self, 'baseline')
 
         self.code = code
         self.flags = flags

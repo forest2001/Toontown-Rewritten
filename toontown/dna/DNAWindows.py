@@ -1,13 +1,13 @@
-from DNASceneElement import DNASceneElement
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNAWindows(DNASceneElement):
+class DNAWindows(DNANode):
     TAG = 'windows'
     PARENTS = ['wall']
 
     def __init__(self, code, count="0"):
-        DNASceneElement.__init__(self)
+        DNANode.__init__(self, 'windows')
 
         self.code = code
         self.count = int(count)

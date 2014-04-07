@@ -1,12 +1,12 @@
-from DNAGroup import DNAGroup
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNASign(DNAGroup):
+class DNASign(DNANode):
     TAG = 'sign'
 
     def __init__(self, code=None):
-        DNAGroup.__init__(self, code or 'sign')
+        DNANode.__init__(self, code or 'sign')
 
         self.code = code
 

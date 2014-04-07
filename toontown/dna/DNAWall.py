@@ -1,13 +1,13 @@
-from DNASceneElement import DNASceneElement
+from DNANode import DNANode
 from DNAParser import *
 from panda3d.core import *
 
-class DNAWall(DNASceneElement):
+class DNAWall(DNANode):
     TAG = 'wall'
     PARENTS = ['flat_building']
 
     def __init__(self, code, height="0"):
-        DNASceneElement.__init__(self)
+        DNANode.__init__(self, 'wall')
 
         self.code = code
         self.height = float(height)
