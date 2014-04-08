@@ -71,7 +71,13 @@ class QuestManagerAI:
         pass
 
     def avatarChoseQuest(self, avId, npc, questId, rewardId, toNpcId):
-        self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
+        if simbase.air.doId2do.has_key(avId):
+            av = simbase.air.doId2do[avId]
+            fromNpcId = npc.getDoId()
+            toonProgress = 0
+            self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
+            av.addQuest((questId, fromNpcId, toNpcId, rewardId, toonProgress), Quests.Quest2RemainingStepsDict[questId] == 1)
+            npc.assignQuest(avId, questId, rewardId, toNpcId)
 
     def avatarChoseTrack(self, avId, npc, pendingTrackQuest, trackId):
         pass
