@@ -20,3 +20,10 @@ def r_getChildrenOfType(root, type, list):
         if isinstance(child, type):
             list.append(child)
         r_getVisGroups(child, list)
+
+
+def getBlock(name):
+    block = name[name.find(':')-2:name.find(':')]
+    if block[0] > '9' or block[0] < '0':
+        block = block[1:]
+    return block

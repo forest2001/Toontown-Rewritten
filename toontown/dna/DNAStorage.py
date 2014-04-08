@@ -10,6 +10,7 @@ class DNAStorageEntry:
 class DNAStorage:
     def __init__(self):
         self._typecode2entry = {}
+        self._block2title = {}
 
         # For the special case below:
         self._dcsNode = NodePath(ModelNode(''))
@@ -58,3 +59,9 @@ class DNAStorage:
 
     def findTexture(self, code):
         return self.find('texture', code)
+
+    def setBlockTitle(self, block, title):
+        self._block2title[block] = title
+
+    def getTitleFromBlockNumber(self, block):
+        return self._block2title[block]
