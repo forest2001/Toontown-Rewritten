@@ -6,6 +6,7 @@ class DNASceneElement(DNAElement):
         DNAElement.__init__(self)
 
         self.code = None
+        self.name = ''
 
     def _generate(self, storage, parent):
         node = self._makeNode(storage, parent)
@@ -34,3 +35,11 @@ class DNASceneElement(DNAElement):
 
     def _storeData(self, data):
         pass # Also overridable by subclass.
+
+
+    # Lookup functions:
+    def getVisGroup(self):
+        if self.parent is not None:
+            return self.parent.getVisGroup()
+        else:
+            return None
