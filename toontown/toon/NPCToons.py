@@ -90,7 +90,6 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     elif type == NPC_HQ:
-        return False
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback, hq=1)
     elif type == NPC_CLERK:
         return False
