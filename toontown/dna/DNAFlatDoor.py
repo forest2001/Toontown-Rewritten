@@ -21,7 +21,7 @@ class DNAFlatDoor(DNANode):
         np.setPos(0.5, 0, 0) # Centered within the wall
 
         # Appear on top of wall:
-        np.setDepthOffset(50)
+        np.setDepthOffset(self.DEPTH_OFFSET)
 
         return np
 

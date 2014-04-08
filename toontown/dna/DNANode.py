@@ -10,6 +10,8 @@ from DNAScale import DNAScale
 class DNANode(DNAGroup):
     TAG = 'node'
 
+    DEPTH_OFFSET = 3
+
     def __getAttribute(self, type, member, default):
         children = self.findChildren(type)
         if not children:

@@ -18,7 +18,7 @@ class DNAWindows(DNANode):
             raise DNAError('DNAWindows uses unknown code %s' % self.code)
 
         windows = parent.attachNewNode('windows')
-        windows.setDepthOffset(50)
+        windows.setDepthOffset(self.DEPTH_OFFSET)
 
         for i in xrange(self.count):
             x = (i + 1)/(self.count + 1.0)

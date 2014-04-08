@@ -25,7 +25,7 @@ class DNABaseline(DNANode):
         np = parent.attachNewNode('baseline')
 
         # Don't z-fight with the sign.
-        np.setDepthOffset(50)
+        np.setDepthOffset(self.DEPTH_OFFSET)
 
         return np
 

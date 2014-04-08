@@ -18,7 +18,7 @@ class DNACornice(DNANode):
 
         np = node.copyTo(parent)
         np.setZ(1)
-        np.setDepthOffset(50) # Appear on top of the wall.
+        np.setDepthOffset(self.DEPTH_OFFSET) # Appear on top of the wall.
 
         return np
 
