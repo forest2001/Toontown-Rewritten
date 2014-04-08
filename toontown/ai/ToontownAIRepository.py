@@ -127,8 +127,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.partyManager = DistributedPartyManagerAI(self)
         self.partyManager.generateWithRequired(2)
         
-        self.aprilToonsMgr = DistributedAprilToonsMgrAI(self)
-        self.aprilToonsMgr.generateWithRequired(2)
+        # Disable April Toons
+        # self.aprilToonsMgr = DistributedAprilToonsMgrAI(self)
+        # self.aprilToonsMgr.generateWithRequired(2)
 
         # setup our view of the global party manager ud
         self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
