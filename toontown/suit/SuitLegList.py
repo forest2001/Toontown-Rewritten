@@ -52,6 +52,8 @@ class SuitLegList:
         leg = self.getLegIndexAtTime(startTime, 0)
         time = startTime
         while time < endTime:
+            if leg >= len(self.legs):
+                return False
             if self[leg].pointA == point or self[leg].pointB == point:
                 return True
             time += self[leg].getLegTime()

@@ -88,10 +88,9 @@ class DistributedBattleAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
             for toonId in self.activeToons:
                 toon = self.getToon(toonId)
                 if toon:
-                    #TODO: quest & promotion mgr
-                    pass
-                    '''self.toonItems[toonId] = self.air.questManager.recoverItems(toon, self.suitsKilled, self.zoneId)
-                    if toonId in self.helpfulToons:
+                    #TODO: promotion mgr
+                    self.toonItems[toonId] = self.air.questManager.recoverItems(toon, self.suitsKilled, self.zoneId)
+                    '''if toonId in self.helpfulToons:
                         self.toonMerits[toonId] = self.air.promotionMgr.recoverMerits(toon, self.suitsKilled, self.zoneId)
                     else:
                         self.notify.debug('toon %d not helpful, skipping merits' % toonId)'''

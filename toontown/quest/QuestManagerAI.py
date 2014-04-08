@@ -45,11 +45,5 @@ class QuestManagerAI:
     def avatarChoseTrack(self, avId, npc, pendingTrackQuest, trackId):
         pass
 
-    def hasTailorClothingTicket(self, av, tailorNpc):
-        pass
-
-    def removeClothingTicket(self, av, tailorNpc):
-        pass
-
     def toonMadeFriend(self, av, otherAv):
         pass

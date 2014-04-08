@@ -669,7 +669,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if friendsList:
             friendId = friendsList[-1]
             otherAv = self.air.doId2do.get(friendId)
-            #self.air.questManager.toonMadeFriend(self, otherAv)
+            self.air.questManager.toonMadeFriend(self, otherAv)
 
     def getFriendsList(self):
         return self.friendsList

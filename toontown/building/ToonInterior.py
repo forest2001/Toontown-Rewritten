@@ -13,6 +13,8 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toon import NPCForceAcknowledge
 from toontown.toon import HealthForceAcknowledge
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class ToonInterior(Place.Place):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonInterior')
