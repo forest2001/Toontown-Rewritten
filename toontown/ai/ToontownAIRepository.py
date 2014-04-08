@@ -41,6 +41,7 @@ from toontown.parties import PartyGlobals
 from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 
 from toontown.quest.QuestManagerAI import QuestManagerAI
+from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -141,6 +142,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
+
+        self.trophyMgr = DistributedTrophyMgrAI(self)
+        self.trophyMgr.generateWithRequired(2)
 
     def startFireworks(self, task):
         allFwTypes = [PartyGlobals.FireworkShows.Summer, ToontownGlobals.JULY4_FIREWORKS]
