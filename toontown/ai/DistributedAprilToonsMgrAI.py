@@ -10,8 +10,7 @@ class DistributedAprilToonsMgrAI(DistributedObjectAI):
         self.events = [EventRandomDialogue,
                        EventRandomEffects,
                        EventEstateGravity,
-                       EventGlobalGravity,
-                       EventSirMaxBirthday]
+                       EventGlobalGravity]
     
     def getEvents(self):
         return self.events
