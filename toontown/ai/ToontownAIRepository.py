@@ -39,6 +39,8 @@ from toontown.parties import PartyGlobals
 # AprilToons, bitches!
 from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 
+from toontown.quest.QuestManagerAI import QuestManagerAI
+
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
         ToontownInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
@@ -59,6 +61,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.holidayManager = HolidayManagerAI()
         
         self.fishManager = FishManagerAI()
+        self.questManager = QuestManagerAI()
 
     def getTrackClsends(self):
         return False
