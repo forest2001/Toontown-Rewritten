@@ -10,6 +10,7 @@ from otp.nametag.NametagConstants import *
 ChoiceTimeout = 20
 
 class DistributedNPCToon(DistributedNPCToonBase):
+    deferFor = 1
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)
@@ -97,9 +98,10 @@ class DistributedNPCToon(DistributedNPCToonBase):
     def setupCamera(self, mode):
         camera.wrtReparentTo(render)
         if mode == NPCToons.QUEST_MOVIE_QUEST_CHOICE or mode == NPCToons.QUEST_MOVIE_TRACK_CHOICE:
-            camera.lerpPosHpr(5, 9, self.getHeight() - 0.5, 155, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+            self.cameraLerp = LerpPosHprInterval(camera, 1, Point3(5, 9, self.getHeight() - 0.5), Point3(155, -2, 0))
         else:
-            camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+            self.cameraLerp = LerpPosHprInterval(camera, 1, Point3(-5, 9, self.getHeight() - 0.5), Point3(-150, -2, 0))
+        self.cameraLerp.start()
 
     def setMovie(self, mode, npcId, avId, quests, timestamp):
         timeStamp = ClockDelta.globalClockDelta.localElapsedTime(timestamp)
