@@ -1,4 +1,8 @@
+import Quests
+from direct.directnotify import DirectNotifyGlobal
+
 class QuestManagerAI:
+    notify = DirectNotifyGlobal.directNotify.newCategory('QuestManagerAI')
     def __init__(self):
         pass
 
@@ -34,13 +38,40 @@ class QuestManagerAI:
         pass
 
     def requestInteract(self, avId, npc):
-        pass
+        if simbase.air.doId2do.has_key(avId):
+            av = simbase.air.doId2do[avId]
+            quests = av.quests
+            numQuests = len(quests)
+            if numQuests+1 > av.getQuestCarryLimit():
+                npc.rejectAvatar(avId)
+                return
+            questHistory = av.getQuestHistory()
+            #HACK ALERT
+            #TODO: fix this for tutorial quests
+            toonTier = 1
+            for tier, questList in Quests.Tier2QuestsDict.items():
+                if tier < toonTier:
+                    continue
+                toonTier = tier
+                breaking = False
+                for questId in questList:
+                    if not questId in questHistory:
+                        breaking = True
+                        break
+                if breaking:
+                    break
+
+            offeredQuests = Quests.chooseBestQuests(toonTier, npc, av)
+            if not offeredQuests:
+                npc.rejectAvatarTierNotDone(avId)
+                return
+            npc.presentQuestChoice(avId, offeredQuests)
 
     def avatarCancelled(self, avId):
         pass
 
-    def avatarChoseQuest(self, avId, npc, *quest):
-        pass
+    def avatarChoseQuest(self, avId, npc, questId, rewardId, toNpcId):
+        self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
 
     def avatarChoseTrack(self, avId, npc, pendingTrackQuest, trackId):
         pass
