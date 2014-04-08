@@ -1,6 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.parties import PartyGlobals
+from toontown.dna.DNASpawnerAI import *
+from toontown.dna.DNAProp import DNAProp
 
 class DistributedPartyGateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyGateAI")
@@ -34,3 +36,9 @@ class DistributedPartyGateAI(DistributedObjectAI):
             self.sendUpdateToAvatarId(self.air.getAvatarIdFromSender(), 'partyRequestDenied', [PartyGlobals.PartyGateDenialReasons.Unavailable])
             return #dafuq
         self.air.globalPartyMgr.d_requestPartySlot(pid, self.air.getAvatarIdFromSender(), self.doId)
+
+@dnaSpawn(DNAProp, 'prop_party_gate')
+def spawn(air, zone, element, match):
+    gate = DistributedPartyGateAI(air)
+    gate.setArea(zone)
+    gate.generateWithRequired(zone)
