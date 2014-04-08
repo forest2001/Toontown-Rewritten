@@ -1,7 +1,5 @@
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
-from otp.nametag.NametagGroup import NametagGroup
-from otp.nametag.Nametag import Nametag
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
@@ -18,6 +16,8 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 from toontown.distributed.DelayDeletable import DelayDeletable
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
 if (__debug__):
     import pdb
 
@@ -190,18 +190,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-        if self.doorType == DoorTypes.INT_HQ:
-            if not getattr(base.cr, 'hqLoaded', False):
-                messenger.accept('hqInternalDone', self, self.__doPostAnnounceGenerate)
-            else:
-                self.doPostAnnounceGenerate()
-        else:
-            self.doPostAnnounceGenerate()
-
-    def __doPostAnnounceGenerate(self):
-        self.ignore('hqInternalDone')
-
         self.doPostAnnounceGenerate()
+
     def doPostAnnounceGenerate(self):
         if self.doorType == DoorTypes.INT_STANDARD:
             self.bHasFlat = True
