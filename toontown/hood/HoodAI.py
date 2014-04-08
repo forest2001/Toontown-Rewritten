@@ -51,5 +51,6 @@ class HoodAI:
         self.treasurePlanner.start()
 
     def spawnObjects(self):
-        # TODO: Create a working DNASpawnerAI
-        pass
+        filename = self.air.genDNAFileName(self.safezone)
+
+        self.air.dnaSpawner.spawnObjects(filename, self.safezone)

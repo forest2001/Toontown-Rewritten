@@ -17,3 +17,10 @@ class StreetAI:
         self.sp.generateWithRequired(self.zoneId)
         self.sp.d_setZoneId(self.zoneId)
         self.sp.initTasks()
+
+        self.spawnObjects()
+    
+    def spawnObjects(self):
+        filename = self.air.genDNAFileName(self.zoneId)
+
+        self.air.dnaSpawner.spawnObjects(filename, self.zoneId)

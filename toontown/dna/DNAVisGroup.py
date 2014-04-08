@@ -15,4 +15,7 @@ class DNAVisGroup(DNAGroup):
         # Store the VisGroup's existence into the DNASceneData:
         data.visgroups.append(self)
 
+    def getVisGroup(self):
+        return self
+
 registerElement(DNAVisGroup)
