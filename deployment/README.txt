@@ -4,6 +4,7 @@ uberdogs.yml contains the 'uberdogs' section of an astrond.yml. Please keep it u
 
 deploy.json describes a specific release of TTR. It contains the version of astron to use as well as the version of Panda3D to use.
 deploy.json also contains a version prefix. For releases, a commit should be made that updates deploy.json to state the new version prefix.
+The key 'server-resources' maps to a list of file extensions of files in the resources directory that are necessary to be used server-side. We do not package and deploy art assets onto servers.
 For example:
 deploy.json resides at prefix ttr-v1.0.1-
 Git commit 6ebecf60d contains all the code that we want to push in v1.0.2
