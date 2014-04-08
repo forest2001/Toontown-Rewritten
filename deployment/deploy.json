@@ -3,5 +3,5 @@
   "astron": "b9b8a28",
   "panda3d": "61eb70d",
   "version-prefix": "ttr-alpha-g",
-  "server-resources": ["dna", "xml", "txt", "dat]
+  "server-resources": ["dna", "xml", "txt", "dat"]
 }
