@@ -14,6 +14,7 @@ from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
+from toontown.dna.DNASpawnerAI import DNASpawnerAI
 
 #friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -42,6 +43,8 @@ from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
         ToontownInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
+
+        self.dnaSpawner = DNASpawnerAI(self)
 
         self.districtName = districtName
 

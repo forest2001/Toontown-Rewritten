@@ -55,4 +55,4 @@ class HoodAI:
     def spawnObjects(self):
         filename = self.air.genDNAFileName(self.safezone)
 
-        DNASpawnerAI().spawnObjects(filename, self.safezone)
+        self.air.dnaSpawner.spawnObjects(filename, self.safezone)

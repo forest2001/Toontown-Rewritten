@@ -19,4 +19,4 @@ class StreetAI:
     def spawnObjects(self):
         filename = self.air.genDNAFileName(self.zoneId)
 
-        DNASpawnerAI().spawnObjects(filename, self.zoneId)
+        self.air.dnaSpawner.spawnObjects(filename, self.zoneId)
