@@ -33,6 +33,19 @@ AnnouncementMusic = 'phase_4/audio/bgm/EE_Announcement.ogg' #Played when Alec, F
 VictoryMusic = 'phase_4/audio/bgm/EE_Celebration.ogg' #Played during Slappy's victory, right before the cog lands
 SadMusic = 'phase_4/audio/bgm/EE_DiesandPies.ogg' #Played when Slappy dies and the first pie thrown
 
+SurleeTips = [
+    'Always watch all sides of you, the Cogs are sneaky and love to backstab.',
+    'Make sure to not only pie the cogs, but your fellow toons as well! There\'s lots of Laff to go around.',
+    'Mover and Shakers give tremors as they walk -- You\'ll need to hit them from a distance.',
+    'Come on, get more pies! Fight for the town!',
+    'The bigger a Cog is, the faster they walk and the more they talk.',
+    'Don\'t let them take away out fun! Stop them!',
+    'The Cog\'s business is too boring to bear. Don\'t let them talk to you.',
+    'That\'s what I\'m talking about. Keep at it!',
+    'Flippy, we need more pies over here. They\'re flying out quick.',
+    'Doctor Dimm, have you had any luck on Slappy\'s stand?',
+    'Keep a close eye on your pie count, it can run out fast.'
+]
 
 ########################
 #   Slappy's Balloon   #

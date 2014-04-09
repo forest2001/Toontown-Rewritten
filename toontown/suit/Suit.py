@@ -938,7 +938,7 @@ class Suit(Avatar.Avatar):
                 self.generateCorporateTie(self.loseActor)
         self.loseActor.setScale(self.scale)
         self.loseActor.setPos(self.getPos())
-        self.loseActor.setHpr(self.getHpr())
+        self.loseActor.setHpr(self.getH(), 0, 0)
         self.collTube = CollisionTube(0, 0, 0.5, 0, 0, 4, 2)
         self.collNode = CollisionNode('loseActor')
         self.collNode.addSolid(self.collTube)

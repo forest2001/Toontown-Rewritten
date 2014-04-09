@@ -1,10 +1,31 @@
+# The position of the Finale suit
+# Spawns at SuitSpawnPoints # 3
+FinaleSuitDestination = (29.3, -5.0)
 
-# The Spawnpoint of the first cog to land
-FirstSuitSpawnPoint = (65, 3.6, 4.0, 45.0)
-FirstSuitType = 'ym'
+# Lets give the Finale suit a special name
+# This one is surprisingly fitting, because of the election -- http://en.wikipedia.org/wiki/Ambush_marketing
+FinaleSuitName = 'Director of\nAmbush Marketing\nSupervisor\nLevel 50'
 
-# The destination of the Finale suit
-FinaleSuitDestination = (30.0, 3.6)
+# Add a few phrases for the cog to say
+FinaleSuitPhrases = [
+    # The Director has landed
+    "Apparently our marketing strategies haven't exactly appealed to you \"Toons\". I've been sent in to give you an offer that you can't refuse.",
+    "I suppose you could say that \"I'm the boss.\"",
+    # Time to find Flippy, we'll do some brainstorming along the way
+    "I'll be needing to speak with your President directly."
+    "I'm prepared to close this deal quickly.",
+    "Relax, you'll find this is for the best.",
+    "At this rate I'll need to liquidate toons from the picture.",
+    "I assure you that you'll find no greater offer.",
+    "The Chairman won't be happy until you are.",
+    # We arrive at Flippy
+    "Ah, finally. The toon I've been searching for.",
+    "I hope you won't pull out of the deal like your predecessor.",
+    "Don't worry, he is in safe keeping now."
+]
+
+FinaleSuitAttackDamage = 10
+FinaleSuitAttackDelay = 10 # Wait 10 seconds before jumping again
 
 # Spawn points for the Invasion Minigame
 # There are currently 18 spawnpoints
@@ -32,14 +53,9 @@ SuitSpawnPoints = [
 ]
 
 SuitWaves = [
-    [('tbc', 0)]
-]
-
-SuitWaves2 = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
-    # TODO: Do full wave setup
 
     # WAVE 1:
     [('f', 0), ('bf', 1), ('f', 0), ('f', 0), ('cc', 0), ('sc', 0), ('sc', 1), ('bf', 0), ('cc', 1)],
@@ -81,10 +97,10 @@ SuitWaves2 = [
     [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
     [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 
-    # WAVE 9: The Final Wave
-    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
-    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
-    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+    # WAVE 9: THE FINAL WAVE
+    [('tbc', 2), ('bw', 1), ('rb', 3), ('mh', 3), ('tbc', 1), ('bw', 1), ('rb', 2), ('mh', 4)],
+    [('tbc', 4), ('bw', 1), ('rb', 4), ('mh', 1), ('tbc', 3)], # Wait Wave
+    [('tbc', 4), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 4), ('mh', 4), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
@@ -95,27 +111,24 @@ SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
 SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
 
 # These are the last waves that start turning cogs into Skelcogs.
-SuitSkelecogWaves = [24]
+SuitSkelecogWaves = [24, 25, 26]
 
-# This should be at least 6.5 (the suit fly-down time)
-WaveBeginningTime = 10
-# How long does the intermission last?
-IntermissionTime = 20
+WaveBeginningTime = 10 # This should be at least 6.5 (the suit fly-down time)
+IntermissionTime = 20 # How long does the intermission last?
 
-# How much damage does a suit's attack do?
-StandardSuitDamage = 5
+StandardSuitDamage = 5 # How much damage does a standard suit's attack do?
+MoveShakerDamageRadius = 3 # How much damage does a Move and Shaker's attack do?
+MoveShakerRadius = 20 # And it's attack radius?
+MoveShakerStunTime = 5.0 # Once hit by a Mover and Shaker, how long do toons have before hit again?
 
-# How much damage does a Move and Shaker's attack do?
-MoveShakerDamageRadius = 3
-MoveShakerRadius = 30
-MoveShakerStunTime = 5.0
-
-# How much healing does a pie on a Toon do?
-ToonHealAmount = 1
+ToonHealAmount = 1 # How much healing does a pie on a Toon do?
 
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
 InvasionMusicEnter = 'phase_4/audio/bgm/DD_main_temp.ogg' # TODO: Break into separate parts for a better loop
 
-# Leave Toontown Central Alert
+# This message is displayed upon trying to leave Toontown Central
 LeaveToontownCentralAlert = "There isn't anywhere to go! Shops are closed for the election today."
+
+# A message for Anth's credit sequence. Might end up unused.
+Thanks = "Thank you so much for attending the elections! We'd like to thank you all for supporting us! See you all soon!"

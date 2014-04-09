@@ -11,6 +11,8 @@ from DistributedInvasionSuitAI import DistributedInvasionSuitAI
 from InvasionMasterAI import InvasionMasterAI
 from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
+import ElectionGlobals
+import random
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -30,10 +32,36 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def enterOff(self):
         self.requestDelete()
+
+
+    '''
+     PRE-ELECTION CAMPAIGNS
+       These bits are for things used before Election Day, and mostly unrelated to the Election Sequence.
+    '''
+    def enterIdle(self):
+        # Generate Slappy's Hot Air Balloon!
+        if self.balloon is None:
+            # Pump some self.air into Slappy's Balloon
+            self.balloon = DistributedHotAirBalloonAI(self.air)
+            self.balloon.generateWithRequired(self.zoneId)
+        if simbase.config.GetBool('want-doomsday', False):
+            # It's Election day!
+            self.balloon.b_setState('ElectionIdle')
+            # Better spawn some cameras
+            if not hasattr(simbase.air, 'cameraManager'):
+                camMgr = DistributedElectionCameraManagerAI(simbase.air)
+                camMgr.spawnManager()
+        else:
+            self.balloon.b_setState('Waiting')
     
-    def setPieTypeAmount(self, type, num):
-        # This is more for the invasion than the pre-invasion elections.
-        self.pieTypeAmount = [type, num]
+    def phraseSaidToFlippy(self, phraseId):
+        # Someone said something (relavent) to Flippy!
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId, None)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
+            return
+        self.sendUpdate('flippySpeech', [avId, phraseId])
 
     def wheelbarrowAvatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
@@ -46,6 +74,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             av.b_setNumPies(self.pieTypeAmount[1])
             av.b_setPieThrowType(self.pieTypeAmount[2])
         self.sendUpdate('flippySpeech', [avId, 1]) # 1 = Pie Request
+
+    def setPieTypeAmount(self, type, num):
+        # This is more for the invasion than the pre-invasion elections.
+        self.pieTypeAmount = [type, num]
         
     def slappyAvatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
@@ -55,27 +87,14 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             return
         av.b_setCheesyEffect(15, 0, 0)
 
-    def phraseSaidToFlippy(self, phraseId):
-        # Someone said something (relavent) to Flippy!
-        avId = self.air.getAvatarIdFromSender()
-        av = self.air.doId2do.get(avId, None)
-        if not av:
-            self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
-            return
-        self.sendUpdate('flippySpeech', [avId, phraseId])
 
-    def enterIdle(self):
-        # Spawn some cameras
-        if not hasattr(simbase.air, 'cameraManager'):
-            camMgr = DistributedElectionCameraManagerAI(simbase.air)
-            camMgr.spawnManager()
-        # Generate Slappy's Hot Air Balloon!
-        if self.balloon is None:
-            # Pump some self.air into Slappy's Balloon
-            self.balloon = DistributedHotAirBalloonAI(self.air)
-            self.balloon.generateWithRequired(self.zoneId)
-        self.balloon.b_setState('ElectionIdle')
-
+    '''
+     ELETION DAY SEQUENCE
+       Next up we have the things that relate to the election sequence, which is controlled by both the AI and client.
+       The AI has the global timer, which will fire off which state should be played and when. Sort of like checkpoints.
+       The client has the sequences themselves, though, just in case anyone has any network lag when watching it.
+       The client also shoots a message to the AI to ask how much time has elapsed since the sequence started so that late-joining clients can stay in sync with the sequence.
+    '''
     def enterEvent(self):
         event = simbase.air.doFind('ElectionEvent')
         if event is None:
@@ -87,23 +106,31 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             self.balloon.generateWithRequired(self.zoneId)
         self.eventSequence = Sequence(
             Func(event.b_setState, 'PreShow'),
-            Wait(30),
+            Wait(34),
             Func(event.b_setState, 'Begin'),
             Wait(10),
-            #Func(event.b_setState, 'AlecSpeech'),
-            #Wait(140),
+            Func(event.b_setState, 'AlecSpeech'),
+            Wait(155),
             Func(event.b_setState, 'VoteBuildup'),
-            Wait(12),
+            Wait(16),
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
-            Wait(90),
+            Wait(117),
             Func(event.b_setState, 'Invasion')
         )
         self.eventSequence.start()
 
     def enterPreShow(self):
-        pass
+        self.showAnnounceInterval = Sequence(
+            Func(self.sendGlobalUpdate, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.'),
+            Wait(5),
+            Func(self.sendGlobalUpdate, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.')
+        )
+        self.showAnnounceInterval.start()
+
+    def exitPreShow(self):
+        self.showAnnounceInterval.finish()
 
     def enterBegin(self):
         pass
@@ -118,17 +145,57 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         )
         self.landingSequence.start()
 
+    def exitCogLanding(self):
+        self.landingSequence.finish()
+
     def enterInvasion(self):
+        self.surleePhraseLoop = Sequence(
+            Wait(25),
+            Func(self.saySurleePhrase)
+        )
+        self.invasionSequence = Sequence(
+            Wait(20),
+            Func(self.spawnInvasion),
+            Func(self.surleePhraseLoop.loop)                        
+        )
+        self.invasionSequence.start()
+
+    def exitInvasion(self):
+        self.invasionSequence.finish()
+
+    def enterWrapUp(self):
+        pass
+
+
+    '''
+     ELETION DAY MISC.
+       Just a few other bits and pieces we need for Election Day, unrelated to the main sequence.
+    '''
+    def spawnInvasion(self):
         invasion = simbase.air.doFind('SafezoneInvasion')
         if invasion is None:
             invasion = DistributedSafezoneInvasionAI(simbase.air)
             invasion.generateWithRequired(2000)
 
-    def enterFlippyRunning(self):
-        pass
+    def setSuitDamage(self, hp):
+        self.suit = DistributedInvasionSuitAI(self.air, self)
+        self.suit.dna.newSuit('ym')
+        self.suit.setSpawnPoint(99)
+        self.suit.setLevel(0)
+        self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
+        self.suit.takeDamage(hp)
 
-    def enterFlippyWaving(self):
-        pass
+    def saySurleePhrase(self, phrase = None):
+        if not phrase:
+            phrase = random.choice(ElectionGlobals.SurleeTips)
+        self.sendUpdate('saySurleePhrase', [phrase])
+
+    def sendGlobalUpdate(self, text):
+        # Send a whisper to everyone on the district from our local Toon HQ
+        for doId in simbase.air.doId2do:
+            if str(doId)[:2] == '10': # Are they a real player?
+                do = simbase.air.doId2do.get(doId)
+                do.d_setSystemMessage(0, text)
 
     def setState(self, state):
         self.demand(state)
@@ -143,14 +210,6 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def getState(self):
         return (self.state, self.stateTime)
-
-    def setSuitDamage(self, hp):
-        self.suit = DistributedInvasionSuitAI(self.air, self)
-        self.suit.dna.newSuit('ym')
-        self.suit.setSpawnPoint(99)
-        self.suit.setLevel(0)
-        self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
-        self.suit.takeDamage(hp)
 
 @magicWord()
 def election(state):
