@@ -42,6 +42,7 @@ from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 
 from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
+from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -66,6 +67,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         
         self.fishManager = FishManagerAI()
         self.questManager = QuestManagerAI()
+        self.cogPageManager = CogPageManagerAI()
 
     def getTrackClsends(self):
         return False

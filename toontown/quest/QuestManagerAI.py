@@ -11,7 +11,7 @@ class QuestManagerAI:
 
     def recoverItems(self, toon, suitsKilled, zoneId):
         #return (recovered, notRecovered)
-        pass
+        return ([], [])
 
     def toonKilledBuilding(self, toon, track, difficulty, numFloors, zoneId, activeToons):
         pass
