@@ -664,8 +664,50 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeIntroInterval.finish()
 
     def enterWrapUp(self, offset):
-        #Flippy runs onto the stage and throws a pie at the boss, killing him
-        pass
+        # This starts here so that we can drift towards Flippy for his speech,
+        # but some of it should be moved over to the real credits sequence which is called after this.
+        # A safe time to cut to the real sequence would be after the portable hole nosedive, or right when the camera arrives at Flippy before "Toons of the world... UNITE!"
+        musicCredits = base.loadMusic(ElectionGlobals.CreditsMusic)
+        base.localAvatar.stopUpdateSmartCamera()
+        base.camera.wrtReparentTo(render)
+        self.logo = loader.loadModel('phase_3/models/gui/toontown-logo.bam')
+        self.logo.reparentTo(aspect2d)
+        self.logo.setTransparency(1)
+        self.logo.setScale(0.6)
+        self.logo.setPos(0, 1, 0.3)
+        self.logo.setColorScale(1, 1, 1, 0)
+
+        # Temporarily put Flippy here manually
+        self.flippy.reparentTo(self.showFloor)
+        self.flippy.setPos(2, -10, 3.23)
+        self.flippy.setH(90)
+        
+        self.portal = loader.loadModel('phase_3.5/models/props/portal-mod.bam')
+        self.portal.reparentTo(render)
+        self.portal.setPosHprScale(93.1, 0.4, 4, 4, 355, 45, 0, 0, 0)
+
+        self.wrapUpSequence = Sequence(
+            Func(self.flippy.setChatAbsolute, 'Toons of the world...', CFSpeech|CFTimeout),
+            Func(base.playMusic, musicCredits, looping=0, volume=0.8),
+            Wait(4.5),
+            Func(self.flippy.setChatAbsolute, 'UNITE!', CFSpeech|CFTimeout),
+            ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=0, endFrame=9),
+            Wait(7.5),
+            ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=9, endFrame=0),
+        )
+        self.cameraSequence = Sequence(
+            # Begin to slowly drift towards Flippy as he delivers his speech (He currently doesn't have a speech)
+            base.camera.posHprInterval(10, (75, -9.5, 12), (-90, -10, 0), blendType='easeInOut'),
+            Func(self.wrapUpSequence.start),
+            Wait(12),
+            # Dramatically fade in the logo as the camera rises
+            Parallel(self.logo.posHprScaleInterval(6.5, (0, 0, 0.5), (0), (1), blendType='easeOut'), self.logo.colorScaleInterval(6.5, Vec4(1, 1, 1, 1), blendType='easeOut'), base.camera.posInterval(7.5, (70, 0.6, 42.2), blendType='easeInOut')),
+            # Take a nosedive into a portable hole
+            Parallel(self.logo.colorScaleInterval(0.25, Vec4(1, 1, 1, 0)), base.camera.posHprInterval(0.25, (85, 0, 42), (-90, -30, 0), blendType='easeIn')),
+            Parallel(base.camera.posHprInterval(1.1, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2)))
+        )
+        self.cameraSequence.start()
+        self.cameraSequence.setT(offset)
 
 
     '''

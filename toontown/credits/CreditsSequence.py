@@ -1,6 +1,6 @@
 from direct.interval.IntervalGlobal import *
 from otp.ai.MagicWordGlobal import *
-from TestScenes import *
+from AlphaCredits import *
 
 class CreditsSequence:
     def __init__(self):
@@ -8,7 +8,9 @@ class CreditsSequence:
         self.interval = None
 
         self.creditsScenes = [
-            FlippyScene()
+            TestScene1(),
+            TestScene2(),
+            FlippyScene(),
             ]
 
     def load(self):
