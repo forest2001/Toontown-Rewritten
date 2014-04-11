@@ -227,8 +227,9 @@ def cogExists(filePrefix):
 def loadSuitAnims(suit, flag = 1):
     if suit in SuitDNA.suitHeadTypes:
         try:
-            animList = locals()[suit]
+            animList = globals()[suit]
         except KeyError:
+            print 'still keyError, gg'
             animList = ()
 
     else:
@@ -393,13 +394,10 @@ class Suit(Avatar.Avatar):
         self.setDNA(self.dna)
 
     def setDNA(self, dna):
-        if self.style:
-            pass
-        else:
-            self.style = dna
-            self.generateSuit()
-            self.initializeDropShadow()
-            self.initializeNametag3d()
+        self.style = dna
+        self.generateSuit()
+        self.initializeDropShadow()
+        self.initializeNametag3d()
 
     def generateSuit(self):
         dna = self.style
@@ -662,7 +660,7 @@ class Suit(Avatar.Avatar):
                     animDict[anim[0]] = 'phase_12/models/char/suitC-' + anim[1]
 
         try:
-            animList = locals()[self.style.name]
+            animList = globals()[self.style.name]
         except KeyError:
             animList = ()
 
