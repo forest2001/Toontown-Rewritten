@@ -4975,7 +4975,18 @@ def givePies(pieType, numPies=0):
         return "numPies value out of range (0-99)"
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
-    
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
+def setQP(questId, progress):
+    av = spellbook.getTarget()
+    questIds = ""
+    for index in range(len(av.quests)):
+        questIds += "{0} ".format(av.quests[index][0])
+        if av.quests[index][0] == questId:
+            av.quests[index][4] = progress
+    av.b_setQuests(av.quests)
+    return questIds
+
 @magicWord(category=CATEGORY_MODERATION, types=[int, str])
 def locate(avIdShort=0, returnType=''):
     """Locate an avatar anywhere on the [CURRENT] AI."""
