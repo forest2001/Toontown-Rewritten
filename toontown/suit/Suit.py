@@ -394,10 +394,13 @@ class Suit(Avatar.Avatar):
         self.setDNA(self.dna)
 
     def setDNA(self, dna):
-        self.style = dna
-        self.generateSuit()
-        self.initializeDropShadow()
-        self.initializeNametag3d()
+        if self.style:
+            pass
+        else:
+            self.style = dna
+            self.generateSuit()
+            self.initializeDropShadow()
+            self.initializeNametag3d()
 
     def generateSuit(self):
         dna = self.style
