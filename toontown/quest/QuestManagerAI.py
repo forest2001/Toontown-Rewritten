@@ -81,10 +81,11 @@ class QuestManagerAI:
     def npcGiveQuest(self, npc, av, questId, rewardId, toNpcId):
         '''Have npc assign quest to av'''
         finalReward = 0
+        rewardId = Quests.transformReward(rewardId, av)
         if Quests.Quest2RemainingStepsDict[questId] == 1:
             finalReward = rewardId
-        av.addQuest((questId, npc.getDoId(), toNpcId, Quests.transformReward(rewardId, av), 0), finalReward)
-        npc.assignQuest(av.getDoId(), questId, Quests.transformReward(rewardId, av), toNpcId)
+        av.addQuest(questId, npc.getDoId(), toNpcId, rewardId, finalReward)
+        npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
 
     def requestInteract(self, avId, npc):
         '''Handle interactions between a player and an npc'''
@@ -131,10 +132,14 @@ class QuestManagerAI:
             tier = rewardHistory[0]
 
             #See if eligible for tier upgrade
-            if Quests.avatarHasAllRequiredRewards(av, tier) and not Quests.avatarWorkingOnRequiredRewards(av):
-                if tier != Quests.ELDER_TIER: #lmao elder tier
-                    tier += 1
-                av.b_setRewardHistory(tier, rewardHistory[1])
+            if Quests.avatarHasAllRequiredRewards(av, tier):
+                if not Quests.avatarWorkingOnRequiredRewards(av):
+                    if tier != Quests.ELDER_TIER: #lmao elder tier
+                        tier += 1
+                    av.b_setRewardHistory(tier, rewardHistory[1])
+                else:
+                    self.notify.debug("Rejecting avId({0}) because still working on tier, but will be eligible for tierup".format(avId))
+                    npc.rejectAvatarTierNotDone(avId)
 
             offeredQuests = Quests.chooseBestQuests(tier, npc, av)
             if not offeredQuests:
