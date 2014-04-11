@@ -130,23 +130,17 @@ class QuestManagerAI:
             rewardHistory = av.getRewardHistory()
             tier = rewardHistory[0]
 
+            #See if eligible for tier upgrade
+            if Quests.avatarHasAllRequiredRewards(av, tier) and not Quests.avatarWorkingOnRequiredRewards(av):
+                if tier != Quests.ELDER_TIER: #lmao elder tier
+                    tier += 1
+                av.b_setRewardHistory(tier, rewardHistory[1])
+
             offeredQuests = Quests.chooseBestQuests(tier, npc, av)
             if not offeredQuests:
-                #no more quests in tier, see if eligible for tier upgrade
-                if Quests.avatarHasAllRequiredRewards(av, tier):
-                    if tier != Quests.ELDER_TIER: #lmao elder tier
-                        tier += 1
-                    av.b_setRewardHistory(tier, rewardHistory[1])
-                    #try once again to get quests
-                    offeredQuests = Quests.chooseBestQuests(tier, npc, av)
-                    if not offeredQuests:
-                        self.notify.debug("Rejecting avId({0}) because they tier'd up but still don't have quests".format(avId))
-                        npc.rejectAvatar(avId)
-                        return
-                else:
-                    self.notify.debug("Rejecting avId({0}) because they can't tier up and no quests".format(avId))
-                    npc.rejectAvatarTierNotDone(avId)
-                    return
+                self.notify.debug("Rejecting avId({0}) because no quests available".format(avId))
+                npc.rejectAvatar(avId)
+                return
 
             npc.presentQuestChoice(avId, offeredQuests)
             return
