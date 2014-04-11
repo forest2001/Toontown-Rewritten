@@ -621,9 +621,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.notify.debug('requestAdjust() - in state: %s' % cstate)
 
     def __handleUnexpectedExit(self, avId):
-        disconnectCode = self.air.getAvatarDisconnectReason(avId)
+        #TODO self.air.getAvatarDisconnectReason
+        '''disconnectCode = self.air.getAvatarDisconnectReason(avId)
         self.notify.warning('toon: %d exited unexpectedly, reason %d' % (avId, disconnectCode))
-        userAborted = disconnectCode == ToontownGlobals.DisconnectCloseWindow
+        userAborted = disconnectCode == ToontownGlobals.DisconnectCloseWindow'''
+        userAborted = False
         self.__handleSuddenExit(avId, userAborted)
 
     def __handleSuddenExit(self, avId, userAborted):
