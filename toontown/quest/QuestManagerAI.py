@@ -25,10 +25,10 @@ class QuestManagerAI:
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.RecoverItemQuest):
                 if quest.isLocationMatch(zoneId):
-                    if quest.getHolderType() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track' \
+                    if quest.getHolder() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track' \
                       or quest.getHolderType() == 'level':
                         for suit in suitsKilled:
-                            if quest.getHolderType() == Quests.Any \
+                            if quest.getHolder() == Quests.Any \
                              or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                              or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
                              or (quest.getHolderType() == 'level' and quest.getHolder() >= suit['level']):
