@@ -1,6 +1,7 @@
 import Quests
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownBattleGlobals
+import random
 
 class QuestManagerAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestManagerAI')
@@ -18,7 +19,24 @@ class QuestManagerAI:
 
     def recoverItems(self, toon, suitsKilled, zoneId):
         #return (recovered, notRecovered)
-        return ([], [])
+        recovered = []
+        notRecovered = []
+        for questIndex in range(len(toon.quests)):
+            quest = Quests.getQuest(toon.quests[questIndex][0])
+            if isinstance(quest, Quests.RecoverItemQuest):
+                if quest.isLocationMatch(zoneId):
+                    if quest.getHolderType() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track':
+                        for suit in suitsKilled:
+                            if quest.getHolderType() == Quests.Any \
+                             or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
+                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']):
+                                if random.randint(1, 100) <= quest.getPercentChance():
+                                    recovered.append(quest.getItem())
+                                    toon.quests[questIndex][4] += 1
+                                else:
+                                    notRecovered.append(quest.getItem())
+        toon.b_setQuests(toon.quests)
+        return (recovered, notRecovered)
 
     def toonKilledBuilding(self, toon, track, difficulty, numFloors, zoneId, activeToons):
         pass
