@@ -5,6 +5,7 @@ from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 from toontown.toon import NPCToons
 from toontown.election.DistributedElectionEventAI import DistributedElectionEventAI
 from toontown.building.HQBuildingAI import HQBuildingAI
+from toontown.toon import NPCToons
 
 class TTHoodAI(HoodAI):
     HOOD = ToontownGlobals.ToontownCentral
@@ -15,12 +16,19 @@ class TTHoodAI(HoodAI):
         self.butterflies = []
         # TODO: Re-enable butterflies. RIP, you will be missed.
         #self.createButterflies()
-        self.spawnElection()
+        
+        #beginhack disable election props
+        #self.spawnElection()
+        #endhack
 
         #TODO: in reality this should be done by the buildingMgr
         hqBlock = 20
         hqZone = self.HOOD - self.HOOD % 100 + 500 + hqBlock
         self.hqBuilding = HQBuildingAI(self.air, self.HOOD, hqZone, hqBlock)
+        #beginhack FLIPPY IN TTC
+        flippy = NPCToons.createNPC(self.air, 2001, NPCToons.NPCToonDict[2001], self.HOOD, 3)
+        print flippy
+        #endhack
     
     def spawnElection(self):
         event = self.air.doFind('ElectionEvent')
