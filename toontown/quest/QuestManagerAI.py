@@ -25,11 +25,14 @@ class QuestManagerAI:
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.RecoverItemQuest):
                 if quest.isLocationMatch(zoneId):
-                    if quest.getHolderType() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track':
+                    if quest.getHolderType() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track' \
+                      or quest.getHolderType() == 'level':
                         for suit in suitsKilled:
                             if quest.getHolderType() == Quests.Any \
                              or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
-                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']):
+                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
+                             or (quest.getHolderType() == 'level' and quest.getHolder() >= suit['level']):
+                                self.notify.debug("passed check")
                                 if random.randint(1, 100) <= quest.getPercentChance():
                                     recovered.append(quest.getItem())
                                     toon.quests[questIndex][4] += 1
