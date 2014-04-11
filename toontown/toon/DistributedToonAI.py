@@ -285,7 +285,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
-                self.sendUpdate('setLastHood', [hood])
+                self.b_setLastHood(hood)
                 self.b_setDefaultZone(hood)
 
                 hoodsVisited = list(self.getHoodsVisited())
@@ -647,6 +647,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.notify.debug('setting default zone to %s' % zone)
 
     def b_setDefaultZone(self, zone):
+        if zone == self.defaultZone:
+            return #reduces lag a shit ton
         self.sendUpdate('setDefaultZone', [zone])
         self.setDefaultZone(zone)
 
@@ -1208,6 +1210,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setLastHood(self, hood):
         self.lastHood = hood
+
+    def d_setLastHood(self, hood):
+        self.sendUpdate('setLastHood', [hood])
+
+    def b_setLastHood(self, hood):
+        if self.lastHood == hood:
+            return
+        self.setLastHood(hood)
+        self.d_setLastHood(hood)
 
     def getLastHood(self):
         return self.lastHood
