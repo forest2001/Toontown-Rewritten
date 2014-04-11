@@ -78,39 +78,37 @@ class QuestManagerAI:
                         return
                     else:
                         #gib quest
+                        self.completeQuest(av, questId)
                         questId = nextQuest[0]
                         rewardId = Quests.getFinalRewardId(questId, 1)
                         toNpcId = nextQuest[1]
-                        self.completeQuest(av, questId)
                         self.npcGiveQuest(npc, av, questId, rewardId, toNpcId)
+                        return
 
-            #stuff below this return is to-be rewritten
-            npc.rejectAvatar(npcId)
-            return
             numQuests = len(quests)
             if numQuests+1 > av.getQuestCarryLimit():
                 npc.rejectAvatar(avId)
                 return
-            questHistory = av.getQuestHistory()
-            #HACK ALERT
-            #TODO: fix this for tutorial quests
-            toonTier = 1
-            for tier, questList in Quests.Tier2QuestsDict.items():
-                if tier < toonTier:
-                    continue
-                toonTier = tier
-                breaking = False
-                for questId in questList:
-                    if not questId in questHistory:
-                        breaking = True
-                        break
-                if breaking:
-                    break
 
-            offeredQuests = Quests.chooseBestQuests(toonTier, npc, av)
+            #check if any quests left in current tier
+            rewardHistory = av.getRewardHistory()
+            tier = rewardHistory[0]
+
+            offeredQuests = Quests.chooseBestQuests(tier, npc, av)
             if not offeredQuests:
-                npc.rejectAvatarTierNotDone(avId)
-                return
+                #no more quests in tier, see if eligible for tier upgrade
+                if Quests.avatarHasAllRequiredRewards(av, tier):
+                    if tier != Quests.ELDER_TIER: #lmao elder tier
+                        tier += 1
+                    #try once again to get quests
+                    offeredQuests = Quests.chooseBestQuests(tier, npc, av)
+                    if not offeredQuests:
+                        npc.rejectAvatar(avId)
+                        return
+                else:
+                    npc.rejectAvatarTierNotDone(avId)
+                    return
+
             npc.presentQuestChoice(avId, offeredQuests)
             return
         #if nothing else, reject them
