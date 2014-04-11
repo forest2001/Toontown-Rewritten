@@ -101,7 +101,7 @@ class QuestManagerAI:
 
             numQuests = len(quests)
             if numQuests+1 > av.getQuestCarryLimit():
-                self.notify.debug("Rejecting avId({0}) because they're quest inventory is full".format(avId))
+                self.notify.debug("Rejecting avId({0}) because their quest inventory is full".format(avId))
                 npc.rejectAvatar(avId)
                 return
 
