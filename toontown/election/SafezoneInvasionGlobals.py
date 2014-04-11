@@ -1,3 +1,5 @@
+import random
+
 # The position of the Finale suit
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
@@ -52,55 +54,111 @@ SuitSpawnPoints = [
     (-113.6,  20.0,  0.03,  55.0),
 ]
 
+suitLevels = [
+    0,
+    1,
+    2,
+    3,
+    4
+]
+sellbotSuits = [
+    'cc',
+    'tm',
+    'nd',
+    'gh',
+    'ms',
+    'tf',
+    'm',
+    'mh'
+]
+cashbotSuits = [
+    'sc',
+    'pp',
+    'tw',
+    'bc',
+    'nc',
+    'mb',
+    'ls',
+    'rb'
+]
+lawbotSuitTypes = [
+    'bf',
+    'b',
+    'dt',
+    'ac',
+    'bs',
+    'sd',
+    'le',
+    'bw'
+]
+bossbotSuits = [
+    'f',
+    'p',
+    'ym',
+    'mm',
+    'ds',
+    'hh',
+    'cr',
+    'tbc'
+]
+
+
+def generateSuits(numberOfSuits, suitLevelRange=[0, 0], suitRange=[0, 0]):
+    suits = [sellbotSuits, cashbotSuits, lawbotSuitTypes, bossbotSuits] # Suit arrays
+    wave = [(random.choice(suits)[random.randint(suitRange[0], suitRange[1])], 
+             random.randint(suitLevelRange[0], suitLevelRange[1])) 
+             for k in range(numberOfSuits)]
+    return wave
+
 SuitWaves = [
     # Suits in a wave can't exceed the number of spawn points.
     # While each index is actually separate wave, they will keep
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    [('f', 0), ('bf', 1), ('f', 0), ('f', 0), ('cc', 0), ('sc', 0), ('sc', 1), ('bf', 0), ('cc', 1)],
-    [('sc', 1), ('cc', 1), ('bf', 0), ('sc', 0), ('f', 1), ('bf', 1)], # Wait Wave
-    [('f', 1), ('bf', 0), ('sc', 0), ('cc', 0), ('f', 0), ('bf', 1), ('sc', 0), ('cc', 1), ('sc', 0), ('f', 0), ('bf', 1), ('bf', 0), ('f', 1), ('bf', 0)], # Intermission Wave
+    generateSuits(9,  [3, 4], [0, 0]),
+    generateSuits(6,  [3, 4], [0, 0]), # Wait Wave
+    generateSuits(15, [2, 3], [0, 0]), # Intermission Wave
 
     # WAVE 2:
-    [('pp', 0), ('dt', 0), ('cc', 1), ('tm', 0), ('bf', 2), ('b', 0), ('p', 1)],
-    [('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 0), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 1), ('bf', 1), ('p', 0)], # Wait Wave
-    [('p', 1), ('b', 0), ('b', 1), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 2), ('nd', 0), ('bf', 2), ('bf', 2), ('p', 1), ('b', 0), ('b', 0), ('tm', 1), ('tm', 1), ('cc', 0), ('sc', 3)], # Intermission Wave
+    generateSuits(7,  [2, 3], [0, 1]),
+    generateSuits(11, [1, 2], [0, 1]), # Wait Wave
+    generateSuits(16, [2, 3], [0, 1]), # Intermission Wave
 
     # WAVE 3:
-    [('ym', 0), ('dt', 0), ('tw', 0), ('nd', 0), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1)],
-    [('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('ym', 1), ('dt', 1), ('tw', 1), ('nd', 1), ('ym', 1), ('dt', 1)], # Wait Wave
-    [('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 2), ('dt', 2), ('tw', 2), ('nd', 2), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3), ('dt', 3), ('tw', 3), ('nd', 3), ('ym', 3)], # Intermission Wave
+    generateSuits(8,  [2, 3], [1, 2]),
+    generateSuits(11, [1, 2], [2, 2]), # Wait Wave
+    generateSuits(17, [2, 3], [2, 2]), # Intermission Wave
 
     # WAVE 4:
-    [('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0), ('mm', 0), ('ac', 0), ('bc', 0), ('gh', 0)],
-    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1)], # Wait Wave
-    [('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 1), ('ac', 1), ('bc', 1), ('gh', 1), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2), ('ac', 2), ('bc', 2), ('gh', 2), ('mm', 2)], # Intermission Wave
+    generateSuits(8,  [2, 3], [2, 3]),
+    generateSuits(11, [1, 2], [3, 3]), # Wait Wave
+    generateSuits(17, [2, 3], [3, 3]), # Intermission Wave
 
     # WAVE 5:
-    [('ds', 0), ('bs', 0), ('nc', 0), ('ms', 0), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1)],
-    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2)], # Wait Wave
-    [('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 1), ('bs', 1), ('nc', 1), ('ms', 1), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2), ('bs', 2), ('nc', 2), ('ms', 2), ('ds', 2)], # Intermission Wave
+    generateSuits(8,  [0, 2], [3, 4]),
+    generateSuits(11, [1, 4], [4, 4]), # Wait Wave
+    generateSuits(17, [2, 3], [4, 4]), # Intermission Wave
 
     # WAVE 6:
-    [('hh', 0), ('sd', 0), ('mb', 0), ('tf', 0), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1)],
-    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2)], # Wait Wave
-    [('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 1), ('sd', 1), ('mb', 1), ('tf', 1), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2), ('sd', 2), ('mb', 2), ('tf', 2), ('hh', 2)], # Intermission Wave
+    generateSuits(8,  [1, 2], [4, 5]),
+    generateSuits(11, [1, 4], [5, 5]), # Wait Wave
+    generateSuits(17, [2, 3], [5, 5]), # Intermission Wave
 
     # WAVE 7:
-    [('cr', 0), ('le', 0), ('ls', 0), ('m', 0), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1)],
-    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2)], # Wait Wave
-    [('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 1), ('le', 1), ('ls', 1), ('m', 1), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2), ('le', 2), ('ls', 2), ('m', 2), ('cr', 2)], # Intermission Wave
+    generateSuits(8,  [0, 2], [5, 6]),
+    generateSuits(11, [1, 2], [6, 6]), # Wait Wave
+    generateSuits(17, [2, 3], [6, 6]), # Intermission Wave
 
     # WAVE 8:
-    [('tbc', 0), ('bw', 0), ('rb', 0), ('mh', 0), ('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1)],
-    [('tbc', 1), ('bw', 1), ('rb', 1), ('mh', 1), ('tbc', 2)], # Wait Wave
-    [('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 2), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+    generateSuits(10, [1, 3], [6, 7]),
+    generateSuits(16, [1, 4], [7, 7]), # Wait Wave
+    generateSuits(18, [2, 4], [7, 7]), # Intermission Wave
 
     # WAVE 9: THE FINAL WAVE
-    [('tbc', 2), ('bw', 1), ('rb', 3), ('mh', 3), ('tbc', 1), ('bw', 1), ('rb', 2), ('mh', 4)],
-    [('tbc', 4), ('bw', 1), ('rb', 4), ('mh', 1), ('tbc', 3)], # Wait Wave
-    [('tbc', 4), ('bw', 2), ('rb', 2), ('mh', 2), ('tbc', 3), ('bw', 3), ('rb', 4), ('mh', 4), ('tbc', 3), ('bw', 3), ('rb', 3), ('mh', 3), ('tbc', 4), ('bw', 4), ('rb', 4), ('mh', 4), ('tbc', 4)], # Intermission Wave
+    generateSuits(10, [1, 3], [6, 7]),
+    generateSuits(16, [1, 4], [7, 7]), # Wait Wave
+    generateSuits(18, [2, 4], [7, 7]), # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
