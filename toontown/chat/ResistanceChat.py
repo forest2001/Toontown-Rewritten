@@ -151,29 +151,27 @@ def doEffect(textId, speakingToon, nearbyToons):
         invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         invModel.setScale(4)
         invModel.flattenLight()
-        icons = [invModel.find('**/inventory_creampie')]
-#Only show cream pies for Alpha Unites
-#        if itemValue != -1:
-#            for item in range(6):
-#                iconName = ToontownBattleGlobals.AvPropsNew[itemValue][item]
-#                icons.append(invModel.find('**/%s' % iconName))
-#
-#        else:
-#            tracks = range(7)
-#            random.shuffle(tracks)
-#            for i in range(6):
-#                track = tracks[i]
-#                item = random.randint(0, 5)
-#                iconName = ToontownBattleGlobals.AvPropsNew[track][item]
-#                icons.append(invModel.find('**/%s' % iconName))
-        #These should be 0-5
+        icons = []
+        if itemValue != -1:
+            for item in range(6):
+                iconName = ToontownBattleGlobals.AvPropsNew[itemValue][item]
+                icons.append(invModel.find('**/%s' % iconName))
+
+        else:
+            tracks = range(7)
+            random.shuffle(tracks)
+            for i in range(6):
+                track = tracks[i]
+                item = random.randint(0, 5)
+                iconName = ToontownBattleGlobals.AvPropsNew[track][item]
+                icons.append(invModel.find('**/%s' % iconName))
+
         iconDict = {'particles-1': icons[0],
-         'particles-2': icons[0],
-         'particles-3': icons[0],
-         'particles-4': icons[0],
-         'particles-5': icons[0],
-         'particles-6': icons[0]}
-        #No I mean the ones above this line
+         'particles-2': icons[1],
+         'particles-3': icons[2],
+         'particles-4': icons[3],
+         'particles-5': icons[4],
+         'particles-6': icons[5]}
         for name, icon in iconDict.items():
             p = effect.getParticlesNamed(name)
             p.renderer.setFromNode(icon)

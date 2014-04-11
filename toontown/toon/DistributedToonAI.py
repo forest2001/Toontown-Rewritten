@@ -2758,16 +2758,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             else:
                 self.toonUp(msgValue)
             self.notify.debug('Toon-up for ' + self.name)
-      #Slappy's Alpha Only Unite
         elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
-            self.b_setPieType(4)
-            self.b_setNumPies(20)
-            self.b_setPieThrowType(1)
-            self.notify.debug('Alpha Pie Restock for ' + self.name)
-#        elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
-#            self.inventory.NPCMaxOutInv(msgValue)
-#            self.d_setInventory(self.inventory.makeNetString())
-#            self.notify.debug('Restock for ' + self.name)
+            self.inventory.NPCMaxOutInv(msgValue)
+            self.d_setInventory(self.inventory.makeNetString())
+            self.notify.debug('Restock for ' + self.name)
         elif msgType == ResistanceChat.RESISTANCE_MONEY:
             if msgValue == -1:
                 self.addMoney(999999)
