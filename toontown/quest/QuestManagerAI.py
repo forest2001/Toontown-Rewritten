@@ -1,5 +1,6 @@
 import Quests
 from direct.directnotify import DirectNotifyGlobal
+from toontown.toonbase import ToontownBattleGlobals
 
 class QuestManagerAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestManagerAI')
@@ -7,7 +8,13 @@ class QuestManagerAI:
         pass
 
     def toonKilledCogs(self, toon, suitsKilled, zoneId, activeToonList):
-        pass
+        for questIndex in range(len(toon.quests)):
+            quest = Quests.getQuest(toon.quests[questIndex][0])
+            if isinstance(quest, Quests.CogQuest):
+                for suit in suitsKilled:
+                    if quest.doesCogCount(toon.getDoId(), suit, zoneId, activeToonList):
+                        toon.quests[questIndex][4] += 1
+        toon.b_setQuests(toon.quests)
 
     def recoverItems(self, toon, suitsKilled, zoneId):
         #return (recovered, notRecovered)
@@ -52,7 +59,10 @@ class QuestManagerAI:
 
     def npcGiveQuest(self, npc, av, questId, rewardId, toNpcId):
         '''Have npc assign quest to av'''
-        av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), Quests.Quest2RemainingStepsDict[questId] == 1)
+        finalReward = 0
+        if Quests.Quest2RemainingStepsDict[questId] == 1:
+            finalReward = rewardId
+        av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
         npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
 
     def requestInteract(self, avId, npc):
@@ -71,6 +81,10 @@ class QuestManagerAI:
                     #check if there is a next quest
                     nextQuest = Quests.getNextQuest(questId, npc, av)
                     if nextQuest == (Quests.NA, Quests.NA):
+                        if isinstance(quest, Quests.TrackChoiceQuest):
+                            #TrackTrainingReward quests are a little different
+                            npc.presentTrackChoice(avId, questId, quest.getChoices())
+                            return
                         rewardId = Quests.getAvatarRewardId(av, questId) #idk about this one, maybe a single quest can have different rewards?
                         npc.completeQuest(avId, questId, rewardId)
                         self.completeQuest(av, questId)
@@ -87,6 +101,7 @@ class QuestManagerAI:
 
             numQuests = len(quests)
             if numQuests+1 > av.getQuestCarryLimit():
+                self.notify.debug("Rejecting avId({0}) because they're quest inventory is full".format(avId))
                 npc.rejectAvatar(avId)
                 return
 
@@ -100,12 +115,15 @@ class QuestManagerAI:
                 if Quests.avatarHasAllRequiredRewards(av, tier):
                     if tier != Quests.ELDER_TIER: #lmao elder tier
                         tier += 1
+                    av.b_setRewardHistory(tier, rewardHistory[1])
                     #try once again to get quests
                     offeredQuests = Quests.chooseBestQuests(tier, npc, av)
                     if not offeredQuests:
+                        self.notify.debug("Rejecting avId({0}) because they tier'd up but still don't have quests".format(avId))
                         npc.rejectAvatar(avId)
                         return
                 else:
+                    self.notify.debug("Rejecting avId({0}) because they can't tier up and no quests".format(avId))
                     npc.rejectAvatarTierNotDone(avId)
                     return
 
@@ -123,8 +141,28 @@ class QuestManagerAI:
             self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
             self.npcGiveQuest(npc, av, questId, rewardId, toNpcId)
 
-    def avatarChoseTrack(self, avId, npc, pendingTrackQuest, trackId):
-        pass
+    def avatarChoseTrack(self, avId, npc, questId, trackId):
+        if simbase.air.doId2do.has_key(avId):
+            av = simbase.air.doId2do[avId]
+            #see Quests.py for rewardIds
+            rewardId = 400
+            if trackId == ToontownBattleGlobals.HEAL_TRACK:
+                rewardId = 401
+            if trackId == ToontownBattleGlobals.TRAP_TRACK:
+                rewardId = 402
+            if trackId == ToontownBattleGlobals.LURE_TRACK:
+                rewardId = 403
+            if trackId == ToontownBattleGlobals.SOUND_TRACK:
+                rewardId = 404
+            if trackId == ToontownBattleGlobals.THROW_TRACK:
+                rewardId = 405
+            if trackId == ToontownBattleGlobals.SQUIRT_TRACK:
+                rewardId = 406
+            if trackId == ToontownBattleGlobals.DROP_TRACK:
+                rewardId = 407
+            npc.completeQuest(avId, questId, rewardId)
+            self.completeQuest(av, questId)
+            self.giveReward(av, rewardId)
 
     def toonMadeFriend(self, av, otherAv):
         pass
