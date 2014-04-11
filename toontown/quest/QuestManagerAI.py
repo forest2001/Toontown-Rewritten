@@ -83,8 +83,8 @@ class QuestManagerAI:
         finalReward = 0
         if Quests.Quest2RemainingStepsDict[questId] == 1:
             finalReward = rewardId
-        av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
-        npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
+        av.addQuest((questId, npc.getDoId(), toNpcId, Quests.transformReward(rewardId, av), 0), finalReward)
+        npc.assignQuest(av.getDoId(), questId, Quests.transformReward(rewardId, av), toNpcId)
 
     def requestInteract(self, avId, npc):
         '''Handle interactions between a player and an npc'''
