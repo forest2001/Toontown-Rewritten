@@ -335,7 +335,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self.explodeTrack.setT(time)
 
     def exitExplode(self):
-        self.explodeTrack.finish()
+        self.explodeTrack.pause()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
