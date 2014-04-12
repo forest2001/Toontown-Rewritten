@@ -137,7 +137,11 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def attack(self, who):
         attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
-        self.sendUpdate('setAttackInfo', [who, choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
+        damage = int(round(self.level/2.0))
+        print damage
+        if damage == 0:
+            damage = 1
+        self.sendUpdate('setAttackInfo', [who, choice(attacks), damage])
         self.b_setState('Attack')
 
     def enterAttack(self):
