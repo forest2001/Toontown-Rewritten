@@ -9,9 +9,11 @@ from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 from toontown.battle import BattleParticles, SuitBattleGlobals, BattleProps
 from InvasionSuitBase import InvasionSuitBase
+from toontown.distributed.DelayDeletable import DelayDeletable
+from toontown.distributed.DelayDelete import *
 import random
 
-class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
+class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayDeletable):
     def __init__(self, cr):
         DistributedSuitBase.__init__(self, cr)
         InvasionSuitBase.__init__(self)
@@ -241,17 +243,19 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
             Sequence(self.prop.posInterval(distance/speed, hitPos),
                      Func(self.cleanupProp)).start()
+                     
 
-        track = Parallel(
+        track = Sequence(Parallel(
             ActorInterval(self, animName),
             Track(
                 (0.4, Func(self.prop.reparentTo, self.getRightHand())),
                 (0.0, Func(self.prop.setPosHpr, x, y, z, h, p, r)),
                 (0.0, Func(self.sayFaceoffTaunt)),
-                (throwDelay, Func(throwProp)),
-                (10.0, Func(self.cleanupProp))
+                (throwDelay, Func(throwProp))
             ),
-        )
+        ))
+        track.delayDelete = DelayDelete(self, 'propTrack')
+        track.append(Func(track.delayDelete.destroy))
 
         return track
 
@@ -327,15 +331,18 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
         
         # Cleanup
+        
         cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
 
         # Blow the sucker up
-        self.explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
+        self.explodeTrack = Sequence(Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack))
+        self.explodeTrack.delayDelete = DelayDelete(self, 'cleanupExplode')
+        self.explodeTrack.append(Func(self.explodeTrack.delayDelete.destroy))
         self.explodeTrack.start()
         self.explodeTrack.setT(time)
 
     def exitExplode(self):
-        self.explodeTrack.pause()
+        self.explodeTrack.finish()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()
