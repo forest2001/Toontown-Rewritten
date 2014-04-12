@@ -16,17 +16,17 @@ from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
 
-#friends!
+# Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
 
-#estates
+# Estates!
 from toontown.estate.EstateManagerAI import EstateManagerAI
 
-# par-tay
+# Par-tay!
 from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
 from otp.distributed.OtpDoGlobals import *
 
-# All imports needed for fireworks
+# Fireworks!
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
@@ -37,12 +37,13 @@ import time
 from otp.ai.MagicWordGlobal import *
 from toontown.parties import PartyGlobals
 
-# AprilToons, bitches!
-from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
-
+# Tasks!
 from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
+
+# April Toons! (To be replaced with holiday manager)
+from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
