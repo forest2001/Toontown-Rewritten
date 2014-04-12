@@ -81,8 +81,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.waveNumber = waveNumber
 
         if self.waveNumber == 24:
-            election = DistributedElectionEventAI.DistributedElectionEventAI(simbase.air)
-            election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
+            election = self.air.doFind('ElectionEvent')
+            if election:
+                election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
 
         # Reset spawnpoints:
         self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
