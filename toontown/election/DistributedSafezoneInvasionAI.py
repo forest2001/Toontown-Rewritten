@@ -263,7 +263,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
         # If the cog's attack is higher than the amount of laff they have, we'll only take away what they have.
         # If the attack is 5 and the toon has 3 laff, we'll only take away 3 laff. This mostly prevents toons going under 0 Laff.
-        if damage > toon.hp:
+        if damage > toon.hp and toon.hp > 0:
             toon.takeDamage(toon.hp)
         else:
             toon.takeDamage(damage)
