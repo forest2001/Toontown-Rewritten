@@ -25,10 +25,10 @@ class QuestManagerAI:
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.RecoverItemQuest):
                 if quest.isLocationMatch(zoneId):
-                    if quest.getHolderType() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track' \
+                    if quest.getHolder() == Quests.Any or quest.getHolderType() == 'type' or quest.getHolderType() == 'track' \
                       or quest.getHolderType() == 'level':
                         for suit in suitsKilled:
-                            if quest.getHolderType() == Quests.Any \
+                            if quest.getHolder() == Quests.Any \
                              or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                              or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
                              or (quest.getHolderType() == 'level' and quest.getHolder() >= suit['level']):
@@ -81,7 +81,8 @@ class QuestManagerAI:
     def npcGiveQuest(self, npc, av, questId, rewardId, toNpcId):
         '''Have npc assign quest to av'''
         finalReward = 0
-        if Quests.Quest2RemainingStepsDict[questId] == 1:
+        rewardId = Quests.transformReward(rewardId, av)
+        if Quests.isStartingQuest(questId):
             finalReward = rewardId
         av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
         npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
@@ -130,23 +131,21 @@ class QuestManagerAI:
             rewardHistory = av.getRewardHistory()
             tier = rewardHistory[0]
 
-            offeredQuests = Quests.chooseBestQuests(tier, npc, av)
-            if not offeredQuests:
-                #no more quests in tier, see if eligible for tier upgrade
-                if Quests.avatarHasAllRequiredRewards(av, tier):
+            #See if eligible for tier upgrade
+            if Quests.avatarHasAllRequiredRewards(av, tier):
+                if not Quests.avatarWorkingOnRequiredRewards(av):
                     if tier != Quests.ELDER_TIER: #lmao elder tier
                         tier += 1
                     av.b_setRewardHistory(tier, rewardHistory[1])
-                    #try once again to get quests
-                    offeredQuests = Quests.chooseBestQuests(tier, npc, av)
-                    if not offeredQuests:
-                        self.notify.debug("Rejecting avId({0}) because they tier'd up but still don't have quests".format(avId))
-                        npc.rejectAvatar(avId)
-                        return
                 else:
-                    self.notify.debug("Rejecting avId({0}) because they can't tier up and no quests".format(avId))
+                    self.notify.debug("Rejecting avId({0}) because still working on tier, but will be eligible for tierup".format(avId))
                     npc.rejectAvatarTierNotDone(avId)
-                    return
+
+            offeredQuests = Quests.chooseBestQuests(tier, npc, av)
+            if not offeredQuests:
+                self.notify.debug("Rejecting avId({0}) because no quests available".format(avId))
+                npc.rejectAvatar(avId)
+                return
 
             npc.presentQuestChoice(avId, offeredQuests)
             return
