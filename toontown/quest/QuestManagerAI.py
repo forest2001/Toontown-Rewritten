@@ -82,9 +82,9 @@ class QuestManagerAI:
         '''Have npc assign quest to av'''
         finalReward = 0
         rewardId = Quests.transformReward(rewardId, av)
-        if Quests.Quest2RemainingStepsDict[questId] == 1:
+        if Quests.isStartingQuest(questId):
             finalReward = rewardId
-        av.addQuest(questId, npc.getDoId(), toNpcId, rewardId, finalReward)
+        av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
         npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
 
     def requestInteract(self, avId, npc):
