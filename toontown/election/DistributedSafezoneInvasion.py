@@ -58,8 +58,7 @@ class DistributedSafezoneInvasion(DistributedObject):
         self.cr.invasion = None
         DistributedObject.delete(self)
 
-        # We should check if the invasion is loaded first to be safe.
-        if self.invasionOn:
+        if not self.invasionOn:
             # These are only called if the sky is loaded
             del self.fadeIn
             del self.fadeOut
