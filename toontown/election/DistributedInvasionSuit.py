@@ -168,7 +168,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self._attackInterval.start(time)
 
     def exitAttack(self):
-        if self._attackInterval:
+        if self._attackInterval and self._attackInterval.isPlaying():
             self._attackInterval.finish()
         if self.msStartStomp.isPlaying():
             self.msStartStomp.finish()
@@ -183,45 +183,45 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
 
     def makeAttackTrack(self):
         # TODO: Add more props than the tie. Possibly more animations.
-        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
-        self.propIsActor = True
+        prop = BattleProps.globalPropPool.getProp(self.attackProp)
+        propIsActor = True
         animName = 'throw-paper'
         x, y, z, h, p, r = (0.1, 0.2, -0.35, 0, 336, 0)
         if self.attackProp == 'redtape':
             animName = 'throw-object'
             x,y,z,h,p,r = (0.24, 0.09, -0.38, -1.152, 86.581, -76.784)
-            self.propIsActor = False
+            propIsActor = False
         elif self.attackProp == 'newspaper':
             animName = 'throw-object'
-            self.propIsActor = False
+            propIsActor = False
             x,y,z,h,p,r = (-0.07, 0.17, -0.13, 161.867, -33.149, -48.086)
-            self.prop.setScale(4)
+            prop.setScale(4)
         elif self.attackProp == 'pink-slip':
             animName = 'throw-paper'
-            self.propIsActor = False
+            propIsActor = False
             x,y,z,h,p,r = (0.07, -0.06, -0.18, -172.075, -26.715, -89.131)
-            self.prop.setScale(5)
+            prop.setScale(5)
         elif self.attackProp == 'power-tie':
             animName = 'throw-paper'
-            self.propIsActor = False
+            propIsActor = False
             x,y,z,h,p,r = (1.16, 0.24, 0.63, 171.561, 1.745, -163.443)
-            self.prop.setScale(4)
+            prop.setScale(4)
         elif self.attackProp == 'clip-on-tie':
             animName = 'throw-paper'
-            self.propIsActor = True
+            propIsActor = True
             x,y,z,h,p,r = (0.1, 0.2, -0.35, 0, 336, 0)
 
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
         colNode.setTag('damage', str(self.attackDamage))
 
-        bounds = self.prop.getBounds()
+        bounds = prop.getBounds()
         center = bounds.getCenter()
         radius = bounds.getRadius()
         sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
         sphere.setTangible(0)
         colNode.addSolid(sphere)
-        self.prop.attachNewNode(colNode)
+        prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
 
@@ -236,26 +236,26 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
             if not toon:
-                self.cleanupProp()
+                self.cleanupProp(prop, propIsActor)
                 return
 
             self.lookAtTarget()
 
-            self.prop.wrtReparentTo(render)
+            prop.wrtReparentTo(render)
 
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
-            distance = (self.prop.getPos() - hitPos).length()
+            distance = (prop.getPos() - hitPos).length()
             speed = 50.0
 
-            Sequence(self.prop.posInterval(distance/speed, hitPos),
-                     Func(self.cleanupProp)).start()
+            Sequence(prop.posInterval(distance/speed, hitPos),
+                     Func(self.cleanupProp, prop, propIsActor)).start()
                      
 
         track = Sequence(Parallel(
             ActorInterval(self, animName),
             Track(
-                (0.4, Func(self.prop.reparentTo, self.getRightHand())),
-                (0.0, Func(self.prop.setPosHpr, x, y, z, h, p, r)),
+                (0.4, Func(prop.reparentTo, self.getRightHand())),
+                (0.0, Func(prop.setPosHpr, x, y, z, h, p, r)),
                 (0.0, Func(self.sayFaceoffTaunt)),
                 (throwDelay, Func(throwProp))
             ),
@@ -264,13 +264,14 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         track.append(Func(track.delayDelete.destroy))
 
         return track
+    
 
-    def cleanupProp(self):
-        if self.propIsActor:
-            self.prop.cleanup()
-            self.prop.removeNode()
+    def cleanupProp(self, prop, propIsActor):
+        if propIsActor:
+            prop.cleanup()
+            prop.removeNode()
         else:
-            self.prop.removeNode()
+            prop.removeNode()
 
     def lookAtTarget(self):
         if not self.attackTarget:
@@ -297,9 +298,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self._stunInterval.finish()
 
     def enterExplode(self, time):
-        if self._attackInterval:
-            self._attackInterval.finish()
-
         # We're done with this guy
         self.stash()
 
