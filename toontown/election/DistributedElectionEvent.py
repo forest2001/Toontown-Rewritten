@@ -223,6 +223,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitOff(self):
         self.showFloor.reparentTo(render)
 
+    def __cleanupNPCs(self):
+        npcs = [self.flippy, self.slappy, self.alec, self.surlee, self.surleeR, self.prepostera, self.dimm, self.suit]
+        for npc in npcs:
+            if npc:
+                npc.removeActive()
+
     def delete(self):
         self.demand('Off', 0.)
 
@@ -230,6 +236,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
         self.ignore('enter' + self.pieCollision.node().getName())
+        self.__cleanupNPCs()
+
         DistributedObject.delete(self)
 
 
@@ -686,6 +694,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.portal.reparentTo(render)
         self.portal.setPosHprScale(93.1, 0.4, 4, 4, 355, 45, 0, 0, 0)
 
+        # To prevent some jittering when loading the credits, we'll load the first scene here.
+        from direct.gui.OnscreenText import OnscreenText
+        from direct.gui.OnscreenImage import OnscreenImage
+        self.title = OnscreenText(text='Shockley', pos=(0.6, 0.15, 0.0), scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=TextNode.ACenter)
+        self.description = OnscreenText(text='Lead Developer\nNetwork Administraitor\nAstron Team', pos=(0.25, 0.05, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
+        self.image = OnscreenImage(image='phase_4/maps/news/11-17-13_garden.jpg', pos=(-0.5, -1, 0.0), scale=(0.5, 0.30, 0.30))
+        elements = [self.title, self.description, self.image]
+        for node in elements:
+            node.setTransparency(1)
+            node.setColorScale(1, 1, 1, 0)
+
         self.wrapUpSequence = Sequence(
             Func(self.flippy.setChatAbsolute, 'Toons of the world...', CFSpeech|CFTimeout),
             Func(base.playMusic, musicCredits, looping=0, volume=0.8),
@@ -694,6 +713,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=0, endFrame=9),
             Wait(7.5),
             ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=9, endFrame=0),
+            Wait(7.5),
+            Parallel(self.title.colorScaleInterval(0.5, (1, 1, 1, 1)), self.description.colorScaleInterval(0.5, (1, 1, 1, 1)), self.image.colorScaleInterval(0.5, (1, 1, 1, 1))),
+            Func(base.cr.loginFSM.request, 'credits')
         )
         self.cameraSequence = Sequence(
             # Begin to slowly drift towards Flippy as he delivers his speech (He currently doesn't have a speech)
@@ -703,11 +725,20 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # Dramatically fade in the logo as the camera rises
             Parallel(self.logo.posHprScaleInterval(6.5, (0, 0, 0.5), (0), (1), blendType='easeOut'), self.logo.colorScaleInterval(6.5, Vec4(1, 1, 1, 1), blendType='easeOut'), base.camera.posInterval(7.5, (70, 0.6, 42.2), blendType='easeInOut')),
             # Take a nosedive into a portable hole
-            Parallel(self.logo.colorScaleInterval(0.25, Vec4(1, 1, 1, 0)), base.camera.posHprInterval(0.25, (85, 0, 42), (-90, -30, 0), blendType='easeIn')),
-            Parallel(base.camera.posHprInterval(1.1, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2)))
+            Parallel(self.logo.colorScaleInterval(0.3, Vec4(1, 1, 1, 0)), base.camera.posHprInterval(0.3, (85, 0, 42), (-90, -30, 0), blendType='easeIn')),
+            Parallel(base.camera.posHprInterval(0.9, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2))),
         )
         self.cameraSequence.start()
         self.cameraSequence.setT(offset)
+
+    def exitWrapUp(self):
+        self.logo.removeNode()
+        self.portal.removeNode()
+        self.title.removeNode()
+        self.description.removeNode()
+        self.image.removeNode()
+        self.wrapUpSequence.finish()
+        self.cameraSequence.finish()
 
 
     '''

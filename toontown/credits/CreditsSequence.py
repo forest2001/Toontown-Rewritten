@@ -8,9 +8,11 @@ class CreditsSequence:
         self.interval = None
 
         self.creditsScenes = [
-            TestScene1(),
-            TestScene2(),
-            FlippyScene(),
+            Shockley(),
+            SirMax(),
+            FatMcStink(),
+            McQuack(),
+            Hawkheart()
             ]
 
     def load(self):
