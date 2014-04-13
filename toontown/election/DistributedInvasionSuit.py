@@ -206,11 +206,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             propIsActor = False
             x,y,z,h,p,r = (1.16, 0.24, 0.63, 171.561, 1.745, -163.443)
             prop.setScale(4)
-        elif self.attackProp == 'clip-on-tie':
-            animName = 'throw-paper'
-            propIsActor = True
-            x,y,z,h,p,r = (0.1, 0.2, -0.35, 0, 336, 0)
-
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
         colNode.setTag('damage', str(self.attackDamage))
