@@ -56,9 +56,8 @@ class DistributedSafezoneInvasion(DistributedObject):
 
     def delete(self):
         self.cr.invasion = None
-        DistributedObject.delete(self)
 
-        if not self.invasionOn:
+        if self.invasionOn:
             # These are only called if the sky is loaded
             del self.fadeIn
             del self.fadeOut
@@ -69,6 +68,9 @@ class DistributedSafezoneInvasion(DistributedObject):
             del self.musicEnter
             del self.beginSkySequence
             del self.endSkySequence
+
+        DistributedObject.delete(self)
+
         self.ignoreAll()
 
 
