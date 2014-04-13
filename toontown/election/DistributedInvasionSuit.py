@@ -197,19 +197,13 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             x,y,z,h,p,r = (-0.07, 0.17, -0.13, 161.867, -33.149, -48.086)
             self.prop.setScale(4)
         elif self.attackProp == 'pink-slip':
-            animName = 'throw-paper'
             self.propIsActor = False
             x,y,z,h,p,r = (0.07, -0.06, -0.18, -172.075, -26.715, -89.131)
             self.prop.setScale(5)
         elif self.attackProp == 'power-tie':
-            animName = 'throw-paper'
             self.propIsActor = False
             x,y,z,h,p,r = (1.16, 0.24, 0.63, 171.561, 1.745, -163.443)
             self.prop.setScale(4)
-        elif self.attackProp == 'clip-on-tie':
-            animName = 'throw-paper'
-            self.propIsActor = True
-            x,y,z,h,p,r = (0.1, 0.2, -0.35, 0, 336, 0)
 
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
