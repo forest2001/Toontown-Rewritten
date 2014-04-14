@@ -261,8 +261,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
         # If the cog's attack is higher than the amount of laff they have, we'll only take away what they have.
         # If the attack is 5 and the toon has 3 laff, we'll only take away 3 laff. This mostly prevents toons going under 0 Laff.
-        if damage > toon.hp and toon.hp > 0:
-            toon.takeDamage(toon.hp)
+        toonHp = toon.getHp()
+        if damage > toonHp and toonHp > 0:
+            toon.takeDamage(toonHp)
         else:
             toon.takeDamage(damage)
             
@@ -281,7 +282,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
         # Just to be safe, let's check if the Toon has less than 0 laff.
         # Sometimes this happens from multiple cog hits at once.
-        if toon.hp == -1:
+        if toon.getHp() == -1:
             # They do! :( Let's give them a little boost before tooning up to make it fair.
             toon.setHp(0)
 
@@ -291,18 +292,20 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def checkToonHp(self):
         # Check all the toons
         for toon in self.toons:
-            if toon.hp <= 0:
+            if toon.getHp() < 0:
                 # We kicked the bucket
                 if toon not in self.sadToons:
                     self.sadToons.append(toon) # They got one of us!
 
                 # Make sure the toon is the invasion before removing it
-                if toon in self.master.invasion.toons:
-                    self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
-            elif toon.hp > 0:
-                # Toon now has some laffs...
+                if toon in self.toons:
+                    self.toons.remove(toon) # Stop attacking us sad toons!
+
+        for toon in self.sadToons:
+            if toon.getHp() > 0:
+                # Toon now has some laff...
                 if toon in self.sadToons:
-                    self.master.invasion.toons.append(toon) # Add the toon back into the invasion
+                    self.toons.append(toon) # Add the toon back into the invasion
                     self.sadToons.remove(toon) # Remove the sad toon
 
     '''

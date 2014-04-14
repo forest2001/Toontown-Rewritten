@@ -265,7 +265,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if not toon:
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
             return
-        if toon.hp > 0:
+        if toon.getHp() > 0:
             toon.takeDamage(damage)
 
 
