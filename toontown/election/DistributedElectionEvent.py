@@ -698,8 +698,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         from direct.gui.OnscreenText import OnscreenText
         from direct.gui.OnscreenImage import OnscreenImage
         self.title = OnscreenText(text='Shockley', pos=(0.6, 0.15, 0.0), scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=TextNode.ACenter)
-        self.description = OnscreenText(text='Lead Developer\nNetwork Administraitor\nAstron Team', pos=(0.25, 0.05, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
-        self.image = OnscreenImage(image='phase_4/maps/news/11-17-13_garden.jpg', pos=(-0.5, -1, 0.0), scale=(0.5, 0.30, 0.30))
+        self.description = OnscreenText(text='Lead Developer\nNetwork Technician\nGame Systems Engineer', pos=(0.25, 0.05, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
+        self.image = OnscreenImage(image='phase_4/maps/news/11-17-13_garden.jpg', pos=(-0.5, 0.0, 0.0), scale=(0.5, 0.30, 0.30))
         elements = [self.title, self.description, self.image]
         for node in elements:
             node.setTransparency(1)
