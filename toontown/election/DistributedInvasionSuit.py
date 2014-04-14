@@ -169,7 +169,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
 
     def exitAttack(self):
         if self._attackInterval and self._attackInterval.isPlaying():
-            self._attackInterval.finish()
+            self._attackInterval.pause()
+            self.cleanupProp(self._attackInterval.prop, self._attackInterval.propIsActor)
+            #hehehe manual cleanup. so bad
         if self.msStartStomp.isPlaying():
             self.msStartStomp.finish()
         if self.msSoundLoop.isPlaying():
@@ -255,8 +257,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
                 (throwDelay, Func(throwProp))
             ),
         ))
-        track.delayDelete = DelayDelete(self, 'propTrack')
-        track.append(Func(track.delayDelete.destroy))
+        track.prop = prop
+        track.propIsActor = propIsActor
 
         return track
     
