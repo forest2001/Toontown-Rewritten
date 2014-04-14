@@ -59,6 +59,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             Func(self.loop, 'walk', fromFrame=22, toFrame=62)
         )
         self.msSoundLoop = Sequence(SoundInterval(self.stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
+        self.isStomper = False
 
     def announceGenerate(self):
         DistributedSuitBase.announceGenerate(self)
@@ -76,7 +77,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
     def generateAnimDict(self):
         animDict = DistributedSuitBase.generateAnimDict(self)
 
-        if self.style.name == 'ms':
+        if self.style.name == 'ms' or self.style.name == 'sd':
+            self.isStomper = True
             # Movers and Shakers should stomp instead of walk
             animDict['walk'] = 'phase_5/models/char/suitB-stomp'
 
@@ -140,7 +142,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self.__placeOnGround()
 
     def enterMarch(self, time):
-        if self.style.name == 'ms':
+        if self.isStomper:
             self.msStartStomp.start(time)
             self.msSoundLoop.loop(time)
             self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
@@ -159,7 +161,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self.__moveToStaticPoint()
 
     def enterAttack(self, time):
-        if self.style.name == 'ms':
+        if self.isStomper:
             self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
             self.msStartStomp.start(time)
             self.msSoundLoop.loop(time)
