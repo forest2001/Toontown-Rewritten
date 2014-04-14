@@ -302,11 +302,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
                 # Make sure the toon is the invasion before removing it
                 if toon in self.master.invasion.toons:
                     self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
-        if toon.hp > 0:
-            # Toon now has some laffs...
-            if toon in self.sadToons:
-                self.master.invasion.toons.append(toon) # Add the toon back into the invasion
-                self.sadToons.remove(toon) # Remove the sad toon
+            elif toon.hp > 0:
+                # Toon now has some laffs...
+                if toon in self.sadToons:
+                    self.master.invasion.toons.append(toon) # Add the toon back into the invasion
+                    self.sadToons.remove(toon) # Remove the sad toon
 
     '''
      SUIT-RELATED
