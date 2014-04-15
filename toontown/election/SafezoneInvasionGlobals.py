@@ -166,9 +166,9 @@ SuitWaves = [
     generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
 
     # WAVE 9: THE FINAL WAVE
-    generateSuits(10, [1, 3], [6, 7]),
-    generateSuits(15, [1, 4], [7, 7]), # Wait Wave
-    generateSuits(16, [2, 4], [7, 7]), # Intermission Wave
+    generateSuits(10, [1, 3], [6, 7], True),
+    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
