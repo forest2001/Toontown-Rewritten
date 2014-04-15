@@ -1,5 +1,7 @@
 import random
 
+FirstSuitSpawnPoint = (65, -1, 4.0, 45.0)
+
 # The position of the Finale suit
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
