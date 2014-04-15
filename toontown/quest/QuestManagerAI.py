@@ -188,6 +188,11 @@ class QuestManagerAI:
         pass
 
     def toonFished(self, toon):
+        '''
+        Retval: -1 = no relevant quest
+        0 = not caught
+        itemid = caught
+        '''
         for questIndex in range(len(toon.quests)):
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.RecoverItemQuest):
