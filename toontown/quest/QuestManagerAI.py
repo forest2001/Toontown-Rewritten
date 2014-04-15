@@ -186,3 +186,18 @@ class QuestManagerAI:
 
     def toonMadeFriend(self, av, otherAv):
         pass
+
+    def toonFished(self, toon):
+        for questIndex in range(len(toon.quests)):
+            quest = Quests.getQuest(toon.quests[questIndex][0])
+            if isinstance(quest, Quests.RecoverItemQuest):
+                if quest.isLocationMatch(zoneId):
+                    if quest.getHolder() == Quests.AnyFish:
+                        if random.randint(1, 100) <= quest.getPercentChance():
+                            recovered.append(quest.getItem())
+                            toon.quests[questIndex][4] += 1
+                            toon.b_setQuests(toon.quests)
+                            return quest.getItem()
+                        else:
+                            return 0
+        return -1
