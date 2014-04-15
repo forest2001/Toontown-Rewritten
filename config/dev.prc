@@ -20,15 +20,19 @@ show-total-population #f
 want-mat-all-tailors #t
 want-tailor-jellybeans #t
 
-estate-day-night #t
-
-want-karts #t
+# For alpha, we have to disable a few features for now.
 want-pets #f
-want-news-page #f
-want-news-tab #f
+want-karts #t
 want-housing #t
-want-doomsday #t
+want-news-tab #f
+want-news-page #f
 
-force-holiday-decorations 6
-want-old-fireworks #t
+# A few fun things for our developer build.
+estate-day-night #t
 want-instant-parties #t
+
+# Here are some events to enable.
+force-holiday-decorations 6
+want-doomsday #t
+# TODO: Fix new fireworks
+want-old-fireworks #t

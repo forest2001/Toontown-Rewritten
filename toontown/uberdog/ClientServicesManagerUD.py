@@ -5,6 +5,8 @@ from direct.distributed.PyDatagram import *
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
+from sys import platform
+import dumbdbm
 import anydbm
 import time
 import hmac
@@ -24,7 +26,10 @@ class LocalAccountDB:
         # This uses dbm, so we open the DB file:
         filename = simbase.config.GetString('accountdb-local-file',
                                             'dev-accounts.db')
-        self.dbm = anydbm.open(filename, 'c')
+        if platform == 'darwin':
+            self.dbm = dumbdbm.open(filename, 'c')
+        else:
+            self.dbm = anydbm.open(filename, 'c')
 
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):

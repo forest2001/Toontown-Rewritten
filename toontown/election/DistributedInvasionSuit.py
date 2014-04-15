@@ -9,9 +9,11 @@ from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 from toontown.battle import BattleParticles, SuitBattleGlobals, BattleProps
 from InvasionSuitBase import InvasionSuitBase
+from toontown.distributed.DelayDeletable import DelayDeletable
+from toontown.distributed.DelayDelete import *
 import random
 
-class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
+class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayDeletable):
     def __init__(self, cr):
         DistributedSuitBase.__init__(self, cr)
         InvasionSuitBase.__init__(self)
@@ -23,6 +25,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._lerpTimestamp = 0
         self._turnInterval = None
         self._staticPoint = (0, 0, 0)
+
+        self.explodeTrack = None
 
         self.attackTarget = 0
         self.attackProp = ''
@@ -164,8 +168,10 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._attackInterval.start(time)
 
     def exitAttack(self):
-        if self._attackInterval:
-            self._attackInterval.finish()
+        if self._attackInterval and self._attackInterval.isPlaying():
+            self._attackInterval.pause()
+            self.cleanupProp(self._attackInterval.prop, self._attackInterval.propIsActor)
+            #hehehe manual cleanup. so bad
         if self.msStartStomp.isPlaying():
             self.msStartStomp.finish()
         if self.msSoundLoop.isPlaying():
@@ -179,39 +185,40 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
 
     def makeAttackTrack(self):
         # TODO: Add more props than the tie. Possibly more animations.
-        self.prop = BattleProps.globalPropPool.getProp(self.attackProp)
-        self.propIsActor = True
+        prop = BattleProps.globalPropPool.getProp(self.attackProp)
+        propIsActor = True
         animName = 'throw-paper'
         x, y, z, h, p, r = (0.1, 0.2, -0.35, 0, 336, 0)
         if self.attackProp == 'redtape':
             animName = 'throw-object'
             x,y,z,h,p,r = (0.24, 0.09, -0.38, -1.152, 86.581, -76.784)
-            self.propIsActor = False
+            propIsActor = False
         elif self.attackProp == 'newspaper':
             animName = 'throw-object'
-            self.propIsActor = False
+            propIsActor = False
             x,y,z,h,p,r = (-0.07, 0.17, -0.13, 161.867, -33.149, -48.086)
-            self.prop.setScale(4)
+            prop.setScale(4)
         elif self.attackProp == 'pink-slip':
-            self.propIsActor = False
+            animName = 'throw-paper'
+            propIsActor = False
             x,y,z,h,p,r = (0.07, -0.06, -0.18, -172.075, -26.715, -89.131)
-            self.prop.setScale(5)
+            prop.setScale(5)
         elif self.attackProp == 'power-tie':
-            self.propIsActor = False
+            animName = 'throw-paper'
+            propIsActor = False
             x,y,z,h,p,r = (1.16, 0.24, 0.63, 171.561, 1.745, -163.443)
-            self.prop.setScale(4)
-
+            prop.setScale(4)
         # Prop collisions:
         colNode = CollisionNode('SuitAttack')
         colNode.setTag('damage', str(self.attackDamage))
 
-        bounds = self.prop.getBounds()
+        bounds = prop.getBounds()
         center = bounds.getCenter()
         radius = bounds.getRadius()
         sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
         sphere.setTangible(0)
         colNode.addSolid(sphere)
-        self.prop.attachNewNode(colNode)
+        prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
 
@@ -226,39 +233,42 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         def throwProp():
             toon = self.cr.doId2do.get(toonId)
             if not toon:
-                self.cleanupProp()
+                self.cleanupProp(prop, propIsActor)
                 return
 
             self.lookAtTarget()
 
-            self.prop.wrtReparentTo(render)
+            prop.wrtReparentTo(render)
 
             hitPos = toon.getPos() + Vec3(0, 0, 2.5)
-            distance = (self.prop.getPos() - hitPos).length()
+            distance = (prop.getPos() - hitPos).length()
             speed = 50.0
 
-            Sequence(self.prop.posInterval(distance/speed, hitPos),
-                     Func(self.cleanupProp)).start()
+            Sequence(prop.posInterval(distance/speed, hitPos),
+                     Func(self.cleanupProp, prop, propIsActor)).start()
+                     
 
-        track = Parallel(
+        track = Sequence(Parallel(
             ActorInterval(self, animName),
             Track(
-                (0.4, Func(self.prop.reparentTo, self.getRightHand())),
-                (0.0, Func(self.prop.setPosHpr, x, y, z, h, p, r)),
+                (0.4, Func(prop.reparentTo, self.getRightHand())),
+                (0.0, Func(prop.setPosHpr, x, y, z, h, p, r)),
                 (0.0, Func(self.sayFaceoffTaunt)),
-                (throwDelay, Func(throwProp)),
-                (10.0, Func(self.cleanupProp))
+                (throwDelay, Func(throwProp))
             ),
-        )
+        ))
+        track.prop = prop
+        track.propIsActor = propIsActor
 
         return track
+    
 
-    def cleanupProp(self):
-        if self.propIsActor:
-            self.prop.cleanup()
-            self.prop.removeNode()
+    def cleanupProp(self, prop, propIsActor):
+        if propIsActor:
+            prop.cleanup()
+            prop.removeNode()
         else:
-            self.prop.removeNode()
+            prop.removeNode()
 
     def lookAtTarget(self):
         if not self.attackTarget:
@@ -285,19 +295,23 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         self._stunInterval.finish()
 
     def enterExplode(self, time):
-        if self._attackInterval:
-            self._attackInterval.finish()
+        # We're done with this guy
+        self.stash()
+
+        # Are we exploding?
         self.exploding = True
-        # We're done with our suit. Let's get rid of him and load an actor for the explosion
+
+        # Lets create a specific actor for the explosion and load the explosion stuff
         loseActor = self.getLoseActor()
         loseActor.reparentTo(render)
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-        self.stash()
 
         # Oh boy, time to load all of our explosion effects!
         explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
         deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+        
+        # Load the particles for the explosion
         BattleParticles.loadParticles()
         smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
         singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -308,14 +322,28 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM):
         singleGear.setDepthWrite(False)
         smallGearExplosion.setDepthWrite(False)
         bigGearExplosion.setDepthWrite(False)
+
+        # Create the explosion track
         explosionTrack = Sequence()
         explosionTrack.append(Wait(5.4))
         explosionTrack.append(self.createKapowExplosionTrack(loseActor))
+
         gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
         gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+        
+        # Cleanup
+        
         cleanupTrack = Track((6.5, Func(self.cleanupLoseActor))) # Better delete the poor guy when we're done
-        explodeTrack = Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack)
-        explodeTrack.start(time)
+
+        # Blow the sucker up
+        self.explodeTrack = Sequence(Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack))
+        self.explodeTrack.delayDelete = DelayDelete(self, 'cleanupExplode')
+        self.explodeTrack.append(Func(self.explodeTrack.delayDelete.destroy))
+        self.explodeTrack.start()
+        self.explodeTrack.setT(time)
+
+    def exitExplode(self):
+        self.explodeTrack.finish()
 
     def createKapowExplosionTrack(self, parent): #(self, parent, explosionPoint, scale)
         explosionTrack = Sequence()

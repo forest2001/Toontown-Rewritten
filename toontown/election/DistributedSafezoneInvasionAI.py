@@ -13,12 +13,12 @@ from toontown.toonbase import ToontownBattleGlobals
 class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSafezoneInvasionAI")
 
-    def __init__(self, air):
+    def __init__(self, air, election):
         DistributedObjectAI.__init__(self, air)
         FSM.__init__(self, 'InvasionFSM')
 
         self.master = InvasionMasterAI(self)
-
+        self.election = election
         self.waveNumber = 0
         self.spawnPoints = []
         self.suits = []
@@ -81,8 +81,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.waveNumber = waveNumber
 
         if self.waveNumber == 24:
-            election = DistributedElectionEventAI.DistributedElectionEventAI(simbase.air)
-            election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
+            self.election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
 
         # Reset spawnpoints:
         self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
@@ -160,27 +159,26 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # This state is entered after a wave is successfully over. There's a
         # pause in the action until the next wave.
-        election = DistributedElectionEventAI.DistributedElectionEventAI(simbase.air)
 
         # Surlee keeps everyone's spirits held high during the Intermission.
         if self.waveNumber == 2:
-            election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve got a little break to regroup before they come back.')
+            self.election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve got a little break to regroup before they come back.')
         elif self.waveNumber == 5:
-            election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!')
+            self.election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!')
         elif self.waveNumber == 8:
-            election.saySurleePhrase('They\'re getting stronger with each wave... This isn\'t good.')
+            self.election.saySurleePhrase('They\'re getting stronger with each wave... This isn\'t good.')
         elif self.waveNumber == 11:
-            election.saySurleePhrase('I\'ve been keeping track of the wave intervals, and we seem to have about 20 seconds between each wave. Hang on tight.')
+            self.election.saySurleePhrase('I\'ve been keeping track of the wave intervals, and we seem to have about 20 seconds between each wave. Hang on tight.')
         elif self.waveNumber == 14:
-            election.saySurleePhrase('Stay happy, toons! We can do this!')
+            self.election.saySurleePhrase('Stay happy, toons! We can do this!')
         elif self.waveNumber == 17:
-            election.saySurleePhrase('We\'re losing toons fast, but our motivation is still high. Don\'t let these metal menaces take over our town!')
+            self.election.saySurleePhrase('We\'re losing toons fast, but our motivation is still high. Don\'t let these metal menaces take over our town!')
         elif self.waveNumber == 20:
-            election.saySurleePhrase('These next ones are the hardest yet. Flippy, do you have any bigger pies? We\'re going to need them soon.')
+            self.election.saySurleePhrase('These next ones are the hardest yet. Flippy, do you have any bigger pies? We\'re going to need them soon.')
         elif self.waveNumber == 23:
-            election.saySurleePhrase('Oof... I... I think we made it. Those must have been the last ones.')
+            self.election.saySurleePhrase('Oof... I... I think we made it. Those must have been the last ones.')
         elif self.waveNumber == 26:
-            election.saySurleePhrase('I think this is it, toons. They\'re sending in the boss!')
+            self.election.saySurleePhrase('I think this is it, toons. They\'re sending in the boss!')
 
     def __endIntermission(self, task):
         self.demand('BeginWave', self.waveNumber + 1)
@@ -263,8 +261,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
         # If the cog's attack is higher than the amount of laff they have, we'll only take away what they have.
         # If the attack is 5 and the toon has 3 laff, we'll only take away 3 laff. This mostly prevents toons going under 0 Laff.
-        if damage > toon.hp:
-            toon.takeDamage(toon.hp)
+        toonHp = toon.getHp()
+        if damage > toonHp and toonHp > 0:
+            toon.takeDamage(toonHp)
         else:
             toon.takeDamage(damage)
             
@@ -283,7 +282,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             return
         # Just to be safe, let's check if the Toon has less than 0 laff.
         # Sometimes this happens from multiple cog hits at once.
-        if toon.hp == -1:
+        if toon.getHp() == -1:
             # They do! :( Let's give them a little boost before tooning up to make it fair.
             toon.setHp(0)
 
@@ -293,18 +292,20 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def checkToonHp(self):
         # Check all the toons
         for toon in self.toons:
-            if toon.hp <= 0:
+            if toon.getHp() < 0:
                 # We kicked the bucket
                 if toon not in self.sadToons:
                     self.sadToons.append(toon) # They got one of us!
 
                 # Make sure the toon is the invasion before removing it
-                if toon in self.master.invasion.toons:
-                    self.master.invasion.toons.remove(toon) # Stop attacking us sad toons!
-            elif toon.hp > 0:
-                # Toon now has some laffs...
+                if toon in self.toons:
+                    self.toons.remove(toon) # Stop attacking us sad toons!
+
+        for toon in self.sadToons:
+            if toon.getHp() > 0:
+                # Toon now has some laff...
                 if toon in self.sadToons:
-                    self.master.invasion.toons.append(toon) # Add the toon back into the invasion
+                    self.toons.append(toon) # Add the toon back into the invasion
                     self.sadToons.remove(toon) # Remove the sad toon
 
     '''
@@ -381,7 +382,10 @@ def szInvasion(cmd, arg=''):
 
     if cmd == 'start':
         if invasion is None:
-            invasion = DistributedSafezoneInvasionAI(simbase.air)
+            election = simbase.air.doFind('ElectionEvent')
+            if election is None:
+                return 'No election event.'
+            invasion = DistributedSafezoneInvasionAI(simbase.air, election)
             invasion.generateWithRequired(2000)
         else:
             return 'An invasion object already exists.'

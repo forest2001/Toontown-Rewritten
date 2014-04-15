@@ -8,6 +8,8 @@ import webbrowser
 import SafezoneInvasionGlobals
 
 class DistributedSafezoneInvasion(DistributedObject):
+    deferFor = 1
+
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         
@@ -54,9 +56,7 @@ class DistributedSafezoneInvasion(DistributedObject):
 
     def delete(self):
         self.cr.invasion = None
-        DistributedObject.delete(self)
 
-        # We should check if the invasion is loaded first to be safe.
         if self.invasionOn:
             # These are only called if the sky is loaded
             del self.fadeIn
@@ -68,6 +68,9 @@ class DistributedSafezoneInvasion(DistributedObject):
             del self.musicEnter
             del self.beginSkySequence
             del self.endSkySequence
+
+        DistributedObject.delete(self)
+
         self.ignoreAll()
 
 

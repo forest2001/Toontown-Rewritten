@@ -174,7 +174,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def spawnInvasion(self):
         invasion = simbase.air.doFind('SafezoneInvasion')
         if invasion is None:
-            invasion = DistributedSafezoneInvasionAI(simbase.air)
+            invasion = DistributedSafezoneInvasionAI(simbase.air, self)
             invasion.generateWithRequired(2000)
 
     def setSuitDamage(self, hp):

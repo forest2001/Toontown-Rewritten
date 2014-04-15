@@ -137,7 +137,10 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def attack(self, who):
         attacks = ['clip-on-tie', 'redtape', 'newspaper', 'pink-slip', 'power-tie']
-        self.sendUpdate('setAttackInfo', [who, choice(attacks), SafezoneInvasionGlobals.StandardSuitDamage])
+        damage = round(float(self.getActualLevel())/2.0)
+        if damage <= 0:
+            damage = 1
+        self.sendUpdate('setAttackInfo', [who, choice(attacks), damage])
         self.b_setState('Attack')
 
     def enterAttack(self):
@@ -262,8 +265,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         if not toon:
             self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
             return
-
-        toon.takeDamage(damage)
+        if toon.getHp() > 0:
+            toon.takeDamage(damage)
 
 
     '''
