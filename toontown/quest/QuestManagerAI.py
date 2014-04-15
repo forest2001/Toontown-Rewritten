@@ -9,6 +9,10 @@ class QuestManagerAI:
         pass
 
     def toonKilledCogs(self, toon, suitsKilled, zoneId, activeToonList):
+        '''
+        Called in battleExpierience to alert the quest system that a
+        toon has killed some cogs
+        '''
         for questIndex in range(len(toon.quests)):
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.CogQuest):
@@ -18,7 +22,12 @@ class QuestManagerAI:
         toon.b_setQuests(toon.quests)
 
     def recoverItems(self, toon, suitsKilled, zoneId):
-        #return (recovered, notRecovered)
+        '''
+        Called in battleExpierience to alert the quest system that a toon
+        should test for recovered items
+        
+        Returns a tuple of two lists, [0] - list of recovered items, [1] - list of items not recovered
+        '''
         recovered = []
         notRecovered = []
         for questIndex in range(len(toon.quests)):
@@ -153,15 +162,28 @@ class QuestManagerAI:
         npc.rejectAvatar(avId)
 
     def avatarCancelled(self, avId):
+        '''
+        Called by NPCToon to alert the quest system that an avatar
+        has cancelled an interaction.
+        '''
+        #SECURITYTODO: IMPLEMENT THIS
         pass
 
     def avatarChoseQuest(self, avId, npc, questId, rewardId, toNpcId):
+        '''
+        Called by NPCToon to alert the quest system that an avatar
+        has chosen a quest from the list supplied
+        '''
         if simbase.air.doId2do.has_key(avId):
             av = simbase.air.doId2do[avId]
             self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
             self.npcGiveQuest(npc, av, questId, rewardId, toNpcId)
 
     def avatarChoseTrack(self, avId, npc, questId, trackId):
+        '''
+        Called by NPCToon to alert the quest system that an avatar
+        has chosen a track from the list supplied
+        '''
         if simbase.air.doId2do.has_key(avId):
             av = simbase.air.doId2do[avId]
             #see Quests.py for rewardIds
