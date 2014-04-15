@@ -32,8 +32,9 @@ class Shockley:
         return Sequence(
             ParentInterval(self.sceneRoot, render),
             # This fades in during the election's WrapUp state to prevent jittering when loading this first scene.
-            Wait(3),
+            Wait(3.5),
             Func(doFade, 'out', self.elements),
+            Wait(0.5),
             ParentInterval(self.sceneRoot, hidden)
             )
 
@@ -54,8 +55,8 @@ class SirMax:
         self.description = OnscreenText(text='Team Lead\nCommunity Manager\nWriter\nDeveloper', pos=(0.25, 0.05, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
         self.image = OnscreenImage(image='phase_4/maps/news/10-29-13_cannon.jpg', pos=(-0.5, 0.0, 0.0), scale=(0.5, 0.30, 0.30))
 
-        elements = [self.title, self.description, self.image]
-        for node in elements:
+        self.elements = [self.title, self.description, self.image]
+        for node in self.elements:
             node.setTransparency(1)
             node.setColorScale(1, 1, 1, 0)
 
@@ -63,8 +64,9 @@ class SirMax:
         return Sequence(
             ParentInterval(self.sceneRoot, render),
             Func(doFade, 'in', self.elements),
-            Wait(3),
+            Wait(3.5),
             Func(doFade, 'out', self.elements),
+            Wait(0.5),
             ParentInterval(self.sceneRoot, hidden)
             )
 
@@ -85,16 +87,18 @@ class FatMcStink:
         self.description = OnscreenText(text='Server Administraitor\nWeb Backend Development\nDeveloper', pos=(-0.1, 0.0, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ARight)
         self.image = OnscreenImage(image='phase_4/maps/news/11-8-13_pieornot.jpg', pos=(0.5, 1, 0.0), scale=(0.5, 0.30, 0.30))
 
-        elements = [self.title, self.description, self.image]
-        for node in elements:
+        self.elements = [self.title, self.description, self.image]
+        for node in self.elements:
             node.setTransparency(1)
+            node.setColorScale(1, 1, 1, 0)
 
     def makeInterval(self):
         return Sequence(
             ParentInterval(self.sceneRoot, render),
             Func(doFade, 'in', self.elements),
-            Wait(3),
+            Wait(3.5),
             Func(doFade, 'out', self.elements),
+            Wait(0.5),
             ParentInterval(self.sceneRoot, hidden)
             )
 
@@ -112,19 +116,21 @@ class McQuack:
         self.sceneRoot = NodePath('McQuack')
 
         self.title = OnscreenText(text='McQuack', pos=(-0.6, 0.1, 0.0), scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=TextNode.ACenter)
-        self.description = OnscreenText(text='Expert of Explosives\nDeveloper\nAstron Team', pos=(-0.1, 0.0, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
+        self.description = OnscreenText(text='Expert of Explosives\nDeveloper\nAstron Team', pos=(-0.1, 0.0, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ARight)
         self.image = OnscreenImage(image='phase_4/maps/news/12-28-13-hiatus.jpg', pos=(0.5, 1, 0.0), scale=(0.5, 0.30, 0.30))
 
-        elements = [self.title, self.description, self.image]
-        for node in elements:
+        self.elements = [self.title, self.description, self.image]
+        for node in self.elements:
             node.setTransparency(1)
+            node.setColorScale(1, 1, 1, 0)
 
     def makeInterval(self):
         return Sequence(
             ParentInterval(self.sceneRoot, render),
             Func(doFade, 'in', self.elements),
-            Wait(3),
+            Wait(3.5),
             Func(doFade, 'out', self.elements),
+            Wait(0.5),
             ParentInterval(self.sceneRoot, hidden)
             )
 
@@ -145,16 +151,18 @@ class Hawkheart:
         self.description = OnscreenText(text='Fish Bingo Controller\nDeveloper', pos=(0.25, 0.05, 0.0), scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=TextNode.ALeft)
         self.image = OnscreenImage(image='phase_4/maps/news/11-11-13_bingo.jpg', pos=(-0.5, 0.0, 0.0), scale=(0.5, 0.30, 0.30))
 
-        elements = [self.title, self.description, self.image]
-        for node in elements:
+        self.elements = [self.title, self.description, self.image]
+        for node in self.elements:
             node.setTransparency(1)
+            node.setColorScale(1, 1, 1, 0)
 
     def makeInterval(self):
         return Sequence(
             ParentInterval(self.sceneRoot, render),
             Func(doFade, 'in', self.elements),
-            Wait(3),
+            Wait(3.5),
             Func(doFade, 'out', self.elements),
+            Wait(0.5),
             ParentInterval(self.sceneRoot, hidden)
             )
 
