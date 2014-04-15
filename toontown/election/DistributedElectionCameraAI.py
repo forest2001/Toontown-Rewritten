@@ -27,7 +27,7 @@ class DistributedElectionCameraAI(DistributedNodeAI):
         time = dist/10.0 + 1.5 #constant rate of 10 unit/s with some extra time just in case
         self.b_setState('Move', globalClockDelta.getRealNetworkTime(), x, y, z, h, p, 0)
         taskMgr.remove('finish%d' % self.doId)
-        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[x, y, z, h, p])
+        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[x, y, z])
         
         
     def _dist(self, x, y, z):
@@ -37,19 +37,21 @@ class DistributedElectionCameraAI(DistributedNodeAI):
         x, y, z = object.getPos()
         dist = self._dist(x, y - 10.0, z + 7.0)
         time = dist/10.0 + 1.5
-        self.b_setState('Follow', globalClockDelta.getRealNetworkTime(), 0, -15, 7, 0, 345, object.doId)
+        self.b_setState('Follow', globalClockDelta.getRealNetworkTime(), 0, -15, 7, -90, -15, object.doId)
         taskMgr.remove('finish%d' % self.doId)
-        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[0, -15, 7, 0,  345])
+        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[0, -15, 7])
         
     def _watch(self, object):
         x, y, z = object.getPos()
         dist = self._dist(x, y + 10.0, z + 7.0)
         time = dist/10.0 + 1.5
-        self.b_setState('Follow', globalClockDelta.getRealNetworkTime(), 0, 15, 7, 180, 345, object.doId)
+        self.b_setState('Follow', globalClockDelta.getRealNetworkTime(), 0, 15, 7, 90, -15, object.doId)
         taskMgr.remove('finish%d' % self.doId)
-        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[0, 15, 7, 180,  345])
+        taskMgr.doMethodLater(time, self.__finishMove, 'finish%d' % self.doId, extraArgs=[0, 15, 7])
 
         
         
-    def __finishMove(self, x, y, z, h, p):
-        self.b_setPosHpr(x, y, z, h, p, 0)
+    def __finishMove(self, x, y, z):
+        self.setPos(x, y, z)
+        self.d_setXY(x, y)
+        self.d_setZ(z)

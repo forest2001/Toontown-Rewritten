@@ -13,6 +13,7 @@ class DistributedElectionCamera(DistributedNode):
         
     def generate(self):
         self.assign(render.attachNewNode('DistributedElectionCamera'))
+        self.camAttach = self.attachNewNode('CameraAttach')
         DistributedNode.generate(self)
         camera = loader.loadModel('phase_4/models/events/camera.egg')
         camera.reparentTo(self)
@@ -41,7 +42,8 @@ class DistributedElectionCamera(DistributedNode):
             self.posInterval(2.5, (x, y, z), blendType='easeInOut'),
         )
         movement = Sequence(
-            Parallel(self.posInterval(time-elapsed, Point3(x, y, z)), self.camBody.hprInterval(time-elapsed, (h, p, 0))),
+            Parallel(self.posInterval(time, Point3(x, y, z)), self.camBody.hprInterval(time, (h + 180, p, 0)), self.camAttach.hprInterval(time, (h, p, 0))),
             Func(idleInterval.loop)
         )
         movement.start()
+        movement.setT(elapsed)

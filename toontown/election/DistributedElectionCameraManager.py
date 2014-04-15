@@ -69,15 +69,12 @@ class DistributedElectionCameraManager(DistributedObject):
         self.mainCam = new
         if self.mainCam != 0:
             if new in self.cr.doId2do:
-                self.camera.reparentTo(self.cr.doId2do[new])
-                if self.cameraViewEnabled:
-                    camNP = NodePath(self.winCam)
-                    camNP.reparentTo(self.cr.doId2do[new])
+                self.camera.reparentTo(self.cr.doId2do[new].camAttach)
             else:
                 self.acceptOnce('generate-%d' % new, self.setCam)
             
     def setCam(self, cam):
-        self.camera.reparentTo(cam)
+        self.camera.reparentTo(cam.camAttach)
         
     def setCameraIds(self, ids):
         self.cameraIds = ids
