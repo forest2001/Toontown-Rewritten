@@ -8,11 +8,16 @@ class CreditsSequence:
         self.interval = None
 
         self.creditsScenes = [
+            # Developers
             Shockley(),
             SirMax(),
             FatMcStink(),
             McQuack(),
-            Hawkheart()
+            Hawkheart(),
+            TooManySecrets(),
+            MuddyPaws(),
+            Hamlet()
+            # Artists
             ]
 
     def load(self):
