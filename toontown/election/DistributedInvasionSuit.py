@@ -501,7 +501,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self.invasionFinale = finale
         
     def wrapUp(self, offset):
-        print 'WE DID IT BOIS'
         cogSequence = Sequence()
         cogSequence.start()
         cogSequence.setT(offset)
