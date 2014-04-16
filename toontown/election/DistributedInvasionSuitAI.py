@@ -296,6 +296,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         # Final Destination
         finalX, finalY = SafezoneInvasionGlobals.FinaleSuitDestination
         if (finalX - 1.0 <= oldX <= finalX + 1.0) and (finalY - 1.0 <= oldY <= finalY + 1.0): # Check if it hit its destination
+            self.invasion.election.b_setState('WrapUp')
             self.d_sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[6])
             self.idle()
             self.finaleAttack.remove()

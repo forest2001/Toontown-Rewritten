@@ -665,7 +665,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def enterWrapUp(self, offset):
         #Flippy runs onto the stage and throws a pie at the boss, killing him
-        pass
+        cake = BattleProps.globalPropPool.getProp('wedding-cake')
+        messenger.send('wrapUpSequence', [offset])
+        pieSeq = Sequence(Wait(30), Func(self.sendUpdate, 'setSuitDamage', [200]))
+        pieSeq.start()
+        pieSeq.setT(offset)
 
 
     '''

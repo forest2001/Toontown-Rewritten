@@ -24,6 +24,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.pieTypeAmount = [4, 20, 1]
         self.balloon = None
+        self.cogDead = False
         
         # For the DistributedInvasionSuitAI
         self.master = InvasionMasterAI(self)
@@ -109,8 +110,8 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Wait(34),
             Func(event.b_setState, 'Begin'),
             Wait(10),
-            Func(event.b_setState, 'AlecSpeech'),
-            Wait(155),
+            #Func(event.b_setState, 'AlecSpeech'),
+            #Wait(155),
             Func(event.b_setState, 'VoteBuildup'),
             Wait(16),
             Func(event.b_setState, 'WinnerAnnounce'),
@@ -164,7 +165,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.invasionSequence.finish()
 
     def enterWrapUp(self):
-        pass
+        self.cogDead = False
 
 
     '''
@@ -178,12 +179,19 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             invasion.generateWithRequired(2000)
 
     def setSuitDamage(self, hp):
-        self.suit = DistributedInvasionSuitAI(self.air, self)
-        self.suit.dna.newSuit('ym')
-        self.suit.setSpawnPoint(99)
-        self.suit.setLevel(0)
-        self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
-        self.suit.takeDamage(hp)
+        if not self.cogDead:
+            self.cogDead = True
+            if self.state == 'WrapUp':
+                invasion = simbase.air.doFind('SafezoneInvasion')
+                if invasion:
+                    invasion.setFinaleSuitStunned(hp)
+            else:
+                self.suit = DistributedInvasionSuitAI(self.air, self)
+                self.suit.dna.newSuit('ym')
+                self.suit.setSpawnPoint(99)
+                self.suit.setLevel(0)
+                self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
+                self.suit.takeDamage(hp)
 
     def saySurleePhrase(self, phrase = None):
         if not phrase:
