@@ -104,6 +104,11 @@ class Credits:
         self.toonImage = None
         self.side = None
 
+class Surviver:
+    def __init__(self, toonName):
+        self.toonName = toonName
+        print('Saved toon name is: %s' % self.toonName)
+
 AlphaCreditsScenes = [
                 # Developers
                 Shockley(),
