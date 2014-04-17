@@ -126,28 +126,28 @@ SuitWaves = [
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    generateSuits(9,  [3, 4], [0, 0]),
-    generateSuits(6,  [3, 4], [0, 0]), # Wait Wave
-    generateSuits(15, [2, 3], [0, 0]), # Intermission Wave
+    generateSuits(10, [3, 4], [0, 0]),
+    generateSuits(13, [3, 4], [0, 0]), # Wait Wave
+    generateSuits(17, [2, 3], [0, 0]), # Intermission Wave
 
     # WAVE 2:
-    generateSuits(7,  [2, 3], [0, 1]),
-    generateSuits(11, [1, 2], [0, 1]), # Wait Wave
-    generateSuits(16, [2, 3], [0, 1]), # Intermission Wave
+    generateSuits(11, [2, 3], [0, 1]),
+    generateSuits(14, [2, 2], [0, 1]), # Wait Wave
+    generateSuits(17, [2, 3], [0, 1]), # Intermission Wave
 
     # WAVE 3:
     generateSuits(8,  [2, 3], [1, 2]),
-    generateSuits(11, [1, 2], [2, 2]), # Wait Wave
+    generateSuits(11, [2, 2], [2, 2]), # Wait Wave
     generateSuits(17, [2, 3], [2, 2]), # Intermission Wave
 
     # WAVE 4:
     generateSuits(8,  [2, 3], [2, 3]),
-    generateSuits(11, [1, 2], [3, 3]), # Wait Wave
+    generateSuits(11, [2, 2], [3, 3]), # Wait Wave
     generateSuits(17, [2, 3], [3, 3]), # Intermission Wave
 
     # WAVE 5:
     generateSuits(8,  [0, 2], [3, 4]),
-    generateSuits(11, [1, 4], [4, 4]), # Wait Wave
+    generateSuits(11, [2, 4], [4, 4]), # Wait Wave
     generateSuits(17, [2, 3], [4, 4]), # Intermission Wave
 
     # WAVE 6:
@@ -165,7 +165,12 @@ SuitWaves = [
     generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
     generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
 
-    # WAVE 9: THE FINAL WAVE
+    # WAVE 9:
+    generateSuits(10, [1, 3], [6, 7], True),
+    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
+
+    # WAVE 10: THE FINAL WAVE
     generateSuits(10, [1, 3], [6, 7], True),
     generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
     generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
@@ -176,13 +181,13 @@ SuitWaves = [
 SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
 
 # These waves have a 20 second intermission period after all suits are destroyed.
-SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
+SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29]
 
 # These are the last waves that start turning cogs into Skelcogs.
-SuitSkelecogWaves = [24, 25, 26]
+SuitSkelecogWaves = [27, 28, 29]
 
 WaveBeginningTime = 10 # This should be at least 6.5 (the suit fly-down time)
-IntermissionTime = 20 # How long does the intermission last?
+IntermissionTime = 10 # How long does the intermission last?
 
 StandardSuitDamage = 5 # How much damage does a standard suit's attack do?
 MoveShakerDamageRadius = 3 # How much damage does a Move and Shaker's attack do?
