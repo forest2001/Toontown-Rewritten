@@ -163,5 +163,4 @@ CreditsScenes = [
                 # Special Thanks to:
                 Credits('Disney Online', 'The owners and creators of Toontown.', '11-20-13_donald.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
                 Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', '14-1-22_ohmanohmanOHMAN.jpg', 'left'),
-                Credits('YOU', 'Alpha Tester\nDoomsday Survivor', 'flippy_cheezer.jpg', 'left'), #This should be replaced with their real name
                 ]

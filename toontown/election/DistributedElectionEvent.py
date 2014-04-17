@@ -672,6 +672,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeIntroInterval.finish()
 
     def enterWrapUp(self, offset):
+        # Tell the credits our toon name and dna.
+        base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
+    
         # This starts here so that we can drift towards Flippy for his speech,
         # but some of it should be moved over to the real credits sequence which is called after this.
         # A safe time to cut to the real sequence would be after the portable hole nosedive, or right when the camera arrives at Flippy before "Toons of the world... UNITE!"

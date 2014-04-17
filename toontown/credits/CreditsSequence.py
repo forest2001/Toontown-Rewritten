@@ -1,14 +1,18 @@
 from direct.interval.IntervalGlobal import *
 from otp.ai.MagicWordGlobal import *
 
+# Import * should be done at module level!
+from AlphaCredits import *
+
 class CreditsSequence:
     def __init__(self, sequence):
         self.loaded = False
         self.sequence = sequence # So we can load different types of sequences
         self.interval = None
+        self.localToonName = None
 
         if sequence == 'alpha':
-            from AlphaCredits import *
+            pass
         elif sequence == 'beta':
             # For when beta comes around
             pass
@@ -20,6 +24,11 @@ class CreditsSequence:
     def load(self):
         if self.loaded:
             return
+            
+        if self.sequence == 'alpha' and self.localToonName is not None:
+            self.creditsScenes.append(
+                Credits(self.localToonName, 'Alpha Tester\nDoomsday Survivor', 'flippy_cheezer.jpg', 'left')
+            )
 
         for scene in self.creditsScenes:
             scene.load()
@@ -34,6 +43,10 @@ class CreditsSequence:
             scene.unload()
 
         self.loaded = False
+        
+    def setLocalToonDetails(self, name, dna):
+        self.localToonName = name
+        self.localToonDNA = dna
 
     def enter(self):
         # Begin playing the credits sequence.
@@ -46,6 +59,7 @@ class CreditsSequence:
         self.interval = Sequence()
         for scene in self.creditsScenes:
             self.interval.append(scene.makeInterval())
+        
         self.interval.start()
 
     def exit(self):
