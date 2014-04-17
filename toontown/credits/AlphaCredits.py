@@ -137,10 +137,6 @@ class Credits:
         self.toonImage = None
         self.side = None
 
-class Survivor:
-    def __init__(self, toonName):
-        self.toonName = toonName
-
 CreditsScenes = [
                 # Developers
                 Shockley(),
