@@ -160,7 +160,7 @@ CreditsScenes = [
                 Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 'Joshsora', 'Infinite Patience\n3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
 
                 # Composers
-                Credits('Cool Peachers', 'Lead Composer', 'flippy_cheezer.jpg', 'right', 2, 'Jethred', 'Main Theme Composer', 'flippy_cheezer.jpg'),
+                Credits('Cool Peaches', 'Lead Composer', 'flippy_cheezer.jpg', 'right', 2, 'Jethred', 'Main Theme Composer', 'flippy_cheezer.jpg'),
 
                 # Special Thanks to:
                 Credits('Disney Online', 'The owners and creators of Toontown.', '11-20-13_donald.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
