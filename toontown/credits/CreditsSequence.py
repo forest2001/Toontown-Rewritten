@@ -1,24 +1,29 @@
 from direct.interval.IntervalGlobal import *
 from otp.ai.MagicWordGlobal import *
-from AlphaCredits import *
 
 class CreditsSequence:
-    def __init__(self):
+    def __init__(self, sequence):
         self.loaded = False
+        self.sequence = sequence # So we can load different types of sequences
         self.interval = None
 
-        self.creditsScenes = [
-            # Developers
-            Shockley(),
-            SirMax(),
-            FatMcStink(),
-            McQuack(),
-            Hawkheart(),
-            TooManySecrets(),
-            MuddyPaws(),
-            Hamlet()
-            # Artists
-            ]
+        if sequence == 'alpha':
+            from AlphaCredits import *
+            self.creditsScenes = [
+                # Developers
+                Shockley(),
+                SirMax(),
+                FatMcStink(),
+                McQuack(),
+                Hawkheart(),
+                Hamlet(),
+                MuddyPaws(),
+                Goshi(),
+                TooManySecrets(),
+                ]
+        elif sequence == 'beta':
+            # For when beta comes around
+            pass
 
     def load(self):
         if self.loaded:

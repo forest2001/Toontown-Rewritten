@@ -128,7 +128,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         state = self.gameFSM.getStateNamed('playGame')
         state.addTransition('skipTutorialRequest')
 
-        self.credits = CreditsSequence()
+        # Alpha Credits
+        self.credits = CreditsSequence('alpha')
         self.loginFSM.addState(State.State('credits', self.enterCredits, self.exitCredits, ['gameOff']))
         state = self.loginFSM.getStateNamed('playingGame')
         state.addTransition('credits')
