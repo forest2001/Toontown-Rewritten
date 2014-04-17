@@ -9,10 +9,13 @@ class CreditsSequence:
 
         if sequence == 'alpha':
             from AlphaCredits import *
-            self.creditsScenes = AlphaCreditsScenes
         elif sequence == 'beta':
             # For when beta comes around
             pass
+
+        # Any credits sequence should have "CreditsScenes" to list the order of
+        # the credits sequence. This is imported when selecting the sequence type.
+        self.creditsScenes = CreditsScenes
 
     def load(self):
         if self.loaded:
@@ -52,8 +55,8 @@ class CreditsSequence:
 
 @magicWord()
 def rollCredits():
-    """Request that the credits sequence play back.
-
+    """
+    Request that the credits sequence play back.
     This will disconnect you.
     """
 
