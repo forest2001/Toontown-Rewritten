@@ -22,6 +22,7 @@ class ClickablePopup(PandaNode, DirectObject):
         self.__disabled = False
         self.__clicked = False
         self.__hovered = False
+        self.__onscreen = False
         self.__clickState = 0
 
         self.__clickEvent = ''
@@ -39,10 +40,12 @@ class ClickablePopup(PandaNode, DirectObject):
         if event is None:
             # The caller is disabling us, so instead:
             self.__disabled = True
+            self.__region.setActive(False)
             self.__updateClickState()
         else:
             self.__clickEvent = event
             self.__disabled = False
+            self.__region.setActive(True)
             self.__updateClickState()
 
     def getClickState(self):
@@ -126,6 +129,7 @@ class ClickablePopup(PandaNode, DirectObject):
                     lens.project(Point3(cBottomRight), sBottomRight)):
                 # Not on-screen! Disable the click region:
                 self.__region.setActive(False)
+                self.__onscreen = False
                 return
         else:
             # No cam; the "camspace" (actually just net transform) IS the
@@ -137,4 +141,8 @@ class ClickablePopup(PandaNode, DirectObject):
         sRight, sBottom = sBottomRight
 
         self.__region.setFrame(sLeft, sRight, sBottom, sTop)
-        self.__region.setActive(True)
+        self.__region.setActive(not self.__disabled)
+        self.__onscreen = True
+
+    def isOnScreen(self):
+        return self.__onscreen
