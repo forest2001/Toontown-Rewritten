@@ -49,7 +49,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.reparentTo(self.showFloor)
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
         rope.setScale(2, 2, 2)
-        rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
+        rc = CollisionSphere(8.2, 15.5, 2.0, 13.5)
+        rc2 = CollisionBox(Point3(8.88, 28.76, 0.00), 4.44, 6.38, 9.00)
+        ropeCollision = rope.attachNewNode(CollisionNode('collision'))
+        ropeCollision.node().addSolid(rc)
+        ropeCollision.node().addSolid(rc2)
 
         #Campaign stands
         self.flippyStand = Actor.Actor('phase_4/models/events/election_flippyStand-mod', {'idle': 'phase_4/models/events/election_flippyStand-idle'})
