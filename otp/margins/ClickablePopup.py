@@ -144,5 +144,9 @@ class ClickablePopup(PandaNode, DirectObject):
         self.__region.setActive(not self.__disabled)
         self.__onscreen = True
 
+    def stashClickRegion(self):
+        self.__region.setActive(False)
+        self.__onscreen = False
+
     def isOnScreen(self):
         return self.__onscreen
