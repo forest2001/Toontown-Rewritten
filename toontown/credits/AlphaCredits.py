@@ -12,7 +12,6 @@ def doFade(fade, elements):
         for node in elements:
             Sequence(node.colorScaleInterval(0.5, (1, 1, 1, 0))).start()
 
-# Developers
 class Shockley:
     def __init__(self, preload=False):
         self.sceneRoot = None
@@ -49,7 +48,7 @@ class Shockley:
         self.image.removeNode()
 
 class Credits:
-    def __init__(self, name, description, image, side = 'Left'):
+    def __init__(self, name, description, image, side = 'left'):
         self.sceneRoot = None
         self.toonName = name
         self.toonDescription = description
@@ -64,7 +63,7 @@ class Credits:
         descriptionPos = None
         imagePos = None
         textAlignment = None
-        if self.side == 'Left':
+        if self.side == 'left':
             titlePos = (0.6, 0.15, 0.0)
             descriptionPos = (0.25, 0.05, 0.0)
             imagePos = (-0.5, 0.0, 0.0)
@@ -104,3 +103,24 @@ class Credits:
         self.toonDescription = None
         self.toonImage = None
         self.side = None
+
+AlphaCreditsScenes = [
+                # Developers
+                Shockley(),
+                Credits('Sir Max', 'Team Lead\nCommunity Manager\nWriter\nDeveloper', '10-29-13_cannon.jpg', 'left'),
+                Credits('Fat McStink', 'Server Administraitor\nWeb Backend Development\nDeveloper', '11-8-13_pieornot.jpg', 'right'),
+                Credits('McQuack', 'Expert of Explosives\nDeveloper\nAstron Team', '12-28-13-hiatus.jpg', 'right'),
+                Credits('Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg', 'left'),
+                Credits('Hamlet', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left'),
+                Credits('Muddy Paws', 'Expert Cake Maker\nDeveloper\nMac Team', 'muddy-paws.jpg', 'right'),
+                Credits('Goshi', 'Support Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg', 'right'),
+                Credits('Too Many Secrets', 'Many Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
+
+                # Artists
+                Credits('Capt. Sandy', 'Lead Graphic Designer\nConcept Artist\nSite Designer\nArtist', 'capt_sandy.jpg', 'left'),
+                Credits('Slate Blue\nRabbit', '\n\nTexture Artist', 'slate.jpg', 'right'),
+                Credits('Roxy\'s Joyful\nUber', '\n\nTexture Artist', 'roxys_joyful_uber.jpg', 'right'),
+                Credits('Roger Dog', '3D Modeler\nArtist', 'roger_dog.jpg', 'left'),
+                Credits('Flippy Cheezer', '3D Modeler\nArtist', 'flippy_cheezer.jpg', 'left'),
+                Credits('Boo Boo', 'Novice Construction Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg', 'right'),
+                ]
