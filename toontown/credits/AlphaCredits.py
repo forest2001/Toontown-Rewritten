@@ -14,8 +14,9 @@ def doFade(fade, elements):
 
 # Developers
 class Shockley:
-    def __init__(self):
+    def __init__(self, preload=False):
         self.sceneRoot = None
+        self.preload = preload
 
     def load(self):
         self.sceneRoot = NodePath('Shockley')
@@ -28,6 +29,8 @@ class Shockley:
         self.elements = [self.title, self.description, self.image]
         for node in self.elements:
             node.setTransparency(1)
+            if self.preload:
+                node.setColorScale(1, 1, 1, 0)
 
     def makeInterval(self):
         return Sequence(
