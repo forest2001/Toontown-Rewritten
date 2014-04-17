@@ -109,10 +109,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.restockSfx.play()
             
     def handleSlappyCollisionSphereEnter(self, collEntry):
-        if base.localAvatar.savedCheesyEffect != 15:
-            # We need to give them more pies! Send a request to the server.
-            self.sendUpdate('slappyAvatarEnter', [])
-            self.splashSfx.play()
+        pass
 
     def startInteractiveFlippy(self):
         self.flippy.reparentTo(self.showFloor)
