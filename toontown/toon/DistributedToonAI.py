@@ -270,8 +270,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
-                self.sendUpdate('setLastHood', [hood])
-                self.b_setDefaultZone(hood)
+                if not simbase.config.GetBool('want-doomsday', True):
+                    self.sendUpdate('setLastHood', [hood])
+                    self.b_setDefaultZone(hood)
 
                 hoodsVisited = list(self.getHoodsVisited())
                 if not hood in hoodsVisited:
@@ -4426,6 +4427,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # Spawn in TTC for Doomsday
         if simbase.config.GetBool('want-doomsday', True):
+            hood = ZoneUtil.getHoodId(ToontownGlobals.ToontownCentral)
+            self.sendUpdate('setLastHood', [hood])
             self.b_setDefaultZone(ToontownGlobals.ToontownCentral)
 
         # Their fishing rod should be level 4.
