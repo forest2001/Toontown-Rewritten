@@ -145,27 +145,27 @@ CreditsScenes = [
                 # Developers
                 Shockley(),
                 Credits('Sir Max      ', 'Team Lead\nCommunity Manager\nDeveloper', '10-29-13_cannon.jpg', 'left'),
+                Credits('      McQuack', 'Expert of Explosives\nDeveloper', '14-3-17_dontworryhesurvived.jpg', 'right', 2, 'Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg'),
                 Credits('Fat McStink', 'Ultimate Party King\nServer Administraitor\nDeveloper', '11-8-13_pieornot.jpg', 'right'),
-                Credits('      McQuack', 'Expert of Explosives\nDeveloper', '12-28-13-hiatus.jpg', 'right', 2, 'Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg'),
-                Credits('Hamlet       ', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left'),
-                Credits('Muddy Paws', 'Expert Cake Baker\nMac Support\nDeveloper', 'muddy-paws.jpg', 'right', 2, 'Goshi           ', 'Support Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg'),
+                Credits('Hamlet       ', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left', 2, 'Muddy Paws', 'Expert Cake Baker\nMac Support\nDeveloper', 'muddy-paws.jpg'),
+                Credits('Goshi', 'Self-proclaimed Police\nSupport Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg', 'right', 2, 'J.C.', 'Moral Support\nModerator', '11-2-13_whatdoesjcsay.jpg'),
 
                 # Artists
                 Credits('Captain\nSandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
-                Credits('Slate Blue\nRabbit', '\n\nTexture Artist', 'slate.jpg', 'right', 2, 'June', '\n\nTexture Artist', 'roxys_joyful_uber.jpg'),
+                Credits('Slate Blue\nRabbit', '\n\nTexture Artist', '12-6-13_slate.jpg', 'right', 2, 'June', '\n\nTexture Artist', 'roxys_joyful_uber.jpg'),
 
                 # Too Many Secrets
                 Credits('Too Many\n Secrets', 'Many Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
 
                 # Modelers
-                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', 'roger_dog.jpg', 'left', 2, 'Flippy\nCheezer', 'The Speedway Master\n3D Modeler', 'flippy_cheezer.jpg'),
-                Credits('Scooter', 'Puzzle Piecer\nARG Organizer', 'roger_dog.jpg', 'left', 2, 'Joshsora', 'Infinite Patience\n3D Modeler', 'flippy_cheezer.jpg'),
+                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 'Flippy\nCheezer', 'The Speedway Master\n3D Modeler', 'flippy_cheezer.jpg'),
+                Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 'Joshsora', 'Infinite Patience\n3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
 
                 # Composers
                 Credits('Cool Peachers', 'Lead Composer', 'flippy_cheezer.jpg', 'right', 2, 'Jethred', 'Main Theme Composer', 'flippy_cheezer.jpg'),
 
                 # Special Thanks to:
-                Credits('Disney Online', 'The owners and creators of Toontown.', 'flippy_cheezer.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', 'flippy_cheezer.jpg'),
-                Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', 'flippy_cheezer.jpg', 'left'),
+                Credits('Disney Online', 'The owners and creators of Toontown.', '11-20-13_donald.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
+                Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', '14-1-22_ohmanohmanOHMAN.jpg', 'left'),
                 Credits('YOU', 'Alpha Tester\nDoomsday Survivor', 'flippy_cheezer.jpg', 'left'), #This should be replaced with their real name
                 ]
