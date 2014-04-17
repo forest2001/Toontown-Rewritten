@@ -47,7 +47,7 @@ class Shockley:
 
 class Credits:
     def __init__(self, name, description, image, side = 'Left'):
-        self.sceneRoot = None;
+        self.sceneRoot = None
         self.toonName = name
         self.toonDescription = description
         self.toonImage = image
