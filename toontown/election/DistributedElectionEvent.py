@@ -698,7 +698,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         from direct.gui.OnscreenText import OnscreenText
         from direct.gui.OnscreenImage import OnscreenImage
         from toontown.credits import AlphaCredits
-        AlphaCredits.Surviver(base.localAvatar.getName())
+        AlphaCredits.Survivor(base.localAvatar.getName())
         self.shockley = AlphaCredits.Shockley(True)
         self.shockley.load()
 

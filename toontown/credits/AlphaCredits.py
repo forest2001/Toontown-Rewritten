@@ -104,7 +104,7 @@ class Credits:
         self.toonImage = None
         self.side = None
 
-class Surviver:
+class Survivor:
     def __init__(self, toonName):
         self.toonName = toonName
         print('Saved toon name is: %s' % self.toonName)
