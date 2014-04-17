@@ -4427,7 +4427,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # Spawn in TTC for Doomsday
         if simbase.config.GetBool('want-doomsday', True):
-            self.sendUpdate('setLastHood', [0])
+            self.sendUpdate('setLastHood', [ToontownGlobals.ToontownCentral])
             self.b_setDefaultZone(ToontownGlobals.ToontownCentral)
 
         # Their fishing rod should be level 4.
