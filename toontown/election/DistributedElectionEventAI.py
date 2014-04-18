@@ -168,10 +168,9 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.surleePhraseLoop.finish()
 
     def enterInvasionEnd(self):
-        pass
+        self.cogDead = False
 
     def enterWrapUp(self):
-        self.cogDead = False
         taskMgr.doMethodLater(60, self.noMoreLogins, 'kill-csmud')
 
 
