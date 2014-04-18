@@ -879,6 +879,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.shockley.load()
 
         self.wrapUpSequence = Sequence(
+            Func(base.cr.cameraManager.tv.hide)
             Func(self.flippy.setChatAbsolute, 'Toons of the world...', CFSpeech|CFTimeout),
             Func(base.playMusic, musicCredits, looping=0, volume=0.8),
             Wait(4.5),
