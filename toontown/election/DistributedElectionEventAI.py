@@ -151,7 +151,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def enterInvasion(self):
         self.surleePhraseLoop = Sequence(
-            Wait(25),
+            Wait(30),
             Func(self.saySurleePhrase)
         )
         self.invasionSequence = Sequence(
@@ -193,10 +193,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
                 self.suit.generateWithRequired(ToontownGlobals.ToontownCentral)
                 self.suit.takeDamage(hp)
 
-    def saySurleePhrase(self, phrase = None):
+    def saySurleePhrase(self, phrase = None, interrupt = 0, broadcast = False):
         if not phrase:
             phrase = random.choice(ElectionGlobals.SurleeTips)
-        self.sendUpdate('saySurleePhrase', [phrase])
+        self.sendUpdate('saySurleePhrase', [phrase, interrupt, broadcast])
 
     def sendGlobalUpdate(self, text):
         # Send a whisper to everyone on the district from our local Toon HQ

@@ -186,6 +186,15 @@ WHISPER_COLORS = {
         ((0.0, 0.0, 0.0, 1.0), (0.8, 0.3, 0.6, 0.6)),
     ),
     # TODO: WTBattleSOS
-    # TODO: WTEmote
+    WTEmote: (
+        # Normal  FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.9, 0.5, 0.1, 0.6)),
+        # Click   FG                    BG
+        ((1.0, 0.5, 0.5, 1.0), (1.0, 1.0, 1.0, 1.0)),
+        # Hover   FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.2, 0.7, 0.9, 0.6)),
+        # Disable FG                    BG
+        ((0.0, 0.0, 0.0, 1.0), (0.2, 0.7, 0.8, 0.6)),
+    ),
     # TODO: WTToontownBoardingGroup
 }

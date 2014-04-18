@@ -81,8 +81,10 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         # regular intervals until the quota for the wave is met.
         self.waveNumber = waveNumber
 
-        if self.waveNumber == 24:
-            self.election.saySurleePhrase('Oh boy... We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!')
+        if self.waveNumber == 12:
+            self.election.saySurleePhrase('Brace yourselves for impact. They\'re sending in the Movers and Shakers!', 1, True)
+        elif self.waveNumber == 24:
+            self.election.saySurleePhrase('Oh no. Nonono. We\'re destroying the Cogs faster than they can be built. Skelecogs inbound!', 1, True)
 
         # Reset spawnpoints:
         self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
@@ -167,23 +169,23 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Surlee keeps everyone's spirits held high during the Intermission.
         if self.waveNumber == 2:
-            self.election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve got a little break to regroup before they come back.')
+            self.election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve have a short time to regroup before they come back.', 1, True)
         elif self.waveNumber == 5:
-            self.election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!')
+            self.election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!', 1, True)
         elif self.waveNumber == 8:
-            self.election.saySurleePhrase('They\'re getting stronger with each wave... This isn\'t good.')
+            self.election.saySurleePhrase('They\'re getting stronger with each wave... This isn\'t good. No, not good at all.', 1, True)
         elif self.waveNumber == 11:
-            self.election.saySurleePhrase('I\'ve been keeping track of the wave intervals, and we seem to have about 20 seconds between each wave. Hang on tight.')
+            self.election.saySurleePhrase('Stay happy, toons! We can do this! There can\'t be too many more...', 1, True)
         elif self.waveNumber == 14:
-            self.election.saySurleePhrase('Stay happy, toons! We can do this!')
+            self.election.saySurleePhrase('We\'re losing toons fast, but our motivation is still high. Don\'t let these metal menaces take over our town!', 1, True)
         elif self.waveNumber == 17:
-            self.election.saySurleePhrase('We\'re losing toons fast, but our motivation is still high. Don\'t let these metal menaces take over our town!')
+            self.election.saySurleePhrase('One more down. I\'ve been keeping track of the wave intervals - we seem to have about 20 seconds between each fight. Hang on tight.', 1, True)
         elif self.waveNumber == 20:
-            self.election.saySurleePhrase('These next ones are the hardest yet. Flippy, do you have any bigger pies? We\'re going to need them soon.')
+            self.election.saySurleePhrase('These next ones are the hardest yet. Flippy, do you have any bigger pies? We\'re going to need a whole lot more as fast as possible.', 1, True)
         elif self.waveNumber == 23:
-            self.election.saySurleePhrase('Oof... I... I think we made it. Those must have been the last ones.')
+            self.election.saySurleePhrase('Did... Did we get them? That had to have been the last wave - their field levels don\'t go any higher. Why are the skies growing darker?', 1, True)
         elif self.waveNumber == 26:
-            self.election.saySurleePhrase('I think this is it, toons. They\'re sending in the boss!')
+            self.election.saySurleePhrase('Absolutely outstanding! I can\'t believe we made it! Brace yourselves, we have one more baddy to go...', 1, True)
 
     def __endIntermission(self, task):
         self.demand('BeginWave', self.waveNumber + 1)
@@ -193,9 +195,10 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self._delay.remove()
 
     def enterFinale(self):
-        self._delay = taskMgr.doMethodLater(1, self.spawnFinaleSuit, self.uniqueName('summon-finale-suit'))
+        self._delay = taskMgr.doMethodLater(20, self.spawnFinaleSuit, self.uniqueName('summon-finale-suit'))
     
     def spawnFinaleSuit(self, task):
+        self.election.saySurleePhrase('This is it, toons. They\'re sending in the boss! Brace yourselves, this will be the toughest one yet!', 1, True)
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit('ls')
         suit.setSpawnPoint(1) # Point 1 is in front of the trolly
