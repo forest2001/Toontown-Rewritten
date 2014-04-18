@@ -36,3 +36,6 @@ force-holiday-decorations 6
 want-doomsday #t
 # TODO: Fix new fireworks
 want-old-fireworks #t
+
+#goodbye vsync
+sync-video #f
