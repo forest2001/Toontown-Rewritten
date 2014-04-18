@@ -11,6 +11,9 @@ def doFade(fade, elements):
     elif fade == 'out':
         for node in elements:
             Sequence(node.colorScaleInterval(0.5, (1, 1, 1, 0))).start()
+    elif fade == 'hide':
+        for node in elements:
+            node.setColorScale(1, 1, 1, 0)
 
 class Shockley:
     def __init__(self, preload=False):
@@ -48,13 +51,14 @@ class Shockley:
         self.image.removeNode()
 
 class Credits:
-    def __init__(self, name, description, image, side = 'left', number = 1, name2 = None, description2 = None, image2 = None):
+    def __init__(self, name, description, image, side = 'left', number = 1, name2 = None, description2 = None, image2 = None, special = None):
         self.sceneRoot = None
         self.twoSlides = None
         self.toonName = name
         self.toonDescription = description
         self.toonImage = image
         self.side = side
+        self.special = special # For special types of slides, like the final one
         if number > 1:
             self.toon2Name = name2
             self.toon2Description = description2
@@ -68,46 +72,46 @@ class Credits:
         if self.twoSlides:
             if self.side == 'left':
                 # Left Top
-                titlePos = (0.6, 0.5, 0.0)
-                descriptionPos = (0.25, 0.4, 0.0)
+                titlePos = (0.1, 0.5, 0.0)
+                descriptionPos = (0.2, 0.4, 0.0)
                 imagePos = (-0.55, 0.0, 0.4)
                 textAlignment = TextNode.ALeft
                 # Right Bottom
-                title2Pos = (-0.6, -0.35, 0.0)
+                title2Pos = (-0.1, -0.35, 0.0)
                 description2Pos = (-0.1, -0.45, 0.0)
                 image2Pos = (0.55, 0.0, -0.4)
                 text2Alignment = TextNode.ARight
             else:
                 # Right Top
-                titlePos = (-0.6, 0.5, 0.0)
+                titlePos = (-0.1, 0.5, 0.0)
                 descriptionPos = (-0.1, 0.4, 0.0)
                 imagePos = (0.55, 0.0, 0.4)
                 textAlignment = TextNode.ARight
                 # Left Bottom
-                title2Pos = (0.6, -0.35, 0.0)
+                title2Pos = (0.1, -0.35, 0.0)
                 description2Pos = (0.25, -0.45, 0.0)
                 image2Pos = (-0.55, 0.0, -0.4)
                 text2Alignment = TextNode.ALeft
         elif self.side == 'left':
             # Left Middle
-            titlePos = (0.6, 0.15, 0.0)
-            descriptionPos = (0.25, 0.05, 0.0)
+            titlePos = (0.1, 0.15, 0.0)
+            descriptionPos = (0.2, 0.05, 0.0)
             imagePos = (-0.5, 0.0, 0.0)
             textAlignment = TextNode.ALeft
         else: 
             # Right Middle
-            titlePos = (-0.6, 0.1, 0.0)
-            descriptionPos = (-0.1, 0.0, 0.0)
+            titlePos = (-0.1, 0.1, 0.0)
+            descriptionPos = (-0.11, 0.0, 0.0)
             imagePos = (0.5, 0.0, 0.0)
             textAlignment = TextNode.ARight
 
-        self.title = OnscreenText(text=self.toonName, pos=titlePos, scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=TextNode.ACenter)
+        self.title = OnscreenText(text=self.toonName, pos=titlePos, scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=textAlignment)
         self.description = OnscreenText(text=self.toonDescription, pos=descriptionPos, scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=textAlignment)
         self.image = OnscreenImage(image='phase_4/maps/news/%s' % self.toonImage, pos=imagePos, scale=(0.5, 0.30, 0.30))
         self.elements = [self.title, self.description, self.image]
         
         if self.twoSlides:
-            self.title2 = OnscreenText(text=self.toon2Name, pos=title2Pos, scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=TextNode.ACenter)
+            self.title2 = OnscreenText(text=self.toon2Name, pos=title2Pos, scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=text2Alignment)
             self.description2 = OnscreenText(text=self.toon2Description, pos=description2Pos, scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=text2Alignment)
             self.image2 = OnscreenImage(image='phase_4/maps/news/%s' % self.toon2Image, pos=image2Pos, scale=(0.5, 0.30, 0.30))
             self.elements.extend([self.title2, self.description2, self.image2])
@@ -117,14 +121,25 @@ class Credits:
             node.setColorScale(1, 1, 1, 0)
 
     def makeInterval(self):
-        return Sequence(
-            ParentInterval(self.sceneRoot, render),
-            Func(doFade, 'in', self.elements),
-            Wait(3.5),
-            Func(doFade, 'out', self.elements),
-            Wait(0.5),
-            ParentInterval(self.sceneRoot, hidden)
-            )
+        if self.special == 'final':
+            # Hide the last slide, rather than fade out
+            return Sequence(
+                ParentInterval(self.sceneRoot, render),
+                Func(doFade, 'in', self.elements),
+                Wait(3),
+                Func(doFade, 'hide', self.elements),
+                ParentInterval(self.sceneRoot, hidden)
+                )
+        else:
+            # Just a normal slide
+            return Sequence(
+                ParentInterval(self.sceneRoot, render),
+                Func(doFade, 'in', self.elements),
+                Wait(3.5),
+                Func(doFade, 'out', self.elements),
+                Wait(0.5),
+                ParentInterval(self.sceneRoot, hidden)
+                )
 
     def unload(self):
         self.sceneRoot.removeNode()
@@ -140,27 +155,27 @@ class Credits:
 CreditsScenes = [
                 # Developers
                 Shockley(),
-                Credits('Sir Max      ', 'Team Lead\nCommunity Manager\nDeveloper', '10-29-13_cannon.jpg', 'left'),
-                Credits('      McQuack', 'Expert of Explosives\nDeveloper', '14-3-17_dontworryhesurvived.jpg', 'right', 2, 'Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg'),
+                Credits('Sir Max', 'Team Lead\nCommunity Manager\nDeveloper', '10-29-13_cannon.jpg', 'left'),
+                Credits('McQuack', 'Expert of Explosives\nDeveloper', '14-3-17_dontworryhesurvived.jpg', 'right', 2, 'Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg'),
                 Credits('Fat McStink', 'Ultimate Party King\nServer Administraitor\nDeveloper', '11-8-13_pieornot.jpg', 'right'),
-                Credits('Hamlet       ', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left', 2, 'Muddy Paws', 'Expert Cake Baker\nMac Support\nDeveloper', 'muddy-paws.jpg'),
+                Credits('Hamlet', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left', 2, 'Muddy Paws', 'Expert Cake Baker\nMac Support\nDeveloper', 'muddy-paws.jpg'),
                 Credits('Goshi', 'Self-proclaimed Police\nSupport Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg', 'right', 2, 'J.C.', 'Moral Support\nModerator', '11-2-13_whatdoesjcsay.jpg'),
 
                 # Artists
-                Credits('Captain\nSandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
-                Credits('Slate Blue\nRabbit', '\n\nTexture Artist', '12-6-13_slate.jpg', 'right', 2, 'June', '\n\nTexture Artist', 'roxys_joyful_uber.jpg'),
+                Credits('Capt. Sandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
+                Credits('Slate', 'Texture Artist', '12-6-13_slate.jpg', 'right', 2, 'June', 'Texture Artist', 'roxys_joyful_uber.jpg'),
 
                 # Too Many Secrets
-                Credits('Too Many\n Secrets', 'Many Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
+                Credits('Too Many\nSecrets', '\n\nMany Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
 
                 # Modelers
-                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 'Flippy\nCheezer', 'The Speedway Master\n3D Modeler', 'flippy_cheezer.jpg'),
-                Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 'Joshsora', 'Infinite Patience\n3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
+                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 'Flippy Cheezer', 'The Speedway Master\n3D Modeler', 'flippy_cheezer.jpg'),
+                Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 'Joshsora', 'Infinite Chatterbox\nFormer 3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
 
                 # Composers
-                Credits('Cool Peaches', 'Lead Composer', 'flippy_cheezer.jpg', 'right', 2, 'Jethred', 'Main Theme Composer', 'flippy_cheezer.jpg'),
+                Credits('Cool Peaches', 'Lead Composer\nElection Composer', 'flippy_cheezer.jpg', 'right', 2, 'Jethred', 'Theme Song Composer', 'flippy_cheezer.jpg'),
 
                 # Special Thanks to:
-                Credits('Disney Online', 'The owners and creators of Toontown.', '11-20-13_donald.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
+                Credits('Disney Online', 'The owners and creators\nof Toontown.', '11-20-13_donald.jpg', 'left', 2, 'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
                 Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', '14-1-22_ohmanohmanOHMAN.jpg', 'left'),
                 ]

@@ -1,7 +1,8 @@
 from direct.interval.IntervalGlobal import *
 from otp.ai.MagicWordGlobal import *
 
-# Import * should be done at module level!
+# I would prefer this to be passed in init so we don't have to load
+# unnecessary imports for different sequences, but Harv says no :(
 from AlphaCredits import *
 
 class CreditsSequence:
@@ -11,23 +12,16 @@ class CreditsSequence:
         self.interval = None
         self.localToonName = None
 
-        if sequence == 'alpha':
-            pass
-        elif sequence == 'beta':
-            # For when beta comes around
-            pass
-
-        # Any credits sequence should have "CreditsScenes" to list the order of
-        # the credits sequence. This is imported when selecting the sequence type.
+        # Any credits sequence should have "CreditsScenes" to list the order of the sequence.
         self.creditsScenes = CreditsScenes
 
     def load(self):
         if self.loaded:
             return
-            
+
         if self.sequence == 'alpha' and self.localToonName is not None:
             self.creditsScenes.append(
-                Credits(self.localToonName, 'Alpha Tester\nDoomsday Survivor', 'flippy_cheezer.jpg', 'left')
+                Credits(self.localToonName, 'Alpha Tester\nDoomsday Survivor', 'flippy_cheezer.jpg', 'left', special = 'final')
             )
 
         for scene in self.creditsScenes:
