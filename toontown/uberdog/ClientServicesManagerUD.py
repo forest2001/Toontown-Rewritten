@@ -840,7 +840,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         if self.closed:
             # Doomsday is over... no more logging in until beta!
             dg = PyDatagram()
-            dg.addServerHeader(sender, simbase.air.ourChannel, CLIENTAGENT_EJECT)
+            dg.addServerHeader(sender, self.air.ourChannel, CLIENTAGENT_EJECT)
             dg.addUint16(156)
             dg.addString('Toontown Rewritten is now closed until Beta. Learn more and check out the updates on our website, toontownrewritten.com. Thanks for Alpha Testing with us!')
             self.air.send(dg)

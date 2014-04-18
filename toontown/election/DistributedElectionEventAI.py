@@ -225,8 +225,8 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def noMoreLogins(self, task):
         task.delayTime = 60
         csm = OTP_DO_ID_CLIENT_SERVICES_MANAGER
-        dg = simbase.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, simbase.air.ourChannel, [True])
-        simbase.air.send(dg)
+        dg = self.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, self.air.ourChannel, [True])
+        self.air.send(dg)
         return task.again
 
 @magicWord()
