@@ -169,7 +169,7 @@ CreditsScenes = [
                 Credits('Too Many\nSecrets', '\n\nMany Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
 
                 # Modelers
-                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 'Flippy Cheezer', 'The Speedway Master\n3D Modeler', 'flippy_cheezer.jpg'),
+                Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 'Flippy Cheezer', 'The Speedway Master\n3D Modeler\nCharacter Rigger', 'flippy_cheezer.jpg'),
                 Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 'Joshsora', 'Infinite Chatterbox\nFormer 3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
 
                 # Composers
