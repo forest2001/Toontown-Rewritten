@@ -269,6 +269,14 @@ def wire():
 def textures():
     'Toggle textures on and off.'
     base.toggleTexture()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def fps():
+    'Toggle frame rate meter on or off.'
+    if base.frameRateMeter:
+        base.setFrameRateMeter(False)
+    else:
+        base.setFrameRateMeter(True)
     
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():
