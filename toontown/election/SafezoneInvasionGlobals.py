@@ -1,5 +1,7 @@
 import random
 
+FirstSuitSpawnPoint = (65, -1, 4.0, 45.0)
+
 # The position of the Finale suit
 # Spawns at SuitSpawnPoints # 3
 FinaleSuitDestination = (29.3, -5.0)
@@ -103,9 +105,17 @@ bossbotSuits = [
 ]
 
 
-def generateSuits(numberOfSuits, suitLevelRange=[0, 0], suitRange=[0, 0]):
+def generateSuits(numberOfSuits, suitLevelRange=[0, 0], suitRange=[0, 0], wantExtraShakers=False):
     suits = [sellbotSuits, cashbotSuits, lawbotSuitTypes, bossbotSuits] # Suit arrays
-    wave = [(random.choice(suits)[random.randint(suitRange[0], suitRange[1])], 
+    wave = []
+    if wantExtraShakers:
+        wave = [(random.choice(suits)[random.randint(suitRange[0], suitRange[1])], 
+             random.randint(suitLevelRange[0], suitLevelRange[1])) 
+             for k in range(numberOfSuits)]
+        wave.append(('ms', 4))
+        wave.append(('ms', 4))
+    else:
+        wave = [(random.choice(suits)[random.randint(suitRange[0], suitRange[1])], 
              random.randint(suitLevelRange[0], suitLevelRange[1])) 
              for k in range(numberOfSuits)]
     return wave
@@ -142,23 +152,23 @@ SuitWaves = [
 
     # WAVE 6:
     generateSuits(8,  [1, 2], [4, 5]),
-    generateSuits(11, [1, 4], [5, 5]), # Wait Wave
-    generateSuits(17, [2, 3], [5, 5]), # Intermission Wave
+    generateSuits(11, [1, 4], [5, 5], True), # Wait Wave
+    generateSuits(16, [2, 3], [5, 5], True), # Intermission Wave
 
     # WAVE 7:
-    generateSuits(8,  [0, 2], [5, 6]),
-    generateSuits(11, [1, 2], [6, 6]), # Wait Wave
-    generateSuits(17, [2, 3], [6, 6]), # Intermission Wave
+    generateSuits(8,  [0, 2], [5, 6], True),
+    generateSuits(11, [1, 2], [6, 6], True), # Wait Wave
+    generateSuits(16, [2, 3], [6, 6], True), # Intermission Wave
 
     # WAVE 8:
-    generateSuits(10, [1, 3], [6, 7]),
-    generateSuits(16, [1, 4], [7, 7]), # Wait Wave
-    generateSuits(18, [2, 4], [7, 7]), # Intermission Wave
+    generateSuits(10, [1, 3], [6, 7], True),
+    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
 
     # WAVE 9: THE FINAL WAVE
-    generateSuits(10, [1, 3], [6, 7]),
-    generateSuits(16, [1, 4], [7, 7]), # Wait Wave
-    generateSuits(18, [2, 4], [7, 7]), # Intermission Wave
+    generateSuits(10, [1, 3], [6, 7], True),
+    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.

@@ -493,11 +493,18 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
             self.setScale(1.1)
             self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
+            self.acceptOnce('wrapUpSequence', self.wrapUp)
         elif not finale and self.invasionFinale:
             pass
         else:
             return # We don't care about this change...
         self.invasionFinale = finale
+        
+    def wrapUp(self, offset):
+        cogSequence = Sequence()
+        cogSequence.start()
+        cogSequence.setT(offset)
+    
 
     def enterFinalePhrases(self, offset):
         self.phraseSequence = Sequence(
@@ -512,7 +519,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self.phraseSequence.start()
 
     def exitFinalePhrases(self):
-        self.phraseSequence.finish()
+        pass
 
     def enterFinaleBrainstormAttack(self, offset):
         if Vec3(base.localAvatar.getPos(self)).length() <= 40:

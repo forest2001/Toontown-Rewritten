@@ -17,7 +17,7 @@ class DistributedElectionCameraManagerAI(DistributedObjectAI):
             cam = DistributedElectionCameraAI(simbase.air)
             cam.setState('Waiting', globalClockDelta.getRealNetworkTime(), 31, -5, 8, -80, -5, 0)
             cam.generateWithRequired(2000)
-            cam.b_setPosHpr(0, 0, 10, -90, -5, 0)
+            cam.b_setPosHpr(0, 0, 10, 0, 0, 0)
             cameras.append(cam.getDoId())
         self.setMainCamera(cameras[0])
         self.setCameraIds(cameras)

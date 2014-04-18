@@ -671,6 +671,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitInvasion(self):
         self.surleeIntroInterval.finish()
 
+    def enterInvasionEnd(self, offset):
+        cake = BattleProps.globalPropPool.getProp('wedding-cake')
+        messenger.send('wrapUpSequence', [offset])
+        pieSeq = Sequence(Wait(30), Func(self.sendUpdate, 'setSuitDamage', [200]))
+        pieSeq.start()
+        pieSeq.setT(offset)
+
     def enterWrapUp(self, offset):
         # Tell the credits our toon name and dna.
         base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
