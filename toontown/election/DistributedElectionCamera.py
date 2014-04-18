@@ -47,9 +47,9 @@ class DistributedElectionCamera(DistributedNode):
             testNode.setPos(x, y, z)
             testNode.lookAt(object)
             h, p, r = testNode.getHpr()
+            cH, cP, cR = testNode.getHpr(render)
             p += 10
-            cH = h + 90
-            cP = p + 180
+            cP = cP + 190
             testNode.removeNode()
         else:
             return
