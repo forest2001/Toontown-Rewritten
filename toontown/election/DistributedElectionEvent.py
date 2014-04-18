@@ -406,6 +406,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.slappy.hide()
             self.slappy.removeActive()
             base.cr.cameraManager.disableScreen()
+            self.accept('enter' + self.pieCollision.node().getName())
 
         if self.finishedInvasion:
             self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
@@ -770,7 +771,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def exitCogLanding(self):
         self.cogSequence.finish()
-        del self.suit
 
     def enterInvasion(self, offset):
         # Get ourselves caught up with what just happened
