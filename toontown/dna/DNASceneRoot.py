@@ -23,7 +23,7 @@ class DNASceneRoot(DNASceneElement):
             child._generate(storage, scene)
         return scene.node()
 
-    def getData(self):
+    def generateData(self):
         """
         Generate a DNASceneData object to represent the information contained
         within this scene.
