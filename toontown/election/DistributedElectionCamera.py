@@ -31,14 +31,17 @@ class DistributedElectionCamera(DistributedNode):
 
                 
     def setState(self, state, ts, x, y, z, h, p, target):
-        cH = h + 180
-        cP = p
         if self.idleInterval and self.idleInterval.isPlaying():
             self.idleInterval.pause()
         self.camera.setPos(self.getX(), self.getY(), self.getZ())
         if state == 'Move':
             self.wrtReparentTo(render)
             self.camera.wrtReparentTo(render)
+            testNode = render.attachNewNode('test')
+            testNode.setPosHpr(x, y, z, h, p, 0)
+            cH, cP, cR = testNode.getHpr(self.camera)
+            cH += + 180
+            testNode.removeNode()
         elif state == 'Follow' and target in base.cr.doId2do:
             object = base.cr.doId2do[target]
             self.wrtReparentTo(object)
@@ -47,7 +50,7 @@ class DistributedElectionCamera(DistributedNode):
             testNode.setPos(x, y, z)
             testNode.lookAt(object)
             h, p, r = testNode.getHpr()
-            cH, cP, cR = testNode.getHpr(render)
+            cH, cP, cR = testNode.getHpr(self.camera)
             p += 10
             cP = cP + 190
             testNode.removeNode()
