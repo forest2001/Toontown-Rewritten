@@ -36,14 +36,17 @@ from toontown.toonbase import ToontownGlobals
 
 class DNASpawnerAI:
         
-    def spawnObjects(self, filename, baseZone):       
+    def spawnObjects(self, filename, baseZone):
+        if simbase.config.GetBool('want-doomsday', False):
+            if baseZone != 2000:
+                return
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)
         
     def _createObjects(self, group, zone):
         if group.getName()[:13] == 'fishing_pond_':
-            if simbase.config.GetBool('want-doomsday', True):
+            if simbase.config.GetBool('want-doomsday', False):
                 return
             visGroup = group.getVisGroup()
             pondZone = 0
