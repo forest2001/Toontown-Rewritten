@@ -8,6 +8,7 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.hood import HoodUtil
 from toontown.building import SuitBuildingGlobals
 from toontown.dna import *
+from direct.stdpy.file import open
 
 class SuitPlannerBase:
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitPlannerBase')
@@ -491,12 +492,14 @@ class SuitPlannerBase:
         if self.dnaStore:
             return None
         dnaFileName = self.genDNAFileName()
-        try:
-            f = open(dnaFileName, "r")
-        except IOError:
-            f = open('resources/' + dnaFileName, "r")
-        self.dnaStore = DNAParser.parse(f)
-        f.close()
+        if __debug__:
+            try:
+                self.dnaStore = simbase.air.loadDNA(dnaFileName)
+            except:
+                self.dnaStore = loader.loadDNA(dnaFileName)
+        else:
+            self.dnaStore = loader.loadDNA(dnaFileName)
+        self.dnaData = self.dnaStore.generateData()
         self.initDNAInfo()
         return None
 
@@ -556,7 +559,7 @@ class SuitPlannerBase:
         self.frontdoorPointList = []
         self.sidedoorPointList = []
         self.cogHQDoorPointList = []
-        for point in self.dnaStore.getData().suitPoints:
+        for point in self.dnaData.suitPoints:
             if point.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT:
                 self.frontdoorPointList.append(point)
             elif point.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
@@ -587,7 +590,7 @@ class SuitPlannerBase:
         return None
 
     def genPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        return self.dnaStore.getData().suitGraph.getSuitPath(startPoint, endPoint, minPathLen, maxPathLen)
+        return self.dnaData.suitGraph.getSuitPath(startPoint, endPoint, minPathLen, maxPathLen)
 
     def getDnaStore(self):
         return self.dnaStore

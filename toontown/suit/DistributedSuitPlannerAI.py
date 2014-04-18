@@ -926,7 +926,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if adjacentPoint != None:
             return self.battleCollision(point, adjacentPoint)
         else:
-            points = self.dnaStore.getData().getAdjacentPoints(point)
+            points = self.dnaData.getAdjacentPoints(point)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -938,7 +938,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def battleCollision(self, point, adjacentPoint):
-        zoneName = self.dnaStore.getData().getConnectingEdge(point, adjacentPoint).parent.zone
+        zoneName = self.dnaData.getConnectingEdge(point, adjacentPoint).parent.zone
         zoneId = int(self.extractGroupName(zoneName))
         return self.battleMgr.cellHasBattle(zoneId)
 
