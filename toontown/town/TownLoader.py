@@ -235,6 +235,7 @@ class TownLoader(StateData.StateData):
             self.notify.debug('done loading %s' % self.townStorageDNAFile)
         sceneTree = loader.loadDNA(dnaFile)
         node = sceneTree.generate(self.hood.dnaStore)
+        base.cr.playGame.dnaData = sceneTree.generateData()
         self.notify.debug('done loading %s' % dnaFile)
         if node.getNumParents() == 1:
             self.geom = NodePath(node.getParent(0))
@@ -271,8 +272,6 @@ class TownLoader(StateData.StateData):
             nodePath.wrtReparentTo(bucket)
 
     def makeDictionaries(self, sceneTree):
-        sceneData = sceneTree.getData()
-
         self.nodeDict = {}
         self.zoneDict = {}
         self.nodeToZone = {}
@@ -281,7 +280,7 @@ class TownLoader(StateData.StateData):
         self.fadeOutDict = {}
         a1 = Vec4(1, 1, 1, 1)
         a0 = Vec4(1, 1, 1, 0)
-        for visgroup in sceneData.visgroups:
+        for visgroup in base.cr.playGame.dnaData.visgroups:
             groupName = base.cr.hoodMgr.extractGroupName(visgroup.name)
             zoneId = int(groupName)
             zoneId = ZoneUtil.getTrueZoneId(zoneId, self.zoneId)
@@ -302,7 +301,7 @@ class TownLoader(StateData.StateData):
             self.fadeOutDict[groupNode] = Sequence(Func(groupNode.setTransparency, 1), LerpColorScaleInterval(groupNode, fadeDuration, a0, startColorScale=a1), Func(groupNode.clearColorScale), Func(groupNode.clearTransparency), Func(groupNode.stash), name='fadeZone-' + str(zoneId), autoPause=1)
             self.fadeInDict[groupNode] = Sequence(Func(groupNode.unstash), Func(groupNode.setTransparency, 1), LerpColorScaleInterval(groupNode, fadeDuration, a1, startColorScale=a0), Func(groupNode.clearColorScale), Func(groupNode.clearTransparency), name='fadeZone-' + str(zoneId), autoPause=1)
 
-        for visgroup in sceneData.visgroups:
+        for visgroup in base.cr.playGame.dnaData.visgroups:
             zoneId = int(base.cr.hoodMgr.extractGroupName(visgroup.name))
             zoneId = ZoneUtil.getTrueZoneId(zoneId, self.zoneId)
             for visName in visgroup.vis:
