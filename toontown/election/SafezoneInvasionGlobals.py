@@ -30,7 +30,7 @@ FinaleSuitPhrases = [
     "I assure you that you'll find no greater offer.",
     "The Chairman won't be happy until you are.",
     # We arrive at Flippy
-    "Ah, finally. The toon I've been searching for.",
+    "Ah, finally. Just the toon I've been searching for.",
     "I hope you won't pull out of the deal like your predecessor.",
     "Don't worry, he is in safe keeping now."
 ]

@@ -82,19 +82,14 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         # states.
         if self.invasion.state == 'Finale':
             self.b_setInvasionFinale(True)
-            
+
         self._delay = taskMgr.doMethodLater((SuitTimings.fromSky + 1.0), self.__flyDownComplete,
                                             self.uniqueName('fly-down-animation'))
 
     def __flyDownComplete(self, task):
         if self.invasion.state == 'Finale':
             self.b_setState('FinalePhrases')
-            self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
-            self.finaleDestinationPoint = 0
-            self.finaleX, self.finaleY = SafezoneInvasionGlobals.FinaleSuitDestinations[0]
-            self.finaleNextX, self.finaleNextY = SafezoneInvasionGlobals.FinaleSuitDestinations[1]
-            self.brain.navigateTo(self.finaleX, self.finaleY)
-            self.finaleAttack = taskMgr.doMethodLater(3, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
+            self.finaleMarchDelay = taskMgr.doMethodLater(10, self.startFinaleMarch, self.uniqueName('FinaleMarch-Later'))
             return
 
         self.b_setState('Idle')
@@ -293,6 +288,14 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def getInvasionFinale(self):
         return self.finale
 
+    def startFinaleMarch(self)
+        self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
+        self.finaleDestinationPoint = 0
+        self.finaleX, self.finaleY = SafezoneInvasionGlobals.FinaleSuitDestinations[0]
+        self.finaleNextX, self.finaleNextY = SafezoneInvasionGlobals.FinaleSuitDestinations[1]
+        self.brain.navigateTo(self.finaleX, self.finaleY)
+        self.finaleAttack = taskMgr.doMethodLater(3, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
+
     def enterFinaleMarch(self, task):
         oldX, oldY = self.getCurrentPos()
         finalX, finalY, = SafezoneInvasionGlobals.FinaleSuitDestinations[4]
@@ -336,7 +339,5 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
 
     def __finaleAttackDone(self, task):
         self.brain.navigateTo(self.finaleX, self.finaleY)
-
-        # Is there a better way of doing this?
         self.finaleAttack = taskMgr.doMethodLater(SafezoneInvasionGlobals.FinaleSuitAttackDelay, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
         return task.done
