@@ -32,6 +32,7 @@ class HoodAI:
         self.createStreets()
 
     def createSafeZone(self):
+        self.air.dnaStoreMap[self.HOOD] = self.air.loadDNA(self.air.genDNAFileName(self.HOOD)).generateData()
         self.createTrolley()
         self.createTreasurePlanner()
 

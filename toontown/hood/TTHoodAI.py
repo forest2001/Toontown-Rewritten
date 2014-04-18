@@ -8,6 +8,7 @@ from toontown.building.HQBuildingAI import HQBuildingAI
 from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer
 from otp.ai.MagicWordGlobal import *
+from toontown.building.DistributedBuildingMgrAI import DistributedBuildingMgrAI
 
 class TTHoodAI(HoodAI):
     HOOD = ToontownGlobals.ToontownCentral
@@ -23,13 +24,7 @@ class TTHoodAI(HoodAI):
         #self.spawnElection()
         #endhack
 
-        #TODO: in reality this should be done by the buildingMgr
-        hqBlock = 20
-        hqZone = self.HOOD - self.HOOD % 100 + 500 + hqBlock
-        self.hqBuilding = HQBuildingAI(self.air, self.HOOD, hqZone, hqBlock)
-        #beginhack NPC IN TTC
-        self.npc = NPCToons.createNPC(self.air, 2001, NPCToons.NPCToonDict[2001], self.HOOD, 3)
-        #endhack
+        self.buildingMgr = DistributedBuildingMgrAI(self.air, self.HOOD, self.air.dnaStoreMap[self.HOOD], self.air.trophyMgr)
     
     def spawnElection(self):
         event = self.air.doFind('ElectionEvent')
@@ -47,22 +42,3 @@ class TTHoodAI(HoodAI):
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.HOOD)
                 self.butterflies.append(butterfly)
-
-@magicWord(category=CATEGORY_OVERRIDE, types=[str])
-def gibnpc(npcName):
-    hood = simbase.air.hoods[0]
-    npcId = 0
-    for id, name in TTLocalizer.NPCToonNames.items():
-        if npcName.lower() == name.lower():
-            hood.npc.requestDelete()
-            hood.npc = NPCToons.createNPC(simbase.air, id, NPCToons.NPCToonDict[id], hood.HOOD, 3)
-            return "Found match {0}({1})".format(name, id)
-    return "No match found"
-
-@magicWord(category=CATEGORY_OVERRIDE, types=[int])
-def gibnpcid(npcId):
-    hood = simbase.air.hoods[0]
-    hood.npc.requestDelete()
-    hood.npc = NPCToons.createNPC(simbase.air, npcId, NPCToons.NPCToonDict[npcId], hood.HOOD, 3)
-    return "swapped"
-
