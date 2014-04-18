@@ -39,7 +39,7 @@ SurleeTips = [
     'Mover and Shakers give tremors as they walk -- You\'ll need to hit them from a distance.',
     'Come on, get more pies! Fight for the town!',
     'The bigger a Cog is, the faster they walk and the more they talk.',
-    'Don\'t let them take away out fun! Stop them!',
+    'Don\'t let them take away our fun! Stop them!',
     'The Cog\'s business is too boring to bear. Don\'t let them talk to you.',
     'That\'s what I\'m talking about. Keep at it!',
     'Flippy, we need more pies over here. They\'re flying out quick.',

@@ -187,12 +187,12 @@ SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29]
 SuitSkelecogWaves = [27, 28, 29]
 
 WaveBeginningTime = 10 # This should be at least 6.5 (the suit fly-down time)
-IntermissionTime = 10 # How long does the intermission last?
+IntermissionTime = 20 # How long does the intermission last?
 
 StandardSuitDamage = 5 # How much damage does a standard suit's attack do?
 MoveShakerDamageRadius = 3 # How much damage does a Move and Shaker's attack do?
 MoveShakerRadius = 20 # And it's attack radius?
-MoveShakerStunTime = 5.0 # Once hit by a Mover and Shaker, how long do toons have before hit again?
+MoveShakerStunTime = 5 # Once hit by a Mover and Shaker, how long do toons have before hit again?
 
 ToonHealAmount = 1 # How much healing does a pie on a Toon do?
 
