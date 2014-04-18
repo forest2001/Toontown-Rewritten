@@ -288,7 +288,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def getInvasionFinale(self):
         return self.finale
 
-    def startFinaleMarch(self):
+    def startFinaleMarch(self, task):
         self.finaleMarch = taskMgr.add(self.enterFinaleMarch, self.uniqueName('FinaleMarch'))
         self.finaleDestinationPoint = 0
         self.finaleX, self.finaleY = SafezoneInvasionGlobals.FinaleSuitDestinations[0]
