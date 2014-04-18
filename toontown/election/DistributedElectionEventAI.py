@@ -155,7 +155,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(self.saySurleePhrase)
         )
         self.invasionSequence = Sequence(
-            Wait(20),
+            Wait(15),
             Func(self.spawnInvasion),
             Func(self.surleePhraseLoop.loop)                        
         )

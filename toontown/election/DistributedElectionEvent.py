@@ -220,6 +220,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.speechQuestionSfx = loader.loadSfx(phasePath + 'COG_VO_question.ogg')
             self.speechGruntSfx = loader.loadSfx(phasePath + 'COG_VO_grunt.ogg')
 
+            # We'll use these to check and see if a certain state has already happened
+            self.finishedPreShow = False
+            self.finishedBegin = False
+            self.finishedAlecSpeech = False
+            self.finishedCogLanding = False
+            self.finishedInvasion = False
+
     def enterOff(self, offset):
         base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
         self.showFloor.reparentTo(hidden)
@@ -354,6 +361,44 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def enterEvent(self, offset):
         base.cr.playGame.hood.loader.music.stop()
 
+    def catchUp(self):
+        # This is used to get us up to date if we missed out on some of the sequences.
+        if self.finishedPreShow:
+            self.surlee.hide()
+            self.surlee.removeActive()
+            self.surleeR.show()
+            self.surleeR.addActive()
+            self.surleeR.startBlink()
+            self.surleeR.setPosHpr(-32, -15, 0, -40, 0, 0)
+            base.cr.cameraManager.tv.show()
+            base.cr.cameraManager.tv.setPos(87.85, -0.25, 21.0)
+            base.cr.cameraManager.tvIdle.loop()
+
+        if self.finishedBegin:
+            for character in self.characters:
+                character.reparentTo(self.showFloor)
+                character.useLOD(1000)
+                character.addActive()
+                character.startBlink()
+                character.setH(90)
+                character.head = character.find('**/__Actor_head')
+            self.slappyStand.loop('watch-idle')
+            self.ignore('enter' + self.pieCollision.node().getName())
+            self.alec.setPos(-4.5, -0.14, 3.13)
+            self.slappy.setPos(1, 9, 3.03)
+            self.flippy.setPos(2, -10, 3.23)
+
+        if self.finishedCogLanding:
+            self.slappyStand.pose('sad-idle', 1)
+            self.flippy.setPosHpr(-15, -12, 0, 0, 0, 0)
+            self.alec.setPos(-1.5, -0.14, 3.13)
+            self.slappy.hide()
+            self.slappy.removeActive()
+            base.cr.cameraManager.disableScreen()
+
+        if self.finishedInvasion:
+            self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
+
     def enterPreShow(self, offset):
         # And now for the Pre-election sequence
         self.surleeLeaveInterval = Sequence(
@@ -391,6 +436,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeLeaveInterval.finish()
 
     def enterBegin(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.catchUp()
+
         # Oh boy, here come the candidates
         for character in self.characters:
             character.reparentTo(self.showFloor)
@@ -398,6 +447,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             character.useLOD(1000)
             character.addActive()
             character.startBlink()
+            character.head = character.find('**/__Actor_head')
         musicIntro = base.loadMusic(ElectionGlobals.IntroMusic)
         self.slappyStand.loop('watch-idle')
         self.ignore('enter' + self.pieCollision.node().getName())
@@ -439,6 +489,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyHallInterval.finish()
 
     def enterAlecSpeech(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.catchUp()
+
         # TODO: This was written on the spot and needs to be more interesting.
         self.alecSpeech = Sequence(
             # Alec drones on about how much he loves elections, the candidates give their speeches
@@ -495,6 +550,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.alecSpeech.finish()
 
     def enterVoteBuildup(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.catchUp()
+
+        # And now it's time to announce the winner
         musicAnnouncement = base.loadMusic(ElectionGlobals.AnnouncementMusic)
         self.buildupSequence = Sequence(
             # Alec builds up some hype before...
@@ -515,6 +576,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.buildupSequence.setT(offset)
 
     def enterWinnerAnnounce(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.catchUp()
+
         # Slappy won! Lets give him some victory time before his rude interruption.
         musicVictory = base.loadMusic(ElectionGlobals.VictoryMusic)
         self.victorySequence = Sequence(
@@ -533,12 +599,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.victorySequence.finish()
 
     def enterCogLanding(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.catchUp()
+
+        # Huh, what's that thing?
         musicSad = base.loadMusic(ElectionGlobals.SadMusic)
         sfxSad = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
         mtrack = self.suit.beginSupaFlyMove(Point3(65, 3.6, 4.0), 1, 'fromSky', walkAfterLanding=False)
         self.slappyStandDie = Sequence(
-            ActorInterval(self.slappyStand, 'sad'),
-            ActorInterval(self.flippy, 'sad-idle')
+            ActorInterval(self.slappyStand, 'sad')
         )
         self.pie = BattleProps.globalPropPool.getProp('creampie')
         self.cogSequence = Sequence(
@@ -637,7 +708,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(1.5),
-            Parallel(Sequence(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.loop, 'neutral')), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes), Sequence(Wait(0.8), Func(self.pie.wrtReparentTo, render), Parallel(ProjectileInterval(self.pie, endPos=Point3(65, -1, 4.0), duration=0.7)))),
+            Parallel(Sequence(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.loop, 'neutral')), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes), Sequence(Wait(0.8), Func(self.pie.wrtReparentTo, render), Parallel(ProjectileInterval(self.pie, endPos=Point3(65, -1, 7.0), duration=0.4)))),
             Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36), Func(self.pie.removeNode)),
             Wait(5),
             Func(base.cr.cameraManager.disableScreen)
@@ -650,16 +721,24 @@ class DistributedElectionEvent(DistributedObject, FSM):
         del self.suit
 
     def enterInvasion(self, offset):
-        self.surleeR.show()
-        self.surleeR.setPosHpr(-32, -15, 0, -40, 0, 0)
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.finishedCogLanding = True
+        self.catchUp()
+
+        # Everyone is stunned by the explosion, but Surlee knows what is to come.
+        # He grabs their attention as the cogs begin landing.
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         self.surleeIntroInterval = Sequence(
-            # Everyone is stunned by the explosion, but Surlee knows what is to come. He grabs their attention as the cogs begin landing
             Func(self.surleeR.loop, 'walk'),
             Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
-            self.surleeR.posHprInterval(1, (-32, -15, 0), (30, 0, 0)),
+            self.surleeR.posHprInterval(1, (-32, -15, 0), (40, 0, 0)),
             Func(self.surleeR.loop, 'neutral'),
-            Wait(5),
+            self.flippy.head.hprInterval(1, (80, 0 , 0), blendType='easeInOut'),
+            Parallel(Func(self.flippy.loop, 'walk'), self.flippy.hprInterval(2, (95, 0, 0)), self.flippy.head.hprInterval(2, (0, 0, 0))),
+            Func(self.flippy.loop, 'neutral'),
+            Wait(2),
             Func(self.surleeR.setChatAbsolute, 'Grab the pies, they seem to be the weakness of these...', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.surleeR.setChatAbsolute, '..."Cogs."', CFSpeech|CFTimeout),
@@ -675,6 +754,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeIntroInterval.finish()
 
     def enterWrapUp(self, offset):
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.finishedCogLanding = True
+        self.finishedInvasion = True
+        self.catchUp()
+
         #Flippy runs onto the stage and throws a pie at the boss, killing him
         cake = BattleProps.globalPropPool.getProp('wedding-cake')
         messenger.send('wrapUpSequence', [offset])
