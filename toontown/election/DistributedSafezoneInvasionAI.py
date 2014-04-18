@@ -210,6 +210,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def setFinaleSuitStunned(self, hp):
         if self.state == 'Finale':
+            self.sendUpdate('stopMusic')
             for suit in self.suits:
                 hp = min(hp, suit.currHP) # Don't take more damage than we have...
                 suit.b_setHP(suit.currHP - hp)

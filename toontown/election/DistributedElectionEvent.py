@@ -708,8 +708,27 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(1.5),
-            Parallel(Sequence(ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91), Func(self.flippy.loop, 'neutral')), Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout), Func(self.surleeR.normalEyes), Sequence(Wait(0.8), Func(self.pie.wrtReparentTo, render), Parallel(ProjectileInterval(self.pie, endPos=Point3(65, -1, 7.0), duration=0.4)))),
-            Parallel(Func(self.suit.hide), Func(self.suit.removeActive), Func(self.setSuitDamage, 36), Func(self.pie.removeNode)),
+            Parallel(
+                Sequence(
+                    ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91),
+                    Func(self.flippy.loop, 'neutral')
+                ),
+                Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout),
+                Func(self.surleeR.normalEyes),
+                Sequence(
+                    Wait(0.8),
+                    Func(self.pie.wrtReparentTo, render),
+                    Parallel(
+                        ProjectileInterval(self.pie, endPos=Point3(65, -1, 7.0), duration=0.4)
+                    )
+                )
+            ),
+            Parallel(
+                Func(self.suit.hide),
+                Func(self.suit.removeActive),
+                Func(self.setSuitDamage, 36),
+                Func(self.pie.removeNode)
+            ),
             Wait(5),
             Func(base.cr.cameraManager.disableScreen)
         )
@@ -760,12 +779,32 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.finishedInvasion = True
         self.catchUp()
 
-        #Flippy runs onto the stage and throws a pie at the boss, killing him
+        #Flippy runs onto the stage and throws a cake at the boss, killing him
         cake = BattleProps.globalPropPool.getProp('wedding-cake')
+        cake.setScale(1.4)
+        sfxCake = loader.loadSfx('phase_5/audio/sfx/AA_throw_wedding_cake.ogg')
+        sfxCakeSplat = loader.loadSfx('phase_5/audio/sfx/AA_throw_wedding_cake_cog.ogg')
         messenger.send('wrapUpSequence', [offset])
-        pieSeq = Sequence(Wait(30), Func(self.sendUpdate, 'setSuitDamage', [200]))
-        pieSeq.start()
-        pieSeq.setT(offset)
+        # This sequence is based off of what Hawk did for Flippy's pie throw - remind Joey to clean it up
+        cakeSeq = Sequence(
+            Wait(20)
+            Parallel(Func(base.playSfx, sfxCake, volume=0.9), ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(cake.reparentTo, self.flippy.rightHand)),
+            Parallel(
+                Sequence(
+                    ActorInterval(self.flippy, 'throw', startFrame=47, endFrame=91),
+                    Func(self.flippy.loop, 'neutral')
+                ),
+                Sequence(
+                    Wait(0.6),
+                    Func(cake.wrtReparentTo, render),
+                    ProjectileInterval(cake, endPos=Point3(36.5,  -1.9, 7.0), duration=0.2),
+                    Func(base.playSfx, sfxCakeSplat, volume=0.8),
+                    Func(self.sendUpdate, 'setSuitDamage', [200])                        
+                )
+            )
+        )
+        cakeSeq.start()
+        cakeSeq.setT(offset)
 
 
     '''

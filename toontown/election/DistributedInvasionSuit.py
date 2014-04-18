@@ -511,12 +511,25 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
 
     def enterFinalePhrases(self, offset):
         self.phraseSequence = Sequence(
-            Wait(6.5),
             Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[0]),
-            Wait(5),
+            Wait(7),
             Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[1]),
-            Wait(4),
-            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
+            Wait(7),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[2]),
+            Wait(10),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[3]),
+            Wait(20),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[4]),
+            Wait(20),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[5]),
+            Wait(15),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[6]),
+            Wait(20),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[7]),
+            Wait(7),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[8]),
+            Wait(7),
+            Func(self.sayFaceoffTaunt, True, SafezoneInvasionGlobals.FinaleSuitPhrases[9]),
         )
         self.phraseSequence.setT(offset)
         self.phraseSequence.start()
@@ -554,7 +567,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             self.finaleBrainstormSequence.setT(offset)
             self.finaleBrainstormSequence.start()
 
-        self.sayFaceoffTaunt(True, SafezoneInvasionGlobals.FinaleSuitPhrases[2])
         self.play('effort')
 
     def exitFinaleBrainstormAttack(self):

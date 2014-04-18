@@ -1017,6 +1017,7 @@ dclass DistributedSafezoneInvasion : DistributedObject {
   pieHitSuit(uint32 avId) clsend airecv;
   takeDamage(uint8 damage) clsend airecv;
   setInvasionStarted(bool started) required broadcast ram;
+  stopMusic() broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {

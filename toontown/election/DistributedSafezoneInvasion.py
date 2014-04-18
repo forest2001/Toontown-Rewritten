@@ -123,6 +123,9 @@ class DistributedSafezoneInvasion(DistributedObject):
                 Func(self.sky.removeNode) # Remove the sky node after the fade out
                 )
 
+    def stopMusic(self):
+        self.musicEnter.stop()
+
     def showThanks(self):
         self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.Thanks, style=TTDialog.Acknowledge,
             suppressKeys=True)
