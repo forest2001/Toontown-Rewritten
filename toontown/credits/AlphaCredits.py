@@ -140,13 +140,11 @@ class Credits:
 CreditsScenes = [
                 # Developers
                 Shockley(),
+                Credits('Sir Max      ', 'Team Lead\nCommunity Manager\nDeveloper', '10-29-13_cannon.jpg', 'left'),
                 Credits('      McQuack', 'Expert of Explosives\nDeveloper', '14-3-17_dontworryhesurvived.jpg', 'right', 2, 'Hawkheart', 'Fish Bingo Controller\nDeveloper', '11-11-13_bingo.jpg'),
-                Credits('Fat McStink', 'Ultimate Party King\nServer Administraitor\nDeveloper', '11-8-13_pieornot.jpg', 'right', 2, 'Sir Max      ', 'Team Lead\nCommunity Manager\nDeveloper', '10-29-13_cannon.jpg'),
+                Credits('Fat McStink', 'Ultimate Party King\nServer Administraitor\nDeveloper', '11-8-13_pieornot.jpg', 'right'),
                 Credits('Hamlet       ', 'Astron Team\nDeveloper', 'hamlet.jpg', 'left', 2, 'Muddy Paws', 'Expert Cake Baker\nMac Support\nDeveloper', 'muddy-paws.jpg'),
                 Credits('Goshi', 'Self-proclaimed Police\nSupport Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg', 'right', 2, 'J.C.', 'Moral Support\nModerator', '11-2-13_whatdoesjcsay.jpg'),
-                
-                # Moral Support :D [Need names + pictures]
-                Credits('MatthewH12', 'Moral Support\nModerator', 'flippy_cheezer.jpg', 'right', 2, 'Brian', 'Moral Support\nModerator', 'flippy_cheezer.jpg'),
 
                 # Artists
                 Credits('Captain\nSandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
