@@ -169,7 +169,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Surlee keeps everyone's spirits held high during the Intermission.
         if self.waveNumber == 2:
-            self.election.saySurleePhrase('You got them, but that\'s only the first wave. We\'ve have a short time to regroup before they come back.', 1, True)
+            self.election.saySurleePhrase('You got them, but that\'s only the first wave. We have a short time to regroup before they come back.', 1, True)
         elif self.waveNumber == 5:
             self.election.saySurleePhrase('Another wave down, very nice. Get ready, more are on the way!', 1, True)
         elif self.waveNumber == 8:
