@@ -24,5 +24,6 @@ class DNAStoreNode(DNAStorageElement):
             node = model.find('**/' + self.node)
 
         storage.storeNode(node, self.code, self.getScope())
+        storage.storeCatalogCode(self.root, self.code)
 
 registerElement(DNAStoreNode)

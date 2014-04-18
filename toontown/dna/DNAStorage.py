@@ -10,11 +10,24 @@ class DNAStorageEntry:
 class DNAStorage:
     def __init__(self):
         self._typecode2entry = {}
-        self._block2title = {}
+        self._catalog = {}
 
         # For the special case below:
         self._dcsNode = NodePath(ModelNode(''))
         self._dcsNode.node().setPreserveTransform(ModelNode.PTNet)
+
+    def storeCatalogCode(self, category, code):
+        if not category in self._catalog:
+            self._catalog[category] = []
+        self._catalog[category].append(code)
+
+    def getNumCatalogCodes(self, category):
+        if category in self._catalog:
+            return len(self._catalog[category])
+        return 0
+
+    def getCatalogCode(self, category, index):
+        return self._catalog[category][index]
 
     def store(self, entity, type, code, scope):
         entry = DNAStorageEntry(entity, type, code, scope)
@@ -59,9 +72,3 @@ class DNAStorage:
 
     def findTexture(self, code):
         return self.find('texture', code)
-
-    def setBlockTitle(self, block, title):
-        self._block2title[block] = title
-
-    def getTitleFromBlockNumber(self, block):
-        return self._block2title[block]

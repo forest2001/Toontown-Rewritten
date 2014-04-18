@@ -2,6 +2,7 @@ from DNANode import DNANode
 from DNAParser import *
 from DNATitle import DNATitle
 import DNAUtil
+from DNAVisGroup import DNAVisGroup
 from panda3d.core import *
 
 class DNALandmarkBuilding(DNANode):
@@ -41,9 +42,15 @@ class DNALandmarkBuilding(DNANode):
         self.node.setName(self.id)
         self.node.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
 
-        storage.setBlockTitle(int(DNAUtil.getBlock(self.id)), self.getTitle())
-
         self.setupSuitBuildingOrigin(node, self.node)
-        self.node.flattenStrong()
+        gr = SceneGraphReducer()
+        gr.flatten(self.node.getNode(0), 0)
+        return self.node
+
+    def _storeData(self, data):
+        block = data.getBlock(DNAUtil.getBlock(self.name))
+        block.title = self.getTitle()
+        block.buildingType = self.type
+        block.zone = self.getVisGroup().getZone()
 
 registerElement(DNALandmarkBuilding)

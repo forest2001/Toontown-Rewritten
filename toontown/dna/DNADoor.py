@@ -11,6 +11,7 @@ class DNADoor(DNANode):
         DNANode.__init__(self, 'door')
 
         self.code = code
+        self.doorStore = None
 
     @staticmethod
     def setupDoor(doorNodePath, parentNode, doorOrigin, dnaStore, block, color):
@@ -44,8 +45,12 @@ class DNADoor(DNANode):
         store = NodePath('door-%s' % block)
         store.setPosHprScale(doorNodePath, (0,0,0), (0,0,0), (1,1,1))
 
+        return store
+
     def _makeNode(self, storage, parent):
-        frontNode = parent.find('**/*_front')
+        frontNode = parent.find('**/*building*_front')
+        if frontNode.isEmpty():
+            frontNode = parent.find('**/*_front')
         if not frontNode.getNode(0).isGeomNode():
             frontNode = frontNode.find('**/+GeomNode')
         frontNode.setEffect(DecalEffect.make())
@@ -55,7 +60,12 @@ class DNADoor(DNANode):
             #TODO: error message here
             pass
         doorNode = node.copyTo(frontNode, 0)
-        self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
+        self.doorStore = self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
           DNAUtil.getBlock(parent.getName()), self.getColor())
+        return doorNode
+
+    def _storeData(self, data):
+        block = data.getBlock(DNAUtil.getBlock(self.parent.name))
+        block.door = self.doorStore
 
 registerElement(DNADoor)

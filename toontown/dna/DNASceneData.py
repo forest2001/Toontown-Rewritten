@@ -14,7 +14,7 @@ class DNASuitGraph:
         for edge in edges:
             try:
                 a = self._pointId2point[edge.a]
-                a.zone = int(edge.parent.zone)
+                a.zone = int(edge.parent.getZone())
                 b = self._pointId2point[edge.b]
             except KeyError:
                 raise DNAError('Edge connects a nonexistent point!')
@@ -67,6 +67,12 @@ class DNASuitGraph:
                     return True
         return False
 
+class DNABlock:
+    title = None
+    door = None
+    buildingType = None
+    zone = None
+
 class DNASceneData:
     def __init__(self):
         self.visgroups = []
@@ -74,6 +80,8 @@ class DNASceneData:
         self.suitPoints = []
         self.suitEdges = []
         self.suitGraph = None
+        
+        self._blocks = {}
 
     def update(self):
         self.suitGraph = DNASuitGraph(self.suitPoints, self.suitEdges)
@@ -92,3 +100,11 @@ class DNASceneData:
             if (a == pointA and b == pointB) or (a == pointB and b == pointA):
                 return edge
         return None
+
+    def getBlock(self, block):
+        if not int(block) in self._blocks:
+            self._blocks[int(block)] = DNABlock()
+        return self._blocks[int(block)]
+
+    def getBlocks(self):
+        return self._blocks.items()
