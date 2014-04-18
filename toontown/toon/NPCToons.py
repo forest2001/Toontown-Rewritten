@@ -11533,7 +11533,7 @@ NPCToonDict = {20000: (-1,
         NPC_REGULAR),
 # McQuack, TTR Staff Member
 # This DNA isn't correct right now. Just for the name.
-91915: (2513,
+91915: (-1,
         lnames[91915],
         ('fll',
          'ss',
