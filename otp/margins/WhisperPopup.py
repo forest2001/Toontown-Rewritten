@@ -38,7 +38,7 @@ class WhisperPopup(MarginPopup, ClickablePopup):
             cc = WTSystem
         fgColor, bgColor = WHISPER_COLORS[cc][0]
 
-        balloon = NametagGlobals.speechBalloon2d.generate(
+        balloon, frame = NametagGlobals.speechBalloon2d.generate(
             self.text, self.font, textColor=fgColor, balloonColor=bgColor,
             wordWrap=self.WORDWRAP)
         balloon.reparentTo(self.innerNP)

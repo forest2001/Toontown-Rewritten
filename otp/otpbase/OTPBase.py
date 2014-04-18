@@ -264,6 +264,11 @@ def oobeCull():
 def wire():
     'Toggle wireframe view.'
     base.toggleWireframe()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def textures():
+    'Toggle textures on and off.'
+    base.toggleTexture()
     
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():
@@ -285,3 +290,11 @@ def toga2d():
         aspect2d.show()
     else:
         aspect2d.hide()
+        
+@magicWord(category=CATEGORY_GUI)
+def placer():
+    base.camera.place()
+    
+@magicWord(category=CATEGORY_GUI)
+def explorer():
+    base.render.explore()

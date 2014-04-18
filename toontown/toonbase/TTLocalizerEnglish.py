@@ -7656,7 +7656,11 @@ NPCToonNames = {20000: 'Tutorial Tom',
  7006: 'Gimmy Ahand',
  7007: 'Dewin Tymme',
  7008: 'Ima Cagedtoon',
- 7009: 'Jimmy Thelock'}
+ 7009: 'Jimmy Thelock',
+91913: 'Shockley', # 9/19/13 = Closing of Toontown, just a random number to start with so we don't take up other IDs
+91914: 'Sir Max',  # Feel free to add other TTR members in as needed.
+91915: 'McQuack',
+91916: 'Hawkheart'}
 zone2TitleDict = {2513: ('Toon Hall', ''),
  2514: ('Toontown Bank', ''),
  2516: ('Toontown School House', ''),

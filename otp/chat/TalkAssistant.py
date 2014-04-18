@@ -624,25 +624,10 @@ class TalkAssistant(DirectObject.DirectObject):
         return error
 
     def sendWhisperTalk(self, message, receiverAvId):
-        error = None
-        receiver = base.cr.doId2do.get(receiverAvId)
-        if receiver:
-            receiver.sendUpdate('setTalkWhisper', [0,
-             0,
-             '',
-             message,
-             [],
-             0])
-        else:
-            receiver = base.cr.identifyAvatar(receiverAvId)
-            if receiver:
-                base.localAvatar.sendUpdate('setTalkWhisper', [0,
-                 0,
-                 '',
-                 message,
-                 [],
-                 0], sendToId=receiverAvId)
-        return error
+        # This is TT specific... which goes against all things OTP. But oh well.
+        # Route through the TTRFMUD.
+        base.cr.ttrFriendsManager.sendUpdate('sendTalkWhisper', [receiverAvId, message])
+        return None
 
     def sendAccountTalk(self, message, receiverAccount):
         error = None

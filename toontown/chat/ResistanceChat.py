@@ -2,8 +2,6 @@ from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.battle import BattleParticles
-from direct.particles import Particles
 import random
 TTBG = ToontownBattleGlobals
 TTL = TTLocalizer
@@ -125,6 +123,8 @@ def getRandomId():
 
 
 def doEffect(textId, speakingToon, nearbyToons):
+    from toontown.battle import BattleParticles
+    from direct.particles import Particles
     menuIndex, itemIndex = decodeId(textId)
     itemValue = getItemValue(textId)
     if menuIndex == RESISTANCE_TOONUP:
