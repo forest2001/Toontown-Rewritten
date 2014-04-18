@@ -74,7 +74,9 @@ class Nametag2d(Nametag, MarginPopup):
     def considerUpdateClickRegion(self):
         # If we are onscreen, we update our click region:
         if self.isDisplayed():
-            self.updateClickRegion(*self.frame)
+            left, right, bottom, top = self.frame
+            self.updateClickRegion(left*self.SCALE_2D, right*self.SCALE_2D,
+                                   bottom*self.SCALE_2D, top*self.SCALE_2D)
         else:
             self.stashClickRegion()
 
