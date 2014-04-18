@@ -28,10 +28,11 @@ FlippyWheelbarrowPies = [
 ########################
 
 # Election Music
-IntroMusic = 'phase_4/audio/bgm/EE_Intro.ogg' #Played when Alec, Flippy, and Slappy enter
-AnnouncementMusic = 'phase_4/audio/bgm/EE_Announcement.ogg' #Played when Alec, Flippy, and Slappy enter
-VictoryMusic = 'phase_4/audio/bgm/EE_Celebration.ogg' #Played during Slappy's victory, right before the cog lands
-SadMusic = 'phase_4/audio/bgm/EE_DiesandPies.ogg' #Played when Slappy dies and the first pie thrown
+IntroMusic = 'phase_4/audio/bgm/EE_Intro.ogg' # Played when Alec, Flippy, and Slappy enter
+AnnouncementMusic = 'phase_4/audio/bgm/EE_Announcement.ogg' # Played when Alec, Flippy, and Slappy enter
+VictoryMusic = 'phase_4/audio/bgm/EE_Celebration.ogg' # Played during Slappy's victory, right before the cog lands
+SadMusic = 'phase_4/audio/bgm/EE_DiesandPies.ogg' # Played when Slappy dies and the first pie thrown
+CreditsMusic = 'phase_4/audio/bgm/EE_Theme.ogg' # The Election Credits
 
 SurleeTips = [
     'Always watch all sides of you, the Cogs are sneaky and love to backstab.',

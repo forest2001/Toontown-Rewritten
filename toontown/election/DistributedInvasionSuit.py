@@ -497,7 +497,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             self.setPickable(0) # We don't want people to see the cog's true identity, a Level 11 Loanshark.
             self.setScale(1.1)
             self.walkSpeed = ToontownGlobals.SuitWalkSpeed # The Director should walk slower than other high-level cogs
-            self.acceptOnce('wrapUpSequence', self.wrapUp)
+            self.acceptOnce('invasionEndSequence', self.wrapUp)
         elif not finale and self.invasionFinale:
             pass
         else:

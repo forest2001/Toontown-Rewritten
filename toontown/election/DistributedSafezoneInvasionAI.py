@@ -226,6 +226,10 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def enterVictory(self):
         self.b_setInvasionStarted(False)
+        taskMgr.doMethodLater(65, self.wrapUp, self.uniqueName('WrapUp-Later'))
+
+    def wrapUp(self, task):
+        self.election.b_setState('WrapUp')
 
     def enterOff(self):
         self.__deleteSuits()

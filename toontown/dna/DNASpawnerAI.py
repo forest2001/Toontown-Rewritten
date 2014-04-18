@@ -36,12 +36,7 @@ from toontown.toonbase import ToontownGlobals
 
 class DNASpawnerAI:
         
-    def spawnObjects(self, filename, baseZone):
-        if simbase.config.GetBool('want-doomsday', True):
-            if baseZone != 2000:
-                # We only want to spawn TTC during doomsday, as this is the only playground
-                # toons will be in.
-                return
+    def spawnObjects(self, filename, baseZone):       
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore, filename)
         self._createObjects(dnaData, baseZone)

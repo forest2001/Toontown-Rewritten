@@ -234,6 +234,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitOff(self):
         self.showFloor.reparentTo(render)
 
+    def __cleanupNPCs(self):
+        npcs = [self.flippy, self.slappy, self.alec, self.surlee, self.surleeR, self.prepostera, self.dimm, self.suit]
+        for npc in npcs:
+            if npc:
+                npc.removeActive()
+
     def delete(self):
         self.demand('Off', 0.)
 
@@ -241,6 +247,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
         self.ignore('enter' + self.pieCollision.node().getName())
+        self.__cleanupNPCs()
+
         DistributedObject.delete(self)
 
 
@@ -772,22 +780,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def exitInvasion(self):
         self.surleeIntroInterval.finish()
 
-    def enterWrapUp(self, offset):
+    def enterInvasionEnd(self, offset):
+        # Get ourselves caught up with what just happened
         self.finishedPreShow = True
         self.finishedBegin = True
         self.finishedCogLanding = True
         self.finishedInvasion = True
         self.catchUp()
 
-        #Flippy runs onto the stage and throws a cake at the boss, killing him
+        #Flippy now runs onto the stage and throws a cake at the boss, killing him
         cake = BattleProps.globalPropPool.getProp('wedding-cake')
         cake.setScale(1.4)
         sfxCake = loader.loadSfx('phase_5/audio/sfx/AA_throw_wedding_cake.ogg')
         sfxCakeSplat = loader.loadSfx('phase_5/audio/sfx/AA_throw_wedding_cake_cog.ogg')
-        messenger.send('wrapUpSequence', [offset])
+        messenger.send('invasionEndSequence', [offset])
         # This sequence is based off of what Hawk did for Flippy's pie throw - remind Joey to clean it up
         cakeSeq = Sequence(
-            Wait(20)
+            Wait(20),
             Parallel(Func(base.playSfx, sfxCake, volume=0.9), ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(cake.reparentTo, self.flippy.rightHand)),
             Parallel(
                 Sequence(
@@ -805,6 +814,74 @@ class DistributedElectionEvent(DistributedObject, FSM):
         )
         cakeSeq.start()
         cakeSeq.setT(offset)
+
+    def enterWrapUp(self, offset):
+        # Tell the credits our toon name and dna.
+        base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
+    
+        # This starts here so that we can drift towards Flippy for his speech,
+        # but some of it should be moved over to the real credits sequence which is called after this.
+        # A safe time to cut to the real sequence would be after the portable hole nosedive, or right when the camera arrives at Flippy before "Toons of the world... UNITE!"
+        musicCredits = base.loadMusic(ElectionGlobals.CreditsMusic)
+        base.localAvatar.stopUpdateSmartCamera()
+        base.camera.wrtReparentTo(render)
+        self.logo = loader.loadModel('phase_3/models/gui/toontown-logo.bam')
+        self.logo.reparentTo(aspect2d)
+        self.logo.setTransparency(1)
+        self.logo.setScale(0.6)
+        self.logo.setPos(0, 1, 0.3)
+        self.logo.setColorScale(1, 1, 1, 0)
+
+        # Temporarily put Flippy here manually
+        self.flippy.reparentTo(self.showFloor)
+        self.flippy.setPos(2, -10, 3.23)
+        self.flippy.setH(90)
+        
+        self.portal = loader.loadModel('phase_3.5/models/props/portal-mod.bam')
+        self.portal.reparentTo(render)
+        self.portal.setPosHprScale(93.1, 0.4, 4, 4, 355, 45, 0, 0, 0)
+
+        # To prevent some jittering when loading the credits, we'll load the first scene here.
+        from direct.gui.OnscreenText import OnscreenText
+        from direct.gui.OnscreenImage import OnscreenImage
+        from toontown.credits import AlphaCredits
+        self.shockley = AlphaCredits.Shockley(True)
+        self.shockley.load()
+
+        self.wrapUpSequence = Sequence(
+            Func(self.flippy.setChatAbsolute, 'Toons of the world...', CFSpeech|CFTimeout),
+            Func(base.playMusic, musicCredits, looping=0, volume=0.8),
+            Wait(4.5),
+            Func(self.flippy.setChatAbsolute, 'UNITE!', CFSpeech|CFTimeout),
+            ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=0, endFrame=9),
+            Wait(7.5),
+            ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=9, endFrame=0),
+            Wait(7.5),
+            Parallel(self.shockley.title.colorScaleInterval(0.5, (1, 1, 1, 1)), self.shockley.description.colorScaleInterval(0.5, (1, 1, 1, 1)), self.shockley.image.colorScaleInterval(0.5, (1, 1, 1, 1))),
+            Func(base.cr.loginFSM.request, 'credits')
+        )
+        self.cameraSequence = Sequence(
+            # Begin to slowly drift towards Flippy as he delivers his speech (He currently doesn't have a speech)
+            base.camera.posHprInterval(10, (75, -9.5, 12), (-90, -10, 0), blendType='easeInOut'),
+            Func(self.wrapUpSequence.start),
+            Wait(12),
+            # Dramatically fade in the logo as the camera rises
+            Parallel(self.logo.posHprScaleInterval(6.5, (0, 0, 0.5), (0), (1), blendType='easeOut'), self.logo.colorScaleInterval(6.5, Vec4(1, 1, 1, 1), blendType='easeOut'), base.camera.posInterval(7.5, (70, 0.6, 42.2), blendType='easeInOut')),
+            # Take a nosedive into a portable hole
+            Parallel(self.logo.colorScaleInterval(0.3, Vec4(1, 1, 1, 0)), base.camera.posHprInterval(0.3, (85, 0, 42), (-90, -30, 0), blendType='easeIn')),
+            Parallel(base.camera.posHprInterval(0.9, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2))),
+        )
+        self.cameraSequence.start()
+        self.cameraSequence.setT(offset)
+
+    def exitWrapUp(self):
+        self.logo.removeNode()
+        self.portal.removeNode()
+        self.shockley.title.removeNode()
+        self.shockley.description.removeNode()
+        self.shockley.image.removeNode()
+        self.wrapUpSequence.finish()
+        self.cameraSequence.finish()
 
 
     '''

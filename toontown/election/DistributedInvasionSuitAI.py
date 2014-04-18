@@ -302,7 +302,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         finalX, finalY, = SafezoneInvasionGlobals.FinaleSuitDestinations[4]
         if (self.finaleX - 1.0 <= oldX <= self.finaleX + 1.0) and (self.finaleY - 1.0 <= oldY <= self.finaleY + 1.0): # Check if it hit its destination
             if (self.finaleX - 1.0 <= finalX <= self.finaleX + 1.0) and (self.finaleY - 1.0 <= finalY <= self.finaleY + 1.0): # Check if it hit the final destination
-                self.invasion.election.b_setState('WrapUp')
+                self.invasion.election.b_setState('InvasionEnd')
                 self.idle()
                 self.finaleAttack.remove()
                 taskMgr.remove('FinaleAttack-Later')

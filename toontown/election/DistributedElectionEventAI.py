@@ -165,6 +165,10 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def exitInvasion(self):
         self.invasionSequence.finish()
+        self.surleePhraseLoop.finish()
+
+    def enterInvasionEnd(self):
+        pass
 
     def enterWrapUp(self):
         self.cogDead = False
@@ -184,7 +188,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def setSuitDamage(self, hp):
         if not self.cogDead:
             self.cogDead = True
-            if self.state == 'WrapUp':
+            if self.state == 'InvasionEnd':
                 invasion = simbase.air.doFind('SafezoneInvasion')
                 if invasion:
                     invasion.setFinaleSuitStunned(hp)
