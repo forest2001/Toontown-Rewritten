@@ -105,6 +105,7 @@ class PlayGame(StateData.StateData):
         self.hood = None
         self.quietZoneDoneEvent = uniqueName('quietZoneDone')
         self.quietZoneStateData = None
+        self.dnaData = None
         return
 
     def enter(self, hoodId, zoneId, avId):
