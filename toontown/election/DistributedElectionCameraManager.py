@@ -17,6 +17,7 @@ class DistributedElectionCameraManager(DistributedObject):
         self.mainCam = 0
         self.cameraIds = []
         self.cameraViewEnabled = False
+        self.tvOn = True
 
     def generate(self):
         DistributedObject.generate(self)
@@ -58,30 +59,54 @@ class DistributedElectionCameraManager(DistributedObject):
         self.tv.find('**/screen').setTexture(ts, self.buffer.getTexture(), 1)
                 
     def disable(self):
+        if self.tvOn:
+            base.graphicsEngine.removeWindow(self.buffer)
         self.camera.removeNode()
-        base.graphicsEngine.removeWindow(self.buffer)
         self.prop.cleanup()
         self.prop.removeNode()
         self.tv.removeNode()
-        self.screen = None
 
     def setMainCamera(self, new):
+        if self.mainCam != 0 and self.cameraViewEnabled:
+            self.cr.doId2do[self.mainCam].camera.show()
         self.mainCam = new
         if self.mainCam != 0:
             if new in self.cr.doId2do:
                 self.camera.reparentTo(self.cr.doId2do[new])
+                if self.cameraViewEnabled:
+                    self.cr.doId2do[new].camera.hide()
             else:
                 self.acceptOnce('generate-%d' % new, self.setCam)
             
     def setCam(self, cam):
         self.camera.reparentTo(cam)
+        if self.cameraViewEnabled:
+            cam.camera.hide()
         
     def setCameraIds(self, ids):
         self.cameraIds = ids
         
+    def disableScreen(self):
+        if self.tvOn:
+            #gg hacks
+            self.tvOn = False
+            tex = loader.loadTexture("phase_4/maps/smpte-colors.jpg")
+            ts = self.tv.find('**/screen').findTextureStage('*')
+            self.tv.find('**/screen').setTexture(ts, tex, 1)
+            parent = self.camera.getParent()
+            self.camera.removeNode()
+            self.camera = parent.attachNewNode('ECMNode')
+            base.graphicsEngine.removeWindow(self.buffer)
+            if self.cameraViewEnabled:
+                base.camera.reparentTo(self.camera)
+        
     def _toggleCameraView(self):
+        base.localAvatar.stopUpdateSmartCamera()
         base.camera.setPosHpr(0,0,0,0,0,0)
         base.camera.reparentTo(self.camera)
+        self.cameraViewEnabled = True
+        if self.mainCam != 0:
+            self.cr.doId2do[self.mainCam].camera.hide()
 @magicWord(category=CATEGORY_CAMERA)
 def cameraView():
     if not hasattr(base.cr, 'cameraManager'):
