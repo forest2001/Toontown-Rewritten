@@ -52,7 +52,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         rope.reparentTo(self.showFloor)
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
         rope.setScale(2, 2, 2)
-        rope.find('**/collide').setPosHprScale(0.31, 1.10, 0.00, 0.00, 0.00, 0.00, 0.89, 1.00, 1.25)
+        rc = CollisionSphere(8.2, 15.5, 2.0, 13.5)
+        rc2 = CollisionBox(Point3(8.88, 28.76, 0.00), 4.44, 6.38, 9.00)
+        ropeCollision = rope.attachNewNode(CollisionNode('collision'))
+        ropeCollision.node().addSolid(rc)
+        ropeCollision.node().addSolid(rc2)
 
         #Campaign stands
         self.flippyStand = Actor.Actor('phase_4/models/events/election_flippyStand-mod', {'idle': 'phase_4/models/events/election_flippyStand-idle'})
@@ -383,6 +387,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.surleeLeaveInterval.start()
         self.surleeLeaveInterval.setT(offset)
 
+    def exitPreShow(self):
+        self.surleeLeaveInterval.finish()
+
     def enterBegin(self, offset):
         # Oh boy, here come the candidates
         for character in self.characters:
@@ -641,6 +648,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         del self.suit
 
     def enterInvasion(self, offset):
+        self.surleeR.show()
+        self.surleeR.setPosHpr(-32, -15, 0, -40, 0, 0)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
         self.surleeIntroInterval = Sequence(
             # Everyone is stunned by the explosion, but Surlee knows what is to come. He grabs their attention as the cogs begin landing
@@ -679,8 +688,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
 
-    def saySurleePhrase(self, phrase):
-        self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout)
+    def saySurleePhrase(self, phrase, interrupt, broadcast):
+        self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout, interrupt = interrupt)
+        
+        # If we want everyone to see this message, even if not near Surlee, we'll send it as a whisper.
+        if broadcast and Vec3(base.localAvatar.getPos(self.surleeR)).length() >= 15:
+            base.localAvatar.setSystemMessage(0, self.surleeR.getName()+ ': ' + phrase, WTEmote)
         
     def setState(self, state, timestamp):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))
