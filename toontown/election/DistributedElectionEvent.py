@@ -400,7 +400,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.flippy.setPos(2, -10, 3.23)
 
         if self.finishedCogLanding:
-            self.slappyStand.pose('sad-idle', 1)
+            self.slappyStand.loop('sad-idle')
             self.flippy.setPosHpr(-15, -12, 0, 0, 0, 0)
             self.alec.setPos(-1.5, -0.14, 3.13)
             self.slappy.hide()
@@ -409,6 +409,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
         if self.finishedInvasion:
             self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
+            self.flippy.setHpr(95, 0, 0)
 
     def enterPreShow(self, offset):
         # And now for the Pre-election sequence
