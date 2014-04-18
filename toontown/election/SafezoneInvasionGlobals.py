@@ -1,10 +1,17 @@
 import random
 
-FirstSuitSpawnPoint = (65, -1, 4.0, 45.0)
+FirstSuitSpawnPoint =  (65.0,  -1.0, 4.0, 180.0)
+FinaleSuitSpawnPoint = (-138.0, 4.0, 0.5, -90.0)
 
 # The position of the Finale suit
 # Spawns at SuitSpawnPoints # 3
-FinaleSuitDestination = (29.3, -5.0)
+FinaleSuitDestinations = [
+    (-96.2, -52.3),
+    (-36.5, -56.0),
+    (  7.1,  -1.4),
+    ( 27.3,  -0.4),
+    ( 36.5,  -1.9),
+]
 
 # Lets give the Finale suit a special name
 # This one is surprisingly fitting, because of the election -- http://en.wikipedia.org/wiki/Ambush_marketing

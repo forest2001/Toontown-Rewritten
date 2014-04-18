@@ -112,6 +112,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
     def enterFlyDown(self, time):
         if self.spawnPointId == 99:
             x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
+        elif self.spawnPointId == 100:
+            x, y, z, h = SafezoneInvasionGlobals.FinaleSuitSpawnPoint
         else:
             x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.loop('neutral', 0)
@@ -362,6 +364,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self.spawnPointId = spawnPointId
         if self.spawnPointId == 99:
             x, y, z, h = SafezoneInvasionGlobals.FirstSuitSpawnPoint
+        elif self.spawnPointId == 100:
+            x, y, z, h = SafezoneInvasionGlobals.FinaleSuitSpawnPoint
         else:
             x, y, z, h = SafezoneInvasionGlobals.SuitSpawnPoints[self.spawnPointId]
         self.freezeLerp(x, y)
@@ -504,7 +508,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         cogSequence = Sequence()
         cogSequence.start()
         cogSequence.setT(offset)
-    
 
     def enterFinalePhrases(self, offset):
         self.phraseSequence = Sequence(

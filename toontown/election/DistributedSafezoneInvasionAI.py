@@ -201,7 +201,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.election.saySurleePhrase('This is it, toons. They\'re sending in the boss! Brace yourselves, this will be the toughest one yet!', 1, True)
         suit = DistributedInvasionSuitAI(self.air, self)
         suit.dna.newSuit('ls')
-        suit.setSpawnPoint(1) # Point 1 is in front of the trolly
+        suit.setSpawnPoint(100) # Point 100 just tells announceGenerate that this is our boss
         suit.setLevel(4) # Give it the highest level we can. Requires 200 damage for a level 12, 156 for a level 11
         suit.generateWithRequired(self.zoneId)
         suit.d_makeSkelecog()
