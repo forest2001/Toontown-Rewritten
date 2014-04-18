@@ -36,6 +36,10 @@ class Nametag2d(Nametag, MarginPopup):
 
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
+        # Also translate the frame:
+        left, right, bottom, top = self.frame
+        self.frame = (left-center.getX(), right-center.getX(),
+                      bottom-center.getZ(), top-center.getZ())
 
         # When a balloon is active, we need to be somewhat higher-priority in the
         # popup system:
