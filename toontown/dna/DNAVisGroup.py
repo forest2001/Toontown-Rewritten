@@ -11,6 +11,13 @@ class DNAVisGroup(DNAGroup):
         self.zone = zone
         self.vis = vis.split()
 
+    def getZone(self):
+        pos = self.zone.find(':')
+        if pos != -1:
+            return int(self.zone[:pos])
+        else:
+            return int(self.zone)
+
     def _storeData(self, data):
         # Store the VisGroup's existence into the DNASceneData:
         data.visgroups.append(self)
