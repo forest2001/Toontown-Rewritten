@@ -70,6 +70,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.questManager = QuestManagerAI()
         self.cogPageManager = CogPageManagerAI()
 
+        self.dnaStoreMap = {}
+
     def getTrackClsends(self):
         return False
         
@@ -154,12 +156,14 @@ class ToontownAIRepository(ToontownInternalRepository):
         fwType = allFwTypes[random.randint(0, len(allFwTypes)-1)]
         numShows = len(FireworkShows.shows.get(fwType, []))
         showIndex = random.randint(0, numShows-1)
-        for hood in self.hoods:
+        #beginhack: disable fireworks
+        '''for hood in self.hoods:
             if hood.safezone == ToontownGlobals.GolfZone:
                 continue
             fwShow = DistributedFireworkShowAI(self)
             fwShow.generateWithRequired(hood.safezone)
-            fwShow.b_startShow(fwType, showIndex, globalClockDelta.getRealNetworkTime())
+            fwShow.b_startShow(fwType, showIndex, globalClockDelta.getRealNetworkTime())'''
+        #endhack
         task.delayTime = 3600
         return task.again
 
