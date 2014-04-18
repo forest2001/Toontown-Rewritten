@@ -26,6 +26,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         self.sadToons = []
         self.lastWave = (self.waveNumber == len(SafezoneInvasionGlobals.SuitWaves) - 1)
         self.invasionOn = False
+        self.numberOfSuits = 0
 
     def announceGenerate(self):
         self.b_setInvasionStarted(True)
@@ -88,6 +89,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         # Get the suits to call:
         suitsToCall = SafezoneInvasionGlobals.SuitWaves[self.waveNumber]
+        self.numberOfSuits = len(suitsToCall)
 
         # How long do we have to spread out the suit calldowns?
         # In case some dummkopf set WaveBeginningTime too low:
@@ -111,6 +113,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     def exitBeginWave(self):
         for task in self._waveBeginTasks:
             task.remove()
+
+        # Reset the spawn points for the continuous cogs
+        self.spawnPoints = range(len(SafezoneInvasionGlobals.SuitSpawnPoints))
 
     def enterWave(self):
         # This state is entered after all Cogs have been spawned by BeginWave.
@@ -364,6 +369,12 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         if suit not in self.suits:
             self.notify.warning('suitDied called twice for same suit!')
             return
+
+        if self.waveNumber not in SafezoneInvasionGlobals.SuitIntermissionWaves and self.numberOfSuits > 0:
+            self.numberOfSuits = self.numberOfSuits - 1
+
+            # Delay spawing the suits 
+            taskMgr.doMethodLater(1, self.spawnOne, self.uniqueName('summon-suit-%s' % self.numberOfSuits), extraArgs=[suit.getStyleName(), suit.getLevel()])
 
         self.suits.remove(suit)
         if not self.suits:
