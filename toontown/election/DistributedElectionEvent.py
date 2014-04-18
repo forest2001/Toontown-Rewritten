@@ -406,7 +406,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.slappy.hide()
             self.slappy.removeActive()
             base.cr.cameraManager.disableScreen()
-            self.accept('enter' + self.pieCollision.node().getName())
+            self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
         if self.finishedInvasion:
             self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
