@@ -273,10 +273,7 @@ def textures():
 @magicWord(category=CATEGORY_GRAPHICAL)
 def fps():
     'Toggle frame rate meter on or off.'
-    if base.frameRateMeter:
-        base.setFrameRateMeter(False)
-    else:
-        base.setFrameRateMeter(True)
+    base.setFrameRateMeter(not base.frameRateMeter)
     
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():
