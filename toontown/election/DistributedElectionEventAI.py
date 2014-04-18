@@ -13,6 +13,8 @@ from toontown.toonbase import ToontownGlobals
 import SafezoneInvasionGlobals
 import ElectionGlobals
 import random
+from otp.distributed.OtpDoGlobals import *
+from direct.task import Task
 
 class DistributedElectionEventAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEventAI")
@@ -166,6 +168,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def enterWrapUp(self):
         self.cogDead = False
+        taskMgr.doMethodLater(60, self.noMoreLogins, 'kill-csmud')
 
 
     '''
@@ -218,6 +221,13 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def getState(self):
         return (self.state, self.stateTime)
+        
+    def noMoreLogins(self, task):
+        task.delayTime = 60
+        csm = OTP_DO_ID_CLIENT_SERVICES_MANAGER
+        dg = simbase.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, simbase.air.ourChannel, [True])
+        simbase.air.send(dg)
+        return task.again
 
 @magicWord()
 def election(state):
@@ -236,3 +246,14 @@ def election(state):
     event.b_setState(state)
 
     return 'Election event now in %r state' % state
+    
+@magicWord()
+def nologin():
+    """
+    Disable the CSM's login and reject all future connections.
+    This is only a randomly placed MW for doomsday... run along people.
+    """
+    csm = OTP_DO_ID_CLIENT_SERVICES_MANAGER
+    dg = simbase.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, simbase.air.ourChannel, [True])
+    simbase.air.send(dg)
+    return "The CSMUD will reject all logins from now on."
