@@ -110,7 +110,7 @@ class SuitLeg:
         pos = self.getPosA() + pos*(time/self.getLegTime())
         return pos
     def getZone(self):
-        return self.pointA.zone
+        return self.pointB.zone
     @staticmethod
     def getTypeName(type):
         return SuitLeg.TypeToName[type]
