@@ -106,7 +106,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             self.nametag.setActive(0)
             self.nametag.setAvatar(self.getDoorNodePath())
             self.nametag.setObjectCode(self.block)
-            name = self.cr.playGame.dnaStore.getTitleFromBlockNumber(self.block)
+            name = self.cr.playGame.dnaData.getBlock(self.block).title
             self.nametag.setName(name)
             self.nametag.manage(base.marginManager)
         return
@@ -399,7 +399,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             if hasattr(self, 'tempDoorNodePath'):
                 return self.tempDoorNodePath
             else:
-                posHpr = self.cr.playGame.dnaStore.getDoorPosHprFromBlockNumber(self.block)
+                print self.block
+                posHpr = self.cr.playGame.dnaData.getBlock(self.block).door
                 otherNP = NodePath('doorOrigin')
                 otherNP.setPos(posHpr.getPos())
                 otherNP.setHpr(posHpr.getHpr())
