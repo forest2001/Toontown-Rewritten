@@ -432,9 +432,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # 2 = slappy
             # 3 = flippy
             # 4 = entire stage
-            Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 55, 22, 6, -526, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
-            Parallel(Func(self.cameras[1].setState, 'Move', globalClockDelta.getRealNetworkTime(), 50, -13, 7, -424, 0, 0), Func(self.cameras[2].setState, 'Move', globalClockDelta.getRealNetworkTime(), 52, 15, 8, -461, 0, 0), Func(self.cameras[3].setState, 'Move', globalClockDelta.getRealNetworkTime(), 63, -23, 11, -413, 0, 0)),
-            Func(self.cameras[4].setState, 'Move', globalClockDelta.getRealNetworkTime(), 45, 20, 7, -484, 0, 0),
+            Parallel(Func(self.moveCamera, 0, 55, 22, 6, -526, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
+            Parallel(Func(self.moveCamera, 1, 50, -13, 7, -424, 0), Func(self.moveCamera, 2, 52, 15, 8, -461, 0), Func(self.moveCamera, 3, 63, -23, 11, -413, 0)),
+            Func(self.moveCamera, 4,  45, 20, 7, -484, 0),
             # Let's do a quick swap for the real Surlee, now that his animation is done
             Parallel(Func(self.surlee.removeActive), Func(self.surlee.hide), Func(self.surleeR.show), Func(self.surleeR.addActive), Func(self.surleeR.startBlink)),
             Wait(3),
@@ -598,7 +598,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(0.4),
             Func(self.slappy.setChatAbsolute, 'Yeahhh, about that...', CFSpeech|CFTimeout),
             Wait(4),
-            Parallel(Func(self.cameras[1].setState, 'Move', globalClockDelta.getRealNetworkTime(), 50, 11, 8, -473, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[1].getDoId())),
+            Parallel(Func(self.moveCamera, 1, 50, 11, 8, -473, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[1].getDoId())),
             Func(self.alec.setChatAbsolute, 'Hrmph. Instead, however, I have the honor of announcing the votes myself.', CFSpeech|CFTimeout),
             Wait(7),
             Func(self.alec.setChatAbsolute, 'After counting over 10,000 registered votes...', CFSpeech|CFTimeout),
@@ -685,7 +685,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         )
         self.pie = BattleProps.globalPropPool.getProp('creampie')
         self.cogSequence = Sequence(
-            Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 53, 17, 8, -491, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
+            Parallel(Func(self.moveCamera, 0, 53, 17, 8, -491, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
             Parallel(Func(self.suit.reparentTo, render), Func(self.suit.addActive), Func(mtrack.start, offset)),
             self.flippy.head.hprInterval(1, (-15, -10, 0), blendType='easeInOut'),
             Wait(1),
@@ -754,7 +754,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Parallel(self.alec.posInterval(2, (-1.5, -0.14, 3.13))),
             Func(self.alec.loop, 'neutral'),
             # Flippy isn't happy at all, he's going histerical
-            Parallel(Func(self.cameras[3].setState, 'Move', globalClockDelta.getRealNetworkTime(), 55, -22, 6, -338, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[3].getDoId())),
+            Parallel(Func(self.moveCamera, 3, 55, -22, 6, -338, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[3].getDoId())),
             Parallel(Func(self.flippy.setChatAbsolute, "What have you done?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'run')),
             Wait(0.5),
             Parallel(self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)), self.flippy.head.hprInterval(0.5, (0, 0, 0), blendType='easeInOut')),
@@ -850,12 +850,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.loop, 'neutral'),
         )
         self.surleeIntroInterval = Sequence(
-            Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 36, -4, 7, -131, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
+            Parallel(Func(self.moveCamera, 0, 36, -4, 7, -131, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
             Func(self.surleeR.loop, 'walk'),
             Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
             self.surleeR.posHprInterval(1, (-32, -15, 0), (50, 0, 0)),
             Func(self.surleeR.loop, 'neutral'),
-            Func(self.cameras[4].setState, 'Move', globalClockDelta.getRealNetworkTime(), 10, -24, 7, -263, 0, 0),
+            Func(self.moveCamera, 4, 10, -24, 7, -263, 0),
             Parallel(self.alec.head.hprInterval(1, (15, 0, 0), blendType='easeInOut')), self.flippy.head.hprInterval(1, (80, 0 , 0), blendType='easeInOut'),
             Parallel(Func(self.flippy.loop, 'walk'), self.flippy.hprInterval(2, (95, 0, 0)), self.flippy.head.hprInterval(2, (0, 0, 0))),
             Func(self.flippy.loop, 'neutral'),
@@ -1010,6 +1010,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
      ELETION DAY MISC.
        Just a few other bits and pieces we need for Election Day, unrelated to the main sequence.
     '''
+    def moveCamera(self, id, x, y, z, h, p):
+        self.cameras[id].setState('Move', globalClockDelta.getRealNetworkTime(), x, y, z, h, p, 0)
+        
     def setSuitDamage(self, hp):
         self.sendUpdate('setSuitDamage', [hp])
 
