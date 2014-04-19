@@ -63,7 +63,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         elif self.air.questManager.hasTailorClothingTicket(av, self) == 2:
             flag = NPCToons.PURCHASE_MOVIE_START'''
         
-        if self.housingEnabled and isClosetAlmostFull(av):
+        if self.housingEnabled and self.isClosetAlmostFull(av):
             flag = NPCToons.PURCHASE_MOVIE_START_NOROOM
         
         self.sendShoppingMovie(avId, flag)
