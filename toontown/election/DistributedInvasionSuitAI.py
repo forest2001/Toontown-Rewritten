@@ -10,7 +10,7 @@ import SafezoneInvasionGlobals
 from InvasionSuitBase import InvasionSuitBase
 from InvasionSuitBrainAI import InvasionSuitBrainAI
 import SafezoneInvasionGlobals
-from random import random, choice
+from random import random, choice, randint
 
 class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedInvasionSuitAI")
@@ -162,7 +162,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
     def getAttackInfo(self):
         return (0, '', 0) # This is only set dynamically.
 
-    def takeDamage(self, hp):
+    def takeDamage(self, hp, bypassFinale = False):
         if self.state == 'FlyDown':
             return # We can't/shouldn't take damage in this state.
 
@@ -170,7 +170,8 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.b_setHP(self.currHP - hp)
 
         if self.finale:
-            self.b_setHP(self.currHP + hp) # We dont want to big guy to die
+            if not bypassFinale:
+                self.b_setHP(self.currHP + hp) # We dont want the big guy to die
             return
 
         if self.state != 'Stunned':
@@ -294,6 +295,12 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         self.finaleX, self.finaleY = SafezoneInvasionGlobals.FinaleSuitDestinations[0]
         self.finaleNextX, self.finaleNextY = SafezoneInvasionGlobals.FinaleSuitDestinations[1]
         self.brain.navigateTo(self.finaleX, self.finaleY)
+        # Pick a random time to change colors, just to add variation between recorded videos
+        # and a bit more realism.
+        damage1Delay = randint(25, 35)
+        damage2Delay = randint(60, 65)
+        self.takeDamage1 = taskMgr.doMethodLater(damage1Delay, self.takeDamage, self.uniqueName('YellowMeter'), extraArgs=[36, True])
+        self.takeDamage2 = taskMgr.doMethodLater(damage2Delay, self.takeDamage, self.uniqueName('OrangeMeter'), extraArgs=[36, True])
         self.finaleAttack = taskMgr.doMethodLater(3, self.doFinaleAttack, self.uniqueName('FinaleAttack-Later'))
         return task.done
 
