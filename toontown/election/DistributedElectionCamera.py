@@ -14,7 +14,7 @@ class DistributedElectionCamera(DistributedNode):
     def generate(self):
         self.assign(render.attachNewNode('DistributedElectionCamera'))
         DistributedNode.generate(self)
-        self.camera = loader.loadModel('phase_4/models/events/camera.egg')
+        self.camera = loader.loadModel('phase_4/models/events/election_tvCamera')
         self.camera.reparentTo(render)
         self.camera.setScale(0.25)
         propJoint = self.camera.find('**/hat')
