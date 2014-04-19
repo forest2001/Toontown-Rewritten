@@ -943,6 +943,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.catchUp()
 
         # Tell the credits our toon name and dna.
+        NodePath(base.marginManager).hide()
         base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
     
         # This starts here so that we can drift towards Flippy for his speech,
