@@ -558,6 +558,7 @@ dclass DistributedToon : DistributedPlayer {
   setPieType(uint8) broadcast ownrecv ram;
   setNumPies(uint16) broadcast ownrecv ram;
   setPieThrowType(uint8) broadcast ownrecv ram;
+  setHealthDisplay(uint8 mode) broadcast ownrecv ram;
   catalogGenClothes(uint32) broadcast ownrecv;
   catalogGenAccessories(uint32) broadcast ownrecv;
   setPetId(uint32 = 0) required broadcast ownrecv db;
