@@ -114,6 +114,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.flippyStand.loop('idle')
         self.slappyStand.loop('idle')
 
+        self.alecNode = None
+
         # If it's Doomsday, let's get our actors set up.
         if base.config.GetBool('want-doomsday', False):
             self.surlee = NPCToons.createLocalNPC(20191)
@@ -1081,7 +1083,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.cowardSequence.start()
 
     def stopInteractiveAlec(self):
-        self.ignore('enter' + self.alecNode.node().getName())
+        if self.alecNode:
+            self.ignore('enter' + self.alecNode.node().getName())
 
     '''
      ELETION DAY MISC.
