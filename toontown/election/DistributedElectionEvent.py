@@ -838,7 +838,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
                     ProjectileInterval(cake, endPos=Point3(36.5,  -1.9, 7.0), duration=0.2),
                     Func(base.playSfx, sfxCakeSplat, volume=0.8),
                     Func(self.sendUpdate, 'setSuitDamage', [200]),
-                    Fucn(cake.removeNode)
+                    Func(cake.removeNode)
                 )
             )
         )
