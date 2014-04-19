@@ -9,7 +9,7 @@ class PlanD:
         self.pool = pool
 
         # I couldn't resist the name. :)
-        pathPath = 'python ' + os.path.join(os.path.dirname(__file__), 'pathd.py')
+        pathPath = os.path.join(os.path.dirname(__file__), 'pathd.py')
 
         self.sp = subprocess.Popen(pathPath, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         atexit.register(self.sp.kill)
