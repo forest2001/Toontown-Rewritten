@@ -19,12 +19,16 @@ class Spellbook:
 
     def __init__(self):
         self.words = {}
+        self.categories = []
 
         self.currentInvoker = None
         self.currentTarget = None
 
     def addWord(self, word):
         self.words[word.name] = word
+
+    def addCategory(self, category):
+        self.categories.append(category)
 
     def process(self, invoker, target, incantation):
         self.currentInvoker = invoker
@@ -71,27 +75,66 @@ spellbook = Spellbook()
 
 # CATEGORIES
 class MagicWordCategory:
-    def __init__(self, name, defaultAccess=500):
+    def __init__(self, name, defaultAccess=500, doc=''):
         self.name = name
         self.defaultAccess = defaultAccess
+        self.doc = doc
+
+        self.words = []
+
+        spellbook.addCategory(self)
+
+    def addWord(self, word):
+        self.words.append(word)
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
-CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300)
-CATEGORY_GUI = MagicWordCategory('GUI debugging', defaultAccess=300)
-CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=300)
-CATEGORY_OVERRIDE = MagicWordCategory('Override cheats', defaultAccess=400)
-CATEGORY_CHARACTERSTATS = MagicWordCategory('Character-stats cheats', defaultAccess=400)
-CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300)
-CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=300)
+CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300,
+    doc='Magic Words in this category are used to assist developers in locating '
+        'the cause of graphical glitches.')
+CATEGORY_GUI = MagicWordCategory('GUI debugging', defaultAccess=300,
+    doc='These Magic Words are intended to manipulate the on-screen GUI to '
+        'assist developers in testing/debugging the GUI system.')
+CATEGORY_MOBILITY = MagicWordCategory('Mobility cheats', defaultAccess=300,
+    doc='These Magic Words allow you to move around the area/world more easily, '
+        'allow you to get to areas more quickly.')
+CATEGORY_OVERRIDE = MagicWordCategory('Override cheats', defaultAccess=400,
+    doc='These Magic Words let you override normal game logic.')
+CATEGORY_CHARACTERSTATS = MagicWordCategory('Character-stats cheats', defaultAccess=400,
+    doc='These Magic Words let you alter the stats (e.g. gags, laff) of Toons.')
+CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300,
+    doc='These are Magic Words that may be useful in debugging, but have an impact '
+        'on the fairness of the game if you use them, therefore they are considered '
+        'cheats.')
+CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=300,
+    doc='These are Magic Words focused on allowing moderators to deal with '
+        'unruly players.')
 
 
 class MagicWord:
-    def __init__(self, name, func, types, access, doc):
+    def __init__(self, name, func, types, access, doc, category):
         self.name = name
         self.func = func
         self.types = types
         self.access = access
         self.doc = doc
+        self.category = category
+
+        category.addWord(self)
+
+    def getUsage(self):
+        maxArgs = self.func.func_code.co_argcount
+        minArgs = maxArgs - (len(self.func.func_defaults) if self.func.func_defaults else 0)
+        argnames = self.func.func_code.co_varnames[:maxArgs]
+
+        usageArgs = []
+
+        for x in xrange(minArgs):
+            usageArgs.append(argnames[x])
+
+        for x in xrange(minArgs, maxArgs):
+            usageArgs.append('[%s]' % argnames[x])
+
+        return ' '.join(usageArgs)
 
     def parseArgs(self, string):
         maxArgs = self.func.func_code.co_argcount
@@ -142,7 +185,7 @@ class MagicWordDecorator:
         if name is None:
             name = mw.func_name
 
-        word = MagicWord(name, mw, self.types, self.access, mw.__doc__)
+        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category)
         spellbook.addWord(word)
 
         return mw

@@ -36,6 +36,10 @@ class Nametag2d(Nametag, MarginPopup):
 
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
+        # Also translate the frame:
+        left, right, bottom, top = self.frame
+        self.frame = (left-center.getX(), right-center.getX(),
+                      bottom-center.getZ(), top-center.getZ())
 
         # When a balloon is active, we need to be somewhat higher-priority in the
         # popup system:
@@ -74,7 +78,11 @@ class Nametag2d(Nametag, MarginPopup):
     def considerUpdateClickRegion(self):
         # If we are onscreen, we update our click region:
         if self.isDisplayed():
-            self.updateClickRegion(-1,1,-1,1)
+            left, right, bottom, top = self.frame
+            self.updateClickRegion(left*self.SCALE_2D, right*self.SCALE_2D,
+                                   bottom*self.SCALE_2D, top*self.SCALE_2D)
+        else:
+            self.stashClickRegion()
 
     def tick(self):
         # Update the arrow's pointing.

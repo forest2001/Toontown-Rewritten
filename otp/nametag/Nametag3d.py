@@ -46,11 +46,16 @@ class Nametag3d(Nametag):
         distance = self.innerNP.getPos(NametagGlobals.camera).length()
         distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
 
-        self.innerNP.setScale(math.sqrt(distance)*self.SCALING_FACTOR)
+        scale = math.sqrt(distance)*self.SCALING_FACTOR
+        self.innerNP.setScale(scale)
 
         # As 3D nametags can move around on their own, we need to update the
         # click frame constantly:
-        self.updateClickRegion(-1,1,-1,1)
+        if NodePath.anyPath(self).isHidden():
+            self.stashClickRegion()
+        else:
+            left, right, bottom, top = self.frame
+            self.updateClickRegion(left*scale, right*scale, bottom*scale, top*scale)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d

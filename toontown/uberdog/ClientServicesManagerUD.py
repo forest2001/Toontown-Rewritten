@@ -703,7 +703,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
         # Finally, grant ownership and shut down.
         dg = PyDatagram()
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
-        dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
+        dg.addChannel(self.csm.GetAccountConnectionChannel(self.target)) # Set ownership channel to the connection's account channel.
         self.csm.air.send(dg)
         
         # Tell TTRFriendsManager somebody is logging in:

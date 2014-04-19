@@ -9,6 +9,7 @@ class ChatBalloon:
     BUBBLE_PADDING_PROP = 0.05
     BUTTON_SCALE = 6
     BUTTON_SHIFT = (-0.2, 0, 0.6)
+    FRAME_SHIFT = (0.2, 1.4)
 
     def __init__(self, model):
         self.model = model
@@ -63,4 +64,8 @@ class ChatBalloon:
         middle.setSz(height)
         top.setZ(top, height-1)
 
-        return root
+        # Calculate the frame occupied by the balloon:
+        left, bottom = self.FRAME_SHIFT
+        frame = (left, left+width, bottom, bottom+height+1)
+
+        return root, frame

@@ -1,4 +1,3 @@
-from otp.ai.AIBaseGlobal import *
 from otp.otpbase import OTPGlobals
 from direct.fsm import ClassicFSM
 from direct.fsm import State

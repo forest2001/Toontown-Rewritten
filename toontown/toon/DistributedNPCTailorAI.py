@@ -1,4 +1,3 @@
-from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from DistributedNPCToonBaseAI import *
 import ToonDNA

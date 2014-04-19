@@ -977,7 +977,6 @@ dclass DistributedDGFlower : DistributedObject {
 dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
-  slappyAvatarEnter() clsend airecv;
   phraseSaidToFlippy(uint16 phraseId) clsend airecv;
   flippySpeech(uint32 avId, uint16 phraseId) broadcast;
 };
