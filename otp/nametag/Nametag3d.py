@@ -30,7 +30,7 @@ class Nametag3d(Nametag):
                 True,
                 False,
                 self.bbOffset,
-                NametagGlobals.camera,
+                NodePath(), # Empty; look at scene camera
                 Point3(0,0,0)))
 
     def setBillboardOffset(self, bbOffset):
