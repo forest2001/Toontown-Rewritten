@@ -29,6 +29,8 @@ class ThumpAttack(NodePath, DirectObject):
         self.geom.setDepthWrite(0)
         self.geom.setDepthTest(0)
         self.geom.setBin('shadow', 0)
+        self.geom.setTexture(loader.loadTexture('phase_4/maps/shockwave.jpg',
+                                                'phase_4/maps/shockwave_a.rgb'))
 
         self.collisionName = 'thumpCollide-%d' % id(self)
         self.collision = self.attachNewNode(CollisionNode(self.collisionName))
