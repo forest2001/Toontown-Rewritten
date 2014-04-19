@@ -73,7 +73,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
           'idle': 'phase_4/models/events/election_slappyStand-idle',
           'watch-idle': 'phase_4/models/events/election_slappyStand-watch-idle',
           'sad': 'phase_4/models/events/election_slappyStand-reaction',
-          'sad-idle': 'phase_4/models/events/election_slappyStand-reaction-idle'
         })
         self.slappyStand.reparentTo(self.showFloor)
         self.slappyStand.setPosHprScale(-62.45, 14.39, 0.01, 325, 0, 0, 0.55, 0.55, 0.55)
@@ -226,6 +225,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.finishedAlecSpeech = False
             self.finishedCogLanding = False
             self.finishedInvasion = False
+            self.finishedInvasionEnding = False
 
     def enterOff(self, offset):
         base.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
@@ -391,8 +391,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
                 character.useLOD(1000)
                 character.addActive()
                 character.startBlink()
-                character.setH(90)
+                character.initializeBodyCollisions('toon')
                 character.head = character.find('**/__Actor_head')
+                character.setH(90)
             self.slappyStand.loop('watch-idle')
             self.ignore('enter' + self.pieCollision.node().getName())
             self.alec.setPos(-4.5, -0.14, 3.13)
@@ -400,18 +401,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.flippy.setPos(2, -10, 3.23)
 
         if self.finishedCogLanding:
-            self.slappyStand.loop('sad-idle')
+            self.slappyStand.pose('sad', 249)
             self.flippy.setPosHpr(-15, -12, 0, 0, 0, 0)
             self.alec.setPos(-1.5, -0.14, 3.13)
             self.slappy.hide()
             self.slappy.removeActive()
             self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
-            base.cr.cameraManager.disableScreen()
             self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
         if self.finishedInvasion:
-            self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
+            base.cr.cameraManager.disableScreen()
             self.flippy.setHpr(95, 0, 0)
+            self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
+            self.alec.setPosHpr(18.0, 41.2, 0, -130, 0, 0)
+
+        if self.finishedInvasionEnding:
+            self.flippy.setPos(2, -10, 3.23)
+            self.flippy.setH(90)
 
     def enterPreShow(self, offset):
         # And now for the Pre-election sequence
@@ -457,9 +463,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         )
         self.surleeLeaveInterval.start()
         self.surleeLeaveInterval.setT(offset)
-
-    def exitPreShow(self):
-        self.surleeLeaveInterval.finish()
 
     def enterBegin(self, offset):
         # Get ourselves caught up with what just happened
@@ -514,6 +517,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.alecHallInterval.finish()
         self.slappyHallInterval.finish()
         self.flippyHallInterval.finish()
+        # This is still going on when Begin starts. Just cleaning it up here rather than PreShow.
+        self.surleeLeaveInterval.finish()
 
     def enterAlecSpeech(self, offset):
         # Get ourselves caught up with what just happened
@@ -521,41 +526,68 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.finishedBegin = True
         self.catchUp()
 
-        # TODO: This was written on the spot and needs to be more interesting.
         self.alecSpeech = Sequence(
             Func(base.cr.cameraManager.setMainCamera, self.cameras[1].getDoId()),
             # Alec drones on about how much he loves elections, the candidates give their speeches
             Func(self.alec.setChatAbsolute, 'Hellooo Toontown~!', CFSpeech|CFTimeout),
-            Wait(5),
+            Wait(1),
+            self.flippy.head.hprInterval(1, (-25, 0, 0), blendType='easeInOut'),
+            Wait(1),
+            self.slappy.head.hprInterval(1, (20, 3, 0), blendType='easeInOut'),
+            Wait(1),
             Func(self.alec.setChatAbsolute, 'As many of you know, I\'m your Hilarious Host and Eccentric Elector: Alec Tinn!', CFSpeech|CFTimeout),
             Wait(8.5),
             Func(self.alec.setChatAbsolute, 'And of course, we can\'t forget about our two toonerific toons who have been selected to fight for the Presidency...', CFSpeech|CFTimeout),
             Wait(9),
             Func(self.alec.setChatAbsolute, 'Slappy Quackintosh, and Flippy Doggenbottom!', CFSpeech|CFTimeout),
-            Wait(6.5),
+            Wait(3.3),
+            Func(self.slappy.play, 'wave'),
+            self.flippy.head.hprInterval(1, (-70, 0, 0), blendType='easeInOut'),
+            Wait(1.2),
+            self.flippy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
+            Func(self.slappy.loop, 'neutral'),
             Func(self.alec.setChatAbsolute, 'I must say, this turnout is absolutely, positivley, extra-tooneriffically, astounding!', CFSpeech|CFTimeout),
             Wait(6),
-            Func(self.alec.setChatAbsolute, 'It\'s truly an honor to be here on this day, and I''m sure I speak for all of us when I thank you for coming.', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'It\'s truly an honor to be here on this day, and I\'m sure I speak for all of us when I thank you for coming.', CFSpeech|CFTimeout),
             Wait(8),
             Func(self.alec.setChatAbsolute, 'Now, the votes are almost ready to be tallied! Flippy, Slappy, do either of you have anything to say before the moment of truth?', CFSpeech|CFTimeout),
             Wait(10),
             Func(base.cr.cameraManager.setMainCamera, self.cameras[2].getDoId()),
             Func(self.slappy.setChatAbsolute, 'The only thing I have to say, no matter who wins...', CFSpeech|CFTimeout),
-            Wait(6.5),
+            Wait(2),
+            Parallel(
+                self.flippy.head.hprInterval(1, (-70, 0, 0), blendType='easeInOut'),
+                Sequence(
+                    Wait(0.5),
+                    self.alec.head.hprInterval(1, (-70, 0, 0), blendType='easeInOut')
+                )
+            ),
+            Wait(3),
             Func(self.slappy.setChatAbsolute, 'I know that Toontown is going to grow to be even more... "Toontastic" than ever before.', CFSpeech|CFTimeout),
             Wait(8),
             Func(self.slappy.setChatAbsolute, 'All of you are truer-than-truly the best!', CFSpeech|CFTimeout),
-            Wait(10),
+            Wait(7),
+            self.flippy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
+            Wait(1),
             Func(base.cr.cameraManager.setMainCamera, self.cameras[3].getDoId()),
-            Func(self.flippy.setChatAbsolute, 'Like Slappy said, I can''t even begin to thank all of you Toontastic toons for this.', CFSpeech|CFTimeout),
-            Wait(8),
-            Func(self.flippy.setChatAbsolute, 'Even after all of this terrific time together, I''m still speechless that I''m here today.', CFSpeech|CFTimeout),
+            Func(self.flippy.setChatAbsolute, 'Like Slappy said, I can\'t even begin to thank all of you Toontastic toons for this.', CFSpeech|CFTimeout),
+            Wait(1),
+            self.alec.head.hprInterval(2, (70, 0, 0), blendType='easeInOut'),
+            Wait(5),
+            Func(self.flippy.setChatAbsolute, 'Even after all of this terrific time together, I\'m still speechless that I\'m here today.', CFSpeech|CFTimeout),
             Wait(8),
             Func(self.flippy.setChatAbsolute, 'Here\'s to Toontown, Slappy, and all of you!', CFSpeech|CFTimeout),
-            Wait(7),
+            Wait(3),
+            self.slappy.head.hprInterval(1, (70, 0, 0), blendType='easeInOut'),
+            Wait(3),
             Func(base.cr.cameraManager.setMainCamera, self.cameras[4].getDoId()),
             Func(self.alec.setChatAbsolute, 'Well said, the both of you!', CFSpeech|CFTimeout),
-            Wait(5),
+            self.alec.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
+            Wait(1),
+            self.flippy.head.hprInterval(1, (-25, 0, 0), blendType='easeInOut'),
+            Wait(1),
+            self.slappy.head.hprInterval(1, (20, 3, 0), blendType='easeInOut'),
+            Wait(1),
             Func(self.alec.setChatAbsolute, 'Ooh, I\'m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
             Wait(7),
             Func(self.alec.setChatAbsolute, 'Normally, at this time I\'d pull my GRAND ELECTORAL LEVER to start up these two spinners, which would then count down and announce the votes in an amazing buildup!', CFSpeech|CFTimeout),
@@ -570,9 +602,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.setChatAbsolute, 'Hrmph. Instead, however, I have the honor of announcing the votes myself.', CFSpeech|CFTimeout),
             Wait(7),
             Func(self.alec.setChatAbsolute, 'After counting over 10,000 registered votes...', CFSpeech|CFTimeout),
-            Wait(5),
+            Wait(2),
+            self.slappy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
+            Wait(2),
             Func(self.alec.setChatAbsolute, 'The totals ended up being 5,437 to 4,821. I\'ve honestly never seen an election so close!', CFSpeech|CFTimeout),
-            Wait(8),
+            Wait(4),
+            self.flippy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
+            Wait(3),
             Func(self.alec.setChatAbsolute, 'The real question is, who did the votes belong to? Let\'s find out, shall we?', CFSpeech|CFTimeout),
         )
         self.alecSpeech.start()
@@ -596,10 +632,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.setChatAbsolute, 'With 5,437 votes from Toons worldwide...', CFSpeech|CFTimeout),
             Wait(4),
             Func(base.playMusic, musicAnnouncement, looping=0, volume=0.8),
+            self.alec.head.hprInterval(1, (-70, 0, 0), blendType='easeInOut'),
             Wait(1),
             # Slappy's victory!
             Func(self.alec.setChatAbsolute, 'SLAPPYYYY~ QUACKINTOSH!', CFSpeech|CFTimeout),
             Wait(2),
+            self.flippy.head.hprInterval(1, (-60, 0, 0), blendType='easeInOut'),
+            Func(self.slappy.showLaughMuzzle),
             Func(base.cr.cameraManager.setMainCamera, self.cameras[2].getDoId()),
             ActorInterval(self.slappy, 'good-putt'),
             ActorInterval(self.slappy, 'happy-dance'),
@@ -648,8 +687,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.cogSequence = Sequence(
             Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 53, 17, 8, -491, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
             Parallel(Func(self.suit.reparentTo, render), Func(self.suit.addActive), Func(mtrack.start, offset)),
-            Wait(3),
+            self.flippy.head.hprInterval(1, (-15, -10, 0), blendType='easeInOut'),
+            Wait(1),
+            self.alec.head.hprInterval(1, (-15, -5, 0), blendType='easeInOut'),
             Func(self.slappy.setChatAbsolute, 'I will ensure- Uhh...', CFSpeech|CFTimeout),
+            Func(self.slappy.hideLaughMuzzle),
             Wait(2),
             # The cog has landed. Surlee knows what's coming.
             Func(self.surleeR.sadEyes),
@@ -665,7 +707,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.slappy.posHprInterval(0.4, (-13, 8, 0), (125, 0, 0)),
             Wait(0.8),
             Func(self.slappy.loop, 'neutral'),
-            Wait(0.5),
+            self.slappy.head.hprInterval(0.5, (-3, 5, 0)),
             Func(self.slappy.setChatAbsolute, 'My name is Slappy, the newly elected President of the Toon Council in this Toonerrific Town.', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.suit.setChatAbsolute, 'President, you say? Just the Toon I need to speak with.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
@@ -689,10 +731,15 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.suit.setChatAbsolute, 'I like your lingo, Toon. You know how to schmooze.', CFSpeech|CFTimeout, dialogue = self.speechMurmurSfx),
             Wait(6),
             Func(self.suit.setChatAbsolute, 'However, you seem to need a smear of Positive Reinforcement.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
-            Wait(5),
+            #Func(self.suit.play, 'speak'),
+            Wait(3),
+            self.slappy.head.hprInterval(1, (0, 0, 0)),
+            Func(self.slappy.sadEyes),
+            Wait(1),
             # Mother of Walt, he's dead
             Func(self.slappy.play, 'lose'),
             Wait(2),
+            #Func(self.suit.loop, 'neutral'),
             Func(base.playSfx, sfxSad, volume=0.6),
             Wait(1.8),
             Func(base.playMusic, musicSad, looping=0),
@@ -709,9 +756,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
             # Flippy isn't happy at all, he's going histerical
             Parallel(Func(self.cameras[3].setState, 'Move', globalClockDelta.getRealNetworkTime(), 55, -22, 6, -338, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[3].getDoId())),
             Parallel(Func(self.flippy.setChatAbsolute, "What have you done?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'run')),
-            self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)),
+            Wait(0.5),
+            Parallel(self.flippy.posHprInterval(0.5, (-4.2, -9.5, 3.23), (70, 0, 0)), self.flippy.head.hprInterval(0.5, (0, 0, 0), blendType='easeInOut')),
             Wait(0.45),
             Func(self.flippy.play, 'jump'),
+            Wait(0.45),
             self.flippy.posInterval(0.2, (-7.5, -9.2, 3.5)),
             self.flippy.posHprInterval(0.4, (-14, -9, 0), (50, 0, 0)),
             Wait(0.2),
@@ -722,26 +771,29 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Parallel(Func(self.flippy.setChatAbsolute, "Where did you send him?! Where is he?!", CFSpeech|CFTimeout), Func(self.flippy.loop, 'neutral')),
             Wait(2.5),
             Func(self.alec.setChatAbsolute, "Flippy, NO! Get away from it!", CFSpeech|CFTimeout),
-            Wait(6),
+            self.alec.head.hprInterval(1, (-5, -5, 0), blendType='easeInOut'),
+            Wait(5),
             Func(self.flippy.setChatAbsolute, "What... What are you?", CFSpeech|CFTimeout),
             Wait(4),
             # The Yesman has found a new business partner
             Func(self.suit.setChatAbsolute, 'I don\'t like your tone. Perhaps you need a drop of Positive Reinforcement as well.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
             Wait(3),
-            Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0))),
+            Parallel(Func(self.flippy.setChatAbsolute, "No.. No, get away. I don't need your help.", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -7, 0)), self.alec.head.hprInterval(1, (0, -5, 0), blendType='easeInOut')),
             Func(self.flippy.loop, 'neutral'),
             Wait(1.5),
             Func(self.suit.loop, 'walk'),
             Parallel(Func(self.suit.setChatAbsolute, 'Let me confirm our meeting to discuss this. I won\'t take no for an answer.', CFSpeech|CFTimeout, dialogue = self.speechMurmurSfx), self.suit.posInterval(2, (65, -1, 4.0))),
             Func(self.suit.loop, 'neutral'),
-            Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=3), self.flippy.posInterval(3, (-15, -12, 0))),
+            Parallel(Func(self.flippy.setChatAbsolute, "Stop it, this isn't fun!", CFSpeech|CFTimeout), self.alec.head.hprInterval(1, (10, -5, 0), blendType='easeInOut'), ActorInterval(self.flippy, 'walk', loop=1, playRate=-1, duration=2), self.flippy.posInterval(2, (-15, -12, 0))),
             Func(self.flippy.loop, 'neutral'),
-            Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
-            Wait(2),
+            Func(self.suit.loop, 'walk'),
+            Parallel(Func(self.suit.setChatAbsolute, 'Fun cannot exist without order.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx), self.suit.posInterval(2, (65, -5, 4.0))),
+            Func(self.suit.loop, 'neutral'),
             # Flippy makes a last minute attempt to try and slow him down. It... kills him?
             Parallel(ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(self.flippy.setChatAbsolute, "I'm warning you, stay back. Please.", CFSpeech|CFTimeout), Func(self.pie.reparentTo, self.flippy.rightHand)),
             Wait(1),
             Func(self.suit.setChatAbsolute, 'Don\'t worry, I haven\'t been wrong yet.', CFSpeech|CFTimeout, dialogue = self.speechStatementSfx),
+            #Func(self.suit.play, 'speak'),
             Wait(1.5),
             Parallel(
                 Sequence(
@@ -751,21 +803,17 @@ class DistributedElectionEvent(DistributedObject, FSM):
                 Func(self.flippy.setChatAbsolute, "Stay AWAY from me!", CFSpeech|CFTimeout),
                 Func(self.surleeR.normalEyes),
                 Sequence(
-                    Wait(0.8),
+                    Wait(0.6),
                     Func(self.pie.wrtReparentTo, render),
+                    ProjectileInterval(self.pie, endPos=Point3(65, -5, 9.0), duration=0.1),
+                    Func(self.pie.removeNode),
                     Parallel(
-                        ProjectileInterval(self.pie, endPos=Point3(65, -1, 7.0), duration=0.4)
+                        Func(self.setSuitDamage, 36),
+                        Func(self.suit.hide),
+                        Func(self.suit.removeActive)
                     )
                 )
-            ),
-            Parallel(
-                Func(self.suit.hide),
-                Func(self.suit.removeActive),
-                Func(self.setSuitDamage, 36),
-                Func(self.pie.removeNode)
-            ),
-            Wait(5),
-            Func(base.cr.cameraManager.disableScreen)
+            )
         )
         self.cogSequence.setT(offset)
         self.cogSequence.start()
@@ -787,14 +835,28 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ActorInterval(self.surlee, 'scientistEmcee', startFrame=251, endFrame=314),
             ActorInterval(self.surlee, 'scientistEmcee', startFrame=314, endFrame=251)
         )
+        # TODO: Make Alec say things when you get near him.
+        # He is hiding, and scared of anyone who gets near.
+        self.alecRunAway = Sequence(
+            Func(self.alec.loop, 'walk'),
+            self.alec.posInterval(1, (4.2, -0.25, 3.13)),
+            self.alec.posHprInterval(3, (12.9, -3.3, 0), (0, 0, 0)),
+            Func(self.alec.loop, 'neutral'),
+            Wait(0.5),
+            Func(self.alec.loop, 'run'),
+            self.alec.posInterval(3, (18.0, 41.2, 0)),
+            Func(self.alec.loop, 'walk'),
+            self.alec.hprInterval(1.3, (-130, 0, 0)),
+            Func(self.alec.loop, 'neutral'),
+        )
         self.surleeIntroInterval = Sequence(
             Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 36, -4, 7, -131, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
             Func(self.surleeR.loop, 'walk'),
             Func(self.surleeR.setChatAbsolute, 'Everyone, listen. There\'s no time to explain!', CFSpeech|CFTimeout),
-            self.surleeR.posHprInterval(1, (-32, -15, 0), (40, 0, 0)),
+            self.surleeR.posHprInterval(1, (-32, -15, 0), (50, 0, 0)),
             Func(self.surleeR.loop, 'neutral'),
             Func(self.cameras[4].setState, 'Move', globalClockDelta.getRealNetworkTime(), 10, -24, 7, -263, 0, 0),
-            self.flippy.head.hprInterval(1, (80, 0 , 0), blendType='easeInOut'),
+            Parallel(self.alec.head.hprInterval(1, (15, 0, 0), blendType='easeInOut')), self.flippy.head.hprInterval(1, (80, 0 , 0), blendType='easeInOut'),
             Parallel(Func(self.flippy.loop, 'walk'), self.flippy.hprInterval(2, (95, 0, 0)), self.flippy.head.hprInterval(2, (0, 0, 0))),
             Func(self.flippy.loop, 'neutral'),
             Wait(2),
@@ -803,9 +865,12 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.surleeR.setChatAbsolute, '..."Cogs."', CFSpeech|CFTimeout),
             Wait(3),
             Func(self.surleeR.setChatAbsolute, 'Now take up arms, there\'s more on the way!', CFSpeech|CFTimeout),
-            Wait(5),
+            Wait(3),
+            Func(self.alecRunAway.start, offset),
+            Wait(2),
             Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
             Wait(7),
+            Func(base.cr.cameraManager.disableScreen),
             Func(base.cr.cameraManager.setMainCamera, self.cameras[4].getDoId()),
             Wait(3),
             Parallel(
@@ -817,7 +882,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
             ),
             Func(self.surlee.setChatAbsolute, 'Flippy, I\'m going to need you over here to help with the pies. Can you get cooking?', CFSpeech|CFTimeout),
             Wait(7),
-            Func(self.flippy.setChatAbsolute, 'I can certainly try. Stand, get ready to whip up a massive amount of cream pies.', CFSpeech|CFTimeout),
+            Func(self.flippy.setChatAbsolute, 'I can certainly try.', CFSpeech|CFTimeout),
+            Wait(1),
+            Func(self.flippy.loop, 'run'
+            self.flippy.posHprInterval(3.5, (-38, -18.5, 0), (100, 0, 0)),
+            Func(self.flippy.loop, 'walk'),
+            self.flippy.posHprInterval(1.5, (-38, -18.5, 0), (75, 0, 0)),
+            Func(self.flippy.loop, 'neutral')
         )
         self.surleeIntroInterval.start()
         self.surleeIntroInterval.setT(offset)
@@ -863,6 +934,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         cakeSeq.setT(offset)
 
     def enterWrapUp(self, offset):
+        # Get ourselves caught up with what just happened
+        self.finishedPreShow = True
+        self.finishedBegin = True
+        self.finishedCogLanding = True
+        self.finishedInvasion = True
+        self.finishedInvasionEnding = True
+        self.catchUp()
+
         # Tell the credits our toon name and dna.
         base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
     
@@ -878,11 +957,6 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.logo.setScale(0.6)
         self.logo.setPos(0, 1, 0.3)
         self.logo.setColorScale(1, 1, 1, 0)
-
-        # Temporarily put Flippy here manually
-        self.flippy.reparentTo(self.showFloor)
-        self.flippy.setPos(2, -10, 3.23)
-        self.flippy.setH(90)
         
         self.portal = loader.loadModel('phase_3.5/models/props/portal-mod.bam')
         self.portal.reparentTo(render)

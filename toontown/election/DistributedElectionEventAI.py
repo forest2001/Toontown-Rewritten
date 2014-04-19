@@ -126,9 +126,9 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def enterPreShow(self):
         self.showAnnounceInterval = Sequence(
-            Func(self.sendGlobalUpdate, 'TOON HQ: We just got word from Alec Tinn that the Toon Council Presidential Elections will be starting any second.'),
+            Func(self.sendGlobalUpdate, 'TOON HQ: The Toon Council Presidential Elections will be starting any second!'),
             Wait(5),
-            Func(self.sendGlobalUpdate, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a minimum.')
+            Func(self.sendGlobalUpdate, 'TOON HQ: Please silence your Shtickerbooks and keep any Oinks, Squeaks, and Owooos to a low rustle.')
         )
         self.showAnnounceInterval.start()
 
