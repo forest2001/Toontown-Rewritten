@@ -12,6 +12,7 @@ from InvasionSuitBase import InvasionSuitBase
 from toontown.distributed.DelayDeletable import DelayDeletable
 from toontown.distributed.DelayDelete import *
 import random
+from ThumpAttack import ThumpAttack
 
 class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayDeletable):
     def __init__(self, cr):
@@ -53,11 +54,8 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         # Get a few things defined for our Shakers
         self.shakerRadialAttack = None
         self.stompSfx = loader.loadSfx('phase_5/audio/sfx/SA_tremor.ogg')
-        self.msStartStomp = Sequence(
-            Func(self.play, 'walk', fromFrame=0, toFrame=22),
-            Wait(0.9),
-            Func(self.loop, 'walk', fromFrame=22, toFrame=62)
-        )
+        self.msStompLoop = None
+        self.msStartStomp = None
         self.msSoundLoop = Sequence(SoundInterval(self.stompSfx, duration=1.6, startTime=0.3, volume=0.4, node=self))
 
     def announceGenerate(self):
@@ -143,18 +141,20 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
 
     def enterMarch(self, time):
         if self.style.name == 'ms':
+            self.__stompGenerate()
             self.msStartStomp.start(time)
             self.msSoundLoop.loop(time)
-            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
         else:
             self.loop('walk', 0)
         self.startMoveTask()
 
     def exitMarch(self):
-        if self.msStartStomp.isPlaying():
+        if self.msStartStomp and self.msStartStomp.isPlaying():
             self.msStartStomp.finish()
         if self.msSoundLoop.isPlaying():
             self.msSoundLoop.finish()
+        if self.msStompLoop and self.msStompLoop.isPlaying():
+            self.msStompLoop.finish()
         self.loop('neutral', 0)
         self.stopMoveTask()
         self.stopShakerRadialAttack()
@@ -162,7 +162,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
 
     def enterAttack(self, time):
         if self.style.name == 'ms':
-            self.shakerRadialAttack = taskMgr.add(self.__checkToonsInRadius, self.uniqueName('ShakerAttack'))
+            self.__stompGenerate()
             self.msStartStomp.start(time)
             self.msSoundLoop.loop(time)
             return
@@ -174,10 +174,12 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
             self._attackInterval.pause()
             self.cleanupProp(self._attackInterval.prop, self._attackInterval.propIsActor)
             #hehehe manual cleanup. so bad
-        if self.msStartStomp.isPlaying():
+        if self.msStartStomp and self.msStartStomp.isPlaying():
             self.msStartStomp.finish()
         if self.msSoundLoop.isPlaying():
             self.msSoundLoop.finish()
+        if self.msStompLoop and self.msStompLoop.isPlaying():
+            self.msStompLoop.finish()
         self.stopShakerRadialAttack()
 
     def setAttackInfo(self, targetId, attackProp, attackDamage):
@@ -458,15 +460,35 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         if toon.hp > 0:
             base.localAvatar.enableAvatarControls()
 
-    def __checkToonsInRadius(self, task):
+    def __stomp(self):
         if self.exploding:
-            return task.done
+            return
 
-        toon = base.localAvatar
-        if toon:
-            if Vec3(toon.getPos(self)).length() <= SafezoneInvasionGlobals.MoveShakerRadius:
-                self.applyShakeAttack(toon, SafezoneInvasionGlobals.MoveShakerDamageRadius)
-        return task.cont
+        ta = ThumpAttack(lambda: \
+            self.applyShakeAttack(base.localAvatar,
+                                  SafezoneInvasionGlobals.MoveShakerDamageRadius)
+                        )
+        ta.reparentTo(self.getParent())
+        ta.setPos(self, 0, 0, 0)
+        ta.start()
+
+    def __stompGenerate(self):
+        if not self.msStompLoop:
+            self.msStompLoop = Sequence(
+                ActorInterval(self, 'walk', startFrame=22, endFrame=39),
+                Func(self.__stomp),
+                ActorInterval(self, 'walk', startFrame=39, endFrame=59),
+                Func(self.__stomp),
+                ActorInterval(self, 'walk', startFrame=59, endFrame=62)
+            )
+
+        if not self.msStartStomp:
+            self.msStartStomp = Sequence(
+                Func(self.play, 'walk', fromFrame=0, toFrame=22),
+                Wait(0.9),
+                Func(self.msStompLoop.loop)
+            )
+
 
     def applyShakeAttack(self, toon, damage):
         if not getattr(localAvatar.controlManager.currentControls, 'isAirborne', 0):
