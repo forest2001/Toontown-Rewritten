@@ -14,7 +14,7 @@ class ThumpAttack(NodePath, DirectObject):
 
     INNER_RADIUS = 0.95 # Only outer 5% of the shockwave shell counts.
 
-    SHAKE_INTENSITY = 64.0 # How dizzy we get from this thump.
+    SHAKE_INTENSITY = 90.0 # How dizzy we get from this thump.
 
     cm = CardMaker('thump_geom')
     cm.setFrame(-1, 1, -1, 1)
