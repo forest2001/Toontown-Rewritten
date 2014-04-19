@@ -113,9 +113,9 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'Begin'),
             Wait(10),
             Func(event.b_setState, 'AlecSpeech'),
-            Wait(155),
+            Wait(128),
             Func(event.b_setState, 'VoteBuildup'),
-            Wait(16),
+            Wait(42),
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
@@ -139,6 +139,12 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         pass
 
     def enterAlecSpeech(self):
+        pass
+
+    def enterVoteBuildup(self):
+        pass
+
+    def enterWinnerAnnounce(self):
         pass
 
     def enterCogLanding(self):

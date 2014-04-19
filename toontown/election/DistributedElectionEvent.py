@@ -40,16 +40,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         podium.reparentTo(self.showFloor)
         podium.setPosHpr(-6, 0, 3, 270, -2, 5)
         podium.setScale(0.65)
-        counterLeft = Actor.Actor('phase_4/models/events/election_counterLeft-mod', {'count': 'phase_4/models/events/election_counterLeft-countSeq'})
-        counterLeft.reparentTo(self.showFloor)
-        counterLeft.setPosHpr(13.5, 10, 2.95, 270, 0, 0)
-        counterLeft.setScale(2.0)
-        counterRight = Actor.Actor('phase_4/models/events/election_counterRight-mod', {'count': 'phase_4/models/events/election_counterRight-countSeq'})
-        counterRight.reparentTo(self.showFloor)
-        counterRight.setPosHpr(13.5, -10, 3.25, 270, 0, 0)
-        counterRight.setScale(2.0)
-        counterLeft.pose('count', 0)
-        counterRight.pose('count', 0)
+        self.counterLeft = Actor.Actor('phase_4/models/events/election_counterLeft-mod', {'body': 'phase_4/models/events/election_counterLeft-countSeq'})
+        self.counterLeft.reparentTo(self.showFloor)
+        self.counterLeft.setPosHpr(13.5, 10, 2.95, 270, 0, 0)
+        self.counterLeft.setScale(2.0)
+        self.counterRight = Actor.Actor('phase_4/models/events/election_counterRight-mod', {'body': 'phase_4/models/events/election_counterRight-countSeq'})
+        self.counterRight.reparentTo(self.showFloor)
+        self.counterRight.setPosHpr(13.5, -10, 3.25, 270, 0, 0)
+        self.counterRight.setScale(2.0)
         rope = loader.loadModel('phase_4/models/events/election_rope')
         rope.reparentTo(self.showFloor)
         rope.setPosHpr(-34, 18, 0.46, 270, 0, 0)
@@ -287,6 +285,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
             )
             self.surleeIntroInterval.loop()
             self.surleeIntroInterval.setT(offset)
+        self.counterLeft.pose('body', 0)
+        self.counterRight.pose('body', 0)
+
 
     def exitIdle(self):
         if base.config.GetBool('want-doomsday', False):
@@ -594,25 +595,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(1),
             Func(self.alec.setChatAbsolute, 'Ooh, I\'m just jittering with excitement. Are you toons ready to hear the winners?', CFSpeech|CFTimeout),
             Wait(7),
-            Func(self.alec.setChatAbsolute, 'Normally, at this time I\'d pull my GRAND ELECTORAL LEVER to start up these two spinners, which would then count down and announce the votes in an amazing buildup!', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'Without further ado, it is now time to start the GRAND ELECTORAL COUNTERS!', CFSpeech|CFTimeout),
             Wait(8),
-            Func(self.alec.setChatAbsolute, '...But thanks to SOME certain toons who like to play with Cakes and Fireworks, they\'re broken.', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'Here we gooooo...', CFSpeech|CFTimeout),
             Wait(4),
-            Func(self.flippy.setChatAbsolute, 'Err- heh..', CFSpeech|CFTimeout),
-            Wait(0.4),
-            Func(self.slappy.setChatAbsolute, 'Yeahhh, about that...', CFSpeech|CFTimeout),
-            Wait(4),
-            Func(self.alec.setChatAbsolute, 'Hrmph. Instead, however, I have the honor of announcing the votes myself.', CFSpeech|CFTimeout),
-            Wait(7),
-            Func(self.alec.setChatAbsolute, 'After counting over 10,000 registered votes...', CFSpeech|CFTimeout),
-            Wait(2),
-            self.slappy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
-            Wait(2),
-            Func(self.alec.setChatAbsolute, 'The totals ended up being 5,437 to 4,821. I\'ve honestly never seen an election so close!', CFSpeech|CFTimeout),
-            Wait(4),
-            self.flippy.head.hprInterval(1, (0, 0, 0), blendType='easeInOut'),
-            Wait(3),
-            Func(self.alec.setChatAbsolute, 'The real question is, who did the votes belong to? Let\'s find out, shall we?', CFSpeech|CFTimeout),
         )
         self.alecSpeech.start()
         self.alecSpeech.setT(offset)
@@ -628,12 +614,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
         # And now it's time to announce the winner
         musicAnnouncement = base.loadMusic(ElectionGlobals.AnnouncementMusic)
+        sfxDrumroll = loader.loadSfx('phase_4/audio/sfx/EE_Drumroll.ogg')
         self.buildupSequence = Sequence(
             # Alec builds up some hype before...
-            Func(self.alec.setChatAbsolute, 'And the winner is...', CFSpeech|CFTimeout),
+            Func(self.alec.setChatAbsolute, 'The winner is...', CFSpeech|CFTimeout),
             Wait(4),
-            Func(self.alec.setChatAbsolute, 'With 5,437 votes from Toons worldwide...', CFSpeech|CFTimeout),
+            Parallel(Func(self.counterLeft.play, 'body'), Func(self.counterRight.play, 'body')),
+            Wait(3.7),
+            Func(base.playSfx, sfxDrumroll),
+            Wait(3.3),
+            Func(self.alec.setChatAbsolute, 'Oh boy, you can feel the suspense!', CFSpeech|CFTimeout),
+            Wait(9),
+            Func(self.alec.setChatAbsolute, 'It\'s...', CFSpeech|CFTimeout),
             Wait(4),
+            Func(self.alec.setChatAbsolute, 'HOLY SMOKES!', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.alec.setChatAbsolute, 'Well, there you have it. The new President of the Toon Council...', CFSpeech|CFTimeout),
+            Wait(5),
             Func(base.playMusic, musicAnnouncement, looping=0, volume=0.8),
             self.alec.head.hprInterval(1, (-70, 0, 0), blendType='easeInOut'),
             Wait(1),
@@ -1077,7 +1074,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.cowardSequence = Sequence(
                 Parallel(
                     ActorInterval(self.alec, 'cringe'),
-                    Func(self.alec.setChatAbsolute, 'Phew! It\'s only you. Those cogs are scaring me!', CFSpeech|CFTimeout)
+                    Func(self.alec.setChatAbsolute, 'Don\'t hurt me!! Oh, phew. It\'s only you.', CFSpeech|CFTimeout)
                     )
             )
         self.cowardSequence.start()
@@ -1087,9 +1084,11 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.ignore('enter' + self.alecNode.node().getName())
 
     '''
-     ELETION DAY MISC.
+     ELECTION DAY MISC.
        Just a few other bits and pieces we need for Election Day, unrelated to the main sequence.
     '''
+    def moveCamera(self, id, x, y, z, h, p):
+        self.cameras[id].setState('Move', globalClockDelta.getRealNetworkTime(), x, y, z, h, p, 0)
 
     def saySurleePhrase(self, phrase, interrupt, broadcast):
         self.surlee.setChatAbsolute(phrase, CFSpeech|CFTimeout, interrupt = interrupt)
