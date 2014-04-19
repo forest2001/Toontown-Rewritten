@@ -108,6 +108,9 @@ CATEGORY_DEBUG = MagicWordCategory('Debug cheats', defaultAccess=300,
 CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=300,
     doc='These are Magic Words focused on allowing moderators to deal with '
         'unruly players.')
+CATEGORY_CAMERA = MagicWordCategory('Camera controls', defaultAccess=300,
+    doc='These Magic Words manually control the camera system, originally implemented '
+        'with Doomsday.')
 
 
 class MagicWord:

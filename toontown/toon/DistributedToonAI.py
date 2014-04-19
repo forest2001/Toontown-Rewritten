@@ -1,3 +1,4 @@
+from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 from direct.directnotify import DirectNotifyGlobal
@@ -52,9 +53,6 @@ from otp.ai.MagicWordGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 import shlex
-
-# April Toons imports
-from toontown.toonbase import AprilToonsGlobals
 
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
@@ -261,18 +259,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
             self.applyAlphaModifications()
-            
-            if hasattr(self.air, 'aprilToonsMgr'):
-                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomDialogue):
-                    # Give them a random animal sound.
-                    self.b_setAnimalSound(random.randint(0, 8))
-                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
-                    # Start a loop for random toon effects.
-                    self.wantRandomEffects = True
-                    taskMgr.doMethodLater(random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime), self.randomToonEffects, self.uniqueName('random-toon-effects'))
-                if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventSirMaxBirthday):
-                    # This should be changed in the future
-                    self.b_setHat(12, 0, 0)
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -284,14 +270,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
-                self.sendUpdate('setLastHood', [hood])
-                self.b_setDefaultZone(hood)
+                if not simbase.config.GetBool('want-doomsday', True):
+                    self.sendUpdate('setLastHood', [hood])
+                    self.b_setDefaultZone(hood)
 
                 hoodsVisited = list(self.getHoodsVisited())
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
-                    
+                
                 if zoneId == ToontownGlobals.GoofySpeedway:
                     tpAccess = self.getTeleportAccess()
                     if not ToontownGlobals.GoofySpeedway in tpAccess:
@@ -560,9 +547,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if self.dna.headColor not in allowedColors:
                 self.dna.headColor = allowedColors[0]
                 changed = True
-            if not simbase.config.GetBool('want-glove-colors', False) and self.dna.gloveColor != 0:
-                self.dna.gloveColor = 0
-                change = True
             if changed:
                 self.d_setDNAString(self.dna.makeNetString())
         return not changed
@@ -2625,6 +2609,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setPieThrowType(self, pieThrowType):
         self.pieThrowType = pieThrowType
 
+    def b_setHealthDisplay(self, mode):
+        self.setHealthDisplay(mode)
+        self.d_setHealthDisplay(mode)
+
+    def d_setHealthDisplay(self, mode):
+        self.sendUpdate('setHealthDisplay', [mode])
+
+    def setHealthDisplay(self, mode):
+        pass
+
     def d_setTrophyScore(self, score):
         self.sendUpdate('setTrophyScore', [score])
 
@@ -2748,10 +2742,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.notify.debug('Toon-up for ' + self.name)
       #Slappy's Alpha Only Unite
         elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
-            self.b_setPieType(4)
-            self.b_setNumPies(20)
-            self.b_setPieThrowType(1)
-            self.notify.debug('Alpha Pie Restock for ' + self.name)
+            if self.hp > 0:
+                self.b_setPieType(4)
+                self.b_setNumPies(20)
+                self.b_setPieThrowType(1)
+                self.notify.debug('Alpha Pie Restock for ' + self.name)
 #        elif msgType == ResistanceChat.RESISTANCE_RESTOCK:
 #            self.inventory.NPCMaxOutInv(msgValue)
 #            self.d_setInventory(self.inventory.makeNetString())
@@ -4436,35 +4431,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def stopPing(self):
         taskMgr.remove('requestping-' + str(self.doId))
 
-    def setAnimalSound(self, index):
-        self.animalSound = index
-        
-    def d_setAnimalSound(self, index):
-        self.sendUpdate('setAnimalSound', [index])
-        
-    def b_setAnimalSound(self, index):
-        self.setAnimalSound(index)
-        self.d_setAnimalSound(index)
-        
-    def getAnimalSound(self):
-        return self.animalSound
-        
-    def randomToonEffects(self, task):
-        if self is None or not hasattr(self.air, 'aprilToonsMgr'):
-            # Object deleted.
-            return
-        if not self.wantRandomEffects:
-            # Admin manually disabled this via MagicWord.
-            return
-        if self.air.aprilToonsMgr.isEventActive(AprilToonsGlobals.EventRandomEffects):
-            self.b_setCheesyEffect(random.choice(AprilToonsGlobals.RandomCheesyList), 0, 0)
-        task.delayTime = random.randint(AprilToonsGlobals.RandomCheesyMinTime, AprilToonsGlobals.RandomCheesyMaxTime)
-        return task.again
-
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
-        
+
+        # Spawn in TTC for Doomsday
+        if simbase.config.GetBool('want-doomsday', True):
+            self.sendUpdate('setLastHood', [ToontownGlobals.ToontownCentral])
+            self.b_setDefaultZone(ToontownGlobals.ToontownCentral)
+
         # Their fishing rod should be level 4.
         self.b_setFishingRod(4)
 
@@ -4499,7 +4474,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
 
         #Toons with cheesy effects 16, 17 and 18 shouldn't stay persistant.
-        if self.savedCheesyEffect in [16, 17, 18]:
+        if self.savedCheesyEffect == 16 or self.savedCheesyEffect == 17 or self.savedCheesyEffect == 18:
             self.b_setCheesyEffect(0, 0, 0)
         
         # Remove effects and accessories from non-admins.
@@ -4511,6 +4486,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGlasses(0, 0, 0)
             self.b_setShoes(0, 0, 0)
             self.b_setBackpack(0, 0, 0)
+        
+        if self.savedCheesyEffect != 0:
+            self.b_setCheesyEffect(0, 0, 0)
+        
 
         # I hate this, but here we go.......... Q_Q
         from toontown.chat import ResistanceChat
@@ -4777,14 +4756,12 @@ def togGM():
             
 @magicWord(category=CATEGORY_MODERATION)
 def ghost():
-    """Set toon to invisible. (Access 400+ can invoke on anyone)"""
-    av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 400 else spellbook.getInvoker()
-    if av.ghostMode == 0:
-        av.b_setGhostMode(1 if av.getAdminAccess() < 300 else 2)
-        return 'Time to ninja! Enabled ghost for %s' % av.getName()
+    """Set toon to invisible."""
+    if spellbook.getInvoker().ghostMode == 0:
+        spellbook.getInvoker().b_setGhostMode(2)
+        return 'Time to ninja!'
     else:
-        av.b_setGhostMode(0)
-        return 'Disabled ghost for %s' % av.getName()
+        spellbook.getInvoker().b_setGhostMode(0)
         
 @magicWord(category=CATEGORY_MODERATION)
 def badName():
@@ -4867,8 +4844,7 @@ def dna(part, value):
         dna.armColor = value
         dna.legColor = value
     elif part=='gloves': # Incase anyone tries to change glove color for whatever reason...
-        if not simbase.config.GetBool('want-glove-colors', False):
-            return "DNA: Change of glove colors are not allowed."
+        return "DNA: Change of glove colors are not allowed."
         # If you ever want to be able to edit gloves, feel free to comment out this return.
         # However, since DToonAI checks ToonDNA, this would be impossible unless changes
         # are made.
@@ -4963,49 +4939,3 @@ def givePies(pieType, numPies=0):
         return "numPies value out of range (0-99)"
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
-    
-@magicWord(category=CATEGORY_MODERATION, types=[int, str])
-def locate(avIdShort=0, returnType=''):
-    """Locate an avatar anywhere on the [CURRENT] AI."""
-    # TODO: Use Astron msgs to get location of avId from anywhere in the Astron cyber-space.
-    # NOTE: The avIdShort concept needs changing, especially when we start entering 200000000's for avIds
-    if avIdShort <= 0:
-        return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
-    avIdFull = 400000000 - (300000000 - avIdShort)
-    av = simbase.air.doId2do.get(avIdFull, None)
-    if not av:
-        return "Could not find the avatar on the current AI."
-    
-    # Get the avatar's location.
-    zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
-    trueZoneId = zoneId
-    interior = False
-    
-    if returnType == 'zone':
-        # The avatar that called the MagicWord wants a zoneId... Provide them with the untouched zoneId.
-        return "%s is in zoneId %d." % (av.getName(), trueZoneId)
-        
-    if returnType == 'playground':
-        # The avatar that called the MagicWord wants the playground name that the avatar is currently in.
-        zoneId = ZoneUtil.getCanonicalHoodId(zoneId)
-    
-    if ZoneUtil.isInterior(zoneId):
-        # If we're in an interior, we want to fetch the street/playground zone, since there isn't
-        # any mapping for interiorId -> shop name (afaik).
-        zoneId -= 500
-        interior = True
-    
-    if ZoneUtil.isPlayground(zoneId):
-        # If it's a playground, TTG contains a map of all hoodIds -> playground names.
-        where = ToontownGlobals.hoodNameMap.get(zoneId, None)
-    else:
-        # If it's not a playground, the TTL contains a list of all streetId -> street names.
-        zoneId = zoneId - zoneId % 100 # This essentially truncates the last 2 digits.
-        where = TTLocalizer.GlobalStreetNames.get(zoneId, None)
-
-    if not where:
-        return "Failed to map the zoneId %d [trueZoneId: %d] to a location..." % (zoneId, trueZoneId)
-    
-    if interior:
-        return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
-    return "%s has been located %s %s." % (av.getName(), where[1], where[2])

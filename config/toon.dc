@@ -49,6 +49,8 @@ from toontown.safezone import DistributedDGFlower/AI
 from toontown.election import DistributedElectionEvent/AI
 from toontown.election import DistributedHotAirBalloon/AI
 from toontown.election import DistributedSafezoneInvasion/AI
+from toontown.election import DistributedElectionCamera/AI
+from toontown.election import DistributedElectionCameraManager/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
@@ -171,7 +173,6 @@ from toontown.coghq import DistributedSinkingPlatform/AI
 from toontown.suit import DistributedGoon/AI
 from toontown.suit import DistributedGridGoon/AI
 from toontown.coghq import BattleBlocker/AI
-from toontown.ai import DistributedAprilToonsMgr/AI
 from toontown.ai import DistributedBlackCatMgr/AI
 from toontown.ai import DistributedPolarBearMgr/AI
 from toontown.ai import DistributedPolarPlaceEffectMgr/AI
@@ -557,6 +558,7 @@ dclass DistributedToon : DistributedPlayer {
   setPieType(uint8) broadcast ownrecv ram;
   setNumPies(uint16) broadcast ownrecv ram;
   setPieThrowType(uint8) broadcast ownrecv ram;
+  setHealthDisplay(uint8 mode) broadcast ownrecv ram;
   catalogGenClothes(uint32) broadcast ownrecv;
   catalogGenAccessories(uint32) broadcast ownrecv;
   setPetId(uint32 = 0) required broadcast ownrecv db;
@@ -624,8 +626,6 @@ dclass DistributedToon : DistributedPlayer {
   requestPing(uint32) airecv ownsend;
   ping(char [0-1024]);
   pingresp(char [0-1024]) airecv ownsend;
-  
-  setAnimalSound(uint8 index) ram broadcast ownrecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {
@@ -772,11 +772,19 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   // This should be networked BEFORE the current state, so that the spawn point
   // can be known and the position can be initialized.
   setSpawnPoint(uint8 pointId) required broadcast ram;
+  // Ditto:
+  setAttackInfo(uint32 targetId, string prop, uint8 damage) required broadcast ram;
 
   setState(string state, int32 timestamp) required broadcast ram;
   setMarchLerp(int16/10 x1, int16/10 y1, int16/10 x2, int16/10 y2, int32 timestamp) broadcast ram;
 
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
+
+  sayFaceoffTaunt(bool custom, string phrase) broadcast;
+  makeSkelecog() broadcast ram;
+  
+  takeShakerDamage(uint8 damage) clsend airecv;
+  setInvasionFinale(bool finale) required broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {
@@ -977,8 +985,26 @@ dclass DistributedDGFlower : DistributedObject {
 dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
+  slappyAvatarEnter() clsend airecv;
+  requestSuit() clsend airecv;
+  setSuitPhrase(string phrase) clsend airecv;
+  setSuitState(string state) clsend airecv;
+  setSuitDamage(uint8 damage, bool) clsend airecv;
   phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  saySurleePhrase(string phrase, bool, bool) broadcast;
   flippySpeech(uint32 avId, uint16 phraseId) broadcast;
+};
+
+dclass DistributedElectionCamera : DistributedNode
+{
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
+  
+};
+
+dclass DistributedElectionCameraManager : DistributedObject
+{
+  setMainCamera(uint32 doId) required broadcast ram;
+  setCameraIds(uint32[]) required broadcast ram;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {
@@ -988,8 +1014,11 @@ dclass DistributedHotAirBalloon : DistributedObject {
 };
 
 dclass DistributedSafezoneInvasion : DistributedObject {
-  hitToon(uint32 avId) clsend airecv;
-  hitSuit(uint32 avId) clsend airecv;
+  pieHitToon(uint32 avId) clsend airecv;
+  pieHitSuit(uint32 avId) clsend airecv;
+  takeDamage(uint8 damage) clsend airecv;
+  setInvasionStarted(bool started) required broadcast ram;
+  stopMusic() broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {
@@ -2454,12 +2483,6 @@ dclass DistributedPetProxy : DistributedPet {
   setDominantMood(string) broadcast ram;
 };
 
-dclass DistributedAprilToonsMgr : DistributedObject {
-  setEventActive(uint8 eventId, bool) broadcast;
-  requestEventsList() clsend airecv;
-  requestEventsListResp(uint8 []);
-};
-
 dclass DistributedBlackCatMgr : DistributedObject {
   doBlackCatTransformation(uint32 avId) broadcast;
   requestBlackCatTransformation() airecv clsend;
@@ -3255,6 +3278,8 @@ struct PotentialToon {
 dclass ClientServicesManager : DistributedObjectGlobal {
   login(string cookie) clsend;
   acceptLogin();
+  
+  setClosed(bool closed);
 
   requestAvatars() clsend;
   setAvatars(PotentialToon[]);
@@ -3359,9 +3384,6 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   
   whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
   setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
-  
-  sendTalkWhisper(uint32 toId, string message) clsend;
-  receiveTalkWhisper(uint32 fromId, string message);
   
 };
 

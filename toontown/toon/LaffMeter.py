@@ -60,9 +60,12 @@ class LaffMeter(DirectFrame):
             self.resetFrameSize()
             self.setScale(0.1)
             self.frown = DirectFrame(parent=self.container, relief=None, image=gui.find('**/frown'))
+            self.frown.setY(-0.1)
             self.smile = DirectFrame(parent=self.container, relief=None, image=gui.find('**/smile'))
             self.eyes = DirectFrame(parent=self.container, relief=None, image=gui.find('**/eyes'))
+            self.eyes.setY(-0.1)
             self.openSmile = DirectFrame(parent=self.container, relief=None, image=gui.find('**/open_smile'))
+            self.openSmile.setY(-0.1)
             self.tooth1 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_1'))
             self.tooth2 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_2'))
             self.tooth3 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_3'))
@@ -70,13 +73,17 @@ class LaffMeter(DirectFrame):
             self.tooth5 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_5'))
             self.tooth6 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_6'))
             self.maxLabel = DirectLabel(parent=self.eyes, relief=None, pos=(0.442, 0, 0.051), text='120', text_scale=0.4, text_font=ToontownGlobals.getInterfaceFont())
+            self.maxLabel.setY(-0.1)
             self.hpLabel = DirectLabel(parent=self.eyes, relief=None, pos=(-0.398, 0, 0.051), text='120', text_scale=0.4, text_font=ToontownGlobals.getInterfaceFont())
+            self.hpLabel.setY(-0.1)
             self.teeth = [self.tooth6,
              self.tooth5,
              self.tooth4,
              self.tooth3,
              self.tooth2,
              self.tooth1]
+            for tooth in self.teeth:
+                tooth.setY(-0.1)
             self.fractions = [0.0,
              0.166666,
              0.333333,

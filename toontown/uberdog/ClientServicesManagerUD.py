@@ -5,6 +5,8 @@ from direct.distributed.PyDatagram import *
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
+from sys import platform
+import dumbdbm
 import anydbm
 import time
 import hmac
@@ -24,7 +26,10 @@ class LocalAccountDB:
         # This uses dbm, so we open the DB file:
         filename = simbase.config.GetString('accountdb-local-file',
                                             'dev-accounts.db')
-        self.dbm = anydbm.open(filename, 'c')
+        if platform == 'darwin':
+            self.dbm = dumbdbm.open(filename, 'c')
+        else:
+            self.dbm = anydbm.open(filename, 'c')
 
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):
@@ -782,6 +787,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.accountDB = RemoteAccountDB(self)
         else:
             self.notify.error('Invalid account DB type configured: %s' % dbtype)
+            
+        # Attribute to test if doomsday is over...
+        self.closed = False
 
     def killConnection(self, connId, reason):
         dg = PyDatagram()
@@ -819,11 +827,23 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         self.account2fsm[sender] = fsmtype(self, sender)
         self.account2fsm[sender].request('Start', *args)
+        
+    def setClosed(self, closed):
+        self.notify.warning('AI %s has told us to start rejecting logins!' % str(self.air.getMsgSender()))
+        self.closed = closed
 
     def login(self, cookie):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
+        
+        if self.closed:
+            # Doomsday is over... no more logging in until beta!
+            dg = PyDatagram()
+            dg.addServerHeader(sender, self.air.ourChannel, CLIENTAGENT_EJECT)
+            dg.addUint16(156)
+            dg.addString('Toontown Rewritten is now closed until Beta. Learn more and check out the updates on our website, toontownrewritten.com. Thanks for Alpha Testing with us!')
+            self.air.send(dg)
 
         if sender>>32:
             # Oops, they have an account ID on their conneciton already!

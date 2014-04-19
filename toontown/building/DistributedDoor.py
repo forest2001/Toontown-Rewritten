@@ -18,6 +18,8 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 from toontown.distributed.DelayDeletable import DelayDeletable
+from toontown.election import SafezoneInvasionGlobals
+
 if (__debug__):
     import pdb
 
@@ -291,6 +293,13 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         return yToTest < -0.5
 
     def enterDoor(self):
+        if base.config.GetBool('want-doomsday', True):
+            base.localAvatar.disableAvatarControls()
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+            return
+
         if self.allowedToEnter():
             messenger.send('DistributedDoor_doorTrigger')
             self.sendUpdate('requestEnter')
@@ -299,6 +308,15 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             if place:
                 place.fsm.request('stopped')
             self.dialog = TeaserPanel.TeaserPanel(pageName='otherHoods', doneFunc=self.handleOkTeaser)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            base.localAvatar.enableAvatarControls()
+            self.accept(self.getExitTriggerEvent(), self.cancelCheckIsDoorHitTask) # Incase people want to try again
 
     def handleOkTeaser(self):
         self.accept(self.getEnterTriggerEvent(), self.doorTrigger)

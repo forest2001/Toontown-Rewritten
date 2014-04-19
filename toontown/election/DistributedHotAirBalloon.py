@@ -26,13 +26,13 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.cr.parentMgr.registerParent(ToontownGlobals.SPSlappysBalloon, self.balloon)
         # Balloon collision NodePath (outside)
         self.collisionNP = self.balloon.find('**/Collision_Outer')
+
         self.slappy = NPCToons.createLocalNPC(2021)
-        self.slappy.reparentTo(self.balloon)
         self.slappy.setPos(0.7, 0.7, 0.4)
         self.slappy.setH(150)
         self.slappy.setScale((1/ElectionGlobals.BalloonScale)) # We want a normal sized Slappy
         self.slappy.loop('neutral')
-        
+
         # Create balloon flight paths and Slappy speeches. It's important we do this AFTER we load everything
         # else as this requires both the balloon and Slappy.
         self.flightPaths = ElectionGlobals.generateFlightPaths(self)
@@ -47,7 +47,8 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.ignore('enter' + self.collisionNP.node().getName())
         self.cr.parentMgr.unregisterParent(ToontownGlobals.SPSlappysBalloon)
         self.balloon.removeNode()
-        self.slappy.delete()
+        if self.slappy:
+            self.slappy.delete()
         DistributedObject.delete(self)
         
     def setState(self, state, timestamp, avId):
@@ -56,6 +57,9 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         self.demand(state, globalClockDelta.localElapsedTime(timestamp))
             
     def enterWaiting(self, offset):
+        # Render Slappy, since we're going to be giving rides
+        self.slappy.reparentTo(self.balloon)
+
         # Wait for a collision...
         self.accept('enter' + self.collisionNP.node().getName(), self.__handleToonEnter)
         # Mini animation for the balloon hovering near the floor
@@ -67,7 +71,29 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
         )
         self.balloonIdle.loop()
         self.balloonIdle.setT(offset)
+    
+    def enterElectionIdle(self, offset):
+        # Slappy is off for the election, but he left his balloon parked in TTC.
+        self.balloon.setPos(*ElectionGlobals.BalloonElectionPosition)
+        self.balloon.setH(283)
+        self.balloonElectionIdle = Sequence(
+            self.balloon.posInterval(3, (166.5, 64.0, 52.0), blendType='easeInOut'),
+            self.balloon.posInterval(3, (166.5, 64.0, 53.0), blendType='easeInOut'),
+        )
+        self.balloonElectionIdle.loop()
+        self.balloonElectionIdle.setT(offset)
         
+    def enterElectionCrashing(self, offset):
+        # Slappy has gone sad, and in turn his balloon has ran out of silliness.
+        # It's tumbling down behind Toon Hall.
+        self.balloonElectionFall = Sequence(
+            self.balloon.posHprInterval(17, (200.0, 20.0, 0.0), (105, -5, -5), blendType='easeInOut'),
+            Func(self.balloon.hide)
+        )
+        self.balloonElectionFall.start()
+        self.balloonElectionFall.setT(offset)
+
+
     def __handleToonEnter(self, collEntry):
         if self.avId != 0:
             # Someone is already occupying the balloon
@@ -80,7 +106,10 @@ class DistributedHotAirBalloon(DistributedObject, FSM):
     def exitWaiting(self):
         self.balloonIdle.finish()
         self.ignore('enter' + self.collisionNP.node().getName())
-        
+
+    def exitElectionIdle(self):
+        self.balloonElectionIdle.finish()
+
     def enterOccupied(self, offset):
         if self.avId == base.localAvatar.doId:
             # This is us! We need to reparent to the balloon and position ourselves accordingly.

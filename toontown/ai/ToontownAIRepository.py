@@ -130,20 +130,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
 
-    def startFireworks(self, task):
-        allFwTypes = [PartyGlobals.FireworkShows.Summer, ToontownGlobals.JULY4_FIREWORKS]
-        fwType = allFwTypes[random.randint(0, len(allFwTypes)-1)]
-        numShows = len(FireworkShows.shows.get(fwType, []))
-        showIndex = random.randint(0, numShows-1)
-        for hood in self.hoods:
-            if hood.safezone == ToontownGlobals.GolfZone:
-                continue
-            fwShow = DistributedFireworkShowAI(self)
-            fwShow.generateWithRequired(hood.safezone)
-            fwShow.b_startShow(fwType, showIndex, globalClockDelta.getRealNetworkTime())
-        task.delayTime = 3600
-        return task.again
-
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
@@ -158,13 +144,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(GSHoodAI.GSHoodAI(self))
         self.hoods.append(OZHoodAI.OZHoodAI(self))
         self.hoods.append(GZHoodAI.GZHoodAI(self))
-
-        # Calculate time until next hour.
-        thetime = time.time() % 3600
-        if thetime < 60: # If the AI was started less than a minute after the previous full hour.
-            taskMgr.doMethodLater(1, self.startFireworks, 'fireworks-taskmgr-hourly')
-        else:
-            taskMgr.doMethodLater(3600-thetime, self.startFireworks, 'fireworks-taskmgr-hourly')
 
     def genDNAFileName(self, zoneId):
         zoneId = ZoneUtil.getCanonicalZoneId(zoneId)
