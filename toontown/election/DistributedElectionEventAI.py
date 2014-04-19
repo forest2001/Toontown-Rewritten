@@ -184,13 +184,13 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             invasion = DistributedSafezoneInvasionAI(simbase.air, self)
             invasion.generateWithRequired(2000)
 
-    def setSuitDamage(self, hp):
+    def setSuitDamage(self, hp, kill = False):
         if not self.cogDead:
             self.cogDead = True
             if self.state == 'InvasionEnd':
                 invasion = simbase.air.doFind('SafezoneInvasion')
                 if invasion:
-                    invasion.setFinaleSuitStunned(hp)
+                    invasion.setFinaleSuitStunned(hp, kill)
             else:
                 self.suit = DistributedInvasionSuitAI(self.air, self)
                 self.suit.dna.newSuit('ym')

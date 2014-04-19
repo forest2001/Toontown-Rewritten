@@ -208,13 +208,16 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         suit.b_setState('FlyDown')
         self.suits.append(suit)
 
-    def setFinaleSuitStunned(self, hp):
-        if self.state == 'Finale':
+    def setFinaleSuitStunned(self, hp, kill = False):
+        if self.state == 'Finale' and kill:
             self.sendUpdate('stopMusic')
             for suit in self.suits:
                 hp = min(hp, suit.currHP) # Don't take more damage than we have...
                 suit.b_setHP(suit.currHP - hp)
                 suit.b_setState('Stunned')
+        elif self.state == 'Finale':
+            for suit in self.suits:
+                suit.takeDamage(hp)
 
     def winFinale(self):
         if self.state == 'Finale':
@@ -422,6 +425,6 @@ def szInvasion(cmd, arg=''):
     elif cmd == 'endWave':
         invasion.waveWon()
     elif cmd == 'stunFinaleSuit':
-        invasion.setFinaleSuitStunned(200)
+        invasion.setFinaleSuitStunned(200, True)
     elif cmd == 'winFinale':
         invasion.winFinale()

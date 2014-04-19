@@ -133,49 +133,7 @@ SuitWaves = [
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    generateSuits(10, [3, 4], [0, 0]),
-    generateSuits(13, [3, 4], [0, 0]), # Wait Wave
-    generateSuits(17, [2, 3], [0, 0]), # Intermission Wave
-    
-    # WAVE 2:
-    generateSuits(11, [2, 3], [0, 1]),
-    generateSuits(14, [2, 2], [0, 1]), # Wait Wave
-    generateSuits(17, [2, 3], [0, 1]), # Intermission Wave
-    
-    # WAVE 3:
-    generateSuits(8,  [2, 3], [1, 2]),
-    generateSuits(11, [2, 2], [2, 2]), # Wait Wave
-    generateSuits(17, [2, 3], [2, 2]), # Intermission Wave
-  
-    # WAVE 4:
-    generateSuits(8,  [2, 3], [2, 3]),
-    generateSuits(11, [2, 2], [3, 3]), # Wait Wave
-    generateSuits(17, [2, 3], [3, 3]), # Intermission Wave
-    
-    # WAVE 5:
-    generateSuits(8,  [0, 2], [3, 4]),
-    generateSuits(11, [2, 4], [4, 4]), # Wait Wave
-    generateSuits(17, [2, 3], [4, 4]), # Intermission Wave
-    
-    # WAVE 6:
-    generateSuits(8,  [1, 2], [4, 5]),
-    generateSuits(11, [1, 4], [5, 5], True), # Wait Wave
-    generateSuits(16, [2, 3], [5, 5], True), # Intermission Wave  
-    
-    # WAVE 7:
-    generateSuits(8,  [0, 2], [5, 6], True),
-    generateSuits(11, [1, 2], [6, 6], True), # Wait Wave
-    generateSuits(16, [2, 3], [6, 6], True), # Intermission Wave
-    
-    # WAVE 8:
-    generateSuits(10, [1, 3], [6, 7], True),
-    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
-    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave  
-    
-    # WAVE 9: THE FINAL WAVE
-    generateSuits(10, [1, 3], [6, 7], True),
-    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
-    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
+    generateSuits(2, [3, 4], [0, 0]),
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
