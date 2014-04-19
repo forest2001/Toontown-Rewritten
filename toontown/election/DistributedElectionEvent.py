@@ -1071,7 +1071,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.alecNode.node().addSolid(cs)
         self.accept('enter' + self.alecNode.node().getName(), self.handleAlecCollision)
 
-    def handleAlecCollisionion(self, collEntry):
+    def handleAlecCollision(self, collEntry):
         self.cowardSequence = Sequence(
                 Parallel(
                     ActorInterval(self.alec, 'cringe'),
