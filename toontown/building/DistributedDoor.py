@@ -399,7 +399,6 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             if hasattr(self, 'tempDoorNodePath'):
                 return self.tempDoorNodePath
             else:
-                print self.block
                 posHpr = self.cr.playGame.dnaData.getBlock(self.block).door
                 otherNP = NodePath('doorOrigin')
                 otherNP.setPos(posHpr.getPos())
