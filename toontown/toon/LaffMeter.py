@@ -60,6 +60,7 @@ class LaffMeter(DirectFrame):
             self.resetFrameSize()
             self.setScale(0.1)
             self.frown = DirectFrame(parent=self.container, relief=None, image=gui.find('**/frown'))
+            self.frown.setY(-0.1)
             self.smile = DirectFrame(parent=self.container, relief=None, image=gui.find('**/smile'))
             self.eyes = DirectFrame(parent=self.container, relief=None, image=gui.find('**/eyes'))
             self.eyes.setY(-0.1)
