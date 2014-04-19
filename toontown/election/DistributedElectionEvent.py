@@ -884,7 +884,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(7),
             Func(self.flippy.setChatAbsolute, 'I can certainly try.', CFSpeech|CFTimeout),
             Wait(1),
-            Func(self.flippy.loop, 'run'
+            Func(self.flippy.loop, 'run'),
             self.flippy.posHprInterval(3.5, (-38, -18.5, 0), (100, 0, 0)),
             Func(self.flippy.loop, 'walk'),
             self.flippy.posHprInterval(1.5, (-38, -18.5, 0), (75, 0, 0)),
