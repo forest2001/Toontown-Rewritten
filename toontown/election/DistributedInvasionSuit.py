@@ -222,6 +222,7 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         sphere = CollisionSphere(center.getX(), center.getY(), center.getZ(), radius)
         sphere.setTangible(0)
         colNode.addSolid(sphere)
+        colNode.setIntoCollideMask(ToontownGlobals.WallBitmask)
         prop.attachNewNode(colNode)
 
         toonId = self.attackTarget
