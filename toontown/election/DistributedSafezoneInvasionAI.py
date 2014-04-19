@@ -257,6 +257,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
             # Thats just mean
             self.checkToonHp()
 
+            toon.b_setHealthDisplay(2)
+
     def _handleToonExit(self, toon):
         if toon in self.toons:
             self.toons.remove(toon)
@@ -264,6 +266,8 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         if toon in self.sadToons:
             self.sadToons.remove(toon)
+
+        toon.b_setHealthDisplay(0)
 
     def takeDamage(self, damage):
         # One of our cogs successfully hit a toon. Time to drain their laff.
