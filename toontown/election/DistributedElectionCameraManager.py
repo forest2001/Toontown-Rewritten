@@ -57,6 +57,9 @@ class DistributedElectionCameraManager(DistributedObject):
                 
         ts = self.tv.find('**/screen').findTextureStage('*')
         self.tv.find('**/screen').setTexture(ts, self.buffer.getTexture(), 1)
+        self.tv.find('**/screen').setTexScale(ts, 1.2, 1.2)
+        self.tv.find('**/screen').setTexOffset(ts, -0.09, -0.1)
+        self.tv.find('**/screen').setTexHpr(ts, 1, 0, 0)
                 
     def disable(self):
         if self.tvOn:
