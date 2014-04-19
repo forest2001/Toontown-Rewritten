@@ -664,8 +664,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(5),
             Func(self.slappy.setChatAbsolute, '...and will Presently Preside with full Presidential Priorities of this Presidentliness!', CFSpeech|CFTimeout),
         )
-        self.victorySequence.setT(offset)
         self.victorySequence.start()
+        self.victorySequence.setT(offset)
 
     def exitWinnerAnnounce(self):
         self.victorySequence.finish()
@@ -815,8 +815,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
                 )
             )
         )
-        self.cogSequence.setT(offset)
         self.cogSequence.start()
+        self.cogSequence.setT(offset)
 
     def exitCogLanding(self):
         self.cogSequence.finish()
