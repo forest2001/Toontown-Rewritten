@@ -244,7 +244,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def delete(self):
         self.demand('Off', 0.)
-
+        
+        self.ignore('entercnode')
+        
         # Clean up everything...
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
