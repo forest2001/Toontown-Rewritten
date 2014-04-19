@@ -405,6 +405,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.alec.setPos(-1.5, -0.14, 3.13)
             self.slappy.hide()
             self.slappy.removeActive()
+            self.surlee.setPosHpr(-32, -15, 0, 40, 0, 0)
             base.cr.cameraManager.disableScreen()
             self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
 
@@ -782,6 +783,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
         # Everyone is stunned by the explosion, but Surlee knows what is to come.
         # He grabs their attention as the cogs begin landing.
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
+        self.surleeAnimation = Sequence(
+            ActorInterval(self.surlee, 'scientistEmcee', startFrame=251, endFrame=314),
+            ActorInterval(self.surlee, 'scientistEmcee', startFrame=314, endFrame=251)
+        )
         self.surleeIntroInterval = Sequence(
             Parallel(Func(self.cameras[0].setState, 'Move', globalClockDelta.getRealNetworkTime(), 36, -4, 7, -131, 0, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
             Func(self.surleeR.loop, 'walk'),
@@ -800,14 +805,26 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.surleeR.setChatAbsolute, 'Now take up arms, there\'s more on the way!', CFSpeech|CFTimeout),
             Wait(5),
             Func(self.surleeR.setChatAbsolute, 'Fight for our town. Fight for Slappy!', CFSpeech|CFTimeout),
-            Wait(6),
-            Func(base.cr.cameraManager.setMainCamera, self.cameras[4].getDoId())
+            Wait(7),
+            Func(base.cr.cameraManager.setMainCamera, self.cameras[4].getDoId()),
+            Wait(3),
+            Parallel(
+                Func(self.surlee.show),
+                Func(self.surlee.addActive),
+                Func(self.surleeR.hide),
+                Func(self.surleeR.removeActive),
+                Func(self.surleeAnimation.loop, offset)
+            ),
+            Func(self.surlee.setChatAbsolute, 'Flippy, I\'m going to need you over here to help with the pies. Can you get cooking?', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.flippy.setChatAbsolute, 'I can certainly try. Stand, get ready to whip up a massive amount of cream pies.', CFSpeech|CFTimeout),
         )
         self.surleeIntroInterval.start()
         self.surleeIntroInterval.setT(offset)
 
     def exitInvasion(self):
         self.surleeIntroInterval.finish()
+        self.surleeAnimation.finish()
 
     def enterInvasionEnd(self, offset):
         # Get ourselves caught up with what just happened
@@ -923,7 +940,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.sendUpdate('setSuitDamage', [hp])
 
     def saySurleePhrase(self, phrase, interrupt, broadcast):
-        self.surleeR.setChatAbsolute(phrase, CFSpeech|CFTimeout, interrupt = interrupt)
+        self.surlee.setChatAbsolute(phrase, CFSpeech|CFTimeout, interrupt = interrupt)
         
         # If we want everyone to see this message, even if not near Surlee, we'll send it as a whisper.
         if broadcast and Vec3(base.localAvatar.getPos(self.surleeR)).length() >= 15:
