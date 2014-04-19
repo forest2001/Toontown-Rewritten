@@ -21,7 +21,7 @@ class CreditsSequence:
 
         if self.sequence == 'alpha' and self.localToonName is not None:
             self.creditsScenes.append(
-                Credits(self.localToonName, 'Alpha Tester\nDoomsday Survivor', '14-1-22_ohmanohmanOHMAN.jpg', 'left', special = 'final') # No clue what has to go here
+                Credits(self.localToonName, 'Alpha Tester\nDoomsday Survivor', '03-4-19_you.jpg', 'left', special = 'final') # No clue what has to go here
             )
 
         for scene in self.creditsScenes:
