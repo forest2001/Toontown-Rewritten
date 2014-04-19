@@ -1,7 +1,7 @@
 import random
 from pandac.PandaModules import *
 from direct.fsm.FSM import FSM
-from InvasionPathDataAI import pathfinder
+from PathPlannerPoolAI import pool
 
 # Individual suit behaviors...
 
@@ -45,7 +45,8 @@ class AttackBehavior(FSM):
 
             # We can only update our walk-to if we're walking to begin with:
             if self.state == 'Walk':
-                nav = self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackPrefer)
+                nav = True
+                self.brain.navigateTo(toonPos.getX(), toonPos.getY(), attackPrefer)
             else:
                 nav = False
 
@@ -58,6 +59,16 @@ class AttackBehavior(FSM):
         else:
             self.demand('Walk', toonPos.getX(), toonPos.getY())
 
+    def onNavFailed(self):
+        if self.state == 'Walk':
+            self.demand('Attack')
+        else:
+            # Can't get there, Captain!
+            self.brain.master.toonUnreachable(self.toonId)
+            self.brain.demand('Idle')
+            return
+
+
     def enterAttack(self):
         # Attack the Toon.
         self.brain.suit.attack(self.toonId)
@@ -66,11 +77,7 @@ class AttackBehavior(FSM):
         # Walk state -- we try to get closer to the Toon. When we're
         # close enough, we switch to 'Attack'
         attackPrefer, attackMax = self.brain.getAttackRange()
-        if not self.brain.navigateTo(x, y, attackMax):
-            # Can't get there, Captain!
-            self.brain.master.toonUnreachable(self.toonId)
-            self.brain.demand('Idle')
-            return
+        self.brain.navigateTo(x, y, attackMax)
 
         if self._walkTask:
             self._walkTask.remove()
@@ -157,12 +164,13 @@ class UnclumpBehavior(FSM):
         moveVector.normalize()
         x, y = ourPos + (moveVector * self.UNCLUMP_MOVE_DISTANCE)
 
-        if self.brain.navigateTo(x, y):
-            # And we're walking!
-            self.demand('Walking')
-        else:
-            # Hmm... Can't walk there. Let's just idle for a bit instead.
-            self.demand('Wait')
+        self.brain.navigateTo(x, y)
+        # And we're walking!
+        self.demand('Walking')
+
+    def onNavFailed(self):
+        # Hmm... Can't walk there. Let's just idle for a bit instead.
+        self.demand('Wait')
 
     def enterWalking(self):
         pass # Do nothing, we just wait for onArrive and exit the behavior.
@@ -312,15 +320,18 @@ class InvasionSuitBrainAI(FSM):
 
     # Navigation:
     def navigateTo(self, x, y, closeEnough=0):
-        self.__waypoints = pathfinder.planPath(self.suit.getCurrentPos(),
-                                               (x, y), closeEnough)
+        pool.plan(self.__navCallback, self.suit.getCurrentPos(), (x, y),
+                  closeEnough)
+
+    def __navCallback(self, result):
+        self.__waypoints = result
         if self.__waypoints:
             self.finalWaypoint = Point2(self.__waypoints[-1])
             self.__walkToNextWaypoint()
-            return True
         else:
             self.finalWaypoint = None
-            return False
+            if hasattr(self.behavior, 'onNavFailed'):
+                self.behavior.onNavFailed()
 
     def suitFinishedWalking(self):
         # The suit finished walking. If there's another waypoint, go to it.
