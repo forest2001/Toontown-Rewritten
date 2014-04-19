@@ -297,9 +297,6 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         self._stunInterval.finish()
 
     def enterExplode(self, time):
-        # We're done with this guy
-        self.stash()
-
         # Are we exploding?
         self.exploding = True
 
@@ -308,6 +305,9 @@ class DistributedInvasionSuit(DistributedSuitBase, InvasionSuitBase, FSM, DelayD
         loseActor.reparentTo(render)
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+
+        # We're done with this guy
+        self.stash()
 
         # Oh boy, time to load all of our explosion effects!
         explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
