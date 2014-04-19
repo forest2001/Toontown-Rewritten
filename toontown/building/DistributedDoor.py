@@ -152,6 +152,13 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         else:
             return
 
+    def fixTrigger(self):
+        if self.doorType != DoorTypes.INT_STANDARD:
+            building = self.getBuilding()
+            doorTrigger = building.find('**/' + self.getTriggerName())
+            doorTrigger.show()
+            doorTrigger.setScale(1, 1.05, 1)
+
     def setTriggerName_wip(self):
         building = self.getBuilding()
         doorTrigger = building.find('**/door_%d/**/door_trigger_%d' % (self.doorIndex, self.block))
@@ -199,6 +206,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
         self.hideDoorParts()
         self.setTriggerName()
+        self.fixTrigger()
         self.accept(self.getEnterTriggerEvent(), self.doorTrigger)
         self.acceptOnce('clearOutToonInterior', self.doorTrigger)
         self.setupNametag()
