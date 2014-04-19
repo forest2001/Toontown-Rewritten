@@ -153,7 +153,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             return
 
     def fixTrigger(self):
-        if self.doorType != DoorTypes.INT_STANDARD:
+        if self.doorType == DoorTypes.EXT_STANDARD:
             building = self.getBuilding()
             doorTrigger = building.find('**/' + self.getTriggerName())
             doorTrigger.show()
