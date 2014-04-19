@@ -53,6 +53,8 @@ class CreditsSequence:
         self.interval = Sequence()
         for scene in self.creditsScenes:
             self.interval.append(scene.makeInterval())
+        self.interval.append(Wait(5))
+        self.interval.append(Func(base.cr.killClientAlphaIsOver))
         
         self.interval.start()
 

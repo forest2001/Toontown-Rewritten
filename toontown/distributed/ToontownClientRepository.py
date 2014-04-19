@@ -130,7 +130,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
         # Alpha Credits
         self.credits = CreditsSequence('alpha')
-        self.loginFSM.addState(State.State('credits', self.enterCredits, self.exitCredits, ['gameOff']))
+        self.loginFSM.addState(State.State('credits', self.enterCredits, self.exitCredits, ['gameOff', 'noConnection']))
         state = self.loginFSM.getStateNamed('playingGame')
         state.addTransition('credits')
 
@@ -506,8 +506,16 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return
 
     def enterCredits(self):
-        self.sendDisconnect()
         self.credits.enter()
+        
+    def killClientAlphaIsOver(self):
+        # Friend error if we don't disconnect... I don't even?!
+        self.disconnect()
+        # See you in beta, kiddies!
+        self.bootedIndex = 156
+        self.bootedText = OTPLocalizer.CRBootedReasons.get(156)
+        self.stopReaderPollTask()
+        self.lostConnection()
 
     def exitCredits(self):
         self.credits.exit()
