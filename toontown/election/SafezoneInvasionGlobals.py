@@ -133,12 +133,54 @@ SuitWaves = [
     # spawning until the intermission wave, which is defined below.
 
     # WAVE 1:
-    generateSuits(2, [3, 4], [0, 0]),
+    generateSuits(10, [0, 4], [0, 0]),
+    generateSuits(13, [2, 3], [0, 0]), # Wait Wave
+    generateSuits(17, [2, 4], [0, 0]), # Intermission Wave
+
+    # WAVE 2:
+    generateSuits(11, [2, 3], [0, 1]),
+    generateSuits(14, [2, 2], [0, 1]), # Wait Wave
+    generateSuits(17, [2, 3], [0, 1]), # Intermission Wave
+
+    # WAVE 3:
+    generateSuits(8,  [2, 3], [1, 2]),
+    generateSuits(11, [2, 2], [2, 2]), # Wait Wave
+    generateSuits(17, [2, 3], [2, 2]), # Intermission Wave
+
+    # WAVE 4:
+    generateSuits(8,  [2, 3], [2, 3]),
+    generateSuits(11, [2, 2], [3, 3]), # Wait Wave
+    generateSuits(17, [2, 3], [3, 3]), # Intermission Wave
+
+    # WAVE 5:
+    generateSuits(8,  [0, 2], [3, 4]),
+    generateSuits(11, [2, 4], [4, 4]), # Wait Wave
+    generateSuits(17, [2, 3], [4, 4]), # Intermission Wave
+
+    # WAVE 6:
+    generateSuits(8,  [1, 2], [4, 5]),
+    generateSuits(11, [1, 4], [5, 5], True), # Wait Wave
+    generateSuits(16, [2, 3], [5, 5], True), # Intermission Wave
+
+    # WAVE 7:
+    generateSuits(8,  [0, 2], [5, 6], True),
+    generateSuits(11, [1, 2], [6, 6], True), # Wait Wave
+    generateSuits(16, [2, 3], [6, 6], True), # Intermission Wave
+
+    # WAVE 8:
+    generateSuits(10, [1, 3], [6, 7], True),
+    generateSuits(15, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(16, [2, 4], [7, 7], True), # Intermission Wave
+
+    # WAVE 9: THE FINAL WAVE
+    generateSuits(15, [1, 3], [6, 7], True),
+    generateSuits(20, [1, 4], [7, 7], True), # Wait Wave
+    generateSuits(25, [2, 4], [7, 7], True), # Intermission Wave
 ]
 
 # On these waves, no more waves will spawn until all suits are destroyed.
 # Once the suits are destroyed, the next wave will spawn again instantly with no intermission.
-SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 25]
+SuitWaitWaves = [1, 4, 7, 10, 13, 16, 19, 22, 24, 25]
 
 # These waves have a 20 second intermission period after all suits are destroyed.
 SuitIntermissionWaves = [2, 5, 8, 11, 14, 17, 20, 23, 26]
@@ -154,7 +196,7 @@ MoveShakerDamageRadius = 3 # How much damage does a Move and Shaker's attack do?
 MoveShakerRadius = 15 # And it's attack radius?
 MoveShakerStunTime = 5 # Once hit by a Mover and Shaker, how long do toons have before hit again?
 
-ToonHealAmount = 1 # How much healing does a pie on a Toon do?
+ToonHealAmount = 3 # How much healing does a pie on a Toon do?
 
 # Let's define some needed files
 CogSkyFile = 'phase_3.5/models/props/BR_sky'
