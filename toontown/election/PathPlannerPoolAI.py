@@ -75,4 +75,4 @@ class PlannerPool:
         job = PlanJob(callback, navFrom, navTo, radius)
         self.addJob(job)
 
-pool = PlannerPool(8)
+pool = PlannerPool(simbase.config.GetBool('doomsday-threads', 1))
