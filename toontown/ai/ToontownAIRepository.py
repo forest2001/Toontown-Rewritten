@@ -45,6 +45,8 @@ from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 # April Toons! (To be replaced with holiday manager)
 from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
 
+import time
+
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
         ToontownInternalRepository.__init__(self, baseChannel, serverId, dcSuffix='AI')
@@ -171,16 +173,30 @@ class ToontownAIRepository(ToontownInternalRepository):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
         """
+        start = time.clock()
+        def clearQueue():
+            '''So the TCP window doesn't fill up and we get the axe'''
+            while self.readerPollOnce():
+                pass
 
         self.hoods.append(TTHoodAI.TTHoodAI(self))
+        clearQueue()
         self.hoods.append(DDHoodAI.DDHoodAI(self))
+        clearQueue()
         self.hoods.append(DGHoodAI.DGHoodAI(self))
+        clearQueue()
         self.hoods.append(BRHoodAI.BRHoodAI(self))
+        clearQueue()
         self.hoods.append(MMHoodAI.MMHoodAI(self))
+        clearQueue()
         self.hoods.append(DLHoodAI.DLHoodAI(self))
+        clearQueue()
         self.hoods.append(GSHoodAI.GSHoodAI(self))
+        clearQueue()
         self.hoods.append(OZHoodAI.OZHoodAI(self))
+        clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
+        clearQueue()
 
         # Calculate time until next hour.
         thetime = time.time() % 3600
