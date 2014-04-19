@@ -4,7 +4,7 @@ import cPickle
 from otp.ai.AIBaseGlobal import *
 import DistributedBuildingAI
 import HQBuildingAI
-#import GagshopBuildingAI
+import GagshopBuildingAI
 #import PetshopBuildingAI
 #from toontown.building.KartShopBuildingAI import KartShopBuildingAI
 #from toontown.building import DistributedAnimBuildingAI
@@ -202,11 +202,11 @@ class DistributedBuildingMgrAI:
         return building
 
     def newGagshopBuilding(self, blockNumber):
-        return
         dnaStore = self.air.dnaStoreMap[self.canonicalBranchID]
         exteriorZoneId = dnaStore.getBlock(blockNumber).zone
         exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchID)
         interiorZoneId = self.branchID - self.branchID % 100 + 500 + blockNumber
+        self.notify.debug("Spawning GagShop ext: {0} int: {1}".format(exteriorZoneId, interiorZoneId))
         building = GagshopBuildingAI.GagshopBuildingAI(self.air, exteriorZoneId, interiorZoneId, blockNumber)
         self.__buildings[blockNumber] = building
         return building
