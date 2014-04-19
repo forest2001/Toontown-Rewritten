@@ -848,6 +848,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.alec.loop, 'walk'),
             self.alec.hprInterval(1.3, (-130, 0, 0)),
             Func(self.alec.loop, 'neutral'),
+            Func(self.startInteractiveAlec)
         )
         self.surleeIntroInterval = Sequence(
             Parallel(Func(self.moveCamera, 0, 36, -4, 7, -131, 0), Func(base.cr.cameraManager.setMainCamera, self.cameras[0].getDoId())),
@@ -942,6 +943,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.finishedInvasionEnding = True
         self.catchUp()
 
+        self.stopInteractiveAlec() # Gotta clean up
+
         # Tell the credits our toon name and dna.
         NodePath(base.marginManager).hide()
         base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
@@ -1006,6 +1009,23 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.wrapUpSequence.finish()
         self.cameraSequence.finish()
 
+    def startInteractiveAlec(self):
+        cs = CollisionSphere(0, 0, 0, 3)
+        self.alecNode = self.alec.attachNewNode(CollisionNode('cnode'))
+        self.alecNode.node().addSolid(cs)
+        self.accept('enter' + self.alecNode.node().getName(), self.handleAlecCollission)
+
+    def handleAlecCollission(self, collEntry):
+        self.cowardSequecne = Sequence(
+                Parallel(
+                    ActorInterval(self.alec, 'cringe'),
+                    Func(self.alec.setChatAbsolute, 'Phew! It\'s only you. Those cogs are scaring me!', CFSpeech|CFTimeout)
+                    )
+            )
+        self.cowardSequecne.start()
+
+    def stopInteractiveAlec(self):
+        self.ignore('enter' + self.alecNode.node().getName())
 
     '''
      ELETION DAY MISC.
