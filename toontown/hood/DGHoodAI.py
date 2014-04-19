@@ -1,14 +1,14 @@
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedDGFlowerAI import DistributedDGFlowerAI
-from HoodAI import HoodAI
+from SZHoodAI import SZHoodAI
 from toontown.toon import NPCToons
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 
-class DGHoodAI(HoodAI):
+class DGHoodAI(SZHoodAI):
     HOOD = ToontownGlobals.DaisyGardens
 
-    def createSafeZone(self):
-        HoodAI.createSafeZone(self)
+    def createZone(self):
+        SZHoodAI.createZone(self)
 
         self.spawnObjects()

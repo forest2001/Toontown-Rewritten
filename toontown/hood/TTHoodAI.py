@@ -1,20 +1,15 @@
 from toontown.toonbase import ToontownGlobals
-from HoodAI import HoodAI
+from SZHoodAI import SZHoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 from toontown.toon import NPCToons
 from toontown.election.DistributedElectionEventAI import DistributedElectionEventAI
-from toontown.building.HQBuildingAI import HQBuildingAI
-from toontown.toon import NPCToons
-from toontown.toonbase import TTLocalizer
-from otp.ai.MagicWordGlobal import *
-from toontown.building.DistributedBuildingMgrAI import DistributedBuildingMgrAI
 
-class TTHoodAI(HoodAI):
+class TTHoodAI(SZHoodAI):
     HOOD = ToontownGlobals.ToontownCentral
     
-    def createSafeZone(self):
-        HoodAI.createSafeZone(self)
+    def createZone(self):
+        SZHoodAI.createZone(self)
         self.spawnObjects()
         self.butterflies = []
         # TODO: Re-enable butterflies. RIP, you will be missed.
@@ -23,8 +18,6 @@ class TTHoodAI(HoodAI):
         #beginhack disable election props
         #self.spawnElection()
         #endhack
-
-        self.buildingMgr = DistributedBuildingMgrAI(self.air, self.HOOD, self.air.dnaStoreMap[self.HOOD], self.air.trophyMgr)
     
     def spawnElection(self):
         event = self.air.doFind('ElectionEvent')

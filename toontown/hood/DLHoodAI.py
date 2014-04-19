@@ -1,11 +1,11 @@
 from toontown.toonbase import ToontownGlobals
-from HoodAI import HoodAI
+from SZHoodAI import SZHoodAI
 from toontown.toon import NPCToons
 
-class DLHoodAI(HoodAI):
+class DLHoodAI(SZHoodAI):
     HOOD = ToontownGlobals.DonaldsDreamland
     
-    def createSafeZone(self):
-        HoodAI.createSafeZone(self)
+    def createZone(self):
+        SZHoodAI.createZone(self)
         
         self.spawnObjects()

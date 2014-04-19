@@ -11,5 +11,5 @@ class GZHoodAI(HoodAI):
         
         self.golfKarts = []
         
-    def createSafeZone(self):
+    def createZone(self):
         self.spawnObjects()

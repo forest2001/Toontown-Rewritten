@@ -17,5 +17,5 @@ class GSHoodAI(HoodAI.HoodAI):
         self.racepads = []
         self.viewpads = []
         
-    def createSafeZone(self):
+    def createZone(self):
         self.spawnObjects()
