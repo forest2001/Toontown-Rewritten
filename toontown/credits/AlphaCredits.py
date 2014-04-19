@@ -185,7 +185,7 @@ CreditsScenes = [
 
                 # Composers
                 Credits('Cool Peaches', 'Lead Composer\nElection Orchestrator', 'cool_peaches.jpg', 'right', 2, 
-                        'Jethred', 'Theme Song Composer', 'capt_sandy.jpg'),
+                        'Jethred', 'Theme Song Composer', 'jethred.jpg'),
 
                 # Special Thanks to:
                 Credits('Disney Online', 'The owners and creators\nof Toontown.', '11-20-13_donald.jpg', 'left', 2, 
