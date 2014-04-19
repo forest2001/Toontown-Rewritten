@@ -720,7 +720,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
             self.overheadMeter.setAvatar(self)
             self.overheadMeter.setBillboardAxis()
-            self.overheadMeter.setZ(4)
+            self.overheadMeter.setZ(5)
             self.overheadMeter.setScale(1.5)
             self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
             self.overheadMeter.start()
