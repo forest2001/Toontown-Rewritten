@@ -951,14 +951,14 @@ class DistributedElectionEvent(DistributedObject, FSM):
         musicCredits = base.loadMusic(ElectionGlobals.CreditsMusic)
         base.localAvatar.stopUpdateSmartCamera()
         base.camera.wrtReparentTo(render)
-        self.logo = loader.loadModel('phase_3/models/gui/toontown-logo.bam')
+        self.logo = loader.loadModel('phase_3/models/gui/toontown-logo')
         self.logo.reparentTo(aspect2d)
         self.logo.setTransparency(1)
         self.logo.setScale(0.6)
         self.logo.setPos(0, 1, 0.3)
         self.logo.setColorScale(1, 1, 1, 0)
         
-        self.portal = loader.loadModel('phase_3.5/models/props/portal-mod.bam')
+        self.portal = loader.loadModel('phase_3.5/models/props/portal-mod')
         self.portal.reparentTo(render)
         self.portal.setPosHprScale(93.1, 0.4, 4, 4, 355, 45, 0, 0, 0)
 
