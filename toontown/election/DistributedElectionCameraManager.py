@@ -90,9 +90,12 @@ class DistributedElectionCameraManager(DistributedObject):
         if self.tvOn:
             #gg hacks
             self.tvOn = False
-            tex = loader.loadTexture("phase_4/maps/smpte-colors.jpg")
+            tex = loader.loadTexture("phase_4/maps/tv_standby.jpg")
             ts = self.tv.find('**/screen').findTextureStage('*')
             self.tv.find('**/screen').setTexture(ts, tex, 1)
+            self.tv.find('**/screen').setTexScale(ts, 1.2, 1.2)
+            self.tv.find('**/screen').setTexOffset(ts, -0.09, -0.1)
+            self.tv.find('**/screen').setTexHpr(ts, 1, 0, 0)
             parent = self.camera.getParent()
             self.camera.removeNode()
             self.camera = parent.attachNewNode('ECMNode')
