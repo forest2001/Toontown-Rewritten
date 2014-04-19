@@ -1067,16 +1067,16 @@ class DistributedElectionEvent(DistributedObject, FSM):
         cs = CollisionSphere(0, 0, 0, 3)
         self.alecNode = self.alec.attachNewNode(CollisionNode('cnode'))
         self.alecNode.node().addSolid(cs)
-        self.accept('enter' + self.alecNode.node().getName(), self.handleAlecCollission)
+        self.accept('enter' + self.alecNode.node().getName(), self.handleAlecCollision)
 
-    def handleAlecCollission(self, collEntry):
-        self.cowardSequecne = Sequence(
+    def handleAlecCollisionion(self, collEntry):
+        self.cowardSequence = Sequence(
                 Parallel(
                     ActorInterval(self.alec, 'cringe'),
                     Func(self.alec.setChatAbsolute, 'Phew! It\'s only you. Those cogs are scaring me!', CFSpeech|CFTimeout)
                     )
             )
-        self.cowardSequecne.start()
+        self.cowardSequence.start()
 
     def stopInteractiveAlec(self):
         self.ignore('enter' + self.alecNode.node().getName())
