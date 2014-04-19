@@ -170,8 +170,8 @@ CreditsScenes = [
                 Credits('Capt. Sandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 
                         'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
 
-                Credits('Slate', 'Texture Artist', '12-6-13_slate.jpg', 'right', 2, 
-                        'Joyful Roxy', 'Texture Artist', 'joyful_roxy.jpg'),
+                Credits('Slate', 'Fashion Expert\nTexture Artist', '12-6-13_slate.jpg', 'right', 2, 
+                        'Joyful Roxy', 'Hyperactive Jellybean\nTexture Artist', 'joyful_roxy.jpg'),
 
                 # Too Many Secrets
                 Credits('Too Many\nSecrets', '\n\nMany Secret Things\nDeveloper', 'toomanysecrets.jpg', 'left'),
