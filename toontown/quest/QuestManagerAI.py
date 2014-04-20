@@ -57,11 +57,10 @@ class QuestManagerAI:
         for questIndex in range(len(toon.quests)):
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.BuildingQuest):
-                for suit in suitsKilled:
-                    if quest.isLocationMatch(zoneId):
-                        if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
-                            if quest.getNumFloors() >= numFloors:
-                                toon.quests[questIndex][4] += 1
+                if quest.isLocationMatch(zoneId):
+                    if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
+                        if quest.getNumFloors() >= numFloors:
+                            toon.quests[questIndex][4] += 1
         toon.b_setQuests(toon.quests)
 
     def toonKilledCogdo(self, toon, difficulty, numFloors, zoneId, activeToons):
