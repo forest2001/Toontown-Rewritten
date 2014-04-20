@@ -275,6 +275,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         if toon in self.sadToons:
             self.sadToons.remove(toon)
+            self.ignore(self.air.getAvatarExitEvent(toon.doId))
 
         toon.b_setHealthDisplay(0)
 
