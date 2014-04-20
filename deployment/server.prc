@@ -6,3 +6,4 @@ want-housing #f
 want-old-fireworks #t
 want-mat-all-tailors #t
 want-tailor-jellybeans #t
+doomsday-threads 4
