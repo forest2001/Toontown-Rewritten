@@ -18,6 +18,7 @@ from toontown.distributed import DelayDelete
 from toontown.toon import TTEmote
 from otp.avatar import Emote
 from toontown.hood import ZoneUtil
+from direct.task import Task
 FO_DICT = {'s': 'tt_m_ara_cbe_fieldOfficeMoverShaker',
  'l': 'tt_m_ara_cbe_fieldOfficeMoverShaker',
  'm': 'tt_m_ara_cbe_fieldOfficeMoverShaker',
@@ -149,7 +150,12 @@ class DistributedBuilding(DistributedObject.DistributedObject):
     def enterWaitForVictors(self, ts):
         if self.mode != 'suit':
             self.setToSuit()
+        self._ewfvTask = taskMgr.add(self._enterWaitForVictors, self.uniqueName('enterWaitForVictors'))
+
+    def _enterWaitForVictors(self, task):
         victorCount = self.victorList.count(base.localAvatar.doId)
+        if victorCount == 0:
+            return Task.cont
         if victorCount == 1:
             self.acceptOnce('insideVictorElevator', self.handleInsideVictorElevator)
             camera.reparentTo(render)
@@ -171,7 +177,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
             if light != None:
                 light.setColor(LIGHT_OFF_COLOR)
 
-        return
+        return Task.done
 
     def handleInsideVictorElevator(self):
         self.notify.info('inside victor elevator')
@@ -737,7 +743,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
 
         openDoors = getOpenInterval(self, self.leftDoor, self.rightDoor, self.openSfx, None)
         toonDoorPos = self.cr.playGame.dnaData.getBlock(self.block).door.getPos()
-        useFarExitPoints = toonDoorPos.getPos().getZ() > 1.0
+        useFarExitPoints = toonDoorPos.getZ() > 1.0
         runOutAll = Parallel()
         i = 0
         for victor in self.victorList:
