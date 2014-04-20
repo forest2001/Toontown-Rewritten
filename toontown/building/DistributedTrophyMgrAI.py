@@ -22,6 +22,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         if self.scores[avId][1] < 0:
             self.notify.warn("avId %d has a negative scorevalue?~?~?!"%avId)
             self.scores[avId][1] = 0
+        messenger.send('leaderboardChanged')
+        messenger.send('leaderboardFlush')
         if avId in self.air.doId2do:
             self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
 
@@ -34,6 +36,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
             av = self.air.doId2do[avId]
             self.scores[avId][0] = av.getName()
         self.scores[avId][1] += numFloors
+        messenger.send('leaderboardChanged')
+        messenger.send('leaderboardFlush')
         if avId in self.air.doId2do:
             self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
 
