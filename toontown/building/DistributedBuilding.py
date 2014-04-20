@@ -433,14 +433,15 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         return
 
     def setupSuitBuilding(self, nodePath):
+        dnaData = base.cr.playGame.dnaData
         dnaStore = self.cr.playGame.dnaStore
         level = int(self.difficulty / 2) + 1
         suitNP = dnaStore.findNode('suit_landmark_' + chr(self.track) + str(level))
-        zoneId = dnaStore.getZoneFromBlockNumber(self.block)
+        zoneId = dnaData.getBlock(self.block).zone
         zoneId = ZoneUtil.getTrueZoneId(zoneId, self.interiorZoneId)
         newParentNP = base.cr.playGame.hood.loader.zoneDict[zoneId]
         suitBuildingNP = suitNP.copyTo(newParentNP)
-        buildingTitle = dnaStore.getTitleFromBlockNumber(self.block)
+        buildingTitle = dnaData.getBlock(self.block).title
         if not buildingTitle:
             buildingTitle = TTLocalizer.CogsInc
         else:
@@ -735,8 +736,8 @@ class DistributedBuilding(DistributedObject.DistributedObject):
             i += 1
 
         openDoors = getOpenInterval(self, self.leftDoor, self.rightDoor, self.openSfx, None)
-        toonDoorPosHpr = self.cr.playGame.dnaStore.getDoorPosHprFromBlockNumber(self.block)
-        useFarExitPoints = toonDoorPosHpr.getPos().getZ() > 1.0
+        toonDoorPos = self.cr.playGame.dnaData.getBlock(self.block).door.getPos()
+        useFarExitPoints = toonDoorPos.getPos().getZ() > 1.0
         runOutAll = Parallel()
         i = 0
         for victor in self.victorList:

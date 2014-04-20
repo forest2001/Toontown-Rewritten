@@ -94,7 +94,7 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         else:
             color = (0, 1, 0, 1)
         self.__makePathVizText(text, pos[0], pos[1], pos[2], color)
-        adjacent = self.dnaStore.getAdjacentPoints(p)
+        adjacent = self.dnaStore.generateData().getAdjacentPoints(p)
         numPoints = adjacent.getNumPoints()
         for i in range(numPoints):
             q = adjacent.getPoint(i)

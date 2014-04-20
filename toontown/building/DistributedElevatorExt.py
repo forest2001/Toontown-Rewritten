@@ -11,8 +11,12 @@ from direct.fsm import State
 from toontown.hood import ZoneUtil
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
+from otp.nametag.NametagGroup import NametagGroup
+from otp.nametag.Nametag import Nametag
+from otp.nametag.NametagConstants import *
 
 class DistributedElevatorExt(DistributedElevator.DistributedElevator):
+    deferFor = 1
 
     def __init__(self, cr):
         DistributedElevator.DistributedElevator.__init__(self, cr)
@@ -42,7 +46,7 @@ class DistributedElevatorExt(DistributedElevator.DistributedElevator):
             self.nametag.setColorCode(NametagGroup.CCSuitBuilding)
             self.nametag.setActive(0)
             self.nametag.setAvatar(self.getElevatorModel())
-            name = self.cr.playGame.dnaStore.getTitleFromBlockNumber(self.bldg.block)
+            name = self.cr.playGame.dnaData.getBlock(self.bldg.block).title
             if not name:
                 name = TTLocalizer.CogsInc
             else:
@@ -72,7 +76,7 @@ class DistributedElevatorExt(DistributedElevator.DistributedElevator):
             self.bossLevel = self.bldg.getBossLevel()
             self.setupElevator()
         else:
-            self.notify.warning('setBldgDoId: elevator %d cannot find suitDoorOrigin for bldg %d!' % (self.doId, bldgDoId))
+            self.notify.warning('setBldgDoId: elevator %d cannot find suitDoorOrigin for bldg %d!' % (self.doId, self.bldgDoId))
         return
 
     def setFloor(self, floorNumber):

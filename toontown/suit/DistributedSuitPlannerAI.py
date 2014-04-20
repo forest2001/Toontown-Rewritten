@@ -569,9 +569,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.setupDNA()
         if self.notify.getDebug():
             self.notify.debug('Creating a building manager AI in zone' + str(self.zoneId))
-        #TODO: implement buildingMgr
-        #self.buildingMgr = self.air.buildingManagers.get(self.zoneId)
-        self.buildingMgr = None
+        self.buildingMgr = self.air.buildingManagers.get(self.zoneId)
         if self.buildingMgr:
             blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks = self.buildingMgr.getDNABlockLists()
             for currBlock in blocks:
@@ -591,6 +589,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_ZONE] != suitHood:
                 self.currDesired = 0
         self.suitCountAdjust = 0
+        self.air.suitPlanners[zoneId] = self
         return
 
     def cleanup(self):
@@ -620,7 +619,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.buildingSideDoors = {}
         for p in self.frontdoorPointList:
             blockNumber = p.getLandmarkBuildingIndex()
-            if p < 0:
+            if blockNumber < 0:
                 self.notify.warning('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
             elif self.buildingFrontDoors.has_key(blockNumber):
                 self.notify.warning('Multiple front doors for building %d in zone %d' % (blockNumber, self.zoneId))
@@ -629,7 +628,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         for p in self.sidedoorPointList:
             blockNumber = p.getLandmarkBuildingIndex()
-            if p < 0:
+            if blockNumber < 0:
                 self.notify.warning('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
             elif self.buildingSideDoors.has_key(blockNumber):
                 self.buildingSideDoors[blockNumber].append(p)
@@ -696,13 +695,13 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return self.zoneIdToPointMap
         self.zoneIdToPointMap = {}
         for point in self.streetPointList:
-            points = self.dnaStore.getAdjacentPoints(point)
+            points = self.dnaData.getAdjacentPoints(point)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
                 p = self.pointIndexes[pi]
                 i -= 1
-                zoneName = self.dnaStore.getSuitEdgeZone(point.getIndex(), p.getIndex())
+                zoneName = self.dnaData.getSuitEdgeZone(point.getIndex(), p.getIndex())
                 zoneId = int(self.extractGroupName(zoneName))
                 if self.zoneIdToPointMap.has_key(zoneId):
                     self.zoneIdToPointMap[zoneId].append(point)
@@ -715,7 +714,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         pointList = []
         if self.buildingSideDoors.has_key(blockNumber):
             for doorPoint in self.buildingSideDoors[blockNumber]:
-                points = self.dnaStore.getAdjacentPoints(doorPoint)
+                points = self.dnaData.getAdjacentPoints(doorPoint)
                 i = points.getNumPoints() - 1
                 while i >= 0:
                     pi = points.getPointIndex(i)
@@ -726,7 +725,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         if self.buildingFrontDoors.has_key(blockNumber):
             doorPoint = self.buildingFrontDoors[blockNumber]
-            points = self.dnaStore.getAdjacentPoints(doorPoint)
+            points = self.dnaData.getAdjacentPoints(doorPoint)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -745,14 +744,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             blockNumbers.remove(bn)
             if self.buildingSideDoors.has_key(bn):
                 for doorPoint in self.buildingSideDoors[bn]:
-                    points = self.dnaStore.getAdjacentPoints(doorPoint)
+                    points = self.dnaData.getAdjacentPoints(doorPoint)
                     i = points.getNumPoints() - 1
                     while blockNumber == None and i >= 0:
                         pi = points.getPointIndex(i)
                         p = self.pointIndexes[pi]
                         i -= 1
                         startTime = SuitTimings.fromSuitBuilding
-                        startTime += self.dnaStore.getSuitEdgeTravelTime(doorPoint.getIndex(), pi, self.suitWalkSpeed)
+                        startTime += self.dnaData.getSuitEdgeTravelTime(doorPoint.getIndex(), pi, self.suitWalkSpeed)
                         if not self.pointCollision(p, doorPoint, startTime):
                             startTime = SuitTimings.fromSuitBuilding
                             startPoint = doorPoint
@@ -881,6 +880,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 minPathLen = self.MIN_PATH_LEN
         if maxPathLen == None:
             maxPathLen = self.MAX_PATH_LEN
+        self.notify.debug("Path min {0}, Path max {1}".format(minPathLen, maxPathLen))
+        self.notify.debug("startPt {0} {1}".format(suit.startPoint.getIndex(), suit.startPoint.getPointType()))
         retryCount = 0
         while len(possibles) > 0 and retryCount < 50:
             p = random.choice(possibles)
@@ -913,7 +914,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             pi = path.getPointIndex(i)
             adjacentPoint = point
             point = self.pointIndexes[pi]
-            elapsedTime += self.dnaStore.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
+            elapsedTime += self.dnaData.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
 
         result = self.pointCollision(point, adjacentPoint, elapsedTime)
         return result
@@ -1289,7 +1290,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             minFloors, maxFloors = SuitBuildingGlobals.SuitBuildingInfo[level - 1][0]
             if buildingHeight >= minFloors - 1 and buildingHeight <= maxFloors - 1:
                 choices.append(level)
-
+        if len(choices) == 0:
+            return possibleLevels[0]
         return random.choice(choices)
 
     def initTasks(self):
