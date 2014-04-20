@@ -30,7 +30,7 @@ from toontown.suit import DistributedTutorialSuit/AI
 from toontown.suit import DistributedFactorySuit/AI
 from toontown.suit import DistributedMintSuit/AI
 from toontown.suit import DistributedStageSuit/AI
-from toontown.election import DistributedInvasionSuit/AI
+//from toontown.election import DistributedInvasionSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
@@ -46,11 +46,11 @@ from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
 from toontown.safezone import DistributedDGFlower/AI
-from toontown.election import DistributedElectionEvent/AI
-from toontown.election import DistributedHotAirBalloon/AI
-from toontown.election import DistributedSafezoneInvasion/AI
-from toontown.election import DistributedElectionCamera/AI
-from toontown.election import DistributedElectionCameraManager/AI
+//from toontown.election import DistributedElectionEvent/AI
+//from toontown.election import DistributedHotAirBalloon/AI
+//from toontown.election import DistributedSafezoneInvasion/AI
+//from toontown.election import DistributedElectionCamera/AI
+//from toontown.election import DistributedElectionCameraManager/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
