@@ -16,11 +16,11 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
 
     def removeTrophy(self, avId, numFloors):
         if not avId in self.scores:
-            self.notify.warn("avId %d is not in scores"%avId)
+            self.notify.warning("avId %d is not in scores"%avId)
             return
         self.scores[avId][1] -= numFloors
         if self.scores[avId][1] < 0:
-            self.notify.warn("avId %d has a negative scorevalue?~?~?!"%avId)
+            self.notify.warning("avId %d has a negative scorevalue?~?~?!"%avId)
             self.scores[avId][1] = 0
         messenger.send('leaderboardChanged')
         messenger.send('leaderboardFlush')
