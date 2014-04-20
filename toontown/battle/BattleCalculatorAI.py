@@ -7,6 +7,9 @@ import BattleExperienceAI
 from toontown.toon import NPCToons
 from toontown.pets import PetTricks, DistributedPetProxyAI
 from direct.showbase.PythonUtil import lerp
+from otp.ai.MagicWordGlobal import *
+
+battleSkip = 0
 
 class BattleCalculatorAI:
     AccuracyBonuses = [0,
@@ -360,6 +363,8 @@ class BattleCalculatorAI:
     def __calcToonAtkHit(self, attackIndex, atkTargets):
         if len(atkTargets) == 0:
             return (0, 0)
+        if battleSkip:
+            return (1, 95)
         if self.tutorialFlag:
             return (1, 95)
         if self.toonsAlways5050:
@@ -811,6 +816,8 @@ class BattleCalculatorAI:
             if attackLevel == -1 and not atkTrack == FIRE:
                 result = LURE_SUCCEEDED
             elif atkTrack != TRAP:
+                if battleSkip:
+                    attackDamage = suit = self.battle.findSuit(targetId).getHP()
                 result = attackDamage
                 if atkTrack == HEAL:
                     if not self.__attackHasHit(attack, suit=0):
@@ -1883,3 +1890,9 @@ class BattleCalculatorAI:
             return (0, 0)
         else:
             return (1, 100)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def setBattleSkip(bs):
+    global battleSkip
+    battleSkip = bs
+    return "battleSkip = {0}".format(battleSkip)
