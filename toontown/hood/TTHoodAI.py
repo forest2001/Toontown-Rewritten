@@ -3,7 +3,7 @@ from SZHoodAI import SZHoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone.DistributedButterflyAI import DistributedButterflyAI
 from toontown.toon import NPCToons
-from toontown.election.DistributedElectionEventAI import DistributedElectionEventAI
+#from toontown.election.DistributedElectionEventAI import DistributedElectionEventAI
 from direct.task import Task
 import time
 
