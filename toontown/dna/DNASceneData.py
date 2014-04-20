@@ -1,5 +1,6 @@
 from DNAParser import *
 from DNASuitPath import DNASuitPath
+import DNAStoreSuitPoint
 from collections import deque
 
 class DNASuitGraph:
@@ -61,7 +62,8 @@ class DNASuitGraph:
                 return True
         edges = self.getEdgesFrom(point)
         for edge in edges:
-            if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque:
+            if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque \
+              and not (self.getPointFromIndex(edge.b).type != DNAStoreSuitPoint.STREETPOINT and self.getPointFromIndex(edge.b) != endPoint):
                 pointDeque.append(self.getPointFromIndex(edge.b))
                 if self.getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
                     return True
@@ -100,6 +102,11 @@ class DNASceneData:
             if (a == pointA and b == pointB) or (a == pointB and b == pointA):
                 return edge
         return None
+
+    def getSuitEdgeTravelTime(self, p1, p2, speed):
+        pos1 = self.suitGraph.getPointFromIndex(p1).getPos()
+        pos2 = self.suitGraph.getPointFromIndex(p1).getPos()
+        return (pos1 - pos2).length()/speed
 
     def getBlock(self, block):
         if not int(block) in self._blocks:
