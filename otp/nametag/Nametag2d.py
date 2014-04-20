@@ -89,7 +89,7 @@ class Nametag2d(Nametag, MarginPopup):
         if not self.isDisplayed() or self.arrow is None:
             return # No arrow or not onscreen.
 
-        if self.avatar is None:
+        if self.avatar is None or self.avatar.isEmpty():
             return # No avatar, can't be done.
 
         # Get points needed in calculation:
