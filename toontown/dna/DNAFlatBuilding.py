@@ -32,7 +32,7 @@ class DNAFlatBuilding(DNANode):
             raise DNAError('No wall_camera_barrier in storage.')
 
         barrier = barrierNode.copyTo(internalNode, 0)
-        barrier.setScale(1, 1, height)
+        barrier.setScale(self.width, 1, height)
 
         internalNode.flattenStrong()
 
