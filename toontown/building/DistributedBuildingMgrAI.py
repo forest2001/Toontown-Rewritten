@@ -28,6 +28,7 @@ class DistributedBuildingMgrAI:
         self.backupExtension = '.bu'
         self.findAllLandmarkBuildings()
         self.doLaterTask = None
+        self.air.buildingManagers[branchID] = self
         return
 
     def cleanup(self):
