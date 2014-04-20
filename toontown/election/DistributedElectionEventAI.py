@@ -34,6 +34,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.suits = []
 
     def enterOff(self):
+        self.balloon.requestDelete()
         self.requestDelete()
 
 
@@ -177,7 +178,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.cogDead = False
 
     def enterWrapUp(self):
-        taskMgr.doMethodLater(60, self.noMoreLogins, 'kill-csmud')
+        taskMgr.doMethodLater(60, self.b_setState, self.uniqueName('restart-election'), extraArgs=['Off'])
 
 
     '''
@@ -230,13 +231,6 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
     def getState(self):
         return (self.state, self.stateTime)
-        
-    def noMoreLogins(self, task):
-        task.delayTime = 60
-        csm = OTP_DO_ID_CLIENT_SERVICES_MANAGER
-        dg = self.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, self.air.ourChannel, [True])
-        self.air.send(dg)
-        return task.again
 
 @magicWord(category=CATEGORY_MODERATION, types=[str])
 def election(state):
