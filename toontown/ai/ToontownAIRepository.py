@@ -42,9 +42,6 @@ from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 
-# April Toons! (To be replaced with holiday manager)
-from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
-
 import time
 
 class ToontownAIRepository(ToontownInternalRepository):
@@ -143,9 +140,6 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.partyManager = DistributedPartyManagerAI(self)
         self.partyManager.generateWithRequired(2)
-        
-        self.aprilToonsMgr = DistributedAprilToonsMgrAI(self)
-        self.aprilToonsMgr.generateWithRequired(2)
 
         # setup our view of the global party manager ud
         self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
