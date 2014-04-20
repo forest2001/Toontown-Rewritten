@@ -51,7 +51,18 @@ class QuestManagerAI:
         return (recovered, notRecovered)
 
     def toonKilledBuilding(self, toon, track, difficulty, numFloors, zoneId, activeToons):
-        pass
+        '''
+        Called when a toon defeats a cog building
+        '''
+        for questIndex in range(len(toon.quests)):
+            quest = Quests.getQuest(toon.quests[questIndex][0])
+            if isinstance(quest, Quests.BuildingQuest):
+                for suit in suitsKilled:
+                    if quest.isLocationMatch(zoneId):
+                        if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
+                            if quest.getNumFloors() >= numFloors:
+                                toon.quests[questIndex][4] += 1
+        toon.b_setQuests(toon.quests)
 
     def toonKilledCogdo(self, toon, difficulty, numFloors, zoneId, activeToons):
         pass
@@ -145,7 +156,7 @@ class QuestManagerAI:
                 if not Quests.avatarWorkingOnRequiredRewards(av):
                     if tier != Quests.ELDER_TIER: #lmao elder tier
                         tier += 1
-                    av.b_setRewardHistory(tier, rewardHistory[1])
+                    av.b_setRewardHistory(tier, [])
                 else:
                     self.notify.debug("Rejecting avId({0}) because still working on tier, but will be eligible for tierup".format(avId))
                     npc.rejectAvatarTierNotDone(avId)
