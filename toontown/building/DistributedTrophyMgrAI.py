@@ -11,7 +11,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
     def requestTrophyScore(self):
         avId = self.air.getAvatarIdFromSender()
         if avId in self.scores:
-            self.air.sendUpdateToAvatarId(avId, 'setTrophyScore', [self.scores[avId][1]])
+            if avId in self.air.doId2do:
+                self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
 
     def removeTrophy(self, avId, numFloors):
         if not avId in self.scores:
@@ -21,7 +22,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         if self.scores[avId][1] < 0:
             self.notify.warn("avId %d has a negative scorevalue?~?~?!"%avId)
             self.scores[avId][1] = 0
-        self.air.sendUpdateToAvatarId(avId, 'setTrophyScore', [self.scores[avId][1]])
+        if avId in self.air.doId2do:
+            self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
 
     def addTrophy(self, avId, name, numFloors):
         if not avId in self.scores:
@@ -32,7 +34,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
             av = self.air.doId2do[avId]
             self.scores[avId][0] = av.getName()
         self.scores[avId][1] += numFloors
-        self.air.sendUpdateToAvatarId(avId, 'setTrophyScore', [self.scores[avId][1]])
+        if avId in self.air.doId2do:
+            self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
 
     def getLeaderInfo(self):
         avIds = []
