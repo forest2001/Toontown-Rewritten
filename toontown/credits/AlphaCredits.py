@@ -167,7 +167,7 @@ CreditsScenes = [
                 Credits('Goshi', 'Self-proclaimed Police\nSupport Manager\nModerator', '14-4-1_itsabirthdefect-nothingsilly.jpg', 'right', 2,   'J.C.', 'Champion Chatterbox\nMoral Support\nModerator', '11-2-13_whatdoesjcsay.jpg'),
 
                 # Artists
-                Credits('Capt. Sandy', '\n\nLead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 
+                Credits('Capt. Sandy', 'Lead Art Director\nGraphic Designer\nConcept Artist', 'capt_sandy.jpg', 'left', 2, 
                         'Boo Boo', 'Novice Painter\nTexture Artist', '03-4-19_kickedthebucket.jpg'),
 
                 Credits('Slate', 'Fashion Expert\nTexture Artist', '12-6-13_slate.jpg', 'right', 2, 
@@ -180,7 +180,7 @@ CreditsScenes = [
                 Credits('Roger Dog', 'Roger Dog\n3D Modeler\nAnimator', '11-21-13_hiimrogerdog.jpg', 'left', 2, 
                         'Flippy Cheezer', 'The Speedway Master\n3D Modeler\nCharacter Rigger', '03-4-19_themoldermaker.jpg'),
 
-                Credits('Scooter', 'Puzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 
+                Credits('Skinny Scooter\nWackytoon', '\n\nPuzzle Piecer\nARG Organizer', '11-16-13_whatisthis.jpg', 'left', 2, 
                         'Joshsora', 'Infinite Patience\nFormer 3D Modeler', '12-21-13_theworldendedtodaylastyear.jpg'),
 
                 # Composers
@@ -191,5 +191,5 @@ CreditsScenes = [
                 Credits('Disney Online', 'The owners and creators\nof Toontown.', '11-20-13_donald.jpg', 'left', 2, 
                         'VR Studio', 'For developing Toontown Online.', '11-15-13_grey.jpg'),
 
-                Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', '14-1-22_ohmanohmanOHMAN.jpg', 'left'),
-                ]
+                Credits('Jaymo', 'For his continued efforts\nto bring Toontown back.', '14-1-22_ohmanohmanOHMAN.jpg', 'left')
+]
