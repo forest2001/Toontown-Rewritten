@@ -1012,7 +1012,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Wait(5),
             Func(self.alec.setChatAbsolute, 'He\'s right, Flippy. You\'re a hero, and you\'re the only leader we have left.', CFSpeech|CFTimeout),
             Wait(7),
-            Func(self.flippy.setChatAbsolute, 'With a heavy heart, I hereby being Toon Council Presidency.', CFSpeech|CFTimeout),
+            Func(self.flippy.setChatAbsolute, 'With a heavy heart, I hereby the Toon Council Presidency.', CFSpeech|CFTimeout),
             Wait(7),
             Func(self.flippy.setChatAbsolute, 'Only until these Cogs are gone, though.', CFSpeech|CFTimeout),
             Wait(7),
