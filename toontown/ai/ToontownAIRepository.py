@@ -74,6 +74,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.dnaStoreMap = {}
 
+        self.buildingManagers = {}
+        self.suitPlanners = {}
+
     def getTrackClsends(self):
         return False
         
@@ -197,6 +200,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
         clearQueue()
+
+        for sp in self.suitPlanners.values():
+            sp.assignInitialSuitBuildings()
 
         # Calculate time until next hour.
         thetime = time.time() % 3600
