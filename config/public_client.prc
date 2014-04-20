@@ -13,18 +13,21 @@ default-model-extension .bam
 
 cog-thief-ortho 0
 
-show-total-population #t
+show-total-population #f
 want-mat-all-tailors #t
 
 # For alpha, we have to disable a few features for now.
 want-pets #f
-want-news-page #f
-want-news-tab #f
-want-housing #t
-want-doomsday #f
-
 want-karts #t
+want-housing #t
+want-news-tab #f
+want-news-page #f
+
+# Here are some events to enable.
 force-holiday-decorations 6
+want-doomsday #t
+# TODO: Fix new fireworks
+want-old-fireworks #t
 
 model-path /
 model-cache-models #f
@@ -45,5 +48,5 @@ vfs-mount phase_13.mf /
 
 audio-library-name p3openal_audio
 
-# TODO: FIX NEW FIREWORKS!
-want-old-fireworks #t
+#nobody likes vsync anyways
+sync-video #f

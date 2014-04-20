@@ -54,19 +54,29 @@ class InvasionPathVisualizer(NodePath):
 
         self.attachNewNode(segs.create())
 
+invasionViz = None
 @magicWord()
 def showInvasionPaths():
-    viz = InvasionPathVisualizer(pathfinder)
-    viz.reparentTo(render)
+    global invasionViz
+    invasionViz = InvasionPathVisualizer(pathfinder)
+    invasionViz.reparentTo(render)
+    return "Showing invasion paths."
 
+@magicWord()
+def hideInvasionPaths():
+    if invasionViz is None:
+        return "No invasion paths to hide."
+    invasionViz.removeNode()
+    return "Hiding invasion paths."
 
 # HACK MWs for debugging pathfinding
 @magicWord()
-def planFrom():
+def planPathFrom():
     base.localAvatar._planPos = base.localAvatar.getPos()
+    return "Set planned path \"from\"."
 
 @magicWord()
-def planTo():
+def planPathTo():
     fromPos = getattr(base.localAvatar, '_planPos', None)
     if not fromPos:
         return 'No planFrom point set!'
@@ -88,3 +98,4 @@ def planTo():
     for np in render.findAllMatches('**/plannedPath'):
         np.removeNode()
     render.attachNewNode(segs.create())
+    return "Set planned path \"to\"."

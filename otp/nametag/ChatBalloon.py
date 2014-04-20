@@ -5,6 +5,7 @@ class ChatBalloon:
     TEXT_SHIFT_PROP = 0.08
     NATIVE_WIDTH = 10.0
     MIN_WIDTH = 2.5
+    MIN_HEIGHT = 1
     BUBBLE_PADDING = 0.3
     BUBBLE_PADDING_PROP = 0.05
     BUTTON_SCALE = 6
@@ -52,9 +53,15 @@ class ChatBalloon:
             np.setPos(np, self.BUTTON_SHIFT)
             np.setScale(self.BUTTON_SCALE)
 
+        # Set a minimum width and height for short or empty messages
         if width < self.MIN_WIDTH:
             width = self.MIN_WIDTH
             t.setX(t, width/2.0)
+            t.node().setAlign(TextNode.ACenter)
+
+        if height < self.MIN_HEIGHT:
+            height = self.MIN_HEIGHT
+            t.setX(t, height/2.0)
             t.node().setAlign(TextNode.ACenter)
 
         # Set the balloon's size:

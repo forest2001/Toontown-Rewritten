@@ -48,6 +48,7 @@ from toontown.distributed import ToontownDistrictStats
 from toontown.makeatoon import TTPickANamePattern
 from toontown.parties import ToontownTimeManager
 from toontown.toon import Toon, DistributedToon
+from toontown.credits.CreditsSequence import CreditsSequence
 from ToontownMsgTypes import *
 import HoodMgr
 import PlayGame
@@ -126,6 +127,13 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         state.addTransition('skipTutorialRequest')
         state = self.gameFSM.getStateNamed('playGame')
         state.addTransition('skipTutorialRequest')
+
+        # Alpha Credits
+        self.credits = CreditsSequence('alpha')
+        self.loginFSM.addState(State.State('credits', self.enterCredits, self.exitCredits, ['gameOff', 'noConnection']))
+        state = self.loginFSM.getStateNamed('playingGame')
+        state.addTransition('credits')
+
         self.wantCogdominiums = base.config.GetBool('want-cogdominiums', 1)
         self.wantEmblems = base.config.GetBool('want-emblems', 0)
         if base.config.GetBool('tt-node-check', 0):
@@ -496,6 +504,21 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         if self._userLoggingOut:
             self.detectLeaks(okTasks=[], okEvents=['destroy-ToontownLoadingScreenTitle', 'destroy-ToontownLoadingScreenTip', 'destroy-ToontownLoadingScreenWaitBar'])
         return
+
+    def enterCredits(self):
+        self.credits.enter()
+        
+    def killClientAlphaIsOver(self):
+        # Friend error if we don't disconnect... I don't even?!
+        self.disconnect()
+        # See you in beta, kiddies!
+        self.bootedIndex = 156
+        self.bootedText = OTPLocalizer.CRBootedReasons.get(156)
+        self.stopReaderPollTask()
+        self.lostConnection()
+
+    def exitCredits(self):
+        self.credits.exit()
 
     def enterGameOff(self):
         OTPClientRepository.OTPClientRepository.enterGameOff(self)

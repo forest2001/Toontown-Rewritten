@@ -6,6 +6,8 @@ class InvasionSuitBase:
     # move the invading suits around.
 
     def __init__(self):
+        self.walkSpeed = ToontownGlobals.SuitWalkSpeed
+
         # This is a fine way to reset all values to defaults:
         self.freezeLerp(0, 0)
 
@@ -20,7 +22,7 @@ class InvasionSuitBase:
 
         # Calculate how long it takes the suit to march along this lerp:
         vectorLength = self._lerpVector.length()
-        self._lerpDelay = vectorLength / ToontownGlobals.SuitWalkSpeed
+        self._lerpDelay = vectorLength / self.walkSpeed
 
         # Avoid divisions by zero:
         self._lerpDelay = max(self._lerpDelay, 0.01)

@@ -28,6 +28,7 @@ class NametagGroup:
         self.font = None
         self.name = ''
         self.displayName = ''
+        self.wordWrap = 7.5
         self.qtColor = VBase4(1,1,1,1)
         self.colorCode = CCNormal
         self.avatar = None
@@ -140,6 +141,10 @@ class NametagGroup:
         self.font = font
         self.updateTags()
 
+    def setWordwrap(self, wrap):
+        self.wordWrap = wrap
+        self.updateTags()
+
     def setColorCode(self, cc):
         self.colorCode = cc
         self.updateTags()
@@ -223,6 +228,7 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
+        tag.wordWrap = self.wordWrap
         tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
@@ -302,6 +308,3 @@ class NametagGroup:
         for tag in self.nametags:
             if isinstance(tag, MarginPopup):
                 tag.unmanage(manager)
-
-    def setNameWordwrap(self, wrap):
-        pass

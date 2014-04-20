@@ -28,17 +28,23 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
     def d_setState(self, state):
         self.stateTime = globalClockDelta.getRealNetworkTime()
         self.sendUpdate('setState', [state, self.stateTime, self.avId])
-        
+
     def getState(self):
         return (self.state, self.stateTime, self.avId)
-        
+
     def enterOff(self):
         self.requestDelete()
-        
+
     def enterWaiting(self):
         # We don't need to do anything on the AI...
         pass
+
+    def enterElectionIdle(self):
+        pass
         
+    def enterElectionCrashing(self):
+        pass
+
     def requestEnter(self):
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'Waiting':
@@ -47,7 +53,7 @@ class DistributedHotAirBalloonAI(DistributedObjectAI, FSM):
         if self.avId == avId:
             return # Duplicate request?
         self.b_setState('Occupied', avId)
-        
+
     def enterOccupied(self):
         # Generate a flight path while we wait for the toon to hop in
         self.b_setFlightPath(randint(0, ElectionGlobals.NumBalloonPaths-1))

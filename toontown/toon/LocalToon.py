@@ -648,6 +648,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             return
         if not self.allowPies:
             return
+        if self.hp < 1:
+            return
         if self.numPies == 0:
             messenger.send('outOfPies')
             return

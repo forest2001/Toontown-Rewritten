@@ -109,6 +109,40 @@ def getSuitAttack(suitName, suitLevel, attackNum = -1):
     adict['group'] = SuitAttacks[name][1]
     return adict
 
+SuitSizes = {
+    'f': 4.0,
+    'p': 3.35,
+    'ym': 4.125,
+    'mm': 2.5,
+    'ds': 4.5,
+    'hh': 6.5,
+    'cr': 6.75,
+    'tbc': 7.0,
+    'bf': 4.0,
+    'b': 4.375,
+    'dt': 4.25,
+    'ac': 4.35,
+    'bs': 4.5,
+    'sd': 5.65,
+    'le': 7.125,
+    'bw': 7.0,
+    'sc': 3.6,
+    'pp': 3.55,
+    'tw': 4.5,
+    'bc': 4.4,
+    'nc': 5.25,
+    'mb': 5.3,
+    'ls': 6.5,
+    'rb': 7.0,
+    'cc': 3.5,
+    'tm': 3.75,
+    'nd': 4.35,
+    'gh': 4.75,
+    'ms': 4.75,
+    'tf': 5.25,
+    'm': 5.75,
+    'mh': 7.0,
+}
 
 SuitAttributes = {'f': {'name': TTLocalizer.SuitFlunky,
        'singularname': TTLocalizer.SuitFlunkyS,
@@ -3021,13 +3055,15 @@ WATERCOOLER = SuitAttacks.keys().index('Watercooler')
 WITHDRAWAL = SuitAttacks.keys().index('Withdrawal')
 WRITE_OFF = SuitAttacks.keys().index('WriteOff')
 
-def getFaceoffTaunt(suitName, doId):
+def getFaceoffTaunt(suitName, doId, randomChoice = False):
     if SuitFaceoffTaunts.has_key(suitName):
         taunts = SuitFaceoffTaunts[suitName]
     else:
         taunts = TTLocalizer.SuitFaceoffDefaultTaunts
-    return taunts[doId % len(taunts)]
-
+    if randomChoice == True:
+        return random.choice(taunts)
+    else:
+        return taunts[doId % len(taunts)]
 
 SuitFaceoffTaunts = OTPLocalizer.SuitFaceoffTaunts
 
