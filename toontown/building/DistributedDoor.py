@@ -159,7 +159,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             building = self.getBuilding()
             doorTrigger = building.find('**/' + self.getTriggerName())
             if not doorTrigger.isEmpty():
-                doorTrigger.setScale(1, 1.05, 1)
+                doorTrigger.getNode(0).addSolid(CollisionSphere(Point3(4,0,3), 3.5))
 
     def setTriggerName_wip(self):
         building = self.getBuilding()
