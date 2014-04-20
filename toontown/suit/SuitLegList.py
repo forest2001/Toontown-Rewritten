@@ -1,5 +1,6 @@
 from toontown.toonbase import ToontownGlobals
 import SuitTimings
+from toontown.dna import DNAStoreSuitPoint
 
 class SuitLegList:
     def __init__(self, path):
@@ -88,12 +89,25 @@ class SuitLeg:
       9 : 'ToCoghq',
       10 : 'Off'
     }
-    def __init__(self, pointA, pointB, type):
+    def __init__(self, pointA, pointB, type = None):
         self.pointA = pointA
         self.pointB = pointB
         self.posA = pointA.getPos()
         self.posB = pointB.getPos()
-        self.type = type
+        if not type is None:
+            self.type = type
+        else:
+            if pointB.type == DNAStoreSuitPoint.STREETPOINT:
+                self.type = TWalk
+            elif pointB.type == DNAStoreSuitPoint.FRONTDOORPOINT:
+                self.type = TToToonBuilding
+            elif pointB.type == DNAStoreSuitPoint.SIDEDOORPOINT:
+                self.type = TToSuitBuilding
+            elif pointB.type == DNAStoreSuitPoint.COGHQINPOINT:
+                self.type = TToCoghq
+            elif pointB.type == DNAStoreSuitPoint.COGHQOUTPOINT:
+                self.type = TFromCoghq
+
     def getLegTime(self):
         if self.type == SuitLeg.TWalk:
             return (self.posA-self.posB).length()/ToontownGlobals.SuitWalkSpeed
