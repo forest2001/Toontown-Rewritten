@@ -19,7 +19,7 @@ class DNALandmarkBuilding(DNANode):
         return DNANode._DNANode__getAttribute(self, DNATitle, 'title', '')
 
     def setupSuitBuildingOrigin(self, nodePathA, nodePathB):
-        if self.id[0:2] == 'tb' and self.id[3].isdigit() and self.id.find(':') != -1:
+        if self.id[0:2] == 'tb' and self.id[2].isdigit() and self.id.find(':') != -1:
             name = self.id
             name = 's' + name[1:]
             node = nodePathB.find('**/*suit_building_origin')
@@ -31,6 +31,7 @@ class DNALandmarkBuilding(DNANode):
             else:
                 node.wrtReparentTo(nodePathA, 0)
                 node.setName(name)
+            node.hide()
 
     def _makeNode(self, storage, parent):
         node = storage.findNode(self.code)
@@ -42,7 +43,7 @@ class DNALandmarkBuilding(DNANode):
         self.node.setName(self.id)
         self.node.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
 
-        self.setupSuitBuildingOrigin(node, self.node)
+        self.setupSuitBuildingOrigin(self.node, self.node)
         gr = SceneGraphReducer()
         gr.flatten(self.node.getNode(0), 0)
         return self.node
