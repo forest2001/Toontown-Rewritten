@@ -335,6 +335,9 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
     '''
     def spawnOne(self, suitType, levelOffset=0):
         # Pick a spawnpoint:
+        if not self.spawnPoints:
+            return
+
         pointId = random.choice(self.spawnPoints)
         self.spawnPoints.remove(pointId)
 
