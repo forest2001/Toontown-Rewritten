@@ -139,4 +139,7 @@ class DistributedElevatorExt(DistributedElevator.DistributedElevator):
         return self.bldg.interiorZoneId
 
     def getElevatorModel(self):
+        np = self.bldg.getSuitElevatorNodePath()
+        if np.isEmpty():
+            self.notify.error("np not ok")
         return self.bldg.getSuitElevatorNodePath()
