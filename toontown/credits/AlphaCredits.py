@@ -109,7 +109,7 @@ class Credits:
         self.description = OnscreenText(text=self.toonDescription, pos=descriptionPos, scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=textAlignment)
         self.image = OnscreenImage(image='phase_4/maps/news/%s' % self.toonImage, pos=imagePos, scale=(0.5, 0.30, 0.30))
         self.elements = [self.title, self.description, self.image]
-        
+
         if self.twoSlides:
             self.title2 = OnscreenText(text=self.toon2Name, pos=title2Pos, scale=(0.15), fg=(1, 1, 1, 1), font=ToontownGlobals.getSignFont(), align=text2Alignment)
             self.description2 = OnscreenText(text=self.toon2Description, pos=description2Pos, scale=(0.06), fg=(1, 1, 1, 1), font=ToontownGlobals.getMinnieFont(), align=text2Alignment)
@@ -126,7 +126,7 @@ class Credits:
             return Sequence(
                 ParentInterval(self.sceneRoot, render),
                 Func(doFade, 'in', self.elements),
-                Wait(4),
+                Wait(3),
                 Func(doFade, 'hide', self.elements),
                 ParentInterval(self.sceneRoot, hidden)
                 )
