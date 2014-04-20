@@ -381,7 +381,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         if self.finishedPreShow:
             self.cameras = []
             for cameraId in base.cr.cameraManager.cameraIds:
-                self.cameras.append(base.cr.doId2do[cameraId])
+                if cameraId in base.cr.doId2do:
+                    self.cameras.append(base.cr.doId2do[cameraId])
             self.surlee.hide()
             self.surlee.removeActive()
             self.surleeR.show()
