@@ -29,7 +29,7 @@ class TTHoodAI(HoodAI):
     def __startElectionTick(self):
         # Check seconds until next hour.
         ts = time.time()
-        nextHour = ts - (ts % 3600)
+        nextHour = 3600 - (ts % 3600)
         taskMgr.doMethodLater(nextHour, self.__electionTick, 'election-hourly')
         
     def __electionTick(self, task):
