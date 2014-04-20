@@ -156,8 +156,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.doorType == DoorTypes.EXT_STANDARD:
             building = self.getBuilding()
             doorTrigger = building.find('**/' + self.getTriggerName())
-            doorTrigger.show()
-            doorTrigger.setScale(1, 1.05, 1)
+            if not doorTrigger.isEmpty():
+                doorTrigger.setScale(1, 1.05, 1)
 
     def setTriggerName_wip(self):
         building = self.getBuilding()
