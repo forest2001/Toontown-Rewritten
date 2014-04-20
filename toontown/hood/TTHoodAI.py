@@ -46,14 +46,14 @@ class TTHoodAI(HoodAI):
             state = election.getState()
             if state[0] == 'Idle':
                 # There's already an Idle invasion, start it!
-                taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['PreShow'])
+                taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['Event'])
         if not election:
             # Create a new election object.
             election = DistributedElectionEventAI(self.air)
             election.generateWithRequired(self.HOOD)
             election.b_setState('Idle')
             # Start the election after a 10 second delay.
-            taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['PreShow'])
+            taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['Event'])
         return task.again
             
     
