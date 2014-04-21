@@ -1,6 +1,6 @@
 # This is the PRC configuration file for developer servers and clients. 
 # If making a change here, please remember to add it to public_client.prc
-# as well if the changes should be visible when pushed to the public.
+# as well as deployment/server.prc if necessary.
 
 # Client settings
 window-title Toontown Rewritten [DEV BUILD]
