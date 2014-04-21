@@ -11,7 +11,13 @@ class PlanD:
         # I couldn't resist the name. :)
         pathPath = os.path.join(os.path.dirname(__file__), 'pathd.py')
 
-        self.sp = subprocess.Popen(pathPath, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        if not simbase.config.GetBool('want-doomsday', False) and os.name == 'nt':
+            # Hack out Windows crash when doomsday is disabled.
+            # If you want to run doomsday on windows (server), you'll need to use the following:
+            # self.sp = subprocess.Popen([r'/path/to/p3d/linked/python.exe', pathPath], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            return
+        else:
+            self.sp = subprocess.Popen(pathPath, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         atexit.register(self.sp.kill)
         self.callback = None
 
