@@ -4,7 +4,7 @@
 
 # Client settings
 window-title Toontown Rewritten [DEV BUILD]
-server-version dev # Mirai fills this in
+server-version dev
 sync-video #f
 
 
