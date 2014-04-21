@@ -10,6 +10,7 @@ from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
+from toontown.hood import SellbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -177,6 +178,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(OZHoodAI.OZHoodAI(self))
         clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
+        clearQueue()
+        self.hoods.append(SellbotHQAI.SellbotHQAI(self))
         clearQueue()
 
         for sp in self.suitPlanners.values():
