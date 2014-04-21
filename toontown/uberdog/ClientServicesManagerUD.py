@@ -151,12 +151,19 @@ class LoginAccountFSM(OperationFSM):
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
-
-        # Do they have the minimum access needed to play?
-        if self.adminAccess < simbase.config.GetInt('minimum-access', 100):
+        
+        # Binary bitmask in base10 form, appended to the adminAccess.
+        # To find out what they access to, convert the serverAccess to 3-bit binary.
+        # 2^2 = dev, 2^1 = qa, 2^0 = test
+        serverType = simbase.config.GetString('server-type', 'dev')
+        serverAccess = (self.adminAccess % 100) % 10 # Get rid of the X in XYZ, get rid of the Y in YZ, Z = Server Access
+        if (serverType == 'dev' and serverAccess not in [4, 6, 7]) or \
+           (serverType == 'qa' and serverAccess not in [2, 3, 6, 7]) or \
+           (serverType == 'test' and serverAccess not in [1, 3, 7]):
             self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
+            
 
         if accountId:
             self.accountId = accountId
