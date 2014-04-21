@@ -2,9 +2,12 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 import Hood
+from pandac.PandaModules import *
+from toontown.dna import DNAUtil
 
 class CogHood(Hood.Hood):
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHood')
+    dnaFile = None
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         Hood.Hood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
@@ -13,6 +16,7 @@ class CogHood(Hood.Hood):
          State.State('quietZone', self.enterQuietZone, self.exitQuietZone, ['cogHQLoader']),
          State.State('final', self.enterFinal, self.exitFinal, [])], 'start', 'final')
         self.fsm.enterInitialState()
+        self.visInterest = None
 
     def load(self):
         Hood.Hood.load(self)
@@ -27,6 +31,20 @@ class CogHood(Hood.Hood):
         if not skyInner.isEmpty():
             skyInner.setDepthWrite(0)
             skyInner.setBin('background', 20)
+        if not self.dnaFile is None:
+            dna = loader.loadDNA(self.dnaFile)
+            visgroups = DNAUtil.getVisGroups(dna)
+            visZones = []
+            for vg in visgroups:
+                if vg.getZone() == dna.zone:
+                    visZones = vg.vis
+            print 'adding interest on zones', visZones
+            self.visInterest = base.cr.addInterest(base.localAvatar.defaultShard, visZones, 'cogHQVis')
+            
+
+    def unload(self):
+        Hood.Hood.unload(self)
+        base.cr.removeInterest(self.visInterest)
 
     def loadLoader(self, requestStatus):
         loaderName = requestStatus['loader']
