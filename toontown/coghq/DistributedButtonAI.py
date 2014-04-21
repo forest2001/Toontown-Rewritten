@@ -1,6 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
-from toontown.coghq.DistributedSwitchAI import DistributedSwitchAI
+from direct.task import Task
+import DistributedSwitchBase
+import DistributedSwitchAI
 
-class DistributedButtonAI(DistributedSwitchAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedButtonAI")
-
+class DistributedButtonAI(DistributedSwitchAI.DistributedSwitchAI):
+    setColor = DistributedSwitchBase.stubFunction
+    setModel = DistributedSwitchBase.stubFunction

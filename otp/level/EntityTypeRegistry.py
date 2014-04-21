@@ -24,11 +24,11 @@ class EntityTypeRegistry:
             return filename
 
         fileLines = file(getPyExtVersion(EntityTypes.__file__)).readlines()
-        hv.hashString(fileLines.join(''))
+        hv.hashString(string.join(fileLines))
         s = str(hv.asHex())
         s += '.'
         fileLines = file(getPyExtVersion(self.entTypeModule.__file__)).readlines()
-        hv.hashString(fileLines.join(''))
+        hv.hashString(string.join(fileLines))
         s += str(hv.asHex())
         self.hashStr = s
         getPyExtVersion = None

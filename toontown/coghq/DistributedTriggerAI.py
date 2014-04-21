@@ -1,6 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
-from toontown.coghq.DistributedSwitchAI import DistributedSwitchAI
+from direct.task import Task
+import DistributedSwitchAI
 
-class DistributedTriggerAI(DistributedSwitchAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTriggerAI")
-
+class DistributedTriggerAI(DistributedSwitchAI.DistributedSwitchAI):
+    pass

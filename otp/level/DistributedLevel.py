@@ -473,7 +473,7 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             self.levelSpec.setAttribChange(entId, attribName, value, username)
 
     def spawnTitleText(self):
-
+        return
         def getDescription(zoneNum, self = self):
             ent = self.entities.get(zoneNum)
             if ent and hasattr(ent, 'description'):
@@ -499,6 +499,7 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             seq.start()
 
     def showInfoText(self, text = 'hello world'):
+        return
         description = text
         if description and description != '':
             taskMgr.remove(self.uniqueName('titleText'))
@@ -506,8 +507,8 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             self.titleText.setText(description)
             self.titleText.setColor(Vec4(*self.titleColor))
             self.titleText.setFg(self.titleColor)
-            seq = Sequence(Func(self.hideSmallTitleText), Func(self.showTitleText), Wait(0.1), Wait(3.0), self.titleText.colorInterval(0.5, Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0)))
-            seq.start()
+            #seq = Sequence(Func(self.hideSmallTitleText), Func(self.showTitleText), Wait(0.1), Wait(3.0), self.titleText.colorInterval(0.5, Vec4(self.titleColor[0], self.titleColor[1], self.titleColor[2], 0.0)))
+            #seq.start()
 
     def startOuch(self, ouchLevel, period = 2):
         self.notify.debug('startOuch %s' % ouchLevel)

@@ -11,6 +11,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.building import Elevator
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class FactoryInterior(BattlePlace.BattlePlace):
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryInterior')
