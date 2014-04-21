@@ -224,7 +224,7 @@ class MapPage(ShtikerPage.ShtikerPage):
         messenger.send(self.doneEvent)
 
     def goHome(self):
-        if base.config.GetBool('want-doomsday', True):
+        if base.config.GetBool('want-doomsday', False):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
@@ -237,11 +237,11 @@ class MapPage(ShtikerPage.ShtikerPage):
         messenger.send(self.doneEvent)
 
     def __buttonCallback(self, hood):
-        #if base.config.GetBool('want-doomsday', True):
-        #    self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
-        #    self.confirm.show()
-        #    self.accept('confirmDone', self.handleConfirm)
-        #    return
+        if base.config.GetBool('want-doomsday', False):
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+            return
 
         if hood in base.localAvatar.getTeleportAccess() and hood in base.cr.hoodMgr.getAvailableZones():
             base.localAvatar.sendUpdate('checkTeleportAccess', [hood])

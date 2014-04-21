@@ -274,7 +274,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
-                if not simbase.config.GetBool('want-doomsday', 0):
+                if not simbase.config.GetBool('want-doomsday', False):
                     self.sendUpdate('setLastHood', [hood])
                     self.b_setDefaultZone(hood)
 
