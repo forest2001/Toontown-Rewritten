@@ -63,7 +63,7 @@ class DNASuitGraph:
         edges = self.getEdgesFrom(point)
         for edge in edges:
             if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque \
-              and not (self.getPointFromIndex(edge.b).type != DNAStoreSuitPoint.STREETPOINT and self.getPointFromIndex(edge.b) != endPoint):
+              and (self.getPointFromIndex(edge.b).type in [DNAStoreSuitPoint.STREETPOINT, DNAStoreSuitPoint.COGHQINPOINT, DNAStoreSuitPoint.COGHQOUTPOINT] or self.getPointFromIndex(edge.b) == endPoint):
                 pointDeque.append(self.getPointFromIndex(edge.b))
                 if self.getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
                     return True
