@@ -800,7 +800,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         newSuit.buildingHeight = buildingHeight
         gotDestination = self.chooseDestination(newSuit, startTime, toonBlockTakeover=toonBlockTakeover, cogdoTakeover=cogdoTakeover, minPathLen=minPathLen, maxPathLen=maxPathLen)
         if not gotDestination:
-            self.notify.debug("Couldn't get a destination in %d!" % self.zoneId)
+            self.notify.warning("Couldn't get a destination in %d!" % self.zoneId)
             newSuit.doNotDeallocateChannel = None
             newSuit.delete()
             return
@@ -880,8 +880,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 minPathLen = self.MIN_PATH_LEN
         if maxPathLen == None:
             maxPathLen = self.MAX_PATH_LEN
-        self.notify.debug("Path min {0}, Path max {1}".format(minPathLen, maxPathLen))
-        self.notify.debug("startPt {0} {1}".format(suit.startPoint.getIndex(), suit.startPoint.getPointType()))
         retryCount = 0
         while len(possibles) > 0 and retryCount < 50:
             p = random.choice(possibles)
@@ -903,6 +901,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def pathCollision(self, path, elapsedTime):
+        #temphack
+        return 0
         pathLength = path.getNumPoints()
         i = 0
         pi = path.getPointIndex(i)
