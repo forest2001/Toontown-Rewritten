@@ -151,6 +151,13 @@ class LoginAccountFSM(OperationFSM):
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
+
+        # Do they have the minimum access needed to play?
+        if self.adminAccess < simbase.config.GetInt('minimum-access', 100):
+            self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
+            self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
+            return
+
         if accountId:
             self.accountId = accountId
             self.demand('RetrieveAccount')
