@@ -163,7 +163,6 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
-            
 
         if accountId:
             self.accountId = accountId
