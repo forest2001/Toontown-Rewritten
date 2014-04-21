@@ -157,9 +157,9 @@ class LoginAccountFSM(OperationFSM):
         # 2^2 = dev, 2^1 = qa, 2^0 = test
         serverType = simbase.config.GetString('server-type', 'dev')
         serverAccess = (self.adminAccess % 100) % 10 # Get rid of the X in XYZ, get rid of the Y in YZ, Z = Server Access
-        if (serverType == 'dev' and serverAccess not in [4, 6, 7]) or \
-           (serverType == 'qa' and serverAccess not in [2, 3, 6, 7]) or \
-           (serverType == 'test' and serverAccess not in [1, 3, 7]):
+        if (serverType == 'dev' and not serverAccess & 4) or \
+           (serverType == 'qa' and not serverAccess & 2) or \
+           (serverType == 'test' and not serverAccess & 1):
             self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
