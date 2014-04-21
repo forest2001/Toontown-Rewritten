@@ -16,7 +16,8 @@ class TTHoodAI(HoodAI):
         self.butterflies = []
         # TODO: Re-enable butterflies. RIP, you will be missed.
         #self.createButterflies()
-        self.spawnElection()
+        if self.air.config.GetBool('want-doomsday', False):
+            self.spawnElection()
     
     def spawnElection(self):
         election = self.air.doFind('ElectionEvent')
