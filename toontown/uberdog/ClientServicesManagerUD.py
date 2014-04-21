@@ -156,7 +156,7 @@ class LoginAccountFSM(OperationFSM):
         # To find out what they have access to, convert the serverAccess to 3-bit binary.
         # 2^2 = dev, 2^1 = qa, 2^0 = test
         serverType = simbase.config.GetString('server-type', 'dev')
-        serverAccess = (self.adminAccess % 100) % 10 # Get rid of the X in XYZ, get rid of the Y in YZ, Z = Server Access
+        serverAccess = self.adminAccess % 10 # Get the last digit in their access.
         if (serverType == 'dev' and not serverAccess & 4) or \
            (serverType == 'qa' and not serverAccess & 2) or \
            (serverType == 'test' and not serverAccess & 1):
