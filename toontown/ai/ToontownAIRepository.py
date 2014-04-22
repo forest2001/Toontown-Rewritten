@@ -43,7 +43,7 @@ from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 from toontown.coghq.FactoryManagerAI import FactoryManagerAI
-from toontorn.coghq.PromotionManagerAI import PromotionManagerAI
+from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
 
 import time
