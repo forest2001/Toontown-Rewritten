@@ -15,6 +15,7 @@ from direct.interval.IntervalGlobal import *
 import random
 
 class DistributedNPCToonBase(DistributedToon.DistributedToon):
+    deferFor = 1
 
     def __init__(self, cr):
         try:

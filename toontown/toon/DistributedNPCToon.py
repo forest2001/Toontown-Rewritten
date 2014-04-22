@@ -10,7 +10,6 @@ from otp.nametag.NametagConstants import *
 ChoiceTimeout = 20
 
 class DistributedNPCToon(DistributedNPCToonBase):
-    deferFor = 1
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)
