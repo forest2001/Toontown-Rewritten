@@ -5,6 +5,7 @@ from direct.distributed.PyDatagram import *
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
+from otp.distributed import OtpDoGlobals
 from sys import platform
 import dumbdbm
 import anydbm
@@ -725,7 +726,11 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.csm.air.send(dg)
         
         # Tell TTRFriendsManager somebody is logging in:
-        self.csm.air.friendsManager.toonOnline(self.avId, self.avatar)
+        ttrFmId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+        dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                        'udToonOnline', ttrFmId, ttrFmId, self.csm.air.ourChannel,
+                         [self.avId])
+        self.csm.air.send(dg)
 
         # Tell the GlobalPartyManager as well
         self.csm.air.globalPartyMgr.avatarJoined(self.avId)
@@ -746,7 +751,12 @@ class UnloadAvatarFSM(OperationFSM):
         channel = self.csm.GetAccountConnectionChannel(self.target)
         
         # Tell TTRFriendsManager somebody is logging off:
-        self.csm.air.friendsManager.toonOffline(self.avId)
+        ttrFmId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+        dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                        'udToonOffline', ttrFmId, ttrFmId, self.csm.air.ourChannel,
+                         [self.avId])
+        self.csm.air.send(dg)
+
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()

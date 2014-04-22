@@ -3385,6 +3385,9 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
   setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
   
+  udToonOnline(uint32 doId);
+  udToonOffline(uint32 doId);
+  
 };
 
 

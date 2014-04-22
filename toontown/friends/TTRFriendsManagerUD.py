@@ -98,8 +98,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             if dclass != self.air.dclassesByName['DistributedToonUD']:
                 return
             if not avId in self.onlineToons:
-                self.onlineToons.append(avId)
-                self.toonOnline(avId, fields)
+                # this wastes some resources reading from the db again. :D
+                self.udToonOnline(avId)
             self.friendsLists[avId] = fields['setFriendsList'][0]
             self.friendIndexes[avId] = 0
             self.listResponses[avId] = []
@@ -113,9 +113,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
        
         self.air.dbInterface.queryObject(self.air.dbId, avId, functools.partial(handleAv, avId=avId))
         
-    def toonOnline(self, doId, fields):
+    def udToonOnline(self, doId):
         self.onlineToons.append(doId)
-        friendsList = fields['setFriendsList'][0]
         
         channel = self.GetPuppetConnectionChannel(doId)
         dgcleanup = self.dclass.aiFormatUpdate('goingOffline', self.doId, self.doId, self.air.ourChannel, [doId])
@@ -124,13 +123,21 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         dg.addString(dgcleanup.getMessage())
         self.air.send(dg)
         
-        for friend in friendsList:
-            friendId = friend[0]
-            if friend[0] in self.onlineToons:
-                self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
-            self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
+        def handleToon(dclass, fields):
+            if dclass != self.air.dclassesByName['DistributedToonUD']:
+                return
+            friendsList = fields['setFriendsList'][0]
+            for friend in friendsList:
+                friendId = friend[0]
+                if friend[0] in self.onlineToons:
+                    self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
+                self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
+
+        self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
+        
+        
     
-    def toonOffline(self, doId):
+    def udToonOffline(self, doId):
         if doId not in self.onlineToons:
             return
         def handleToon(dclass, fields):
@@ -155,7 +162,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
         
     def goingOffline(self, avId):
-        self.toonOffline(avId)
+        self.udToonOffline(avId)
         
     def getAvatarDetails(self, avId):
         #return
