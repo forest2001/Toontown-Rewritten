@@ -1,29 +1,26 @@
-from HoodAI import HoodAI
+from CogHoodAI import CogHoodAI
 from toontown.toonbase import ToontownGlobals
 from toontown.suit import DistributedSuitPlannerAI
-from toontown.coghq import DistributedFactoryElevatorExtAI
+from toontown.coghq.DistributedFactoryElevatorExtAI import DistributedFactoryElevatorExtAI
 
-class SellbotHQAI(HoodAI):
+class SellbotHQAI(CogHoodAI):
     HOOD = ToontownGlobals.SellbotHQ
 
     def __init__(self, air):
-        HoodAI.__init__(self, air)
-
+        CogHoodAI.__init__(self, air)
         self.createZone()
     
     def createZone(self):
-        HoodAI.createZone(self)
+        CogHoodAI.createZone(self)
         
+        # Create factory elevators.
         mins = ToontownGlobals.FactoryLaffMinimums[0]
-        self.testElev0 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 0, antiShuffle=0, minLaff=mins[0])
-        self.testElev0.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
-        self.testElev1 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 1, antiShuffle=0, minLaff=mins[1])
-        self.testElev1.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
+        self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 0, minLaff=mins[0])
+        self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 1, minLaff=mins[0])
         
-        #TODO: spawn VP lobby
+        # TODO: VP boss battle.
         
-        self.sp = DistributedSuitPlannerAI.DistributedSuitPlannerAI(self.air, self.HOOD)
-        self.sp.generateWithRequired(self.HOOD)
-        self.sp.d_setZoneId(self.HOOD)
-        self.sp.initTasks()
-        self.air.suitPlanners[self.HOOD] = self.sp
+        # Create Suit Planners in the cog playground and factory waiting area.
+        self.createSuitPlanner(self.HOOD)
+        # TODO: SuitPlanner doesn't spawn cogs correctly in factory waiting area.
+        #self.createSuitPlanner(ToontownGlobals.SellbotFactoryExt)
