@@ -25,8 +25,8 @@ class TTHoodAI(SZHoodAI):
             election = DistributedElectionEventAI(self.air)
             election.generateWithRequired(self.HOOD)
         election.b_setState('Idle')
-        # This is to make the election run every hour
-        #self.__startElectionTick()
+        if self.air.config.GetBool('want-hourly-doomsday', False):
+            self.__startElectionTick()
         
     def __startElectionTick(self):
         # Check seconds until next hour.
