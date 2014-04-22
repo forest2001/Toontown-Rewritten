@@ -1,7 +1,7 @@
 from HoodAI import HoodAI
 from toontown.toonbase import ToontownGlobals
 from toontown.suit import DistributedSuitPlannerAI
-#from toontown.coghq import DistributedFactoryElevatorExtAI
+from toontown.coghq import DistributedFactoryElevatorExtAI
 
 class SellbotHQAI(HoodAI):
     HOOD = ToontownGlobals.SellbotHQ
@@ -14,12 +14,11 @@ class SellbotHQAI(HoodAI):
     def createZone(self):
         HoodAI.createZone(self)
         
-        '''mins = ToontownGlobals.FactoryLaffMinimums[0]
+        mins = ToontownGlobals.FactoryLaffMinimums[0]
         self.testElev0 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 0, antiShuffle=0, minLaff=mins[0])
         self.testElev0.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
-        self.addDistObj(self.testElev0)
         self.testElev1 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 1, antiShuffle=0, minLaff=mins[1])
-        self.testElev1.generateWithRequired(ToontownGlobals.SellbotFactoryExt)'''
+        self.testElev1.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
         
         #TODO: spawn VP lobby
         

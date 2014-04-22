@@ -70,7 +70,15 @@ class QuestManagerAI:
         pass
 
     def toonDefeatedFactory(self, toon, factoryId, activeVictors):
-        pass
+        '''
+        Called when a toon defeats a factory
+        '''
+        for questIndex in range(len(toon.quests)):
+            quest = Quests.getQuest(toon.quests[questIndex][0])
+            if isinstance(quest, Quests.FactoryQuest):
+                if quest.doesFactoryCount(toon.getDoId(), factoryId, activeVictors):
+                    toon.quests[questIndex][4] += 1
+        toon.b_setQuests(toon.quests)
 
     def toonDefeatedMint(self, toon, mintId, activeVictors):
         pass
