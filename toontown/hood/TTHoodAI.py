@@ -14,8 +14,7 @@ class TTHoodAI(SZHoodAI):
         SZHoodAI.createZone(self)
         self.spawnObjects()
         self.butterflies = []
-        # TODO: Re-enable butterflies. RIP, you will be missed.
-        #self.createButterflies()
+        self.createButterflies()
 
         if self.air.config.GetBool('want-doomsday', False):
             self.spawnElection()
