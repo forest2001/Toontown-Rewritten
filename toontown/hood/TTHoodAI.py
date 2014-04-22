@@ -16,10 +16,9 @@ class TTHoodAI(SZHoodAI):
         self.butterflies = []
         # TODO: Re-enable butterflies. RIP, you will be missed.
         #self.createButterflies()
-        
-        #beginhack disable election props
-        #self.spawnElection()
-        #endhack
+
+        if self.air.config.GetBool('want-doomsday', False):
+            self.spawnElection()
     
     def spawnElection(self):
         election = self.air.doFind('ElectionEvent')
@@ -32,7 +31,7 @@ class TTHoodAI(SZHoodAI):
     def __startElectionTick(self):
         # Check seconds until next hour.
         ts = time.time()
-        nextHour = ts - (ts % 3600)
+        nextHour = 3600 - (ts % 3600)
         taskMgr.doMethodLater(nextHour, self.__electionTick, 'election-hourly')
         
     def __electionTick(self, task):
@@ -49,14 +48,14 @@ class TTHoodAI(SZHoodAI):
             state = election.getState()
             if state[0] == 'Idle':
                 # There's already an Idle invasion, start it!
-                taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['PreShow'])
+                taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['Event'])
         if not election:
             # Create a new election object.
             election = DistributedElectionEventAI(self.air)
             election.generateWithRequired(self.HOOD)
             election.b_setState('Idle')
             # Start the election after a 10 second delay.
-            taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['PreShow'])
+            taskMgr.doMethodLater(10, election.b_setState, 'election-start-delay', extraArgs=['Event'])
         return task.again
             
     

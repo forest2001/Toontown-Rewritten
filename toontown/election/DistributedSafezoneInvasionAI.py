@@ -229,6 +229,12 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
     def enterVictory(self):
         self.b_setInvasionStarted(False)
+        
+        for toon in self.toons:
+            toon.toonUp(toon.getMaxHp())
+        for toon in self.sadToons:
+            toon.toonUp(toon.getMaxHp())
+            
         taskMgr.doMethodLater(65, self.wrapUp, self.uniqueName('WrapUp-Later'))
 
     def wrapUp(self, task):
@@ -269,6 +275,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 
         if toon in self.sadToons:
             self.sadToons.remove(toon)
+            self.ignore(self.air.getAvatarExitEvent(toon.doId))
 
         toon.b_setHealthDisplay(0)
 

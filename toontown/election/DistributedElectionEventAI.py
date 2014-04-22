@@ -116,7 +116,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             Func(event.b_setState, 'AlecSpeech'),
             Wait(128),
             Func(event.b_setState, 'VoteBuildup'),
-            Wait(42),
+            Wait(44),
             Func(event.b_setState, 'WinnerAnnounce'),
             Wait(12),
             Func(event.b_setState, 'CogLanding'),
@@ -192,13 +192,13 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             invasion.generateWithRequired(2000)
 
     def setSuitDamage(self, hp, kill = False):
-        if not self.cogDead:
-            self.cogDead = True
-            if self.state == 'InvasionEnd':
-                invasion = simbase.air.doFind('SafezoneInvasion')
-                if invasion:
-                    invasion.setFinaleSuitStunned(hp, kill)
-            else:
+        if self.state == 'InvasionEnd':
+            invasion = simbase.air.doFind('SafezoneInvasion')
+            if invasion:
+                invasion.setFinaleSuitStunned(hp, kill)
+        else:
+            if not self.cogDead:
+                self.cogDead = True    
                 self.suit = DistributedInvasionSuitAI(self.air, self)
                 self.suit.dna.newSuit('ym')
                 self.suit.setSpawnPoint(99)

@@ -381,7 +381,8 @@ class DistributedElectionEvent(DistributedObject, FSM):
         if self.finishedPreShow:
             self.cameras = []
             for cameraId in base.cr.cameraManager.cameraIds:
-                self.cameras.append(base.cr.doId2do[cameraId])
+                if cameraId in base.cr.doId2do:
+                    self.cameras.append(base.cr.doId2do[cameraId])
             self.surlee.hide()
             self.surlee.removeActive()
             self.surleeR.show()
@@ -423,6 +424,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             self.alec.setPosHpr(18.0, 41.2, 0, -130, 0, 0)
 
         if self.finishedInvasionEnding:
+            self.alec.setPosHpr(3, -7, 3.23, 165, 0, 0)
             self.flippy.setPos(2, -10, 3.23)
             self.flippy.setH(90)
 
@@ -946,7 +948,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
                     Wait(0.6),
                     Func(self.flippy.setChatAbsolute, 'That\'s for the election!', CFSpeech|CFTimeout),
                     Func(pie.wrtReparentTo, render),
-                    ProjectileInterval(pie, endPos=Point3(36.5,  -1.9, 9.0), duration=0.2),
+                    ProjectileInterval(pie, endPos=Point3(36.5,  -1.9, 11.0), duration=0.3),
                     Func(base.playSfx, sfxPieSplat, volume=0.8),
                     Func(self.sendUpdate, 'setSuitDamage', [36, False]),
                     Func(pie.removeNode)
@@ -963,15 +965,13 @@ class DistributedElectionEvent(DistributedObject, FSM):
                     Wait(0.6),
                     Func(self.flippy.setChatAbsolute, 'THAT\'S for Slappy!', CFSpeech|CFTimeout),
                     Func(cake.wrtReparentTo, render),
-                    ProjectileInterval(cake, endPos=Point3(36.5,  -1.9, 9.0), duration=0.2),
+                    ProjectileInterval(cake, endPos=Point3(36.5,  -1.9, 11.0), duration=0.3),
                     Func(base.playSfx, sfxPieSplat, volume=1.0),
                     Func(self.sendUpdate, 'setSuitDamage', [100, False]),
                     Func(cake.removeNode)
                 )
             ),
-            Wait(0.5),
-            Func(self.flippy.setChatAbsolute, 'AND THIS IS FOR TOONTOWN!', CFSpeech|CFTimeout),
-            Wait(0.5),
+            Wait(1),
             Parallel(Func(base.playSfx, sfxCake, volume=0.9), ActorInterval(self.flippy, 'throw', startFrame=0, endFrame=46), Func(weddingcake.reparentTo, self.flippy.rightHand), weddingcake.scaleInterval(0.5, (1.4))),
             Parallel(
                 Sequence(
@@ -980,13 +980,45 @@ class DistributedElectionEvent(DistributedObject, FSM):
                 ),
                 Sequence(
                     Wait(0.6),
+                    Func(self.flippy.setChatAbsolute, 'AND THIS IS FOR TOONTOWN!', CFSpeech|CFTimeout),
                     Func(weddingcake.wrtReparentTo, render),
-                    ProjectileInterval(weddingcake, endPos=Point3(36.5,  -1.9, 9.0), duration=0.2),
+                    ProjectileInterval(weddingcake, endPos=Point3(36.5,  -1.9, 11.0), duration=0.3),
                     Func(base.playSfx, sfxCakeSplat, volume=0.8),
                     Func(self.sendUpdate, 'setSuitDamage', [200, True]),
                     Func(weddingcake.removeNode)
                 )
-            )
+            ),
+            Wait(10),
+            Func(self.alec.loop, 'run'),
+            Func(self.alec.setChatAbsolute, 'Flippy, you did it!', CFSpeech|CFTimeout),
+            self.alec.posHprInterval(5, (12.9, -0.3, 0), (180, 0, 0)),
+            Parallel(self.alec.posHprInterval(1, (4.2, -3.25, 3.13), (90, 0, 0)), Func(self.flippy.loop, 'walk'), self.flippy.hprInterval(1, (0, 0, 0)), self.flippy.head.hprInterval(1, (15, 0, 0))),
+            Func(self.flippy.loop, 'neutral'),
+            self.alec.posHprInterval(1, (3, -7, 3.23), (165, 0, 0)),
+            Func(self.alec.loop, 'neutral'),
+            Wait(4),
+            Func(self.surleeR.setChatAbsolute, 'Don\'t get too excited... We\'ve only driven them back to the streets.', CFSpeech|CFTimeout),
+            Wait(3),
+            Func(self.flippy.loop, 'walk'),
+            Parallel(self.flippy.hprInterval(1, (90, 0, 0)), self.flippy.head.hprInterval(1, (0, 0, 0))),
+            Func(self.flippy.loop, 'neutral'),
+            Wait(4),
+            Func(self.surleeR.setChatAbsolute, 'The Cogs will be back, but I doubt we\'ll be seeing them in the playgrounds again after this battle.', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.surleeR.setChatAbsolute, 'All of you here today are heros, you\'re survivors!', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.surleeR.setChatAbsolute, 'And I\'m sure our new President is very grateful.', CFSpeech|CFTimeout),
+            Wait(6),
+            Func(self.flippy.setChatAbsolute, 'Surlee, I...', CFSpeech|CFTimeout),
+            Wait(5),
+            Func(self.alec.setChatAbsolute, 'He\'s right, Flippy. You\'re a hero, and you\'re the only leader we have left.', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.flippy.setChatAbsolute, 'With a heavy heart, I hereby accept the Toon Council Presidency.', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.flippy.setChatAbsolute, 'Only until these Cogs are gone, though.', CFSpeech|CFTimeout),
+            Wait(7),
+            Func(self.flippy.setChatAbsolute, 'If we\'re going to get rid of them, we have to stand together.', CFSpeech|CFTimeout),
+            Wait(7),
         )
         cakeSeq.start()
         cakeSeq.setT(offset)
@@ -1036,7 +1068,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(base.playMusic, musicCredits, looping=0, volume=0.8),
             Wait(4.5),
             Func(self.flippy.setChatAbsolute, 'UNITE!', CFSpeech|CFTimeout),
+            Func(self.flippy.stopBlink),
             ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=0, endFrame=9),
+            Func(base.camera.setPosHpr, 73, -9.5, 16, -90, -35, 0),
+            Func(base.takeScreenShot),
             Wait(7.5),
             ActorInterval(self.flippy, 'victory', playRate=0.75, startFrame=9, endFrame=0),
             Wait(7.5),
@@ -1049,10 +1084,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
             Func(self.wrapUpSequence.start),
             Wait(12),
             # Dramatically fade in the logo as the camera rises
-            Parallel(self.logo.posHprScaleInterval(6.5, (0, 0, 0.5), (0), (1), blendType='easeOut'), self.logo.colorScaleInterval(6.5, Vec4(1, 1, 1, 1), blendType='easeOut'), base.camera.posInterval(7.5, (70, 0.6, 42.2), blendType='easeInOut')),
+            Parallel(self.logo.posHprScaleInterval(6.5, (0, 0, 0.5), (0), (1), blendType='easeOut'), self.logo.colorScaleInterval(6.5, Vec4(1, 1, 1, 1), blendType='easeOut'), base.camera.posHprInterval(7.5, (70, 0.6, 42.2), (-90, 0, 0), blendType='easeInOut')),
             # Take a nosedive into a portable hole
             Parallel(self.logo.colorScaleInterval(0.3, Vec4(1, 1, 1, 0)), base.camera.posHprInterval(0.3, (85, 0, 42), (-90, -30, 0), blendType='easeIn')),
-            Parallel(base.camera.posHprInterval(0.9, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2))),
+            Parallel(base.camera.posHprInterval(0.9, (95, 0.6, 6), (-90, -90, 0), blendType='easeOut'), self.portal.scaleInterval(0.5, (2)))
         )
         self.cameraSequence.start()
         self.cameraSequence.setT(offset)

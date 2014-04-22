@@ -44,13 +44,13 @@ class LocalAccountDB:
             callback({'success': True,
                       'accountId': int(self.dbm[cookie]),
                       'databaseId': cookie,
-                      'adminAccess': 500})
+                      'adminAccess': 507})
         else:
             # Nope, let's return w/o account ID:
             callback({'success': True,
                       'accountId': 0,
                       'databaseId': cookie,
-                      'adminAccess': 500})
+                      'adminAccess': 507})
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
@@ -151,6 +151,19 @@ class LoginAccountFSM(OperationFSM):
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
+        
+        # Binary bitmask in base10 form, added to the adminAccess.
+        # To find out what they have access to, convert the serverAccess to 3-bit binary.
+        # 2^2 = dev, 2^1 = qa, 2^0 = test
+        serverType = simbase.config.GetString('server-type', 'dev')
+        serverAccess = self.adminAccess % 10 # Get the last digit in their access.
+        if (serverType == 'dev' and not serverAccess & 4) or \
+           (serverType == 'qa' and not serverAccess & 2) or \
+           (serverType == 'test' and not serverAccess & 1):
+            self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
+            self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
+            return
+
         if accountId:
             self.accountId = accountId
             self.demand('RetrieveAccount')

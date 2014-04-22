@@ -33,7 +33,7 @@ want-instant-parties #t
 
 # Here are some events to enable.
 force-holiday-decorations 6
-want-doomsday #t
+want-doomsday #f
 # TODO: Fix new fireworks
 want-old-fireworks #t
 
