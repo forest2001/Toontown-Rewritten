@@ -40,7 +40,7 @@ class QuestManagerAI:
                             if quest.getHolder() == Quests.Any \
                              or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                              or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
-                             or (quest.getHolderType() == 'level' and quest.getHolder() >= suit['level']):
+                             or (quest.getHolderType() == 'level' and quest.getHolder() <= suit['level']):
                                 self.notify.debug("passed check")
                                 if random.randint(1, 100) <= quest.getPercentChance():
                                     recovered.append(quest.getItem())
