@@ -535,6 +535,10 @@ class OTPClientRepository(ClientRepositoryBase):
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def enterLogin(self):
         self.sendSetAvatarIdMsg(0)
+        dialogClass = OTPGlobals.getGlobalDialogClass()
+        self.loggingInBox = dialogClass(message=OTPLocalizer.CRLoggingIn)
+        self.loggingInBox.show()
+        self.renderFrame()
         self.loginDoneEvent = 'loginDone'
         self.accept(self.loginDoneEvent, self.__handleLoginDone)
         self.csm.performLogin(self.loginDoneEvent)
@@ -564,6 +568,8 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitLogin(self):
+        self.loggingInBox.cleanup()
+        del self.loggingInBox
         self.cleanupWaitingForDatabase()
         self.ignore(self.loginDoneEvent)
         del self.loginDoneEvent
