@@ -427,4 +427,3 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         fromId = self.air.getAvatarIdFromSender()
         self.sendUpdateToAvatarId(toId, 'receiveTalkWhisper', [fromId, message])
         self.air.writeServerEvent('whisper-said', fromId, toId, message)
-        
