@@ -115,6 +115,7 @@ class GetFriendsListFSM(FSM):
         self.friendsDetails = []
         self.iterated = 0
         self.getFriendsFieldsFSMs = {}
+        self.onlineFriends = []
         
     def start(self):
         self.demand('GetFriendsList')
@@ -173,10 +174,22 @@ class GetFriendsListFSM(FSM):
     def __testFinished(self):
         if self.iterated >= len(self.friendsList) and len(self.getFriendsFieldsFSMs) == 0:
             # We've finished! We can now continue.
+            self.demand('CheckFriendsOnline')
+            
+    def enterCheckFriendsOnline(self):
+        self.iterated = 0
+        for friendId, tf in self.friendsList:
+            self.mgr.air.getActivated(friendId, self.__gotActivatedResp)
+            
+    def __gotActivatedResp(self, avId, activated):
+        self.iterated += 1
+        if activated:
+            self.onlineFriends.append(avId)
+        if self.iterated == len(self.friendsList):
             self.demand('Finished')
             
     def enterFinished(self):
-        self.callback(success=True, requesterId=self.requesterId, friendsDetails=self.friendsDetails)
+        self.callback(success=True, requesterId=self.requesterId, friendsDetails=self.friendsDetails, onlineFriends=self.onlineFriends)
             
     def enterFailure(self, reason):
         self.mgr.notify.warning(reason)
@@ -208,6 +221,27 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if fsm.state != 'Off':
             fsm.demand('Off')
         del self.fsms[requesterId]
+    
+    def comingOnline(self, avId, friends):
+        # This is sent from the CSMUD, so no sanity checks needed here.
+        # This is sent when the avatar is set.
+        for friendId in friends:
+            self.sendUpdateToAvatarId(friendId, 'friendOnline', [avId, 0, 0])
+
+    def goingOffline(self, avId):
+        # This is sent from the MD, so no sanity checks needed here.
+        # Since this is a post remove, it means the client has disconnected.
+        # Therefore this FSM doesn't need to be saved in self.fsms as a client
+        # may already be running an FSM.
+        fsm = GetToonDataFSM(self, avId, avId, self.__offlineGotToonFields)
+        fsm.start()
+        
+    def __offlineGotToonFields(self, success, requesterId, fields):
+        if not success:
+            # Something went wrong... abort.
+            return
+        for friendId, tf in fields['setFriendsList'][0]:
+            self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
         
     def removeFriend(self, avId):
         requesterId = self.air.getAvatarIdFromSender()
@@ -306,7 +340,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         fsm.start()
         self.fsms[requesterId] = fsm
         
-    def __gotFriendsList(self, success, requesterId, friendsDetails):
+    def __gotFriendsList(self, success, requesterId, friendsDetails, onlineFriends):
         # We no longer need the FSM.
         self.deleteFSM(requesterId)
         if not success:
@@ -314,6 +348,9 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             return
         # Ship it!
         self.sendUpdateToAvatarId(requesterId, 'friendList', [friendsDetails])
+        for friendId in onlineFriends:
+            # For each online friend, announce it to the client.
+            self.sendUpdateToAvatarId(requesterId, 'friendOnline', [friendId, 0, 0])
         
     def getAvatarDetails(self, friendId):
         requesterId = self.air.getAvatarIdFromSender()

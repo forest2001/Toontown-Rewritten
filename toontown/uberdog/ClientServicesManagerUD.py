@@ -726,11 +726,30 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.csm.air.send(dg)
         
         # Tell TTRFriendsManager somebody is logging in:
-        ttrFmId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
-        dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-                        'udToonOnline', ttrFmId, ttrFmId, self.csm.air.ourChannel,
-                         [self.avId])
+        # Construst a list of all friends.
+        friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+        friendsList = []
+        for friendId, tf in self.avatar['setFriendsList'][0]:
+            friendsList.append(friendId)
+        if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
+            self.csm.air.friendsManager.comingOnline(self.avId, friendsList)
+        else:
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'comingOnline', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId, friendsList]
+            )
+            self.csm.air.send(dg)
+            
+        # Setup a post remove in case the client disconnects randomly.
+        dgcleanup = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+            'goingOffline', friendsManagerDoId, friendsManagerDoId,
+            self.csm.air.ourChannel, [self.avId]
+        )
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
         self.csm.air.send(dg)
+        
 
         # Tell the GlobalPartyManager as well
         self.csm.air.globalPartyMgr.avatarJoined(self.avId)
@@ -751,11 +770,15 @@ class UnloadAvatarFSM(OperationFSM):
         channel = self.csm.GetAccountConnectionChannel(self.target)
         
         # Tell TTRFriendsManager somebody is logging off:
-        ttrFmId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
-        dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-                        'udToonOffline', ttrFmId, ttrFmId, self.csm.air.ourChannel,
-                         [self.avId])
-        self.csm.air.send(dg)
+        if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
+            self.csm.air.friendsManager.goingOffline(self.avId)
+        else:
+            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'goingOffline', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId]
+            )
+            self.csm.air.send(dg)
 
 
         # Clear off POSTREMOVE:
