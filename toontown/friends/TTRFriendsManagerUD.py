@@ -231,11 +231,12 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.notify.warning('TTRFMUD.__rfGotToonFields received wrong toon fields from db, requesterId=%d' % requesterId)
             return
         friendsList = fields['setFriendsList'][0]
+        searchId = requesterId if final else avId
         for index, friend in enumerate(friendsList):
-            if friend[0] == avId:
+            if friend[0] == searchId:
                 del friendsList[index]
                 break
-        fsm = UpdateToonFieldFSM(self, requesterId, requesterId, functools.partial(self.__removeFriendCallback, avId=avId, final=final))
+        fsm = UpdateToonFieldFSM(self, requesterId, avId if final else requesterId, functools.partial(self.__removeFriendCallback, avId=avId, final=final))
         fsm.start('setFriendsList', friendsList)
         self.fsms[requesterId] = fsm
         
