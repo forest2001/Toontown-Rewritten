@@ -5,6 +5,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.FSM import FSM
 import functools
 from time import time
+import cPickle
 
 class GetToonDataFSM(FSM):
     """
@@ -311,3 +312,32 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             return
         # Ship it!
         self.sendUpdateToAvatarId(requesterId, 'friendList', [friendsDetails])
+        
+    def getAvatarDetails(self, friendId):
+        requesterId = self.air.getAvatarIdFromSender()
+        if requesterId in self.fsms:
+            # Looks like the requester already has an FSM running. In the future we
+            # may want to handle this, but for now just ignore it.
+            return
+        fsm = GetToonFieldsFSM(self, requesterId, friendId, self.__gotAvatarDetails)
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __gotAvatarDetails(self, success, requesterId, fields):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not success:
+            # Something went wrong... abort.
+            return
+        details = [
+            ['setExperience' , self.fields['setExperience'][0]],
+            ['setTrackAccess' , self.fields['setTrackAccess'][0]],
+            ['setTrackBonusLevel' , self.fields['setTrackBonusLevel'][0]],
+            ['setInventory' , self.fields['setInventory'][0]],
+            ['setHp' , self.fields['setHp'][0]],
+            ['setMaxHp' , self.fields['setMaxHp'][0]],
+            ['setDefaultShard' , self.fields['setDefaultShard'][0]],
+            ['setLastHood' , self.fields['setLastHood'][0]],
+            ['setDNAString' , self.fields['setDNAString'][0]],
+        ]
+        self.sendUpdateToAvatarId(requesterId, 'friendDetails', [cPickle.dumps(details)])
