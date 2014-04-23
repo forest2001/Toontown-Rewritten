@@ -24,7 +24,7 @@ class GetToonDataFSM(FSM):
         self.demand('QueryDB')
         
     def enterQueryDB(self):
-        self.mgr.air.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
         
     def __queryResponse(self, dclass, fields):
         if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
@@ -38,13 +38,13 @@ class GetToonDataFSM(FSM):
         # We want to cache the basic information we got for GetFriendsListFSM.
         self.mgr.avBasicInfoCache[self.avId] = {
             'expire' : time() + simbase.config.GetInt('friend-detail-cache-expire', 3600),
-            'toonInfo' : [self.fields['setName'][0], self.fields['setDNAString'][0], self.fields['setPetId'][0]],
+            'toonInfo' : [self.avId, self.fields['setName'][0], self.fields['setDNAString'][0], self.fields['setPetId'][0]],
         }
-        self.callback(success=True, self.requesterId, self.fields)
+        self.callback(success=True, requesterId=self.requesterId, fields=self.fields)
             
     def enterFailure(self, reason):
         self.mgr.notify.warning(reason)
-        self.callback(success=False, None, None)
+        self.callback(success=False, requesterId=None, fields=None)
         
 class UpdateToonFieldFSM(FSM):
     """
@@ -65,7 +65,7 @@ class UpdateToonFieldFSM(FSM):
         self.demand('GetToonOnline')
         
     def enterGetToonOnline(self):
-        self.mgr.air.getActivated(avId, self.__toonOnlineResp)
+        self.mgr.air.getActivated(self.avId, self.__toonOnlineResp)
         
     def __toonOnlineResp(self, avId, activated):
         if self.state != 'GetToonOnline':
@@ -120,7 +120,7 @@ class GetFriendsListFSM(FSM):
         self.demand('GetFriendsList')
         
     def enterGetFriendsList(self):
-        self.mgr.air.queryObject(self.mgr.air.dbId, self.requesterId, self.__gotFriendsList)
+        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.requesterId, self.__gotFriendsList)
         
     def __gotFriendsList(self, dclass, fields):
         if self.state != 'GetFriendsList':
@@ -135,7 +135,7 @@ class GetFriendsListFSM(FSM):
         self.demand('GetFriendsDetails')
        
     def enterGetFriendsDetails(self):
-        for friendId, tf in self.friends:
+        for friendId, tf in self.friendsList:
             details = self.mgr.avBasicInfoCache.get(friendId)
             if details:
                 # We have the toons details in cache.
@@ -144,7 +144,7 @@ class GetFriendsListFSM(FSM):
                 if expire and toonInfo:
                     if details.get('expire') > time():
                         # These details haven't expired, use 'em!
-                        self.friendsDetails.append([friendId, *toonInfo])
+                        self.friendsDetails.append(toonInfo)
                         self.iterated += 1
                         self.__testFinished()
                         continue
@@ -158,8 +158,8 @@ class GetFriendsListFSM(FSM):
             
     def __gotAvatarInfo(self, success, requesterId, fields):
         # We no longer need the FSM!
-        if friendId in self.getFriendsFieldsFSMs:
-            del self.getFriendsFieldsFSMs[friendId]
+        if fields['ID'] in self.getFriendsFieldsFSMs:
+            del self.getFriendsFieldsFSMs[fields['ID']]
         if self.state != 'GetFriendsDetails':
             self.demand('Failure', '__gotAvatarInfo while not looking for friends details, avId=%d' % self.requesterId)
             return
@@ -205,7 +205,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.notify.debug('%d tried to delete non-existent FSM!' % requesterId)
             return
         if fsm.state != 'Off':
-            fsm.demand('Failure')
+            fsm.demand('Off')
         del self.fsms[requesterId]
         
     def removeFriend(self, avId):
@@ -215,9 +215,9 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # may want to handle this, but for now just ignore it.
             return
         # We need to get the friends list of the requester.
-        fsm = GetToonFieldsFSM(self, requesterId, requesterId, functools.partial(self.__rfGotToonFields, avId=avId))
+        fsm = GetToonDataFSM(self, requesterId, requesterId, functools.partial(self.__rfGotToonFields, avId=avId))
         fsm.start()
-        self.fsms[requsterId] = fsm
+        self.fsms[requesterId] = fsm
         
     def __rfGotToonFields(self, success, requesterId, fields, avId=None, final=False):
         # We no longer need the FSM.
@@ -231,8 +231,8 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.notify.warning('TTRFMUD.__rfGotToonFields received wrong toon fields from db, requesterId=%d' % requesterId)
             return
         friendsList = fields['setFriendsList'][0]
-        for index, friendId in enumerate(friendsList):
-            if friendId[0] == avId:
+        for index, friend in enumerate(friendsList):
+            if friend[0] == avId:
                 del friendsList[index]
                 break
         fsm = UpdateToonFieldFSM(self, requesterId, requesterId, functools.partial(self.__removeFriendCallback, avId=avId, final=final))
@@ -248,7 +248,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not final:
             # Toon was deleted from the friends list successfully! Now we need to modify
             # the other toons friends list...
-            fsm = GetToonFieldsFSM(self, requesterId, avId, functools.partial(self.__rfGotToonFields, avId=avId, final=True))
+            fsm = GetToonDataFSM(self, requesterId, avId, functools.partial(self.__rfGotToonFields, avId=avId, final=True))
             fsm.start()
             self.fsms[requesterId] = fsm
         else:
@@ -319,7 +319,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Looks like the requester already has an FSM running. In the future we
             # may want to handle this, but for now just ignore it.
             return
-        fsm = GetToonFieldsFSM(self, requesterId, friendId, self.__gotAvatarDetails)
+        fsm = GetToonDataFSM(self, requesterId, friendId, self.__gotAvatarDetails)
         fsm.start()
         self.fsms[requesterId] = fsm
         
@@ -330,14 +330,14 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Something went wrong... abort.
             return
         details = [
-            ['setExperience' , self.fields['setExperience'][0]],
-            ['setTrackAccess' , self.fields['setTrackAccess'][0]],
-            ['setTrackBonusLevel' , self.fields['setTrackBonusLevel'][0]],
-            ['setInventory' , self.fields['setInventory'][0]],
-            ['setHp' , self.fields['setHp'][0]],
-            ['setMaxHp' , self.fields['setMaxHp'][0]],
-            ['setDefaultShard' , self.fields['setDefaultShard'][0]],
-            ['setLastHood' , self.fields['setLastHood'][0]],
-            ['setDNAString' , self.fields['setDNAString'][0]],
+            ['setExperience' , fields['setExperience'][0]],
+            ['setTrackAccess' , fields['setTrackAccess'][0]],
+            ['setTrackBonusLevel' , fields['setTrackBonusLevel'][0]],
+            ['setInventory' , fields['setInventory'][0]],
+            ['setHp' , fields['setHp'][0]],
+            ['setMaxHp' , fields['setMaxHp'][0]],
+            ['setDefaultShard' , fields['setDefaultShard'][0]],
+            ['setLastHood' , fields['setLastHood'][0]],
+            ['setDNAString' , fields['setDNAString'][0]],
         ]
-        self.sendUpdateToAvatarId(requesterId, 'friendDetails', [cPickle.dumps(details)])
+        self.sendUpdateToAvatarId(requesterId, 'friendDetails', [fields['ID'], cPickle.dumps(details)])

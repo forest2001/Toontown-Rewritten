@@ -29,9 +29,9 @@ class TTRFriendsManager(DistributedObjectGlobal):
     def d_getAvatarDetails(self, avId):
         self.sendUpdate('getAvatarDetails', [avId])
         
-    def friendDetails(self, details):
+    def friendDetails(self, friendId, details):
         fields = cPickle.loads(details)
-        base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
+        base.cr.n_handleGetAvatarDetailsResp(friendId, fields=fields)
         
     def d_teleportQuery(self, toId):
         self.sendUpdate('routeTeleportQuery', [toId])
