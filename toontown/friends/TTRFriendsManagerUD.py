@@ -197,6 +197,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         self.fsms = {}
         # TODO: Maybe get the AI to refresh the cache?
         self.avBasicInfoCache = {}
+        self.tpRequests = {}
         
     def deleteFSM(self, requesterId):
         fsm = self.fsms.get(requesterId)
@@ -342,3 +343,51 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             ['setDNAString' , fields['setDNAString'][0]],
         ]
         self.sendUpdateToAvatarId(requesterId, 'friendDetails', [fields['ID'], cPickle.dumps(details)])
+    
+    def routeTeleportQuery(self, toId):
+        fromId = self.air.getAvatarIdFromSender()
+        self.tpRequests[fromId] = toId
+        self.sendUpdateToAvatarId(toId, 'teleportQuery', [fromId])
+        taskMgr.doMethodLater(5, self.giveUpTeleportQuery, 'tp-query-timeout-%d' % fromId, extraArgs=[fromId, toId])
+        
+    def giveUpTeleportQuery(self, fromId, toId):
+        # The client didn't respond to the query within the set time,
+        # So we will tell the query sender that the toon is unavailable.
+        if fromId in self.tpRequests:
+            del self.tpRequests[fromId]
+            self.sendUpdateToAvatarId(fromId, 'teleportResponse', [toId, 0, 0, 0, 0])
+            self.notify.warning('Teleport request that was sent by %d to %d timed out.' % (fromId, toId))
+        
+    def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
+        # Here is where the toId and fromId swap (because we are now sending it back)
+        fromId = self.air.getAvatarIdFromSender()
+        
+        # We got the query response, so no need to give up!
+        if taskMgr.hasTaskNamed('tp-query-timeout-%d' % toId):
+            taskMgr.remove('tp-query-timeout-%d' % toId)
+            
+        if toId not in self.tpRequests:
+            return
+        if self.tpRequests.get(toId) != fromId:
+            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse for a query that isn\'t theirs!')
+            return
+        self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
+        del self.tpRequests[toId]
+        
+    def whisperSCTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCFrom', [fromId, msgIndex])
+        
+    def whisperSCCustomTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCCustomFrom', [fromId, msgIndex])
+        
+    def whisperSCEmoteTo(self, toId, msgIndex):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'setWhisperSCEmoteFrom', [fromId, msgIndex])
+        
+    def sendTalkWhisper(self, toId, message):
+        fromId = self.air.getAvatarIdFromSender()
+        self.sendUpdateToAvatarId(toId, 'receiveTalkWhisper', [fromId, message])
+        self.air.writeServerEvent('whisper-said', fromId, toId, message)
+        
