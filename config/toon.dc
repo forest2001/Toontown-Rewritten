@@ -3262,6 +3262,7 @@ dclass GlobalPartyManager : DistributedObjectGlobal {
     requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
     partyDone(uint64 partyId);
     allocIds(uint16 count);
+    avatarJoined(uint32 avId);
 };
 
 struct PotentialToon {
