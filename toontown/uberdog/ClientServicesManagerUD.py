@@ -757,8 +757,8 @@ class LoadAvatarFSM(AvatarOperationFSM):
             self.csm.air.globalPartyMgr.avatarJoined(self.avId)
         else:
             dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
-                'avatarJoined', OTP_DO_ID_GLOBAL_PARTY_MANAGER, OTP_DO_ID_GLOBAL_PARTY_MANAGER,
-                self.csm.air.ourChannel, [self.avId]
+                'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, 
+                OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
             )
             self.csm.air.send(dg)
 
