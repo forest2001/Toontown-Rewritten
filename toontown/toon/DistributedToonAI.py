@@ -268,6 +268,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
+            # Do we want to start the playground toonup tick?
+            if ToontownGlobals.safeZoneCountMap.has_key(zoneId):
+                self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+            else:
+                self.stopToonUp()
+            
+            # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
                 if not simbase.config.GetBool('want-doomsday', True):
