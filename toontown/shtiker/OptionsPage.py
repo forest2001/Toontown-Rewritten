@@ -303,7 +303,7 @@ class OptionsTabPage(DirectFrame):
             base.display.settings.updateSetting('game', 'sfx', False)
         else:
             base.enableSoundEffects(1)
-            base.display.settings.updateSetting('game', 'sfx', False)
+            base.display.settings.updateSetting('game', 'sfx', True)
         self.settingsChanged = 1
         self.__setSoundFXButton()
 
