@@ -1,6 +1,7 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from otp.otpbase import OTPLocalizer
 from toontown.hood import ZoneUtil
+import cPickle
 
 class TTRFriendsManager(DistributedObjectGlobal):
     
@@ -28,19 +29,9 @@ class TTRFriendsManager(DistributedObjectGlobal):
     def d_getAvatarDetails(self, avId):
         self.sendUpdate('getAvatarDetails', [avId])
         
-    def friendDetails(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel):
-        fields = [
-            ['setExperience' , experience],
-            ['setTrackAccess' , trackAccess],
-            ['setTrackBonusLevel' , trackBonusLevel],
-            ['setInventory' , inventory],
-            ['setHp' , hp],
-            ['setMaxHp' , maxHp],
-            ['setDefaultShard' , defaultShard],
-            ['setLastHood' , lastHood],
-            ['setDNAString' , dnaString],
-        ]
-        base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
+    def friendDetails(self, friendId, details):
+        fields = cPickle.loads(details)
+        base.cr.n_handleGetAvatarDetailsResp(friendId, fields=fields)
         
     def d_teleportQuery(self, toId):
         self.sendUpdate('routeTeleportQuery', [toId])

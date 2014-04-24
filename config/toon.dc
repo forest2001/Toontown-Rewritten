@@ -3366,10 +3366,11 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   friendOnline(uint32, uint8, uint8);
   friendOffline(uint32);
   
+  comingOnline(uint32 avId, uint32[]);
   goingOffline(uint32 avId);
   
   getAvatarDetails(uint32) clsend;
-  friendDetails(uint32, blob, uint16[], uint16, int16, int16, uint32, uint32, blob, blob, int8[]);
+  friendDetails(uint32 friendId, blob details);
   
   routeTeleportQuery(uint32 toId) clsend;
   teleportQuery(uint32 fromId);
@@ -3384,7 +3385,6 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   
   whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
   setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
-  
 };
 
 

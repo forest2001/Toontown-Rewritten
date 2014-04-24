@@ -4939,3 +4939,10 @@ def givePies(pieType, numPies=0):
         return "numPies value out of range (0-99)"
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])    
+def online(doId):
+    """ Check if a toon is online. """
+    av = spellbook.getTarget()
+    doId = 100000000 + doId
+    simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
