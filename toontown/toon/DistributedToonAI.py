@@ -4874,8 +4874,14 @@ def givePies(pieType, numPies=0):
     av.b_setPieType(pieType)
     av.b_setNumPies(numPies)
 
-@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
-def setQP(questId, progress):
+# TODO: Set minimum access for this MW back to 400, after fishing supports quests.
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int], access=300)
+def setQP(questId=0, progress=0):
+    """
+    Get current questId in progress via ~setQP.
+    Set questId progress via ~setQP questId value.
+    """
+    
     av = spellbook.getTarget()
     questIds = ""
     for index in range(len(av.quests)):
