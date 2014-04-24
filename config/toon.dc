@@ -79,7 +79,6 @@ from toontown.shtiker import DeleteManager/AI
 from toontown.ai import NewsManager/AI
 from toontown.shtiker import PurchaseManager/AI
 from toontown.shtiker import NewbiePurchaseManager/AI
-from toontown.safezone import SafeZoneManager/AI
 from toontown.tutorial import TutorialManager/AI
 from toontown.catalog import CatalogManager/AI
 from toontown.safezone import DistributedTreasure/AI
@@ -1547,11 +1546,6 @@ dclass PurchaseManager : DistributedObject {
 
 dclass NewbiePurchaseManager : PurchaseManager {
   setOwnedNewbieId(uint32) required broadcast ram;
-};
-
-dclass SafeZoneManager : DistributedObject {
-  enterSafeZone() airecv clsend;
-  exitSafeZone() airecv clsend;
 };
 
 dclass TutorialManager : DistributedObject {
