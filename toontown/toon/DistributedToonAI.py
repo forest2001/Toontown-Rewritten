@@ -77,7 +77,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
      ToontownGlobals.FT_Torso: (CogDisguiseGlobals.torsoIndex,)}
     lastFlagAvTime = globalClock.getFrameTime()
     flagCounts = {}
-    pingedAvs = {}
     WantTpTrack = simbase.config.GetBool('want-tptrack', False)
     DbCheckPeriodPaid = simbase.config.GetInt('toon-db-check-period-paid', 10 * 60)
     DbCheckPeriodUnpaid = simbase.config.GetInt('toon-db-check-period-unpaid', 1 * 60)
@@ -254,7 +253,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.replaceItemInAccessoriesList(ToonDNA.SHOES, 0, 0, 0, self.shoes[0], self.shoes[1], self.shoes[2])
                 self.b_setShoesList(self.shoesList)
                 self.b_setShoes(0, 0, 0)
-        self.startPing()
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
@@ -341,8 +339,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if simbase.wantPets:
             PetLookerAI.PetLookerAI.destroy(self)
         del self.kart
-        self.cleanupPing()
-        self.stopPing()
         self._sendExitServerEvent()
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.delete(self)
         DistributedPlayerAI.DistributedPlayerAI.delete(self)
@@ -4369,79 +4365,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
 
-    def requestPing(self, avId):
-        av = self.air.doId2do.get(avId)
-        if av:
-            from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
-            if isinstance(av, DistributedNPCToonBaseAI):
-                return
-            if isinstance(av, DistributedToonAI) and not DistributedToonAI.pingedAvs.has_key(avId):
-                av.sendPing()
-        return Task.again
-
-    def sendPing(self):
-
-        def verify(theId):
-            if self.air:
-                msg = '%s failed to respond to ping!' % theId
-                self.notify.warning(msg)
-                self.air.writeServerEvent('suspicious', theId, msg)
-                self.cleanupPing()
-                disconnect = simbase.config.GetBool('client-ping-disconnect', True)
-                if disconnect:
-                    av = self.air.getDo(theId)
-                    if av:
-                        av.disconnect()
-            return Task.done
-
-        val = ''
-        for i in range(14):
-            val = val + random.choice('abcdefghijklmnopqrstuvwxyz')
-
-        self.sendUpdateToAvatarId(self.doId, 'ping', [val])
-        DistributedToonAI.pingedAvs[self.doId] = [globalClock.getFrameTime(), val]
-        delay = simbase.config.GetInt('client-ping-timeout', 150)
-        taskMgr.doMethodLater(delay, verify, 'pingverify-' + str(self.doId), extraArgs=[self.doId])
-
-    def pingresp(self, resp):
-        senderId = self.air.getAvatarIdFromSender()
-        if not DistributedToonAI.pingedAvs.has_key(senderId) or self.air == None:
-            self.cleanupPing()
-            return
-        val = DistributedToonAI.pingedAvs[senderId][1]
-        key = 'monkeyvanilla!'
-        module = ''
-        p = 0
-        for ch in val:
-            ic = ord(ch) ^ ord(key[p])
-            p += 1
-            if p >= len(key):
-                p = 0
-            module += chr(ic)
-
-        match = module == resp
-        if not match:
-            msg = '%s failed to respond to ping! with invalid response' % senderId
-            self.notify.warning(msg)
-            self.air.writeServerEvent('suspicious', senderId, msg)
-        self.cleanupPing()
-        return
-
-    def cleanupPing(self):
-        taskMgr.remove('pingverify-' + str(self.doId))
-        if DistributedToonAI.pingedAvs.has_key(self.doId):
-            del DistributedToonAI.pingedAvs[self.doId]
-
-    def startPing(self):
-        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
-        if isinstance(self, DistributedNPCToonBaseAI):
-            return
-        delay = simbase.config.GetInt('client-ping-period', 60)
-        taskMgr.doMethodLater(delay, self.requestPing, 'requestping-' + str(self.doId), extraArgs=[self.doId])
-
-    def stopPing(self):
-        taskMgr.remove('requestping-' + str(self.doId))
-
     def applyAlphaModifications(self):
         # Apply all of the temporary changes that we want the alpha testers to
         # have:
@@ -5007,3 +4930,10 @@ def locate(avIdShort=0, returnType=''):
     if interior:
         return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])    
+def online(doId):
+    """ Check if a toon is online. """
+    av = spellbook.getTarget()
+    doId = 100000000 + doId
+    simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))

@@ -18,14 +18,15 @@ class ToontownUberRepository(ToontownInternalRepository):
         """
         Create "global" objects.
         """
-
-        self.csm = simbase.air.generateGlobalObject(OTP_DO_ID_CLIENT_SERVICES_MANAGER,
-                                                    'ClientServicesManager')
-
-        self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER,
-                                                          'ChatAgent')
-        
-        self.friendsManager = simbase.air.generateGlobalObject(OTP_DO_ID_TTR_FRIENDS_MANAGER,
-                                                               'TTRFriendsManager')
-
-        self.globalPartyMgr = simbase.air.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+        default = simbase.config.GetBool('want-ud', 1)
+        if simbase.config.GetBool('want-ClientServicesManagerUD', default):
+            self.csm = simbase.air.generateGlobalObject(OTP_DO_ID_CLIENT_SERVICES_MANAGER,
+                                                        'ClientServicesManager')
+        if simbase.config.GetBool('want-ChatAgentUD', default):
+            self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER,
+                                                            'ChatAgent')
+        if simbase.config.GetBool('want-TTRFriendsManagerUD', default):
+            self.friendsManager = simbase.air.generateGlobalObject(OTP_DO_ID_TTR_FRIENDS_MANAGER,
+                                                                 'TTRFriendsManager')
+        if simbase.config.GetBool('want-GlobalPartyManagerUD', default):
+            self.globalPartyMgr = simbase.air.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
