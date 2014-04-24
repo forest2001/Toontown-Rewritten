@@ -280,8 +280,10 @@ class OptionsTabPage(DirectFrame):
     def __doToggleMusic(self):
         messenger.send('wakeup')
         if base.musicActive:
+            base.display.settings.updateSetting('game', 'music', False)
             base.enableMusic(0)
         else:
+            base.display.settings.updateSetting('game', 'music', True)
             base.enableMusic(1)
         self.settingsChanged = 1
         self.__setMusicButton()
@@ -298,8 +300,10 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.sfxActive:
             base.enableSoundEffects(0)
+            base.display.settings.updateSetting('game', 'sfx', False)
         else:
             base.enableSoundEffects(1)
+            base.display.settings.updateSetting('game', 'sfx', False)
         self.settingsChanged = 1
         self.__setSoundFXButton()
 
@@ -307,8 +311,10 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.toonChatSounds:
             base.toonChatSounds = 0
+            base.display.settings.updateSetting('game', 'toon-chat-sounds', False)
         else:
             base.toonChatSounds = 1
+            base.display.settings.updateSetting('game', 'toon-chat-sounds', True)
         self.settingsChanged = 1
         self.__setToonChatSoundsButton()
 
@@ -339,8 +345,10 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNewFriends:
             base.localAvatar.acceptingNewFriends = 0
+            base.display.settings.updateSetting(str(base.localAvatar.getDoId()), 'accepting-new-friends', False)
         else:
             base.localAvatar.acceptingNewFriends = 1
+            base.display.settings.updateSetting(str(base.localAvatar.getDoId()), 'accepting-new-friends', True)
         self.settingsChanged = 1
         self.__setAcceptFriendsButton()
 
@@ -348,8 +356,10 @@ class OptionsTabPage(DirectFrame):
         messenger.send('wakeup')
         if base.localAvatar.acceptingNonFriendWhispers:
             base.localAvatar.acceptingNonFriendWhispers = 0
+            base.display.settings.updateSetting(str(base.localAvatar.getDoId()), 'accepting-non-friend-whispers', False)
         else:
             base.localAvatar.acceptingNonFriendWhispers = 1
+            base.display.settings.updateSetting(str(base.localAvatar.getDoId()), 'accepting-non-friend-whispers', True)
         self.settingsChanged = 1
         self.__setAcceptWhispersButton()
 
@@ -451,6 +461,9 @@ class OptionsTabPage(DirectFrame):
          self.displaySettingsFullscreen,
          self.displaySettingsEmbedded,
          self.displaySettingsApi))
+        base.display.settings.updateSetting('game', 'resolution', base.display.settings.resList.index((self.displaySettingsSize[0], self.displaySettingsSize[1])))
+        base.display.settings.updateSetting('game', 'fullscreen-mode', self.displaySettingsFullscreen)
+        base.display.settings.updateSetting('game', 'embedded-mode', self.displaySettingsEmbedded)
         return Task.done
 
     def __handleExitShowWithConfirm(self):

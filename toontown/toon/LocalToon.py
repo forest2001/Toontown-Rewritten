@@ -165,9 +165,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             if not hasattr(base.cr, 'lastLoggedIn'):
                 base.cr.lastLoggedIn = self.cr.toontownTimeManager.convertStrToToontownTime('')
             self.setLastTimeReadNews(base.cr.lastLoggedIn)
-            # TODO: SETTINGSTODO:
-            self.acceptingNewFriends = True #Settings.getAcceptingNewFriends() and base.config.GetBool('accepting-new-friends-default', True)
-            self.acceptingNonFriendWhispers = True #Settings.getAcceptingNonFriendWhispers() and base.config.GetBool('accepting-non-friend-whispers-default', True)
+            self.acceptingNewFriends = True#base.display.settings.getBool(str(self.getDoId()), 'accepting-new-friends', default=base.config.GetBool('accepting-new-friends-default', True))
+            self.acceptingNonFriendWhispers = True#base.display.settings.getBool(str(self.getDoId()), 'accepting-non-friend-whispers', default=base.config.GetBool('accepting-non-friend-whispers-default', True))
             self.physControls.event.addAgainPattern('again%in')
             self.oldPos = None
             self.questMap = None
@@ -250,6 +249,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if base.wantNametags:
             self.nametag.manage(base.marginManager)
         DistributedToon.DistributedToon.announceGenerate(self)
+        self.acceptingNewFriends = base.display.settings.getBool(str(self.getDoId()), 'accepting-new-friends', default=base.config.GetBool('accepting-new-friends-default', True))
+        self.acceptingNonFriendWhispers = base.display.settings.getBool(str(self.getDoId()), 'accepting-non-friend-whispers', default=base.config.GetBool('accepting-non-friend-whispers-default', True))
         from otp.friends import FriendInfo
         if self.adminAccess >= 300:
             self.seeGhosts = 1
