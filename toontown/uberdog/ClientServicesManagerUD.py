@@ -732,7 +732,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
         for friendId, tf in self.avatar['setFriendsList'][0]:
             friendsList.append(friendId)
         # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
-        if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
+        if self.csm.air.friendsManager:
             self.csm.air.friendsManager.comingOnline(self.avId, friendsList)
         else:
             dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
@@ -753,7 +753,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
         
 
         # Tell the GlobalPartyManager as well
-        if hasattr(self.csm.air, 'globalPartyMgr'):
+        if self.csm.air.globalPartyMgr:
             self.csm.air.globalPartyMgr.avatarJoined(self.avId)
         else:
             dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
@@ -779,7 +779,7 @@ class UnloadAvatarFSM(OperationFSM):
         
         # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
         # Tell TTRFriendsManager somebody is logging off:
-        if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
+        if self.csm.air.friendsManager:
             self.csm.air.friendsManager.goingOffline(self.avId)
         else:
             friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
