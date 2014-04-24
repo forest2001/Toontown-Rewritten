@@ -731,6 +731,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
         friendsList = []
         for friendId, tf in self.avatar['setFriendsList'][0]:
             friendsList.append(friendId)
+        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
         if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
             self.csm.air.friendsManager.comingOnline(self.avId, friendsList)
         else:
@@ -769,6 +770,7 @@ class UnloadAvatarFSM(OperationFSM):
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
         
+        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
         # Tell TTRFriendsManager somebody is logging off:
         if self.csm.air.config.GetBool('want-TTRFriendsManagerUD', self.csm.air.config.GetBool('want-ud', True)):
             self.csm.air.friendsManager.goingOffline(self.avId)
