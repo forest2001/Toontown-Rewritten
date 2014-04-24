@@ -1,5 +1,12 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
+from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from toontown.fishing import FishingTargetGlobals
+from toontown.dna.DNASpawnerAI import *
+from toontown.dna.DNAProp import DNAProp
+from toontown.dna.DNAGroup import DNAGroup
+from toontown.hood import ZoneUtil
 
 class DistributedFishingPondAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFishingPondAI")
@@ -38,3 +45,22 @@ class DistributedFishingPondAI(DistributedObjectAI):
             if self.spots[spot].avId == avId:
                 return self.spots[spot]
         return
+        
+@dnaSpawn(DNAGroup, 'fishing_pond')
+def spawn(air, zone, element, match):
+    pond = DistributedFishingPondAI(air)
+    area = ZoneUtil.getBranchZone(zone)
+    pond.setArea(area)
+    pond.generateWithRequired(zone)
+    for i in range(FishingTargetGlobals.getNumTargets(area)):
+                target = DistributedFishingTargetAI(simbase.air)
+                target.setPondDoId(pond.getDoId())
+                target.generateWithRequired(zone)
+    for child in element.children:
+        if isinstance(child, DNAProp) and 'fishing_spot' in child.code:
+            spot = DistributedFishingSpotAI(air)
+            spot.setPondDoId(pond.getDoId())
+            x, y, z = child.getPos()
+            h, p, r = child.getHpr()
+            spot.setPosHpr(x, y, z, h, p, r)
+            spot.generateWithRequired(zone)

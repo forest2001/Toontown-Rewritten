@@ -12,6 +12,14 @@ class DNACornice(DNANode):
         self.code = code
 
     def _makeNode(self, storage, parent):
-        pass # TODO
+        node = storage.findNode(self.code)
+        if node is None:
+            raise DNAError('DNACornice uses unknown code %s' % self.code)
+
+        np = node.copyTo(parent)
+        np.setZ(1)
+        np.setDepthOffset(self.DEPTH_OFFSET) # Appear on top of the wall.
+
+        return np
 
 registerElement(DNACornice)

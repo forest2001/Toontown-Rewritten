@@ -10,5 +10,12 @@ class DNAAnimProp(DNAProp):
 
         self.anim = anim
 
+    def _makeNode(self, parent, storage):
+        node = DNAProp._makeNode(self, parent, storage)
+
+        node.setTag('DNAAnim', self.anim)
+
+        return node
+
 
 registerElement(DNAAnimProp)
