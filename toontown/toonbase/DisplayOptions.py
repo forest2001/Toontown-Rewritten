@@ -29,11 +29,7 @@ class DisplayOptions:
         toonChatSounds = self.settings.getBool('game', 'toon-chat-sounds', True)
         musicVol = self.settings.getInt('game', 'music-vol', 100) / 100.0
         sfxVol = self.settings.getInt('game', 'sfx-vol', 100) / 100.0
-        resIndex = self.settings.getInt('game', 'resolution', 0)
-        if resIndex >= len(self.settings.resList):
-            res = self.settings.resList[0]
-        else:
-            res = self.settings.resList[resIndex]
+        res = self.settings.getList('game', 'resolution', default=[800, 600], expectedLength=2)
         embed = self.settings.getBool('game', 'embed', False)
         self.notify.debug('before prc settings embedded mode=%s' % str(embed))
         self.notify.debug('before prc settings full screen mode=%s' % str(mode))

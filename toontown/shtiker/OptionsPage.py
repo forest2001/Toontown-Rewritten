@@ -461,7 +461,7 @@ class OptionsTabPage(DirectFrame):
          self.displaySettingsFullscreen,
          self.displaySettingsEmbedded,
          self.displaySettingsApi))
-        base.display.settings.updateSetting('game', 'resolution', base.display.settings.resList.index((self.displaySettingsSize[0], self.displaySettingsSize[1])))
+        base.display.settings.updateSetting('game', 'resolution', (self.displaySettingsSize[0], self.displaySettingsSize[1]))
         base.display.settings.updateSetting('game', 'fullscreen-mode', self.displaySettingsFullscreen)
         base.display.settings.updateSetting('game', 'embedded-mode', self.displaySettingsEmbedded)
         return Task.done

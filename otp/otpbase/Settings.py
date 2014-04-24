@@ -11,13 +11,6 @@ class Settings:
     
     def __init__(self):
         self.fileName = 'settings.json'
-        self.resList = [
-            (640, 480),
-            (800, 600),
-            (1024, 768),
-            (1280, 1024),
-            (1600, 1200)
-        ]
         try:
             with open(self.fileName, 'r') as file:
                 self.settings = json.load(file)
@@ -69,6 +62,17 @@ class Settings:
         """
         value = self.getOption(type, attribute, default)
         if isinstance(value, bool):
+            return value
+        else:
+            return default
+            
+    def getList(self, type, attribute, default=[], expectedLength=2):
+        """
+        Fetch a list type from the json file, but use default if it
+        returns the incorrect type or doesn't exist.
+        """
+        value = self.getOption(type, attribute, default)
+        if isinstance(value, list) and len(value) == expectedLength:
             return value
         else:
             return default
