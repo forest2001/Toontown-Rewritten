@@ -227,9 +227,9 @@ class QuestManagerAI:
     def toonMadeFriend(self, av, otherAv):
         pass
 
-    def toonFished(self, toon):
+    def toonFished(self, toon, zoneId):
         '''
-        Retval: -1 = no relevant quest
+        Retval
         0 = not caught
         itemid = caught
         '''
@@ -239,10 +239,8 @@ class QuestManagerAI:
                 if quest.isLocationMatch(zoneId):
                     if quest.getHolder() == Quests.AnyFish:
                         if random.randint(1, 100) <= quest.getPercentChance():
-                            recovered.append(quest.getItem())
+                            #this still allows you to catch the questitem after you've caught all you needed...
                             toon.quests[questIndex][4] += 1
                             toon.b_setQuests(toon.quests)
                             return quest.getItem()
-                        else:
-                            return 0
-        return -1
+        return 0
