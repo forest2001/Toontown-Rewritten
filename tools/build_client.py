@@ -17,6 +17,7 @@ import zipfile
 EXTRA_MODULES = (
   'encodings.ascii',
   'encodings.latin_1',
+  'encodings.hex_codec',
   '_strptime',
 
   # Animated props and things loaded through DNA...
