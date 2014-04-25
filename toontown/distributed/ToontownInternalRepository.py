@@ -3,6 +3,10 @@ from otp.distributed.OtpDoGlobals import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 
+# HACKFIX TODO: Have the dev server's panda3d installation update properly?
+# Currently, it doesn't have the new message types required for the
+# DBSS_OBJECT_GET_ACTIVATED MsgType, so for now we will hard-code it in.
+
 class ToontownInternalRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
     dbId = 4003
@@ -30,7 +34,7 @@ class ToontownInternalRepository(AstronInternalRepository):
         self._callbacks[ctx] = callback
         
         dg = PyDatagram()
-        dg.addServerHeader(doId, self.ourChannel, DBSS_OBJECT_GET_ACTIVATED)
+        dg.addServerHeader(doId, self.ourChannel, 2207)#DBSS_OBJECT_GET_ACTIVATED)
         dg.addUint32(ctx)
         dg.addUint32(doId)
         self.send(dg)
@@ -54,7 +58,7 @@ class ToontownInternalRepository(AstronInternalRepository):
         
     def handleDatagram(self, di):
         msgType = self.getMsgType()
-        if msgType == DBSS_OBJECT_GET_ACTIVATED_RESP:
+        if msgType == 2208:#DBSS_OBJECT_GET_ACTIVATED_RESP:
             self.handleGetActivatedResp(di)
         else:
             AstronInternalRepository.handleDatagram(self, di)
