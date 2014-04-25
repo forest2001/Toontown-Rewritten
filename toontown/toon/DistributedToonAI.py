@@ -4875,7 +4875,7 @@ def givePies(pieType, numPies=0):
     av.b_setNumPies(numPies)
 
 # TODO: Set minimum access for this MW back to 400, after fishing supports quests.
-@magicWord(category=CATEGORY_OVERRIDE, types=[int, int], access=300)
+@magicWord(category=CATEGORY_OVERRIDE, types=[int, int])
 def setQP(questId=0, progress=0):
     """
     Get current questId in progress via ~setQP.
