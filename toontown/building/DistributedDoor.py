@@ -159,7 +159,15 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             building = self.getBuilding()
             doorTrigger = building.find('**/' + self.getTriggerName())
             if not doorTrigger.isEmpty():
-                doorTrigger.getNode(0).addSolid(CollisionSphere(Point3(4,0,3), 3.5))
+                TRIGGER_SHIFT_Y = 0.25
+                TRIGGER_SHIFT_Z = 1.00
+                if "_gag_shop_" in building.getName():
+                    # Some dipshit put the triggers on backwards for the 
+                    # gag shop compared to every other building.
+                    doorTrigger.setY(doorTrigger.getY() + TRIGGER_SHIFT_Y)
+                else:
+                    doorTrigger.setY(doorTrigger.getY() - TRIGGER_SHIFT_Y)
+                doorTrigger.setZ(doorTrigger.getZ() + TRIGGER_SHIFT_Z)
 
     def setTriggerName_wip(self):
         building = self.getBuilding()
