@@ -63,6 +63,7 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
     def setZoneIds(self, zoneIds):
         DistributedLevel.notify.debug('setZoneIds: %s' % zoneIds)
         self.zoneIds = zoneIds
+        self.privGotAllRequired()
 
     def setStartTimestamp(self, timestamp):
         DistributedLevel.notify.debug('setStartTimestamp: %s' % timestamp)
@@ -70,7 +71,8 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
         self.privGotAllRequired()
 
     def privGotAllRequired(self):
-        self.levelAnnounceGenerate()
+        if hasattr(self, 'zoneIds') and hasattr(self, 'startTime'):
+            self.levelAnnounceGenerate()
 
     def levelAnnounceGenerate(self):
         pass
