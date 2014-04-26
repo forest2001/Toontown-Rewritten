@@ -4,6 +4,7 @@
 *.dll
 *.dis
 *.log
+*.buildings
 parser.out
 parsetab.py
 *.jpg
