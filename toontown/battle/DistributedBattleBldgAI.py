@@ -114,19 +114,18 @@ class DistributedBattleBldgAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
             if topFloor == 0:
                 self.b_setState('Reward')
             else:
-                for floorNum, cogsThisFloor in PythonUtil.enumerate(self.suitsKilledPerFloor):
+                for floorNum, cogsThisFloor in enumerate(self.suitsKilledPerFloor):
                     for toonId in self.activeToons:
                         toon = self.getToon(toonId)
                         if toon:
                             recovered, notRecovered = self.air.questManager.recoverItems(toon, cogsThisFloor, self.zoneId)
                             self.toonItems[toonId][0].extend(recovered)
                             self.toonItems[toonId][1].extend(notRecovered)
-                            #TODO: promotionMgr
-                            #meritArray = self.air.promotionMgr.recoverMerits(toon, cogsThisFloor, self.zoneId, getCreditMultiplier(floorNum))
-                            #if toonId in self.helpfulToons:
-                            #    self.toonMerits[toonId] = addListsByValue(self.toonMerits[toonId], meritArray)
-                            #else:
-                            #    self.notify.debug('toon %d not helpful, skipping merits' % toonId)
+                            meritArray = self.air.promotionMgr.recoverMerits(toon, cogsThisFloor, self.zoneId, getCreditMultiplier(floorNum))
+                            if toonId in self.helpfulToons:
+                                self.toonMerits[toonId] = addListsByValue(self.toonMerits[toonId], meritArray)
+                            else:
+                                self.notify.debug('toon %d not helpful, skipping merits' % toonId)
 
                 self.d_setBattleExperience()
                 self.b_setState('BuildingReward')
