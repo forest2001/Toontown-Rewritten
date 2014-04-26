@@ -2,6 +2,9 @@
 # live server separates these. The client settings go in config/public_client.prc
 # and server settings go here. Don't forget to update both if necessary.
 
+# Server settings
+want-dev #f
+
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
 want-pets #f

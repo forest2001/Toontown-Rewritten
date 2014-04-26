@@ -7,6 +7,7 @@ window-title Toontown Rewritten [BETA]
 server-version SERVER_VERSION_HERE
 audio-library-name p3openal_audio
 sync-video #f
+want-dev #f
 
 
 # Resources settings

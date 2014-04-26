@@ -6,6 +6,7 @@
 window-title Toontown Rewritten [DEV BUILD]
 server-version dev
 sync-video #f
+want-dev #f
 
 
 # Resource settings
