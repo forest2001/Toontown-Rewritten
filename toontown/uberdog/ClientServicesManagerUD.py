@@ -484,6 +484,16 @@ class DeleteAvatarFSM(GetAvatarsFSM):
                 self.csm.air.dclassesByName['DistributedEstateAI'],
                 { 'setSlot%dToonId' % index : [0], 'setSlot%dItems' % index : [[]] }
             )
+        
+        if self.csm.air.friendsManager:
+            self.csm.air.friendsManager.clearList(self.avId)
+        else:
+            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'clearList', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId]
+            )
+            self.csm.air.send(dg)
 
         self.csm.air.dbInterface.updateObject(
             self.csm.air.dbId,
@@ -499,16 +509,6 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
-        
-        if self.csm.air.friendsManager:
-            self.csm.air.friendsManager.clearList(self.avId) #RIP friends list
-        else:
-            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
-            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-                'clearList', friendsManagerDoId, friendsManagerDoId,
-                self.csm.air.ourChannel, [self.avId]
-            )
-            self.csm.air.send(dg)
         self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
         self.demand('QueryAvatars')
 

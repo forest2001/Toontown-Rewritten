@@ -3359,7 +3359,7 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   friendOnline(uint32, uint8, uint8);
   friendOffline(uint32);
   
-  comingOnline(uint32 avId, uint32[]);
+  comingOnline(uint32 avId, uint32 friendIds[]);
   goingOffline(uint32 avId);
   
   getAvatarDetails(uint32) clsend;

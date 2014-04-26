@@ -244,17 +244,74 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
             
     def clearList(self, avId):
-        # This is sent from the CSMUD when a toon is deleted, so that
-        # all their friends don't waste space on their friends list!
-        fsm = GetToonDataFSM(self, avId, avId, self.__clearListGotToonData)
+        # This is sent from the CSMUD when a toon is deleted.
+        # First we need the avId's friendsList.
+        fsm = GetToonDataFSM(self, avId, avId, self.__clearListGotFriendsList)
         fsm.start()
+        self.fsms[avId] = fsm
         
-    def __clearListGotToonData(self, success, requesterId, fields):
+    def __clearListGotFriendsList(self, success, requesterId, fields):
         if not success:
-            # Something went wrong... abort.
+            # We couldn't get the avatar's friends list. Abort!
             return
-        # TODO: Actually iterate through toons friends list and delete each friend.
-        # I got too tired at this stage to continue... RIP.
+        if requesterId != fields['ID']:
+            # Wtf, we got the wrong toon's data!
+            return
+        friendIds = fields['setFriendsList'][0][:]
+        friendIds.append(requesterId)
+        if friendIds[0] == requesterId:
+            # This toon has no friends, no point doing database operations.
+            return
+        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __clearListGotFriendData(self, success, requesterId, fields, friendIds=[]):
+        # Delete the FSM, we no longer need it.
+        self.deleteFSM(requesterId)
+        # Normally we would check if success is false, and stop if it is, but in this
+        # case, we have to continue to clean up everyone else's friends list.
+        if not success:
+            if friendIds:
+                # Move on to the next friend.
+                fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+                fsm.start()
+                self.fsms[requesterId] = fsm
+            else:
+                # No more friends, we can now stop.
+                return
+        # Now we need to remove the requesterId from the friend's fields.
+        friendsIds = fields['setFriendsList'][0][:]
+        if requesterId == fields['ID']:
+            # Delete our friends list entirely.
+            friendsIds = []
+        elif requesterId in friendsIds:
+            # Remove ourself from our friend's list.
+            friendsIds.remove(requesterId)
+        else:
+            # Wtf, we aren't friends with this toon?
+            self.notify.warning('Tried to unfriend %s from %s\'s friendsList while not in friendsList!' % (requesterId, fields['ID']))
+        fsm = UpdateToonFieldFSM(self, requesterId, fields['ID'], functools.partial(self.__clearListUpdatedToonField, avId=fields['ID'], friendIds=friendIds[1:]))
+        fsm.start('setFriendsList', friendsIds)
+        self.fsms[requesterId] = fsm
+        
+    def __clearListUpdatedToonField(self, success, requesterId, online=False, avId=None, friendIds=[]):
+        # Delete the FSM, we no longer need it.
+        self.deleteFSM(requesterId)
+        # Normally we would check if success is false, and stop if it is, but in this
+        # case, we have to continue to clean up everyone else's friends list.
+        if success and online:
+            dg = self.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
+                'friendsNotify', avId, avId, self.air.ourChannel, [requesterId, 1]
+            )
+            self.air.send(dg)
+        if not friendIds:
+            # We can now stop, since we have no friends left to clear.
+            return
+        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
         
     def removeFriend(self, avId):
         requesterId = self.air.getAvatarIdFromSender()
