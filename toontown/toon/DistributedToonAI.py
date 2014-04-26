@@ -4412,13 +4412,19 @@ def maxToon(hasConfirmed='UNCONFIRMED'):
         return 'Are you sure you want to max out %s? This process is irreversible. Use "~maxToon CONFIRM" to confirm.' % toon.getName()
     
     # Max out gag tracks (all 7 tracks)
-    toon.b_setTrackAccess([1, 1, 1, 1, 1, 1, 1])
-    toon.b_setMaxCarry(95) # Compensate for the extra gag track.
-    toon.b_setExperience('99999999999999') # Idk what to put here for valid exp...? Someone feel free to change.
+    toon.b_setTrackAccess([1] * 7)
+    toon.b_setMaxCarry(MaxCarryLimit + 15) # Compensate for the extra gag track.
+    toon.experience.maxOutExp() # Completely max out the toons experience.
+    toon.b_setExperience(toon.experience.makeNetString())
+    
+    # Restock all gags.
+    toon.inventory.zeroInv()
+    toon.inventory.maxOutInv(filterUberGags=0, filterPaidGags=0)
+    toon.b_setInventory(toon.inventory.makeNetString())
     
     # Max out laff
-    toon.b_setMaxHp(137)
-    toon.toonUp(spellbook.getInvoker().getMaxHp() - spellbook.getInvoker().hp)
+    toon.b_setMaxHp(ToontownGlobals.MaxHpLimit)
+    toon.toonUp(toon.getMaxHp() - toon.getHp())
     
     # Max out cog suits (ORDER: Bossbot, Lawbot, Cashbot, Sellbot)
     toon.b_setCogParts([
@@ -4427,19 +4433,19 @@ def maxToon(hasConfirmed='UNCONFIRMED'):
         CogDisguiseGlobals.PartsPerSuitBitmasks[2], # Cashbot
         CogDisguiseGlobals.PartsPerSuitBitmasks[3]  # Sellbot
     ])
-    toon.b_setCogLevels([49, 49, 49, 49])
-    toon.b_setCogTypes([7, 7, 7, 7])
+    toon.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 4)
+    toon.b_setCogTypes([SuitDNA.suitsPerDept-1] * 4)
     
-    # Max racing tickets
+    # High racing tickets
     toon.b_setTickets(99999)
     
     # Teleport access everywhere (Including CogHQ, excluding Funny Farm.)
-    toon.b_setHoodsVisited([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
-    toon.b_setTeleportAccess([1000, 2000, 3000, 4000, 5000, 6000, 8000, 9000, 10000, 11000, 12000, 13000])
+    toon.b_setHoodsVisited(ToontownGlobals.Hoods)
+    toon.b_setTeleportAccess(ToontownGlobals.HoodsForTeleportAll)
     
     # General end game settings
-    toon.b_setQuestCarryLimit(4)
-    toon.b_setRewardHistory(Quests.ElderTier, [])
+    toon.b_setQuestCarryLimit(ToontownGlobals.MaxQuestCarryLimit)
+    toon.b_setRewardHistory(Quests.ELDER_TIER, [])
     toon.b_setMaxMoney(250)
     toon.b_setMoney(toon.getMaxMoney())
     toon.b_setBankMoney(ToontownGlobals.DefaultMaxBankMoney)
