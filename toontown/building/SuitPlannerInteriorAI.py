@@ -127,8 +127,6 @@ class SuitPlannerInteriorAI:
 
     def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType):
         suitName, skeleton = simbase.air.suitInvasionManager.getInvadingCog()
-        suitName = None
-        skeleton = 0
         if suitName and self.respectInvasions:
             suitType = SuitDNA.getSuitType(suitName)
             bldgTrack = SuitDNA.getSuitDept(suitName)
