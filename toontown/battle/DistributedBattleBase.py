@@ -32,7 +32,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     camMenuFov = ToontownBattleGlobals.BattleCamMenuFov
     camJoinPos = ToontownBattleGlobals.BattleCamJoinPos
     camJoinHpr = ToontownBattleGlobals.BattleCamJoinHpr
-    deferFor = 2
+    sortOrder = 2
 
     def __init__(self, cr, townBattle):
         DistributedNode.DistributedNode.__init__(self, cr)

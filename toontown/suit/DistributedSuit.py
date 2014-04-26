@@ -33,7 +33,7 @@ ALLOW_BATTLE_DETECT = 1
 class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuit')
     ENABLE_EXPANDED_NAME = 0
-    deferFor = 1
+    sortOrder = 1
 
     def __init__(self, cr):
         try:
