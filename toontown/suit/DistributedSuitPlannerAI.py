@@ -702,6 +702,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 pi = points.getPointIndex(i)
                 p = self.pointIndexes[pi]
                 i -= 1
+                # DNAData needs getSuitEdgeZone!
                 zoneName = self.dnaData.getSuitEdgeZone(point.getIndex(), p.getIndex())
                 zoneId = int(self.extractGroupName(zoneName))
                 if self.zoneIdToPointMap.has_key(zoneId):

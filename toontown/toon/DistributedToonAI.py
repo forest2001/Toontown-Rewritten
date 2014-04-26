@@ -3285,15 +3285,18 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not self.air.suitPlanners.has_key(streetId):
             return ['badlocation', suitIndex, 0]
         sp = self.air.suitPlanners[streetId]
-        map = sp.getZoneIdToPointMap()
-        zones = [self.zoneId, self.zoneId - 1, self.zoneId + 1]
+        map = sp.streetPointList
+        suit = sp.createNewSuit([], map, suitName=suitName)
+        if suit:
+            return ['success', suitIndex, 0]
+        # TODO: Get DSuitPlanner AI's getZoneIdToPointMap method working.
+        '''zones = [self.zoneId, self.zoneId - 1, self.zoneId + 1]
         for zoneId in zones:
             if map.has_key(zoneId):
                 points = map[zoneId][:]
                 suit = sp.createNewSuit([], points, suitName=suitName)
                 if suit:
-                    return ['success', suitIndex, 0]
-
+                    return ['success', suitIndex, 0]'''
         return ['badlocation', suitIndex, 0]
 
     def doBuildingTakeover(self, suitIndex):
