@@ -16,7 +16,7 @@ class DNALandmarkBuilding(DNANode):
         self.type = type
 
     def getTitle(self):
-        return DNANode._DNANode__getAttribute(self, DNATitle, 'title', '')
+        return self._getAttribute(self, DNATitle, 'title', '')
 
     def setupSuitBuildingOrigin(self, nodePathA, nodePathB):
         if self.id[0:2] == 'tb' and self.id[2].isdigit() and self.id.find(':') != -1:
