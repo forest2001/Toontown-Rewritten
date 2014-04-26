@@ -7,8 +7,6 @@ from toontown.toonbase import ToontownGlobals
 import NPCToons
 from direct.task import Task
 from toontown.quest import Quests
-from toontown.dna.DNASpawnerAI import *
-from toontown.dna.DNAVisGroup import DNAVisGroup
 
 class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
 
@@ -62,8 +60,3 @@ class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
 
     def getPositionIndex(self):
         return self.posIndex
-        
-        
-@dnaSpawn(DNAVisGroup)
-def spawn(air, zone, element):
-    NPCToons.createNpcsInZone(air, zone)
