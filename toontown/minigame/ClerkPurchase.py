@@ -25,6 +25,7 @@ class ClerkPurchase(PurchaseBase):
         return
 
     def unload(self):
+        self.timer.destroy()
         PurchaseBase.unload(self)
         del self.backToPlayground
         del self.timer
