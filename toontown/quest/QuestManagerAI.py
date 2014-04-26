@@ -97,6 +97,7 @@ class QuestManagerAI:
         Remove the quest from the player's quest inventory
         This function exists because I think it may be necesary to do more logic here in the future, time will tell
         '''
+        av.toonUp(av.getMaxHp())
         av.removeQuest(questId)
 
     def giveReward(self, av, rewardId):
