@@ -10,7 +10,8 @@ class DNASceneRoot(DNASceneElement):
     def __init__(self, zone=None):
         DNASceneElement.__init__(self)
 
-        self.zone = int(zone)
+        if zone is not None:
+            self.zone = int(zone)
 
     def generate(self, storage):
         """

@@ -11,6 +11,9 @@ class DNAGroup(DNASceneElement):
         DNASceneElement.__init__(self)
 
         self.name = name
+        
+    def getName(self):
+        return self.name
 
     def _makeNode(self, storage, parent):
         return parent.attachNewNode(self.name)

@@ -20,6 +20,9 @@ class DNAProp(DNANode):
 
     def getName(self):
         return self.name
+        
+    def getCode(self):
+        return self.code
 
 
 registerElement(DNAProp)
