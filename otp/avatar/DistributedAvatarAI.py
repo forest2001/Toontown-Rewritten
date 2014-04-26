@@ -25,19 +25,11 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         return self.name
 
     def b_setMaxHp(self, maxHp):
-        if (maxHp > 137):
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to go over 137 laff.')
-            self.d_setMaxHp(137)
-            self.setMaxHp(137)
-        else:
-            self.d_setMaxHp(maxHp)
-            self.setMaxHp(maxHp)
+        self.d_setMaxHp(maxHp)
+        self.setMaxHp(maxHp)
 
     def d_setMaxHp(self, maxHp):
-        if (maxHp > 137):
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to go over 137 laff.')
-        else:
-            self.sendUpdate('setMaxHp', [maxHp])
+        self.sendUpdate('setMaxHp', [maxHp])
 
     def setMaxHp(self, maxHp):
         self.maxHp = maxHp

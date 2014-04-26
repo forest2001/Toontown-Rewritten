@@ -1156,6 +1156,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedPlayerAI.DistributedPlayerAI.setHp(self, hp)
         if hp <= 0:
             messenger.send(self.getGoneSadMessage())
+            
+    def b_setMaxHp(self, maxHp):
+        if maxHp > ToontownGlobals.MaxHpLimit:
+            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to go over 137 laff.')
+        maxHp = min(maxHp, ToontownGlobals.MaxHpLimit)
+        DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
 
     def b_setTutorialAck(self, tutorialAck):
         self.d_setTutorialAck(tutorialAck)
