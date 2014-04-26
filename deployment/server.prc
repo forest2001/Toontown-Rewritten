@@ -6,8 +6,3 @@
 # Temporary modifications for unimplemented features go here.
 want-pets #f
 want-old-fireworks #t
-
-# Election settings
-# Settings relating to Doomsday and the Election, which we'll probably never use again.
-want-doomsday #f
-doomsday-threads 0
