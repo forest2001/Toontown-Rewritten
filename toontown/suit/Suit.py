@@ -976,10 +976,6 @@ class Suit(Avatar.Avatar):
         self.loadAnims(anims)
         self.getGeomNode().setScale(self.scale * 1.0173)
         self.generateHealthBar()
-        # This ... fixes skelecog health bars when in battle.
-        # If someone wants to completely fix this, then by all means go
-        # ahead.
-        #self.generateCorporateMedallion()
         self.generateCorporateTie()
         self.setHeight(self.height)
         parts = self.findAllMatches('**/pPlane*')
