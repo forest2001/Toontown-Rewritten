@@ -126,8 +126,7 @@ class SuitPlannerInteriorAI:
         return lvlList
 
     def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType):
-        #TODO: invasionmanager
-        #suitName, skeleton = simbase.air.suitInvasionManager.getInvadingCog()
+        suitName, skeleton = simbase.air.suitInvasionManager.getInvadingCog()
         suitName = None
         skeleton = 0
         if suitName and self.respectInvasions:

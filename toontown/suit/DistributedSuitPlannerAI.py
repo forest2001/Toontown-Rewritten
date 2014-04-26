@@ -786,9 +786,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     del self.pendingBuildingHeights[0]
                     self.pendingBuildingHeights.append(buildingHeight)
         if suitName == None:
-            #TODO: suitInvasionManager
-            #suitName, skelecog = self.air.suitInvasionManager.getInvadingCog()
-            skelecog = False
+            suitName, skelecog = self.air.suitInvasionManager.getInvadingCog()
             if suitName == None:
                 suitName = self.defaultSuitName
         if suitType == None and suitName != None:

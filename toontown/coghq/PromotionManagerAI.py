@@ -26,9 +26,8 @@ class PromotionManagerAI:
              0,
              0,
              0]
-        #TODO: suitInvasionManager
-        #if self.air.suitInvasionManager.getInvading():
-        #    multiplier *= getInvasionMultiplier()
+        if self.air.suitInvasionManager.getInvading():
+            multiplier *= getInvasionMultiplier()
         for i in range(len(extraMerits)):
             if CogDisguiseGlobals.isSuitComplete(av.getCogParts(), i):
                 meritsRecovered[i] += extraMerits[i]

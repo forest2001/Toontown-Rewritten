@@ -280,9 +280,8 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         self.battle.setInitialMembers(self.toons, self.suits)
         self.battle.generateWithRequired(self.zoneId)
         mult = getCreditMultiplier(self.currentFloor)
-        #todo: suitInvasionManager
-        #if self.air.suitInvasionManager.getInvading():
-        #    mult *= getInvasionMultiplier()
+        if self.air.suitInvasionManager.getInvading():
+            mult *= getInvasionMultiplier()
         self.battle.battleCalc.setSkillCreditMultiplier(mult)
 
     def __cleanupFloorBattle(self):

@@ -45,6 +45,9 @@ from toontown.coghq.FactoryManagerAI import FactoryManagerAI
 from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
 
+# Suits.
+from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
+
 import time
 
 class ToontownAIRepository(ToontownInternalRepository):
@@ -74,6 +77,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.factoryMgr = FactoryManagerAI(self)
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
+        self.suitInvasionManager = SuitInvasionManagerAI(self)
 
         self.dnaStoreMap = {}
 
