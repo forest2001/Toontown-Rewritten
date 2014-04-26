@@ -5,11 +5,8 @@ class DNASuitPath:
     def addPoint(self, point):
         self.points.append(point)
 
-    def getNumPoints(self):
-        return len(self.points)
-
-    def getPoint(self, index):
-        return self.points[index]
+    def getPoints(self, index):
+        return self.points
 
     def getPointIndex(self, index):
         return self.points[index].getIndex()
