@@ -12,6 +12,8 @@ class DNASceneRoot(DNASceneElement):
 
         if zone is not None:
             self.zone = int(zone)
+        else:
+            self.zone = None
 
     def generate(self, storage):
         """
