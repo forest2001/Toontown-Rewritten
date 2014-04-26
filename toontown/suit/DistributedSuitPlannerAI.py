@@ -19,6 +19,7 @@ import time
 import random
 from SuitLegList import *
 from toontown.dna import *
+from otp.ai.MagicWordGlobal import *
 
 class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlannerBase.SuitPlannerBase):
     CogdoPopFactor = config.GetFloat('cogdo-pop-factor', 1.5)
@@ -1457,3 +1458,12 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             track = SuitDNA.suitDepts[SuitBattleGlobals.pickFromFreqList(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_TRACK])]
         self.notify.debug('pickLevelTypeAndTrack: %d %d %s' % (level, type, track))
         return (level, type, track)
+
+@magicWord(types=[str, int, int, int])
+def spawn(name, level, skelecog=0, revives=0):
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives)
+    return "Spawned %s in current zone." % name
