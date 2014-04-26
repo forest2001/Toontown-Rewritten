@@ -17,4 +17,7 @@ class DNAInteractiveProp(DNAAnimProp):
 
         return node
 
+    def getCellId(self):
+        return self.cell_id
+
 registerElement(DNAInteractiveProp)

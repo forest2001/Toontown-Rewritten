@@ -10,7 +10,8 @@ class DNASceneRoot(DNASceneElement):
     def __init__(self, zone=None):
         DNASceneElement.__init__(self)
 
-        self.zone = int(zone)
+        if zone is not None:
+            self.zone = int(zone)
 
     def generate(self, storage):
         """
@@ -23,7 +24,7 @@ class DNASceneRoot(DNASceneElement):
             child._generate(storage, scene)
         return scene.node()
 
-    def getData(self):
+    def generateData(self):
         """
         Generate a DNASceneData object to represent the information contained
         within this scene.

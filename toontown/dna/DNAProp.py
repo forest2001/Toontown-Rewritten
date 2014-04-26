@@ -18,5 +18,11 @@ class DNAProp(DNANode):
             np.setName(self.name)
             return np
 
+    def getName(self):
+        return self.name
+        
+    def getCode(self):
+        return self.code
+
 
 registerElement(DNAProp)

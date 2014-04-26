@@ -20,14 +20,21 @@ class DNAFlatBuilding(DNANode):
     def _postGenerate(self, storage, np):
         height = np.getPythonTag('wall_height') or 0.0
         np.clearPythonTag('wall_height')
+        
+        node = np.attachNewNode(self.id)
+        
+        internalNode = np.attachNewNode(self.id + '-internal')
+        internalNode.setScale(self.getScale())
 
         # First, set up collisions. We need a (self.width, height)-sized square.
         barrierNode = storage.findNode('wall_camera_barrier')
         if not barrierNode:
             raise DNAError('No wall_camera_barrier in storage.')
 
-        barrier = barrierNode.copyTo(np)
+        barrier = barrierNode.copyTo(internalNode, 0)
         barrier.setScale(self.width, 1, height)
+
+        internalNode.flattenStrong()
 
         # We need to set collisions on all of our knock knock doors:
         match = self.INDEX_REGEX.match(self.name)
@@ -36,7 +43,32 @@ class DNAFlatBuilding(DNANode):
             for collisionNP in np.findAllMatches('**/door_*/+CollisionNode'):
                 collisionNP.setName('KnockKnockDoorSphere_%d' % index)
 
-        # Finally, flatten down:
-        np.flattenStrong()
+        wallCollection = internalNode.findAllMatches('wall*')
+        wallHolder = node.attachNewNode('wall_holder')
+        wallDecal = node.attachNewNode('wall_decal')
+        windowCollection = internalNode.findAllMatches('**/window*')
+        doorCollection = internalNode.findAllMatches('**/door*')
+        corniceCollection = internalNode.findAllMatches('**/cornice*_d')
+        
+        wallCollection.reparentTo(wallHolder)
+        windowCollection.reparentTo(wallDecal)
+        doorCollection.reparentTo(wallDecal)
+        corniceCollection.reparentTo(wallDecal)
+
+        for i in range(wallHolder.getNumChildren()):
+            iNode = wallHolder.getChild(i)
+            iNode.clearTag('DNACode')
+            iNode.clearTag('DNARoot')
+
+        wallHolder.flattenStrong()
+        wallDecal.flattenStrong()
+
+        holderChild0 = wallHolder.getChild(0)
+        wallDecal.getChildren().reparentTo(holderChild0)
+        holderChild0.reparentTo(internalNode)
+        holderChild0.setEffect(DecalEffect.make())
+
+        wallHolder.removeNode()
+        wallDecal.removeNode()
 
 registerElement(DNAFlatBuilding)

@@ -15,5 +15,6 @@ class DNAStoreTexture(DNAStorageElement):
     def _store(self, storage):
         texture = loader.loadTexture(self.path)
         storage.storeTexture(texture, self.code, self.getScope())
+        storage.storeCatalogCode(self.root, self.code)
 
 registerElement(DNAStoreTexture)
