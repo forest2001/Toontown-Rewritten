@@ -4439,6 +4439,7 @@ def maxToon(hasConfirmed='UNCONFIRMED'):
     
     # General end game settings
     toon.b_setQuestCarryLimit(4)
+    toon.b_setRewardHistory(Quests.ElderTier, [])
     toon.b_setMaxMoney(250)
     toon.b_setMoney(toon.getMaxMoney())
     toon.b_setBankMoney(ToontownGlobals.DefaultMaxBankMoney)
