@@ -62,6 +62,10 @@ class OTPClientRepository(ClientRepositoryBase):
 
 
         self.__currentAvId = 0
+        
+        self.sortedGenerates = []
+        self.sortedDoIds = {}
+        self.expectedInterests = []
 
 
         self.productName = config.GetString('product-name', 'DisneyOnline-US')
@@ -1797,22 +1801,41 @@ class OTPClientRepository(ClientRepositoryBase):
                 currentGameStateName = 'None'
 
     def gotInterestDoneMessage(self, di):
+        if self.expectedInterests:
+            dg = Datagram(di.getDatagram())
+            tempDi = DatagramIterator(dg, di.getCurrentIndex())
+            context = tempDi.getUint32()
+            handle = tempDi.getUint16()
+            if handle in self.expectedInterests:
+                self.expectedInterests.remove(handle)
+                if not self.expectedInterests:
+                    self.doSortedGenerate()
         if self.deferredGenerates:
             dg = Datagram(di.getDatagram())
             di = DatagramIterator(dg, di.getCurrentIndex())
             self.deferredGenerates[-1].append((CLIENT_DONE_INTEREST_RESP, (dg, di)))
         else:
             self.handleInterestDoneMessage(di)
+            
+    def doSortedGenerate(self):
+        if not self.sortedGenerates:
+            return
+        for generates in self.sortedGenerates:
+            for generate in generates:
+                msgType, extra = generate
+                self.replayDeferredGenerate(msgType, extra)
+        
 
     def gotObjectLocationMessage(self, di):
-        if self.deferredGenerates:
+        if self.deferredGenerates or self.sortedGenerates:
             dg = Datagram(di.getDatagram())
             di = DatagramIterator(dg, di.getCurrentIndex())
             di2 = DatagramIterator(dg, di.getCurrentIndex())
             doId = di2.getUint32()
             if doId in self.deferredDoIds:
-                print self.deferredDoIds[doId]
-                self.deferredDoIds[doId][2].append((CLIENT_OBJECT_LOCATION, (dg, di)))
+                self.deferredDoIds[doId][3].append((CLIENT_OBJECT_LOCATION, (dg, di)))
+            elif doId in self.sortedDoIds:
+                self.sortedDoIds[doId][3].append((CLIENT_OBJECT_LOCATION, (dg, di)))
             else:
                 self.handleObjectLocation(di)
         else:
@@ -1948,6 +1971,18 @@ class OTPClientRepository(ClientRepositoryBase):
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
+        
+        if self.expectedInterests:
+            sortOrder = getattr(dclass.getClassDef(), 'sortOrder', 0)
+            if sortOrder:
+                while len(self.sortedGenerates) < sortOrder+1:
+                    self.sortedGenerates.append([])
+                self.sortedGenerates[sortOrder].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+                dg = PyDatagram(di.getRemainingBytes())
+                dg.addUint16(0)
+                di = PyDatagramIterator(dg)
+                self.sortedDoIds[doId] = ((parentId, zoneId, classId, doId, di), dg, [])
+                return
         deferFor = getattr(dclass.getClassDef(), 'deferFor', 0)
         if not self.deferInterval or self.noDefer:
             deferrable = False
@@ -1984,6 +2019,17 @@ class OTPClientRepository(ClientRepositoryBase):
         if not self.deferInterval or self.noDefer:
             deferrable = False
         now = globalClock.getFrameTime()
+        if self.expectedInterests:
+            sortOrder = getattr(dclass.getClassDef(), 'sortOrder', 0)
+            if sortOrder:
+                while len(self.sortedGenerates) < sortOrder+1:
+                    self.sortedGenerates.append([])
+                self.sortedGenerates[sortOrder].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+                dg = PyDatagram(di.getRemainingBytes())
+                dg.addUint16(0)
+                di = PyDatagramIterator(dg)
+                self.sortedDoIds[doId] = ((parentId, zoneId, classId, doId, di), dg, [])
+                return
         if self.deferredGenerates or deferFor != 0:
             if len(self.deferredGenerates) == 0:
                 taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
@@ -2077,6 +2123,12 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def addTaggedInterest(self, parentId, zoneId, mainTag, desc, otherTags = [], event = None):
         return self.addInterest(parentId, zoneId, desc, event)
+        
+        
+    def addInterest(self, parentId, zoneId, desc, event = None):
+        handle = ClientRepositoryBase.addInterest(self, parentId, zoneId, desc, event)
+        self.expectedInterests.append(handle.asInt())
+        return handle
 
     #The functions below have been moved from CRBase into OTPCr so we don't need to fuck with CRBase for deferred generated
     #They should be moved back eventually
@@ -2112,7 +2164,16 @@ class OTPClientRepository(ClientRepositoryBase):
                     del self.deferredGenerates[cycle][i]
                 except:
                     pass
-            
+                    
+        elif self.sortedDoIds.has_key(doId):
+            del self.sortedDoIds[doId]
+            for cycle, sortedGenerates in enumerate(self.sortedGenerates):
+                try:
+                    i = sortedGenerates.index((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
+                    del self.sortedGenerates[cycle][i]
+                except:
+                    pass
+
         else:
             self._logFailedDisable(doId, ownerView)
 
@@ -2143,6 +2204,24 @@ class OTPClientRepository(ClientRepositoryBase):
                         # is assumbed to have occured when the
                         # deferred update was originally received
                         self.__doUpdate(doId, di, True)
+            elif doId in self.sortedDoIds:
+                args, dg, updates = self.sortedDoIds[doId]
+                del self.sortedDoIds[doId]
+                self.doGenerate(*args)
+
+                for dg, di in updates:
+                    # non-DC updates that need to be played back in-order are
+                    # stored as (msgType, (dg, di))
+                    if type(di) is types.TupleType:
+                        msgType = dg
+                        dg, di = di
+                        self.replayDeferredGenerate(msgType, (dg, di))
+                    else:
+                        # ovUpdated is set to True since its OV
+                        # is assumbed to have occured when the
+                        # deferred update was originally received
+                        self.__doUpdate(doId, di, True)
+
         else:
             self.notify.warning("Ignoring deferred message %s" % (msgType))
 
@@ -2192,6 +2271,14 @@ class OTPClientRepository(ClientRepositoryBase):
             # This object hasn't really been generated yet.  Sit on
             # the update.
             args, dg0, updates = self.deferredDoIds[doId]
+
+            # Keep a copy of the datagram, and move the di to the copy
+            dg = Datagram(di.getDatagram())
+            di = DatagramIterator(dg, di.getCurrentIndex())
+
+            updates.append((dg, di))
+        elif doId in self.sortedDoIds:
+            args, dg0, updates = self.sortedDoIds[doId]
 
             # Keep a copy of the datagram, and move the di to the copy
             dg = Datagram(di.getDatagram())
