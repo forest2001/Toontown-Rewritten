@@ -1,4 +1,5 @@
 from DNAVisGroup import DNAVisGroup
+import re
 
 
 def getVisGroups(root):
@@ -22,8 +23,10 @@ def r_getChildrenOfType(root, type, list):
         r_getVisGroups(child, list)
 
 
-def getBlock(name):
-    block = name[name.find(':')-2:name.find(':')]
-    if block[0] > '9' or block[0] < '0':
-        block = block[1:]
-    return block
+INDEX_REGEX = re.compile('tb([0-9]+):')
+def getBlockFromName(name):
+    match = INDEX_REGEX.match(name)
+    if not match:
+        return None
+    else:
+        return int(match.group(1))

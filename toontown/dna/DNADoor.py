@@ -61,11 +61,11 @@ class DNADoor(DNANode):
             pass
         doorNode = node.copyTo(frontNode, 0)
         self.doorStore = self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
-          DNAUtil.getBlock(parent.getName()), self.getColor())
+          DNAUtil.getBlockFromName(parent.getName()), self.getColor())
         return doorNode
 
     def _storeData(self, data):
-        block = data.getBlock(DNAUtil.getBlock(self.parent.name))
+        block = data.getBlock(DNAUtil.getBlockFromName(self.parent.name))
         block.door = self.doorStore
 
 registerElement(DNADoor)

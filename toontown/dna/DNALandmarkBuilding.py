@@ -49,7 +49,7 @@ class DNALandmarkBuilding(DNANode):
         return self.node
 
     def _storeData(self, data):
-        block = data.getBlock(DNAUtil.getBlock(self.name))
+        block = data.getBlock(DNAUtil.getBlockFromName(self.name))
         block.title = self.getTitle()
         block.buildingType = self.type
         block.zone = self.getVisGroup().getZone()
