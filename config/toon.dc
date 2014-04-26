@@ -3347,6 +3347,7 @@ uint32 petId;
 };
 
 dclass TTRFriendsManager : DistributedObjectGlobal {
+  clearList(uint32 avId);
   removeFriend(uint32) clsend;
   requestAvatarInfo(uint32[]) clsend;
   

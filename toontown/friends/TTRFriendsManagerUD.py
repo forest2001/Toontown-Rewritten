@@ -242,6 +242,19 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             return
         for friendId, tf in fields['setFriendsList'][0]:
             self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
+            
+    def clearList(self, avId):
+        # This is sent from the CSMUD when a toon is deleted, so that
+        # all their friends don't waste space on their friends list!
+        fsm = GetToonDataFSM(self, avId, avId, self.__clearListGotToonData)
+        fsm.start()
+        
+    def __clearListGotToonData(self, success, requesterId, fields):
+        if not success:
+            # Something went wrong... abort.
+            return
+        # TODO: Actually iterate through toons friends list and delete each friend.
+        # I got too tired at this stage to continue... RIP.
         
     def removeFriend(self, avId):
         requesterId = self.air.getAvatarIdFromSender()
@@ -310,7 +323,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             self.notify.warning('Received blank list of avIds for requestAvatarInfo from avId %d' % requesterId)
             self.air.writeServerEvent('suspicious', requesterId, 'Sent a blank list of avIds for requestAvatarInfo in TTRFMUD')
             return
-        fsm = GetToonDetailsFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
         
@@ -326,7 +339,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         )
         if avIds:
             # We still have more to go... oh boy.
-            fsm = GetToonDetailsFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
+            fsm = GetToonDataFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
             fsm.start()
             self.fsms[requesterId] = fsm
             
