@@ -7,6 +7,7 @@ from toontown.building.DistributedHQInteriorAI import DistributedHQInteriorAI
 from toontown.safezone import TreasureGlobals
 from toontown.town.StreetAI import StreetAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
+from toontown.toon import NPCToons
 
 class SZHoodAI(HoodAI):
     """
@@ -36,6 +37,7 @@ class SZHoodAI(HoodAI):
         self.createTrolley()
         self.createTreasurePlanner()
         self.buildingMgr = DistributedBuildingMgrAI(self.air, self.HOOD, self.air.dnaStoreMap[self.HOOD], self.air.trophyMgr)
+        NPCToons.createNpcsInZone(self.air, self.HOOD)
 
     def createStreets(self):
         branchIds = ToontownGlobals.HoodHierarchy.get(self.HOOD, [])
