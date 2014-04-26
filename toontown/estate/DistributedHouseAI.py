@@ -32,20 +32,16 @@ class DistributedHouseAI(DistributedObjectAI):
         DistributedObjectAI.announceGenerate(self)
         self.interiorZone = self.air.allocateZone()
             
-        self.door = DistributedHouseDoorAI(simbase.air)
-        self.door.setZoneIdAndBlock(self.zoneId, self.getDoId())
-        self.door.setDoorType(DoorTypes.EXT_STANDARD)
+        self.door = DistributedHouseDoorAI(self.air, self.getDoId(), DoorTypes.EXT_STANDARD)
         self.door.setSwing(3)
         self.door.generateWithRequired(self.zoneId)
 
-        self.interiorDoor = DistributedHouseDoorAI(simbase.air)
-        self.interiorDoor.setZoneIdAndBlock(self.interiorZone, self.getDoId())
+        self.interiorDoor = DistributedHouseDoorAI(self.air, self.getDoId(), DoorTypes.INT_STANDARD)
         self.interiorDoor.setSwing(3)
-        self.interiorDoor.setDoorType(DoorTypes.INT_STANDARD)
-        self.interiorDoor.setOtherZoneIdAndDoId(self.zoneId, self.door.getDoId())
+        self.interiorDoor.setOtherDoor(self.door)
         self.interiorDoor.generateWithRequired(self.interiorZone)
 
-        self.door.setOtherZoneIdAndDoId(self.interiorZone, self.interiorDoor.getDoId())
+        self.door.setOtherDoor(self.interiorDoor)
 
         self.interior = DistributedHouseInteriorAI(self.air, self)
         self.interior.setHouseIndex(self.housePos)
