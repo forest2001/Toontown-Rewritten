@@ -11,10 +11,10 @@ def r_getChildrenOfType(root, type, list):
     for child in root.children:
         if isinstance(child, type):
             list.append(child)
-        r_getVisGroups(child, list)
+        r_getChildrenOfType(child, type, list)
 
 def getVisGroups(root):
-    return getChildrenOfType(DNAVisGroup)
+    return getChildrenOfType(root, DNAVisGroup)
 
 
 INDEX_REGEX = re.compile('([a-z][a-z])([0-9]+):')
