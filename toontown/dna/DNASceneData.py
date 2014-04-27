@@ -1,10 +1,12 @@
 from DNAParser import *
-from DNASuitPath import DNASuitPath
 import DNAStoreSuitPoint
 from collections import deque
 
 class DNASuitGraph:
     def __init__(self, points, edges):
+        self.points = points
+        self.edges = edges
+
         self._pointId2point = {}
         self._point2outboundEdges = {}
         self._point2inboundEdges = {}
@@ -15,7 +17,6 @@ class DNASuitGraph:
         for edge in edges:
             try:
                 a = self._pointId2point[edge.a]
-                a.zone = int(edge.parent.getZone())
                 b = self._pointId2point[edge.b]
             except KeyError:
                 raise DNAError('Edge connects a nonexistent point!')
@@ -35,23 +36,28 @@ class DNASuitGraph:
     def getPointFromIndex(self, index):
         return self._pointId2point[index]
 
+    def getEdgeZone(self, edge):
+        return edge.getVisGroup().getZone()
+
+    def getPointZone(self, point):
+        edges = self.getEdgesTo(point)
+        return self.getEdgeZone(edges[0])
+
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
         if minPathLen > 1:
             pointDeque = deque()
             pointDeque.append(startPoint)
-            if self.getSuitPathBreadthFirst(0, pointDeque, endPoint, minPathLen, maxPathLen):
-                path = DNASuitPath()
+            if self._getSuitPathBreadthFirst(0, pointDeque, endPoint, minPathLen, maxPathLen):
+                path = []
                 for i in range(len(pointDeque)):
                     point = pointDeque.popleft()
-                    path.addPoint(point)
+                    path.append(point)
                 return path
         else:
-            path = DNASuitPath()
-            path.addPoint(startPoint)
-            path.addPoint(endPoint)
+            path = [startPoint, endPoint]
             return path
 
-    def getSuitPathBreadthFirst(self, depth, pointDeque, endPoint, minPathLen, maxPathLen):
+    def _getSuitPathBreadthFirst(self, depth, pointDeque, endPoint, minPathLen, maxPathLen):
         point = pointDeque.pop()
         pointDeque.append(point)
         if depth > maxPathLen:
@@ -65,15 +71,36 @@ class DNASuitGraph:
             if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque \
               and (self.getPointFromIndex(edge.b).type in [DNAStoreSuitPoint.STREETPOINT, DNAStoreSuitPoint.COGHQINPOINT, DNAStoreSuitPoint.COGHQOUTPOINT] or self.getPointFromIndex(edge.b) == endPoint):
                 pointDeque.append(self.getPointFromIndex(edge.b))
-                if self.getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
+                if self._getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
                     return True
         return False
 
+    def getAdjacentPoints(self, point):
+        return [self.getPointFromIndex(edge.b) for edge in self.getEdgesFrom(point)]
+
+    def getConnectingEdge(self, pointA, pointB):
+        assert isinstance(pointA, DNAStoreSuitPoint.DNAStoreSuitPoint)
+        assert isinstance(pointB, DNAStoreSuitPoint.DNAStoreSuitPoint)
+        for edge in self.edges:
+            a = self.getPointFromIndex(edge.a)
+            b = self.getPointFromIndex(edge.b)
+            if (a == pointA and b == pointB) or (a == pointB and b == pointA):
+                return edge
+        return None
+
+    def getSuitEdgeTravelTime(self, p1, p2, speed):
+        pos1 = p1.getPos()
+        pos2 = p1.getPos()
+        return (pos1 - pos2).length()/speed
+
 class DNABlock:
+    index = None
     title = None
-    door = None
     buildingType = None
     zone = None
+
+    def __init__(self, index):
+        self.index = index
 
 class DNASceneData:
     def __init__(self):
@@ -88,30 +115,11 @@ class DNASceneData:
     def update(self):
         self.suitGraph = DNASuitGraph(self.suitPoints, self.suitEdges)
 
-    def getAdjacentPoints(self, point):
-        path = DNASuitPath()
-        edges = self.suitGraph.getEdgesFrom(point)
-        for edge in edges:
-            path.addPoint(self.suitGraph.getPointFromIndex(edge.b))
-        return path
-
-    def getConnectingEdge(self, pointA, pointB):
-        for edge in self.suitEdges:
-            a = self.suitGraph.getPointFromIndex(edge.a)
-            b = self.suitGraph.getPointFromIndex(edge.b)
-            if (a == pointA and b == pointB) or (a == pointB and b == pointA):
-                return edge
-        return None
-
-    def getSuitEdgeTravelTime(self, p1, p2, speed):
-        pos1 = self.suitGraph.getPointFromIndex(p1).getPos()
-        pos2 = self.suitGraph.getPointFromIndex(p1).getPos()
-        return (pos1 - pos2).length()/speed
-
     def getBlock(self, block):
-        if not int(block) in self._blocks:
-            self._blocks[int(block)] = DNABlock()
-        return self._blocks[int(block)]
+        assert type(block) == int
+        if not block in self._blocks:
+            self._blocks[block] = DNABlock(block)
+        return self._blocks[block]
 
     def getBlocks(self):
         return self._blocks.items()

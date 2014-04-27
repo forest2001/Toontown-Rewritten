@@ -258,6 +258,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         trackName = 'avatarEnterDoor-%d-%d' % (self.doId, avatar.doId)
         track = Parallel(name=trackName)
         otherNP = self.getDoorNodePath()
+        print self.getBuilding()
         if hasattr(avatar, 'stopSmooth'):
             avatar.stopSmooth()
         if avatar.doId == base.localAvatar.doId:
@@ -430,14 +431,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.doorType == DoorTypes.INT_STANDARD:
             otherNP = render.find('**/door_origin')
         elif self.doorType == DoorTypes.EXT_STANDARD:
-            if hasattr(self, 'tempDoorNodePath'):
-                return self.tempDoorNodePath
-            else:
-                posHpr = self.cr.playGame.dnaData.getBlock(self.block).door
-                otherNP = NodePath('doorOrigin')
-                otherNP.setPos(posHpr.getPos())
-                otherNP.setHpr(posHpr.getHpr())
-                self.tempDoorNodePath = otherNP
+            otherNP = self.getBuilding().find('**/*door_origin')
         elif self.specialDoorTypes.has_key(self.doorType):
             building = self.getBuilding()
             otherNP = building.find('**/door_origin_' + str(self.doorIndex))

@@ -1,12 +1,11 @@
 from DNANode import DNANode
 from DNAParser import *
+import DNAUtil
 from panda3d.core import *
 import re
 
 class DNAFlatBuilding(DNANode):
     TAG = 'flat_building'
-
-    INDEX_REGEX = re.compile('tb([0-9]+):')
 
     def __init__(self, id, width="0"):
         DNANode.__init__(self, id)
@@ -37,11 +36,10 @@ class DNAFlatBuilding(DNANode):
         internalNode.flattenStrong()
 
         # We need to set collisions on all of our knock knock doors:
-        match = self.INDEX_REGEX.match(self.name)
-        if match:
-            index = int(match.group(1))
+        block = DNAUtil.getBlockFromName(self.name)
+        if block is not None:
             for collisionNP in np.findAllMatches('**/door_*/+CollisionNode'):
-                collisionNP.setName('KnockKnockDoorSphere_%d' % index)
+                collisionNP.setName('KnockKnockDoorSphere_%d' % block)
 
         wallCollection = internalNode.findAllMatches('wall*')
         wallHolder = node.attachNewNode('wall_holder')
