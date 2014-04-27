@@ -18,6 +18,13 @@ def getVisGroups(root):
 
 
 INDEX_REGEX = re.compile('([a-z][a-z])([0-9]+):')
+def getBuildingClassFromName(name):
+    match = INDEX_REGEX.match(name)
+    if not match:
+        return None
+    else:
+        return match.group(1)
+
 def getBlockFromName(name):
     match = INDEX_REGEX.match(name)
     if not match:
