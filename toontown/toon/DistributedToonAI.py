@@ -774,7 +774,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.d_setNPCFriendsDict(self.NPCFriendsDict)
         return 1
 
-    def restockAllNPCFriends(self):
+    def restockAllNPCFriends(self, amt=1):
         desiredNpcFriends = [2001,
          2011,
          3112,
@@ -784,7 +784,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          3135]
         self.resetNPCFriendsDict()
         for npcId in desiredNpcFriends:
-            self.attemptAddNPCFriend(npcId, 1)
+            self.attemptAddNPCFriend(npcId, amt)
 
     def d_setMaxAccessories(self, max):
         self.sendUpdate('setMaxAccessories', [self.maxAccessories])
@@ -4486,12 +4486,6 @@ def setName(nameStr):
     """Set target's name."""
     spellbook.getTarget().b_setName(nameStr)
     return "Changed avId %s's name to %s" % (spellbook.getTarget().doId, nameStr)
-
-@magicWord(category=CATEGORY_CHARACTERSTATS)
-def gibunites():
-    """Restock all CFO phrases."""
-    spellbook.getTarget().restockAllResistanceMessages(99)
-    return 'i gib %s all dem unitez' % spellbook.getTarget().getName()
     
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setHat(hatId, hatTex=0):
@@ -4893,3 +4887,36 @@ def immortal():
     av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 500 else spellbook.getInvoker()
     av.setImmortalMode(not av.immortalMode)
     return 'Toggled immortal mode %s for %s' % ('ON' if av.immortalMode else 'OFF', av.getName())
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def sostoons():
+    """Restock all *good* VP SOS toons."""
+    spellbook.getTarget().restockAllNPCFriends(99)
+    return 'Restocked all NPC SOS toons successfully!'   
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def unites():
+    """Restock all CFO phrases."""
+    spellbook.getTarget().restockAllResistanceMessages(99)
+    return 'Restocked all unites successfully!'
+    
+@magicWord(category=CATEGORY_OVERRIDE)
+def summons():
+    """ Restock all CJ summons. """
+    av = spellbook.getInvoker()
+    # Make sure we have every cog in our Cog Page.
+    cogCount = []
+    from toontown.shtiker import CogPageGlobals
+    for deptIndex in xrange(4):
+        for cogIndex in xrange(8):
+            cogCount.append(CogPageGlobals.COG_QUOTAS[1][cogIndex])
+    av.b_setCogCount(cogCount)
+    av.b_setCogStatus([CogPageGlobals.COG_COMPLETE2] * 32)
+    av.restockAllCogSummons()
+    return 'Restocked all cog summons successfully!'
+    
+@magicWord(category=CATEGORY_OVERRIDE)
+def pinkslips():
+    """ Restock (to 99) CEO pink slips. """
+    spellbook.getTarget().b_setPinkSlips(99)
+    return 'Restocked 99 pink slips successfully!'
