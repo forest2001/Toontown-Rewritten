@@ -100,8 +100,7 @@ class SummonCogDialog(DirectFrame, StateData.StateData):
         elif self.summonsType == 'building':
             if returnCode == 'success':
                 building = base.cr.doId2do.get(buildingId)
-                dnaStore = base.cr.playGame.dnaStore
-                buildingTitle = dnaStore.getTitleFromBlockNumber(building.block)
+                buildingTitle = base.cr.playGame.dnaData.getBlock(building.block).title
                 buildingInteriorZone = building.zoneId + 500 + building.block
                 npcName = TTLocalizer.SummonDlgShopkeeper
                 npcId = NPCToons.zone2NpcDict.get(buildingInteriorZone)
