@@ -109,9 +109,10 @@ class DNASceneData:
         return (pos1 - pos2).length()/speed
 
     def getBlock(self, block):
-        if not int(block) in self._blocks:
-            self._blocks[int(block)] = DNABlock()
-        return self._blocks[int(block)]
+        assert type(block) == int
+        if not block in self._blocks:
+            self._blocks[block] = DNABlock()
+        return self._blocks[block]
 
     def getBlocks(self):
         return self._blocks.items()
