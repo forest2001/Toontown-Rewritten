@@ -106,12 +106,13 @@ class QuestManagerAI:
         if reward:
             reward.sendRewardAI(av)
 
-    def npcGiveQuest(self, npc, av, questId, rewardId, toNpcId):
+    def npcGiveQuest(self, npc, av, questId, rewardId, toNpcId, recordReward=False):
         '''Have npc assign quest to av'''
         finalReward = 0
         rewardId = Quests.transformReward(rewardId, av)
-        if Quests.isStartingQuest(questId):
+        if recordReward:
             finalReward = rewardId
+
         av.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
         npc.assignQuest(av.getDoId(), questId, rewardId, toNpcId)
 
@@ -196,7 +197,7 @@ class QuestManagerAI:
         if simbase.air.doId2do.has_key(avId):
             av = simbase.air.doId2do[avId]
             self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
-            self.npcGiveQuest(npc, av, questId, rewardId, toNpcId)
+            self.npcGiveQuest(npc, av, questId, rewardId, toNpcId, True)
 
     def avatarChoseTrack(self, avId, npc, questId, trackId):
         '''
