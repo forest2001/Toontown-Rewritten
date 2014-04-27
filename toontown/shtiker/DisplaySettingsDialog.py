@@ -41,9 +41,17 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         self.apiChanged = 0
         self.screenSizes = ((640, 480),
          (800, 600),
+         (1280, 720),
          (1024, 768),
+         (1440, 900),
+         (1600, 900),
          (1280, 1024),
-         (1600, 1200))
+         (1920, 1080),
+         (1600, 1200),
+         (2560, 1440))
+         # Maybe one day, Hawkheart.
+         #(4096, 2304),
+         #(8192, 4608))
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
         nameShopGui = loader.loadModel('phase_3/models/gui/nameshop_gui')

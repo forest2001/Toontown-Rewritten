@@ -24,12 +24,16 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
 from toontown.toontowngui import TTDialog
 from sys import platform
+from DisplayOptions import DisplayOptions
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):
+        self.display = DisplayOptions()
         OTPBase.OTPBase.__init__(self)
+        base.enableMusic(self.display.settings.getBool('game', 'music', False))
+        base.enableSoundEffects(self.display.settings.getBool('game', 'sfx', False))
         self.disableShowbaseMouse()
         self.addCullBins()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
