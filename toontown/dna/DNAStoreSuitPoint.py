@@ -27,7 +27,7 @@ class DNAStoreSuitPoint(DNASceneElement):
         self.id = int(id)
         self.type = pointTypeMap[type]
         self.pos = Point3(float(x), float(y), float(z))
-        self.building = (building and int(building)) or -1
+        self.building = building and int(building)
 
     def getPointType(self):
         return self.type
