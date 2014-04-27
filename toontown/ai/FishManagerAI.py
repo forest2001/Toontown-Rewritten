@@ -26,6 +26,9 @@ class FishManagerAI:
     def generateCatch(self, av, zoneId):
         if len(av.fishTank) >= av.getMaxFishTank():
             return [FishGlobals.OverTankLimit, 0, 0, 0]
+        caughtItem = simbase.air.questManager.toonFished(av, zoneId)
+        if caughtItem:
+            return [FishGlobals.QuestItem, caughtItem, 0, 0]
         rand = random.random() * 100.0
         for cutoff in FishGlobals.SortedProbabilityCutoffs:
             if rand <= cutoff:

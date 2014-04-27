@@ -8,6 +8,7 @@ from otp.otpgui import OTPDialog
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPRender
 from direct.directnotify import DirectNotifyGlobal
+from otp.otpbase.Settings import Settings
 try:
     import embedded
 except:
@@ -18,40 +19,20 @@ class DisplayOptions:
 
     def __init__(self):
         self.restore_failed = False
+        self.settings = Settings()
         self.loadFromSettings()
 
     def loadFromSettings(self):
-        self.notify.info('TODO: This needs to load from the new settings file!')
-        return
-        Settings.readSettings()
-        mode = not Settings.getWindowedMode()
-        music = Settings.getMusic()
-        sfx = Settings.getSfx()
-        toonChatSounds = Settings.getToonChatSounds()
-        musicVol = Settings.getMusicVolume()
-        sfxVol = Settings.getSfxVolume()
-        resList = [(640, 480),
-         (800, 600),
-         (1024, 768),
-         (1280, 1024),
-         (1600, 1200)]
-        res = resList[Settings.getResolution()]
-        embed = Settings.getEmbeddedMode()
+        mode = self.settings.getBool('game', 'fullscreen-mode')
+        music = self.settings.getBool('game', 'music', True)
+        sfx = self.settings.getBool('game', 'sfx', True)
+        toonChatSounds = self.settings.getBool('game', 'toon-chat-sounds', True)
+        musicVol = self.settings.getInt('game', 'music-vol', 100) / 100.0
+        sfxVol = self.settings.getInt('game', 'sfx-vol', 100) / 100.0
+        res = self.settings.getList('game', 'resolution', default=[800, 600], expectedLength=2)
+        embed = self.settings.getBool('game', 'embed', False)
         self.notify.debug('before prc settings embedded mode=%s' % str(embed))
         self.notify.debug('before prc settings full screen mode=%s' % str(mode))
-        if mode == None:
-            mode = 1
-        if res == None:
-            res = (800, 600)
-        if not Settings.doSavedSettingsExist():
-            self.notify.info('loadFromSettings: No settings; isDefaultEmbedded=%s' % self.isDefaultEmbedded())
-            embed = self.isDefaultEmbedded()
-        if embed and not self.isEmbeddedPossible():
-            self.notify.warning('Embedded mode is not possible.')
-            embed = False
-        if not mode and not self.isWindowedPossible():
-            self.notify.warning('Windowed mode is not possible.')
-            mode = True
         loadPrcFileData('toonBase Settings Window Res', 'win-size %s %s' % (res[0], res[1]))
         self.notify.debug('settings resolution = %s' % str(res))
         loadPrcFileData('toonBase Settings Window FullScreen', 'fullscreen %s' % mode)

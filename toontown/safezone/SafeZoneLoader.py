@@ -80,6 +80,7 @@ class SafeZoneLoader(StateData.StateData):
             loader.loadDNA(self.safeZoneStorageDNAFile).store(self.hood.dnaStore)
         sceneTree = loader.loadDNA(dnaFile)
         node = sceneTree.generate(self.hood.dnaStore)
+        base.cr.playGame.dnaData = sceneTree.generateData()
         if node.getNumParents() == 1:
             self.geom = NodePath(node.getParent(0))
             self.geom.reparentTo(hidden)
@@ -100,10 +101,8 @@ class SafeZoneLoader(StateData.StateData):
             self.geom.prepareScene(gsg)
 
     def makeDictionaries(self, sceneTree):
-        sceneData = sceneTree.generateData()
-
         self.nodeList = []
-        for visgroup in sceneData.visgroups:
+        for visgroup in base.cr.playGame.dnaData.visgroups:
             groupNode = self.geom.find('**/' + visgroup.name)
             if groupNode.isEmpty():
                 self.notify.error('Could not find visgroup')

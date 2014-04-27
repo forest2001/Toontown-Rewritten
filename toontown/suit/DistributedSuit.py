@@ -21,6 +21,9 @@ import copy
 import DistributedSuitBase
 from otp.otpbase import OTPLocalizer
 import random
+from SuitLegList import *
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 STAND_OUTSIDE_DOOR = 2.5
 BATTLE_IGNORE_TIME = 6
 BATTLE_WAIT_TIME = 3
@@ -30,6 +33,7 @@ ALLOW_BATTLE_DETECT = 1
 class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuit')
     ENABLE_EXPANDED_NAME = 0
+    sortOrder = 1
 
     def __init__(self, cr):
         try:

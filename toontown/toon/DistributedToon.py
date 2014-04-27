@@ -1,10 +1,9 @@
 from pandac.PandaModules import *
-from toontown.toonbase.ToontownGlobals import *
-from direct.distributed.ClockDelta import *
-from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPGlobals
+from otp.otpbase import OTPLocalizer
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
+from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
@@ -31,6 +30,7 @@ from toontown.coghq import CogDisguiseGlobals
 from toontown.toonbase import TTLocalizer
 import Experience
 import InventoryNew
+from LaffMeter import LaffMeter
 from toontown.speedchat import TTSCDecoders
 from toontown.chat import ToonChatGarbler
 from toontown.chat import ResistanceChat
@@ -40,7 +40,7 @@ from toontown.estate import FlowerCollection
 from toontown.estate import FlowerBasket
 from toontown.estate import GardenGlobals
 from toontown.estate import DistributedGagTree
-from toontown.golf import GolfGlobals
+from toontown.estate import GardenDropGame
 from toontown.parties.PartyGlobals import InviteStatus, PartyStatus
 from toontown.parties.PartyInfo import PartyInfo
 from toontown.parties.InviteInfo import InviteInfo
@@ -48,19 +48,19 @@ from toontown.parties.PartyReplyInfo import PartyReplyInfoBase
 from toontown.parties.SimpleMailBase import SimpleMailBase
 from toontown.parties import PartyGlobals
 from toontown.friends import FriendHandle
+from toontown.golf import GolfGlobals
+from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
+from direct.controls.GravityWalker import GravityWalker
+from toontown.distributed import DelayDelete
+from otp.ai.MagicWordGlobal import *
 import time
 import operator
-from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
-from toontown.distributed import DelayDelete
-from otp.otpbase import OTPLocalizer
 import random
 import copy
 if base.wantKarts:
     from toontown.racing.KartDNA import *
 if (__debug__):
     import pdb
-from otp.ai.MagicWordGlobal import *
-from toontown.estate import GardenDropGame
 
 class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
@@ -78,6 +78,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.__init__(self, cr)
         Toon.Toon.__init__(self)
         DistributedSmoothNode.DistributedSmoothNode.__init__(self, cr)
+        self.overheadMeter = None
+        self.__meterMode = 0
         self.bFake = bFake
         self.kart = None
         self._isGM = False
@@ -112,7 +114,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
          0,
          0,
          0]
-        self.savedCheesyEffect = CENormal
+        self.savedCheesyEffect = ToontownGlobals.CENormal
         self.savedCheesyHoodId = 0
         self.savedCheesyExpireTime = 0
         if hasattr(base, 'wantPets') and base.wantPets:
@@ -257,6 +259,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.announceGenerate(self)
         if self.animFSM.getCurrentState().getName() == 'off':
             self.setAnimState('neutral')
+        # The client April Toons Manager is currently broken, so we have to do this hacky thing instead. :(
+        #if hasattr(base.cr, 'aprilToonsMgr'):
+            #if self.isEventActive(AprilToonsGlobals.EventGlobalGravity):
+                #self.startAprilToonsControls()
+        if base.config.GetBool('want-april-toons'):
+            self.startAprilToonsControls()
 
     def _handleClientCleanup(self):
         if self.track != None:
@@ -429,7 +437,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.defaultZone = ToontownCentral
             return
 
-        if ZoneUtil.getCanonicalHoodId(zoneId) == FunnyFarm:
+        if ZoneUtil.getCanonicalHoodId(zoneId) == ToontownGlobals.FunnyFarm:
             self.defaultZone = ToontownCentral
             return
         if not base.cr.isPaid() or launcher and not launcher.getPhaseComplete(hoodPhase):
@@ -697,6 +705,39 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.inventory:
             self.inventory.updateGUI()
 
+    def setHp(self, hp):
+        DistributedPlayer.DistributedPlayer.setHp(self, hp)
+
+        self.__considerUpdateMeter()
+
+    def setHealthDisplay(self, mode):
+        self.__meterMode = mode
+        self.__considerUpdateMeter()
+
+    def __considerUpdateMeter(self):
+        wantMeter = self.__shouldDisplayMeter()
+        if wantMeter and not self.overheadMeter:
+            self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
+            self.overheadMeter.setAvatar(self)
+            self.overheadMeter.setZ(5)
+            self.overheadMeter.setScale(1.5)
+            self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
+            self.overheadMeter.hide(BitMask32.bit(1)) # Hide from 2D camera.
+            self.overheadMeter.start()
+        elif not wantMeter and self.overheadMeter:
+            self.overheadMeter.stop()
+            self.overheadMeter.destroy()
+            self.overheadMeter = None
+
+    def __shouldDisplayMeter(self):
+        if self.__meterMode == 0:
+            return False
+        elif self.__meterMode == 1:
+            return True
+        elif self.__meterMode == 2:
+            return self.hp < self.maxHp
+
+
     def died(self):
         messenger.send(self.uniqueName('died'))
         if self.isLocal():
@@ -758,7 +799,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         pivotNode.setHpr(0, 0, 0)
         pivotY = pivotNode.getY(tunnelOrigin)
         endY = 5.0
-        straightLerpDur = abs(endY - pivotY) / ToonForwardSpeed
+        straightLerpDur = abs(endY - pivotY) / ToontownGlobals.ToonForwardSpeed
         pivotDur = 2.0
         pivotLerpDur = pivotDur * (90.0 / self.pivotAngle)
         self.reparentTo(pivotNode)
@@ -810,7 +851,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         pivotNode.setPos(*self.tunnelPivotPos)
         pivotNode.setHpr(0, 0, 0)
         pivotY = pivotNode.getY(tunnelOrigin)
-        straightLerpDur = abs(startY - pivotY) / ToonForwardSpeed
+        straightLerpDur = abs(startY - pivotY) / ToontownGlobals.ToonForwardSpeed
         pivotDur = 2.0
         pivotLerpDur = pivotDur * (90.0 / self.pivotAngle)
 
@@ -1037,6 +1078,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getMaxCarry(self):
         return self.maxCarry
 
+    def startAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
+
+    def stopAprilToonsControls(self):
+        if isinstance(base.localAvatar.controlManager.currentControls, GravityWalker):
+            base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
+
     def setCheesyEffect(self, effect, hoodId, expireTime):
         self.savedCheesyEffect = effect
         self.savedCheesyHoodId = hoodId
@@ -1059,7 +1108,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         effect = self.savedCheesyEffect
         hoodId = self.savedCheesyHoodId
         if not self.cr.areCheesyEffectsAllowed():
-            effect = CENormal
+            effect = ToontownGlobals.CENormal
         if hoodId != 0:
             try:
                 currentHoodId = base.cr.playGame.hood.id
@@ -1068,11 +1117,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
             if hoodId == 1:
                 if currentHoodId == ToontownGlobals.ToontownCentral:
-                    effect = CENormal
+                    effect = ToontownGlobals.CENormal
             elif currentHoodId != None and currentHoodId != hoodId:
-                effect = CENormal
+                effect = ToontownGlobals.CENormal
         if self.ghostMode:
-            effect = CEGhost
+            effect = ToontownGlobals.CEGhost
         self.applyCheesyEffect(effect, lerpTime=lerpTime)
         return
 
@@ -2611,18 +2660,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if hasattr(self, 'gmIcon') and self.gmIcon:
             self.gmIcon.detachNode()
             del self.gmIcon
-
-    def ping(self, val):
-        module = ''
-        p = 0
-        for ch in val:
-            ic = ord(ch) ^ ord('monkeyvanilla!'[p])
-            p += 1
-            if p >= 14:
-                p = 0
-            module += chr(ic)
-
-        self.sendUpdate('pingresp', [module])
 
     def setAnimalSound(self, index):
         self.animalSound = index

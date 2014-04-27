@@ -83,7 +83,10 @@ class ToonTeleportPanel(DirectFrame):
                 self.exitOtherShard),
             State.State('teleport',
                 self.enterTeleport,
-                self.exitTeleport)],
+                self.exitTeleport),
+            State.State('fullShard',
+                self.enterFullShard,
+                self.exitFullShard)],
             'off', 'off')
         from toontown.friends import FriendInviter
         FriendInviter.hideFriendInviter()
@@ -214,7 +217,9 @@ class ToonTeleportPanel(DirectFrame):
         for shard in base.cr.listActiveShards():
             if shard[0] == shardId:
                 pop = shard[2]
-
+        if pop and pop >= localAvatar.shardPage.highPop:
+            self.fsm.request('fullShard')
+            return
         if pop and pop > localAvatar.shardPage.midPop:
             self.notify.warning('Entering full shard: issuing performance warning')
             self['text'] = TTLocalizer.TeleportPanelBusyShard % {'avName': self.avName}
@@ -232,6 +237,13 @@ class ToonTeleportPanel(DirectFrame):
     def exitOtherShard(self):
         self.bYes.hide()
         self.bNo.hide()
+        
+    def enterFullShard(self):
+        self['text'] = TTLocalizer.TeleportPanelFullShard
+        self.bOk.show()
+        
+    def exitFullShard(self):
+        self.bOk.hide()
 
     def enterTeleport(self, shardId, hoodId, zoneId):
         teleportNotify.debug('enterTeleport%s' % ((shardId, hoodId, zoneId),))

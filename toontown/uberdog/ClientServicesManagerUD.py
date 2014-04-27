@@ -5,6 +5,9 @@ from direct.distributed.PyDatagram import *
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
+from otp.distributed import OtpDoGlobals
+from sys import platform
+import dumbdbm
 import anydbm
 import time
 import hmac
@@ -24,7 +27,10 @@ class LocalAccountDB:
         # This uses dbm, so we open the DB file:
         filename = simbase.config.GetString('accountdb-local-file',
                                             'dev-accounts.db')
-        self.dbm = anydbm.open(filename, 'c')
+        if platform == 'darwin':
+            self.dbm = dumbdbm.open(filename, 'c')
+        else:
+            self.dbm = anydbm.open(filename, 'c')
 
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):
@@ -39,13 +45,13 @@ class LocalAccountDB:
             callback({'success': True,
                       'accountId': int(self.dbm[cookie]),
                       'databaseId': cookie,
-                      'adminAccess': 500})
+                      'adminAccess': 507})
         else:
             # Nope, let's return w/o account ID:
             callback({'success': True,
                       'accountId': 0,
                       'databaseId': cookie,
-                      'adminAccess': 500})
+                      'adminAccess': 507})
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
@@ -146,6 +152,19 @@ class LoginAccountFSM(OperationFSM):
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
+        
+        # Binary bitmask in base10 form, added to the adminAccess.
+        # To find out what they have access to, convert the serverAccess to 3-bit binary.
+        # 2^2 = dev, 2^1 = qa, 2^0 = test
+        serverType = simbase.config.GetString('server-type', 'dev')
+        serverAccess = self.adminAccess % 10 # Get the last digit in their access.
+        if (serverType == 'dev' and not serverAccess & 4) or \
+           (serverType == 'qa' and not serverAccess & 2) or \
+           (serverType == 'test' and not serverAccess & 1):
+            self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
+            self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
+            return
+
         if accountId:
             self.accountId = accountId
             self.demand('RetrieveAccount')
@@ -465,6 +484,16 @@ class DeleteAvatarFSM(GetAvatarsFSM):
                 self.csm.air.dclassesByName['DistributedEstateAI'],
                 { 'setSlot%dToonId' % index : [0], 'setSlot%dItems' % index : [[]] }
             )
+        
+        if self.csm.air.friendsManager:
+            self.csm.air.friendsManager.clearList(self.avId)
+        else:
+            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'clearList', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId]
+            )
+            self.csm.air.send(dg)
 
         self.csm.air.dbInterface.updateObject(
             self.csm.air.dbId,
@@ -480,8 +509,6 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
-        
-        self.csm.air.friendsManager.clearList(self.avId) #RIP friends list
         self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
         self.demand('QueryAvatars')
 
@@ -703,14 +730,45 @@ class LoadAvatarFSM(AvatarOperationFSM):
         # Finally, grant ownership and shut down.
         dg = PyDatagram()
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
-        dg.addChannel(self.target<<32 | self.avId) # accountId in high 32 bits, avatar in low
+        dg.addChannel(self.csm.GetAccountConnectionChannel(self.target)) # Set ownership channel to the connection's account channel.
         self.csm.air.send(dg)
         
         # Tell TTRFriendsManager somebody is logging in:
-        self.csm.air.friendsManager.toonOnline(self.avId, self.avatar)
+        # Construst a list of all friends.
+        friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+        friendsList = []
+        for friendId, tf in self.avatar['setFriendsList'][0]:
+            friendsList.append(friendId)
+        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
+        if self.csm.air.friendsManager:
+            self.csm.air.friendsManager.comingOnline(self.avId, friendsList)
+        else:
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'comingOnline', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId, friendsList]
+            )
+            self.csm.air.send(dg)
+            
+        # Setup a post remove in case the client disconnects randomly.
+        dgcleanup = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+            'goingOffline', friendsManagerDoId, friendsManagerDoId,
+            self.csm.air.ourChannel, [self.avId]
+        )
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
+        self.csm.air.send(dg)
+        
 
         # Tell the GlobalPartyManager as well
-        self.csm.air.globalPartyMgr.avatarJoined(self.avId)
+        if self.csm.air.globalPartyMgr:
+            self.csm.air.globalPartyMgr.avatarJoined(self.avId)
+        else:
+            dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
+                'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, 
+                OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
+            )
+            self.csm.air.send(dg)
 
         self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
         self.demand('Off')
@@ -727,8 +785,18 @@ class UnloadAvatarFSM(OperationFSM):
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
         
+        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
         # Tell TTRFriendsManager somebody is logging off:
-        self.csm.air.friendsManager.toonOffline(self.avId)
+        if self.csm.air.friendsManager:
+            self.csm.air.friendsManager.goingOffline(self.avId)
+        else:
+            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
+            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
+                'goingOffline', friendsManagerDoId, friendsManagerDoId,
+                self.csm.air.ourChannel, [self.avId]
+            )
+            self.csm.air.send(dg)
+
 
         # Clear off POSTREMOVE:
         dg = PyDatagram()
@@ -782,6 +850,9 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.accountDB = RemoteAccountDB(self)
         else:
             self.notify.error('Invalid account DB type configured: %s' % dbtype)
+            
+        # Attribute to test if doomsday is over...
+        self.closed = False
 
     def killConnection(self, connId, reason):
         dg = PyDatagram()
@@ -819,11 +890,23 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         self.account2fsm[sender] = fsmtype(self, sender)
         self.account2fsm[sender].request('Start', *args)
+        
+    def setClosed(self, closed):
+        self.notify.warning('AI %s has told us to start rejecting logins!' % str(self.air.getMsgSender()))
+        self.closed = closed
 
     def login(self, cookie):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
+        
+        if self.closed:
+            # Doomsday is over... no more logging in until beta!
+            dg = PyDatagram()
+            dg.addServerHeader(sender, self.air.ourChannel, CLIENTAGENT_EJECT)
+            dg.addUint16(156)
+            dg.addString('Toontown Rewritten is now closed until Beta. Learn more and check out the updates on our website, toontownrewritten.com. Thanks for Alpha Testing with us!')
+            self.air.send(dg)
 
         if sender>>32:
             # Oops, they have an account ID on their conneciton already!

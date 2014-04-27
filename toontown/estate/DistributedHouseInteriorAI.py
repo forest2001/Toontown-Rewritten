@@ -4,7 +4,6 @@ from DistributedFurnitureManagerAI import *
 from toontown.catalog.CatalogWindowItem import CatalogWindowItem
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
 from DNAFurnitureReaderAI import DNAFurnitureReaderAI
-from toontown.dna.DNAParser import *
 
 # The house interior DNA files for each
 houseInteriors = [
@@ -53,8 +52,7 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         dnaFile = houseInteriors[self.houseIndex]
 
         # Load DNA...
-        dnaStorage = DNAStorage()
-        dnaData = loadDNAFileAI(dnaStorage, dnaFile)
+        dnaData = self.air.loadDNA(dnaFile)
 
         # Read it into furniture...
         furnitureReader = DNAFurnitureReaderAI(dnaData)

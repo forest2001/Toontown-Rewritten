@@ -1,192 +1,455 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
-from direct.distributed.PyDatagram import *
+from direct.distributed.PyDatagram import PyDatagram
 from direct.task import Task
 from direct.directnotify.DirectNotifyGlobal import directNotify
+from direct.fsm.FSM import FSM
 import functools
+from time import time
+import cPickle
+
+class GetToonDataFSM(FSM):
+    """
+    A quick implementation to fetch a toon's fields from the
+    database and return it back to the TTRFMUD via a callback.
+    """
+    
+    def __init__(self, mgr, requesterId, avId, callback):
+        FSM.__init__(self, 'GetToonDataFSM')
+        self.mgr = mgr
+        self.requesterId = requesterId
+        self.avId = avId
+        self.callback = callback
+        
+    def start(self):
+        self.demand('QueryDB')
+        
+    def enterQueryDB(self):
+        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        
+    def __queryResponse(self, dclass, fields):
+        if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
+            self.demand('Failure', 'Invalid dclass for avId %s!' % self.avId)
+            return
+        self.fields = fields
+        self.fields['ID'] = self.avId
+        self.demand('Finished')
+        
+    def enterFinished(self):
+        # We want to cache the basic information we got for GetFriendsListFSM.
+        self.mgr.avBasicInfoCache[self.avId] = {
+            'expire' : time() + simbase.config.GetInt('friend-detail-cache-expire', 3600),
+            'toonInfo' : [self.avId, self.fields['setName'][0], self.fields['setDNAString'][0], self.fields['setPetId'][0]],
+        }
+        self.callback(success=True, requesterId=self.requesterId, fields=self.fields)
+            
+    def enterFailure(self, reason):
+        self.mgr.notify.warning(reason)
+        self.callback(success=False, requesterId=None, fields=None)
+        
+class UpdateToonFieldFSM(FSM):
+    """
+    A quick implementation to update a toon's fields in the
+    database and return a callback to the TTRFMUD.
+    """
+    
+    def __init__(self, mgr, requesterId, avId, callback):
+        FSM.__init__(self, 'UpdateToonDataFSM')
+        self.mgr = mgr
+        self.requesterId = requesterId
+        self.avId = avId
+        self.callback = callback
+        
+    def start(self, field, value):
+        self.field = field
+        self.value = value
+        self.demand('GetToonOnline')
+        
+    def enterGetToonOnline(self):
+        self.mgr.air.getActivated(self.avId, self.__toonOnlineResp)
+        
+    def __toonOnlineResp(self, avId, activated):
+        if self.state != 'GetToonOnline':
+            self.demand('Failure', 'Received __toonOnlineResp while not in GetToonOnline state.')
+            return
+        self.online = activated
+        self.demand('UpdateDB')
+       
+    def enterUpdateDB(self):
+        if self.online:
+            dg = self.mgr.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
+                    self.field, self.avId, self.avId, self.mgr.air.ourChannel, [self.value]
+                )
+            self.mgr.air.send(dg)
+        else:
+            self.mgr.air.dbInterface.updateObject(
+                self.mgr.air.dbId,
+                self.avId,
+                self.mgr.air.dclassesByName['DistributedToonUD'],
+                { self.field : [self.value] }
+            )
+        self.demand('Finished')
+        
+    def enterFinished(self):
+        self.callback(success=True, requesterId=self.requesterId, online=self.online)
+    
+    def enterFailure(self, reason):
+        self.mgr.notify.warning(reason)
+        self.callback(success=False)
+        
+class GetFriendsListFSM(FSM):
+    """
+    This is an FSM class to fetch all the friends on a toons list
+    and return their name, dna and petId to the requester. Currently,
+    this may have a huge performance impact on the TTRFMUD as it may
+    have to search up to 200 friends fields from the database.
+    
+    This also checks the cache to check for any existing, non-expired
+    data the TTRFMUD has about a toon.
+    """
+    
+    def __init__(self, mgr, requesterId, callback):
+        FSM.__init__(self, 'GetFriendsListFSM')
+        self.mgr = mgr
+        self.requesterId = requesterId
+        self.callback = callback
+        self.friendsDetails = []
+        self.iterated = 0
+        self.getFriendsFieldsFSMs = {}
+        self.onlineFriends = []
+        
+    def start(self):
+        self.demand('GetFriendsList')
+        
+    def enterGetFriendsList(self):
+        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.requesterId, self.__gotFriendsList)
+        
+    def __gotFriendsList(self, dclass, fields):
+        if self.state != 'GetFriendsList':
+            # We're not currently trying to get our friends list.
+            self.demand('Failure', '__gotFriendsList called when looking for friends list, avId %d' % self.requesterId)
+            return
+        if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
+            # We got an invalid class from the database, eww.
+            self.demand('Failure', 'Invalid dclass for toonId %d' % self.requesterId)
+            return
+        self.friendsList = fields['setFriendsList'][0]
+        self.demand('GetFriendsDetails')
+       
+    def enterGetFriendsDetails(self):
+        for friendId, tf in self.friendsList:
+            details = self.mgr.avBasicInfoCache.get(friendId)
+            if details:
+                # We have the toons details in cache.
+                expire = details.get('expire')
+                toonInfo = details.get('toonInfo')
+                if expire and toonInfo:
+                    if details.get('expire') > time():
+                        # These details haven't expired, use 'em!
+                        self.friendsDetails.append(toonInfo)
+                        self.iterated += 1
+                        self.__testFinished()
+                        continue
+                    else:
+                        # It's expired, delete and continue.
+                        del self.mgr.avBasicInfoCache[friendId]
+            # We need to fetch their details
+            fsm = GetToonDataFSM(self.mgr, self.requesterId, friendId, self.__gotAvatarInfo)
+            fsm.start()
+            self.getFriendsFieldsFSMs[friendId] = fsm
+            
+    def __gotAvatarInfo(self, success, requesterId, fields):
+        # We no longer need the FSM!
+        if fields['ID'] in self.getFriendsFieldsFSMs:
+            del self.getFriendsFieldsFSMs[fields['ID']]
+        if self.state != 'GetFriendsDetails':
+            self.demand('Failure', '__gotAvatarInfo while not looking for friends details, avId=%d' % self.requesterId)
+            return
+        if requesterId != self.requesterId:
+            self.demand('Failure', '__gotAvatarInfo response for wrong requester. wrongId=%d, rightId=%d' % (self.requesterId, requesterId))
+            return
+        self.iterated += 1
+        self.friendsDetails.append([fields['ID'], fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0]])
+        self.__testFinished()
+        
+    def __testFinished(self):
+        if self.iterated >= len(self.friendsList) and len(self.getFriendsFieldsFSMs) == 0:
+            # We've finished! We can now continue.
+            self.demand('CheckFriendsOnline')
+            
+    def enterCheckFriendsOnline(self):
+        self.iterated = 0
+        for friendId, tf in self.friendsList:
+            self.mgr.air.getActivated(friendId, self.__gotActivatedResp)
+            
+    def __gotActivatedResp(self, avId, activated):
+        self.iterated += 1
+        if activated:
+            self.onlineFriends.append(avId)
+        if self.iterated == len(self.friendsList):
+            self.demand('Finished')
+            
+    def enterFinished(self):
+        self.callback(success=True, requesterId=self.requesterId, friendsDetails=self.friendsDetails, onlineFriends=self.onlineFriends)
+            
+    def enterFailure(self, reason):
+        self.mgr.notify.warning(reason)
+        self.callback(success=False, requesterId=self.requesterId, friendsDetails=None)
 
 class TTRFriendsManagerUD(DistributedObjectGlobalUD):
+    """
+    The Toontown Rewritten Friends Manager UberDOG, or TTRFMUD for short.
+    
+    This object is responsible for all requests related to global friends, such as
+    friends coming online, friends going offline, fetching a friends data etc.
+    """
+    
     notify = directNotify.newCategory('TTRFriendsManagerUD')
-
-    def announceGenerate(self):
-        DistributedObjectGlobalUD.announceGenerate(self)
-        self.onlineToons = []
+    
+    def __init__(self, air):
+        DistributedObjectGlobalUD.__init__(self, air)
+        self.fsms = {}
+        # TODO: Maybe get the AI to refresh the cache?
+        self.avBasicInfoCache = {}
         self.tpRequests = {}
-        self.friendsLists = {}
-        self.friendIndexes = {}
-        self.listResponses = {}
-    
-    def removeFriend(self, friendId):
-        avId = self.air.getAvatarIdFromSender()
-        self.__removeFromFriendsList(avId, friendId)
-        self.__removeFromFriendsList(friendId, avId, True)
         
-    def __removeFromFriendsList(self, t1, t2, notify=False):
-        def handleToon(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            newList = []
-            friendsList = fields['setFriendsList'][0]
-            for i in range(len(friendsList)):
-                if friendsList[i][0] == t2:
-                    continue
-                newList.append(friendsList[i])
-            if t1 in self.onlineToons:
-                dg = self.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
-                        'setFriendsList', t1, t1, self.air.ourChannel,
-                         [newList])
-                self.air.send(dg)
-                if notify:
-                    dg = self.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
-                         'friendsNotify', t1, t1, self.air.ourChannel, [t2, 1])
-                    self.air.send(dg)
-            else:
-                self.air.dbInterface.updateObject(self.air.dbId, t1, self.air.dclassesByName['DistributedToonUD'],
-                                                  {'setFriendsList' : [newList]})
-        self.air.dbInterface.queryObject(self.air.dbId, t1, handleToon)
-                
-        
-        
-    def requestAvatarInfo(self, friendIds):
-        avId = self.air.getAvatarIdFromSender()
-        
-        self.currId = 0
-        
-        def handleFriend(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            name = fields['setName'][0]
-            dna = fields['setDNAString'][0]
-            petId = fields['setPetId'][0]
-            self.sendUpdateToAvatarId(avId, 'friendInfo', [self.currId, name, dna, petId])
-            
-        
-        def handleAv(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            friendsList = fields['setFriendsList'][0]
-            for id in friendIds:
-                for friend in friendsList:
-                    if friend[0] == id:
-                        currId = id
-                        self.air.dbInterface.queryObject(self.air.dbId, id, handleFriend)
-                        break
-        
-        self.air.dbInterface.queryObject(self.air.dbId, avId, handleAv)
-        
-    def requestFriendsList(self):
-        avId = self.air.getAvatarIdFromSender()
-        
-        # Writing this function made me hate Python        
-        
-        def addFriend(dclass, fields, friendId=0, avId=0):
-            if not (avId or friendId):
-                return
-            if dclass == self.air.dclassesByName['DistributedToonUD']:
-                self.listResponses[avId].append([friendId, fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0]])
-            if len(self.listResponses[avId]) >= len(self.friendsLists[avId]):
-                self.sendUpdateToAvatarId(avId, 'friendList', [self.listResponses[avId]])
-                del self.friendsLists[avId]
-                del self.friendIndexes[avId]
-                del self.listResponses[avId]
-            else:
-                self.friendIndexes[avId] += 1
-                self.air.dbInterface.queryObject(self.air.dbId, self.friendsLists[avId][self.friendIndexes[avId]][0], functools.partial(addFriend, avId=avId, friendId=self.friendsLists[avId][self.friendIndexes[avId]][0]))
-        
-        def handleAv(dclass, fields, avId=0):
-            if not avId:
-                return
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            if not avId in self.onlineToons:
-                self.onlineToons.append(avId)
-                self.toonOnline(avId, fields)
-            self.friendsLists[avId] = fields['setFriendsList'][0]
-            self.friendIndexes[avId] = 0
-            self.listResponses[avId] = []
-            if len(self.friendsLists[avId]) <= 0:
-                self.sendUpdateToAvatarId(avId, 'friendList', [self.listResponses[avId]])
-                del self.friendsLists[avId]
-                del self.friendIndexes[avId]
-                del self.listResponses[avId]
-                return
-            self.air.dbInterface.queryObject(self.air.dbId, self.friendsLists[avId][0][0], functools.partial(addFriend, avId=avId, friendId=self.friendsLists[avId][0][0]))
-       
-        self.air.dbInterface.queryObject(self.air.dbId, avId, functools.partial(handleAv, avId=avId))
-        
-    def toonOnline(self, doId, fields):
-        self.onlineToons.append(doId)
-        friendsList = fields['setFriendsList'][0]
-        
-        channel = self.GetPuppetConnectionChannel(doId)
-        dgcleanup = self.dclass.aiFormatUpdate('goingOffline', self.doId, self.doId, self.air.ourChannel, [doId])
-        dg = PyDatagram()
-        dg.addServerHeader(channel, self.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
-        dg.addString(dgcleanup.getMessage())
-        self.air.send(dg)
-        
-        for friend in friendsList:
-            friendId = friend[0]
-            if friend[0] in self.onlineToons:
-                self.sendUpdateToAvatarId(doId, 'friendOnline', [friendId, 0, 0])
-            self.sendUpdateToAvatarId(friendId, 'friendOnline', [doId, 0, 0])
-    
-    def toonOffline(self, doId):
-        if doId not in self.onlineToons:
+    def deleteFSM(self, requesterId):
+        fsm = self.fsms.get(requesterId)
+        if not fsm:
+            # Just print debug incase we ever have issues.
+            self.notify.debug('%d tried to delete non-existent FSM!' % requesterId)
             return
-        def handleToon(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            friendsList = fields['setFriendsList'][0]
-            for friend in friendsList:
-                friendId = friend[0]
-                if friendId in self.onlineToons:
-                    self.sendUpdateToAvatarId(friendId, 'friendOffline', [doId])
-            self.onlineToons.remove(doId)
-        self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
-        
-    def clearList(self, doId):
-        def handleToon(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
-                return
-            friendsList = fields['setFriendsList'][0]
-            for friend in friendsList:
-                self.__removeFromFriendsList(doId, friend[0])
-                self.__removeFromFriendsList(friend[0], doId, True)
-        self.air.dbInterface.queryObject(self.air.dbId, doId, handleToon)
-        
+        if fsm.state != 'Off':
+            fsm.demand('Off')
+        del self.fsms[requesterId]
+    
+    def comingOnline(self, avId, friends):
+        # This is sent from the CSMUD, so no sanity checks needed here.
+        # This is sent when the avatar is set.
+        for friendId in friends:
+            self.sendUpdateToAvatarId(friendId, 'friendOnline', [avId, 0, 0])
+
     def goingOffline(self, avId):
-        self.toonOffline(avId)
+        # This is sent from the MD, so no sanity checks needed here.
+        # Since this is a post remove, it means the client has disconnected.
+        # Therefore this FSM doesn't need to be saved in self.fsms as a client
+        # may already be running an FSM.
+        fsm = GetToonDataFSM(self, avId, avId, self.__offlineGotToonFields)
+        fsm.start()
         
-    def getAvatarDetails(self, avId):
-        #return
-        senderId = self.air.getAvatarIdFromSender()
-        def handleToon(dclass, fields):
-            if dclass != self.air.dclassesByName['DistributedToonUD']:
+    def __offlineGotToonFields(self, success, requesterId, fields):
+        if not success:
+            # Something went wrong... abort.
+            return
+        for friendId, tf in fields['setFriendsList'][0]:
+            self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
+            
+    def clearList(self, avId):
+        # This is sent from the CSMUD when a toon is deleted.
+        # First we need the avId's friendsList.
+        fsm = GetToonDataFSM(self, avId, avId, self.__clearListGotFriendsList)
+        fsm.start()
+        self.fsms[avId] = fsm
+        
+    def __clearListGotFriendsList(self, success, requesterId, fields):
+        if not success:
+            # We couldn't get the avatar's friends list. Abort!
+            return
+        if requesterId != fields['ID']:
+            # Wtf, we got the wrong toon's data!
+            return
+        friendIds = fields['setFriendsList'][0][:]
+        friendIds.append(requesterId)
+        if friendIds[0] == requesterId:
+            # This toon has no friends, no point doing database operations.
+            return
+        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __clearListGotFriendData(self, success, requesterId, fields, friendIds=[]):
+        # Delete the FSM, we no longer need it.
+        self.deleteFSM(requesterId)
+        # Normally we would check if success is false, and stop if it is, but in this
+        # case, we have to continue to clean up everyone else's friends list.
+        if not success:
+            if friendIds:
+                # Move on to the next friend.
+                fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+                fsm.start()
+                self.fsms[requesterId] = fsm
+            else:
+                # No more friends, we can now stop.
                 return
-            inventory = fields['setInventory'][0]
-            trackAccess = fields['setTrackAccess'][0]
-            trophies = 0 # fields['setTrophyScore'][0] is not db
-            hp = fields['setHp'][0]
-            maxHp = fields['setMaxHp'][0]
-            defaultShard = fields['setDefaultShard'][0]
-            lastHood = fields['setLastHood'][0]
-            dnaString =  fields['setDNAString'][0]
-            experience = fields['setExperience'][0]
-            trackBonusLevel = fields['setTrackBonusLevel'][0]
-            # We need an actual way to send the fields to the client...............
-            # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
-            self.sendUpdateToAvatarId(senderId, 'friendDetails', [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel])
-        self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)
-    
-    # much client very trust
-    
-    # The TTRFM Uberdog acts as a 'gateway' between two friends
-    # when they cannot directly send updates to one another, for
-    # example when they are on different shards. We do this because
-    # Astron does not currently support a few things that we need.
-    # In this case, we route sent whispers and teleport queries from
-    # 1 client to another. We should probably log these, but for now
-    # we won't.
+        # Now we need to remove the requesterId from the friend's fields.
+        friendsIds = fields['setFriendsList'][0][:]
+        if requesterId == fields['ID']:
+            # Delete our friends list entirely.
+            friendsIds = []
+        elif requesterId in friendsIds:
+            # Remove ourself from our friend's list.
+            friendsIds.remove(requesterId)
+        else:
+            # Wtf, we aren't friends with this toon?
+            self.notify.warning('Tried to unfriend %s from %s\'s friendsList while not in friendsList!' % (requesterId, fields['ID']))
+        fsm = UpdateToonFieldFSM(self, requesterId, fields['ID'], functools.partial(self.__clearListUpdatedToonField, avId=fields['ID'], friendIds=friendIds[1:]))
+        fsm.start('setFriendsList', friendsIds)
+        self.fsms[requesterId] = fsm
+        
+    def __clearListUpdatedToonField(self, success, requesterId, online=False, avId=None, friendIds=[]):
+        # Delete the FSM, we no longer need it.
+        self.deleteFSM(requesterId)
+        # Normally we would check if success is false, and stop if it is, but in this
+        # case, we have to continue to clean up everyone else's friends list.
+        if success and online:
+            dg = self.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
+                'friendsNotify', avId, avId, self.air.ourChannel, [requesterId, 1]
+            )
+            self.air.send(dg)
+        if not friendIds:
+            # We can now stop, since we have no friends left to clear.
+            return
+        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+        
+    def removeFriend(self, avId):
+        requesterId = self.air.getAvatarIdFromSender()
+        if requesterId in self.fsms:
+            # Looks like the requester already has an FSM running. In the future we
+            # may want to handle this, but for now just ignore it.
+            return
+        # We need to get the friends list of the requester.
+        fsm = GetToonDataFSM(self, requesterId, requesterId, functools.partial(self.__rfGotToonFields, avId=avId))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __rfGotToonFields(self, success, requesterId, fields, avId=None, final=False):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not (success and avId):
+            # Something went wrong... abort.
+            return
+        if fields['ID'] not in [requesterId, avId]:
+            # Wtf? We got a db response for a toon that we didn't want
+            # to edit! DEFCON 5!
+            self.notify.warning('TTRFMUD.__rfGotToonFields received wrong toon fields from db, requesterId=%d' % requesterId)
+            return
+        friendsList = fields['setFriendsList'][0]
+        searchId = requesterId if final else avId
+        for index, friend in enumerate(friendsList):
+            if friend[0] == searchId:
+                del friendsList[index]
+                break
+        fsm = UpdateToonFieldFSM(self, requesterId, avId if final else requesterId, functools.partial(self.__removeFriendCallback, avId=avId, final=final))
+        fsm.start('setFriendsList', friendsList)
+        self.fsms[requesterId] = fsm
+        
+    def __removeFriendCallback(self, success, requesterId, online=False, avId=None, final=False):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not (success and avId):
+            # Something went wrong... abort.
+            return
+        if not final:
+            # Toon was deleted from the friends list successfully! Now we need to modify
+            # the other toons friends list...
+            fsm = GetToonDataFSM(self, requesterId, avId, functools.partial(self.__rfGotToonFields, avId=avId, final=True))
+            fsm.start()
+            self.fsms[requesterId] = fsm
+        else:
+            # We're finished with everything!
+            if online:
+                # Lets notify their friend that they went bye bye!
+                # Sad times for this toon. :(...
+                dg = self.air.dclassesByName['DistributedToonUD'].aiFormatUpdate(
+                    'friendsNotify', avId, avId, self.air.ourChannel, [requesterId, 1]
+                )
+                self.air.send(dg)
+            # We are now finished, woo!
+            
+    def requestAvatarInfo(self, avIds):
+        requesterId = self.air.getAvatarIdFromSender()
+        if requesterId in self.fsms:
+            # Looks like the requester already has an FSM running. In the future we
+            # may want to handle this, but for now just ignore it.
+            return
+        if not avIds:
+            # The list is empty. This is suspicious as the client shouldn't send
+            # a blank list.
+            self.notify.warning('Received blank list of avIds for requestAvatarInfo from avId %d' % requesterId)
+            self.air.writeServerEvent('suspicious', requesterId, 'Sent a blank list of avIds for requestAvatarInfo in TTRFMUD')
+            return
+        fsm = GetToonDataFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __avInfoCallback(self, success, requesterId, fields, avIds):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not success:
+            # Something went wrong... abort.
+            return
+        self.sendUpdateToAvatarId(
+            requesterId, 'friendInfo',
+            [ fields['ID'], fields['setName'][0], fields['setDNAString'][0], fields['setPetId'][0] ]
+        )
+        if avIds:
+            # We still have more to go... oh boy.
+            fsm = GetToonDataFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
+            fsm.start()
+            self.fsms[requesterId] = fsm
+            
+    def requestFriendsList(self):
+        requesterId = self.air.getAvatarIdFromSender()
+        if requesterId in self.fsms:
+            # Looks like the requester already has an FSM running. In the future we
+            # may want to handle this, but for now just ignore it.
+            return
+        fsm = GetFriendsListFSM(self, requesterId, self.__gotFriendsList)
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __gotFriendsList(self, success, requesterId, friendsDetails, onlineFriends):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not success:
+            # Something went wrong... abort.
+            return
+        # Ship it!
+        self.sendUpdateToAvatarId(requesterId, 'friendList', [friendsDetails])
+        for friendId in onlineFriends:
+            # For each online friend, announce it to the client.
+            self.sendUpdateToAvatarId(requesterId, 'friendOnline', [friendId, 0, 0])
+        
+    def getAvatarDetails(self, friendId):
+        requesterId = self.air.getAvatarIdFromSender()
+        if requesterId in self.fsms:
+            # Looks like the requester already has an FSM running. In the future we
+            # may want to handle this, but for now just ignore it.
+            return
+        fsm = GetToonDataFSM(self, requesterId, friendId, self.__gotAvatarDetails)
+        fsm.start()
+        self.fsms[requesterId] = fsm
+        
+    def __gotAvatarDetails(self, success, requesterId, fields):
+        # We no longer need the FSM.
+        self.deleteFSM(requesterId)
+        if not success:
+            # Something went wrong... abort.
+            return
+        details = [
+            ['setExperience' , fields['setExperience'][0]],
+            ['setTrackAccess' , fields['setTrackAccess'][0]],
+            ['setTrackBonusLevel' , fields['setTrackBonusLevel'][0]],
+            ['setInventory' , fields['setInventory'][0]],
+            ['setHp' , fields['setHp'][0]],
+            ['setMaxHp' , fields['setMaxHp'][0]],
+            ['setDefaultShard' , fields['setDefaultShard'][0]],
+            ['setLastHood' , fields['setLastHood'][0]],
+            ['setDNAString' , fields['setDNAString'][0]],
+        ]
+        self.sendUpdateToAvatarId(requesterId, 'friendDetails', [fields['ID'], cPickle.dumps(details)])
     
     def routeTeleportQuery(self, toId):
         fromId = self.air.getAvatarIdFromSender()

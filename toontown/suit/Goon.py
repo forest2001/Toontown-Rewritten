@@ -71,7 +71,6 @@ class Goon(Avatar.Avatar):
             self.style = dna
             self.generateGoon()
             self.initializeDropShadow()
-            self.initializeNametag3d()
 
     def generateGoon(self):
         dna = self.style

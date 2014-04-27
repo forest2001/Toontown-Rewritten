@@ -1,6 +1,7 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from otp.otpbase import OTPLocalizer
 from toontown.hood import ZoneUtil
+import cPickle
 
 class TTRFriendsManager(DistributedObjectGlobal):
     
@@ -28,19 +29,9 @@ class TTRFriendsManager(DistributedObjectGlobal):
     def d_getAvatarDetails(self, avId):
         self.sendUpdate('getAvatarDetails', [avId])
         
-    def friendDetails(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel):
-        fields = [
-            ['setExperience' , experience],
-            ['setTrackAccess' , trackAccess],
-            ['setTrackBonusLevel' , trackBonusLevel],
-            ['setInventory' , inventory],
-            ['setHp' , hp],
-            ['setMaxHp' , maxHp],
-            ['setDefaultShard' , defaultShard],
-            ['setLastHood' , lastHood],
-            ['setDNAString' , dnaString],
-        ]
-        base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
+    def friendDetails(self, friendId, details):
+        fields = cPickle.loads(details)
+        base.cr.n_handleGetAvatarDetailsResp(friendId, fields=fields)
         
     def d_teleportQuery(self, toId):
         self.sendUpdate('routeTeleportQuery', [toId])
@@ -52,7 +43,7 @@ class TTRFriendsManager(DistributedObjectGlobal):
         if not hasattr(base.localAvatar, 'getTeleportAvailable') or not hasattr(base.localAvatar, 'ghostMode'):
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])
             return
-        if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode:
+        if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode or base.cr.playGame.getPlaceId() in [10000, 11000, 12000, 13000]:
             if hasattr(base.cr.identifyFriend(fromId), 'getName'):
                 base.localAvatar.setSystemMessage(0, OTPLocalizer.WhisperFailedVisit % base.cr.identifyFriend(fromId).getName())
             self.sendUpdate('routeTeleportResponse', [ fromId, 0, 0, 0, 0 ])

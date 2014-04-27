@@ -1,9 +1,12 @@
 #If you really need these you can extract them from tt.exe yourself
 *.pyc
+*.pyo
 *.dll
 *.dis
 *.log
+*.buildings
 parser.out
 parsetab.py
 *.jpg
 ply
+settings.json

@@ -12,6 +12,8 @@ from toontown.distributed import DelayDelete
 from direct.task.Task import Task
 from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
+from toontown.toontowngui import TTDialog
+from toontown.election import SafezoneInvasionGlobals
 
 class DistributedTrolley(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrolley')
@@ -175,6 +177,13 @@ class DistributedTrolley(DistributedObject.DistributedObject):
             place.fsm.request('walk')
 
     def handleEnterTrolleySphere(self, collEntry):
+        if base.config.GetBool('want-doomsday', False):
+            base.localAvatar.disableAvatarControls()
+            self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
+            self.confirm.show()
+            self.accept('confirmDone', self.handleConfirm)
+            return
+            
         self.notify.debug('Entering Trolley Sphere....')
         if base.localAvatar.getPos(render).getZ() < self.trolleyCar.getPos(render).getZ():
             return
@@ -185,6 +194,14 @@ class DistributedTrolley(DistributedObject.DistributedObject):
             if place:
                 place.fsm.request('stopped')
             self.dialog = TeaserPanel.TeaserPanel(pageName='minigames', doneFunc=self.handleOkTeaser)
+
+    def handleConfirm(self):
+        status = self.confirm.doneStatus
+        self.ignore('confirmDone')
+        self.confirm.cleanup()
+        del self.confirm
+        if status == 'ok':
+            base.localAvatar.enableAvatarControls()
 
     def handleEnterTrolley(self):
         toon = base.localAvatar

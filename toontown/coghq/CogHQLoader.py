@@ -13,11 +13,6 @@ class CogHQLoader(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('CogHQLoader')
 
     def __init__(self, hood, parentFSMState, doneEvent):
-        # TODO: Revert after alpha :)
-        if base.localAvatar.adminAccess < 300:
-            base.localAvatar.sendUpdate('logSuspiciousEvent', ['%s entered a CogHQ!' % base.localAvatar.doId])
-            return
-            
         StateData.StateData.__init__(self, doneEvent)
         self.hood = hood
         self.parentFSMState = parentFSMState

@@ -1,11 +1,12 @@
-from otp.ai.AIBaseGlobal import *
 from direct.task.Task import Task
 from pandac.PandaModules import *
 from DistributedNPCToonBaseAI import *
 from toontown.quest import Quests
+from direct.directnotify import DirectNotifyGlobal
 
 class DistributedNPCToonAI(DistributedNPCToonBaseAI):
     FourthGagVelvetRopeBan = config.GetBool('want-ban-fourth-gag-velvet-rope', 0)
+    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedNPCToonAI')
 
     def __init__(self, air, npcId, questCallback = None, hq = 0):
         DistributedNPCToonBaseAI.__init__(self, air, npcId, questCallback)
@@ -26,9 +27,8 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
     def avatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         self.notify.debug('avatar enter ' + str(avId))
-        #self.air.questManager.requestInteract(avId, self)
-        #DistributedNPCToonBaseAI.avatarEnter(self)
-        self.rejectAvatar(avId)
+        self.air.questManager.requestInteract(avId, self)
+        DistributedNPCToonBaseAI.avatarEnter(self)
 
     def chooseQuest(self, questId):
         avId = self.air.getAvatarIdFromSender()

@@ -10,6 +10,8 @@ import HealJokes
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.pets import Pet, PetTricks
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 notify = DirectNotifyGlobal.directNotify.newCategory('MoviePetSOS')
 soundFiles = ('AA_heal_tickle.ogg', 'AA_heal_telljoke.ogg', 'AA_heal_smooch.ogg', 'AA_heal_happydance.ogg', 'AA_heal_pixiedust.ogg', 'AA_heal_juggle.ogg')
 offset = Point3(0, 4.0, 0)

@@ -264,6 +264,16 @@ def oobeCull():
 def wire():
     'Toggle wireframe view.'
     base.toggleWireframe()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def textures():
+    'Toggle textures on and off.'
+    base.toggleTexture()
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def fps():
+    'Toggle frame rate meter on or off.'
+    base.setFrameRateMeter(not base.frameRateMeter)
     
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():

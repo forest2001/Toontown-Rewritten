@@ -7,7 +7,6 @@ import sys
 import subprocess
 import imp
 import marshal
-import pytz
 import tempfile
 import shutil
 import atexit
@@ -18,6 +17,7 @@ import zipfile
 EXTRA_MODULES = (
   'encodings.ascii',
   'encodings.latin_1',
+  'encodings.hex_codec',
   '_strptime',
 
   # Animated props and things loaded through DNA...
@@ -118,12 +118,7 @@ class ClientBuilder(object):
             fd = fd.replace('SERVER_VERSION_HERE', self.version)
             configData.append(fd)
 
-        # Now add pytz timezones:
-        zoneinfo = {}
-        for zone in pytz.all_timezones:
-            zoneinfo['zoneinfo/'+zone] = pytz.open_resource(zone).read()
-
-        md = 'CONFIG = %r\nDC = %r\nZONEINFO = %r\n' % (configData, dcData, zoneinfo)
+        md = 'CONFIG = %r\nDC = %r\n' % (configData, dcData)
 
         # Now we use tempfile to dump md:
         td = tempfile.mkdtemp()

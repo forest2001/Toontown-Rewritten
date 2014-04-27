@@ -2,6 +2,8 @@ from pandac.PandaModules import *
 from direct.distributed import DistributedObject
 import SuitPlannerBase
 from toontown.toonbase import ToontownGlobals
+from otp.ai.MagicWordGlobal import *
+from toontown.dna import *
 
 class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBase.SuitPlannerBase):
 
@@ -17,11 +19,15 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         return
 
     def generate(self):
+        self.accept('suitShowPaths', self.showPaths)
+        self.accept('suitHidePaths', self.hidePaths)
         self.notify.info('DistributedSuitPlanner %d: generating' % self.getDoId())
         DistributedObject.DistributedObject.generate(self)
         base.cr.currSuitPlanner = self
 
     def disable(self):
+        self.ignore('suitShowPaths')
+        self.ignore('suitHidePaths')
         self.notify.info('DistributedSuitPlanner %d: disabling' % self.getDoId())
         self.hidePaths()
         DistributedObject.DistributedObject.disable(self)
@@ -81,18 +87,17 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
             del points[pi]
         text = '%s' % p.getIndex()
         pos = p.getPos()
-        if p.getPointType() == DNASuitPoint.FRONTDOORPOINT:
+        if p.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT:
             color = (1, 0, 0, 1)
-        elif p.getPointType() == DNASuitPoint.SIDEDOORPOINT:
+        elif p.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
             color = (0, 0, 1, 1)
         else:
             color = (0, 1, 0, 1)
         self.__makePathVizText(text, pos[0], pos[1], pos[2], color)
-        adjacent = self.dnaStore.getAdjacentPoints(p)
+        adjacent = self.dnaStore.generateData().getAdjacentPoints(p)
         numPoints = adjacent.getNumPoints()
         for i in range(numPoints):
-            qi = adjacent.getPointIndex(i)
-            q = self.dnaStore.getSuitPointWithIndex(qi)
+            q = adjacent.getPoint(i)
             pp = p.getPos()
             qp = q.getPos()
             v = Vec3(qp - pp)
@@ -124,3 +129,11 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         np.setScale(1.0)
         np.setBillboardPointEye(2)
         np.node().setAttrib(TransparencyAttrib.make(TransparencyAttrib.MDual), 2)
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def spShow():
+    messenger.send('suitShowPaths')
+
+@magicWord(category=CATEGORY_GRAPHICAL)
+def spHide():
+    messenger.send('suitHidePaths')

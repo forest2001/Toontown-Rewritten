@@ -22,6 +22,8 @@ import SuitDialog
 from toontown.battle import BattleProps
 import math
 import copy
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBase.SuitBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitBase')
@@ -169,6 +171,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def detachPropeller(self):
         if self.prop:
+            self.prop.cleanup()
             self.prop.removeNode()
             self.prop = None
         if self.propInSound:
@@ -205,9 +208,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             animTrack = Sequence(Func(self.pose, 'landing', 0), Wait(waitTime), ActorInterval(self, 'landing', duration=dur))
             if walkAfterLanding:
                 animTrack.append(Func(self.loop, 'walk'))
+            else:
+                animTrack.append(Func(self.loop, 'neutral'))
             self.attachPropeller()
             propTrack = Parallel(SoundInterval(self.propInSound, duration=waitTime + dur, node=self), Sequence(ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=waitTime + spinTime, startTime=0.0, endTime=spinTime), ActorInterval(self.prop, 'propeller', duration=propDur - openTime, startTime=openTime), Func(self.detachPropeller)))
-            return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack, name=self.taskName('trackName'))
+            return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack)
         else:
             lerpPosTrack = Sequence(Wait(impactLength), LerpPosInterval(self, timeTillLanding, skyPos, startPos=pos))
             shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0), startScale=self.scale), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0))

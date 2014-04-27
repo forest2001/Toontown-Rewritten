@@ -7,6 +7,7 @@ from toontown.dna.DNASpawnerAI import *
 from toontown.dna.DNAProp import DNAProp
 from toontown.dna.DNAGroup import DNAGroup
 from toontown.hood import ZoneUtil
+from toontown.toon import NPCToons
 
 class DistributedFishingPondAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFishingPondAI")
@@ -48,6 +49,9 @@ class DistributedFishingPondAI(DistributedObjectAI):
         
 @dnaSpawn(DNAGroup, 'fishing_pond')
 def spawn(air, zone, element, match):
+    if zone % 1000 != 0:
+        # This should hopefully create the Fishermen NPCs on streets.
+        NPCToons.createNpcsInZone(air, zone)
     pond = DistributedFishingPondAI(air)
     area = ZoneUtil.getBranchZone(zone)
     pond.setArea(area)

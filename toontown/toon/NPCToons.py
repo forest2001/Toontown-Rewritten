@@ -90,13 +90,11 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     elif type == NPC_HQ:
-        return False
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback, hq=1)
     elif type == NPC_CLERK:
-        return False
         npc = DistributedNPCClerkAI.DistributedNPCClerkAI(air, npcId)
     elif type == NPC_TAILOR:
-        #return False
+        return False
         npc = DistributedNPCTailorAI.DistributedNPCTailorAI(air, npcId)
     elif type == NPC_BLOCKER:
         npc = DistributedNPCBlockerAI.DistributedNPCBlockerAI(air, npcId)
@@ -113,7 +111,6 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
         return False 
         npc = DistributedNPCSpecialQuestGiverAI.DistributedNPCSpecialQuestGiverAI(air, npcId)
     elif type == NPC_FLIPPYTOONHALL:
-        return False
         npc = DistributedNPCFlippyInToonHallAI.DistributedNPCFlippyInToonHallAI(air, npcId)
     elif type == NPC_SCIENTIST:
         return False
@@ -603,11 +600,51 @@ NPCToonDict = {20000: (-1,
         'm',
         1,
         NPC_SCIENTIST),
+ # A smaller version of doctor Surlee, to be scaled up and fit Prepostera's animations
+ 20191: (2513,
+        lnames[2018],
+        ('pls',
+         'ms',
+         'm',
+         'm',
+         9,
+         0,
+         9,
+         9,
+         98,
+         27,
+         86,
+         27,
+         38,
+         27),
+        'm',
+        1,
+        NPC_SCIENTIST),
  2020: (2513,
         lnames[2020],
         ('hss',
          'ms',
          'm',
+         'm',
+         20,
+         0,
+         20,
+         20,
+         97,
+         27,
+         86,
+         27,
+         37,
+         27),
+        'm',
+        1,
+        NPC_SCIENTIST),
+ # A bigger version of Professor Prepostera, to be scaled down and fit Surlee's animations
+ 20201: (2513,
+        lnames[2020],
+        ('hss',
+         'ls',
+         'l',
          'm',
          20,
          0,
@@ -11535,7 +11572,7 @@ NPCToonDict = {20000: (-1,
         NPC_REGULAR),
 # McQuack, TTR Staff Member
 # This DNA isn't correct right now. Just for the name.
-91915: (2513,
+91915: (-1,
         lnames[91915],
         ('fll',
          'ss',

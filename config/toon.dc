@@ -30,7 +30,7 @@ from toontown.suit import DistributedTutorialSuit/AI
 from toontown.suit import DistributedFactorySuit/AI
 from toontown.suit import DistributedMintSuit/AI
 from toontown.suit import DistributedStageSuit/AI
-from toontown.election import DistributedInvasionSuit/AI
+//from toontown.election import DistributedInvasionSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
@@ -46,9 +46,11 @@ from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
 from toontown.safezone import DistributedDGFlower/AI
-from toontown.election import DistributedElectionEvent/AI
-from toontown.election import DistributedHotAirBalloon/AI
-from toontown.election import DistributedSafezoneInvasion/AI
+//from toontown.election import DistributedElectionEvent/AI
+//from toontown.election import DistributedHotAirBalloon/AI
+//from toontown.election import DistributedSafezoneInvasion/AI
+//from toontown.election import DistributedElectionCamera/AI
+//from toontown.election import DistributedElectionCameraManager/AI
 from toontown.fishing import DistributedFishingPond/AI
 from toontown.fishing import DistributedFishingTarget/AI
 from toontown.fishing import DistributedPondBingoManager/AI
@@ -77,7 +79,6 @@ from toontown.shtiker import DeleteManager/AI
 from toontown.ai import NewsManager/AI
 from toontown.shtiker import PurchaseManager/AI
 from toontown.shtiker import NewbiePurchaseManager/AI
-from toontown.safezone import SafeZoneManager/AI
 from toontown.tutorial import TutorialManager/AI
 from toontown.catalog import CatalogManager/AI
 from toontown.safezone import DistributedTreasure/AI
@@ -171,7 +172,6 @@ from toontown.coghq import DistributedSinkingPlatform/AI
 from toontown.suit import DistributedGoon/AI
 from toontown.suit import DistributedGridGoon/AI
 from toontown.coghq import BattleBlocker/AI
-from toontown.ai import DistributedAprilToonsMgr/AI
 from toontown.ai import DistributedBlackCatMgr/AI
 from toontown.ai import DistributedPolarBearMgr/AI
 from toontown.ai import DistributedPolarPlaceEffectMgr/AI
@@ -527,9 +527,9 @@ dclass DistributedToon : DistributedPlayer {
   setDisguisePageFlag(int8) ownrecv;
   setSosPageFlag(int8) ownrecv;
   setHouseId(uint32 = 0) required ownrecv db;
-  setQuests(uint32[] = []) required broadcast ownrecv db;
-  setQuestHistory(uint16[] = []) required ownrecv db;
-  setRewardHistory(uint8 = 0, uint16[] = []) required ownrecv db;
+  setQuests(uint32[] = [175, 401000019, 1000, 100, 1]) required broadcast ownrecv db;
+  setQuestHistory(uint16[] = [175]) required ownrecv db;
+  setRewardHistory(uint8 = 0, uint16[] = [100]) required ownrecv db;
   setQuestCarryLimit(uint8 = 1) required ownrecv db;
   requestDeleteQuest(uint32[]) ownsend airecv;
   setCheesyEffect(int16 = 0, uint32 = 0, uint32 = 0) required broadcast ownrecv db;
@@ -557,6 +557,7 @@ dclass DistributedToon : DistributedPlayer {
   setPieType(uint8) broadcast ownrecv ram;
   setNumPies(uint16) broadcast ownrecv ram;
   setPieThrowType(uint8) broadcast ownrecv ram;
+  setHealthDisplay(uint8 mode) broadcast ownrecv ram;
   catalogGenClothes(uint32) broadcast ownrecv;
   catalogGenAccessories(uint32) broadcast ownrecv;
   setPetId(uint32 = 0) required broadcast ownrecv db;
@@ -621,11 +622,6 @@ dclass DistributedToon : DistributedPlayer {
   setDISLname(string) ram;
   setDISLid(uint32) ram db airecv;
   flagAv(uint32, uint16, string []) airecv ownsend;
-  requestPing(uint32) airecv ownsend;
-  ping(char [0-1024]);
-  pingresp(char [0-1024]) airecv ownsend;
-  
-  setAnimalSound(uint8 index) ram broadcast ownrecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {
@@ -772,11 +768,19 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
   // This should be networked BEFORE the current state, so that the spawn point
   // can be known and the position can be initialized.
   setSpawnPoint(uint8 pointId) required broadcast ram;
+  // Ditto:
+  setAttackInfo(uint32 targetId, string prop, uint8 damage) required broadcast ram;
 
   setState(string state, int32 timestamp) required broadcast ram;
   setMarchLerp(int16/10 x1, int16/10 y1, int16/10 x2, int16/10 y2, int32 timestamp) broadcast ram;
 
   setStaticPoint(int16/10 x, int16/10 y, uint16%360/100 h) broadcast ram;
+
+  sayFaceoffTaunt(bool custom, string phrase) broadcast;
+  makeSkelecog() broadcast ram;
+  
+  takeShakerDamage(uint8 damage) clsend airecv;
+  setInvasionFinale(bool finale) required broadcast ram;
 };
 
 dclass DistributedBossCog : DistributedNode {
@@ -978,8 +982,25 @@ dclass DistributedElectionEvent : DistributedObject {
   setState(string state, int32 timestamp) required broadcast ram;
   wheelbarrowAvatarEnter() clsend airecv;
   slappyAvatarEnter() clsend airecv;
+  requestSuit() clsend airecv;
+  setSuitPhrase(string phrase) clsend airecv;
+  setSuitState(string state) clsend airecv;
+  setSuitDamage(uint8 damage, bool) clsend airecv;
   phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  saySurleePhrase(string phrase, bool, bool) broadcast;
   flippySpeech(uint32 avId, uint16 phraseId) broadcast;
+};
+
+dclass DistributedElectionCamera : DistributedNode
+{
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
+  
+};
+
+dclass DistributedElectionCameraManager : DistributedObject
+{
+  setMainCamera(uint32 doId) required broadcast ram;
+  setCameraIds(uint32[]) required broadcast ram;
 };
 
 dclass DistributedHotAirBalloon : DistributedObject {
@@ -989,8 +1010,11 @@ dclass DistributedHotAirBalloon : DistributedObject {
 };
 
 dclass DistributedSafezoneInvasion : DistributedObject {
-  hitToon(uint32 avId) clsend airecv;
-  hitSuit(uint32 avId) clsend airecv;
+  pieHitToon(uint32 avId) clsend airecv;
+  pieHitSuit(uint32 avId) clsend airecv;
+  takeDamage(uint8 damage) clsend airecv;
+  setInvasionStarted(bool started) required broadcast ram;
+  stopMusic() broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {
@@ -1519,11 +1543,6 @@ dclass PurchaseManager : DistributedObject {
 
 dclass NewbiePurchaseManager : PurchaseManager {
   setOwnedNewbieId(uint32) required broadcast ram;
-};
-
-dclass SafeZoneManager : DistributedObject {
-  enterSafeZone() airecv clsend;
-  exitSafeZone() airecv clsend;
 };
 
 dclass TutorialManager : DistributedObject {
@@ -2455,10 +2474,6 @@ dclass DistributedPetProxy : DistributedPet {
   setDominantMood(string) broadcast ram;
 };
 
-dclass DistributedAprilToonsMgr : DistributedObject {
-
-};
-
 dclass DistributedBlackCatMgr : DistributedObject {
   doBlackCatTransformation(uint32 avId) broadcast;
   requestBlackCatTransformation() airecv clsend;
@@ -3241,6 +3256,7 @@ dclass GlobalPartyManager : DistributedObjectGlobal {
     requestPartySlot(uint64 partyId, uint32 avId, uint32 gateId);
     partyDone(uint64 partyId);
     allocIds(uint16 count);
+    avatarJoined(uint32 avId);
 };
 
 struct PotentialToon {
@@ -3254,6 +3270,8 @@ struct PotentialToon {
 dclass ClientServicesManager : DistributedObjectGlobal {
   login(string cookie) clsend;
   acceptLogin();
+  
+  setClosed(bool closed);
 
   requestAvatars() clsend;
   setAvatars(PotentialToon[]);
@@ -3329,6 +3347,7 @@ uint32 petId;
 };
 
 dclass TTRFriendsManager : DistributedObjectGlobal {
+  clearList(uint32 avId);
   removeFriend(uint32) clsend;
   requestAvatarInfo(uint32[]) clsend;
   
@@ -3340,10 +3359,11 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   friendOnline(uint32, uint8, uint8);
   friendOffline(uint32);
   
+  comingOnline(uint32 avId, uint32 friendIds[]);
   goingOffline(uint32 avId);
   
   getAvatarDetails(uint32) clsend;
-  friendDetails(uint32, blob, uint16[], uint16, int16, int16, uint32, uint32, blob, blob, int8[]);
+  friendDetails(uint32 friendId, blob details);
   
   routeTeleportQuery(uint32 toId) clsend;
   teleportQuery(uint32 fromId);
@@ -3359,9 +3379,8 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
   setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
   
-  sendTalkWhisper(uint32 toId, string message) clsend;
-  receiveTalkWhisper(uint32 fromId, string message);
-  
+  sendTalkWhisper(uint32 toId, string msg) clsend;
+  receiveTalkWhisper(uint32 fromId, string msg);
 };
 
 

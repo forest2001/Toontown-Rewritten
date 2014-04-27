@@ -29,10 +29,10 @@ class BattleSounds:
             self.sfxSearchPath.appendDirectory(Filename('phase_3.5/audio/sfx'))
             self.sfxSearchPath.appendDirectory(Filename('phase_4/audio/sfx'))
             self.sfxSearchPath.appendDirectory(Filename('phase_5/audio/sfx'))
-            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TTMODELS/built/phase_3/audio/sfx')))
-            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TTMODELS/built/phase_3.5/audio/sfx')))
-            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TTMODELS/built/phase_4/audio/sfx')))
-            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TTMODELS/built/phase_5/audio/sfx')))
+            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_3/audio/sfx')))
+            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_3.5/audio/sfx')))
+            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_4/audio/sfx')))
+            self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_5/audio/sfx')))
 
     def clear(self):
         if self.isValid:

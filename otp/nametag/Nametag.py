@@ -34,6 +34,8 @@ class Nametag(ClickablePopup):
         self.avatar = None
         self.icon = NodePath('icon')
 
+        self.frame = (0, 0, 0, 0)
+
         self.nameFg = (0,0,0,1)
         self.nameBg = (1,1,1,1)
         self.chatFg = (0,0,0,1)
@@ -87,10 +89,11 @@ class Nametag(ClickablePopup):
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else self.chatBg
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
-        balloon = balloon.generate(text, self.font, textColor=self.chatFg,
-                                   balloonColor=color, wordWrap=self.chatWordWrap,
-                                   button=self.getButton())
+        balloon, frame = balloon.generate(text, self.font, textColor=self.chatFg,
+                                          balloonColor=color, wordWrap=self.chatWordWrap,
+                                          button=self.getButton())
         balloon.reparentTo(self.innerNP)
+        self.frame = frame
 
     def showThought(self):
         self.showBalloon(self.getThoughtBalloon(), self.chatString)
@@ -130,3 +133,8 @@ class Nametag(ClickablePopup):
         panel.setScale(width + self.NAME_PADDING, 1, height + self.NAME_PADDING)
         panel.setColor(self.nameBg)
         panel.setTransparency(self.nameBg[3] < 1.0)
+
+        self.frame = (t.node().getLeft()-self.NAME_PADDING/2.0,
+                      t.node().getRight()+self.NAME_PADDING/2.0,
+                      t.node().getBottom()-self.NAME_PADDING/2.0,
+                      t.node().getTop()+self.NAME_PADDING/2.0)

@@ -6,27 +6,27 @@ from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.ai.FishManagerAI import FishManagerAI
-from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
+from toontown.hood import SellbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
 
-#friends!
+# Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
 
-#estates
+# Estates!
 from toontown.estate.EstateManagerAI import EstateManagerAI
 
-# par-tay
+# Par-tay!
 from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
 from otp.distributed.OtpDoGlobals import *
 
-# All imports needed for fireworks
+# Fireworks!
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
@@ -37,8 +37,18 @@ import time
 from otp.ai.MagicWordGlobal import *
 from toontown.parties import PartyGlobals
 
-# AprilToons, bitches!
-from DistributedAprilToonsMgrAI import DistributedAprilToonsMgrAI
+# Tasks!
+from toontown.quest.QuestManagerAI import QuestManagerAI
+from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
+from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
+from toontown.coghq.FactoryManagerAI import FactoryManagerAI
+from toontown.coghq.PromotionManagerAI import PromotionManagerAI
+from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
+
+# Suits.
+from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
+
+import time
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -62,6 +72,17 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.holidayManager = HolidayManagerAI()
         
         self.fishManager = FishManagerAI()
+        self.questManager = QuestManagerAI()
+        self.cogPageManager = CogPageManagerAI()
+        self.factoryMgr = FactoryManagerAI(self)
+        self.promotionMgr = PromotionManagerAI(self)
+        self.cogSuitMgr = CogSuitManagerAI(self)
+        self.suitInvasionManager = SuitInvasionManagerAI(self)
+
+        self.dnaStoreMap = {}
+
+        self.buildingManagers = {}
+        self.suitPlanners = {}
 
     def getTrackClsends(self):
         return False
@@ -121,17 +142,11 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.magicWordManager = MagicWordManagerAI(self)
         self.magicWordManager.generateWithRequired(2)
 
-        self.safeZoneManager = SafeZoneManagerAI(self)
-        self.safeZoneManager.generateWithRequired(2)
-
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
 
         self.partyManager = DistributedPartyManagerAI(self)
         self.partyManager.generateWithRequired(2)
-        
-        self.aprilToonsMgr = DistributedAprilToonsMgrAI(self)
-        self.aprilToonsMgr.generateWithRequired(2)
 
         # setup our view of the global party manager ud
         self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
@@ -139,41 +154,42 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
 
-    def startFireworks(self, task):
-        allFwTypes = [PartyGlobals.FireworkShows.Summer, ToontownGlobals.JULY4_FIREWORKS]
-        fwType = allFwTypes[random.randint(0, len(allFwTypes)-1)]
-        numShows = len(FireworkShows.shows.get(fwType, []))
-        showIndex = random.randint(0, numShows-1)
-        for hood in self.hoods:
-            if hood.safezone == ToontownGlobals.GolfZone:
-                continue
-            fwShow = DistributedFireworkShowAI(self)
-            fwShow.generateWithRequired(hood.safezone)
-            fwShow.b_startShow(fwType, showIndex, globalClockDelta.getRealNetworkTime())
-        task.delayTime = 3600
-        return task.again
+        self.trophyMgr = DistributedTrophyMgrAI(self)
+        self.trophyMgr.generateWithRequired(2)
 
     def createZones(self):
         """
         Spawn safezone objects, streets, doors, NPCs, etc.
         """
+        start = time.clock()
+        def clearQueue():
+            '''So the TCP window doesn't fill up and we get the axe'''
+            while self.readerPollOnce():
+                pass
 
         self.hoods.append(TTHoodAI.TTHoodAI(self))
+        clearQueue()
         self.hoods.append(DDHoodAI.DDHoodAI(self))
+        clearQueue()
         self.hoods.append(DGHoodAI.DGHoodAI(self))
+        clearQueue()
         self.hoods.append(BRHoodAI.BRHoodAI(self))
+        clearQueue()
         self.hoods.append(MMHoodAI.MMHoodAI(self))
+        clearQueue()
         self.hoods.append(DLHoodAI.DLHoodAI(self))
+        clearQueue()
         self.hoods.append(GSHoodAI.GSHoodAI(self))
+        clearQueue()
         self.hoods.append(OZHoodAI.OZHoodAI(self))
+        clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
+        clearQueue()
+        self.hoods.append(SellbotHQAI.SellbotHQAI(self))
+        clearQueue()
 
-        # Calculate time until next hour.
-        thetime = time.time() % 3600
-        if thetime < 60: # If the AI was started less than a minute after the previous full hour.
-            taskMgr.doMethodLater(1, self.startFireworks, 'fireworks-taskmgr-hourly')
-        else:
-            taskMgr.doMethodLater(3600-thetime, self.startFireworks, 'fireworks-taskmgr-hourly')
+        for sp in self.suitPlanners.values():
+            sp.assignInitialSuitBuildings()
 
     def genDNAFileName(self, zoneId):
         zoneId = ZoneUtil.getCanonicalZoneId(zoneId)

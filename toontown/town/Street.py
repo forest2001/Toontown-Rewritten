@@ -19,6 +19,7 @@ from toontown.toon.Toon import teleportDebug
 from toontown.estate import HouseGlobals
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
+from otp.nametag import NametagGlobals
 visualizeZones = base.config.GetBool('visualize-zones', 0)
 
 class Street(BattlePlace.BattlePlace):
@@ -97,6 +98,7 @@ class Street(BattlePlace.BattlePlace):
         self.elevatorDoneEvent = 'elevatorDone'
         self.eventLights = []
         self.visInterestHandle = None
+        self.zoneInterestHandle = None
         self.visZones = []
         self.visInterestChanged = False
 
@@ -111,7 +113,7 @@ class Street(BattlePlace.BattlePlace):
         base.localAvatar.setGeom(self.loader.geom)
         base.localAvatar.setOnLevelGround(1)
         self._telemLimiter = TLGatherAllAvs('Street', RotationLimitToH)
-        #NametagGlobals.setMasterArrowsOn(arrowsOn) #TODO: fix me cfsworks
+        NametagGlobals.setMasterArrowsOn(arrowsOn)
 
         def __lightDecorationOn__():
             geom = base.cr.playGame.getPlace().loader.geom
@@ -165,6 +167,8 @@ class Street(BattlePlace.BattlePlace):
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
         self.enterZone(requestStatus['zoneId'])
         self.tunnelOriginList = base.cr.hoodMgr.addLinkTunnelHooks(self, self.loader.nodeList, self.zoneId)
+        if self.zoneId:
+            self.zoneInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, [self.zoneId-(self.zoneId%100)], 'global_streetVis')
         self.fsm.request(requestStatus['how'], [requestStatus])
         self.replaceStreetSignTextures()
         return
@@ -181,13 +185,15 @@ class Street(BattlePlace.BattlePlace):
                 light.reparentTo(hidden)
 
         newsManager = base.cr.newsManager
-        #NametagGlobals.setMasterArrowsOn(0) #TODO: cfsworks fix me plx
+        NametagGlobals.setMasterArrowsOn(0)
         self.loader.hood.stopSky()
         self.loader.music.stop()
         base.localAvatar.setGeom(render)
         base.localAvatar.setOnLevelGround(0)
         if not self.visInterestHandle is None:
             base.cr.removeInterest(self.visInterestHandle)
+        if not self.zoneInterestHandle is None:
+            base.cr.removeInterest(self.zoneInterestHandle)
 
     def load(self):
         BattlePlace.BattlePlace.load(self)

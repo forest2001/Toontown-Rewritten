@@ -1,31 +1,16 @@
 # This is the PRC configuration file for a published TTR client. Note that only
 # this file and Panda3D's Confauto.prc are included. Any relevant directives in
 # Config.prc should be reproduced here.
-# Comments and empty lines are stripped by Mirai's builder.
 
-window-title Toontown Rewritten [ALPHA]
-
-# The server version is actually a placeholder; Mirai's builder fills it in.
+# Client settings
+window-title Toontown Rewritten [BETA]
 server-version SERVER_VERSION_HERE
-# DC files are NOT configured. They're wrapped up into the code automatically.
+audio-library-name p3openal_audio
+sync-video #f
+want-dev #f
 
-default-model-extension .bam
 
-cog-thief-ortho 0
-
-show-total-population #t
-want-mat-all-tailors #t
-
-# For alpha, we have to disable a few features for now.
-want-pets #f
-want-news-page #f
-want-news-tab #f
-want-housing #t
-want-doomsday #f
-
-want-karts #t
-force-holiday-decorations 6
-
+# Resources settings
 model-path /
 model-cache-models #f
 model-cache-textures #f
@@ -42,11 +27,20 @@ vfs-mount phase_10.mf /
 vfs-mount phase_11.mf /
 vfs-mount phase_12.mf /
 vfs-mount phase_13.mf /
+default-model-extension .bam
 
-audio-library-name p3openal_audio
 
-# TODO: FIX NEW FIREWORKS!
+# DC files are NOT configured.
+# They're wrapped up into the code automatically.
+
+
+# Beta Modifications
+# Temporary modifications for unimplemented features go here.
+want-pets #f
+want-news-tab #f
+want-news-page #f
 want-old-fireworks #t
 
-# Only for Manufacturing Machine ARG
-want-blueprint4-ARG #t
+
+# Holidays and Events
+force-holiday-decorations 6

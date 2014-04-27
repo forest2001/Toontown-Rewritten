@@ -2,13 +2,13 @@ from toontown.toonbase import ToontownGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone.DistributedBoatAI import DistributedBoatAI
 from toontown.toon import NPCToons
-from HoodAI import HoodAI
+from SZHoodAI import SZHoodAI
 
-class DDHoodAI(HoodAI):
+class DDHoodAI(SZHoodAI):
     HOOD = ToontownGlobals.DonaldsDock
 
-    def createSafeZone(self):
-        HoodAI.createSafeZone(self)
+    def createZone(self):
+        SZHoodAI.createZone(self)
 
         self.spawnObjects()
 

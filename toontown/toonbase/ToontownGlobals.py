@@ -143,7 +143,7 @@ def getSuitFont():
         SuitFont = loader.loadFont(TTLocalizer.SuitFont, pixelsPerUnit=40, spaceAdvance=0.25, lineHeight=1.0)
     return SuitFont
 
-
+SafezoneToonupFrequency = 30
 DonaldsDock = 1000
 ToontownCentral = 2000
 TheBrrrgh = 3000
@@ -1363,15 +1363,9 @@ LawbotBossBonusDuration = 20
 LawbotBossBonusToonup = 10
 LawbotBossBonusWeightMultiplier = 2
 LawbotBossChanceToDoAreaAttack = 11
-LOW_POP_JP = 0
-MID_POP_JP = 100
-HIGH_POP_JP = 200
-LOW_POP_INTL = 399
-MID_POP_INTL = 499
-HIGH_POP_INTL = -1
-LOW_POP = 399
-MID_POP = 599
-HIGH_POP = -1
+LOW_POP = 15
+MID_POP = 20
+HIGH_POP = 30
 PinballCannonBumper = 0
 PinballCloudBumperLow = 1
 PinballCloudBumperMed = 2

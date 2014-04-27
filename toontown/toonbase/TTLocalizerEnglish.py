@@ -229,20 +229,16 @@ QuestsDefaultReject = ('Heya, _avName_!',
  'Hi there.',
  "Sorry _avName_, I'm a bit busy right now.",
  'Yes?',
- 'Howdy, _avName_!',
+ 'Howdy, _avName_.',
  'Welcome, _avName_!',
  "Hey, _avName_! How's it hanging?",
  "Need any help?",
  "Hi _avName_, what brings you here?",
- "Flippy is really nice and all, but Slappy is the wackiest toon around. I think I'll be voting for him.",
- "Have you decided on who you are voting for, _avName_?",
- "I don't know about Flippy after that leaked recording of him in Loony Labs. Something seems fishy.",
- "I wonder if Slappy will throw another snowball fight next year if he is elected.",
- "I can't even do a flip. Flippy should have chosen something better for his slogan.",
- "Flippy stopped by earlier and gave me a pie. He's really working hard on his campaign!",
- "I think I'll be voting for Flippy. I like supporting the underdog. Get it? Dog?",
- "Alec did a really great job setting up Toontown Central. It's nice to see a change there.",
- "I wish I could attend the election, but I don't think I can get off from work. I'll watch the live feed instead.")
+ # Beta ramblings - to be removed later on
+ "These new gags from Goofy's Gag Shop are pretty nifty.",
+ "I just bought a new gag earlier. That'll show those Cogs!",
+ "I heard that Soggy Nell's building was taken over by the cogs. That could never happen here... right?",
+ "I've heard rumors of gigantic Cog HQs being made on the outskirts of Toontown. I sure hope they are only rumors.")
 QuestsDefaultTierNotDone = ('Hello, _avName_! You must finish your current ToonTasks before getting a new one.', 'Hi there! You need to finish the ToonTasks you are working on in order to get a new one.', 'Hi, _avName_! Before I can give you a new ToonTask, you need to finish the ones you have.')
 QuestsDefaultQuest = None
 QuestsDefaultVisitQuestDialog = ('I heard _toNpcName_ is looking for you._where_',
@@ -2029,6 +2025,7 @@ TeleportPanelUnavailableHood = '%s is not available right now; try again later.'
 TeleportPanelDenySelf = "You can't go to yourself!"
 TeleportPanelOtherShard = "%(avName)s is in district %(shardName)s, and you're in district %(myShardName)s.  Do you want to switch to %(shardName)s?"
 TeleportPanelBusyShard = '%(avName)s is in a full District. Playing in a full District can severely slow down game performance. Are you sure you want to switch districts?'
+TeleportPanelFullShard = 'That District is bursting with toons! You and your friend should move to a less busy one.'
 BattleBldgBossTaunt = "I'm the boss."
 CogdoBattleBldgBossTaunt = "I don't take meetings with Toons."
 FactoryBossTaunt = "I'm the Foreman."

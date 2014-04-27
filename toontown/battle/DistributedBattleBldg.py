@@ -14,6 +14,8 @@ from toontown.suit import Suit
 import SuitBattleGlobals
 import random
 from toontown.toonbase import ToontownGlobals
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBldg')

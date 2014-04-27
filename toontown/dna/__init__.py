@@ -46,3 +46,7 @@ import DNATexture
 import DNAStoreSuitPoint
 import DNASuitEdge
 import DNABattleCell
+
+# Utilites
+import DNAUtil
+import DNASuitPath

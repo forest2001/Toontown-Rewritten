@@ -24,12 +24,16 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.launcher import ToontownDownloadWatcher
 from toontown.toontowngui import TTDialog
 from sys import platform
+from DisplayOptions import DisplayOptions
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):
+        self.display = DisplayOptions()
         OTPBase.OTPBase.__init__(self)
+        base.enableMusic(self.display.settings.getBool('game', 'music', False))
+        base.enableSoundEffects(self.display.settings.getBool('game', 'sfx', False))
         self.disableShowbaseMouse()
         self.addCullBins()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
@@ -41,6 +45,7 @@ class ToonBase(OTPBase.OTPBase):
         camera.setPosHpr(0, 0, 0, 0, 0, 0)
         self.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
+        self.cam2d.node().setCameraMask(BitMask32.bit(1))
         self.musicManager.setVolume(0.65)
         self.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         tpm = TextPropertiesManager.getGlobalPtr()
@@ -437,12 +442,7 @@ class ToonBase(OTPBase.OTPBase):
         sys.exit()
 
     def getShardPopLimits(self):
-        if self.cr.productName == 'JP':
-            return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP_JP), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP_JP), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP_JP))
-        elif self.cr.productName in ['BR', 'FR']:
-            return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP_INTL), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP_INTL), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP_INTL))
-        else:
-            return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP))
+        return (config.GetInt('shard-low-pop', ToontownGlobals.LOW_POP), config.GetInt('shard-mid-pop', ToontownGlobals.MID_POP), config.GetInt('shard-high-pop', ToontownGlobals.HIGH_POP))
 
     def playMusic(self, music, looping = 0, interrupt = 1, volume = None, time = 0.0):
         OTPBase.OTPBase.playMusic(self, music, looping, interrupt, volume, time)

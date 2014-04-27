@@ -28,6 +28,7 @@ class NametagGroup:
         self.font = None
         self.name = ''
         self.displayName = ''
+        self.wordWrap = 7.5
         self.qtColor = VBase4(1,1,1,1)
         self.colorCode = CCNormal
         self.avatar = None
@@ -140,6 +141,10 @@ class NametagGroup:
         self.font = font
         self.updateTags()
 
+    def setWordwrap(self, wrap):
+        self.wordWrap = wrap
+        self.updateTags()
+
     def setColorCode(self, cc):
         self.colorCode = cc
         self.updateTags()
@@ -223,6 +228,7 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
+        tag.wordWrap = self.wordWrap
         tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
@@ -239,36 +245,33 @@ class NametagGroup:
 
         tag.update()
 
+    def __testVisible3D(self):
+        # We must determine if a 3D nametag is visible or not, since this
+        # affects the visibility state of 2D nametags.
+
+        # Next, we iterate over all of our nametags until we find a visible
+        # one:
+        for nametag in self.nametags:
+            if not isinstance(nametag, Nametag3d):
+                continue # It's not in the 3D system, disqualified.
+
+            if nametag.isOnScreen():
+                return True
+
+        # If we got here, none of the tags were a match...
+        return False
+
+
     def __tickTask(self, task):
         for nametag in self.nametags:
             nametag.tick()
 
-        if self.avatar is None: return task.cont
-
-        # Get avatar bounds. These have the local transform of the node applied,
-        # therefore they are in the coordinate space of self.avatar.getParent().
-        minCorner = Point3()
-        maxCorner = Point3()
-        self.avatar.calcTightBounds(minCorner, maxCorner)
-        avatarBounds = BoundingBox(minCorner, maxCorner)
-
-        # Get the bounds of the camera's lens. These have no transform applied,
-        # so are in the coordinate system of NametagGlobals.camera.
-        cameraBounds = NametagGlobals.camera.node().getLens().makeBounds()
-
-        # Transform cameraBounds to the same coordinate space as avatarBounds:
-        mat = NametagGlobals.camera.getMat(self.avatar.getParent())
-        cameraBounds.xform(mat)
-
-        # Now check for bounding intersection (i.e. cull) to see if self.avatar
-        # is visible:
-        visible3d = bool(cameraBounds.contains(avatarBounds) & BoundingVolume.IFSome)
-
-        if self.avatar.isHidden():
-            visible3d = False
-
         if NametagGlobals.onscreenChatForced and self.chatFlags & CFSpeech:
+            # Because we're *forcing* chat onscreen, we skip the visible3d test
+            # and go ahead and display it anyway.
             visible3d = False
+        else:
+            visible3d = self.__testVisible3D()
 
         if visible3d ^ self.visible3d:
             self.visible3d = visible3d
@@ -305,6 +308,3 @@ class NametagGroup:
         for tag in self.nametags:
             if isinstance(tag, MarginPopup):
                 tag.unmanage(manager)
-                
-    def setNameWordwrap(self, wrap):
-        pass

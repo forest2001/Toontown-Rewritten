@@ -5,6 +5,8 @@ from BattleSounds import *
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 import types
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieToonVictory')
 
 def __findToonReward(rewards, toon):

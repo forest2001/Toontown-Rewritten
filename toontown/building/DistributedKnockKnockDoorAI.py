@@ -1,28 +1,42 @@
+from otp.ai.AIBaseGlobal import *
+from direct.distributed.ClockDelta import *
 from direct.directnotify import DirectNotifyGlobal
-from toontown.building.DistributedAnimatedPropAI import DistributedAnimatedPropAI
-from toontown.dna.DNASpawnerAI import *
-from toontown.dna.DNAFlatDoor import DNAFlatDoor
-import re
+from direct.fsm import ClassicFSM
+import DistributedAnimatedPropAI
+from direct.task.Task import Task
+from direct.fsm import State
 
-class DistributedKnockKnockDoorAI(DistributedAnimatedPropAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedKnockKnockDoorAI")
+class DistributedKnockKnockDoorAI(DistributedAnimatedPropAI.DistributedAnimatedPropAI):
 
-# DNA spawn code:
-buildingPattern = re.compile('tb([0-9]+):')
-@dnaSpawn(DNAFlatDoor)
-def spawn(air, zone, element):
-    # Get door's parent building:
-    building = element.parent.parent
-
-    # Parse building name to figure out index number:
-    match = buildingPattern.match(building.name)
-
-    if not match:
-        # No match! Can't spawn a door...
+    def __init__(self, air, propId):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.__init__(self, air, propId)
+        self.fsm.setName('DistributedKnockKnockDoor')
+        self.propId = propId
+        self.doLaterTask = None
         return
 
-    index = int(match.group(1))
+    def enterOff(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.enterOff(self)
 
-    door = DistributedKnockKnockDoorAI(air)
-    door.setPropId(index)
-    door.generateWithRequired(zone)
+    def exitOff(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.exitOff(self)
+
+    def attractTask(self, task):
+        self.fsm.request('attract')
+        return Task.done
+
+    def enterAttract(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.enterAttract(self)
+
+    def exitAttract(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.exitAttract(self)
+
+    def enterPlaying(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.enterPlaying(self)
+        self.doLaterTask = taskMgr.doMethodLater(9, self.attractTask, self.uniqueName('knockKnock-timer'))
+
+    def exitPlaying(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.exitPlaying(self)
+        taskMgr.remove(self.doLaterTask)
+        self.doLaterTask = None
+        return

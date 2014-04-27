@@ -20,6 +20,8 @@ from toontown.hood import ZoneUtil
 from toontown.distributed import DelayDelete
 from toontown.toon import TTEmote
 from otp.avatar import Emote
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 
 class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBase')
@@ -30,6 +32,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     camMenuFov = ToontownBattleGlobals.BattleCamMenuFov
     camJoinPos = ToontownBattleGlobals.BattleCamJoinPos
     camJoinHpr = ToontownBattleGlobals.BattleCamJoinHpr
+    sortOrder = 2
 
     def __init__(self, cr, townBattle):
         DistributedNode.DistributedNode.__init__(self, cr)

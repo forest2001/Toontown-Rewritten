@@ -5,7 +5,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from otp.avatar import AvatarDNA
 notify = directNotify.newCategory('ToonDNA')
-mergeMATTailor = config.GetBool('want-mat-all-tailors', 0)
+mergeMATTailor = config.GetBool('want-mat-all-tailors', 1)
 toonSpeciesTypes = ['d',
  'c',
  'h',

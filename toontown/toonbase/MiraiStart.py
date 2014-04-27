@@ -189,17 +189,5 @@ class ConnectionRepository_override(ConnectionRepository.ConnectionRepository):
 
 ConnectionRepository.ConnectionRepository = ConnectionRepository_override
 
-# We also need timezone stuff. We can import pytz and change its __loader__ in
-# order to trick pkg_resources into using our functions.
-class dictloader(object):
-    def __init__(self, dict):
-        self.dict = dict
-
-    def get_data(self, key):
-        return self.dict.get(key.replace('\\','/'))
-
-import pytz
-pytz.__loader__ = dictloader(_miraidata.ZONEINFO)
-
 # Okay, everything should be set now... Toontown, start!
 import toontown.toonbase.ToontownStart

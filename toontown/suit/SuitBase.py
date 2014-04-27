@@ -8,6 +8,7 @@ from toontown.battle import SuitBattleGlobals
 import SuitTimings
 import SuitDNA
 from toontown.toonbase import TTLocalizer
+from SuitLegList import *
 TIME_BUFFER_PER_WPT = 0.25
 TIME_DIVISOR = 100
 DISTRIBUTE_TASK_CREATION = 0
@@ -80,4 +81,4 @@ class SuitBase:
             print '\t', self.sp.dnaStore.getSuitPointWithIndex(indexVal)
 
     def makeLegList(self):
-        self.legList = SuitLegList(self.path, self.sp.dnaStore, self.sp.suitWalkSpeed, SuitTimings.fromSky, SuitTimings.toSky, SuitTimings.fromSuitBuilding, SuitTimings.toSuitBuilding, SuitTimings.toToonBuilding)
+        self.legList = SuitLegList(self.path)
