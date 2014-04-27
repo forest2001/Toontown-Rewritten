@@ -697,11 +697,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.zoneIdToPointMap = {}
         for point in self.streetPointList:
             points = self.dnaData.suitGraph.getAdjacentPoints(point)
-            i = points.getNumPoints() - 1
-            while i >= 0:
-                pi = points.getPointIndex(i)
-                p = self.pointIndexes[pi]
-                i -= 1
+            for p in points:
                 # DNAData needs getSuitEdgeZone!
                 zoneName = self.dnaData.getSuitEdgeZone(point.getIndex(), p.getIndex())
                 zoneId = int(self.extractGroupName(zoneName))
@@ -717,22 +713,15 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if self.buildingSideDoors.has_key(blockNumber):
             for doorPoint in self.buildingSideDoors[blockNumber]:
                 points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
-                i = points.getNumPoints() - 1
-                while i >= 0:
-                    pi = points.getPointIndex(i)
-                    point = self.pointIndexes[pi]
+                for point in points:
                     if point.getPointType() == DNAStoreSuitPoint.STREETPOINT:
                         pointList.append(point)
-                    i -= 1
 
         if self.buildingFrontDoors.has_key(blockNumber):
             doorPoint = self.buildingFrontDoors[blockNumber]
             points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
-            i = points.getNumPoints() - 1
-            while i >= 0:
-                pi = points.getPointIndex(i)
-                pointList.append(self.pointIndexes[pi])
-                i -= 1
+            for point in points:
+                pointList.append(point)
 
         return pointList
 
@@ -747,17 +736,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if self.buildingSideDoors.has_key(bn):
                 for doorPoint in self.buildingSideDoors[bn]:
                     points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
-                    i = points.getNumPoints() - 1
-                    while blockNumber == None and i >= 0:
-                        pi = points.getPointIndex(i)
-                        p = self.pointIndexes[pi]
-                        i -= 1
+                    for p in points:
                         startTime = SuitTimings.fromSuitBuilding
-                        startTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(doorPoint.getIndex(), pi, self.suitWalkSpeed)
+                        startTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(doorPoint, p, self.suitWalkSpeed)
                         if not self.pointCollision(p, doorPoint, startTime):
                             startTime = SuitTimings.fromSuitBuilding
                             startPoint = doorPoint
                             blockNumber = bn
+                            break
 
         while startPoint == None and len(streetPoints) > 0:
             p = random.choice(streetPoints)
@@ -894,7 +880,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 suit.maxPathLen = maxPathLen
                 suit.buildingDestination = p[0]
                 suit.buildingDestinationIsCogdo = cogdoTakeover
-                suit.setPath(path)
+                suit.setPath(self.dnaData.suitGraph, path)
                 return 1
             retryCount += 1
 
@@ -928,11 +914,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return self.battleCollision(point, adjacentPoint)
         else:
             points = self.dnaData.suitGraph.getAdjacentPoints(point)
-            i = points.getNumPoints() - 1
-            while i >= 0:
-                pi = points.getPointIndex(i)
-                p = self.pointIndexes[pi]
-                i -= 1
+            for p in points:
+                assert self.dnaData.suitGraph.getConnectingEdge(p, point)
                 if self.battleCollision(point, p):
                     return 1
 

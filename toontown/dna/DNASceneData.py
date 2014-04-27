@@ -1,5 +1,4 @@
 from DNAParser import *
-from DNASuitPath import DNASuitPath
 import DNAStoreSuitPoint
 from collections import deque
 
@@ -37,20 +36,25 @@ class DNASuitGraph:
     def getPointFromIndex(self, index):
         return self._pointId2point[index]
 
+    def getEdgeZone(self, edge):
+        return edge.getVisGroup().getZone()
+
+    def getPointZone(self, point):
+        edges = self.getEdgesTo(point)
+        return self.getEdgeZone(edges[0])
+
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
         if minPathLen > 1:
             pointDeque = deque()
             pointDeque.append(startPoint)
             if self._getSuitPathBreadthFirst(0, pointDeque, endPoint, minPathLen, maxPathLen):
-                path = DNASuitPath()
+                path = []
                 for i in range(len(pointDeque)):
                     point = pointDeque.popleft()
-                    path.addPoint(point)
+                    path.append(point)
                 return path
         else:
-            path = DNASuitPath()
-            path.addPoint(startPoint)
-            path.addPoint(endPoint)
+            path = [startPoint, endPoint]
             return path
 
     def _getSuitPathBreadthFirst(self, depth, pointDeque, endPoint, minPathLen, maxPathLen):
@@ -72,23 +76,21 @@ class DNASuitGraph:
         return False
 
     def getAdjacentPoints(self, point):
-        path = DNASuitPath()
-        edges = self.getEdgesFrom(point)
-        for edge in edges:
-            path.addPoint(self.getPointFromIndex(edge.b))
-        return path
+        return [self.getPointFromIndex(edge.b) for edge in self.getEdgesFrom(point)]
 
     def getConnectingEdge(self, pointA, pointB):
+        assert isinstance(pointA, DNAStoreSuitPoint.DNAStoreSuitPoint)
+        assert isinstance(pointB, DNAStoreSuitPoint.DNAStoreSuitPoint)
         for edge in self.edges:
-            a = self.suitGraph.getPointFromIndex(edge.a)
-            b = self.suitGraph.getPointFromIndex(edge.b)
+            a = self.getPointFromIndex(edge.a)
+            b = self.getPointFromIndex(edge.b)
             if (a == pointA and b == pointB) or (a == pointB and b == pointA):
                 return edge
         return None
 
     def getSuitEdgeTravelTime(self, p1, p2, speed):
-        pos1 = self.getPointFromIndex(p1).getPos()
-        pos2 = self.getPointFromIndex(p1).getPos()
+        pos1 = p1.getPos()
+        pos2 = p1.getPos()
         return (pos1 - pos2).length()/speed
 
 class DNABlock:

@@ -3,21 +3,22 @@ import SuitTimings
 from toontown.dna import DNAStoreSuitPoint
 
 class SuitLegList:
-    def __init__(self, path):
+    def __init__(self, suitGraph, path):
+        self.suitGraph = suitGraph
         self.suitLegType = 0
         self.startTime = 0.0
         self.legTime = 0.0
         self.blockNumber = 0
         self.legs = []
         i = 0
-        self.legs.append(SuitLeg(path.getPoint(0), path.getPoint(0), SuitLeg.TFromSky))
-        while i+1 < path.getNumPoints():
-            point = path.getPoint(i)
-            point2 = path.getPoint(i+1)
-            self.legs.append(SuitLeg(point, point2, SuitLeg.TWalk))
+        self.legs.append(SuitLeg(suitGraph, path[0], path[0], SuitLeg.TFromSky))
+        while i+1 < len(path):
+            point = path[i]
+            point2 = path[i+1]
+            self.legs.append(SuitLeg(suitGraph, point, point2, SuitLeg.TWalk))
             i += 1
-        endPoint = path.getPoint(path.getNumPoints()-1)
-        self.legs.append(SuitLeg(endPoint, endPoint, SuitLeg.TToSky))
+        endPoint = path[-1]
+        self.legs.append(SuitLeg(suitGraph, endPoint, endPoint, SuitLeg.TToSky))
 
     def getStartTime(self, index):
         time = 0
@@ -89,7 +90,8 @@ class SuitLeg:
       9 : 'ToCoghq',
       10 : 'Off'
     }
-    def __init__(self, pointA, pointB, type = None):
+    def __init__(self, suitGraph, pointA, pointB, type = None):
+        self.suitGraph = suitGraph
         self.pointA = pointA
         self.pointB = pointB
         self.posA = pointA.getPos()
@@ -124,7 +126,7 @@ class SuitLeg:
         pos = self.getPosA() + pos*(time/self.getLegTime())
         return pos
     def getZone(self):
-        return self.pointB.zone
+        return self.suitGraph.getPointZone(self.pointB)
     @staticmethod
     def getTypeName(type):
         return SuitLeg.TypeToName[type]

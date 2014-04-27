@@ -226,7 +226,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.startPoint = self.sp.pointIndexes[self.pathEndpointStart]
         self.endPoint = self.sp.pointIndexes[self.pathEndpointEnd]
         path = self.sp.genPath(self.startPoint, self.endPoint, self.minPathLen, self.maxPathLen)
-        self.setPath(path)
+        self.setPath(self.sp.dnaData.suitGraph, path)
         self.makeLegList()
         return
 
