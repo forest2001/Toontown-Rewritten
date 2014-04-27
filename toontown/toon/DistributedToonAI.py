@@ -172,6 +172,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.savedCheesyExpireTime = 0
         self.ghostMode = 0
         self.immortalMode = 0
+        self.unlimitedGags = 0
         self.numPies = 0
         self.pieType = 0
         self._isGM = False
@@ -2449,6 +2450,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setImmortalMode(self, flag):
         self.immortalMode = flag
+        
+    def setUnlimitedGags(self, flag):
+        self.unlimitedGags = flag
 
     def b_setSpeedChatStyleIndex(self, index):
         self.setSpeedChatStyleIndex(index)
@@ -4875,3 +4879,17 @@ def online(doId):
     av = spellbook.getTarget()
     doId = 100000000 + doId
     simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
+    
+@magicWord(category=CATEGORY_OVERRIDE)
+def unlimitedGags():
+    """ Restock avatar's gags at the start of each round. """
+    av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 500 else spellbook.getInvoker()
+    av.setUnlimitedGags(not av.unlimitedGags)
+    return 'Toggled unlimited gags %s for %s' % ('ON' if av.unlimitedGags else 'OFF', av.getName())
+
+@magicWord(category=CATEGORY_OVERRIDE)    
+def immortal():
+    """ Make target (if 500+) or self (if 499-) immortal. """
+    av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 500 else spellbook.getInvoker()
+    av.setImmortalMode(not av.immortalMode)
+    return 'Toggled immortal mode %s for %s' % ('ON' if av.immortalMode else 'OFF', av.getName())
