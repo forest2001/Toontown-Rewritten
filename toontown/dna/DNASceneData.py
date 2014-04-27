@@ -96,7 +96,6 @@ class DNASuitGraph:
 class DNABlock:
     index = None
     title = None
-    doorName = None
     buildingType = None
     zone = None
 

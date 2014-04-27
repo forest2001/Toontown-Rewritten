@@ -41,8 +41,6 @@ class DNALandmarkBuilding(DNANode):
             pass
         np = node.copyTo(parent)
         np.setName(self.id)
-        np.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
-
         self.setupSuitBuildingOrigin(np, np)
         gr = SceneGraphReducer()
         gr.flatten(np.getNode(0), 0)

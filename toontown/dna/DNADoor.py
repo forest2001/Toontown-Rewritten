@@ -41,11 +41,6 @@ class DNADoor(DNANode):
         doorTrigger.wrtReparentTo(parentNode, 0)
         doorTrigger.setName('door_trigger_%s' % block)
 
-        store = NodePath('door-%s' % block)
-        store.setPosHprScale(doorNodePath, (0,0,0), (0,0,0), (1,1,1))
-
-        return store
-
     def _makeNode(self, storage, parent):
         frontNode = parent.find('**/*building*_front')
         if frontNode.isEmpty():
@@ -59,12 +54,10 @@ class DNADoor(DNANode):
             #TODO: error message here
             pass
         doorNode = node.copyTo(frontNode, 0)
-        self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
+        origin = parent.find('**/*door_origin')
+        origin.node().setPreserveTransform(ModelNode.PTNet)
+        self.setupDoor(doorNode, parent, origin, storage,
           DNAUtil.getBlockFromName(parent.getName()), self.getColor())
         return doorNode
-
-    def _storeData(self, data):
-        block = data.getBlock(DNAUtil.getBlockFromName(self.parent.name))
-        block.doorName = 'door-%s' % block.index
 
 registerElement(DNADoor)
