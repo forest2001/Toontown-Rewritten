@@ -19,16 +19,16 @@ class BattleSounds:
 
     def setupSearchPath(self):
         self.sfxSearchPath = DSearchPath()
-        self.sfxSearchPath.appendDirectory(Filename('/phase_3/audio/sfx'))
-        self.sfxSearchPath.appendDirectory(Filename('/phase_3.5/audio/sfx'))
-        self.sfxSearchPath.appendDirectory(Filename('/phase_4/audio/sfx'))
-        self.sfxSearchPath.appendDirectory(Filename('/phase_5/audio/sfx'))
         if __debug__:
             self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_3/audio/sfx')))
             self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_3.5/audio/sfx')))
             self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_4/audio/sfx')))
             self.sfxSearchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('resources/phase_5/audio/sfx')))
-
+        else:
+            self.sfxSearchPath.appendDirectory(Filename('/phase_3/audio/sfx'))
+            self.sfxSearchPath.appendDirectory(Filename('/phase_3.5/audio/sfx'))
+            self.sfxSearchPath.appendDirectory(Filename('/phase_4/audio/sfx'))
+            self.sfxSearchPath.appendDirectory(Filename('/phase_5/audio/sfx'))
 
     def clear(self):
         if self.isValid:
