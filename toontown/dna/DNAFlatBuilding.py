@@ -1,4 +1,5 @@
 from DNANode import DNANode
+from DNAFlatDoor import DNAFlatDoor
 from DNAParser import *
 import DNAUtil
 from panda3d.core import *
@@ -28,6 +29,10 @@ class DNAFlatBuilding(DNANode):
         barrier = barrierNode.copyTo(np)
         barrier.setScale(self.width, 1, height)
 
+        type = DNAUtil.getBuildingClassFromName(self.id)
+        if type == 'tb':
+            self.generateSuitGeometry(storage, np, height, barrier)
+
         # We need to set collisions on all of our knock knock doors:
         block = DNAUtil.getBlockFromName(self.name)
         if block is not None:
@@ -36,5 +41,22 @@ class DNAFlatBuilding(DNANode):
 
         # Finally, flatten down:
         np.flattenStrong()
+
+    def generateSuitGeometry(self, storage, np, height, barrier):
+        node = np.getParent().attachNewNode('sb' + self.id[2:])
+        node.setTransform(np.getTransform())
+
+        barrier.copyTo(node)
+
+        wall = storage.findNode('wall_suit_build1_ur')
+        if wall:
+            wallNode = wall.copyTo(node)
+            wallNode.setScale(self.width, 1, height)
+
+            for door in DNAUtil.getChildrenOfType(self, DNAFlatDoor):
+                door.generateSuitGeometry(storage, wallNode)
+
+        node.flattenStrong()
+        node.stash()
 
 registerElement(DNAFlatBuilding)

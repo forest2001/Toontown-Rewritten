@@ -16,6 +16,14 @@ class DNAFlatDoor(DNANode):
         if node is None:
             raise DNAError('DNAFlatDoor uses unknown code %s' % self.code)
 
+        return self.__apply(node, parent)
+
+    def generateSuitGeometry(self, storage, parent):
+        node = storage.findNode('suit_door')
+        if node:
+            return self.__apply(node, parent)
+
+    def __apply(self, node, parent):
         np = node.copyTo(parent)
         np.setScale(np.getTop(), (1, 1, 1)) # No net scale
         np.setPos(0.5, 0, 0) # Centered within the wall
