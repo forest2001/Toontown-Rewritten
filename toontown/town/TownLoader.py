@@ -270,7 +270,7 @@ class TownLoader(StateData.StateData):
             nodePath.wrtReparentTo(bucket)
 
     def makeDictionaries(self, sceneTree):
-        sceneData = sceneTree.getData()
+        sceneData = sceneTree.generateData()
 
         self.nodeDict = {}
         self.zoneDict = {}

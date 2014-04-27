@@ -100,7 +100,7 @@ class SafeZoneLoader(StateData.StateData):
             self.geom.prepareScene(gsg)
 
     def makeDictionaries(self, sceneTree):
-        sceneData = sceneTree.getData()
+        sceneData = sceneTree.generateData()
 
         self.nodeList = []
         for visgroup in sceneData.visgroups:
