@@ -696,7 +696,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return self.zoneIdToPointMap
         self.zoneIdToPointMap = {}
         for point in self.streetPointList:
-            points = self.dnaData.getAdjacentPoints(point)
+            points = self.dnaData.suitGraph.getAdjacentPoints(point)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -716,7 +716,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         pointList = []
         if self.buildingSideDoors.has_key(blockNumber):
             for doorPoint in self.buildingSideDoors[blockNumber]:
-                points = self.dnaData.getAdjacentPoints(doorPoint)
+                points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
                 i = points.getNumPoints() - 1
                 while i >= 0:
                     pi = points.getPointIndex(i)
@@ -727,7 +727,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         if self.buildingFrontDoors.has_key(blockNumber):
             doorPoint = self.buildingFrontDoors[blockNumber]
-            points = self.dnaData.getAdjacentPoints(doorPoint)
+            points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -746,14 +746,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             blockNumbers.remove(bn)
             if self.buildingSideDoors.has_key(bn):
                 for doorPoint in self.buildingSideDoors[bn]:
-                    points = self.dnaData.getAdjacentPoints(doorPoint)
+                    points = self.dnaData.suitGraph.getAdjacentPoints(doorPoint)
                     i = points.getNumPoints() - 1
                     while blockNumber == None and i >= 0:
                         pi = points.getPointIndex(i)
                         p = self.pointIndexes[pi]
                         i -= 1
                         startTime = SuitTimings.fromSuitBuilding
-                        startTime += self.dnaData.getSuitEdgeTravelTime(doorPoint.getIndex(), pi, self.suitWalkSpeed)
+                        startTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(doorPoint.getIndex(), pi, self.suitWalkSpeed)
                         if not self.pointCollision(p, doorPoint, startTime):
                             startTime = SuitTimings.fromSuitBuilding
                             startPoint = doorPoint
@@ -914,7 +914,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             pi = path.getPointIndex(i)
             adjacentPoint = point
             point = self.pointIndexes[pi]
-            elapsedTime += self.dnaData.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
+            elapsedTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
 
         result = self.pointCollision(point, adjacentPoint, elapsedTime)
         return result
@@ -927,7 +927,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if adjacentPoint != None:
             return self.battleCollision(point, adjacentPoint)
         else:
-            points = self.dnaData.getAdjacentPoints(point)
+            points = self.dnaData.suitGraph.getAdjacentPoints(point)
             i = points.getNumPoints() - 1
             while i >= 0:
                 pi = points.getPointIndex(i)
@@ -939,7 +939,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def battleCollision(self, point, adjacentPoint):
-        zoneName = self.dnaData.getConnectingEdge(point, adjacentPoint).parent.zone
+        zoneName = self.dnaData.suitGraph.getConnectingEdge(point, adjacentPoint).parent.zone
         zoneId = int(self.extractGroupName(zoneName))
         return self.battleMgr.cellHasBattle(zoneId)
 
