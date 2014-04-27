@@ -1,5 +1,6 @@
 from pandac.PandaModules import *
 from direct.showbase import PythonUtil
+import __builtin__
 
 import argparse
 
@@ -28,7 +29,7 @@ loadPrcFileData('Command-line', localconfig)
 class game:
     name = 'toontown'
     process = 'server'
-__builtins__.game = game
+__builtin__.game = game
 
 from otp.ai.AIBaseGlobal import *
 

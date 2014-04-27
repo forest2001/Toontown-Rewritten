@@ -44,36 +44,47 @@ class DNASuitGraph:
         return self.getEdgeZone(edges[0])
 
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        if minPathLen > 1:
-            pointDeque = deque()
-            pointDeque.append(startPoint)
-            if self._getSuitPathBreadthFirst(0, pointDeque, endPoint, minPathLen, maxPathLen):
-                path = []
-                for i in range(len(pointDeque)):
-                    point = pointDeque.popleft()
-                    path.append(point)
-                return path
-        else:
-            path = [startPoint, endPoint]
-            return path
+        # Performs a BFS in order to find a path from startPoint to endPoint,
+        # the minimum length will be minPathLen, and the maximum will be
+        # maxPathLen. N.B. these values indicate the length in edges, not
+        # vertices, so the returned list will be:
+        # minPathLen+1 <= len(list) <= maxPathLen+1
 
-    def _getSuitPathBreadthFirst(self, depth, pointDeque, endPoint, minPathLen, maxPathLen):
-        point = pointDeque.pop()
-        pointDeque.append(point)
-        if depth > maxPathLen:
-            return False
-        if point == endPoint:
-            if depth > minPathLen:
-                pointDeque.append(point)
-                return True
-        edges = self.getEdgesFrom(point)
-        for edge in edges:
-            if self.getPointFromIndex(edge.b) != point and not self.getPointFromIndex(edge.b) in pointDeque \
-              and (self.getPointFromIndex(edge.b).type in [DNAStoreSuitPoint.STREETPOINT, DNAStoreSuitPoint.COGHQINPOINT, DNAStoreSuitPoint.COGHQOUTPOINT] or self.getPointFromIndex(edge.b) == endPoint):
-                pointDeque.append(self.getPointFromIndex(edge.b))
-                if self._getSuitPathBreadthFirst(depth+1, pointDeque, endPoint, minPathLen, maxPathLen):
-                    return True
-        return False
+        # The queue of paths to consider:
+        # The format is a tuple: (prevPath, depth, point)
+        pathDeque = deque()
+        pathDeque.append((None, 0, startPoint))
+        while pathDeque:
+            path = pathDeque.popleft()
+            prevPath, depth, point = path
+
+            newDepth = depth + 1
+            if newDepth > maxPathLen:
+                # This path has grown too long, prune it.
+                continue
+
+            for adj in self.getAdjacentPoints(point):
+                if adj == endPoint and newDepth >= minPathLen:
+                    # Hey, we found the end! Let's return it:
+                    points = deque()
+                    points.appendleft(adj)
+                    while path:
+                        points.appendleft(path[-1])
+                        path, _, _ = path
+                    return list(points)
+
+                # We're not at the end yet... Let's see if we can traverse this
+                # point:
+                if adj.type not in (DNAStoreSuitPoint.STREETPOINT,
+                                    DNAStoreSuitPoint.COGHQINPOINT,
+                                    DNAStoreSuitPoint.COGHQOUTPOINT):
+                    # This is some other special point that we cannot walk
+                    # across.
+                    continue
+
+                # Append this point to the paths we are considering:
+                pathDeque.append((path, newDepth, adj))
+
 
     def getAdjacentPoints(self, point):
         return [self.getPointFromIndex(edge.b) for edge in self.getEdgesFrom(point)]
