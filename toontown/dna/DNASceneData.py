@@ -92,10 +92,14 @@ class DNASuitGraph:
         return (pos1 - pos2).length()/speed
 
 class DNABlock:
+    index = None
     title = None
-    door = None
+    doorName = None
     buildingType = None
     zone = None
+
+    def __init__(self, index):
+        self.index = index
 
 class DNASceneData:
     def __init__(self):
@@ -113,7 +117,7 @@ class DNASceneData:
     def getBlock(self, block):
         assert type(block) == int
         if not block in self._blocks:
-            self._blocks[block] = DNABlock()
+            self._blocks[block] = DNABlock(block)
         return self._blocks[block]
 
     def getBlocks(self):

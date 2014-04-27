@@ -11,7 +11,6 @@ class DNADoor(DNANode):
         DNANode.__init__(self, 'door')
 
         self.code = code
-        self.doorStore = None
 
     @staticmethod
     def setupDoor(doorNodePath, parentNode, doorOrigin, dnaStore, block, color):
@@ -60,12 +59,12 @@ class DNADoor(DNANode):
             #TODO: error message here
             pass
         doorNode = node.copyTo(frontNode, 0)
-        self.doorStore = self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
+        self.setupDoor(doorNode, parent, parent.find('**/*door_origin'), storage,
           DNAUtil.getBlockFromName(parent.getName()), self.getColor())
         return doorNode
 
     def _storeData(self, data):
         block = data.getBlock(DNAUtil.getBlockFromName(self.parent.name))
-        block.door = self.doorStore
+        block.doorName = 'door-%s' % block.index
 
 registerElement(DNADoor)
