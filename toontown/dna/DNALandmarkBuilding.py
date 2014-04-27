@@ -16,7 +16,7 @@ class DNALandmarkBuilding(DNANode):
         self.type = type
 
     def getTitle(self):
-        return self._getAttribute(self, DNATitle, 'title', '')
+        return self._getAttribute(DNATitle, 'title', '')
 
     def setupSuitBuildingOrigin(self, nodePathA, nodePathB):
         if self.id[0:2] == 'tb' and self.id[2].isdigit() and self.id.find(':') != -1:
@@ -39,17 +39,17 @@ class DNALandmarkBuilding(DNANode):
             #TODO: dna logging
             #raise DNAError('DNALandmarkBuilding uses unknown code %s' % self.code)
             pass
-        self.node = node.copyTo(parent)
-        self.node.setName(self.id)
-        self.node.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
+        np = node.copyTo(parent)
+        np.setName(self.id)
+        np.setPosHprScale(self.getPos(), self.getHpr(), self.getScale())
 
-        self.setupSuitBuildingOrigin(self.node, self.node)
+        self.setupSuitBuildingOrigin(np, np)
         gr = SceneGraphReducer()
-        gr.flatten(self.node.getNode(0), 0)
-        return self.node
+        gr.flatten(np.getNode(0), 0)
+        return np
 
     def _storeData(self, data):
-        block = data.getBlock(DNAUtil.getBlockFromName(self.name))
+        block = data.getBlock(DNAUtil.getBlockFromName(self.id))
         block.title = self.getTitle()
         block.buildingType = self.type
         block.zone = self.getVisGroup().getZone()

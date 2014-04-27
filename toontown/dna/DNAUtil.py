@@ -17,10 +17,10 @@ def getVisGroups(root):
     return getChildrenOfType(DNAVisGroup)
 
 
-INDEX_REGEX = re.compile('tb([0-9]+):')
+INDEX_REGEX = re.compile('([a-z][a-z])([0-9]+):')
 def getBlockFromName(name):
     match = INDEX_REGEX.match(name)
     if not match:
         return None
     else:
-        return int(match.group(1))
+        return int(match.group(2))
