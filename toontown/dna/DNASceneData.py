@@ -18,7 +18,6 @@ class DNASuitGraph:
         for edge in edges:
             try:
                 a = self._pointId2point[edge.a]
-                a.zone = int(edge.parent.getZone())
                 b = self._pointId2point[edge.b]
             except KeyError:
                 raise DNAError('Edge connects a nonexistent point!')
