@@ -1833,9 +1833,9 @@ class OTPClientRepository(ClientRepositoryBase):
             di2 = DatagramIterator(dg, di.getCurrentIndex())
             doId = di2.getUint32()
             if doId in self.deferredDoIds:
-                self.deferredDoIds[doId][3].append((CLIENT_OBJECT_LOCATION, (dg, di)))
+                self.deferredDoIds[doId][2].append((CLIENT_OBJECT_LOCATION, (dg, di)))
             elif doId in self.sortedDoIds:
-                self.sortedDoIds[doId][3].append((CLIENT_OBJECT_LOCATION, (dg, di)))
+                self.sortedDoIds[doId][2].append((CLIENT_OBJECT_LOCATION, (dg, di)))
             else:
                 self.handleObjectLocation(di)
         else:
