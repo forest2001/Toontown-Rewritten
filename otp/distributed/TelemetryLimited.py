@@ -18,5 +18,7 @@ class TelemetryLimited:
             self._limits.remove(limit)
 
     def enforceTelemetryLimits(self):
+        if self.isEmpty():
+            return
         for limit in self._limits:
             limit(self)
