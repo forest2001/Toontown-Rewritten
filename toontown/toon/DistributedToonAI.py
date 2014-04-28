@@ -267,10 +267,22 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             # Do we want to start the playground toonup tick?
-            if ToontownGlobals.safeZoneCountMap.has_key(zoneId):
+            if ToontownGlobals.safeZoneCountMap.has_key(ZoneUtil.getBranchZone(zoneId)):
                 self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
             else:
-                self.stopToonUp()
+                zoneOwner = self.air.zoneId2owner.get(zoneId)
+                if not zoneOwner:
+                    self.stopToonUp()
+                else:
+                    from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
+                    from toontown.safezone.DistributedGolfKartAI import DistributedGolfKartAI
+                    from DistributedNPCPartyPersonAI import DistributedNPCPartyPersonAI
+                    if isinstance(zoneOwner, (DistributedRacePadAI, DistributedGolfKartAI, DistributedNPCPartyPersonAI)):
+                        self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+                    elif zoneOwner in [self.air.partyManager, self.air.estateManager, 'MinigameCreatorAI']:
+                        self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+                    else:
+                        self.stopToonUp()
             
             # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
