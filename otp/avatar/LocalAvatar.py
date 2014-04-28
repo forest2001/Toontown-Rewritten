@@ -806,6 +806,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         camera.setPos(targetCamPos)
         camera.lookAt(targetCamLookAt)
         targetCamHpr = camera.getHpr()
+        for x in xrange(3):
+            # This function is from PythonUtil:
+            targetCamHpr[x] = fitDestAngle2Src(curCamHpr[x], targetCamHpr[x])
         hprDone = 0
         if Vec3(curCamHpr - targetCamHpr).length() <= CLOSE_ENOUGH:
             hprDone = 1
