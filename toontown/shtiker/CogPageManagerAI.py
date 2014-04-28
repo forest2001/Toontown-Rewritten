@@ -44,7 +44,7 @@ class CogPageManagerAI:
                 buildingQuota = COG_QUOTAS[1][cogIndex % SuitDNA.suitsPerDept]
                 cogQuota = COG_QUOTAS[0][cogIndex % SuitDNA.suitsPerDept]
                 if cogCounts[cogIndex] >= buildingQuota:
-                    return
+                    continue
                 
                 cogCounts[cogIndex] += 1
                 
@@ -69,8 +69,8 @@ class CogPageManagerAI:
                 status =  toon.cogs[dept*SuitDNA.suitsPerDept + cog]
                 if status != COG_COMPLETE2:
                     buildingRadar = 0
-                if status != COG_COMPLETE1 or status != COG_COMPLETE2:
-                    cogRadar = 0
+                    if status != COG_COMPLETE1:
+                        cogRadar = 0
             newCogRadar[dept] = cogRadar
             newBuildingRadar[dept] = buildingRadar
         toon.b_setCogRadar(newCogRadar)
