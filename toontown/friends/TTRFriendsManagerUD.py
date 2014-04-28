@@ -262,7 +262,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if friendIds[0] == requesterId:
             # This toon has no friends, no point doing database operations.
             return
-        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
         
@@ -274,7 +274,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not success:
             if friendIds:
                 # Move on to the next friend.
-                fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+                fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
                 fsm.start()
                 self.fsms[requesterId] = fsm
             else:
