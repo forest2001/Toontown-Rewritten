@@ -48,8 +48,10 @@ class DNALandmarkBuilding(DNANode):
 
         self.setupSuitBuildingOrigin(np)
 
-        np.flattenMedium()
         return np
+
+    def _postGenerate(self, storage, np):
+        np.flattenStrong()
 
     def _storeData(self, data):
         block = data.getBlock(DNAUtil.getBlockFromName(self.id))
