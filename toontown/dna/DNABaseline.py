@@ -29,4 +29,8 @@ class DNABaseline(DNANode):
 
         return np
 
+    def _postGenerate(self, storage, np):
+        # Scale is managed by the typesetter.
+        np.setScale(1,1,1)
+
 registerElement(DNABaseline)

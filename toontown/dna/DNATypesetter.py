@@ -18,7 +18,6 @@ class DNATypesetter:
             font = self.dnaStorage.findFont(self.baseline.code)
             if font is None:
                 font = TextProperties.getDefaultFont()
-                3/0
             tn.setFont(font)
 
             # If this is the first glyph, and we've got the 'b' flag, we need
@@ -27,6 +26,7 @@ class DNATypesetter:
                 tn.setTextScale(1.5)
 
             np = root.attachNewNode(tn)
+            np.setScale(self.baseline.getScale())
             np.setDepthWrite(0)
             if i&1:
                 np.setPos(x+self.baseline.stumble, 0, self.baseline.stomp)
@@ -34,7 +34,7 @@ class DNATypesetter:
             else:
                 np.setPos(x-self.baseline.stumble, 0, -self.baseline.stomp)
                 np.setR(self.baseline.wiggle)
-            x += tn.getWidth() + self.baseline.kern
+            x += tn.getWidth()*np.getSx() + self.baseline.kern
 
         # Center...
         for child in root.getChildren():
