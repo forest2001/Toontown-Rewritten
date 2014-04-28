@@ -60,6 +60,7 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
+        self.zoneOwners = {}
 
         NPCToons.generateZone2NpcDict()
 
@@ -112,11 +113,22 @@ class ToontownAIRepository(ToontownInternalRepository):
     def decrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
 
-    def allocateZone(self):
-        return self.zoneAllocator.allocate()
+    def allocateZone(self, owner=None):
+        zoneId = self.zoneAllocator.allocate()
+        if owner:
+            self.zoneOwners[zoneId] = owner
+        return zoneId
 
     def deallocateZone(self, zone):
+        if self.zoneOwners.get(zone):
+            del self.zoneOwners[zone]
         self.zoneAllocator.free(zone)
+        
+    def zoneId2owner(self, zone):
+        owner = self.zoneOwners.get(zone)
+        if owner:
+            return owner
+        return None
 
     def getZoneDataStore(self):
         return self.zoneDataStore
