@@ -18,7 +18,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.golf import BuildGeometry
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
-from toontown.dna.DNAParser import *
+from toontown.dna.DNAStorage import DNAStorage
 from otp.nametag import NametagGroup
 from direct.interval.IntervalGlobal import *
 import random
@@ -122,10 +122,12 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.storageDNAFile = self.data['DNA_TRIO'][1]
         self.dnaFile = self.data['DNA_TRIO'][2]
         self.dnaStore = DNAStorage()
-        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.xml')
-        loader.loadDNAFile(self.dnaStore, self.storageDNAFile)
-        loader.loadDNAFile(self.dnaStore, self.safeZoneStorageDNAFile)
-        node = loader.loadDNAFile(self.dnaStore, self.dnaFile)
+        loader.loadDNA('phase_4/dna/storage.xml').store(self.dnaStore)
+        loader.loadDNA(self.storageDNAFile).store(self.dnaStore)
+        loader.loadDNA(self.safeZoneStorageDNAFile).store(self.dnaStore)
+        sceneTree = loader.loadDNA(self.dnaFile)
+        node = sceneTree.generate(self.dnaStore)
+        self.sceneData = sceneTree.generateData()
         self.scene = hidden.attachNewNode(node)
         self.construct()
         purchaseModels = loader.loadModel('phase_4/models/gui/purchase_gui')
@@ -1412,7 +1414,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.sky.find('**/cloud1').setBin('background', -99)
         self.sky.find('**/cloud2').setBin('background', -98)
         self.scene.reparentTo(render)
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
         #Causes a crash, disabling has seemingly no bad effect.
@@ -1436,7 +1438,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.sky.find('**/skypanel5').setBin('background', -94)
         self.sky.find('**/skypanel6').setBin('background', -93)
         self.scene.reparentTo(render)
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
         boatGeom = self.scene.find('**/donalds_boat')
@@ -1497,7 +1499,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
             maze.setTag('sceneryIndex', '%s' % len(self.scenery))
             self.scenery.append(maze)
 
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
 
@@ -1524,7 +1526,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.scene.find('**/doorFrameHoleLeft_1*').hide()
         self.scene.find('**/doorFrameHoleRight').hide()
         self.scene.find('**/doorFrameHoleLeft').hide()
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
         lm = self.scene.findAllMatches('**/*landmark*')
@@ -1547,7 +1549,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.scene.find('**/door_trigger_11*').hide()
         self.scene.find('**/doorFrameHoleRight_0*').hide()
         self.scene.find('**/doorFrameHoleLeft_0*').hide()
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
         self.snow = BattleParticles.loadParticleFile('snowdisk.ptf')
@@ -1578,7 +1580,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.scene.find('**/doorFrameHoleLeft_0*').hide()
         self.scene.find('**/doorFrameHoleRight_1*').hide()
         self.scene.find('**/doorFrameHoleLeft_1*').hide()
-        self.makeDictionaries(self.dnaStore)
+        self.makeDictionaries(self.sceneData)
         self.createAnimatedProps(self.nodeList)
         self.startAnimatedProps()
 
@@ -1586,12 +1588,11 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.stopAnimatedProps()
         self.deleteAnimatedProps()
 
-    def makeDictionaries(self, dnaStore):
+    def makeDictionaries(self, sceneData):
         self.nodeList = []
-        for i in range(dnaStore.getNumDNAVisGroups()):
-            groupFullName = dnaStore.getDNAVisGroupName(i)
-            groupName = base.cr.hoodMgr.extractGroupName(groupFullName)
-            groupNode = self.scene.find('**/' + groupFullName)
+        for visgroup in sceneData.visgroups:
+            groupName = base.cr.hoodMgr.extractGroupName(visgroup.name)
+            groupNode = self.scene.find('**/' + visgroup.name)
             if groupNode.isEmpty():
                 self.notify.error('Could not find visgroup')
             self.nodeList.append(groupNode)
