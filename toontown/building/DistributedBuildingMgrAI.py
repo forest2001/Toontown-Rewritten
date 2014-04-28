@@ -6,7 +6,7 @@ import DistributedBuildingAI
 import HQBuildingAI
 import GagshopBuildingAI
 #import PetshopBuildingAI
-#from toontown.building.KartShopBuildingAI import KartShopBuildingAI
+from toontown.building.KartShopBuildingAI import KartShopBuildingAI
 #from toontown.building import DistributedAnimBuildingAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import ZoneUtil
@@ -223,7 +223,6 @@ class DistributedBuildingMgrAI:
         return building
 
     def newKartShopBuilding(self, blockNumber):
-        return
         dnaStore = self.air.dnaStoreMap[self.canonicalBranchID]
         exteriorZoneId = dnaStore.getBlock(blockNumber).zone
         exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchID)

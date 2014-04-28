@@ -1,21 +1,20 @@
 from toontown.hood import HoodAI
-from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
-from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
-from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockAI, DistributedViewingBlockAI
-from toontown.building.DistributedDoorAI import DistributedDoorAI
-from toontown.building.DistributedKartShopInteriorAI import DistributedKartShopInteriorAI
-from toontown.toon import NPCToons
-from toontown.building import DoorTypes
-from toontown.racing import RaceGlobals
-from otp.ai.MagicWordGlobal import *
+from toontown.building.DistributedBuildingMgrAI import DistributedBuildingMgrAI
 
 class GSHoodAI(HoodAI.HoodAI):
     HOOD = 8000
 
     def __init__(self, air):
         HoodAI.HoodAI.__init__(self, air)
-        self.racepads = []
-        self.viewpads = []
+        self.createZone()
+        self.spawnObjects()
         
     def createZone(self):
-        self.spawnObjects()
+        HoodAI.HoodAI.createZone(self)
+        self.air.dnaStoreMap[self.HOOD] = self.air.loadDNA(self.air.genDNAFileName(self.HOOD)).generateData()
+        self.buildingMgr = DistributedBuildingMgrAI(self.air, self.HOOD, self.air.dnaStoreMap[self.HOOD], self.air.trophyMgr)
+        
+    def spawnObjects(self):
+        HoodAI.HoodAI.spawnObjects(self)
+        filename = self.air.genDNAFileName(self.HOOD)
+        self.air.dnaSpawner.spawnObjects(filename, self.HOOD)
