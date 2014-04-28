@@ -206,7 +206,7 @@ class DistributedGolfKartAI(DistributedObjectAI, FSM):
         return task.done
 
     def createGolfGame(self, players):
-        gameZone = self.air.allocateZone()
+        gameZone = self.air.allocateZone(owner=self)
         
         course = DistributedGolfCourseAI(self.air)
         course.setGolferIds(players)

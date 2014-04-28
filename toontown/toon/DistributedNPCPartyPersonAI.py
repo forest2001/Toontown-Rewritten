@@ -85,7 +85,7 @@ class DistributedNPCPartyPersonAI(DistributedNPCToonBaseAI):
                     flag = NPCToons.PARTY_MOVIE_ONLYPAID
                     self.d_setMovie(avId, flag)
                 else:
-                    zoneId = self.air.allocateZone()
+                    zoneId = self.air.allocateZone(owner=self)
                     hoodId = ToontownGlobals.PartyHood
                     self.d_setMovie(avId, NPCToons.PARTY_MOVIE_COMPLETE, [hoodId, zoneId])
         else:

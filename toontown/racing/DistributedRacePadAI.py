@@ -118,7 +118,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         self.b_setState('AllAboard', globalClockDelta.getRealNetworkTime())
         
     def createRace(self):
-        self.raceZone = self.air.allocateZone()
+        self.raceZone = self.air.allocateZone(owner=self)
         avatars = []
         for block in self.startingBlocks:
             if block.avId != 0:

@@ -292,7 +292,7 @@ class EstateManagerAI(DistributedObjectAI):
             # finishes anyway.
             return
 
-        zoneId = self.air.allocateZone()
+        zoneId = self.air.allocateZone(owner=self)
 
         def estateLoaded(success):
             if success:

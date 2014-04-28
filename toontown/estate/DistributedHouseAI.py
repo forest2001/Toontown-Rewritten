@@ -30,7 +30,7 @@ class DistributedHouseAI(DistributedObjectAI):
         
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
-        self.interiorZone = self.air.allocateZone()
+        self.interiorZone = self.air.allocateZone(owner=self.air.estateManager)
             
         self.door = DistributedHouseDoorAI(self.air, self.getDoId(), DoorTypes.EXT_STANDARD)
         self.door.setSwing(3)
