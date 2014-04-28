@@ -96,11 +96,13 @@ class DistributedNPCToon(DistributedNPCToonBase):
     def setupCamera(self, mode):
         camera.wrtReparentTo(render)
         if mode == NPCToons.QUEST_MOVIE_QUEST_CHOICE or mode == NPCToons.QUEST_MOVIE_TRACK_CHOICE:
-            self.cameraLerp = LerpPosHprInterval(camera, 2, Point3(5, 9, self.getHeight() - 0.5), Point3(155, -2, 0), other=self, blendType='easeInOut')
+            quat = Quat()
+            quat.setHpr((155, -2, 0))
+            camera.posQuatInterval(1, Point3(5, 9, self.getHeight() - 0.5), quat, other=self, blendType='easeOut').start()
         else:
-            self.cameraLerp = LerpPosHprInterval(camera, 2, Point3(-5, 9, self.getHeight() - 0.5), Point3(-150, -2, 0), other=self, blendType='easeInOut')
-        self.cameraLerp.start()
-
+            quat = Quat()
+            quat.setHpr((-150, -2, 0))
+            camera.posQuatInterval(1, Point3(-5, 9, self.getHeight() - 0.5), quat, other=self, blendType='easeOut').start()
     def setMovie(self, mode, npcId, avId, quests, timestamp):
         timeStamp = ClockDelta.globalClockDelta.localElapsedTime(timestamp)
         isLocalToon = avId == base.localAvatar.doId
