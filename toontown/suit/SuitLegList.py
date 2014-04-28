@@ -161,7 +161,8 @@ class SuitLeg:
         self.type = type
 
     def getLegTime(self):
-        if self.type == SuitLeg.TWalk:
+        if self.type in (SuitLeg.TWalk, SuitLeg.TWalkFromStreet,
+                         SuitLeg.TWalkToStreet):
             return (self.posA-self.posB).length()/ToontownGlobals.SuitWalkSpeed
         elif self.type == SuitLeg.TFromSky:
             return SuitTimings.fromSky
