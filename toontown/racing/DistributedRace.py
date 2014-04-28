@@ -27,7 +27,7 @@ from toontown.minigame import MinigameRulesPanel
 from toontown.racing import Piejectile
 from toontown.racing import EffectManager
 from toontown.racing import PiejectileManager
-from toontown.dna.DNAParser import *
+from toontown.dna.DNAStorage import DNAStorage
 from otp.ai.MagicWordGlobal import *
 
 class DistributedRace(DistributedObject.DistributedObject):
@@ -716,18 +716,18 @@ class DistributedRace(DistributedObject.DistributedObject):
 
     def loadUrbanTrack(self):
         self.dnaStore = DNAStorage()
-        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_town.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_4/dna/storage_TT.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_5/dna/storage_TT_town.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_BR_town.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL.xml')
-        loader.loadDNAFile(self.dnaStore, 'phase_8/dna/storage_DL_town.xml')
+        loader.loadDNA('phase_4/dna/storage.xml').store(self.dnaStore)
+        loader.loadDNA('phase_5/dna/storage_town.xml').store(self.dnaStore)
+        loader.loadDNA('phase_4/dna/storage_TT.xml').store(self.dnaStore)
+        loader.loadDNA('phase_5/dna/storage_TT_town.xml').store(self.dnaStore)
+        loader.loadDNA('phase_8/dna/storage_BR.xml').store(self.dnaStore)
+        loader.loadDNA('phase_8/dna/storage_BR_town.xml').store(self.dnaStore)
+        loader.loadDNA('phase_8/dna/storage_DL.xml').store(self.dnaStore)
+        loader.loadDNA('phase_8/dna/storage_DL_town.xml').store(self.dnaStore)
         dnaFile = 'phase_6/dna/urban_track_town.xml'
         if self.trackId in (RaceGlobals.RT_Urban_2, RaceGlobals.RT_Urban_2_rev):
             dnaFile = 'phase_6/dna/urban_track_town_B.xml'
-        node = loader.loadDNAFile(self.dnaStore, dnaFile)
+        node = loader.loadDNA(dnaFile).generate(self.dnaStore)
         self.townGeom = self.geom.attachNewNode(node)
         self.townGeom.findAllMatches('**/+CollisionNode').stash()
         self.buildingGroups = {}
