@@ -640,7 +640,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         toonId = self.toon.getDoId()
         avatarName = line[1]
         avatar = self.getVar(avatarName)
-        chatString = eval('TTLocalizer.' + line[2])
+        chatString = getattr(TTLocalizer, line[2])
         chatFlags = CFSpeech | CFTimeout
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
         if extraChatFlags:
@@ -680,7 +680,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         toonId = self.toon.getDoId()
         avatarName = line[1]
         avatar = self.getVar(avatarName)
-        chatString = eval('TTLocalizer.' + line[2])
+        chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
         return Func(avatar.setPageChat, toonId, 0, chatString, quitButton, extraChatFlags, dialogueList)
 
@@ -688,7 +688,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         lineLength = len(line)
         avatarName = line[1]
         avatar = self.getVar(avatarName)
-        chatString = eval('TTLocalizer.' + line[2])
+        chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
@@ -696,7 +696,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         lineLength = len(line)
         avatarName = line[1]
         avatar = self.getVar(avatarName)
-        chatString = eval('TTLocalizer.' + line[2])
+        chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
         if len(dialogueList) > 0:
             dialogue = dialogueList[0]
@@ -711,8 +711,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         toAvatarKey = line[2]
         toAvatar = self.getVar(toAvatarKey)
         localizerAvatarName = toAvatar.getName().capitalize()
-        toAvatarName = eval('TTLocalizer.' + localizerAvatarName)
-        chatString = eval('TTLocalizer.' + line[3])
+        toAvatarName = getattr(TTLocalizer, localizerAvatarName)
+        chatString = getattr(TTLocalizer, line[3])
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
