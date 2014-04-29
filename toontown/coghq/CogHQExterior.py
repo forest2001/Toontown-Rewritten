@@ -88,7 +88,8 @@ class CogHQExterior(BattlePlace.BattlePlace):
         self.fsm.request(how, [requestStatus])
 
     def exit(self):
-        base.cr.removeInterest(self.visInterest)
+        if self.visInterest:
+            base.cr.removeInterest(self.visInterest)
         self.fsm.requestFinalState()
         self._telemLimiter.destroy()
         del self._telemLimiter
