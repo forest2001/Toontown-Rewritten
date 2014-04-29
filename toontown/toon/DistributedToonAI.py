@@ -2669,7 +2669,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return False
         
     def considerToonUp(self, zoneId):
-        if self.shouldToonUp(zoneId) is None:
+        if zoneId == OTPGlobals.QuietZone:
             # Don't consider anything, we're in the QuietZone. Shh!
             return
         if self.shouldToonUp(zoneId):
