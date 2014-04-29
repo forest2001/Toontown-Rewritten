@@ -18,7 +18,7 @@ from toontown.building import BoardingGroupShow
 class DistributedElevator(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevator')
     JumpOutOffsets = JumpOutOffsets
-    deferFor = 1
+    sortOrder = 1
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
