@@ -267,22 +267,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             # Do we want to start the playground toonup tick?
-            if ToontownGlobals.safeZoneCountMap.has_key(ZoneUtil.getBranchZone(zoneId)):
-                self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
-            else:
-                zoneOwner = self.air.zoneId2owner.get(zoneId)
-                if not zoneOwner:
-                    self.stopToonUp()
-                else:
-                    from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
-                    from toontown.safezone.DistributedGolfKartAI import DistributedGolfKartAI
-                    from DistributedNPCPartyPersonAI import DistributedNPCPartyPersonAI
-                    if isinstance(zoneOwner, (DistributedRacePadAI, DistributedGolfKartAI, DistributedNPCPartyPersonAI)):
-                        self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
-                    elif zoneOwner in [self.air.partyManager, self.air.estateManager, 'MinigameCreatorAI']:
-                        self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
-                    else:
-                        self.stopToonUp()
+            self.considerToonUp(zoneId)
             
             # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
@@ -2660,6 +2645,40 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def stopToonUp(self):
         taskMgr.remove(self.uniqueName('safeZoneToonUp'))
         self.ignore(self.air.getAvatarExitEvent(self.getDoId()))
+        
+    def shouldToonUp(self, zoneId):
+        if zoneId == OTPGlobals.QuietZone:
+            return None
+        if ToontownGlobals.safeZoneCountMap.has_key(ZoneUtil.getBranchZone(zoneId)):
+            return True
+        else:
+            zoneOwner = self.air.zoneId2owner.get(zoneId)
+            if not zoneOwner:
+                return False
+            else:
+                from toontown.racing.DistributedRacePadAI import DistributedRacePadAI
+                from toontown.safezone.DistributedGolfKartAI import DistributedGolfKartAI
+                from DistributedNPCPartyPersonAI import DistributedNPCPartyPersonAI
+                if isinstance(zoneOwner, (DistributedRacePadAI, DistributedGolfKartAI, DistributedNPCPartyPersonAI)):
+                    return True
+                elif zoneOwner in [self.air.partyManager, self.air.estateManager, 'MinigameCreatorAI']:
+                    return True
+                else:
+                    return False
+        # Incase for whatever reason we even get to this stage...
+        return False
+        
+    def considerToonUp(self, zoneId):
+        if self.shouldToonUp(zoneId) is None:
+            # Don't consider anything, we're in the QuietZone. Shh!
+            return
+        if self.shouldToonUp(zoneId):
+            if taskMgr.hasTaskNamed(self.uniqueName('safeZoneToonUp')):
+                # Do nothing, we were already in a safezone!
+                return
+            self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+        else:
+            self.stopToonUp()
 
     def startToonUp(self, healFrequency):
         self.stopToonUp()
