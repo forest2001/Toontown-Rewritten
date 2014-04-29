@@ -16,6 +16,7 @@ from toontown.suit import Suit
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from otp.speedchat import SpeedChatGlobals
+from otp.nametag.NametagConstants import *
 from toontown.ai import DistributedBlackCatMgr
 from direct.showbase import PythonUtil
 from direct.interval.IntervalGlobal import *
