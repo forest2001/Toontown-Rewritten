@@ -13,7 +13,7 @@ class DNAText(DNASceneElement):
         self.text = ''
 
     def handleText(self, text):
-        self.text = text
+        self.text += text
 
     def _makeNode(self, storage, parent):
         typesetter = DNATypesetter(self.parent, storage)

@@ -12,7 +12,7 @@ class DNATitle(DNASceneElement):
         self.title = ''
 
     def handleText(self, text):
-        self.title = text
+        self.title += text
 
 
     def _makeNode(self, storage, parent):
