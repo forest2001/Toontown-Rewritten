@@ -48,7 +48,13 @@ class DNAFlatBuilding(DNANode):
 
         barrier.copyTo(node)
 
-        wall = storage.findNode('wall_suit_build1_ur')
+        strIndex = str(abs(node.getPos().length()))
+        if strIndex != '.':
+            index = int(strIndex[1:2])
+            wall = storage.findNode(storage.getCatalogCode('suit_wall', int(index)))
+        else:
+            wall = storage.findNode(storage.getCatalogCode('suit_wall', 0))
+
         if wall:
             wallNode = wall.copyTo(node)
             wallNode.setScale(self.width, 1, height)
@@ -58,5 +64,13 @@ class DNAFlatBuilding(DNANode):
 
         node.flattenStrong()
         node.stash()
+
+    def getCatalogCodes(self, storage, category):
+        numCodes = storage.getNumCatalogCodes(category)
+        codes = []
+        for i in range(numCodes):
+            codes.append(storage.getCatalogCode(category, i))
+
+        return codes
 
 registerElement(DNAFlatBuilding)
