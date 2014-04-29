@@ -3,7 +3,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.coghq import SellbotCogHQLoader
 
 class SellbotHQ(CogHood.CogHood):
-    dnaFile = 'phase_9/dna/cog_hq_sellbot_sz.xml'
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         CogHood.CogHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
