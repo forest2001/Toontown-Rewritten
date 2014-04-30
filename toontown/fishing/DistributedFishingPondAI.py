@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.dna.DNASpawnerAI import *
 from toontown.dna.DNAProp import DNAProp
@@ -56,6 +57,13 @@ def spawn(air, zone, element, match):
     area = ZoneUtil.getBranchZone(zone)
     pond.setArea(area)
     pond.generateWithRequired(zone)
+    bingoMgr = DistributedPondBingoManagerAI(air)
+    bingoMgr.setPondDoId(pond.getDoId())
+    bingoMgr.generateWithRequired(zone)
+    pond.bingoMgr = bingoMgr
+    pond.bingoMgr.createGame()
+    simbase.air.fishManager.ponds[zone] = pond
+    
     for i in range(FishingTargetGlobals.getNumTargets(area)):
                 target = DistributedFishingTargetAI(simbase.air)
                 target.setPondDoId(pond.getDoId())
