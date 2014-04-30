@@ -1637,6 +1637,28 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def announceBingo(self):
         self.setChatAbsolute(TTLocalizer.FishBingoBingo, CFSpeech | CFTimeout)
+        
+    def b_setFishBingoTutorialDone(self, bDone):
+        self.d_setFishBingoTutorialDone(bDone)
+        self.setFishBingoTutorialDone(bDone)
+
+    def d_setFishBingoTutorialDone(self, bDone):
+        self.sendUpdate('setFishBingoTutorialDone', [bDone])
+
+    def setFishBingoTutorialDone(self, bDone):
+        self.bFishBingoTutorialDone = bDone
+
+    def b_setFishBingoMarkTutorialDone(self, bDone):
+        self.d_setFishBingoMarkTutorialDone(bDone)
+        self.setFishBingoMarkTutorialDone(bDone)
+
+    def d_setFishBingoMarkTutorialDone(self, bDone):
+        self.sendUpdate('setFishBingoMarkTutorialDone', [bDone])
+
+    def setFishBingoMarkTutorialDone(self, bDone):
+        self.bFishBingoMarkTutorialDone = bDone
+
+
 
     def squish(self, damage):
         if self == base.localAvatar:
@@ -1785,6 +1807,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         def getKartingPersonalBestAll(self):
             return self.kartingPersonalBest + self.kartingPersonalBest2
+         
 
     if hasattr(base, 'wantPets') and base.wantPets:
 
@@ -1814,26 +1837,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         def setPetTutorialDone(self, bDone):
             self.bPetTutorialDone = bDone
-
-        def b_setFishBingoTutorialDone(self, bDone):
-            self.d_setFishBingoTutorialDone(bDone)
-            self.setFishBingoTutorialDone(bDone)
-
-        def d_setFishBingoTutorialDone(self, bDone):
-            self.sendUpdate('setFishBingoTutorialDone', [bDone])
-
-        def setFishBingoTutorialDone(self, bDone):
-            self.bFishBingoTutorialDone = bDone
-
-        def b_setFishBingoMarkTutorialDone(self, bDone):
-            self.d_setFishBingoMarkTutorialDone(bDone)
-            self.setFishBingoMarkTutorialDone(bDone)
-
-        def d_setFishBingoMarkTutorialDone(self, bDone):
-            self.sendUpdate('setFishBingoMarkTutorialDone', [bDone])
-
-        def setFishBingoMarkTutorialDone(self, bDone):
-            self.bFishBingoMarkTutorialDone = bDone
 
         def b_setPetMovie(self, petId, flag):
             self.d_setPetMovie(petId, flag)
