@@ -150,6 +150,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.specialDoorTypes.has_key(self.doorType):
             building = self.getBuilding()
             doorTrigger = building.find('**/door_' + str(self.doorIndex) + '/**/door_trigger*')
+            doorTrigger.setY(doorTrigger.getY() - 3)
             doorTrigger.node().setName(self.getTriggerName())
         else:
             return

@@ -2,6 +2,7 @@ from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.actor import Actor
 from otp.avatar import Avatar
+from otp.nametag.NametagGroup import NametagGroup
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from direct.fsm import FSM

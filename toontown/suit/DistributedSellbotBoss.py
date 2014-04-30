@@ -28,6 +28,8 @@ import random
 import math
 from toontown.coghq import CogDisguiseGlobals
 from toontown.suit import SellbotBossGlobals
+from otp.nametag.NametagConstants import *
+from otp.nametag import NametagGlobals
 OneBossCog = None
 
 class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
