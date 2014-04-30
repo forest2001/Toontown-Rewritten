@@ -4975,7 +4975,7 @@ def tracks(toonup, trap, lure, sound, throw, squirt, drop):
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, int])    
 def exp(track, amt):
     """ Set your experience to the amount specified for a single track. """
-    trackIndex = TTLocalizer.BattleGlobalTracks.index(str)
+    trackIndex = TTLocalizer.BattleGlobalTracks.index(track)
     av = spellbook.getTarget()
     av.experience.setExp(trackIndex, amt)
     av.b_setExperience(av.experience.makeNetString())
