@@ -4951,3 +4951,16 @@ def pinkslips():
     """ Restock (to 99) CEO pink slips. """
     spellbook.getTarget().b_setPinkSlips(99)
     return 'Restocked 99 pink slips successfully!'
+    
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+def questTier(tier):
+    """
+    Set toon's tier to specified value. Note that this does not give the
+    toon the rewards they would normally require to be in this tier, so
+    use this magic word with caution. This will also reset all of the
+    target's quests, so they will lose any progress on any tasks that
+    they are currently working on.
+    """
+    av.b_setQuests([])
+    av.b_setRewardHistory(tier, [])
+    return "Set %s's quest tier to %d." % (av.getName(), tier)
