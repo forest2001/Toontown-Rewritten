@@ -17,7 +17,6 @@ class SellbotHQAI(CogHoodAI):
         
         # Create Suit Planners in the cog playground and factory waiting area.
         self.createSuitPlanner(self.HOOD)
-        # TODO: SuitPlanner doesn't spawn cogs correctly in factory waiting area.
         self.createSuitPlanner(ToontownGlobals.SellbotFactoryExt)
         
         # Create factory elevators.
