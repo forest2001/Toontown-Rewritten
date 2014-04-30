@@ -51,7 +51,8 @@ class Nametag3d(Nametag):
 
         # As 3D nametags can move around on their own, we need to update the
         # click frame constantly:
-        if NodePath.anyPath(self).isHidden():
+        path = NodePath.anyPath(self)
+        if path.isHidden() or path.getTop() != NametagGlobals.camera.getTop():
             self.stashClickRegion()
         else:
             left, right, bottom, top = self.frame
