@@ -147,6 +147,10 @@ NAMETAG_COLORS = {
     ),
 }
 
+ARROW_COLORS = {
+    CCSuit: (0.8, 0.4, 0.0, 1.0),
+}
+
 DEFAULT_WORDWRAPS = {
     CCNormal: 7.5,
     CCNoChat: 7.5,
