@@ -4965,3 +4965,18 @@ def questTier(tier):
     av.b_setQuests([])
     av.b_setRewardHistory(tier, [])
     return "Set %s's quest tier to %d." % (av.getName(), tier)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])
+def tracks(toonup, trap, lure, sound, throw, squirt, drop):
+    """ Set access for each of the 7 gag tracks. """
+    spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
+    return "Set track access accordingly."
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, int])    
+def exp(track, amt):
+    """ Set your experience to the amount specified for a single track. """
+    trackIndex = TTLocalizer.BattleGlobalTracks.index(str)
+    av = spellbook.getTarget()
+    av.experience.setExp(trackIndex, amt)
+    av.b_setExperience(av.experience.makeNetString())
+    return "Set %s exp to %d successfully." % (track, amt)
