@@ -2982,7 +2982,7 @@ class Toon(Avatar.Avatar, ToonHead):
             self.nametag.setDisplayName(TTLocalizer.SuitBaseNameWithLevel % {'name': name,
              'dept': suitName,
              'level': self.cogLevels[suitDept] + 1})
-            self.nametag.setNameWordwrap(9.0)
+            self.nametag.setWordwrap(9.0)
 
     def takeOffSuit(self):
         if not self.isDisguised:
@@ -3005,7 +3005,7 @@ class Toon(Avatar.Avatar, ToonHead):
         Emote.globalEmote.releaseAll(self)
         self.isDisguised = 0
         self.setFont(ToontownGlobals.getToonFont())
-        self.nametag.setNameWordwrap(-1)
+        self.nametag.setWordwrap(None)
         if hasattr(base, 'idTags') and base.idTags:
             name = self.getAvIdName()
         else:
