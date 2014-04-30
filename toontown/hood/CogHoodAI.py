@@ -20,7 +20,7 @@ class CogHoodAI(HoodAI):
         self.suitPlanners = []
         # TODO: Boarding groups.
     
-    def createElevator(self, dclass, mgr, extZone, intZone, index=0, minLaff):
+    def createElevator(self, dclass, mgr, extZone, intZone, index=0, minLaff=0):
         elevator = dclass(self.air, mgr, intZone, index, antiShuffle=self.air.config.GetInt('want-anti-shuffle', 0), minLaff=minLaff)
         elevator.generateWithRequired(extZone)
         self.elevators.append(elevator)
