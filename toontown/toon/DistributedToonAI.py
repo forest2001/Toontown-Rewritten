@@ -4961,6 +4961,7 @@ def questTier(tier):
     target's quests, so they will lose any progress on any tasks that
     they are currently working on.
     """
+    av = spellbook.getTarget()
     av.b_setQuests([])
     av.b_setRewardHistory(tier, [])
     return "Set %s's quest tier to %d." % (av.getName(), tier)
