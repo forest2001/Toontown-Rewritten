@@ -4980,3 +4980,16 @@ def exp(track, amt):
     av.experience.setExp(trackIndex, amt)
     av.b_setExperience(av.experience.makeNetString())
     return "Set %s exp to %d successfully." % (track, amt)
+    
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def disguise():
+    """ Set disguise type and level.  CURRENTLY MAX TOONS SUITS!!!"""
+    toon = spellbook.getTarget()
+    toon.b_setCogParts([
+        0, # Bossbot
+        0, # Lawbot
+        0, # Cashbot
+        CogDisguiseGlobals.PartsPerSuitBitmasks[3]  # Sellbot
+    ])
+    toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
+    toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
