@@ -11,6 +11,18 @@ class DNATypesetter:
     def generate(self, texts):
         root = NodePath('typesetter')
 
+        # Text parameters are irrespective of scale, so we compensate:
+        sx, sy, sz = self.baseline.getScale()
+        root.setScale(1/sx, 1/sy, 1/sz)
+
+        width = self.baseline.width
+        height = self.baseline.height
+        stumble = self.baseline.stumble
+        stomp = self.baseline.stomp
+        kern = self.baseline.kern
+        wiggle = self.baseline.wiggle
+        indent = self.baseline.indent
+
         x = 0.0
         for i,text in enumerate(texts):
             tn = TextNode('text')
@@ -26,23 +38,23 @@ class DNATypesetter:
                 tn.setTextScale(1.5)
 
             np = root.attachNewNode(tn)
-            np.setScale(self.baseline.getScale())
+            np.setScale(sx, sy, sz)
             np.setDepthWrite(0)
             if i&1:
-                np.setPos(x+self.baseline.stumble, 0, self.baseline.stomp)
-                np.setR(-self.baseline.wiggle)
+                np.setPos(x+stumble, 0, stomp)
+                np.setR(-wiggle)
             else:
-                np.setPos(x-self.baseline.stumble, 0, -self.baseline.stomp)
-                np.setR(self.baseline.wiggle)
-            x += tn.getWidth()*np.getSx() + self.baseline.kern
+                np.setPos(x-stumble, 0, -stomp)
+                np.setR(wiggle)
+            x += tn.getWidth()*sx + kern
 
         # Center...
         for child in root.getChildren():
             child.setX(child.getX()-x/2)
 
         # Is there a width+height on the baseline? If so, we have to curve:
-        if self.baseline.width != 0.0 and self.baseline.height != 0.0:
-            ellipse = DNAEllipseFormatter(self.baseline)
+        if width != 0.0 and height != 0.0:
+            ellipse = DNAEllipseFormatter(width, height, indent)
             ellipse.process(root)
 
         # Generate all TextNodes to GeomNodes, then flatten:
@@ -61,13 +73,13 @@ class DNATypesetter:
 
 class DNAEllipseFormatter:
     # This class curves the text if a width/height is specified.
-    def __init__(self, baseline):
-        self.baseline = baseline
-
+    def __init__(self, width, height, indent):
         # It's /2 because the height/width is specified as "diameter" while
         # elliptical calculations are done with radius axes.
-        self.a = self.baseline.width/2.
-        self.b = self.baseline.height/2.
+        self.a = width/2.
+        self.b = height/2.
+
+        self.indent = indent
 
     def arc(self, x):
         # TODO: This function needs to calculate the inverse arc length along
@@ -81,7 +93,7 @@ class DNAEllipseFormatter:
             deviation = node.getY()
 
             # Apply indent:
-            theta += self.baseline.indent * math.pi/180
+            theta += self.indent * math.pi/180
 
             x, y = math.sin(theta)*self.a, (math.cos(theta)-1)*self.b
             radius = math.sqrt(x*x + y*y)
