@@ -29,10 +29,9 @@ class DNAFlatBuilding(DNANode):
         barrier = barrierNode.copyTo(np)
         barrier.setScale(self.width, 1, height)
 
-        if 'safe_zone' not in str(np.getParent()):
-            type = DNAUtil.getBuildingClassFromName(self.id)
-            if type == 'tb':
-                self.generateSuitGeometry(storage, np, height, barrier)
+        type = DNAUtil.getBuildingClassFromName(self.id)
+        if type == 'tb':
+            self.generateSuitGeometry(storage, np, height, barrier)
 
         # We need to set collisions on all of our knock knock doors:
         block = DNAUtil.getBlockFromName(self.name)
@@ -49,12 +48,17 @@ class DNAFlatBuilding(DNANode):
 
         barrier.copyTo(node)
 
-        strIndex = str(abs(node.getPos().length()))
-        if strIndex != '.':
-            index = int(strIndex[1:2])
-            wall = storage.findNode(storage.getCatalogCode('suit_wall', int(index)))
+        block = DNAUtil.getBlockFromName(self.id)
+        x = int(np.getX())
+        y = int(np.getY())
+        seed = block*1231 + x*83 + y
+
+        codes = storage.getNumCatalogCodes('suit_wall')
+        if codes != 0:
+            wallCode = storage.getCatalogCode('suit_wall', seed%codes)
+            wall = storage.findNode(wallCode)
         else:
-            wall = storage.findNode(storage.getCatalogCode('suit_wall', 0))
+            wall = None
 
         if wall:
             wallNode = wall.copyTo(node)
