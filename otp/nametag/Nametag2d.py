@@ -9,6 +9,8 @@ class Nametag2d(Nametag, MarginPopup):
     ARROW_OFFSET = -1.0
     ARROW_SCALE = 1.5
 
+    DEFAULT_CHAT_WORDWRAP = 8.0
+
     def __init__(self):
         Nametag.__init__(self)
         MarginPopup.__init__(self)

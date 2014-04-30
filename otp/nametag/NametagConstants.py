@@ -147,6 +147,18 @@ NAMETAG_COLORS = {
     ),
 }
 
+DEFAULT_WORDWRAPS = {
+    CCNormal: 7.5,
+    CCNoChat: 7.5,
+    CCNonPlayer: 7.5,
+    CCSuit: 7.5,
+    CCToonBuilding: 8.5,
+    CCSuitBuilding: 8.5,
+    CCHouseBuilding: 10.0,
+    CCSpeedChat: 7.5,
+    CCFreeChat: 7.5
+}
+
 WTNormal = 0
 WTQuickTalker = 1
 WTSystem = 2

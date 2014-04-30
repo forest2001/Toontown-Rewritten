@@ -11,6 +11,8 @@ class Nametag(ClickablePopup):
     NAME_PADDING = 0.2
     CHAT_ALPHA = 1.0
 
+    DEFAULT_CHAT_WORDWRAP = 10.0
+
     IS_3D = False # 3D variants will set this to True.
 
     def __init__(self):
@@ -24,7 +26,7 @@ class Nametag(ClickablePopup):
         self.innerNP = NodePath.anyPath(self).attachNewNode('nametag_contents')
 
         self.wordWrap = 7.5
-        self.chatWordWrap = 10.0
+        self.chatWordWrap = None
 
         self.font = None
         self.name = ''
@@ -53,6 +55,9 @@ class Nametag(ClickablePopup):
 
     def setAvatar(self, avatar):
         self.avatar = avatar
+
+    def setChatWordwrap(self, chatWordWrap):
+        self.chatWordWrap = chatWordWrap
 
     def tick(self):
         pass # Does nothing by default.
@@ -90,7 +95,9 @@ class Nametag(ClickablePopup):
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
         balloon, frame = balloon.generate(text, self.font, textColor=self.chatFg,
-                                          balloonColor=color, wordWrap=self.chatWordWrap,
+                                          balloonColor=color,
+                                          wordWrap=self.chatWordWrap or \
+                                            self.DEFAULT_CHAT_WORDWRAP,
                                           button=self.getButton())
         balloon.reparentTo(self.innerNP)
         self.frame = frame

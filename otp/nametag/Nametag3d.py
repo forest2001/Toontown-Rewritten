@@ -63,6 +63,3 @@ class Nametag3d(Nametag):
 
     def getThoughtBalloon(self):
         return NametagGlobals.thoughtBalloon3d
-
-    def setChatWordwrap(self, todo1):
-        pass

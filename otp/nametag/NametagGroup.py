@@ -28,7 +28,7 @@ class NametagGroup:
         self.font = None
         self.name = ''
         self.displayName = ''
-        self.wordWrap = 7.5
+        self.wordWrap = None
         self.qtColor = VBase4(1,1,1,1)
         self.colorCode = CCNormal
         self.avatar = None
@@ -228,7 +228,7 @@ class NametagGroup:
     def updateNametag(self, tag):
         tag.font = self.font
         tag.name = self.name
-        tag.wordWrap = self.wordWrap
+        tag.wordWrap = self.wordWrap or DEFAULT_WORDWRAPS[self.colorCode]
         tag.displayName = self.displayName or self.name
         tag.qtColor = self.qtColor
         tag.colorCode = self.colorCode
