@@ -1814,11 +1814,7 @@ class OTPClientRepository(ClientRepositoryBase):
             di2.getUint32() # Context, ignore this
             handle = di2.getUint16() # Handle
 
-            # TODO/HACK: This is not pretty, but it seems like elevator
-            # exteriors on suit buildings need a frame to go by so they can
-            # perform some sort of setup. Otherwise, the doors are stuck when
-            # you complete a building.
-            taskMgr.doMethodLater(0.0, self.__playBackGenerates, 'playbackgen%s' % handle, extraArgs=[handle])
+            self.__playBackGenerates(handle)
 
             self.handleInterestDoneMessage(di)
 

@@ -206,12 +206,15 @@ class Street(BattlePlace.BattlePlace):
         bldg = base.cr.doId2do.get(bldgDoId)
         if bldg:
             if bldg.elevatorNodePath is not None:
-                self._enterElevatorGotElevator()
-                return Task.done
+                if self._enterElevatorGotElevator():
+                    return Task.done
         return Task.cont
 
     def _enterElevatorGotElevator(self):
+        if not messenger.whoAccepts('insideVictorElevator'):
+            return False
         messenger.send('insideVictorElevator')
+        return True
 
     def exitElevatorIn(self):
         taskMgr.remove(self._eiwbTask)
