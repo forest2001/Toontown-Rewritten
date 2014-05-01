@@ -20,7 +20,6 @@ from otp.speedchat import SpeedChatGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEvent")
-    deferFor = 1
     
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
