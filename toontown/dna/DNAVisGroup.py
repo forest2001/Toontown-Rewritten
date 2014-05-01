@@ -18,6 +18,9 @@ class DNAVisGroup(DNAGroup):
         else:
             return int(self.zone)
 
+    def getVisibleZones(self):
+        return map(int, self.vis)
+
     def _storeData(self, data):
         # Store the VisGroup's existence into the DNASceneData:
         data.visgroups.append(self)

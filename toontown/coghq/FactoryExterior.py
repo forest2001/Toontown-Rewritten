@@ -169,7 +169,7 @@ class FactoryExterior(BattlePlace.BattlePlace):
         visZones = []
         for vg in self.visGroups:
             if vg.getZone() == zone:
-                visZones = vg.vis
+                visZones = vg.getVisibleZones()
                 visZones.append(ToontownGlobals.SellbotFactoryExt) # :dolphin:
                 break
         if not self.visInterest:

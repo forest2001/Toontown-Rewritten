@@ -65,13 +65,14 @@ class CogHQExterior(BattlePlace.BattlePlace):
         BattlePlace.BattlePlace.unload(self)
 
     def enter(self, requestStatus):
-        if not self.dnaFile is None:
+        if self.dnaFile is not None:
             dna = loader.loadDNA(self.dnaFile)
             visgroups = DNAUtil.getVisGroups(dna)
             visZones = []
             for vg in visgroups:
                 if vg.getZone() == dna.zone:
-                    visZones = vg.vis
+                    visZones = vg.getVisibleZones()
+                    break
             self.visInterest = base.cr.addInterest(base.localAvatar.defaultShard, visZones, 'cogHQVis')
         self.zoneId = requestStatus['zoneId']
         BattlePlace.BattlePlace.enter(self)
