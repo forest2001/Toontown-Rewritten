@@ -742,10 +742,16 @@ class DistributedBuilding(DistributedObject.DistributedObject):
             i += 1
 
         openDoors = getOpenInterval(self, self.leftDoor, self.rightDoor, self.openSfx, None)
+
         buildingNodes = self.getNodePaths()
         for np in buildingNodes:
             if np.getName().startswith('tb'):
                 doorNodePath = np.find('**/*door_origin')
+                if not doorNodePath.isEmpty():
+                    break
+        else:
+            self.notify.error('Could not find door origin!')
+
         toonDoorPos = doorNodePath.getPos(NodePath())
         useFarExitPoints = toonDoorPos.getZ() > 1.0
         runOutAll = Parallel()
