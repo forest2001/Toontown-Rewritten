@@ -12,7 +12,6 @@ import HouseGlobals
 
 class DistributedFurnitureItem(DistributedHouseItem.DistributedHouseItem, DistributedSmoothNode.DistributedSmoothNode):
     notify = directNotify.newCategory('DistributedFurnitureItem')
-    deferFor = 1
 
     def __init__(self, cr):
         DistributedHouseItem.DistributedHouseItem.__init__(self, cr)

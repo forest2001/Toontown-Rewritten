@@ -16,7 +16,6 @@ from otp.nametag.Nametag import Nametag
 from otp.nametag.NametagConstants import *
 
 class DistributedElevatorExt(DistributedElevator.DistributedElevator):
-    sortOrder = 1
 
     def __init__(self, cr):
         DistributedElevator.DistributedElevator.__init__(self, cr)

@@ -97,10 +97,6 @@ class Street(BattlePlace.BattlePlace):
         self.tunnelOriginList = []
         self.elevatorDoneEvent = 'elevatorDone'
         self.eventLights = []
-        self.visInterestHandle = None
-        self.zoneInterestHandle = None
-        self.visZones = []
-        self.visInterestChanged = False
 
     def enter(self, requestStatus, visibilityFlag = 1, arrowsOn = 1):
         teleportDebug(requestStatus, 'Street.enter(%s)' % (requestStatus,))
@@ -167,8 +163,6 @@ class Street(BattlePlace.BattlePlace):
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
         self.enterZone(requestStatus['zoneId'])
         self.tunnelOriginList = base.cr.hoodMgr.addLinkTunnelHooks(self, self.loader.nodeList, self.zoneId)
-        if self.zoneId:
-            self.zoneInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, [self.zoneId-(self.zoneId%100)], 'global_streetVis')
         self.fsm.request(requestStatus['how'], [requestStatus])
         self.replaceStreetSignTextures()
         return
@@ -190,10 +184,6 @@ class Street(BattlePlace.BattlePlace):
         self.loader.music.stop()
         base.localAvatar.setGeom(render)
         base.localAvatar.setOnLevelGround(0)
-        if not self.visInterestHandle is None:
-            base.cr.removeInterest(self.visInterestHandle)
-        if not self.zoneInterestHandle is None:
-            base.cr.removeInterest(self.zoneInterestHandle)
 
     def load(self):
         BattlePlace.BattlePlace.load(self)
@@ -359,29 +349,6 @@ class Street(BattlePlace.BattlePlace):
         self.ignore('on-floor')
         self.showAllVisibles()
 
-    def addVisInterest(self, zone):
-        self.notify.debug('addVisInterest zone=%i'%zone)
-        self.visZones.append(zone)
-        self.visInterestChanged = True
-
-    def removeVisInterest(self, zone):
-        self.notify.debug('removeVisInterest zone=%i'%zone)
-        try:
-            self.visZones.remove(zone)
-            self.visInterestChanged = True
-        except ValueError: #item was not in the list
-            self.notify.warning('Street.removeVisInterest called on zone %i that isn\'t in interest' % zone)
-    
-    def updateVisInterest(self):
-        if self.visInterestChanged:
-            self.notify.debug('updateVisInterest zones=' + str(self.visZones) + ' handle=' +str(self.visInterestHandle))
-            self.visInterestChanged = False
-            if self.visInterestHandle is None:
-                if len(self.visZones) > 0:
-                    self.visInterestHandle = base.cr.addInterest(base.localAvatar.defaultShard, self.visZones, 'streetVis')
-            else:
-                base.cr.alterInterest(self.visInterestHandle, base.localAvatar.defaultShard, self.visZones)
-
     def doEnterZone(self, newZoneId):
         if self.zoneId != None:
             for i in self.loader.nodeDict[self.zoneId]:
@@ -389,9 +356,7 @@ class Street(BattlePlace.BattlePlace):
                     if i not in self.loader.nodeDict[newZoneId]:
                         self.loader.fadeOutDict[i].start()
                         self.loader.exitAnimatedProps(i)
-                        self.removeVisInterest(self.loader.nodeToZone[i])
                 else:
-                    self.removeVisInterest(self.loader.nodeToZone[i])
                     i.stash()
                     self.loader.exitAnimatedProps(i)
 
@@ -401,7 +366,6 @@ class Street(BattlePlace.BattlePlace):
                     if i not in self.loader.nodeDict[self.zoneId]:
                         self.loader.fadeInDict[i].start()
                         self.loader.enterAnimatedProps(i)
-                        self.addVisInterest(self.loader.nodeToZone[i])
                 else:
                     if self.loader.fadeOutDict[i].isPlaying():
                         self.loader.fadeOutDict[i].finish()
@@ -409,9 +373,7 @@ class Street(BattlePlace.BattlePlace):
                         self.loader.fadeInDict[i].finish()
                     self.loader.enterAnimatedProps(i)
                     i.unstash()
-                    self.addVisInterest(self.loader.nodeToZone[i])
 
-        self.updateVisInterest()
         if newZoneId != self.zoneId:
             if visualizeZones:
                 if self.zoneId != None:
@@ -419,7 +381,9 @@ class Street(BattlePlace.BattlePlace):
                 if newZoneId != None:
                     self.loader.zoneDict[newZoneId].setColor(0, 0, 1, 1, 100)
             if newZoneId != None:
-                base.cr.sendSetZoneMsg(newZoneId)
+                visZones = [self.loader.nodeToZone[x] for x in self.loader.nodeDict[newZoneId]]
+                visZones.append(ZoneUtil.getBranchZone(newZoneId))
+                base.cr.sendSetZoneMsg(newZoneId, visZones)
                 self.notify.debug('Entering Zone %d' % newZoneId)
             self.zoneId = newZoneId
         geom = base.cr.playGame.getPlace().loader.geom

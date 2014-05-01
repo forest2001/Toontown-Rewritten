@@ -37,7 +37,6 @@ from otp.uberdog import OtpAvatarManager
 from otp.distributed import OtpDoGlobals
 from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
-from direct.distributed.MsgTypes import *
 
 class OTPClientRepository(ClientRepositoryBase):
     notify = directNotify.newCategory('OTPClientRepository')
@@ -62,10 +61,6 @@ class OTPClientRepository(ClientRepositoryBase):
 
 
         self.__currentAvId = 0
-        
-        self.sortedGenerates = []
-        self.sortedDoIds = {}
-        self.expectedInterests = []
 
 
         self.productName = config.GetString('product-name', 'DisneyOnline-US')
@@ -445,6 +440,10 @@ class OTPClientRepository(ClientRepositoryBase):
         self.uberZoneInterest = None
         self.wantSwitchboard = config.GetBool('want-switchboard', 0)
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
+
+        self.__pendingGenerates = {}
+        self.__pendingMessages = {}
+        self.__doId2pendingInterest = {}
 
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
         self.chatAgent = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
@@ -1491,10 +1490,12 @@ class OTPClientRepository(ClientRepositoryBase):
     def handlePlayGame(self, msgType, di):
         if self.notify.getDebug():
             self.notify.debug('handle play game got message type: ' + `msgType`)
+        if self.__recordObjectMessage(msgType, di):
+            return
         if msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
-            self.handleGenerateWithRequiredOther(di)
+            self.handleGenerateWithRequired(di, other=True)
         elif msgType == CLIENT_OBJECT_SET_FIELD:
             self.handleUpdateField(di)
         elif msgType == CLIENT_OBJECT_LEAVING:
@@ -1768,6 +1769,8 @@ class OTPClientRepository(ClientRepositoryBase):
         return Task.done
 
     def handleMessageType(self, msgType, di):
+        if self.__recordObjectMessage(msgType, di):
+            return
         if msgType == CLIENT_EJECT:
             self.handleGoGetLost(di)
         elif msgType == CLIENT_HEARTBEAT:
@@ -1775,7 +1778,7 @@ class OTPClientRepository(ClientRepositoryBase):
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
-            self.handleGenerateWithRequiredOther(di)
+            self.handleGenerateWithRequired(di, other=True)
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER_OWNER:
             self.handleGenerateWithRequiredOtherOwner(di)
         elif msgType == CLIENT_OBJECT_SET_FIELD:
@@ -1801,41 +1804,32 @@ class OTPClientRepository(ClientRepositoryBase):
                 currentGameStateName = 'None'
 
     def gotInterestDoneMessage(self, di):
-        if self.expectedInterests:
-            dg = Datagram(di.getDatagram())
-            tempDi = DatagramIterator(dg, di.getCurrentIndex())
-            context = tempDi.getUint32()
-            handle = tempDi.getUint16()
-            if handle in self.expectedInterests:
-                self.expectedInterests.remove(handle)
-                if not self.expectedInterests:
-                    self.doSortedGenerate()
         if self.deferredGenerates:
             dg = Datagram(di.getDatagram())
             di = DatagramIterator(dg, di.getCurrentIndex())
-            self.deferredGenerates[-1].append((CLIENT_DONE_INTEREST_RESP, (dg, di)))
+            self.deferredGenerates.append((CLIENT_DONE_INTEREST_RESP, (dg, di)))
         else:
+            # Peek ahead:
+            di2 = DatagramIterator(di.getDatagram(), di.getCurrentIndex())
+            di2.getUint32() # Context, ignore this
+            handle = di2.getUint16() # Handle
+
+            # TODO/HACK: This is not pretty, but it seems like elevator
+            # exteriors on suit buildings need a frame to go by so they can
+            # perform some sort of setup. Otherwise, the doors are stuck when
+            # you complete a building.
+            taskMgr.doMethodLater(0.0, self.__playBackGenerates, 'playbackgen%s' % handle, extraArgs=[handle])
+
             self.handleInterestDoneMessage(di)
-            
-    def doSortedGenerate(self):
-        if not self.sortedGenerates:
-            return
-        for generates in self.sortedGenerates:
-            for generate in generates:
-                msgType, extra = generate
-                self.replayDeferredGenerate(msgType, extra)
-        
 
     def gotObjectLocationMessage(self, di):
-        if self.deferredGenerates or self.sortedGenerates:
+        if self.deferredGenerates:
             dg = Datagram(di.getDatagram())
             di = DatagramIterator(dg, di.getCurrentIndex())
             di2 = DatagramIterator(dg, di.getCurrentIndex())
             doId = di2.getUint32()
             if doId in self.deferredDoIds:
-                self.deferredDoIds[doId][2].append((CLIENT_OBJECT_LOCATION, (dg, di)))
-            elif doId in self.sortedDoIds:
-                self.sortedDoIds[doId][2].append((CLIENT_OBJECT_LOCATION, (dg, di)))
+                self.deferredDoIds[doId][3].append((CLIENT_OBJECT_LOCATION, (dg, di)))
             else:
                 self.handleObjectLocation(di)
         else:
@@ -1891,7 +1885,7 @@ class OTPClientRepository(ClientRepositoryBase):
             dg, di = extra
             self.handleObjectLocation(di)
         else:
-            self.o_replayDeferredGenerate(msgType, extra)
+            ClientRepositoryBase.replayDeferredGenerate(self, msgType, extra)
 
     @exceptionLogged(append=False)
     def handleDatagram(self, di):
@@ -1963,90 +1957,98 @@ class OTPClientRepository(ClientRepositoryBase):
                 return True
         return False
 
-    def handleGenerateWithRequired(self, di):
+    def handleGenerateWithRequired(self, di, other=False):
         doId = di.getUint32()
         parentId = di.getUint32()
         zoneId = di.getUint32()
         classId = di.getUint16()
-        dclass = self.dclassesByNumber[classId]
-        if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
-            return
-        
-        if self.expectedInterests:
-            sortOrder = getattr(dclass.getClassDef(), 'sortOrder', 0)
-            if sortOrder:
-                while len(self.sortedGenerates) < sortOrder+1:
-                    self.sortedGenerates.append([])
-                self.sortedGenerates[sortOrder].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-                dg = PyDatagram(di.getRemainingBytes())
-                dg.addUint16(0)
-                di = PyDatagramIterator(dg)
-                self.sortedDoIds[doId] = ((parentId, zoneId, classId, doId, di), dg, [])
-                return
-        deferFor = getattr(dclass.getClassDef(), 'deferFor', 0)
-        if not self.deferInterval or self.noDefer:
-            deferrable = False
-        if deferFor == 0:
-            dclass.startGenerate()
-            distObj = self.generateWithRequiredFields(dclass, doId, di, parentId, zoneId)
-            dclass.stopGenerate()
-        else:
-            if len(self.deferredGenerates) == 0:
-                taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
-            while len(self.deferredGenerates) < deferFor+1:
-                self.deferredGenerates.append([])
-            dg = PyDatagram(di.getRemainingBytes())
-            dg.addUint16(0)
-            di = PyDatagramIterator(dg)
-            self.deferredGenerates[deferFor].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-            self.deferredDoIds[doId] = ((parentId,
-              zoneId,
-              classId,
-              doId,
-              di),
-             dg,
-             [])
 
-    def handleGenerateWithRequiredOther(self, di):
-        doId = di.getUint32()
-        parentId = di.getUint32()
-        zoneId = di.getUint32()
-        classId = di.getUint16()
+        # At this point, we must decide whether to add this to the interest's
+        # "pending generates" or process it straight away:
+        for handle, interest in self._interests.items():
+            if parentId != interest.parentId:
+                continue
+
+            if isinstance(interest.zoneIdList, list):
+                if zoneId not in interest.zoneIdList:
+                    continue
+            else:
+                if zoneId != interest.zoneIdList:
+                    continue
+
+            break
+        else:
+            self.notify.warning('Received generate for %d from %d:%d, not part '
+                                'of any existing interest!' % (doId, parentId, zoneId))
+            interest = None
+
+        if not interest or not interest.events:
+            # This object can be generated straight away:
+            return self.__doGenerate(doId, parentId, zoneId, classId, di, other)
+
+        # This object must be generated when the operation completes:
+        pending = self.__pendingGenerates.setdefault(handle, [])
+        pending.append((doId, parentId, zoneId, classId, Datagram(di.getDatagram()), other))
+        self.__doId2pendingInterest[doId] = handle
+
+    def __playBackGenerates(self, handle):
+        if handle not in self.__pendingGenerates:
+            return
+
+        # This interest has pending generates! Play them.
+        generates = self.__pendingGenerates[handle]
+        del self.__pendingGenerates[handle]
+        generates.sort(key=lambda x: x[3]) # sort by classId
+        for doId, parentId, zoneId, classId, dg, other in generates:
+            di = DatagramIterator(dg)
+            di.skipBytes(16) # MsgType (2), zoneId, doId, parentId (3x4), classId (2)
+            self.__doGenerate(doId, parentId, zoneId, classId, di, other)
+            if doId in self.__doId2pendingInterest:
+                del self.__doId2pendingInterest[doId]
+
+        # Also play back any messages, if we have those too:
+        self.__playBackMessages(handle)
+
+
+    def __playBackMessages(self, handle):
+        if handle not in self.__pendingMessages:
+            return
+
+        # Any pending messages? Play those back as well:
+        for dg in self.__pendingMessages[handle]:
+            di = DatagramIterator(dg)
+            msgType = di.getUint16()
+            self.handler(msgType, di)
+
+        del self.__pendingMessages[handle]
+
+    def __recordObjectMessage(self, msgType, di):
+        if msgType not in (CLIENT_OBJECT_SET_FIELD,
+                           CLIENT_OBJECT_LEAVING,
+                           CLIENT_OBJECT_LOCATION):
+            return False
+
+        di2 = DatagramIterator(di.getDatagram(), di.getCurrentIndex())
+        doId = di2.getUint32()
+
+        if doId not in self.__doId2pendingInterest:
+            return False
+
+        pending = self.__pendingMessages.setdefault(self.__doId2pendingInterest[doId], [])
+        pending.append(Datagram(di.getDatagram()))
+
+        return True
+
+    def __doGenerate(self, doId, parentId, zoneId, classId, di, other):
         dclass = self.dclassesByNumber[classId]
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
             return
-        deferFor = getattr(dclass.getClassDef(), 'deferFor', 0)
-        if not self.deferInterval or self.noDefer:
-            deferrable = False
-        now = globalClock.getFrameTime()
-        if self.expectedInterests:
-            sortOrder = getattr(dclass.getClassDef(), 'sortOrder', 0)
-            if sortOrder:
-                while len(self.sortedGenerates) < sortOrder+1:
-                    self.sortedGenerates.append([])
-                self.sortedGenerates[sortOrder].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-                dg = PyDatagram(di.getRemainingBytes())
-                dg.addUint16(0)
-                di = PyDatagramIterator(dg)
-                self.sortedDoIds[doId] = ((parentId, zoneId, classId, doId, di), dg, [])
-                return
-        if self.deferredGenerates or deferFor != 0:
-            if len(self.deferredGenerates) == 0:
-                taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
-            while len(self.deferredGenerates) < deferFor+1:
-                self.deferredGenerates.append([])
-            self.deferredGenerates[deferFor].append((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-            dg = Datagram(di.getDatagram())
-            di = DatagramIterator(dg, di.getCurrentIndex())
-            self.deferredDoIds[doId] = ((parentId,
-              zoneId,
-              classId,
-              doId,
-              di),
-             dg,
-             [])
+        dclass.startGenerate()
+        if other:
+            distObj = self.generateWithRequiredOtherFields(dclass, doId, di, parentId, zoneId)
         else:
-            self.doGenerate(parentId, zoneId, classId, doId, di)
+            distObj = self.generateWithRequiredFields(dclass, doId, di, parentId, zoneId)
+        dclass.stopGenerate()
 
     def handleGenerateWithRequiredOtherOwner(self, di):
         doId = di.getUint32()
@@ -2123,215 +2125,3 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def addTaggedInterest(self, parentId, zoneId, mainTag, desc, otherTags = [], event = None):
         return self.addInterest(parentId, zoneId, desc, event)
-        
-        
-    def addInterest(self, parentId, zoneId, desc, event = None):
-        handle = ClientRepositoryBase.addInterest(self, parentId, zoneId, desc, event)
-        self.expectedInterests.append(handle.asInt())
-        return handle
-
-    #The functions below have been moved from CRBase into OTPCr so we don't need to fuck with CRBase for deferred generated
-    #They should be moved back eventually
-    def disableDoId(self, doId, ownerView=False):
-        table, cache = self.getTables(ownerView)
-        # Make sure the object exists
-        if table.has_key(doId):
-            # Look up the object
-            distObj = table[doId]
-            # remove the object from the dictionary
-            del table[doId]
-
-            # Only cache the object if it is a "cacheable" type
-            # object; this way we don't clutter up the caches with
-            # trivial objects that don't benefit from caching.
-            # also don't try to cache an object that is delayDeleted
-            cached = False
-            if distObj.getCacheable() and distObj.getDelayDeleteCount() <= 0:
-                cached = cache.cache(distObj)
-            if not cached:
-                distObj.deleteOrDelay()
-                if distObj.getDelayDeleteCount() <= 0:
-                    # make sure we're not leaking
-                    distObj.detectLeaks()
-
-        elif self.deferredDoIds.has_key(doId):
-            # The object had been deferred.  Great; we don't even have
-            # to generate it now.
-            del self.deferredDoIds[doId]
-            for cycle, deferredGenerates in enumerate(self.deferredGenerates):
-                try:
-                    i = deferredGenerates.index((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-                    del self.deferredGenerates[cycle][i]
-                except:
-                    pass
-                    
-        elif self.sortedDoIds.has_key(doId):
-            del self.sortedDoIds[doId]
-            for cycle, sortedGenerates in enumerate(self.sortedGenerates):
-                try:
-                    i = sortedGenerates.index((CLIENT_ENTER_OBJECT_REQUIRED_OTHER, doId))
-                    del self.sortedGenerates[cycle][i]
-                except:
-                    pass
-
-        else:
-            self._logFailedDisable(doId, ownerView)
-
-    #This function has an extra o_ because it is also overridden by OTPCr
-    #when moving it back to CRBase, it needs the o_ removed, and the reference to it here needs to be changed
-    def o_replayDeferredGenerate(self, msgType, extra):
-        """ Override this to do something appropriate with deferred
-        "generate" messages when they are replayed().
-        """
-
-        if msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
-            # It's a generate message.
-            doId = extra
-            if doId in self.deferredDoIds:
-                args, dg, updates = self.deferredDoIds[doId]
-                del self.deferredDoIds[doId]
-                self.doGenerate(*args)
-
-                for dg, di in updates:
-                    # non-DC updates that need to be played back in-order are
-                    # stored as (msgType, (dg, di))
-                    if type(di) is types.TupleType:
-                        msgType = dg
-                        dg, di = di
-                        self.replayDeferredGenerate(msgType, (dg, di))
-                    else:
-                        # ovUpdated is set to True since its OV
-                        # is assumbed to have occured when the
-                        # deferred update was originally received
-                        self.__doUpdate(doId, di, True)
-            elif doId in self.sortedDoIds:
-                args, dg, updates = self.sortedDoIds[doId]
-                del self.sortedDoIds[doId]
-                self.doGenerate(*args)
-
-                for dg, di in updates:
-                    # non-DC updates that need to be played back in-order are
-                    # stored as (msgType, (dg, di))
-                    if type(di) is types.TupleType:
-                        msgType = dg
-                        dg, di = di
-                        self.replayDeferredGenerate(msgType, (dg, di))
-                    else:
-                        # ovUpdated is set to True since its OV
-                        # is assumbed to have occured when the
-                        # deferred update was originally received
-                        self.__doUpdate(doId, di, True)
-
-        else:
-            self.notify.warning("Ignoring deferred message %s" % (msgType))
-
-    def doDeferredGenerate(self, task):
-        """ This is the task that generates an object on the deferred
-        queue. """
-        now = globalClock.getFrameTime()
-        if now - self.lastGenerate < self.deferInterval:
-            # Come back later.
-            return Task.again
-        self.lastGenerate = globalClock.getFrameTime()
-        deferredGenerates = self.deferredGenerates.pop(0)
-        for deferredGenerate in deferredGenerates:
-            # Generate the next deferred object.
-            msgType, extra = deferredGenerate
-            self.replayDeferredGenerate(msgType, extra)
-
-        if len( self.deferredGenerates) == 0:
-            # All objects are generaetd.
-            return Task.done
-        return Task.again
-
-    def handleUpdateField(self, di):
-        """
-        This method is called when a CLIENT_OBJECT_UPDATE_FIELD
-        message is received; it decodes the update, unpacks the
-        arguments, and calls the corresponding method on the indicated
-        DistributedObject.
-
-        In fact, this method is exactly duplicated by the C++ method
-        cConnectionRepository::handle_update_field(), which was
-        written to optimize the message loop by handling all of the
-        CLIENT_OBJECT_UPDATE_FIELD messages in C++.  That means that
-        nowadays, this Python method will probably never be called,
-        since UPDATE_FIELD messages will not even be passed to the
-        Python message handlers.  But this method remains for
-        documentation purposes, and also as a "just in case" handler
-        in case we ever do come across a situation in the future in
-        which python might handle the UPDATE_FIELD message.
-        """
-        # Get the DO Id
-        doId = di.getUint32()
-
-        ovUpdated = self.__doUpdateOwner(doId, di)
-        
-        if doId in self.deferredDoIds:
-            # This object hasn't really been generated yet.  Sit on
-            # the update.
-            args, dg0, updates = self.deferredDoIds[doId]
-
-            # Keep a copy of the datagram, and move the di to the copy
-            dg = Datagram(di.getDatagram())
-            di = DatagramIterator(dg, di.getCurrentIndex())
-
-            updates.append((dg, di))
-        elif doId in self.sortedDoIds:
-            args, dg0, updates = self.sortedDoIds[doId]
-
-            # Keep a copy of the datagram, and move the di to the copy
-            dg = Datagram(di.getDatagram())
-            di = DatagramIterator(dg, di.getCurrentIndex())
-
-            updates.append((dg, di))
-        else:
-            # This object has been fully generated.  It's OK to update.
-            self.__doUpdate(doId, di, ovUpdated)
-
-    #The following two functions are unmodified, but are needed for the above to work
-    def __doUpdate(self, doId, di, ovUpdated):
-        # Find the DO
-        do = self.doId2do.get(doId)
-        if do is not None:
-            # Let the dclass finish the job
-            do.dclass.receiveUpdate(do, di)
-        elif not ovUpdated:
-            # this next bit is looking for avatar handles so that if you get an update 
-            # for an avatar that isn't in your doId2do table but there is a 
-            # avatar handle for that object then it's messages will be forwarded to that 
-            # object. We are currently using that for whisper echoing
-            # if you need a more general perpose system consider registering proxy objects on
-            # a dict and adding the avatar handles to that dict when they are created
-            # then change/remove the old method. I didn't do that because I couldn't think
-            # of a use for it. -JML
-            try :
-                handle = self.identifyAvatar(doId)
-                if handle:
-                    dclass = self.dclassesByName[handle.dclassName]
-                    dclass.receiveUpdate(handle, di)
-                    
-                else:
-                    self.notify.warning(
-                        "Asked to update non-existent DistObj " + str(doId))
-            except:
-                self.notify.warning(
-                        "Asked to update non-existent DistObj " + str(doId) + "and failed to find it")
-
-    def __doUpdateOwner(self, doId, di):
-        ovObj = self.doId2ownerView.get(doId)
-        if ovObj:
-            odg = Datagram(di.getDatagram())
-            odi = DatagramIterator(odg, di.getCurrentIndex())
-            ovObj.dclass.receiveUpdate(ovObj, odi)
-            return True
-        return False
-
-    def flushGenerates(self):
-        """ Forces all pending generates to be performed immediately. """
-        for deferredGenerates in self.deferredGenerates:
-            for deferredGenerate in deferredGenerates:
-                msgType, extra = self.deferredGenerate
-                self.replayDeferredGenerate(msgType, extra)
-        self.deferredGenerates = []
-        taskMgr.remove('deferredGenerate')
