@@ -442,6 +442,8 @@ class OTPClientRepository(ClientRepositoryBase):
         self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
 
         self.__pendingGenerates = {}
+        self.__pendingMessages = {}
+        self.__doId2pendingInterest = {}
 
         self.centralLogger = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER, 'CentralLogger')
         self.chatAgent = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
@@ -1488,6 +1490,8 @@ class OTPClientRepository(ClientRepositoryBase):
     def handlePlayGame(self, msgType, di):
         if self.notify.getDebug():
             self.notify.debug('handle play game got message type: ' + `msgType`)
+        if self.__recordObjectMessage(msgType, di):
+            return
         if msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
@@ -1765,6 +1769,8 @@ class OTPClientRepository(ClientRepositoryBase):
         return Task.done
 
     def handleMessageType(self, msgType, di):
+        if self.__recordObjectMessage(msgType, di):
+            return
         if msgType == CLIENT_EJECT:
             self.handleGoGetLost(di)
         elif msgType == CLIENT_HEARTBEAT:
@@ -1808,12 +1814,9 @@ class OTPClientRepository(ClientRepositoryBase):
             di2.getUint32() # Context, ignore this
             handle = di2.getUint16() # Handle
 
-            if handle in self.__pendingGenerates:
-                self.__playBackGenerates(handle)
+            self.__playBackGenerates(handle)
 
             self.handleInterestDoneMessage(di)
-
-        # This may be a tad inefficient, but:
 
     def gotObjectLocationMessage(self, di):
         if self.deferredGenerates:
@@ -1982,8 +1985,12 @@ class OTPClientRepository(ClientRepositoryBase):
         # This object must be generated when the operation completes:
         pending = self.__pendingGenerates.setdefault(handle, [])
         pending.append((doId, parentId, zoneId, classId, Datagram(di.getDatagram()), other))
+        self.__doId2pendingInterest[doId] = handle
 
     def __playBackGenerates(self, handle):
+        if handle not in self.__pendingGenerates:
+            return
+
         # This interest has pending generates! Play them.
         generates = self.__pendingGenerates[handle]
         del self.__pendingGenerates[handle]
@@ -1992,6 +1999,41 @@ class OTPClientRepository(ClientRepositoryBase):
             di = DatagramIterator(dg)
             di.skipBytes(16) # MsgType (2), zoneId, doId, parentId (3x4), classId (2)
             self.__doGenerate(doId, parentId, zoneId, classId, di, other)
+            if doId in self.__doId2pendingInterest:
+                del self.__doId2pendingInterest[doId]
+
+        # Also play back any messages, if we have those too:
+        self.__playBackMessages(handle)
+
+
+    def __playBackMessages(self, handle):
+        if handle not in self.__pendingMessages:
+            return
+
+        # Any pending messages? Play those back as well:
+        for dg in self.__pendingMessages[handle]:
+            di = DatagramIterator(dg)
+            msgType = di.getUint16()
+            self.handler(msgType, di)
+
+        del self.__pendingMessages[handle]
+
+    def __recordObjectMessage(self, msgType, di):
+        if msgType not in (CLIENT_OBJECT_SET_FIELD,
+                           CLIENT_OBJECT_LEAVING,
+                           CLIENT_OBJECT_LOCATION):
+            return False
+
+        di2 = DatagramIterator(di.getDatagram(), di.getCurrentIndex())
+        doId = di2.getUint32()
+
+        if doId not in self.__doId2pendingInterest:
+            return False
+
+        pending = self.__pendingMessages.setdefault(self.__doId2pendingInterest[doId], [])
+        pending.append(Datagram(di.getDatagram()))
+
+        return True
 
     def __doGenerate(self, doId, parentId, zoneId, classId, di, other):
         dclass = self.dclassesByNumber[classId]
