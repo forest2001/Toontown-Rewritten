@@ -57,9 +57,10 @@ def determineVersion(cwd):
 class ClientBuilder(object):
     MAINMODULE = 'toontown.toonbase.MiraiStart'
 
-    def __init__(self, directory, version=None):
+    def __init__(self, directory, version=None, language='english'):
         self.directory = directory
         self.version = version or determineVersion(self.directory)
+        self.language = language
 
         self.dcfiles = [os.path.join(directory, 'config/otp.dc'),
                         os.path.join(directory, 'config/toon.dc')]
@@ -116,6 +117,7 @@ class ClientBuilder(object):
         with open(os.path.join(self.directory, 'config/public_client.prc')) as f:
             fd = f.read()
             fd = fd.replace('SERVER_VERSION_HERE', self.version)
+            fd = fd.replace('LANGUAGE_HERE', self.language)
             configData.append(fd)
 
         md = 'CONFIG = %r\nDC = %r\n' % (configData, dcData)
@@ -173,6 +175,11 @@ class ClientBuilder(object):
         self.mf.import_hook(self.MAINMODULE)
         for module in EXTRA_MODULES:
             self.mf.import_hook(module)
+        if self.language != "english":
+            self.mf.import_hook('otp.otpbase.OTPLocalizer_%s' % self.language)
+            self.mf.import_hook('otp.otpbase.OTPLocalizer_%sProperty' % self.language)
+            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language)
+            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language)
         self.modules['__main__'] = (False, compile('import %s' % self.MAINMODULE,
                                                    '__main__', 'exec'))
 
