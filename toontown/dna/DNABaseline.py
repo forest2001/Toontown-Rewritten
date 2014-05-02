@@ -12,7 +12,6 @@ class DNABaseline(DNANode):
         self.code = code
         self.flags = flags
 
-        # TODO: Text spacing parameters must have the scaling factor applied.
         self.wiggle = float(wiggle)
         self.stumble = float(stumble)
         self.indent = float(indent)

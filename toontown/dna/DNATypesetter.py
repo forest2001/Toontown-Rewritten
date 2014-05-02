@@ -12,8 +12,8 @@ class DNATypesetter:
         root = NodePath('typesetter')
 
         # Text parameters are irrespective of scale, so we compensate:
-        sx, sy, sz = self.baseline.getScale()
-        root.setScale(1/sx, 1/sy, 1/sz)
+        sx, _, sz = self.baseline.getScale()
+        root.setScale(1/sx, 1, 1/sz)
 
         width = self.baseline.width
         height = self.baseline.height
@@ -38,7 +38,7 @@ class DNATypesetter:
                 tn.setTextScale(1.5)
 
             np = root.attachNewNode(tn)
-            np.setScale(sx, sy, sz)
+            np.setScale(sx, 1, sz)
             np.setDepthWrite(0)
             if i&1:
                 np.setPos(x+stumble, 0, stomp)
