@@ -94,7 +94,7 @@ class RemoteAccountDB:
             callback(True)
 
     def __executeHttpRequest(self, url, message):
-        channel = self.http.makeChannel(True)
+        channel = self.http.makeChannel(False)
         spec = DocumentSpec(simbase.config.GetString("account-server-endpoint", "https://www.toontownrewritten.com/api/gameserver/") + url)
         rf = Ramfile()
         digest = hmac.new(simbase.config.GetString('account-server-secret', 'dev'), message, hashlib.sha256)
