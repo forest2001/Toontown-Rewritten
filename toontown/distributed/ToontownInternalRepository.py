@@ -62,3 +62,11 @@ class ToontownInternalRepository(AstronInternalRepository):
             self.handleGetActivatedResp(di)
         else:
             AstronInternalRepository.handleDatagram(self, di)
+
+    # Write a key-value server event
+    def writeServerEvent(self, logtype, **kwargs):
+        # TODO log as real key-value with msgpack or something neat like that
+        args = []
+        for key in kwargs:
+            args.append('%s=%s' % (key, kwargs[key]))
+        AstronInternalRepository.writeServerEvent(self, logtype, *args)
