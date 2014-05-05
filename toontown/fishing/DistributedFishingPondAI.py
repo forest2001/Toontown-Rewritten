@@ -23,13 +23,13 @@ class DistributedFishingPondAI(DistributedObjectAI):
     def hitTarget(self, target):
         avId = self.air.getAvatarIdFromSender()
         if self.targets.get(target) == None:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to hit nonexistent fishing target!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to hit nonexistent fishing target!')
             return
         spot = self.hasToon(avId)
         if spot:
             spot.rewardIfValid(target)
             return
-        self.air.writeServerEvent('suspicious', avId, 'Toon tried to catch fish while not fishing!')
+        self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to catch fish while not fishing!')
     def addTarget(self, target):
          self.targets[target.doId] = target
 

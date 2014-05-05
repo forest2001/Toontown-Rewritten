@@ -29,7 +29,7 @@ class DistributedCrateAI(DistributedCrushableEntityAI.DistributedCrushableEntity
          1,
          2,
          3]:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedCrateAI.requestPush given invalid side arg')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedCrateAI.requestPush given invalid side arg')
             return
         if not self.avId and self.grid.checkPush(self.entId, side):
             self.avId = avId

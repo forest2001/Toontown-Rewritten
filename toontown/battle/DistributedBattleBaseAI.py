@@ -1011,11 +1011,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         validResponse = 1
         if track == SOS:
             self.notify.debug('toon: %d calls for help' % toonId)
-            self.air.writeServerEvent('friendSOS', toonId, '%s' % av)
+            self.air.writeServerEvent('friend-sos', avId=toonId, target='%s' % av)
             self.toonAttacks[toonId] = getToonAttack(toonId, track=SOS, target=av)
         elif track == NPCSOS:
             self.notify.debug('toon: %d calls for help' % toonId)
-            self.air.writeServerEvent('NPCSOS', toonId, '%s' % av)
+            self.air.writeServerEvent('npc-sos', avId=toonId, target='%s' % av)
             toon = self.getToon(toonId)
             if toon == None:
                 return
@@ -1032,7 +1032,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     self.npcAttacks[av] = toonId
         elif track == PETSOS:
             self.notify.debug('toon: %d calls for pet: %d' % (toonId, av))
-            self.air.writeServerEvent('PETSOS', toonId, '%s' % av)
+            self.air.writeServerEvent('pet-sos', avId=toonId, target='%s' % av)
             toon = self.getToon(toonId)
             if toon == None:
                 return
@@ -1340,7 +1340,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         if toon != None:
                             check = toon.inventory.useItem(track, level)
                             if check == -1:
-                                self.air.writeServerEvent('suspicious', toonId, 'Toon generating movie for non-existant gag track %s level %s' % (track, level))
+                                self.air.writeServerEvent('suspicious', avId=toonId, issue='Toon generating movie for non-existant gag track %s level %s' % (track, level))
                                 self.notify.warning('generating movie for non-existant gag track %s level %s! avId: %s' % (track, level, toonId))
                             toon.d_setInventory(toon.inventory.makeNetString())
                     hps = attack[TOON_HP_COL]
@@ -1552,7 +1552,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 if not (hasattr(suit, 'dna') and suit.dna):
                     toonId = self.air.getAvatarIdFromSender()
                     self.notify.warning('_movieDone avoiding crash, sender=%s but suit has no dna' % toonId)
-                    self.air.writeServerEvent('suspicious', toonId, '_movieDone avoiding crash, suit has no dna')
+                    self.air.writeServerEvent('suspicious', avId=toonId, issue='_movieDone avoiding crash, suit has no dna')
                     continue
                 adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
                 hps = self.suitAttacks[i][SUIT_HP_COL]
@@ -1665,7 +1665,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 msgText += ','
             msgText += '%s%s' % (count, msgName)
 
-        self.air.writeServerEvent('battleCogsDefeated', self.doId, '%s|%s' % (msgText, self.getTaskZoneId()))
+        self.air.writeServerEvent('battle-cogs-defeated', battleId=self.doId, msgText=msgText, taskZoneId=self.getTaskZoneId())
 
     def exitResume(self):
         pass

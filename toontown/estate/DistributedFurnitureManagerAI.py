@@ -187,18 +187,18 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         senderId = self.air.getAvatarIdFromSender()
 
         if self.ownerId != senderId:
-            self.air.writeServerEvent('suspicious', senderId,
+            self.air.writeServerEvent('suspicious', avId=senderId,
                                       'Tried to move furniture, but not the house owner!')
             return
 
         if senderId != directorId and directorId != 0:
-            self.air.writeServerEvent('suspicious', senderId,
+            self.air.writeServerEvent('suspicious', avId=senderId,
                                       'Tried to make someone else (%d) move their furniture!' % directorId)
             return
 
         director = self.air.doId2do.get(directorId)
         if directorId and not director:
-            self.air.writeServerEvent('suspicious', directorId,
+            self.air.writeServerEvent('suspicious', avId=directorId,
                                       'Tried to move furniture without being on the shard!')
             return
 

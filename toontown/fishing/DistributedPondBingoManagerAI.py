@@ -49,17 +49,17 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         avId = self.air.getAvatarIdFromSender()
         spot = self.pond.hasToon(avId)
         if not spot:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo while not fishing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to call bingo while not fishing!')
             return
         fishTuple = (genus, species)
         if (genus != spot.lastFish[1] or species != spot.lastFish[2]) and (spot.lastFish[0] != FishGlobals.BootItem):
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to update bingo card with a fish they didn\'t catch!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to update bingo card with a fish they didn\'t catch!')
             return
         if cardId != self.cardId:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to update expired bingo card!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to update expired bingo card!')
             return
         if self.state != 'Playing':
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to update while the game is not running!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to update while the game is not running!')
             return
         spot.lastFish = [None, None, None, None]
         result = self.bingoCard.cellUpdateCheck(cellId, genus, species)
@@ -80,13 +80,13 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         avId = self.air.getAvatarIdFromSender()
         spot = self.pond.hasToon(avId)
         if not spot:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo while not fishing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to call bingo while not fishing!')
             return
         if not self.canCall:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo whle the game is not running!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to call bingo whle the game is not running!')
             return
         if cardId != self.cardId:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to call bingo with an expired cardId!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to call bingo with an expired cardId!')
             return
         av = self.air.doId2do[avId]
         av.d_announceBingo()
