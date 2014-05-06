@@ -18580,6 +18580,21 @@ class CogSuitPartReward(Reward):
     def getPosterString(self):
         return TTLocalizer.QuestsCogSuitPartRewardPoster % {'cogTrack': self.getCogTrackName(),
          'part': self.getCogPartName()}
+         
+class BetaKeyReward(Reward):
+    def sendRewardAI(self, av):
+        # TODO: Tell CSMUD that X completed a beta key task and
+        # needs the reward. From there, the CSMUD needs to contact
+        # the web server to say this toon's account needs another
+        # beta key. Alternatively, we can have an RPCManager tell
+        # the website that they completed this quest.
+        pass
+        
+    def getString(self):
+        return TTLocalizer.QuestsBetaKeyReward
+       
+    def getPosterString(self):
+        return TTLocalizer.QuestsBetaKeyRewardPoster
 
 
 def getRewardClass(id):
@@ -18607,6 +18622,11 @@ def getNextRewards(numChoices, tier, av):
     optRewards = list(getOptionalRewardsInTier(tier))
     if av.getGameAccess() == OTPGlobals.AccessFull and tier == TT_TIER + 3:
         optRewards = []
+    if av.getWantBetaKeyQuest():
+        # We want to return the Beta Key quest to them, as an optional task!
+        # This can occur during the final task in TTC (getting the 16th anim
+        # for the Toon-Up/Sound gag track), because we want to be nice. :)
+        optRewards = [5000]
     if isLoopingFinalTier(tier):
         rewardHistory = map(lambda questDesc: questDesc[3], av.quests)
         if notify.getDebug():
@@ -19210,7 +19230,8 @@ RewardDict = {100: (MaxHpReward, 1),
  4213: (CogSuitPartReward, 'c', CogDisguiseGlobals.leftArmHand),
  4214: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmUpper),
  4215: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmLower),
- 4216: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmHand)}
+ 4216: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmHand),
+ 5000: (BetaKeyReward, None)}
 
 def getNumTiers():
     return len(RequiredRewardTrackDict) - 1
