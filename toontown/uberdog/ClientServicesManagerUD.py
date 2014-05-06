@@ -31,7 +31,7 @@ class LocalAccountDB:
 
         # databaseId must be a uint32, so we'll use the crc32 of the cookie:
         import zlib
-        databaseId = zlib.crc32(cookie)&0xFFFFFFFF
+        databaseId = zlib.crc32(cookie)&0x7FFFFFFF
 
         callback({'success': True,
                   'databaseId': databaseId,
