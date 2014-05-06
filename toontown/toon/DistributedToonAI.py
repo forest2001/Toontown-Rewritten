@@ -4407,6 +4407,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             for coconspirator in coconspirators:
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
+                
+    def magicFanfare(self):
+        self.sendUpdate('magicFanfare', [])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -4993,3 +4996,9 @@ def disguise():
     ])
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
+    
+@magicWord(access=300)
+def fanfare():
+    """ Give target toon a fanfare for the lolz. """
+    spellbook.getTarget().magicFanfare()
+    return "Jason: Because the trumpets they go...~"

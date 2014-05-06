@@ -2666,6 +2666,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setAnimalSound(self, index):
         self.animalSound = index
+        
+    def magicFanfare(self):
+        from toontown.battle import Fanfare
+        fanfare = Sequence(Fanfare.makeFanfare(0, self)[0])
+        fanfare.start()
    
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
