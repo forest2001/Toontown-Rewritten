@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
-from toontown.hood import SellbotHQAI
+from toontown.hood import SellbotHQAI, CashbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -42,6 +42,7 @@ from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 from toontown.coghq.FactoryManagerAI import FactoryManagerAI
+from toontown.coghq.MintManagerAI import MintManagerAI
 from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
 
@@ -76,6 +77,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.questManager = QuestManagerAI()
         self.cogPageManager = CogPageManagerAI()
         self.factoryMgr = FactoryManagerAI(self)
+        self.mintMgr = MintManagerAI(self)
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
@@ -192,6 +194,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(GZHoodAI.GZHoodAI(self))
         clearQueue()
         self.hoods.append(SellbotHQAI.SellbotHQAI(self))
+        clearQueue()
+        self.hoods.append(CashbotHQAI.CashbotHQAI(self))
         clearQueue()
 
         for sp in self.suitPlanners.values():

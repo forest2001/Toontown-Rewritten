@@ -5,6 +5,7 @@ from toontown.coghq import DistributedLevelBattle
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toon import TTEmote
 from otp.avatar import Emote
+from otp.nametag import NametagGlobals
 from toontown.battle import SuitBattleGlobals
 import random
 from toontown.suit import SuitDNA
