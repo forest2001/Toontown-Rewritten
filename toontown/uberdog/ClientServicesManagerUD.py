@@ -534,7 +534,8 @@ class SetNameTypedFSM(AvatarOperationFSM):
                 self.avId,
                 self.csm.air.dclassesByName['DistributedToonUD'],
                 {'WishNameState': WISHNAME_PENDING,
-                 'WishName': self.name})
+                 'WishName': self.name,
+                 'WishNameTimestamp': int(time.time())})
 
         if self.avId:
             self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
