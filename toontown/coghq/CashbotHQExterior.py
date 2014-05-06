@@ -9,6 +9,7 @@ from toontown.safezone import Train
 class CashbotHQExterior(CogHQExterior.CogHQExterior):
     notify = DirectNotifyGlobal.directNotify.newCategory('CashbotHQExterior')
     TrackZ = -67
+    dnaFile = 'phase_10/dna/cog_hq_cashbot_sz.xml'
     TrainTracks = [{'start': Point3(-1000, -54.45, TrackZ),
       'end': Point3(2200, -54.45, TrackZ)},
      {'start': Point3(1800, -133.45, TrackZ),

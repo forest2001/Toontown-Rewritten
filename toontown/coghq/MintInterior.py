@@ -5,6 +5,7 @@ from direct.fsm import State
 from direct.showbase import BulletinBoardWatcher
 from pandac.PandaModules import *
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
+from otp.nametag import NametagGlobals
 from toontown.toon import Toon
 from toontown.toonbase import ToontownGlobals
 from toontown.hood import ZoneUtil
