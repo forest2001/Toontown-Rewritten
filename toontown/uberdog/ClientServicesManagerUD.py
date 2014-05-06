@@ -430,7 +430,7 @@ class GetAvatarsFSM(AvatarOperationFSM):
         for avId, fields in self.avatarFields.items():
             index = self.avList.index(avId)
             wns = fields.get('WishNameState', '')
-            name = fields['setName']
+            name = fields['setName'][0]
             if wns == 'OPEN':
                 nameState = 1
             elif wns == 'PENDING':
