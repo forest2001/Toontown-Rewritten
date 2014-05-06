@@ -250,8 +250,8 @@ dclass DistributedPlayer : DistributedAvatar {
   setDISLname(string) broadcast ownrecv ram;
   setDISLid(uint32 = 0) broadcast ownrecv ram db airecv required;
   OwningAccount(DoId);
-  WishName(string = "") db ram;
-  WishNameState(string = "OPEN") db ram;
+  string WishName = "" db ram;
+  string WishNameState = "OPEN" db ram;
   setPreviousAccess(uint8 = 0) required db airecv;
   setAccess(uint8 = 2) broadcast ownrecv required ram airecv;
   setAdminAccess(uint16 = 0) ownrecv required airecv;

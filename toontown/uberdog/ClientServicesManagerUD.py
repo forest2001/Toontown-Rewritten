@@ -318,8 +318,8 @@ class CreateAvatarFSM(OperationFSM):
 
         toonFields = {
             'setName': (name,),
-            'WishNameState': ('OPEN',),
-            'WishName': ('',),
+            'WishNameState': 'OPEN',
+            'WishName': '',
             'setDNAString': (self.dna,),
             'setDISLid': (self.target,)
         }
@@ -429,15 +429,15 @@ class GetAvatarsFSM(AvatarOperationFSM):
 
         for avId, fields in self.avatarFields.items():
             index = self.avList.index(avId)
-            wns = fields.get('WishNameState', [''])[0]
-            name = fields['setName'][0]
+            wns = fields.get('WishNameState', '')
+            name = fields['setName']
             if wns == 'OPEN':
                 nameState = 1
             elif wns == 'PENDING':
                 nameState = 2
             elif wns == 'APPROVED':
                 nameState = 3
-                name = fields['WishName'][0]
+                name = fields['WishName']
             elif wns == 'REJECTED':
                 nameState = 4
             elif wns == '':
@@ -540,7 +540,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'][0] != 'OPEN':
+        if fields['WishNameState'] != 'OPEN':
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -555,8 +555,8 @@ class SetNameTypedFSM(AvatarOperationFSM):
                 self.csm.air.dbId,
                 self.avId,
                 self.csm.air.dclassesByName['DistributedToonUD'],
-                {'WishNameState': ('PENDING',),
-                 'WishName': (self.name,)})
+                {'WishNameState': 'PENDING',
+                 'WishName': self.name})
 
         if self.avId:
             self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
@@ -587,7 +587,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'][0] != 'OPEN':
+        if fields['WishNameState'] != 'OPEN':
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -611,8 +611,8 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.csm.air.dbId,
             self.avId,
             self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': ('',),
-             'WishName': ('',),
+            {'WishNameState': '',
+             'WishName': '',
              'setName': (name,)})
 
         self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
@@ -642,8 +642,8 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
             return
 
         # Process the WishNameState change.
-        wns = fields['WishNameState'][0]
-        wn = fields['WishName'][0]
+        wns = fields['WishNameState']
+        wn = fields['WishName']
         name = fields['setName'][0]
 
         if wns == 'APPROVED':
@@ -662,8 +662,8 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
             self.csm.air.dbId,
             self.avId,
             self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': (wns,),
-             'WishName': (wn,),
+            {'WishNameState': wns,
+             'WishName': wn,
              'setName': (name,)},
             {'WishNameState': fields['WishNameState'],
              'WishName': fields['WishName'],
