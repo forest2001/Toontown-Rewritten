@@ -87,6 +87,13 @@ class RemoteAccountDB:
         else:
             return False
 
+# Constants used by the naming FSM:
+WISHNAME_LOCKED = 0
+WISHNAME_OPEN = 1
+WISHNAME_PENDING = 2
+WISHNAME_APPROVED = 3
+WISHNAME_REJECTED = 4
+
 # --- FSMs ---
 class OperationFSM(FSM):
     TARGET_CONNECTION = False
@@ -167,7 +174,6 @@ class LoginAccountFSM(OperationFSM):
 
     def enterCreateAccount(self):
         self.account = {'ACCOUNT_AV_SET': [0]*6,
-                        'pirateAvatars': [],
                         'ESTATE_ID': 0,
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
@@ -290,7 +296,7 @@ class CreateAvatarFSM(OperationFSM):
 
         toonFields = {
             'setName': (name,),
-            'WishNameState': 'OPEN',
+            'WishNameState': WISHNAME_OPEN,
             'WishName': '',
             'setDNAString': (self.dna,),
             'setDISLid': (self.target,)
@@ -401,18 +407,18 @@ class GetAvatarsFSM(AvatarOperationFSM):
 
         for avId, fields in self.avatarFields.items():
             index = self.avList.index(avId)
-            wns = fields.get('WishNameState', '')
+            wns = fields.get('WishNameState', WISHNAME_LOCKED)
             name = fields['setName'][0]
-            if wns == 'OPEN':
+            if wns == WISHNAME_OPEN:
                 nameState = 1
-            elif wns == 'PENDING':
+            elif wns == WISHNAME_PENDING:
                 nameState = 2
-            elif wns == 'APPROVED':
+            elif wns == WISHNAME_APPROVED:
                 nameState = 3
                 name = fields['WishName']
-            elif wns == 'REJECTED':
+            elif wns == WISHNAME_REJECTED:
                 nameState = 4
-            elif wns == '':
+            elif wns == WISHNAME_LOCKED:
                 nameState = 0
             else:
                 self.csm.notify.warning('Avatar %d is in unknown name state %s.' % (avId, wns))
@@ -512,7 +518,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'] != 'OPEN':
+        if fields['WishNameState'] != WISHNAME_OPEN:
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -527,7 +533,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
                 self.csm.air.dbId,
                 self.avId,
                 self.csm.air.dclassesByName['DistributedToonUD'],
-                {'WishNameState': 'PENDING',
+                {'WishNameState': WISHNAME_PENDING,
                  'WishName': self.name})
 
         if self.avId:
@@ -559,7 +565,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'] != 'OPEN':
+        if fields['WishNameState'] != WISHNAME_OPEN:
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -583,7 +589,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.csm.air.dbId,
             self.avId,
             self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': '',
+            {'WishNameState': WISHNAME_LOCKED,
              'WishName': '',
              'setName': (name,)})
 
@@ -618,11 +624,11 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
         wn = fields['WishName']
         name = fields['setName'][0]
 
-        if wns == 'APPROVED':
+        if wns == WISHNAME_APPROVED:
             wns = ''
             name = wn
             wn = ''
-        elif wns == 'REJECTED':
+        elif wns == WISHNAME_REJECTED:
             wns = 'OPEN'
             wn = ''
         else:
