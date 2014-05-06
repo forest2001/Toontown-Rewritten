@@ -45,13 +45,15 @@ class LocalAccountDB:
             callback({'success': True,
                       'accountId': int(self.dbm[cookie]),
                       'databaseId': cookie,
-                      'adminAccess': 507})
+                      'adminAccess': 507,
+                      'betaKeyQuest': 1})
         else:
             # Nope, let's return w/o account ID:
             callback({'success': True,
                       'accountId': 0,
                       'databaseId': cookie,
-                      'adminAccess': 507})
+                      'adminAccess': 507,
+                      'betaKeyQuest': 1})
 
     def storeAccountID(self, databaseId, accountId, callback):
         self.dbm[databaseId] = str(accountId)
@@ -81,7 +83,8 @@ class RemoteAccountDB:
             callback({'success': True,
                       'databaseId': response['user_id'],
                       'accountId': gsUserId,
-                      'adminAccess': response['adminAccess']})
+                      'adminAccess': response['adminAccess'],
+                      'betaKeyQuest': response['betaKeyQuest']})
     def storeAccountID(self, databaseId, accountId, callback):
         response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
         if not response:
@@ -152,6 +155,7 @@ class LoginAccountFSM(OperationFSM):
         self.databaseId = result.get('databaseId', 0)
         accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
+        self.betaKeyQuest = result.get('betaKeyQuest', 0)
         
         # Binary bitmask in base10 form, added to the adminAccess.
         # To find out what they have access to, convert the serverAccess to 3-bit binary.
@@ -191,7 +195,8 @@ class LoginAccountFSM(OperationFSM):
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime(),
                         'ACCOUNT_ID': str(self.databaseId),
-                        'ADMIN_ACCESS': self.adminAccess}
+                        'ADMIN_ACCESS': self.adminAccess,
+                        'BETA_KEY_QUEST': self.betaKeyQuest,}
 
         self.csm.air.dbInterface.createObject(
             self.csm.air.dbId,
@@ -258,7 +263,8 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.dclassesByName['AccountUD'],
             {'LAST_LOGIN': time.ctime(),
              'ACCOUNT_ID': str(self.databaseId),
-             'ADMIN_ACCESS': self.adminAccess})
+             'ADMIN_ACCESS': self.adminAccess,
+             'BETA_KEY_QUEST': self.betaKeyQuest})
 
         # We're done.
         self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.databaseId)
@@ -713,7 +719,8 @@ class LoadAvatarFSM(AvatarOperationFSM):
         # Activate the avatar on the DBSS:
         self.csm.air.sendActivate(self.avId, 0, 0,
                                   self.csm.air.dclassesByName['DistributedToonUD'],
-                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)]})
+                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)],
+                                   'setWantBetaKeyQuest': [self.account.get('BETA_KEY_QUEST', 0)]})
 
         # Next, add them to the avatar channel:
         dg = PyDatagram()

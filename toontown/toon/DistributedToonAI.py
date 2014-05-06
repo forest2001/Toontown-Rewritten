@@ -224,6 +224,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.modulelist = ModuleListAI.ModuleList()
         self._dbCheckDoLater = None
         self.teleportOverride = 0
+        self.wantBetaKeyQuest = 0
         return
 
     def generate(self):
@@ -4407,6 +4408,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             for coconspirator in coconspirators:
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
+    
+    def setWantBetaKeyQuest(self, wantQuest):
+        self.wantBetaKeyQuest = wantQuest
+        
+    def getWantBetaKeyQuest(self):
+        return self.wantBetaKeyQuest
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

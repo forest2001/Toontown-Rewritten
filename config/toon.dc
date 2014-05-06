@@ -440,6 +440,7 @@ dclass DistributedAnimatedProp : DistributedObject {
 typedef int16 pair16[2];
 
 dclass DistributedToon : DistributedPlayer {
+  setWantBetaKeyQuest(uint8 = 0) required db airecv;
   setDNAString(blob) required broadcast ownrecv db;
   setGM(uint8 = 0) required broadcast ownrecv db;
   setMaxBankMoney(int16 = 1200) required broadcast ownrecv db;
