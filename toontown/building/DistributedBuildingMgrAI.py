@@ -247,6 +247,12 @@ class DistributedBuildingMgrAI:
     def load(self):
         blocks = {}
 
+        # Ensure that toontown.streets is indexed. Doing this at loading time
+        # is a fine way to make sure that we won't upset players with a
+        # lagspike while we wait for the backend to handle the index request.
+        self.air.mongodb.toontown.streets.ensure_index([('ai', 1),
+                                                        ('branch', 1)])
+
         street = {'ai': self.shard, 'branch': self.branchID}
         doc = self.air.mongodb.toontown.streets.find_one(street)
 
