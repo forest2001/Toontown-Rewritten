@@ -40,13 +40,9 @@ struct AvatarPendingDel {
 };
 
 dclass Account {
-  string DcObjectType db;
-  uint32 ACCOUNT_AV_SET[] required db;
-  uint32 pirateAvatars[] required db;
+  uint32 ACCOUNT_AV_SET[6] required db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
-  string PLAYED_MINUTES db;
-  string PLAYED_MINUTES_PERIOD db;
   string CREATED db;
   string LAST_LOGIN db;
   uint32 ACCOUNT_ID db;
@@ -221,7 +217,6 @@ dclass AvatarHandle : TalkPath_whisper {
 };
 
 dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
-  string DcObjectType db;
   setName(string name = "[Name not set]") required broadcast db airecv;
   friendsNotify(DoId avId, int8 status) ownrecv airecv;
   checkAvOnShard(DoId avId) clsend airecv;

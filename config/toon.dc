@@ -1228,7 +1228,6 @@ struct lawnItem {
 };
 
 dclass DistributedEstate : DistributedObject {
-  string DcObjectType db;
   setEstateReady() broadcast;
   setClientReady() airecv clsend;
   setEstateType(uint8 type = 0) required broadcast db;
@@ -1263,7 +1262,6 @@ dclass DistributedEstate : DistributedObject {
 };
 
 dclass DistributedHouse : DistributedObject {
-  string DcObjectType db;
   setHousePos(uint8 index) required broadcast;
   setHouseType(uint8 type = 0) required broadcast db;
   setGardenPos(uint8 index = 0) required broadcast db;
@@ -2420,7 +2418,6 @@ dclass DistributedMover : DistributedEntity {
 typedef uint16/10000 PetTrait;
 
 dclass DistributedPet : DistributedSmoothNode {
-  string DcObjectType db;
   setOwnerId(uint32) required broadcast db;
   setPetName(string) required broadcast db;
   setTraitSeed(uint32) required broadcast db;
