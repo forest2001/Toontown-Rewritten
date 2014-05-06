@@ -260,7 +260,7 @@ class NametagGroup:
     def __tickTask(self, task):
         for nametag in self.nametags:
             nametag.tick()
-            if NametagGlobals.masterNametagsActive and (self.active or self.hasButton()):
+            if (NametagGlobals.masterNametagsActive and self.active) or self.hasButton():
                 nametag.setClickRegionEvent(self.getUniqueId())
             else:
                 nametag.setClickRegionEvent(None)
