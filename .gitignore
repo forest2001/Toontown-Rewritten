@@ -2,10 +2,5 @@
 *.pyc
 *.pyo
 *.dll
-*.dis
-*.log
-parser.out
-parsetab.py
 *.jpg
-ply
 settings.json
