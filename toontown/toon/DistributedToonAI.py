@@ -4412,6 +4412,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setWantBetaKeyQuest(self, wantQuest):
         self.wantBetaKeyQuest = wantQuest
         
+    def d_setWantBetaKeyQuest(self, wantQuest):
+        self.sendUpdate('setWantBetaKeyQuest', [wantQuest])
+        
+    def b_setWantBetaKeyQuest(self, wantQuest):
+        self.setWantBetaKeyQuest(wantQuest)
+        self.d_setWantBetaKeyQuest(wantQuest)
+        
     def getWantBetaKeyQuest(self):
         return self.wantBetaKeyQuest
 

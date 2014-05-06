@@ -197,11 +197,12 @@ class QuestManagerAI:
         if simbase.air.doId2do.has_key(avId):
             av = simbase.air.doId2do[avId]
             if rewardId == 5000:
-                av.setWantBetaKeyQuest(0)
-                simbase.air.dclassesByName['AccountAI'].aiFormatUpdate(
+                av.b_setWantBetaKeyQuest(0)
+                dg = simbase.air.dclassesByName['AccountAI'].aiFormatUpdate(
                     'BETA_KEY_QUEST', av.DISLid, av.DISLid,
                     simbase.air.ourChannel, 0
                 )
+                simbase.air.send(dg)
             self.notify.debug("avatar chose quest %s"%str((questId, rewardId, toNpcId)))
             self.npcGiveQuest(npc, av, questId, rewardId, toNpcId, True)
 
