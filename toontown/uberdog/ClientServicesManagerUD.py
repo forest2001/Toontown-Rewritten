@@ -7,8 +7,6 @@ from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
 from otp.distributed import OtpDoGlobals
 from sys import platform
-import dumbdbm
-import anydbm
 import time
 import hmac
 import hashlib
@@ -24,14 +22,6 @@ class LocalAccountDB:
     def __init__(self, csm):
         self.csm = csm
 
-        # This uses dbm, so we open the DB file:
-        filename = simbase.config.GetString('accountdb-local-file',
-                                            'dev-accounts.db')
-        if platform == 'darwin':
-            self.dbm = dumbdbm.open(filename, 'c')
-        else:
-            self.dbm = anydbm.open(filename, 'c')
-
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):
             # Beginning a cookie with . symbolizes "invalid"
@@ -39,25 +29,13 @@ class LocalAccountDB:
                       'reason': 'Invalid cookie specified!'})
             return
 
-        # See if the cookie is in the DBM:
-        if cookie in self.dbm:
-            # Return it w/ account ID!
-            callback({'success': True,
-                      'accountId': int(self.dbm[cookie]),
-                      'databaseId': cookie,
-                      'adminAccess': 507})
-        else:
-            # Nope, let's return w/o account ID:
-            callback({'success': True,
-                      'accountId': 0,
-                      'databaseId': cookie,
-                      'adminAccess': 507})
+        # databaseId must be a uint32, so we'll use the crc32 of the cookie:
+        import zlib
+        databaseId = zlib.crc32(cookie)&0xFFFFFFFF
 
-    def storeAccountID(self, databaseId, accountId, callback):
-        self.dbm[databaseId] = str(accountId)
-        if getattr(self.dbm, 'sync', None):
-            self.dbm.sync()
-        callback()
+        callback({'success': True,
+                  'databaseId': databaseId,
+                  'adminAccess': 507})
 
 class RemoteAccountDB:
     def __init__(self, csm):
@@ -150,7 +128,6 @@ class LoginAccountFSM(OperationFSM):
             return
 
         self.databaseId = result.get('databaseId', 0)
-        accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
         
         # Binary bitmask in base10 form, added to the adminAccess.
@@ -165,8 +142,13 @@ class LoginAccountFSM(OperationFSM):
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
 
-        if accountId:
-            self.accountId = accountId
+        # Try to figure out the accountId using the databaseId.
+        # To do this, query the MongoDB backend and ask it for the account:
+        self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
+        account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
+
+        if account:
+            self.accountId = account['_id']
             self.demand('RetrieveAccount')
         else:
             self.demand('CreateAccount')
@@ -190,7 +172,7 @@ class LoginAccountFSM(OperationFSM):
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime(),
-                        'ACCOUNT_ID': str(self.databaseId),
+                        'ACCOUNT_ID': self.databaseId,
                         'ADMIN_ACCESS': self.adminAccess}
 
         self.csm.air.dbInterface.createObject(
@@ -212,16 +194,6 @@ class LoginAccountFSM(OperationFSM):
         self.csm.air.writeServerEvent('accountCreated', accountId)
 
         self.accountId = accountId
-        self.demand('StoreAccountID')
-
-    def enterStoreAccountID(self):
-        self.csm.accountDB.storeAccountID(self.databaseId, self.accountId, self.__handleStored)
-
-    def __handleStored(self, success=True):
-        if not success:
-            self.demand('Kill', 'The account server could not save your account DB ID!')
-            return
-
         self.demand('SetAccount')
 
     def enterSetAccount(self):
@@ -257,7 +229,7 @@ class LoginAccountFSM(OperationFSM):
             self.accountId,
             self.csm.air.dclassesByName['AccountUD'],
             {'LAST_LOGIN': time.ctime(),
-             'ACCOUNT_ID': str(self.databaseId),
+             'ACCOUNT_ID': self.databaseId,
              'ADMIN_ACCESS': self.adminAccess})
 
         # We're done.

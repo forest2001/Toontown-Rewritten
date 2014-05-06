@@ -49,7 +49,7 @@ dclass Account {
   string PLAYED_MINUTES_PERIOD db;
   string CREATED db;
   string LAST_LOGIN db;
-  string ACCOUNT_ID db;
+  uint32 ACCOUNT_ID db;
   uint16 ADMIN_ACCESS db;
 };
 
