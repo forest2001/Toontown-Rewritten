@@ -36,16 +36,16 @@ class CashbotHQAI(CogHoodAI):
         # Create lobby manager...
         self.createLobbyManager(DistributedCashbotBossAI, ToontownGlobals.CashbotLobby)
         
-        # Create VP elevator.
+        # Create CFO elevator.
         self.createElevator(DistributedCFOElevatorAI, self.lobbyMgr, ToontownGlobals.CashbotLobby, ToontownGlobals.CashbotLobby, boss=True)
         
         # Make our doors.
         self.createDoor()
         
-        # Create Suit Planners in the cog playground and factory waiting area.
+        # Create Suit Planners in the cog playground
         self.createSuitPlanner(self.HOOD)
         
-        # Create factory elevators.
+        # Create mint elevators.
         mins = ToontownGlobals.FactoryLaffMinimums[1]
         self.createElevator(DistributedMintElevatorExtAI, self.air.mintMgr, self.HOOD, ToontownGlobals.CashbotMintIntA, 0, minLaff=mins[0])
         self.createElevator(DistributedMintElevatorExtAI, self.air.mintMgr, self.HOOD, ToontownGlobals.CashbotMintIntB, 1, minLaff=mins[1])
