@@ -4996,9 +4996,15 @@ def disguise():
     ])
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
-    
+
 @magicWord(access=300)
 def fanfare():
     """ Give target toon a fanfare for the lolz. """
     spellbook.getTarget().magicFanfare()
     return "Jason: Because the trumpets they go...~"
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def pouch(amt):
+    """ Set the target's max gag limit. """
+    spellbook.getTarget().b_setMaxCarry(amt)
+    return "Set %s's pouch size to %d" % (spellbook.getTarget().getName(), amt)
