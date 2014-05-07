@@ -385,7 +385,7 @@ cfoMenuStructure = [[OTPLocalizer.SCMenuCFOBattleCranes,
  2131,
  2132,
  2133,
- 1410]
+ 1404]
 cjMenuStructure = [2200,
  2201,
  2202,
