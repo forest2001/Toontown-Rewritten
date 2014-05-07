@@ -72,7 +72,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         gravity = LinearVectorForce(0, 0, -32)
         fn.addForce(gravity)
         self.physicsMgr.addLinearForce(gravity)
-        #base.localAvatar.chatMgr.chatInputSpeedChat.addCFOMenu()
+        localAvatar.chatMgr.chatInputSpeedChat.addCFOMenu()
         global OneBossCog
         if OneBossCog != None:
             self.notify.warning('Multiple BossCogs visible.')
