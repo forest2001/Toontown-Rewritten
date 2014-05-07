@@ -17,13 +17,7 @@ from toontown.shtiker.OptionsPage import speedChatStyles
 from toontown.toonbase import TTLocalizer
 from toontown.parties.PartyGlobals import ActivityIds, DecorationIds
 from toontown.toonbase import ToontownGlobals
-scStructure = [[OTPLocalizer.SCMenuElection,
-  10100,
-  10101,
-  10102,
-  10103,
-  10104,
-  10105],
+scStructure = [
  [OTPLocalizer.SCMenuTesting,
   [OTPLocalizer.SCMenuBugs,
    5406,
@@ -501,6 +495,8 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         structure.append([SCEmoteMenu, OTPLocalizer.SCMenuEmotions])
         structure.append([SCCustomMenu, OTPLocalizer.SCMenuCustom])
         structure.append([TTSCResistanceMenu, OTPLocalizer.SCMenuResistance])
+        if base.config.GetBool('want-doomsday', False):
+          structure.append([OTPLocalizer.SCMenuElection, 10100, 10101, 10102, 10103, 10104, 10105])
         if hasattr(base, 'wantPets') and base.wantPets:
             structure += scPetMenuStructure
         structure += scStructure
