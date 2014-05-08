@@ -495,10 +495,10 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         structure.append([SCEmoteMenu, OTPLocalizer.SCMenuEmotions])
         structure.append([SCCustomMenu, OTPLocalizer.SCMenuCustom])
         structure.append([TTSCResistanceMenu, OTPLocalizer.SCMenuResistance])
-        if base.config.GetBool('want-doomsday', False):
-          structure.append([OTPLocalizer.SCMenuElection, 10100, 10101, 10102, 10103, 10104, 10105])
         if hasattr(base, 'wantPets') and base.wantPets:
             structure += scPetMenuStructure
+        if base.config.GetBool('want-doomsday', False):
+          structure.append([OTPLocalizer.SCMenuElection, 10100, 10101, 10102, 10103, 10104, 10105])
         structure += scStructure
         self.createSpeedChatObject(structure)
 
