@@ -89,9 +89,9 @@ class MagicWordCategory:
         
     def getDefinedAccess(self):
         try:
-            return simbase.config.GetInt(self.name.replace(' ', '-').lower(), 0)
+            return simbase.config.GetInt(self.name.replace(' ', '-').lower(), 500)
         except:
-            return base.config.GetInt(self.name.replace(' ', '-').lower(), 0)
+            return 500
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300,
