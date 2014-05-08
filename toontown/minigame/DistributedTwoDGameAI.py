@@ -111,15 +111,16 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
             jellybeans = sqrt(self.scoreDict[avId] * ToonBlitzGlobals.ScoreToJellyBeansMultiplier)
             self.scoreDict[avId] = max(1, int(jellybeans))
 
-        self.air.writeServerEvent('minigame_twoD', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.TwoDGameId,
-         self.getSafezoneId(),
-         self.avIdList,
-         scoreList,
-         finishedBonusList,
-         timeLeftList,
-         treasureCollectedList,
-         playerErrorList,
-         self.sectionIndexList))
+        #self.air.writeServerEvent('minigame_twoD', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.TwoDGameId,
+        # self.getSafezoneId(),
+        # self.avIdList,
+        # scoreList,
+        # finishedBonusList,
+        # timeLeftList,
+        # treasureCollectedList,
+        # playerErrorList,
+        # self.sectionIndexList))
+        # jjkoletar: not interested
         self.notify.debug('minigame_twoD%s: %s|%s|%s|%s|%s|%s|%s|%s|%s' % (self.doId,
          ToontownGlobals.TwoDGameId,
          self.getSafezoneId(),

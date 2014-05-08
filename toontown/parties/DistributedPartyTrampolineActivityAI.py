@@ -23,16 +23,16 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
     def awardBeans(self, numBeans, height):
         avId = self.air.getAvatarIdFromSender()
         if avId != self.currentAv:
-            self.air.writeServerEvent('suspicious',avId,'Tried to give beans while not using the trampoline!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to give beans while not using the trampoline!')
             return
         if self.state != 'Active':
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to award beans while the game wasn\'t running!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to award beans while the game wasn\'t running!')
             return
         if numBeans != self.collected:
-            self.air.writeServerEvent('suspicious',avId,'Toon reported incorrect number of collected jellybeans!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon reported incorrect number of collected jellybeans!')
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to award beans while not in district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to award beans while not in district!')
             return
         reward = self.collected*2
         message = TTLocalizer.PartyTrampolineBeanResults % self.collected
@@ -50,13 +50,13 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to report height without being on the district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to report height without being on the district!')
             return
         if height > self.record:
             self.record = height
             self.sendUpdate('setBestHeightInfo', [av.getName(), height])
         else:
-            self.air.writeServerEvent('suspicious',avId,'Toon incorrectly reported height!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon incorrectly reported height!')
             
     def enterActive(self):
         self.jellybeans = range(PartyGlobals.TrampolineNumJellyBeans)
@@ -75,24 +75,24 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
     def requestAnim(self, anim):
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'Active':
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to request an animation while not playing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to request an animation while not playing!')
             return
         if self.currentAv != avId:
-            self.air.writeServerEvent('suspicious',avId, 'Toon tried to request an anim for someone else!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to request an anim for someone else!')
             return
         self.sendUpdate('requestAnimEcho', [anim])
 
     def removeBeans(self, beans):
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'Active':
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to collect jellybeans while not playing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to collect jellybeans while not playing!')
             return
         if self.currentAv != avId:
-            self.air.writeServerEvent('suspicious',avId, 'Toon tried to collect jellybeans while someone else was playing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to collect jellybeans while someone else was playing!')
             return
         for bean in beans:
             if not bean in self.jellybeans:
-                self.air.writeServerEvent('suspicious',avId,'Toon tried to collect non-existent bean!')
+                self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to collect non-existent bean!')
                 beans.remove(bean)
             else:
                 self.collected += 1
@@ -116,10 +116,10 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
     def toonExitRequest(self):
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'Active':
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to leave a trampoline that was not running!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to leave a trampoline that was not running!')
             return
         if self.currentAv != avId:  
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to exit trampoline for someone else!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to exit trampoline for someone else!')
             return
         taskMgr.remove('exitTrampoline'%self.doId)
         self.sendUpdate('leaveTrampoline', [])
@@ -127,17 +127,17 @@ class DistributedPartyTrampolineActivityAI(DistributedPartyActivityAI, FSM):
     def toonExitDemand(self):
         avId = self.air.getAvatarIdFromSender()
         if avId != self.currentAv:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to exit trampoline they\'re not using!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to exit trampoline they\'re not using!')
             return
         self.demand('Idle')
         
     def toonReady(self):
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'Rules':
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to verify rules while the rules were not running!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to verify rules while the rules were not running!')
             return
         if avId != self.currentAv:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to verify rules for someone else!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to verify rules for someone else!')
             return
         self.demand('Active')
         

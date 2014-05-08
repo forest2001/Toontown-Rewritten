@@ -85,14 +85,15 @@ class DistributedPairingGameAI(DistributedMinigameAI):
                 self.logAllPerfect()
 
         logAvId = self.avIdList[0]
-        self.air.writeServerEvent('minigame_pairing', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.PairingGameId,
-         self.getSafezoneId(),
-         self.avIdList,
-         self.scoreDict[logAvId],
-         self.gameDuration,
-         self.matches,
-         self.flips,
-         lowFlipBonus))
+        #self.air.writeServerEvent('minigame_pairing', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.PairingGameId,
+        # self.getSafezoneId(),
+        # self.avIdList,
+        # self.scoreDict[logAvId],
+        # self.gameDuration,
+        # self.matches,
+        # self.flips,
+        # lowFlipBonus))
+        # jjkoletar: again, are we really that interested in this data at this point?
         self.gameFSM.request('cleanup')
         DistributedMinigameAI.gameOver(self)
 

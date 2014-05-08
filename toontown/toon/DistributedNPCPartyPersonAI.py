@@ -74,14 +74,14 @@ class DistributedNPCPartyPersonAI(DistributedNPCToonBaseAI):
     def answer(self, wantsToPlan):
         avId = self.air.getAvatarIdFromSender()
         if self.busy != avId:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCPartyPersonAI.answer busy with %s' % self.busy)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCPartyPersonAI.answer busy with %s' % self.busy)
             self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
             return
         if wantsToPlan:
             av = simbase.air.doId2do.get(avId)
             if av:
                 if av.getGameAccess() != ToontownGlobals.AccessFull:
-                    self.air.writeServerEvent('suspicious', avId, 'DistributedNPCPartyPersonAI.free player tried to host party.')
+                    self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCPartyPersonAI.free player tried to host party.')
                     flag = NPCToons.PARTY_MOVIE_ONLYPAID
                     self.d_setMovie(avId, flag)
                 else:

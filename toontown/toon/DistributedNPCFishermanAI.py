@@ -65,7 +65,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
     def completeSale(self, sell):
         avId = self.air.getAvatarIdFromSender()
         if self.busy != avId:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCFishermanAI.completeSale busy with %s' % self.busy)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCFishermanAI.completeSale busy with %s' % self.busy)
             self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
             return
         if sell:

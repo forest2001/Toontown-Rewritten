@@ -182,10 +182,10 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         self.demand(state)
         if self.air:
             if state in self.keyStates:
-                self.air.writeServerEvent('bossBattle', self.doId, '%s|%s|%s|%s' % (self.dept,
-                 state,
-                 self.involvedToons,
-                 self.formatReward()))
+                self.air.writeServerEvent('boss-battle', doId=self.doId, dept=self.dept,
+                 state=state,
+                 involvedToons=self.involvedToons,
+                 reward=self.formatReward()))
 
     def getState(self):
         return self.state

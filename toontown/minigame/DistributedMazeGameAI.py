@@ -79,7 +79,7 @@ class DistributedMazeGameAI(DistributedMinigameAI):
              self.avIdList))
             return
         if treasureNum < 0 or treasureNum >= self.numTreasures:
-            self.air.writeServerEvent('warning', treasureNum, 'MazeGameAI.claimTreasure treasureNum out of range')
+            self.air.writeServerEvent('warning', avId=avId, issue='MazeGameAI.claimTreasure treasureNum out of range, was %s' % treasureNum)
             return
         if self.takenTable[treasureNum]:
             return

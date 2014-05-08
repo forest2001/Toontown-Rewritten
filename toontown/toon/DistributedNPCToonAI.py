@@ -41,7 +41,7 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
             return
         if self.pendingQuests is None:
             self.notify.warning('chooseQuest: not expecting a quest choice from this avatar: %s' % avId)
-            self.air.writeServerEvent('suspicious', avId, 'unexpected chooseQuest')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='unexpected chooseQuest')
             return
         if questId == 0:
             self.pendingAvId = None
@@ -55,7 +55,7 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
                 self.notify.warning('chooseQuest: av not present: %s' % avId)
                 return
             if av.getGameAccess() != ToontownGlobals.AccessFull:
-                simbase.air.writeServerEvent('suspicious', avId, 'NPCToonAI.chooseQuest: non-paid player choosing task beyond velvet rope')
+                simbase.air.writeServerEvent('suspicious', avId=avId, issue='NPCToonAI.chooseQuest: non-paid player choosing task beyond velvet rope')
                 self.sendTimeoutMovie(None)
                 if self.FourthGagVelvetRopeBan:
                     av.ban('fourth gag track velvet rope hacking')
@@ -83,7 +83,7 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
             return
         if self.pendingTracks is None:
             self.notify.warning('chooseTrack: not expecting a track choice from this avatar: %s' % avId)
-            self.air.writeServerEvent('suspicious', avId, 'unexpected chooseTrack')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='unexpected chooseTrack')
             return
         if trackId == -1:
             self.pendingAvId = None
@@ -241,6 +241,6 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
             taskMgr.remove(self.uniqueName('clearMovie'))
             self.sendClearMovie(None)
         elif self.busy:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCToonAI.setMovieDone busy with %s' % self.busy)
+            self.air.writeServerEvent('suspicious', avID=avId, issue='DistributedNPCToonAI.setMovieDone busy with %s' % self.busy)
             self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
         return
