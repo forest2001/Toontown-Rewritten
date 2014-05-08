@@ -238,10 +238,13 @@ class QuestManagerAI:
         for questIndex in range(len(toon.quests)):
             quest = Quests.getQuest(toon.quests[questIndex][0])
             if isinstance(quest, Quests.RecoverItemQuest):
+                complete = quest.getCompletionStatus(toon, quest)
+                if complete == Quests.COMPLETE:
+                    # Task is already complete. Check if we have any other quests that we need to fish for.
+                    continue
                 if quest.isLocationMatch(zoneId):
                     if quest.getHolder() == Quests.AnyFish:
                         if random.randint(1, 100) <= quest.getPercentChance():
-                            #this still allows you to catch the questitem after you've caught all you needed...
                             toon.quests[questIndex][4] += 1
                             toon.b_setQuests(toon.quests)
                             return quest.getItem()
