@@ -31,13 +31,13 @@ class QuestManagerAI:
         Called in battleExperience to alert the quest system that a toon has
         killed some cogs.
         """
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.CogQuest):
                 # It's a cog quest!
                 for suit in suitsKilled:
                     if quest.doesCogCount(toon.getDoId(), suit, zoneId, activeToons):
                         # The cog we killed counts!
-                        self.__incrementQuestProgress(quest)
+                        self.__incrementQuestProgress(toon.quests[index])
         toon.b_setQuests(toon.quests)
         
     def recoverItems(self, toon, suitsKilled, zoneId):
@@ -50,7 +50,7 @@ class QuestManagerAI:
             Index 1: a list of unrecovered items.
         """
         recovered, notRecovered = ([] for i in xrange(2))
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.RecoverItemQuest):
                 # It's a quest where we need to recover an item!
                 if quest.isLocationMatch(zoneId):
@@ -65,7 +65,7 @@ class QuestManagerAI:
                                 if self.__testPercentage(quest.getPercentageChance()):
                                     # We win! We got the item from the cogs. :)
                                     recovered.append(quest.getItem())
-                                    self.__incrementQuestProgress(quest)
+                                    self.__incrementQuestProgress(toon.quests[index])
                                 else:
                                     # Tough luck, maybe next time.
                                     notRecovered.append(quest.getItem())
@@ -77,7 +77,7 @@ class QuestManagerAI:
         This method is called whenever a toon defeats a cog building.
         N.B: This is called once for each toon that defeated the building.
         """
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.BuildingQuest):
                 # This quest is a building quest, time to see if it counts towards
                 # our progress!
@@ -86,7 +86,7 @@ class QuestManagerAI:
                     if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
                         if quest.getNumFloors() >= floors:
                             # This building had enough floors.
-                            self.__incrementQuestProgress(quest)
+                            self.__incrementQuestProgress(toon.quests[index])
         toon.b_setQuests(toon.quests)
         
     def toonKilledCogdo(self, toon, difficulty, floors, zoneId, activeToons):
@@ -100,12 +100,12 @@ class QuestManagerAI:
         This method is called whenever a toon defeats a Sellbot HQ factory.
         N.B: This is called once for each toon that defeated the factory.
         """
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.FactoryQuest):
                 # Cool, it's a factory quest! Does it count?
                 if quest.doesFactoryCount(toon.getDoId(), factoryId, activeToonVictors):
                     # Woo, this counts towards our quest progress!
-                    self.__incrementQuestProgress(quest)
+                    self.__incrementQuestProgress(toon.quests[index])
         toon.b_setQuests(toon.quests)
         
     def toonDefeatedMint(self, toon, mintId, activeToonVictors):
@@ -113,12 +113,12 @@ class QuestManagerAI:
         This method is called whenever a toon defeats a Cashbot HQ mint.
         N.B: This is called once for each toon that defeated the mint.
         """
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.MintQuest):
                 # Oh lookie here, a mint quest! I love me some Polos.
                 if quest.doesMintCount(toon.getDoId(), mintId, activeToonVictors):
                     # Nom nom nom nom, progress!
-                    self.__incrementQuestProgress(quest)
+                    self.__incrementQuestProgress(toon.quests[index])
         toon.b_setQuests(toon.quests)
         
     def toonDefeatedStage(self, toon, stageId, activeToonVictors):
@@ -291,7 +291,7 @@ class QuestManagerAI:
         a fish. This checks for any "fishing" quests that are in progress,
         and determines if they caught any items.
         """
-        for quest in self.__toonQuestsList2Quests(toon.quests):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.RecoverItemQuest):
                 # Well, this is a quest where we have to recover an item...
                 if quest.getCompletionStatus(toon, quest) == Quests.COMPLETE:
@@ -304,7 +304,7 @@ class QuestManagerAI:
                         # Bazinga! This is a fishing quest!
                         if self.__testPercentage(quest.getPercentageChance()):
                             # We got lucky, dave! We caught the item!
-                            self.__incrementQuestProgress(quest)
+                            self.__incrementQuestProgress(toon.quests[index])
                             toon.b_setQuests(toon.quests)
                             # Since we caught an item already, there's no
                             # point in checking the other quests as we can
