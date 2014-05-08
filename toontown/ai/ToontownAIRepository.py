@@ -15,6 +15,7 @@ from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
+from direct.stdpy.file import open
 
 # Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -210,7 +211,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         return 'phase_%s/dna/%s_%s.xml' % (phase, hood, zoneId)
 
     def loadDNA(self, filename):
-        with open('resources/' + filename) as f:
+        with open('/' + filename) as f:
             tree = DNAParser.parse(f)
 
         return tree
