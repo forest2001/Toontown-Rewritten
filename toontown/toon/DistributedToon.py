@@ -2677,6 +2677,15 @@ def globaltp():
     spellbook.getInvoker().sendUpdate('setTeleportOverride', [1])
     base.localAvatar.setTeleportAccess([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
     return "Global teleport activated for the current session."
+
+@magicWord(category=CATEGORY_MODERATION)
+def sleep():
+    if not base.localAvatar.neverSleep:
+        base.localAvatar.disableSleeping()
+        return "Sleeping has been deactivated for the current session."
+    else:
+        base.localAvatar.enableSleeping()
+        return "Sleeping has been activated for the current session."
     
 @magicWord(category=CATEGORY_GUI)
 def gardenGame():
