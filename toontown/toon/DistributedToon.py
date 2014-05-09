@@ -2671,6 +2671,27 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         from toontown.battle import Fanfare
         fanfare = Sequence(Fanfare.makeFanfare(0, self)[0])
         fanfare.start()
+        
+    def magicTeleportRequest(self, requesterId):
+        self.sendUpdate('magicTeleportResponse', [requesterId, base.cr.playGame.getPlaceId()])
+        
+    def magicTeleportInitiate(self, hoodId, zoneId):
+        loaderId = ZoneUtil.getBranchLoaderName(zoneId)
+        whereId = ZoneUtil.getToonWhereName(zoneId)
+        if zoneId in [ToontownGlobals.BossbotLobby, ToontownGlobals.LawbotLobby, ToontownGlobals.CashbotLobby, ToontownGlobals.SellbotLobby, ToontownGlobals.LawbotOfficeExt]:
+            how = 'walk'
+        else:
+            how = 'teleportIn'
+        requestStatus = [{
+            'loader': loaderId,
+            'where': whereId,
+            'how': how,
+            'hoodId': hoodId,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1
+        }]
+        base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
    
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
@@ -2690,3 +2711,22 @@ def sleep():
 @magicWord(category=CATEGORY_GUI)
 def gardenGame():
     base.localAvatar.game = GardenDropGame.GardenDropGame()
+    
+@magicWord(category=CATEGORY_MODERATION, types=[int]) # Yeah right.
+def goto(zoneId):
+    return
+    loaderId = ZoneUtil.getBranchLoaderName(zoneId)
+    whereId = ZoneUtil.getToonWhereName(zoneId)
+    hoodId = ZoneUtil.getCanonicalHoodId(zoneId)
+    requestStatus = [{
+        'loader': loaderId,
+        'where': whereId,
+        'how': 'walk',
+        'hoodId': hoodId,
+        'zoneId': zoneId,
+        'shardId': None,
+        'avId': -1
+    }]
+    base.cr.playGame.getPlace().forceTransition('teleportOut', requestStatus)
+    return "Forcing self to zoneId %d." % zoneId
+    # TODO REVERT THE REVERTED REVERT OF THE ADDING VFS
