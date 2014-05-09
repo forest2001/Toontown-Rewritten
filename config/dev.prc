@@ -10,8 +10,7 @@ want-dev #f
 
 
 # Resource settings
-vfs-mount resources /
-model-path /
+model-path resources
 default-model-extension .bam
 
 # Server settings
