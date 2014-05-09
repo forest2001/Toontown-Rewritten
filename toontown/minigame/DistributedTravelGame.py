@@ -136,7 +136,7 @@ class DistributedTravelGame(DistributedMinigame):
         self.gameBoard = loader.loadModel('phase_4/models/minigames/toon_cannon_gameground')
         self.gameBoard.setPosHpr(100, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
-        station = loader.loadModel('phase_4/models/modules/trolley_station_TT.bam')
+        station = loader.loadModel('phase_4/models/modules/trolley_station_TT')
         self.trolleyCar = station.find('**/trolley_car')
         self.trolleyCar.reparentTo(hidden)
         self.trolleyCarOrigPos = self.trolleyCar.getPos()

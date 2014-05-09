@@ -99,7 +99,7 @@ class DistributedGagTree(DistributedPlantBase.DistributedPlantBase):
             self.sandMound = loader.loadModel('phase_5.5/models/estate/sand_mound')
             self.sandMound.reparentTo(self.model)
         self.adjustGrowth()
-        self.signModel = loader.loadModel('phase_5.5/models/estate/garden_sign.bam')
+        self.signModel = loader.loadModel('phase_5.5/models/estate/garden_sign')
         self.signModel.setPos(3.5, 0, 0.025)
         self.signModel.reparentTo(self.rotateNode)
         owner = self.getOwnerIndex()

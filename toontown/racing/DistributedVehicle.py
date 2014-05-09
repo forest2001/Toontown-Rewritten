@@ -139,7 +139,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         return
 
     def __loadTextures(self):
-        self.pieSplatter = loader.loadModel('phase_6/models/karting/pie_splat_1.bam')
+        self.pieSplatter = loader.loadModel('phase_6/models/karting/pie_splat_1')
 
     def announceGenerate(self):
         DistributedSmoothNode.DistributedSmoothNode.announceGenerate(self)

@@ -84,10 +84,10 @@ class DistributedRingGame(DistributedMinigame):
         self.sndAmbience = base.loadSfx('phase_4/audio/sfx/AV_ambient_water.ogg')
         self.sndPerfect = base.loadSfx('phase_4/audio/sfx/ring_perfect.ogg')
         loadBase = 'phase_4/models/minigames/'
-        self.environModel = loader.loadModel(loadBase + 'swimming_game.bam')
+        self.environModel = loader.loadModel(loadBase + 'swimming_game')
         self.environModel.setPos(0, self.ENVIRON_LENGTH / 2.0, self.SEA_FLOOR_Z)
         self.environModel.flattenMedium()
-        self.ringModel = loader.loadModel(loadBase + 'swimming_game_ring.bam')
+        self.ringModel = loader.loadModel(loadBase + 'swimming_game_ring')
         self.ringModel.setTransparency(1)
         modelRadius = 4.0
         self.ringModel.setScale(RingGameGlobals.RING_RADIUS / modelRadius)

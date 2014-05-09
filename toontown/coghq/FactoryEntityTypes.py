@@ -306,7 +306,7 @@ class Lift(Nodepath):
     attribs = (('duration', 1, 'float'),
      ('startPos', Point3(0, 0, 0), 'pos'),
      ('endPos', Point3(0, 0, 0), 'pos'),
-     ('modelPath', 'phase_9/models/cogHQ/Elevator.bam', 'bamfilename'),
+     ('modelPath', 'phase_9/models/cogHQ/Elevator', 'bamfilename'),
      ('floorName', 'elevator_floor', 'string'),
      ('modelScale', Vec3(1), 'scale'),
      ('startGuardName', '', 'string'),

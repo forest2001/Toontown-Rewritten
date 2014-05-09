@@ -119,7 +119,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         del self.phone
 
     def getPicture(self, avatar):
-        chatBalloon = loader.loadModel('phase_3/models/props/chatbox.bam')
+        chatBalloon = loader.loadModel('phase_3/models/props/chatbox')
         chatBalloon.find('**/top').setPos(1, 0, 5)
         chatBalloon.find('**/middle').setScale(1, 1, 3)
         frame = self.makeFrame()
