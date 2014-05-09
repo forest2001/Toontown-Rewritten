@@ -10,6 +10,7 @@ from toontown.battle import BattleBase
 from pandac.PandaModules import *
 import SuitDNA
 import random
+from otp.ai.MagicWordGlobal import *
 AllBossCogs = []
 
 class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
@@ -608,3 +609,13 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def doNextAttack(self, task):
         self.b_setAttackCode(ToontownGlobals.BossCogNoAttack)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str])
+def bosscog(state):
+    """ Set the current state of the boss battle that the invoker is in. """
+    for object in simbase.air.doId2do.itervalues():
+        if isinstance(object, DistributedBossCogAI):
+            if spellbook.getInvoker().getDoId() in object.looseToons + object.involvedToons:
+                object.b_setState(state)
+                return "Set state of the current boss battle to %s." % state
+    return "Unable to find boss battle which has current avatar."
