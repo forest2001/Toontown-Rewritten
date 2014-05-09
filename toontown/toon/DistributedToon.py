@@ -2711,22 +2711,3 @@ def sleep():
 @magicWord(category=CATEGORY_GUI)
 def gardenGame():
     base.localAvatar.game = GardenDropGame.GardenDropGame()
-    
-@magicWord(category=CATEGORY_MODERATION, types=[int]) # Yeah right.
-def goto(zoneId):
-    return
-    loaderId = ZoneUtil.getBranchLoaderName(zoneId)
-    whereId = ZoneUtil.getToonWhereName(zoneId)
-    hoodId = ZoneUtil.getCanonicalHoodId(zoneId)
-    requestStatus = [{
-        'loader': loaderId,
-        'where': whereId,
-        'how': 'walk',
-        'hoodId': hoodId,
-        'zoneId': zoneId,
-        'shardId': None,
-        'avId': -1
-    }]
-    base.cr.playGame.getPlace().forceTransition('teleportOut', requestStatus)
-    return "Forcing self to zoneId %d." % zoneId
-    # TODO REVERT THE REVERTED REVERT OF THE ADDING VFS
