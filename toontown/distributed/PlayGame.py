@@ -198,7 +198,8 @@ class PlayGame(StateData.StateData):
         if how in ['tunnelIn',
          'teleportIn',
          'doorIn',
-         'elevatorIn']:
+         'elevatorIn',
+         'walk']:
             self.fsm.request('quietZone', [doneStatus])
         else:
             self.notify.error('Exited hood with unexpected mode %s' % how)
