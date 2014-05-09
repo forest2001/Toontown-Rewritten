@@ -7,8 +7,6 @@ from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
 from otp.distributed import OtpDoGlobals
 from sys import platform
-import dumbdbm
-import anydbm
 import time
 import hmac
 import hashlib
@@ -24,14 +22,6 @@ class LocalAccountDB:
     def __init__(self, csm):
         self.csm = csm
 
-        # This uses dbm, so we open the DB file:
-        filename = simbase.config.GetString('accountdb-local-file',
-                                            'dev-accounts.db')
-        if platform == 'darwin':
-            self.dbm = dumbdbm.open(filename, 'c')
-        else:
-            self.dbm = anydbm.open(filename, 'c')
-
     def lookup(self, cookie, callback):
         if cookie.startswith('.'):
             # Beginning a cookie with . symbolizes "invalid"
@@ -39,25 +29,13 @@ class LocalAccountDB:
                       'reason': 'Invalid cookie specified!'})
             return
 
-        # See if the cookie is in the DBM:
-        if cookie in self.dbm:
-            # Return it w/ account ID!
-            callback({'success': True,
-                      'accountId': int(self.dbm[cookie]),
-                      'databaseId': cookie,
-                      'adminAccess': 507})
-        else:
-            # Nope, let's return w/o account ID:
-            callback({'success': True,
-                      'accountId': 0,
-                      'databaseId': cookie,
-                      'adminAccess': 507})
+        # databaseId must be a uint32, so we'll use the crc32 of the cookie:
+        import zlib
+        databaseId = zlib.crc32(cookie)&0x7FFFFFFF
 
-    def storeAccountID(self, databaseId, accountId, callback):
-        self.dbm[databaseId] = str(accountId)
-        if getattr(self.dbm, 'sync', None):
-            self.dbm.sync()
-        callback()
+        callback({'success': True,
+                  'databaseId': databaseId,
+                  'adminAccess': 507})
 
 class RemoteAccountDB:
     def __init__(self, csm):
@@ -109,6 +87,13 @@ class RemoteAccountDB:
         else:
             return False
 
+# Constants used by the naming FSM:
+WISHNAME_LOCKED = 0
+WISHNAME_OPEN = 1
+WISHNAME_PENDING = 2
+WISHNAME_APPROVED = 3
+WISHNAME_REJECTED = 4
+
 # --- FSMs ---
 class OperationFSM(FSM):
     TARGET_CONNECTION = False
@@ -150,7 +135,6 @@ class LoginAccountFSM(OperationFSM):
             return
 
         self.databaseId = result.get('databaseId', 0)
-        accountId = result.get('accountId', 0)
         self.adminAccess = result.get('adminAccess', 0)
         
         # Binary bitmask in base10 form, added to the adminAccess.
@@ -165,8 +149,13 @@ class LoginAccountFSM(OperationFSM):
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
 
-        if accountId:
-            self.accountId = accountId
+        # Try to figure out the accountId using the databaseId.
+        # To do this, query the MongoDB backend and ask it for the account:
+        self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
+        account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
+
+        if account:
+            self.accountId = account['_id']
             self.demand('RetrieveAccount')
         else:
             self.demand('CreateAccount')
@@ -185,12 +174,11 @@ class LoginAccountFSM(OperationFSM):
 
     def enterCreateAccount(self):
         self.account = {'ACCOUNT_AV_SET': [0]*6,
-                        'pirateAvatars': [],
                         'ESTATE_ID': 0,
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime(),
-                        'ACCOUNT_ID': str(self.databaseId),
+                        'ACCOUNT_ID': self.databaseId,
                         'ADMIN_ACCESS': self.adminAccess}
 
         self.csm.air.dbInterface.createObject(
@@ -212,16 +200,6 @@ class LoginAccountFSM(OperationFSM):
         self.csm.air.writeServerEvent('accountCreated', accountId)
 
         self.accountId = accountId
-        self.demand('StoreAccountID')
-
-    def enterStoreAccountID(self):
-        self.csm.accountDB.storeAccountID(self.databaseId, self.accountId, self.__handleStored)
-
-    def __handleStored(self, success=True):
-        if not success:
-            self.demand('Kill', 'The account server could not save your account DB ID!')
-            return
-
         self.demand('SetAccount')
 
     def enterSetAccount(self):
@@ -257,7 +235,7 @@ class LoginAccountFSM(OperationFSM):
             self.accountId,
             self.csm.air.dclassesByName['AccountUD'],
             {'LAST_LOGIN': time.ctime(),
-             'ACCOUNT_ID': str(self.databaseId),
+             'ACCOUNT_ID': self.databaseId,
              'ADMIN_ACCESS': self.adminAccess})
 
         # We're done.
@@ -318,8 +296,8 @@ class CreateAvatarFSM(OperationFSM):
 
         toonFields = {
             'setName': (name,),
-            'WishNameState': ('OPEN',),
-            'WishName': ('',),
+            'WishNameState': WISHNAME_OPEN,
+            'WishName': '',
             'setDNAString': (self.dna,),
             'setDISLid': (self.target,)
         }
@@ -429,18 +407,18 @@ class GetAvatarsFSM(AvatarOperationFSM):
 
         for avId, fields in self.avatarFields.items():
             index = self.avList.index(avId)
-            wns = fields.get('WishNameState', [''])[0]
+            wns = fields.get('WishNameState', WISHNAME_LOCKED)
             name = fields['setName'][0]
-            if wns == 'OPEN':
+            if wns == WISHNAME_OPEN:
                 nameState = 1
-            elif wns == 'PENDING':
+            elif wns == WISHNAME_PENDING:
                 nameState = 2
-            elif wns == 'APPROVED':
+            elif wns == WISHNAME_APPROVED:
                 nameState = 3
-                name = fields['WishName'][0]
-            elif wns == 'REJECTED':
+                name = fields['WishName']
+            elif wns == WISHNAME_REJECTED:
                 nameState = 4
-            elif wns == '':
+            elif wns == WISHNAME_LOCKED:
                 nameState = 0
             else:
                 self.csm.notify.warning('Avatar %d is in unknown name state %s.' % (avId, wns))
@@ -540,7 +518,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'][0] != 'OPEN':
+        if fields['WishNameState'] != WISHNAME_OPEN:
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -555,8 +533,9 @@ class SetNameTypedFSM(AvatarOperationFSM):
                 self.csm.air.dbId,
                 self.avId,
                 self.csm.air.dclassesByName['DistributedToonUD'],
-                {'WishNameState': ('PENDING',),
-                 'WishName': (self.name,)})
+                {'WishNameState': WISHNAME_PENDING,
+                 'WishName': self.name,
+                 'WishNameTimestamp': int(time.time())})
 
         if self.avId:
             self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
@@ -587,7 +566,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.demand('Kill', "One of the account's avatars is invalid!")
             return
 
-        if fields['WishNameState'][0] != 'OPEN':
+        if fields['WishNameState'] != WISHNAME_OPEN:
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
@@ -611,8 +590,8 @@ class SetNamePatternFSM(AvatarOperationFSM):
             self.csm.air.dbId,
             self.avId,
             self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': ('',),
-             'WishName': ('',),
+            {'WishNameState': WISHNAME_LOCKED,
+             'WishName': '',
              'setName': (name,)})
 
         self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
@@ -642,15 +621,15 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
             return
 
         # Process the WishNameState change.
-        wns = fields['WishNameState'][0]
-        wn = fields['WishName'][0]
+        wns = fields['WishNameState']
+        wn = fields['WishName']
         name = fields['setName'][0]
 
-        if wns == 'APPROVED':
+        if wns == WISHNAME_APPROVED:
             wns = ''
             name = wn
             wn = ''
-        elif wns == 'REJECTED':
+        elif wns == WISHNAME_REJECTED:
             wns = 'OPEN'
             wn = ''
         else:
@@ -662,8 +641,8 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
             self.csm.air.dbId,
             self.avId,
             self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': (wns,),
-             'WishName': (wn,),
+            {'WishNameState': wns,
+             'WishName': wn,
              'setName': (name,)},
             {'WishNameState': fields['WishNameState'],
              'WishName': fields['WishName'],
