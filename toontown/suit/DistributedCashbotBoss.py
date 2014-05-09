@@ -188,7 +188,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.endVault.findAllMatches('**/Safes').detach()
         self.endVault.findAllMatches('**/MagnetControlsAll').detach()
         cn = self.endVault.find('**/wallsCollision').node()
-        cn.setIntoCollideMask(OTPGlobals.WallBitmask | ToontownGlobals.PieBitmask | BitMask32.lowerOn(3) << 21)
+        cn.setIntoCollideMask(OTPGlobals.WallBitmask | ToontownGlobals.PieBitmask)
         self.door1 = self.midVault.find('**/SlidingDoor1/')
         self.door2 = self.midVault.find('**/SlidingDoor/')
         self.door3 = self.endVault.find('**/SlidingDoor/')
