@@ -274,27 +274,7 @@ def textures():
 def fps():
     'Toggle frame rate meter on or off.'
     base.setFrameRateMeter(not base.frameRateMeter)
-
-@magicWord(category=CATEGORY_GRAPHICAL)
-def sounds():
-    'Toggle sounds on or off'
-    if base.sfxActive:
-        base.display.settings.updateSetting('game', 'sfx', False)
-    else:
-        base.display.settings.updateSetting('game', 'sfx', True)
-
-    base.enableSoundEffects(base.display.settings.getBool('game', 'sfx', True))
-
-@magicWord(category=CATEGORY_GRAPHICAL)
-def music():
-    'Toggle music on or off'
-    if base.musicActive:
-        base.display.settings.updateSetting('game', 'music', False)
-    else:
-        base.display.settings.updateSetting('game', 'music', True)
-
-    base.enableMusic(base.display.settings.getBool('game', 'music', True))
-
+    
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():
     'Show avId in Nametags.'
