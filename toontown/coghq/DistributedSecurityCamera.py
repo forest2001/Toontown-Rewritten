@@ -26,7 +26,7 @@ def circleY(angle, radius, centerX, centerY):
 
 def getCirclePoints(segCount, centerX, centerY, radius, wideX = 1.0, wideY = 1.0):
     returnShape = []
-    for seg in range(0, segCount):
+    for seg in range(0, int(segCount)):
         coordX = wideX * circleX(pi * 2.0 * float(float(seg) / float(segCount)), radius, centerX, centerY)
         coordY = wideY * circleY(pi * 2.0 * float(float(seg) / float(segCount)), radius, centerX, centerY)
         returnShape.append((coordX, coordY, 1))

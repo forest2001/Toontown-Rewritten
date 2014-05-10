@@ -14,6 +14,7 @@ from toontown.toon import ToonHead
 from toontown.toonbase import TTLocalizer
 from toontown.minigame import Trajectory
 from toontown.effects import DustCloud
+from otp.nametag import NametagGlobals
 GROUND_PLANE_MIN = -15
 CANNON_ROTATION_MIN = -55
 CANNON_ROTATION_MAX = 50
