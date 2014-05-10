@@ -4,12 +4,14 @@ from direct.task import Task
 import random
 
 class LaserGameAvoid(LaserGameBase.LaserGameBase):
+    counter = 0
     
     def __init__(self, funcSuccess, funcFail, funcSendGrid, funcSetGrid):
         LaserGameBase.LaserGameBase.__init__(self, funcSuccess, funcFail, funcSendGrid, funcSetGrid)
         self.setGridSize(8, 8)
         self.blankGrid()
-        self.cycleName = simbase.air.trueUniqueName('AvoidGame')
+        self.cycleName = 'AvoidGame-%d' % self.counter
+        self.counter += 1
 
     
     def delete(self):
