@@ -50,10 +50,10 @@ class DistributedButterfly(DistributedObject.DistributedObject):
         if self.butterfly:
             return
         self.butterfly = Actor.Actor()
-        self.butterfly.loadModel('phase_4/models/props/SZ_butterfly-mod.bam')
-        self.butterfly.loadAnims({'flutter': 'phase_4/models/props/SZ_butterfly-flutter.bam',
-         'glide': 'phase_4/models/props/SZ_butterfly-glide.bam',
-         'land': 'phase_4/models/props/SZ_butterfly-land.bam'})
+        self.butterfly.loadModel('phase_4/models/props/SZ_butterfly-mod')
+        self.butterfly.loadAnims({'flutter': 'phase_4/models/props/SZ_butterfly-flutter',
+         'glide': 'phase_4/models/props/SZ_butterfly-glide',
+         'land': 'phase_4/models/props/SZ_butterfly-land'})
         index = self.doId % len(self.wingTypes)
         chosenType = self.wingTypes[index]
         node = self.butterfly.getGeomNode()

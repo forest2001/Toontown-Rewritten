@@ -294,7 +294,7 @@ class QuestManagerAI:
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.RecoverItemQuest):
                 # Well, this is a quest where we have to recover an item...
-                if quest.getCompletionStatus(toon, quest) == Quests.COMPLETE:
+                if quest.getCompletionStatus(toon, toon.quests[index]) == Quests.COMPLETE:
                     # Task is already complete. Check if we have any other
                     # quests that we need to fish for.
                     continue

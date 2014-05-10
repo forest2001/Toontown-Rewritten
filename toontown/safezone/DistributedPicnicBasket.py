@@ -36,10 +36,10 @@ class DistributedPicnicBasket(DistributedObject.DistributedObject):
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
         self.loader = self.cr.playGame.hood.loader
-        self.foodLoader = ['phase_6/models/golf/picnic_sandwich.bam',
-         'phase_6/models/golf/picnic_apple.bam',
-         'phase_6/models/golf/picnic_cupcake.bam',
-         'phase_6/models/golf/picnic_chocolate_cake.bam']
+        self.foodLoader = ['phase_6/models/golf/picnic_sandwich',
+         'phase_6/models/golf/picnic_apple',
+         'phase_6/models/golf/picnic_cupcake',
+         'phase_6/models/golf/picnic_chocolate_cake']
         self.fullSeat = []
         self.food = []
         for i in range(4):
@@ -378,7 +378,7 @@ class DistributedPicnicBasket(DistributedObject.DistributedObject):
 
     def generateBasketAppearTrack(self):
         if self.basket == None:
-            self.basket = loader.loadModel('phase_6/models/golf/picnic_basket.bam')
+            self.basket = loader.loadModel('phase_6/models/golf/picnic_basket')
         self.basket.setScale(0.1)
         basketTrack = Sequence(
             Func(self.basket.show),

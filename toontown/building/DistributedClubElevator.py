@@ -53,7 +53,7 @@ class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
         self.wantState = 0
         self.latch = None
         self.lastState = self.state
-        self.kartModelPath = 'phase_12/models/bossbotHQ/Coggolf_cart3.bam'
+        self.kartModelPath = 'phase_12/models/bossbotHQ/Coggolf_cart3'
         self.leftDoor = None
         self.rightDoor = None
         self.__toonTracks = {}

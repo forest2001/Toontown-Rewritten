@@ -39,7 +39,7 @@ class DistributedGrid(BasicEntities.DistributedNodePathEntity):
         self.notify.debug('loadModel')
         texSize = 6.0
         scale = self.cellSize / texSize
-        self.model = loader.loadModel('phase_9/models/cogHQ/FloorWear.bam')
+        self.model = loader.loadModel('phase_9/models/cogHQ/FloorWear')
         self.model.reparentTo(self)
         long = self.numCol
         short = self.numRow

@@ -23,7 +23,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         DistributedNode.DistributedNode.__init__(self, cr)
         self.cr = cr
         self.reparentTo(render)
-        self.boardNode = loader.loadModel('phase_6/models/golf/findfour_game.bam')
+        self.boardNode = loader.loadModel('phase_6/models/golf/findfour_game')
         self.boardNode.reparentTo(self)
         self.board = [[0,
           0,

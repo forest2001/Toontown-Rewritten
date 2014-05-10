@@ -25,7 +25,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         NodePath.__init__(self, 'DistributedPicnicTable')
         DistributedNode.DistributedNode.__init__(self, cr)
         self.reparentTo(render)
-        self.picnicTable = loader.loadModel('phase_6/models/golf/game_table.bam')
+        self.picnicTable = loader.loadModel('phase_6/models/golf/game_table')
         self.picnicTable.reparentTo(self)
         self.picnicTableSphereNodes = []
         self.numSeats = 6

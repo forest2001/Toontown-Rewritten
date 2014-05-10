@@ -197,7 +197,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
     def gotCurrentSpec(self, curSpec):
         self.entTypeReg = self.level.getEntityTypeReg()
         curSpec.setEntityTypeReg(self.entTypeReg)
-        self.axis = loader.loadModel('models/misc/xyzAxis.bam')
+        self.axis = loader.loadModel('models/misc/xyzAxis')
         self.axis.setColorOff()
         self.axis.setColorScale(1, 1, 1, 1, 1)
         self.initializeLevel(self.doId, curSpec, curSpec.getScenario())

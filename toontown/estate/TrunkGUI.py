@@ -90,7 +90,7 @@ class TrunkGUI(StateData.StateData):
         self.rotateR.bind(DGG.B1PRESS, self.__rotateRDown)
         self.rotateR.bind(DGG.B1RELEASE, self.__rotateRUp)
         if self.isOwner:
-            trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui.bam')
+            trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui')
             trashImage = (trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_RLVR'))
             self.trashPanel = DirectFrame(parent=aspect2d, image=DGG.getDefaultDialogGeom(), image_color=(1, 1, 0.75, 0.8), image_scale=(0.36, 0, 1.2), pos=(-.86, 0, 0.1), relief=None)
 

@@ -68,11 +68,11 @@ class DistributedGarden(DistributedObject.DistributedObject):
          y,
          z)
         if prop == HouseGlobals.PROP_ICECUBE:
-            model = loader.loadModel('phase_8/models/props/icecube.bam')
+            model = loader.loadModel('phase_8/models/props/icecube')
         elif prop == HouseGlobals.PROP_FLOWER:
-            model = loader.loadModel('phase_8/models/props/flower_treasure.bam')
+            model = loader.loadModel('phase_8/models/props/flower_treasure')
         elif prop == HouseGlobals.PROP_SNOWFLAKE:
-            model = loader.loadModel('phase_8/models/props/snowflake_treasure.bam')
+            model = loader.loadModel('phase_8/models/props/snowflake_treasure')
         model.reparentTo(hidden)
         model.setPos(x, y, z)
         model.setScale(0.2)
@@ -90,11 +90,11 @@ class DistributedGarden(DistributedObject.DistributedObject):
     def loadProp(self, prop, i, j):
         pos = self.getPropPos(i, j)
         if prop == HouseGlobals.PROP_ICECUBE:
-            model = loader.loadModel('phase_8/models/props/icecube.bam')
+            model = loader.loadModel('phase_8/models/props/icecube')
         elif prop == HouseGlobals.PROP_FLOWER:
-            model = loader.loadModel('phase_8/models/props/flower_treasure.bam')
+            model = loader.loadModel('phase_8/models/props/flower_treasure')
         elif prop == HouseGlobals.PROP_SNOWFLAKE:
-            model = loader.loadModel('phase_8/models/props/snowflake_treasure.bam')
+            model = loader.loadModel('phase_8/models/props/snowflake_treasure')
         else:
             self.notify.error('cant find prop: %s' % prop)
         model.reparentTo(hidden)
