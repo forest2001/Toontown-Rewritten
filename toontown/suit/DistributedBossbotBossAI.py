@@ -88,7 +88,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             self.battleOneBattlesMade = True
 
     def getHoodId(self):
-        return ToontownGlobals.LawbotHQ
+        return ToontownGlobals.BossbotHQ
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
@@ -111,8 +111,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             while len(activeSuits) < 4:
                 activeSuits.append(reserveSuits.pop()[0])
 
-        retval = {'activeSuits': activeSuits,
-         'reserveSuits': reserveSuits}
+        retval = {'activeSuits': activeSuits, 'reserveSuits': reserveSuits}
         return retval
 
     def makeBattle(self, bossCogPosHpr, battlePosHpr, roundCallback, finishCallback, battleNumber, battleSide):
@@ -417,24 +416,25 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 self.numToonsAtEnd += 1
                 toonHps.append(toon.hp)
 
-        self.air.writeServerEvent('ceoInfo', self.doId, '%d|%.2f|%d|%d|%d|%d|%d|%d|%s|%s|%.1f|%d|%d|%d|%d|%d}%d|%s|' % (didTheyWin,
-         self.battleFourTimeInMin,
-         self.battleDifficulty,
-         self.numToonsAtStart,
-         self.numToonsAtEnd,
-         self.numTables,
-         self.numTables * self.numDinersPerTable,
-         self.numDinersExploded,
-         toonHps,
-         self.involvedToons,
-         self.speedDamage,
-         self.numMoveAttacks,
-         self.numGolfAttacks,
-         self.numGearAttacks,
-         self.numGolfAreaAttacks,
-         self.numToonupGranted,
-         self.totalLaffHealed,
-         'ceoBugfixes'))
+        self.air.writeServerEvent('ceoInfo', self.doId, '%d|%.2f|%d|%d|%d|%d|%d|%d|%s|%s|%.1f|%d|%d|%d|%d|%d}%d|%s|' % (didTheyWin, 
+            self.battleFourTimeInMin,
+            self.battleDifficulty,
+            self.numToonsAtStart,
+            self.numToonsAtEnd,
+            self.numTables,
+            self.numTables * self.numDinersPerTable,
+            self.numDinersExploded,
+            toonHps,
+            self.involvedToons,
+            self.speedDamage,
+            self.numMoveAttacks,
+            self.numGolfAttacks,
+            self.numGearAttacks,
+            self.numGolfAreaAttacks,
+            self.numToonupGranted,
+            self.totalLaffHealed,
+            'ceoBugfixes')
+        )
 
     def setupBattleFourObjects(self):
         if self.battleFourSetup:
@@ -559,16 +559,17 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         for golfSpot in self.golfSpots:
             golfSpot.turnOff()
 
-        self.suitsKilled.append({'type': None,
-         'level': None,
-         'track': self.dna.dept,
-         'isSkelecog': 0,
-         'isForeman': 0,
-         'isVP': 1,
-         'isCFO': 0,
-         'isSupervisor': 0,
-         'isVirtual': 0,
-         'activeToons': self.involvedToons[:]})
+        self.suitsKilled.append({
+            'type': None,
+            'level': None,
+            'track': self.dna.dept,
+            'isSkelecog': 0,
+            'isForeman': 0,
+            'isVP': 1,
+            'isCFO': 0,
+            'isSupervisor': 0,
+            'isVirtual': 0,
+            'activeToons': self.involvedToons[:]})
         self.barrier = self.beginBarrier('Victory', self.involvedToons, 30, self.__doneVictory)
         return
 
@@ -629,12 +630,13 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             self.doneOvertimeTwoAttack = True
             optionalParam = 1
         else:
-            attackCode = random.choice([ToontownGlobals.BossCogGolfAreaAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack])
-            
+            attackCode = random.choice([
+                ToontownGlobals.BossCogGolfAreaAttack,
+                ToontownGlobals.BossCogDirectedAttack,
+                ToontownGlobals.BossCogDirectedAttack,
+                ToontownGlobals.BossCogDirectedAttack,
+                ToontownGlobals.BossCogDirectedAttack])
+
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
         if attackCode == ToontownGlobals.BossCogGolfAreaAttack:
