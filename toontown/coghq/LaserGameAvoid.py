@@ -50,35 +50,24 @@ class LaserGameAvoid(LaserGameBase.LaserGameBase):
                 self.gridData[column][row] = tile
             
         
-        taskMgr.doMethodLater(2.5, self._LaserGameAvoid__cycle, self.cycleName)
+        taskMgr.doMethodLater(2.5, self.__cycle, self.cycleName)
 
     
-    def _LaserGameAvoid__cycle(self, taskMgrFooler = 0):
+    def __cycle(self, taskMgrFooler = 0):
         if not hasattr(self, 'gridNumX'):
             return Task.done
-        
         for column in range(0, self.gridNumX):
             for row in range(0, self.gridNumY):
                 if self.gridData[column][row] == 0:
-                    tile = random.choice([
-                        0,
-                        14])
+                    tile = random.choice([0, 14])
                     self.gridData[column][row] = tile
-                    continue
-                if self.gridData[column][row] == 14:
+                elif self.gridData[column][row] == 14:
                     tile = 12
                     self.gridData[column][row] = tile
-                    continue
-                if self.gridData[column][row] == 12:
+                elif self.gridData[column][row] == 12:
                     tile = 0
                     self.gridData[column][row] = tile
-                    continue
-            
-        
         if not self.finshed:
-            taskMgr.doMethodLater(2.5, self._LaserGameAvoid__cycle, self.cycleName)
+            taskMgr.doMethodLater(2.5, self.__cycle, self.cycleName)
             self.funcSendGrid()
-        
         return Task.done
-
-
