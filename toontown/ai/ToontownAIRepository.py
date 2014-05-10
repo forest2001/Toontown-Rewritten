@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
-from toontown.hood import SellbotHQAI, CashbotHQAI, LawbotHQAI
+from toontown.hood import SellbotHQAI, CashbotHQAI, LawbotHQAI, BossbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -201,6 +201,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.hoods.append(CashbotHQAI.CashbotHQAI(self))
         clearQueue()
         self.hoods.append(LawbotHQAI.LawbotHQAI(self))
+        clearQueue()
+        self.hoods.append(BossbotHQAI.BossbotHQAI(self))
         clearQueue()
 
         for sp in self.suitPlanners.values():
