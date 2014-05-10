@@ -7,7 +7,6 @@ from toontown.coghq.DistributedCogHQDoorAI import DistributedCogHQDoorAI
 from toontown.building import DoorTypes
 from toontown.building import FADoorCodes
 
-
 class SellbotHQAI(CogHoodAI):
     HOOD = ToontownGlobals.SellbotHQ
 
@@ -24,6 +23,7 @@ class SellbotHQAI(CogHoodAI):
             exteriorDoor.generateWithRequired(ToontownGlobals.SellbotHQ)
             exteriorDoor.sendUpdate('setDoorIndex', [i])
             self.doors.append(exteriorDoor)
+
         interiorDoor.setOtherDoor(self.doors[0])
         interiorDoor.zoneId = ToontownGlobals.SellbotLobby
         interiorDoor.generateWithRequired(ToontownGlobals.SellbotLobby)
@@ -38,7 +38,7 @@ class SellbotHQAI(CogHoodAI):
         self.createLobbyManager(DistributedSellbotBossAI, ToontownGlobals.SellbotLobby)
         
         # Create VP elevator.
-        self.createElevator(DistributedVPElevatorAI, self.lobbyMgr, ToontownGlobals.SellbotLobby, ToontownGlobals.SellbotLobby, boss=True)
+        self.vpElevator = self.createElevator(DistributedVPElevatorAI, self.lobbyMgr, ToontownGlobals.SellbotLobby, ToontownGlobals.SellbotLobby, boss=True)
         
         # Make our doors.
         self.createDoor()
@@ -49,5 +49,14 @@ class SellbotHQAI(CogHoodAI):
         
         # Create factory elevators.
         mins = ToontownGlobals.FactoryLaffMinimums[0]
-        self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 0, minLaff=mins[0])
-        self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 1, minLaff=mins[1])
+        self.frontEntrance = self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 0, minLaff=mins[0])
+        self.sideEntrance = self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 1, minLaff=mins[1])
+
+        # Enable boarding groups
+        if simbase.config.GetBool('want-boarding-groups', True):
+            # VP Boarding Group
+            self.createBoardingGroup(self.air, [self.vpElevator.doId], ToontownGlobals.SellbotLobby, 8)
+
+            # Factory Boarding Group's
+            self.factories = [self.frontEntrance.doId, self.sideEntrance.doId]
+            self.createBoardingGroup(self.air, self.factories, ToontownGlobals.SellbotFactoryExt)
