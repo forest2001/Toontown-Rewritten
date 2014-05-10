@@ -3,7 +3,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.suit.DistributedBossbotBossAI import DistributedBossbotBossAI
 from toontown.building.DistributedBBElevatorAI import DistributedBBElevatorAI
 from toontown.coghq.DistributedCogHQDoorAI import DistributedCogHQDoorAI
-from toontown.coghq import DistributedCogKartAI
+from toontown.coghq.DistributedCogKartAI import DistributedCogKartAI
 from toontown.building import DoorTypes
 from toontown.building import FADoorCodes
 
@@ -12,6 +12,7 @@ class BossbotHQAI(CogHoodAI):
 
     def __init__(self, air):
         CogHoodAI.__init__(self, air)
+        self.karts = []
         self.createZone()
         
     def createDoor(self):
@@ -28,7 +29,12 @@ class BossbotHQAI(CogHoodAI):
         interiorDoor.generateWithRequired(ToontownGlobals.BossbotLobby)
         interiorDoor.sendUpdate('setDoorIndex', [0])
         self.doors.append(interiorDoor)
-            
+    
+    def createKart(self, index, x, y, z, h, p, r, min):
+        kart = DistributedCogKartAI(self.air, index, x, y, z, h, p, r, self.air.countryClubMgr, min)
+        kart.generateWithRequired(self.HOOD)
+        self.karts.append(kart)
+        return kart
     
     def createZone(self):
         CogHoodAI.createZone(self)
@@ -43,13 +49,14 @@ class BossbotHQAI(CogHoodAI):
         self.createDoor()
         
         # Create Cog Golf Courses.
-        # kartPos = ((154.762, 37.169, 0), (141.403, -81.887, 0), (-48.44, 15.308, 0))
-        # hprList = ((110.815, 0, 0), (61.231, 0, 0), (-105.481, 0, 0))
+        kartPos = ((154.762, 37.169, 0), (141.403, -81.887, 0), (-48.44, 15.308, 0))
+        hprList = ((110.815, 0, 0), (61.231, 0, 0), (-105.481, 0, 0))
 
-        # mins = ToontownGlobals.FactoryLaffMinimums[3]
-        # self.frontThree = self.createKart(DistributedCogKartAI, self.air.mintMgr, self.HOOD, ToontownGlobals.BossbotCountryClubIntA, 0, minLaff=mins[0])
-        # self.middleSix = self.createKart(DistributedCogKartAI, self.air.mintMgr, self.HOOD, ToontownGlobals.BossbotCountryClubIntB, 1, minLaff=mins[1])
-        # self.backNine = self.createKart(DistributedCogKartAI, self.air.mintMgr, self.HOOD, ToontownGlobals.BossbotCountryClubIntC, 2, minLaff=mins[2])
+        mins = ToontownGlobals.FactoryLaffMinimums[3]
+        for i in range(3):
+            x, y, z = kartPos[i]
+            h, p, r = hprList[i]
+            self.createKart(i, x, y, z, h, p, r, mins[i])
 
         # Enable boarding groups
         if simbase.config.GetBool('want-boarding-groups', True):
@@ -57,5 +64,5 @@ class BossbotHQAI(CogHoodAI):
             self.createBoardingGroup(self.air, [self.ceoElevator.doId], ToontownGlobals.BossbotLobby, 8)
 
             # Cog Golf Boarding Group's
-            # self.cogGolfCources = [self.frontThree.doId, self.middleSix.doId, self.backNine.doId]
-            # self.createBoardingGroup(self.air, self.cogGolfCources, ToontownGlobals.BossbotHQ)
+            kartIds = [kart.getDoId() for kart in self.karts]
+            self.createBoardingGroup(self.air, kartIds, ToontownGlobals.BossbotHQ)

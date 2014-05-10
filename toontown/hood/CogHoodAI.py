@@ -20,7 +20,6 @@ class CogHoodAI(HoodAI):
         HoodAI.__init__(self, air)
         self.doors = []
         self.elevators = []
-        self.karts = []
         self.suitPlanners = []
         self.lobbyMgr = None
     
@@ -33,12 +32,6 @@ class CogHoodAI(HoodAI):
         self.elevators.append(elevator)
         return elevator
         
-    def createKart(self, dclass, mgr, extZone, intZone, index=0, minLaff=0, boss=False):
-        kart = dclass(self.air, mgr, intZone, index, antiShuffle=self.air.config.GetInt('want-anti-shuffle', 0), minLaff=minLaff)
-        kart.generateWithRequired(extZone)
-        self.karts.append(kart)
-        return kart
-
     def createDoor(self):
         # Overridable by sub-class.
         pass

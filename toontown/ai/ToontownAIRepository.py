@@ -46,6 +46,7 @@ from toontown.coghq.MintManagerAI import MintManagerAI
 from toontown.coghq.LawOfficeManagerAI import LawOfficeManagerAI
 from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
+from toontown.coghq.CountryClubManagerAI import CountryClubManagerAI
 
 # Suits.
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
@@ -80,6 +81,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.factoryMgr = FactoryManagerAI(self)
         self.mintMgr = MintManagerAI(self)
         self.lawOfficeMgr = LawOfficeManagerAI(self)
+        self.countryClubMgr = CountryClubManagerAI(self)
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
