@@ -2,6 +2,7 @@ from toontown.toonbase import ToontownGlobals
 from HoodAI import HoodAI
 from toontown.suit.DistributedSuitPlannerAI import DistributedSuitPlannerAI
 from toontown.coghq.DistributedCogHQDoorAI import DistributedCogHQDoorAI
+from toontown.coghq import DistributedCogKartAI
 from toontown.coghq.LobbyManagerAI import LobbyManagerAI
 from toontown.building import DistributedBoardingPartyAI
 
@@ -19,9 +20,9 @@ class CogHoodAI(HoodAI):
         HoodAI.__init__(self, air)
         self.doors = []
         self.elevators = []
+        self.karts = []
         self.suitPlanners = []
         self.lobbyMgr = None
-        # TODO: Boarding groups.
     
     def createElevator(self, dclass, mgr, extZone, intZone, index=0, minLaff=0, boss=False):
         if boss:
@@ -32,6 +33,12 @@ class CogHoodAI(HoodAI):
         self.elevators.append(elevator)
         return elevator
         
+    def createKart(self, dclass, mgr, extZone, intZone, index=0, minLaff=0, boss=False):
+        kart = dclass(self.air, mgr, intZone, index, antiShuffle=self.air.config.GetInt('want-anti-shuffle', 0), minLaff=minLaff)
+        kart.generateWithRequired(extZone)
+        self.karts.append(kart)
+        return kart
+
     def createDoor(self):
         # Overridable by sub-class.
         pass
