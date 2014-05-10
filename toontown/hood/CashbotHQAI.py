@@ -50,11 +50,10 @@ class CashbotHQAI(CogHoodAI):
         self.dollarMint = self.createElevator(DistributedMintElevatorExtAI, self.air.mintMgr, self.HOOD, ToontownGlobals.CashbotMintIntB, 1, minLaff=mins[1])
         self.bullionMint = self.createElevator(DistributedMintElevatorExtAI, self.air.mintMgr, self.HOOD, ToontownGlobals.CashbotMintIntC, 2, minLaff=mins[2])
 
-        # Enable boarding groups
-        if simbase.config.GetBool('want-boarding-groups', True):
-            # CFO Boarding Group
-            self.createBoardingGroup(self.air, [self.cfoElevator.doId], ToontownGlobals.CashbotLobby, 8)
+        # Create boarding groups
+        # CFO Boarding Group
+        self.createBoardingGroup(self.air, [self.cfoElevator.doId], ToontownGlobals.CashbotLobby, 8)
 
-            # Mint Boarding Group's
-            self.mints = [self.cointMint.doId, self.dollarMint.doId, self.bullionMint.doId]
-            self.createBoardingGroup(self.air, self.mints, ToontownGlobals.CashbotHQ)
+        # Mint Boarding Group's
+        self.mints = [self.cointMint.doId, self.dollarMint.doId, self.bullionMint.doId]
+        self.createBoardingGroup(self.air, self.mints, ToontownGlobals.CashbotHQ)

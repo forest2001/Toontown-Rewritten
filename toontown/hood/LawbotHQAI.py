@@ -70,11 +70,10 @@ class LawbotHQAI(CogHoodAI):
         self.officeC = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 2, minLaff=mins[2])
         self.officeD = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 3, minLaff=mins[3])
 
-        # Enable boarding groups
-        if simbase.config.GetBool('want-boarding-groups', True):
-            # CJ Boarding Group
-            self.createBoardingGroup(self.air, [self.cjElevator.doId], ToontownGlobals.LawbotLobby, 8)
+        # Create boarding groups
+        # CJ Boarding Group
+        self.createBoardingGroup(self.air, [self.cjElevator.doId], ToontownGlobals.LawbotLobby, 8)
 
-            # DA Office Boarding Group's
-            self.offices = [self.officeA.doId, self.officeB.doId, self.officeC.doId, self.officeD.doId]
-            self.createBoardingGroup(self.air, self.offices, ToontownGlobals.LawbotOfficeExt)
+        # DA Office Boarding Group's
+        self.offices = [self.officeA.doId, self.officeB.doId, self.officeC.doId, self.officeD.doId]
+        self.createBoardingGroup(self.air, self.offices, ToontownGlobals.LawbotOfficeExt)
