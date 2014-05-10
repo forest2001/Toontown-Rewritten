@@ -50,8 +50,8 @@ class LawbotHQAI(CogHoodAI):
         # Create lobby manager...
         self.createLobbyManager(DistributedLawbotBossAI, ToontownGlobals.LawbotLobby)
         
-        # Create CFO elevator.
-        self.createElevator(DistributedCJElevatorAI, self.lobbyMgr, ToontownGlobals.LawbotLobby, ToontownGlobals.LawbotLobby, boss=True)
+        # Create CJ elevator.
+        self.cjElevator = self.createElevator(DistributedCJElevatorAI, self.lobbyMgr, ToontownGlobals.LawbotLobby, ToontownGlobals.LawbotLobby, boss=True)
         
         # Make our doors.
         self.createDoor()
@@ -61,7 +61,16 @@ class LawbotHQAI(CogHoodAI):
         
         # Create mint elevators.
         mins = ToontownGlobals.FactoryLaffMinimums[2]
-        self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 0, minLaff=mins[0])
-        self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 1, minLaff=mins[1])
-        self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 2, minLaff=mins[2])
-        self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 3, minLaff=mins[3])
+        self.officeA = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 0, minLaff=mins[0])
+        self.officeB = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 1, minLaff=mins[1])
+        self.officeC = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 2, minLaff=mins[2])
+        self.officeD = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 3, minLaff=mins[3])
+
+        # Enable boarding groups
+        if simbase.config.GetBool('want-boarding-groups', True):
+            # CJ Boarding Group
+            self.createBoardingGroup(self.air, [self.cjElevator.doId], ToontownGlobals.LawbotLobby, 8)
+
+            # DA Office Boarding Group's
+            self.offices = [self.officeA.doId, self.officeB.doId, self.officeC.doId, self.officeD.doId]
+            self.createBoardingGroup(self.air, self.offices, ToontownGlobals.LawbotOfficeExt)
