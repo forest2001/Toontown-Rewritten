@@ -58,11 +58,10 @@ class BossbotHQAI(CogHoodAI):
             h, p, r = hprList[i]
             self.createKart(i, x, y, z, h, p, r, mins[i])
 
-        # Enable boarding groups
-        if simbase.config.GetBool('want-boarding-groups', True):
-            # CEO Boarding Group
-            self.createBoardingGroup(self.air, [self.ceoElevator.doId], ToontownGlobals.BossbotLobby, 8)
+        # Create boarding groups
+        # CEO Boarding Group
+        self.createBoardingGroup(self.air, [self.ceoElevator.doId], ToontownGlobals.BossbotLobby, 8)
 
-            # Cog Golf Boarding Group's
-            kartIds = [kart.getDoId() for kart in self.karts]
-            self.createBoardingGroup(self.air, kartIds, ToontownGlobals.BossbotHQ)
+        # Cog Golf Boarding Group's
+        kartIds = [kart.getDoId() for kart in self.karts]
+        self.createBoardingGroup(self.air, kartIds, ToontownGlobals.BossbotHQ)

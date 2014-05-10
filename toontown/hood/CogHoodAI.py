@@ -37,8 +37,9 @@ class CogHoodAI(HoodAI):
         pass
         
     def createBoardingGroup(self, air, elevators, zone, maxSize=4):
-        boardingGroup = DistributedBoardingPartyAI.DistributedBoardingPartyAI(air, elevators, maxSize)
-        boardingGroup.generateWithRequired(zone)
+        if simbase.config.GetBool('want-boarding-groups', True):
+            boardingGroup = DistributedBoardingPartyAI.DistributedBoardingPartyAI(air, elevators, maxSize)
+            boardingGroup.generateWithRequired(zone)
 
     def createSuitPlanner(self, zone):
         sp = DistributedSuitPlannerAI(self.air, zone)

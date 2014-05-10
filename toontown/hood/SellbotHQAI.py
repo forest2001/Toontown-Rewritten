@@ -39,7 +39,7 @@ class SellbotHQAI(CogHoodAI):
         
         # Create VP elevator.
         self.vpElevator = self.createElevator(DistributedVPElevatorAI, self.lobbyMgr, ToontownGlobals.SellbotLobby, ToontownGlobals.SellbotLobby, boss=True)
-        
+
         # Make our doors.
         self.createDoor()
         
@@ -52,11 +52,10 @@ class SellbotHQAI(CogHoodAI):
         self.frontEntrance = self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 0, minLaff=mins[0])
         self.sideEntrance = self.createElevator(DistributedFactoryElevatorExtAI, self.air.factoryMgr, ToontownGlobals.SellbotFactoryExt, ToontownGlobals.SellbotFactoryInt, 1, minLaff=mins[1])
 
-        # Enable boarding groups
-        if simbase.config.GetBool('want-boarding-groups', True):
-            # VP Boarding Group
-            self.createBoardingGroup(self.air, [self.vpElevator.doId], ToontownGlobals.SellbotLobby, 8)
+        # Create boarding groups
+        # VP Boarding Group
+        self.createBoardingGroup(self.air, [self.vpElevator.doId], ToontownGlobals.SellbotLobby, 8)
 
-            # Factory Boarding Group's
-            self.factories = [self.frontEntrance.doId, self.sideEntrance.doId]
-            self.createBoardingGroup(self.air, self.factories, ToontownGlobals.SellbotFactoryExt)
+        # Factory Boarding Group's
+        self.factories = [self.frontEntrance.doId, self.sideEntrance.doId]
+        self.createBoardingGroup(self.air, self.factories, ToontownGlobals.SellbotFactoryExt)
