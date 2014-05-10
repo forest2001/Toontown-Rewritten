@@ -21,10 +21,7 @@ class ToontownLoader(Loader.Loader):
         Loader.Loader.destroy(self)
 
     def loadDNA(self, filename):
-        if __debug__:
-            filename = 'resources/' + filename
-        else:
-            filename = '/' + filename
+        filename = '/' + filename
 
         with open(filename, 'r') as f:
             tree = DNAParser.parse(f)
