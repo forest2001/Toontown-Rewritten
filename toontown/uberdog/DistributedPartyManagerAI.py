@@ -63,7 +63,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def addPartyRequest(self, hostId, startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         if hostId != simbase.air.getAvatarIdFromSender():
-            self.air.writeServerEvent('suspicious',simbase.air.getAvatarIdFromSender(),'Toon tried to create a party as someone else!')
+            self.air.writeServerEvent('suspicious', avId=simbase.air.getAvatarIdFromSender(), issue='Toon tried to create a party as someone else!')
             return
         print 'party requested: host %s, start %s, end %s, private %s, invitetheme %s, activities omitted, decor omitted, invitees %s' % (hostId, startTime, endTime, isPrivate, inviteTheme, inviteeIds)
         simbase.air.globalPartyMgr.sendAddParty(hostId, self.host2PartyId[hostId], startTime, endTime, isPrivate, inviteTheme, activities, decorations, inviteeIds)
@@ -191,7 +191,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
         sender = self.air.getAvatarIdFromSender()
         # Only the host of a party can free its zone
         if sender != hostId:
-            self.air.writeServerEvent('suspicious',sender,'Toon tried to free zone for someone else\'s party!')
+            self.air.writeServerEvent('suspicious', avId=sender, issue='Toon tried to free zone for someone else\'s party!')
             return
         partyId = self.host2PartyId[hostId]
         if partyId in self.partyId2PlanningZone:

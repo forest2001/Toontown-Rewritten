@@ -63,11 +63,11 @@ class DistributedCannonGameAI(DistributedMinigameAI):
     def _checkCannonRange(self, zRot, angle, avId):
         outOfRange = 0
         if zRot < CannonGameGlobals.CANNON_ROTATION_MIN or zRot > CannonGameGlobals.CANNON_ROTATION_MAX:
-            self.air.writeServerEvent('suspicious', avId, 'Cannon game z-rotation out of range: %s' % zRot)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Cannon game z-rotation out of range: %s' % zRot)
             self.notify.warning('av %s cannon z-rotation out of range: %s' % (avId, zRot))
             outOfRange = 1
         if angle < CannonGameGlobals.CANNON_ANGLE_MIN or angle > CannonGameGlobals.CANNON_ANGLE_MAX:
-            self.air.writeServerEvent('suspicious', avId, 'Cannon game vertical angle out of range: %s' % angle)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Cannon game vertical angle out of range: %s' % angle)
             self.notify.warning('av %s cannon vertical angle out of range: %s' % (avId, angle))
             outOfRange = 1
         return outOfRange

@@ -14,8 +14,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
     def chatMessage(self, message):
         sender = self.air.getAvatarIdFromSender()
         if sender == 0:
-            self.air.writeServerEvent('suspicious', self.air.getAccountIdFromSender(),
-                                         'Account sent chat without an avatar', message)
+            self.air.writeServerEvent('suspicious', accId=self.air.getAccountIdFromSender(),
+                                         issue='Account sent chat without an avatar', message=message)
             return
 
         modifications = []

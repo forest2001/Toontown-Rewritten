@@ -27,8 +27,8 @@ class DistributedFurnitureItemAI(DistributedSmoothNodeAI):
         senderId = self.air.getAvatarIdFromSender()
         if (not self.furnitureMgr.director or
                 senderId != self.furnitureMgr.director.doId):
-            self.air.writeServerEvent('suspicious', senderId,
-                                      'Tried to move furniture without being the director!')
+            self.air.writeServerEvent('suspicious', avId=senderId,
+                                      issue='DistributedFurnitureItemAI.requestPosHpr Tried to move furniture without being the director!')
             return
 
         self.catalogItem.posHpr = x, y, z, h, p, r

@@ -53,7 +53,7 @@ class DistributedLiftAI(DistributedEntityAI.DistributedEntityAI):
         avId = self.air.getAvatarIdFromSender()
         avatar = self.air.doId2do.get(avId)
         if not avatar:
-            self.air.writeServerEvent('suspicious', avId, 'LiftAI.setAvatarEnter avId not valid')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='LiftAI.setAvatarEnter avId not valid')
             return
         self.notify.debug('setAvatarEnter: %s' % avId)
         if avId in self.boardedAvs:

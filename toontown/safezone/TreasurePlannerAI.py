@@ -91,7 +91,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
             else:
                 secondsPerGrab = elapsed / self.requestCount
                 if self.requestCount >= 3 and secondsPerGrab <= 0.4:
-                    simbase.air.writeServerEvent('suspicious', avId, 'TreasurePlannerAI.grabAttempt %s treasures in %s seconds' % (self.requestCount, elapsed))
+                    simbase.air.writeServerEvent('suspicious', avId=avId, issue='TreasurePlannerAI.grabAttempt %s treasures in %s seconds' % (self.requestCount, elapsed))
         else:
             self.lastRequestId = avId
             self.requestCount = 1
@@ -102,7 +102,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
         else:
             av = simbase.air.doId2do.get(avId)
             if av == None:
-                simbase.air.writeServerEvent('suspicious', avId, 'TreasurePlannerAI.grabAttempt unknown avatar')
+                simbase.air.writeServerEvent('suspicious', avId=avId, issue='TreasurePlannerAI.grabAttempt unknown avatar')
                 self.notify.warning('avid: %s does not exist' % avId)
             else:
                 treasure = self.treasures[index]

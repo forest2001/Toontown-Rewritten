@@ -5,10 +5,6 @@ from direct.distributed.MsgTypes import *
 from panda3d.core import *
 import pymongo, urlparse
 
-# HACKFIX TODO: Have the dev server's panda3d installation update properly?
-# Currently, it doesn't have the new message types required for the
-# DBSS_OBJECT_GET_ACTIVATED MsgType, so for now we will hard-code it in.
-
 mongodb_url = ConfigVariableString('mongodb-url', 'mongodb://localhost',
                                    'Specifies the URL of the MongoDB server that'
                                    'stores all gameserver data.')

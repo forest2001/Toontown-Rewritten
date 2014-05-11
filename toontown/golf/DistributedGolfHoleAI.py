@@ -53,10 +53,10 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     def setAvatarReadyHole(self):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to join a hole for a game of golf they\'re not in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to join a hole for a game of golf they\'re not in!')
             return
         if avId in self.readyAvatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to join a golf hole twice!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to join a golf hole twice!')
             return
         self.readyAvatars.append(avId)
         if set(self.readyAvatars) == set(self.avatars):
@@ -78,10 +78,10 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     def turnDone(self):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to end their turn in a golf game they\'re not playing in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to end their turn in a golf game they\'re not playing in!')
             return
         if avId != self.curGolfer:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to end someone else\'s turn in a game of golf!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to end someone else\'s turn in a game of golf!')
             return
         avIndex = self.avatars.index(avId)
         if set(self.avatars) == set(self.finishedAvatars):
@@ -117,13 +117,13 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
         #THIS FUNCTION IS NEVER CALLED BY THE DISNEY CLIENT
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to get a hole in a golf game they\'re not playing in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to get a hole in a golf game they\'re not playing in!')
             return
         if avId in self.finishedAvatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to get a hole twice!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to get a hole twice!')
             return
         if avId != self.curGolfer:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to get a hole while someone else is golfing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to get a hole while someone else is golfing!')
             return
         self.finishedAvatars.append(avId)
 
@@ -158,10 +158,10 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     def setAvatarTee(self, tee):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to set their tee in a game they\'re not in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to set their tee in a game they\'re not in!')
             return
         if avId != self.curGolfer:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to set their tee while not being the current golfer!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to set their tee while not being the current golfer!')
             return
         self.sendUpdate('setAvatarFinalTee', [avId, tee])
         self.sendUpdate('golfersTurn', [avId])
@@ -172,10 +172,10 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     def postSwingState(self, cycleTime, power, bX, bY, bZ, x, y, aimTime, cod):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to swing in a golf game they\'re not playing in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to swing in a golf game they\'re not playing in!')
             return
         if avId != self.curGolfer:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to golf outside of their turn!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to golf outside of their turn!')
             return
         if len(self.avatars) == 1:
             self.assignedAvatar = self.avatars[0]
@@ -194,7 +194,7 @@ class DistributedGolfHoleAI(DistributedPhysicsWorldAI):
     def ballMovie2AI(self, cycleTime, avId, recording, aVRecording, ballInHoleFrame, ballTouchedHoleFrame, ballFirstTouchedHoleFrame, COD):
         sender = self.air.getAvatarIdFromSender()
         if sender != self.assignedAvatar:
-            self.air.writeServerEvent('suspicious', sender, 'Toon tried to send ball movie with no assigned sender!')
+            self.air.writeServerEvent('suspicious', avId=sender, issue='Toon tried to send ball movie with no assigned sender!')
             return
         if ballInHoleFrame != 0:
             self.finishedAvatars.append(avId)

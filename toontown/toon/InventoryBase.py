@@ -255,7 +255,7 @@ class InventoryBase(DirectObject.DirectObject):
             self.notify.warning('Somebody is trying to buy forbidden items! ' + 'Rejecting purchase.')
             return 0
         if not self.validateItemsBasedOnAccess(newInventory):
-            simbase.air.writeServerEvent('suspicious', self.toon.doId, 'non-paid av trying to purchase paid gags')
+            simbase.air.writeServerEvent('suspicious', avId=self.toon.doId, issue='non-paid av trying to purchase paid gags')
             return 0
         self.updateInventory(newInventory)
         return 1

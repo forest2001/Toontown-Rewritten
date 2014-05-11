@@ -378,7 +378,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # The list is empty. This is suspicious as the client shouldn't send
             # a blank list.
             self.notify.warning('Received blank list of avIds for requestAvatarInfo from avId %d' % requesterId)
-            self.air.writeServerEvent('suspicious', requesterId, 'Sent a blank list of avIds for requestAvatarInfo in TTRFMUD')
+            self.air.writeServerEvent('suspicious', avId=requesterId, issue='Sent a blank list of avIds for requestAvatarInfo in TTRFMUD')
             return
         fsm = GetToonDataFSM(self, requesterId, avIds[0], functools.partial(self.__avInfoCallback, avIds=avIds[1:]))
         fsm.start()
@@ -476,7 +476,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if toId not in self.tpRequests:
             return
         if self.tpRequests.get(toId) != fromId:
-            self.air.writeServerEvent('suspicious', fromId, 'toon tried to send teleportResponse for a query that isn\'t theirs!')
+            self.air.writeServerEvent('suspicious', avId=fromId, issue='toon tried to send teleportResponse for a query that isn\'t theirs!')
             return
         self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
         del self.tpRequests[toId]
@@ -496,4 +496,4 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
     def sendTalkWhisper(self, toId, message):
         fromId = self.air.getAvatarIdFromSender()
         self.sendUpdateToAvatarId(toId, 'receiveTalkWhisper', [fromId, message])
-        self.air.writeServerEvent('whisper-said', fromId, toId, message)
+        self.air.writeServerEvent('whisper-said', fromId=fromId, toId=toId, message=message)

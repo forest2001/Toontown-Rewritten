@@ -275,7 +275,7 @@ class QuestManagerAI:
             # Better stop hackers, or our own stupidity.
             self.notify.warning("toonId %s attempted to select trackId %d, which is a default track!" % (toonId, trackId))
             # Yes this is suspicious, because it should be impossible.
-            self.air.writeServerEvent('suspicious', toonId, 'Attempted to train trackId %d, which is a default track!' % trackId)
+            self.air.writeServerEvent('suspicious', avId=toonId, issue='QMAI.avatarChoseTrack Attempted to train trackId %d, which is a default track!' % trackId)
             return
         rewardId = 401 + trackId
         npc.completeQuest(toonId, questId, rewardId)
