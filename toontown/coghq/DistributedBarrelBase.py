@@ -16,7 +16,7 @@ class DistributedBarrelBase(BasicEntities.DistributedNodePathEntity, BarrelBase.
         self.animTrack = None
         self.shadow = 0
         self.barrelScale = 0.5
-        self.sphereRadius = 3.2
+        self.sphereRadius = 4.2
         self.playSoundForRemoteToons = 1
         self.gagNode = None
         self.gagModel = None

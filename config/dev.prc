@@ -40,7 +40,8 @@ smooth-lag 0.4
 # A few fun things for our developer build. These shouldn't go in public_client.
 estate-day-night #t
 want-instant-parties #t
-show-total-population #t
+show-total-population #f
+want-whitelist #f
 
 
 # Holidays and Events

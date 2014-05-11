@@ -9,7 +9,7 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
-from toontown.hood import SellbotHQAI
+from toontown.hood import SellbotHQAI, CashbotHQAI, LawbotHQAI, BossbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
@@ -43,8 +43,11 @@ from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 from toontown.coghq.FactoryManagerAI import FactoryManagerAI
+from toontown.coghq.MintManagerAI import MintManagerAI
+from toontown.coghq.LawOfficeManagerAI import LawOfficeManagerAI
 from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
+from toontown.coghq.CountryClubManagerAI import CountryClubManagerAI
 
 # Suits.
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
@@ -77,6 +80,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.questManager = QuestManagerAI(self)
         self.cogPageManager = CogPageManagerAI()
         self.factoryMgr = FactoryManagerAI(self)
+        self.mintMgr = MintManagerAI(self)
+        self.lawOfficeMgr = LawOfficeManagerAI(self)
+        self.countryClubMgr = CountryClubManagerAI(self)
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
@@ -192,8 +198,22 @@ class ToontownAIRepository(ToontownInternalRepository):
         clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
         clearQueue()
-        self.hoods.append(SellbotHQAI.SellbotHQAI(self))
-        clearQueue()
+        
+        if simbase.config.GetBool('want-sbhq', True):
+            self.hoods.append(SellbotHQAI.SellbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-cbhq', True):
+            self.hoods.append(CashbotHQAI.CashbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-lbhq', True):
+            self.hoods.append(LawbotHQAI.LawbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-bbhq', True):
+            self.hoods.append(BossbotHQAI.BossbotHQAI(self))
+            clearQueue()
 
         for sp in self.suitPlanners.values():
             sp.assignInitialSuitBuildings()

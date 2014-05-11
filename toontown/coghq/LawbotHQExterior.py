@@ -9,3 +9,4 @@ from toontown.coghq import CogHQExterior
 
 class LawbotHQExterior(CogHQExterior.CogHQExterior):
     notify = DirectNotifyGlobal.directNotify.newCategory('LawbotHQExterior')
+    dnaFile = 'phase_11/dna/cog_hq_lawbot_sz.xml'

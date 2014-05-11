@@ -186,7 +186,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
                 self.air.writeServerEvent('boss-battle', doId=self.doId, dept=self.dept,
                  state=state,
                  involvedToons=self.involvedToons,
-                 reward=self.formatReward()))
+                 reward=self.formatReward())
 
     def getState(self):
         return self.state

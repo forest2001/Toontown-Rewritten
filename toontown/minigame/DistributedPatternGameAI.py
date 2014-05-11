@@ -121,10 +121,10 @@ class DistributedPatternGameAI(DistributedMinigameAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='PatternGameAI.reportButtonPress avId not on list')
             return
         if index < 0 or index > 3:
-            self.air.writeServerEvent('warning', avId=avId, 'PatternGameAI.reportButtonPress got bad index, was %s' % index)
+            self.air.writeServerEvent('warning', avId=avId, issue='PatternGameAI.reportButtonPress got bad index, was %s' % index)
             return
         if wrong not in [0, 1]:
-            self.air.writeServerEvent('warning', avId=avId, "PatternGameAI.reportButtonPress got bad 'wrong', was %s" % wrong)
+            self.air.writeServerEvent('warning', avId=avId, issue="PatternGameAI.reportButtonPress got bad 'wrong', was %s" % wrong)
             return
         self.sendUpdate('remoteButtonPressed', [avId, index, wrong])
 

@@ -42,7 +42,7 @@ class LaserGameRoll(LaserGameBase.LaserGameBase):
     
     def hit(self, hitX, hitY, oldx = -1, oldy = -1):
         if self.finshed:
-            return None
+            return
         
         if self.gridData[hitX][hitY] == 10:
             self.gridData[hitX][hitY] = 13
@@ -62,15 +62,9 @@ class LaserGameRoll(LaserGameBase.LaserGameBase):
             for row in range(0, self.gridNumY):
                 if self.gridData[column][row] == 10:
                     count1 += 1
-                    continue
-                if self.gridData[column][row] == 13:
+                elif self.gridData[column][row] == 13:
                     count2 += 1
-                    continue
-            
-        
         if count1 and count2:
             return 0
         else:
             return 1
-
-

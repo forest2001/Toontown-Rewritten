@@ -6,6 +6,7 @@ from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from toontown.toon import ToonAvatarPanel
 from toontown.toontowngui import TTDialog
+from otp.nametag import NametagGlobals
 
 class GroupPanel(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('GroupPanel')
@@ -114,7 +115,7 @@ class GroupPanel(DirectObject.DirectObject):
 
     def __defineConstants(self):
         self.forcedHidden = False
-        self.textFgcolor = NametagGlobals.getNameFg(NametagGroup.CCSpeedChat, PGButton.SInactive)
+        self.textFgcolor = Vec4(0.0, 0.6, 0.2, 1.0) # Ripped strait from hacky-boss-battles
         self.textBgRolloverColor = Vec4(1, 1, 0, 1)
         self.textBgDownColor = Vec4(0.5, 0.9, 1, 1)
         self.textBgDisabledColor = Vec4(0.4, 0.8, 0.4, 1)

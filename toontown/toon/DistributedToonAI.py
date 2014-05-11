@@ -2781,7 +2781,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('setSCResistance', [msgIndex, affectedPlayers])
         chattype = ResistanceChat.getMenuName(msgIndex)
         value = ResistanceChat.getItemValue(msgIndex)
-        self.air.writeServerEvent('resistanceChat', zoneId=self.zoneId, avId=self.doId, chatType=chattype, value=value, affectedPlayers=affectedPlayers))
+        self.air.writeServerEvent('resistanceChat', zoneId=self.zoneId, avId=self.doId, chatType=chattype, value=value, affectedPlayers=affectedPlayers)
 
     def doResistanceEffect(self, msgIndex):
         msgType, itemIndex = ResistanceChat.decodeId(msgIndex)
@@ -3295,7 +3295,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.sendUpdate('cogSummonsResponse', ['fail', suitIndex, 0])
             return
         if not self.hasCogSummons(suitIndex, type):
-            self.air.writeServerEvent('suspicious', issue=self.doId, issue='bogus cog summons')
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='bogus cog summons')
             self.sendUpdate('cogSummonsResponse', ['fail', suitIndex, 0])
             return
         if ZoneUtil.isWelcomeValley(self.zoneId):
