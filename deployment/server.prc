@@ -7,5 +7,9 @@ want-dev #f
 
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
+want-sbhq #f
+want-cbhq #f
+want-lbhq #f
+want-bbhq #f
 want-pets #f
 want-old-fireworks #t
