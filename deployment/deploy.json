@@ -1,7 +1,7 @@
 {
   "__fyi__": "If you use anything other than the first 7 characters of the git hash, you just broke everything",
   "astron": "4d66e5a",
-  "panda3d": "3ae44dc",
+  "panda3d": "20faeb8",
   "version-prefix": "ttr-alpha-g",
   "server-resources": ["dna", "xml", "txt", "dat"]
 }
