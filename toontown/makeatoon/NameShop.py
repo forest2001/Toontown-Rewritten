@@ -956,10 +956,7 @@ class NameShop(StateData.StateData):
         self.notify.debug('serverCreateAvatar')
         style = self.toon.getStyle()
         self.newDNA = style.makeNetString()
-        if skipTutorial:
-            self.requestingSkipTutorial = True
-        else:
-            self.requestingSkipTutorial = False
+        self.requestingSkipTutorial = skipTutorial
         if not self.avExists or self.avExists and self.avId == 'deleteMe':
             base.cr.csm.sendCreateAvatar(style, '', self.index)
             self.accept('nameShopCreateAvatarDone', self.handleCreateAvatarResponse)
