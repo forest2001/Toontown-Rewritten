@@ -254,7 +254,7 @@ def loadDialog(level):
         return
     else:
         loadPath = 'phase_3.5/audio/dial/'
-        SuitDialogFiles = ['COG_VO_grunt',
+        SuitDialogFiles = ['COG_VO_statement',
          'COG_VO_murmur',
          'COG_VO_statement',
          'COG_VO_question']
