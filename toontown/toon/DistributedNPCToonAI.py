@@ -241,6 +241,6 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
             taskMgr.remove(self.uniqueName('clearMovie'))
             self.sendClearMovie(None)
         elif self.busy:
-            self.air.writeServerEvent('suspicious', avID=avId, issue='DistributedNPCToonAI.setMovieDone busy with %s' % self.busy)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCToonAI.setMovieDone busy with %s' % self.busy)
             self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
         return

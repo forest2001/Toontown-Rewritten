@@ -446,7 +446,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
 
     def handleFishCollision(self, avId, spawnId, spawnerId, status):
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'DivingGameAI.handleFishCollision: invalid avId')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleFishCollision: invalid avId')
             return
         timestamp = globalClockDelta.getFrameNetworkTime()
         self.sendUpdate('setTreasureDropped', [avId, timestamp])

@@ -183,7 +183,7 @@ class DistributedPairingGameAI(DistributedMinigameAI):
             return
         avId = self.air.getAvatarIdFromSender()
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'openCardRequest from non-player av %s' % avId)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='openCardRequest from non-player av %s' % avId)
             return
         if deckOrderIndex < 0 or deckOrderIndex >= len(self.cards):
             self.logSuspicious(avId, 'openCardRequest: invalid deckOrderIndex: %s' % deckOrderIndex)

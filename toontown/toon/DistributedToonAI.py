@@ -4277,7 +4277,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.air.writeServerEvent('suspicious', avId=self.doId, issue='toAvId=%d is not equal to self.doId' % toAvId)
             return
         if available != 1:
-            self.air.writeServerEvent('suspicious', avID=self.doId, issue='invalid availableValue=%d' % available)
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='invalid availableValue=%d' % available)
             return
         if fromAvId == 0:
             return

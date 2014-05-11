@@ -170,7 +170,7 @@ class DistributedVineGameAI(DistributedMinigameAI):
         if not self._playing():
             return
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'VineGameAI.setNewVine: invalid avId')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='VineGameAI.setNewVine: invalid avId')
             return
         oldVineIndex = self.toonInfo[avId][0]
         debugStr = 'setNewVine doId=%s avId=%d vineIndex=%s oldVineIndex=%s' % (self.doId,
