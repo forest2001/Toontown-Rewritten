@@ -443,7 +443,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
                 self.numToonJurorsSeated += 1
 
         self.notify.debug('numToonJurorsSeated=%d' % self.numToonJurorsSeated)
-        self.air.writeServerEvent('jurorsSeated', self.doId, '%s|%s|%s' % (self.dept, self.involvedToons, self.numToonJurorsSeated))
+        self.air.writeServerEvent('jurorsSeated', doId=self.doId, dept=self.dept, involvedToons=self.involvedToons, numToonJurors=self.numToonJurorsSeated)
         self.__deleteCannons()
         self.__stopChairs()
 
@@ -485,12 +485,12 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
          self.numGavels,
          self.numLawyers,
          self.toonupValue))
-        self.air.writeServerEvent('lawbotBossSettings', self.doId, '%s|%s|%s|%s|%s|%s' % (self.dept,
-         self.battleDifficulty,
-         self.ammoCount,
-         self.numGavels,
-         self.numLawyers,
-         self.toonupValue))
+        self.air.writeServerEvent('lawbotBossSettings', doId=self.doId, dept=self.dept,
+         difficulty=self.battleDifficulty,
+         ammoCount=self.ammoCount,
+         numGavels=self.numGavels,
+         numLawyers=self.numLawyers,
+         toonupValue=self.toonupValue)
         self.__makeBattleThreeObjects()
         self.__makeLawyers()
         self.numPies = self.ammoCount
@@ -600,20 +600,20 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
                 self.numToonsAtEnd += 1
                 toonHps.append(toon.hp)
 
-        self.air.writeServerEvent('b3Info', self.doId, '%d|%.2f|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%s|%s' % (didTheyWin,
-         self.battleThreeTimeInMin,
-         self.numToonsAtStart,
-         self.numToonsAtEnd,
-         self.numToonJurorsSeated,
-         self.battleDifficulty,
-         self.ammoCount,
-         self.numGavels,
-         self.numLawyers,
-         self.toonupValue,
-         self.numBonusStates,
-         self.numAreaAttacks,
-         toonHps,
-         self.weightPerToon))
+        self.air.writeServerEvent('b3Info', doId=self.doId, victory=didTheyWin,
+         time=self.battleThreeTimeInMin,
+         numToonsAtStart=self.numToonsAtStart,
+         numToonsAtEnd=self.numToonsAtEnd,
+         toonJurors=self.numToonJurorsSeated,
+         difficulty=self.battleDifficulty,
+         ammoCount=self.ammoCount,
+         numGavels=self.numGavels,
+         numLawyers=self.numLawyers,
+         toonupValue=self.toonupValue,
+         numBonuses=self.numBonusStates,
+         numAreaAttacks=self.numAreaAttacks,
+         toonHps=toonHps,
+         weightPerToon=self.weightPerToon)
 
     def exitBattleThree(self):
         self.doBattleThreeInfo()

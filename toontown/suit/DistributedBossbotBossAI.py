@@ -416,25 +416,23 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 self.numToonsAtEnd += 1
                 toonHps.append(toon.hp)
 
-        self.air.writeServerEvent('ceoInfo', self.doId, '%d|%.2f|%d|%d|%d|%d|%d|%d|%s|%s|%.1f|%d|%d|%d|%d|%d}%d|%s|' % (didTheyWin, 
-            self.battleFourTimeInMin,
-            self.battleDifficulty,
-            self.numToonsAtStart,
-            self.numToonsAtEnd,
-            self.numTables,
-            self.numTables * self.numDinersPerTable,
-            self.numDinersExploded,
-            toonHps,
-            self.involvedToons,
-            self.speedDamage,
-            self.numMoveAttacks,
-            self.numGolfAttacks,
-            self.numGearAttacks,
-            self.numGolfAreaAttacks,
-            self.numToonupGranted,
-            self.totalLaffHealed,
-            'ceoBugfixes')
-        )
+        self.air.writeServerEvent('ceoInfo', doId=self.doId, victory=didTheyWin, 
+            battleTIme=self.battleFourTimeInMin,
+            difficulty=self.battleDifficulty,
+            numToonsAtStart=self.numToonsAtStart,
+            numToonsAtEnd=self.numToonsAtEnd,
+            numTables=self.numTables,
+            numDiners=self.numTables * self.numDinersPerTable,
+            dinersKilled=self.numDinersExploded,
+            toonHps=toonHps,
+            involvedToons=self.involvedToons,
+            speedDamage=self.speedDamage,
+            numMoveAttacks=self.numMoveAttacks,
+            numGolfAttacks=self.numGolfAttacks,
+            numGearAttacks=self.numGearAttacks,
+            numGolfAreaAttacks=self.numGolfAreaAttacks,
+            toonupsGranted=self.numToonupGranted,
+            laffHealed=self.totalLaffHealed)
 
     def setupBattleFourObjects(self):
         if self.battleFourSetup:

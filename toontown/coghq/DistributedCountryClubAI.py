@@ -43,9 +43,8 @@ class DistributedCountryClubAI(DistributedObjectAI.DistributedObjectAI):
         self.placeElevatorsOnMarkers()
         if __dev__:
             simbase.countryClub = self
-        description = '%s|%s|%s' % (self.countryClubId, self.floorNum, self.avIds)
         for avId in self.avIds:
-            self.air.writeServerEvent('countryClubEntered', avId, description)
+            self.air.writeServerEvent('countryClubEntered', avId=avId, countryClubId=self.countryClubId, floorNum=self.floorNum, avIds=self.avIds)
 
         return
 
