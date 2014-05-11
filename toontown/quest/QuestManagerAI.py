@@ -15,7 +15,7 @@ class QuestManagerAI:
         Returns TRUE or FALSE, depending on if the generated number is within the
         percentage specified.
         """
-        return random.rantint(1, 100) <= percentage
+        return random.randint(1, 100) <= percentage
         
     def __incrementQuestProgress(self, quest):
         """
