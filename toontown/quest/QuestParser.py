@@ -20,6 +20,8 @@ from otp.nametag.NametagConstants import *
 from toontown.ai import DistributedBlackCatMgr
 from direct.showbase import PythonUtil
 from direct.interval.IntervalGlobal import *
+from otp.nametag.NametagConstants import *
+
 notify = DirectNotifyGlobal.directNotify.newCategory('QuestParser')
 lineDict = {}
 globalVarDict = {}
@@ -130,6 +132,10 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         return
 
     def getVar(self, varName):
+        if varName[0] == '"':
+            varName = varName[1:-1]
+            return globals()[varName]
+
         if self.privateVarDict.has_key(varName):
             return self.privateVarDict[varName]
         elif globalVarDict.has_key(varName):
@@ -463,10 +469,17 @@ class NPCMoviePlayer(DirectObject.DirectObject):
     def parseLoad(self, line):
         if len(line) == 3:
             token, varName, modelPath = line
-            node = loader.loadModel(modelPath)
+            modelPath = modelPath[1:-1]
+            fn = Filename(modelPath)
+            fn.setExtension('bam')
+            node = loader.loadModel(fn)
         elif len(line) == 4:
             token, varName, modelPath, subNodeName = line
-            node = loader.loadModel(modelPath).find('**/' + subNodeName)
+            modelPath = modelPath[1:-1]
+            fn = Filename(modelPath)
+            fn.setExtension('bam')
+            subNodeName = subNodeName[1:-1]
+            node = loader.loadModel(fn).find('**/' + subNodeName)
         else:
             notify.error('invalid parseLoad command')
         self.setVar(varName, node)
@@ -572,6 +585,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             subNodeName = None
         elif len(line) == 4:
             token, childNodeName, parentNodeName, subNodeName = line
+            subNodeName = subNodeName[1:-1]
         childNode = self.getVar(childNodeName)
         if subNodeName:
             parentNode = self.getVar(parentNodeName).find(subNodeName)
@@ -663,8 +677,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         extraChatFlags = None
         dialogueList = []
         for arg in args:
-            if type(arg) == type(0):
-                quitButton = arg
+            if type(arg) == type(0) or type(arg) == type(1.0):
+                quitButton = int(arg)
             elif type(arg) == type(''):
                 if len(arg) > 2 and arg[:2] == 'CF':
                     extraChatFlags = eval(arg)
@@ -722,9 +736,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         avatarName = line[1]
         avatar = self.getVar(avatarName)
         if self.toon.getStyle().gender == 'm':
-            chatString = eval('TTLocalizer.' + line[2] % 'Mickey')
+            chatString = getattr(TTLocalizer, line[2][1:-1] % 'Mickey')
         else:
-            chatString = eval('TTLocalizer.' + line[2] % 'Minnie')
+            chatString = getattr(TTLocalizer, line[2][1:-1] % 'Minnie')
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
@@ -737,9 +751,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         localizerAvatarName = toAvatar.getName().capitalize()
         toAvatarName = eval('TTLocalizer.' + localizerAvatarName)
         if self.toon.getStyle().gender == 'm':
-            chatString = eval('TTLocalizer.' + line[3] % 'Mickey')
+            chatString = getattr(TTLocalizer, line[3][1:-1] % 'Mickey')
         else:
-            chatString = eval('TTLocalizer.' + line[3] % 'Minnie')
+            chatString = getattr(TTLocalizer, line[3][1:-1] % 'Minnie')
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
@@ -857,8 +871,13 @@ class NPCMoviePlayer(DirectObject.DirectObject):
     def parseFunction(self, line):
         token, objectName, functionName = line
         object = self.getVar(objectName)
-        cfunc = compile('object' + '.' + functionName, '<string>', 'eval')
-        return Func(eval(cfunc))
+        # cfunc = compile('object' + '.' + functionName, '<string>', 'eval')
+        # return Func(eval(cfunc))
+        functionName = functionName[1:-1]
+        func = object
+        for fn in functionName.split('.'):
+            func = getattr(func, fn)
+        return Func(func)
 
     def parseAddLaffMeter(self, line):
         token, maxHpDelta = line
@@ -880,17 +899,17 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         token, track, level, number = line
         inventory = self.getVar('inventory')
         countSound = base.loadSfx('phase_3.5/audio/sfx/tick_counter.ogg')
-        return Sequence(Func(base.playSfx, countSound), Func(inventory.buttonBoing, track, level), Func(inventory.addItems, track, level, number), Func(inventory.updateGUI, track, level))
+        return Sequence(Func(base.playSfx, countSound), Func(inventory.buttonBoing, int(track), int(level)), Func(inventory.addItems, int(track), int(level), int(number)), Func(inventory.updateGUI, int(track), int(level)))
 
     def parseSetInventory(self, line):
         token, track, level, number = line
         inventory = self.getVar('inventory')
-        return Sequence(Func(inventory.setItem, track, level, number), Func(inventory.updateGUI, track, level))
+        return Sequence(Func(inventory.setItem, int(track), int(level), int(number)), Func(inventory.updateGUI, int(track), int(level)))
 
     def parseSetInventoryYPos(self, line):
         token, track, level, yPos = line
         inventory = self.getVar('inventory')
-        button = inventory.buttons[track][level].stateNodePath[0]
+        button = inventory.buttons[int(track)][int(level)].stateNodePath[0]
         text = button.find('**/+TextNode')
         return Sequence(Func(text.setY, yPos))
 
@@ -907,7 +926,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         elif val == 0:
             return Func(inventory.hideDetail)
         elif val == 1:
-            return Func(inventory.showDetail, track, level)
+            return Func(inventory.showDetail, int(track), int(level))
         else:
             notify.error('invalid inventory detail level: %s' % val)
 
