@@ -771,12 +771,12 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
     return anims
 
 
-def getSoundTrack(fileName, delay = 0.01, duration = None, node = None):
+def getSoundTrack(fileName, delay = 0.01, startTime = 0.0, duration = None, node = None):
     soundEffect = globalBattleSoundCache.getSound(fileName)
     if duration:
-        return Sequence(Wait(delay), SoundInterval(soundEffect, duration=duration, node=node))
+        return Sequence(Wait(delay), SoundInterval(soundEffect, startTime=startTime, duration=duration, node=node))
     else:
-        return Sequence(Wait(delay), SoundInterval(soundEffect, node=node))
+        return Sequence(Wait(delay), SoundInterval(soundEffect, startTime=startTime, node=node))
 
 
 def doClipOnTie(attack):
@@ -2291,6 +2291,8 @@ def doFilibuster(attack):
 def doSchmooze(attack):
     suit = attack['suit']
     battle = attack['battle']
+    target = attack['target']
+    dmg = target['hp']
     BattleParticles.loadParticles()
     upperEffects = []
     lowerEffects = []
@@ -2345,7 +2347,11 @@ def doSchmooze(attack):
      1.28])
     dodgeAnims.append(['duck', 0.01, 3.16])
     toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.9, showDamageExtraTime=1.1)
-    return Parallel(suitTrack, toonTrack, upperPartTracks, lowerPartTracks)
+    if dmg > 0:
+        hitSound = getSoundTrack('SA_schmooze.ogg', delay=damageDelay + 0.35, startTime=1.2, node=suit)
+        return Parallel(suitTrack, toonTrack, upperPartTracks, lowerPartTracks, hitSound)
+    else:
+        return Parallel(suitTrack, toonTrack, upperPartTracks, lowerPartTracks)
 
 
 def doQuake(attack):
