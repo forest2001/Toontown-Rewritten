@@ -62,7 +62,7 @@ class QuestManagerAI:
                             or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
                             or (quest.getHolderType() == 'level' and quest.getHolder() == suit['level']):
-                                if self.__testPercentage(quest.getPercentageChance()):
+                                if self.__testPercentage(quest.getPercentChance()): # FIXME this is the wrong behavior. The RecoverItemQuest has an implementation that takes into account previous attempts to recover the item. We should use it instead
                                     # We win! We got the item from the cogs. :)
                                     recovered.append(quest.getItem())
                                     self.__incrementQuestProgress(toon.quests[index])
