@@ -1768,7 +1768,8 @@ def doHalfWindsor(attack):
       0.01,
       0.4], ['cringe', 0.01, 0.7]]
     toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    return Parallel(suitTrack, toonTrack, tiePropTrack)
+    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 1, node=suit)
+    return Parallel(suitTrack, toonTrack, tiePropTrack, throwSound)
 
 
 def doHeadShrink(attack):
