@@ -137,8 +137,8 @@ class EstateLoader(SafeZoneLoader.SafeZoneLoader):
             self.houseNode[i].setPosHpr(*posHpr)
 
     def loadSunMoon(self):
-        self.sun = loader.loadModel('phase_4/models/props/sun.bam')
-        self.moon = loader.loadModel('phase_5.5/models/props/moon.bam')
+        self.sun = loader.loadModel('phase_4/models/props/sun')
+        self.moon = loader.loadModel('phase_5.5/models/props/moon')
         self.sunMoonNode = self.geom.attachNewNode('sunMoon')
         self.sunMoonNode.setPosHpr(0, 0, 0, 0, 0, 0)
         if self.sun:

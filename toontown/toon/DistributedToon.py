@@ -2666,12 +2666,51 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setAnimalSound(self, index):
         self.animalSound = index
+        
+    def magicFanfare(self):
+        from toontown.battle import Fanfare
+        fanfare = Sequence(Fanfare.makeFanfare(0, self)[0])
+        fanfare.start()
+        
+    def magicTeleportRequest(self, requesterId):
+        self.sendUpdate('magicTeleportResponse', [requesterId, base.cr.playGame.getPlaceId()])
+        
+    def magicTeleportInitiate(self, hoodId, zoneId):
+        loaderId = ZoneUtil.getBranchLoaderName(zoneId)
+        whereId = ZoneUtil.getToonWhereName(zoneId)
+        # TEMP HACK: Currently assume that the whereId is a boss battle if hoodId = cogHQ
+        # and zoneId is dynamic.
+        if ZoneUtil.isDynamicZone(zoneId) and hoodId in [ToontownGlobals.BossbotHQ, ToontownGlobals.LawbotHQ, ToontownGlobals.CashbotHQ, ToontownGlobals.SellbotHQ]:
+            whereId = 'cogHQBossBattle'
+        if zoneId in [ToontownGlobals.BossbotLobby, ToontownGlobals.LawbotLobby, ToontownGlobals.CashbotLobby, ToontownGlobals.SellbotLobby, ToontownGlobals.LawbotOfficeExt]:
+            how = 'walk'
+        else:
+            how = 'teleportIn'
+        requestStatus = [{
+            'loader': loaderId,
+            'where': whereId,
+            'how': how,
+            'hoodId': hoodId,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1
+        }]
+        base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
    
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
     spellbook.getInvoker().sendUpdate('setTeleportOverride', [1])
     base.localAvatar.setTeleportAccess([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
     return "Global teleport activated for the current session."
+
+@magicWord(category=CATEGORY_MODERATION)
+def sleep():
+    if not base.localAvatar.neverSleep:
+        base.localAvatar.disableSleeping()
+        return "Sleeping has been deactivated for the current session."
+    else:
+        base.localAvatar.enableSleeping()
+        return "Sleeping has been activated for the current session."
     
 @magicWord(category=CATEGORY_GUI)
 def gardenGame():

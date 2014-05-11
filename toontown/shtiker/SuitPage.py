@@ -165,7 +165,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         ShtikerPage.ShtikerPage.load(self)
         frameModel = loader.loadModel('phase_3.5/models/gui/suitpage_frame')
         frameModel.setScale(0.03375, 0.03, 0.045)
-        frameModel.setPos(0, 10, -0.575)
+        frameModel.setPos(0, 20, -0.575)
         self.guiTop = NodePath('guiTop')
         self.guiTop.reparentTo(self)
         self.frameNode = NodePath('frameNode')

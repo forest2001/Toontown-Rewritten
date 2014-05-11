@@ -2,11 +2,6 @@
 *.pyc
 *.pyo
 *.dll
-*.dis
-*.log
-*.buildings
-parser.out
-parsetab.py
 *.jpg
-ply
+*.buildings
 settings.json

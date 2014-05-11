@@ -567,7 +567,7 @@ def indicateMissed(actor, duration = 1.1, scale = 0.7):
 
 def createKapowExplosionTrack(parent, explosionPoint = None, scale = 1.0):
     explosionTrack = Sequence()
-    explosion = loader.loadModel('phase_3.5/models/props/explosion.bam')
+    explosion = loader.loadModel('phase_3.5/models/props/explosion')
     explosion.setBillboardPointEye()
     explosion.setDepthWrite(False)
     if not explosionPoint:

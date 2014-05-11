@@ -77,7 +77,7 @@ spellbook = Spellbook()
 class MagicWordCategory:
     def __init__(self, name, defaultAccess=500, doc=''):
         self.name = name
-        self.defaultAccess = defaultAccess
+        self.defaultAccess = self.getDefinedAccess() or defaultAccess
         self.doc = doc
 
         self.words = []
@@ -86,6 +86,12 @@ class MagicWordCategory:
 
     def addWord(self, word):
         self.words.append(word)
+        
+    def getDefinedAccess(self):
+        try:
+            return simbase.config.GetInt(self.name.replace(' ', '-').lower(), 0)
+        except:
+            return 0
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300,

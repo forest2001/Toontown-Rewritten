@@ -56,7 +56,9 @@ class Nametag3d(Nametag):
             self.stashClickRegion()
         else:
             left, right, bottom, top = self.frame
-            self.updateClickRegion(left*scale, right*scale, bottom*scale, top*scale)
+            self.updateClickRegion(left*scale, right*scale,
+                                   bottom*scale, top*scale,
+                                   self.bbOffset)
 
     def getSpeechBalloon(self):
         return NametagGlobals.speechBalloon3d

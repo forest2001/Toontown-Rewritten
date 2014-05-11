@@ -932,7 +932,7 @@ class CatalogScreen(DirectFrame):
     def setClarabelleChat(self, str, timeout = 6):
         self.clearClarabelleChat()
         if not self.clarabelleChatBalloon:
-            self.clarabelleChatBalloon = loader.loadModel('phase_3/models/props/chatbox.bam')
+            self.clarabelleChatBalloon = loader.loadModel('phase_3/models/props/chatbox')
         self.clarabelleChat = ChatBalloon(self.clarabelleChatBalloon.node())
         chatNode = self.clarabelleChat.generate(str, ToontownGlobals.getInterfaceFont(), 10, Vec4(0, 0, 0, 1), Vec4(1, 1, 1, 1), 0, 0, 0, NodePath(), 0, 0, NodePath())
         self.clarabelleChatNP = self.attachNewNode(chatNode, 1000)

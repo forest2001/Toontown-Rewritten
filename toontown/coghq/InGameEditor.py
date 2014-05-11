@@ -547,7 +547,7 @@ class InGameEditor(AppShell):
             else:
                 initialDir = Filename.expandFrom('$TTMODELS/built/%s' % text.get()[1:-1]).toOsSpecific()
             print text, text.get()[1:-1], initialDir
-            rawFilename = askopenfilename(defaultextension='*', initialdir=initialDir, filetypes=(('Bam Files', '*.bam'),
+            rawFilename = askopenfilename(defaultextension='*', initialdir=initialDir, filetypes=(('Bam Files', '*'),
              ('Egg Files', '*.egg'),
              ('Maya Binaries', '*.mb'),
              ('All files', '*')), title='Load Model File', parent=self.interior())

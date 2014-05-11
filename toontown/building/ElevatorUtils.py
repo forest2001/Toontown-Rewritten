@@ -105,7 +105,9 @@ def getRideElevatorInterval(type = ELEVATOR_NORMAL):
      ELEVATOR_CFO,
      ELEVATOR_CJ,
      ELEVATOR_BB):
+        base.camLens.setFov(65)
         ival = Sequence(Wait(0.5), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMin), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMin)), Wait(1.0), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMax), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, 1.0, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMax)))
     else:
+        base.camLens.setFov(55)
         ival = Sequence(Wait(0.5), LerpPosInterval(camera, 0.5, Point3(0, 14, 3.8), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 0.5, Point3(0, 14, 4), startPos=Point3(0, 14, 3.8)), Wait(1.0), LerpPosInterval(camera, 0.5, Point3(0, 14, 4.2), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 1.0, Point3(0, 14, 4), startPos=Point3(0, 14, 4.2)))
     return ival

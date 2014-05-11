@@ -32,8 +32,8 @@ class ToonBase(OTPBase.OTPBase):
     def __init__(self):
         self.display = DisplayOptions()
         OTPBase.OTPBase.__init__(self)
-        base.enableMusic(self.display.settings.getBool('game', 'music', False))
-        base.enableSoundEffects(self.display.settings.getBool('game', 'sfx', False))
+        base.enableMusic(self.display.settings.getBool('game', 'music', True))
+        base.enableSoundEffects(self.display.settings.getBool('game', 'sfx', True))
         self.disableShowbaseMouse()
         self.addCullBins()
         base.debugRunningMultiplier /= OTPGlobals.ToonSpeedFactor
@@ -202,8 +202,6 @@ class ToonBase(OTPBase.OTPBase):
         vfs = VirtualFileSystem.getGlobalPtr()
 
         searchPath = DSearchPath()
-        if __debug__:
-            searchPath.appendDirectory(Filename('resources/phase_3/etc'))
         searchPath.appendDirectory(Filename('/phase_3/etc'))
 
         for filename in ['toonmono.cur', 'icon.ico']:

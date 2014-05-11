@@ -1521,8 +1521,8 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
         fileName = bamFile.split('/')[-1]
         dotIndex = fileName.find('.')
         baseName = fileName[0:dotIndex]
-        camModelName = baseName + '_cammodel.bam'
-        cameraName = baseName + '_camera.bam'
+        camModelName = baseName + '_cammodel'
+        cameraName = baseName + '_camera'
         path = bamFile[0:bamFile.find(fileName)]
         camModelFullPath = path + camModelName
         cameraAnimFullPath = path + cameraName

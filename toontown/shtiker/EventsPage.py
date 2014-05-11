@@ -155,7 +155,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
 
     def loadNewsTab(self):
         self.newsDisplay = self.attachNewNode('news')
-        newspaper = loader.loadModel('phase_4/models/parties/tt_m_gui_sbk_newspaper.bam')
+        newspaper = loader.loadModel('phase_4/models/parties/tt_m_gui_sbk_newspaper')
         self.newsFrame = DirectLabel(relief=None, parent=self.newsDisplay, pos=(0, 0, -0.1))
         newspaper.reparentTo(self.newsFrame)
         self.createArticleTextList()

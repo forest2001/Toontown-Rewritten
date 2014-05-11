@@ -402,7 +402,7 @@ class PhysicsWorldBase:
             if self.canRender:
                 myModel = loader.loadModel('phase_6/models/golf/golf_windmill_b')
             else:
-                myModel = loader.loadModel('phase_6/models/golf/golf_windmill_b.bam')
+                myModel = loader.loadModel('phase_6/models/golf/golf_windmill_b')
             myModel.reparentTo(self.root)
             myModel.setPos(vPos)
             myModel.setHpr(vHpr)

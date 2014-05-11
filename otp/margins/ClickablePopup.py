@@ -101,14 +101,14 @@ class ClickablePopup(PandaNode, DirectObject):
 
         self.clickStateChanged()
 
-    def updateClickRegion(self, left, right, bottom, top):
+    def updateClickRegion(self, left, right, bottom, top, offset=0):
         transform = NodePath.anyPath(self).getNetTransform()
 
         if self.__cam:
             # We have a camera, so get its transform and move our net transform
             # into the coordinate space of the camera:
             camTransform = self.__cam.getNetTransform()
-            transform = camTransform.getInverse().compose(transform)
+            transform = camTransform.invertCompose(transform)
 
         # We must discard the rotational component on our transform, thus:
         transform = transform.setQuat(Quat())
@@ -117,6 +117,14 @@ class ClickablePopup(PandaNode, DirectObject):
         mat = transform.getMat()
         cTopLeft = mat.xformPoint(Point3(left, 0, top))
         cBottomRight = mat.xformPoint(Point3(right, 0, bottom))
+
+        # Shift along the offset while in camspace, not worldspace.
+        if offset:
+            mid = mat.xformPoint(Point3(0,0,0))
+            length = mid.length()
+            shift = mid*(length - offset)/length - mid
+            cTopLeft += shift
+            cBottomRight += shift
 
         if self.__cam:
             # We must go further and project to screenspace:

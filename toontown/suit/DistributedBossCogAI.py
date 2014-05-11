@@ -10,6 +10,7 @@ from toontown.battle import BattleBase
 from pandac.PandaModules import *
 import SuitDNA
 import random
+from otp.ai.MagicWordGlobal import *
 AllBossCogs = []
 
 class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
@@ -608,3 +609,50 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def doNextAttack(self, task):
         self.b_setAttackCode(ToontownGlobals.BossCogNoAttack)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str, str, str])
+def boss(cmd, val, val2=''):
+    """
+    A bunch of commands that can be run on the current boss in the invoker's zone.
+    
+    ~boss state StateOne
+    ~boss add loose avId(short)
+    ~boss add toon avId(short)
+    ~boss remove loose avId(short)
+    ~boss remove toon avId(short)
+    """
+    for object in simbase.air.doId2do.itervalues():
+        if isinstance(object, DistributedBossCogAI):
+            # Is this boss cog in the same zone as us?
+            if object.getLocation() == spellbook.getInvoker().getLocation():
+                # Yes it is! We can run commands on it.
+                if cmd == 'state':
+                    object.b_setState(val)
+                    return "Set state of the current boss battle to %s." % state
+                elif cmd in ['add', 'remove']:
+                    avId = 100000000 + int(val2)
+                    toon = simbase.air.doId2do.get(avId)
+                    if not toon:
+                        return "This toon is not currently online!"
+                    if toon.getLocation() != spellbook.getInvoker().getLocation():
+                        return "This toon is not currently in your boss battle!"
+                    if cmd == 'add':
+                        if val == 'loose':
+                            object.looseToons.append(avId)
+                            return "Added avId %d to the loose toons list!" % avId
+                        elif val == 'toon':
+                            object.involvedToons.append(avId)
+                            return "Added avId %d to the involved toons list!" % avId
+                    elif cmd == 'remove':
+                        if val == 'loose':
+                            if avId not in object.looseToons:
+                                return "This toon is not in the loose toons list!"
+                            object.looseToons.remove(avId)
+                            return "Removed avId %d from the loose toons list!" % avId
+                        elif val == 'toon':
+                            if avId not in object.involvedToons:
+                                return "This toon is not in the involved toons list!"
+                            object.involvedToons.remove(avId)
+                            return "Removed avId %d from the involved toons list!" % avId
+                return "Unknown boss command %s." % cmd
+    return "Unable to find boss battle which has current avatar."

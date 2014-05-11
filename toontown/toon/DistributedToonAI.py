@@ -224,6 +224,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.modulelist = ModuleListAI.ModuleList()
         self._dbCheckDoLater = None
         self.teleportOverride = 0
+        self.magicWordTeleportRequests = []
         return
 
     def generate(self):
@@ -4404,6 +4405,20 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             for coconspirator in coconspirators:
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
+                
+    def magicFanfare(self):
+        self.sendUpdate('magicFanfare', [])
+        
+    def magicTeleportResponse(self, requesterId, hoodId):
+        toon = self.air.doId2do.get(requesterId)
+        if toon:
+            toon.magicTeleportInitiate(self.getDoId(), hoodId, self.getLocation()[1])
+            
+    def magicTeleportInitiate(self, targetId, hoodId, zoneId):
+        if targetId not in self.magicWordTeleportRequests:
+            return
+        self.magicWordTeleportRequests.remove(targetId)
+        self.sendUpdate('magicTeleportInitiate', [hoodId, zoneId])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -4990,3 +5005,25 @@ def disguise():
     ])
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
+
+@magicWord(access=300)
+def fanfare():
+    """ Give target toon a fanfare for the lolz. """
+    spellbook.getTarget().magicFanfare()
+    return "Jason: Because the trumpets they go...~"
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+def pouch(amt):
+    """ Set the target's max gag limit. """
+    spellbook.getTarget().b_setMaxCarry(amt)
+    return "Set %s's pouch size to %d" % (spellbook.getTarget().getName(), amt)
+    
+@magicWord(category=CATEGORY_MODERATION, types=[int])
+def goto(avIdShort):
+    """ Teleport to the avId specified. """
+    avId = 100000000+avIdShort # To get target doId.
+    toon = simbase.air.doId2do.get(avId)
+    if not toon:
+        return "Unable to teleport to target, they are not currently on this district."
+    spellbook.getInvoker().magicWordTeleportRequests.append(avId)
+    toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])

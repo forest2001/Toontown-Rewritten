@@ -271,11 +271,11 @@ class DistributedTargetGame(DistributedMinigame):
         self.skyListLow = []
         self.skyListMid = []
         loadBase = 'phase_4/models/minigames/'
-        self.modelName = 'slingshot_game_desert4.bam'
-        self.trampoline = loader.loadModel('phase_4/models/minigames/slingshot_game_tramp.bam')
+        self.modelName = 'slingshot_game_desert4'
+        self.trampoline = loader.loadModel('phase_4/models/minigames/slingshot_game_tramp')
         self.trampoline.setBin('ground', 100)
         self.trampoline.find('**/tramp_shadow').hide()
-        self.cacti = loader.loadModel('phase_4/models/minigames/slingshot_game_cacti.bam')
+        self.cacti = loader.loadModel('phase_4/models/minigames/slingshot_game_cacti')
         self.cactusA = self.cacti.find('**/cactus_a')
         self.cactusB = self.cacti.find('**/cactus_b')
         self.findGround = '**/sand_layer1'
@@ -339,7 +339,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.powerBar['value'] = self.power
         self.powerBar.hide()
         self.rubberBands = []
-        self.umbrella = loader.loadModel('phase_4/models/minigames/slingshot_game_umbrellas.bam')
+        self.umbrella = loader.loadModel('phase_4/models/minigames/slingshot_game_umbrellas')
         pick = random.randint(0, 3)
         self.umbrellaColorSelect[pick] = 0
         tex = loader.loadTexture(DistributedTargetGame.UMBRELLA_TEXTURE_LIST[pick])

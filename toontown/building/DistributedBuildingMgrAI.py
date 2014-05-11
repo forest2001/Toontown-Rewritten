@@ -24,8 +24,7 @@ class DistributedBuildingMgrAI:
         self.__buildings = {}
         self.dnaStore = dnaStore
         self.trophyMgr = trophyMgr
-        self.shard = str(air.districtId)
-        self.backupExtension = '.bu'
+        self.shard = air.ourChannel
         self.findAllLandmarkBuildings()
         self.doLaterTask = None
         self.air.buildingManagers[branchID] = self
@@ -231,122 +230,36 @@ class DistributedBuildingMgrAI:
         self.__buildings[blockNumber] = building
         return building
 
-    def getFileName(self):
-        f = '%s%s_%d.buildings' % (self.serverDatafolder, self.shard, self.branchID)
-        return f
-
-    def saveTo(self, file, block = None):
-        if block:
-            pickleData = block.getPickleData()
-            cPickle.dump(pickleData, file)
-        else:
-            for i in self.__buildings.values():
-                if isinstance(i, HQBuildingAI.HQBuildingAI):
-                    continue
-                pickleData = i.getPickleData()
-                cPickle.dump(pickleData, file)
-
-    def fastSave(self, block):
-        return
-        try:
-            fileName = self.getFileName() + '.delta'
-            working = fileName + '.temp'
-            if os.path.exists(working):
-                os.remove(working)
-            os.rename(fileName, working)
-            file = open(working, 'w')
-            file.seek(0, 2)
-            self.saveTo(file, block)
-            file.close()
-            os.rename(working, fileName)
-        except IOError:
-            self.notify.error(str(sys.exc_info()[1]))
-
     def save(self):
-        try:
-            fileName = self.getFileName()
-            backup = fileName + self.backupExtension
-            if os.path.exists(fileName):
-                os.rename(fileName, backup)
-            file = open(fileName, 'w')
-            file.seek(0)
-            self.saveTo(file)
-            file.close()
-            if os.path.exists(backup):
-                os.remove(backup)
-        except EnvironmentError:
-            self.notify.warning(str(sys.exc_info()[1]))
+        buildings = []
+        for i in self.__buildings.values():
+            if isinstance(i, HQBuildingAI.HQBuildingAI):
+                continue
+            buildings.append(i.getPickleData())
 
-    def loadFrom(self, file):
+        street = {'ai': self.shard, 'branch': self.branchID}
 
-        #0	BUILD_MAP         None
-        #3	STORE_FAST        'blocks'
-        blocks = {}
-
-#6	SETUP_EXCEPT      '55'
-        try:
-
-#9	SETUP_LOOP        '51'
-            while 1:
-
-                #12	LOAD_GLOBAL       'cPickle'
-                #15	LOAD_ATTR         'load'
-                #18	LOAD_FAST         'file'
-                #21	CALL_FUNCTION_1   None
-                #24	STORE_FAST        'pickleData'
-                pickleData = cPickle.load(file)
-        
-
-                #27	LOAD_FAST         'pickleData'
-                #30	LOAD_FAST         'blocks'
-                #33	LOAD_GLOBAL       'int'
-                #36	LOAD_FAST         'pickleData'
-                #39	LOAD_CONST        'block'
-                #42	BINARY_SUBSCR     None
-                #43	CALL_FUNCTION_1   None
-                #46	STORE_SUBSCR      None
-                #47	JUMP_BACK         '12'
-                #50	POP_BLOCK         None
-                #51_0	COME_FROM         '9'
-                #51	POP_BLOCK         None
-                #52	JUMP_FORWARD      '72'
-                #55_0	COME_FROM         '6'
-                blocks[int(pickleData['block'])] = pickleData
-
-        #55	DUP_TOP           None
-        #56	LOAD_GLOBAL       'EOFError'
-        #59	COMPARE_OP        'exception match'
-        #62	JUMP_IF_FALSE     '71'
-        #65	POP_TOP           None
-        #66	POP_TOP           None
-        #67	POP_TOP           None
-        except EOFError:
-            pass
-
-        #68	JUMP_FORWARD      '72'
-        #71	END_FINALLY       None
-        #72_0	COME_FROM         '52'
-        #72_1	COME_FROM         '71'
-
-        #72	LOAD_FAST         'blocks'
-        #75	RETURN_VALUE      None
-        #-1	RETURN_LAST       None
-        return blocks
+        self.air.mongodb.toontown.streets.update(street,
+                                                 {'$setOnInsert': street,
+                                                  '$set': {'buildings': buildings}},
+                                                 upsert=True)
 
     def load(self):
-        fileName = self.getFileName()
-        try:
-            file = open(fileName + self.backupExtension, 'r')
-            if os.path.exists(fileName):
-                os.remove(fileName)
-        except IOError:
-            try:
-                file = open(fileName, 'r')
-            except IOError:
-                return {}
+        blocks = {}
 
-        file.seek(0)
-        blocks = self.loadFrom(file)
-        file.close()
+        # Ensure that toontown.streets is indexed. Doing this at loading time
+        # is a fine way to make sure that we won't upset players with a
+        # lagspike while we wait for the backend to handle the index request.
+        self.air.mongodb.toontown.streets.ensure_index([('ai', 1),
+                                                        ('branch', 1)])
+
+        street = {'ai': self.shard, 'branch': self.branchID}
+        doc = self.air.mongodb.toontown.streets.find_one(street)
+
+        if not doc:
+            return blocks
+
+        for building in doc.get('buildings', []):
+            blocks[int(building['block'])] = building
+
         return blocks
-# VERIFICATION PASSED
