@@ -50,7 +50,7 @@ class Spellbook:
     def doWord(self, wordName, args):
         word = self.words.get(wordName)
         if not word:
-            return
+            raise MagicError('Unknown magic word!')
 
         ensureAccess(word.access)
         if self.getTarget() and self.getTarget() != self.getInvoker():
