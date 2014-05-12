@@ -26,7 +26,8 @@ class RPCCall:
         self.errback = errback
         self.tries = tries
 
-        self.requestData = json.dumps({'id': 1, 'method': method, 'params': params})
+        self.requestData = json.dumps({'jsonrpc': "2.0", 'id': 1,
+                                       'method': method, 'params': params})
         self.stream = StringStream()
 
         self.channel = None
@@ -127,7 +128,7 @@ class RPCClient:
 
         self.task = taskMgr.add(self._task, 'RPCClient')
 
-    def call(self, method, params=[], callback=None, errback=None, retry=False):
+    def call(self, method, callback=None, errback=None, retry=False, **kwargs):
         if not self.url.hasServer():
             # RPC is not configured; skip.
             if errback:
@@ -143,7 +144,7 @@ class RPCClient:
         else:
             assert False
 
-        call = RPCCall(self, method, params, callback, errback, tries)
+        call = RPCCall(self, method, kwargs, callback, errback, tries)
         call.submit()
 
     def _setHeaders(self, channel):

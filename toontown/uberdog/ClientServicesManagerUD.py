@@ -523,7 +523,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
         def callback(result=False):
             self.demand('JudgeName', result)
 
-        self.csm.air.rpc.call('checkBlacklistedName', [self.name],
+        self.csm.air.rpc.call('checkBlacklistedName', name=self.name,
                               callback=callback, errback=callback, retry=True)
 
     def enterJudgeName(self, blacklisted):
@@ -542,7 +542,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
 
             # Fire off the information to the webserver:
-            self.csm.air.rpc.call('submitAvatarName', [self.avId, self.name],
+            self.csm.air.rpc.call('submitAvatarName', avId=self.avId, name=self.name,
                                   retry=True)
 
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
