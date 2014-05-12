@@ -540,6 +540,10 @@ class SetNameTypedFSM(AvatarOperationFSM):
         if self.avId:
             self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
 
+            # Fire off the information to the webserver:
+            self.csm.air.rpc.call('submitAvatarName', [self.avId, self.name],
+                                  retry=True)
+
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
 
