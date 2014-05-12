@@ -3,7 +3,6 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from otp.ai.MagicWordGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
-from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
 
 class MagicWordManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("MagicWordManagerAI")
@@ -34,6 +33,7 @@ class MagicWordManagerAI(DistributedObjectAI):
         if response:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
             
+        from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
         targetAccess = 0 if not isinstance(target, DistributedPlayerAI) else target.getAdminAccess()
 
         self.air.writeServerEvent('magic-word',
