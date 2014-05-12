@@ -1,6 +1,8 @@
 from direct.showbase import PythonUtil
+from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
 
 MINIMUM_MAGICWORD_ACCESS = 300
+MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS = 500 # Lol this is long.
 
 class MagicError(Exception): pass
 
@@ -52,7 +54,8 @@ class Spellbook:
 
         ensureAccess(word.access)
         if self.getTarget() and self.getTarget() != self.getInvoker():
-            if self.getInvokerAccess() <= self.getTarget().getAdminAccess():
+            targetAccess = MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS if not isinstance(target, DistributedPlayerAI) else self.target.getAdminAccess()
+            if self.getInvokerAccess() <= targetAccess:
                 raise MagicError('Target must have lower access')
 
         result = word.run(args)
