@@ -32,6 +32,8 @@ class MagicWordManagerAI(DistributedObjectAI):
         response = spellbook.process(invoker, target, word)
         if response:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
+        else:
+            response = ''
 
         self.air.writeServerEvent('magic-word',
                                   invokerId=invokerId, invokerAccess=invoker.getAdminAccess(),
