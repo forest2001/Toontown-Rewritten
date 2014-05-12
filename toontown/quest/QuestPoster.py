@@ -124,6 +124,7 @@ class QuestPoster(DirectFrame):
         self.headline.setZ(self.headline.getZ() + 0.03)
         self.lPictureFrame.setZ(self.lPictureFrame.getZ() + 0.03)
         self.questInfo.setZ(self.questInfo.getZ() + 0.03)
+        self.questProgress.setZ(self.questProgress.getZ() + 0.03)
         self.rewardText.show()
 
     def mouseExitPoster(self, event):
@@ -132,6 +133,7 @@ class QuestPoster(DirectFrame):
         self.headline.setZ(self.headline.getZ() - 0.03)
         self.lPictureFrame.setZ(self.lPictureFrame.getZ() - 0.03)
         self.questInfo.setZ(self.questInfo.getZ() - 0.03)
+        self.questProgress.setZ(self.questProgress.getZ() - 0.03)
         self.rewardText.hide()
 
     def createNpcToonHead(self, toNpcId):
