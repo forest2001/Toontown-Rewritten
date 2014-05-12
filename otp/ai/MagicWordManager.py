@@ -33,11 +33,16 @@ class MagicWordManager(DistributedObject.DistributedObject):
             magicWord = magicWord[1:]
 
         targetId = target.doId
-        self.sendUpdate('sendMagicWord', [magicWord, targetId])
         if target == base.localAvatar:
             response = spellbook.process(base.localAvatar, target, magicWord)
-            if response:
-                self.sendMagicWordResponse(response)
+            if response != 'Unknown magic word!': # Hacky! Woo!
+                # The spellbook didn't tell us the magic word is invalid.
+                if response:
+                    self.sendMagicWordResponse(response)
+                self.sendUpdate('sendMagicWord', [magicWord, targetId, False])
+            else:
+                # Client's spellbook has no idea about this MW. Tell the AI to execute.
+                self.sendUpdate('sendMagicWord', [magicWord, targetId, True])
 
     def sendMagicWordResponse(self, response):
         self.notify.info(response)

@@ -7,7 +7,7 @@ from direct.distributed.MsgTypes import *
 class MagicWordManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("MagicWordManagerAI")
 
-    def sendMagicWord(self, word, targetId):
+    def sendMagicWord(self, word, targetId, execute):
         invokerId = self.air.getAvatarIdFromSender()
 
         invoker = self.air.doId2do.get(invokerId)
@@ -28,10 +28,13 @@ class MagicWordManagerAI(DistributedObjectAI):
         if not target:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing target'])
             return
-
-        response = spellbook.process(invoker, target, word)
-        if response:
-            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
+        
+        if execute:
+            response = spellbook.process(invoker, target, word)
+            if response:
+                self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
+        else:
+            response = 'Client MW executed.'
             
         from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
         targetAccess = 0 if not isinstance(target, DistributedPlayerAI) else target.getAdminAccess()
