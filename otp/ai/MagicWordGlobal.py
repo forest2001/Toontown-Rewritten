@@ -54,7 +54,7 @@ class Spellbook:
 
         ensureAccess(word.access)
         if self.getTarget() and self.getTarget() != self.getInvoker():
-            targetAccess = MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS if not isinstance(target, DistributedPlayerAI) else self.target.getAdminAccess()
+            targetAccess = MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS if not isinstance(self.getTarget(), DistributedPlayerAI) else self.target.getAdminAccess()
             if self.getInvokerAccess() <= targetAccess:
                 raise MagicError('Target must have lower access')
 
