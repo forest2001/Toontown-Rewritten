@@ -12,11 +12,6 @@ import hmac
 import hashlib
 import json
 
-def judgeName(name):
-    # Judge a typed name for approval-queue candidacy.
-    # For now we reject only "Rejectnow" for debugging.
-    return name != 'Rejectnow'
-
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
     def __init__(self, csm):
@@ -503,7 +498,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             return
 
         # Hmm, self.avId was 0. Okay, let's just cut to the judging:
-        self.demand('JudgeName')
+        self.demand('CheckName')
 
     def enterRetrieveAvatar(self):
         if self.avId and self.avId not in self.avList:
@@ -522,11 +517,17 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
-        self.demand('JudgeName')
+        self.demand('CheckName')
 
-    def enterJudgeName(self):
-        # Let's see if the name is valid:
-        status = judgeName(self.name)
+    def enterCheckName(self):
+        def callback(result=False):
+            self.demand('JudgeName', result)
+
+        self.csm.air.rpc.call('checkBlacklistedName', [self.name],
+                              callback=callback, errback=callback, retry=True)
+
+    def enterJudgeName(self, blacklisted):
+        status = not blacklisted
 
         if self.avId and status:
             self.csm.air.dbInterface.updateObject(
