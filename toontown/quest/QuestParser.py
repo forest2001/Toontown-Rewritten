@@ -704,7 +704,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         avatar = self.getVar(avatarName)
         chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
-        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        # Hack Alert!
+        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        return Func(avatar.setLocalPageChat, chatString, 0)
 
     def parseLocalChatPersist(self, line):
         lineLength = len(line)
@@ -729,7 +731,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         chatString = getattr(TTLocalizer, line[3])
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
-        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        # Hack Alert!
+        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        return Func(avatar.setLocalPageChat, chatString, 0)
 
     def parseCCChatConfirm(self, line):
         lineLength = len(line)
@@ -740,7 +744,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             chatString = getattr(TTLocalizer, line[2][1:-1] % 'Minnie')
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
-        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        # Hack Alert!
+        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        return Func(avatar.setLocalPageChat, chatString, 0)
 
     def parseCCChatToConfirm(self, line):
         lineLength = len(line)
@@ -756,7 +762,10 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             chatString = getattr(TTLocalizer, line[3][1:-1] % 'Minnie')
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
-        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+
+        # Hack Alert!
+        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
+        return Func(avatar.setLocalPageChat, chatString, 0)
 
     def parsePlaySfx(self, line):
         if len(line) == 2:
