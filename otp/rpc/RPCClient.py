@@ -125,23 +125,23 @@ class RPCClient:
 
         self.task = taskMgr.add(self._task, 'RPCClient')
 
-    def call(self, method, callback=None, errback=None, retry=False, **kwargs):
+    def call(self, _method, _callback=None, _errback=None, _retry=False, **kwargs):
         if not self.url.hasServer():
             # RPC is not configured; skip.
-            if errback:
-                errback()
+            if _errback:
+                _errback()
             return
 
-        if retry == True:
+        if _retry == True:
             tries = self.defaultTries
-        elif retry == False:
+        elif _retry == False:
             tries = 1
-        elif isinstance(retry, (int, long)):
-            tries = retry
+        elif isinstance(_retry, (int, long)):
+            tries = _retry
         else:
             assert False
 
-        call = RPCCall(self, method, kwargs, callback, errback, tries)
+        call = RPCCall(self, _method, kwargs, _callback, _errback, tries)
         self._enqueueCall(call)
 
     def _setHeaders(self, channel):
