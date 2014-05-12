@@ -32,9 +32,6 @@ class RPCCall:
 
         self.channel = None
 
-    def submit(self):
-        self.client._enqueueCall(self)
-
     def begin(self, channel):
         self.channel = channel
 
@@ -145,7 +142,7 @@ class RPCClient:
             assert False
 
         call = RPCCall(self, method, kwargs, callback, errback, tries)
-        call.submit()
+        self._enqueueCall(call)
 
     def _setHeaders(self, channel):
         channel.clearExtraHeaders()
