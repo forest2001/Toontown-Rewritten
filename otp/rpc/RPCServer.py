@@ -218,7 +218,7 @@ class RPCConnection(asynchat.async_chat, FSM):
         except Exception:
             self.demand('JSONError', -1, PythonUtil.describeException())
         else:
-            if result is not None:
+            if result != request: # Returning "request" signifies deference.
                 if request.active:
                     request.result(result)
 
