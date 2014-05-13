@@ -137,3 +137,26 @@ class ToontownRPCHandler:
         self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 
         return request
+
+    def rpc_openName(self, request, avId):
+        """Allows name changes by "opening up" the name of a specified avatar.
+        This causes the "Name your Toon!" button to appear on the PAT screen,
+        allowing users to submit a different name.
+
+        On success, returns null.
+        On failure, comes back with a JSON error:
+        -100: avId invalid
+        """
+
+        def callback(dclass, fields):
+            if fields is None or dclass.getName() != 'DistributedToon':
+                return request.error(-100, 'avId invalid')
+
+            self.air.dbInterface.updateObject(self.air.dbId, avId, dclass,
+                                              {'WishNameState': WISHNAME_OPEN})
+
+            return request.result(None)
+
+        self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
+
+        return request
