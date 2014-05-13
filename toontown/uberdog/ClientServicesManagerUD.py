@@ -631,11 +631,11 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
         name = fields['setName'][0]
 
         if wns == WISHNAME_APPROVED:
-            wns = ''
+            wns = WISHNAME_LOCKED
             name = wn
             wn = ''
         elif wns == WISHNAME_REJECTED:
-            wns = 'OPEN'
+            wns = WISHNAME_OPEN
             wn = ''
         else:
             self.demand('Kill', "Tried to acknowledge name on an avatar in %s state!" % wns)
