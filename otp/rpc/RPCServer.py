@@ -19,9 +19,13 @@ rpc_server_listen = ConfigVariableInt(
     'Specifies the depth of the listening socket\'s listen queue.')
 
 rpc_server_polltime = ConfigVariableInt(
-    'rpc-server-polltime', 5,
+    'rpc-server-polltime', 2,
     'Specifies the number of milliseconds, per polling iteration, to wait for'
     ' incoming requests.')
+
+rpc_server_polliters = ConfigVariableInt(
+    'rpc-server-polliters', 5,
+    'Specifies the number of polling iterations to perform each frame.')
 
 rpc_server_keepalive = ConfigVariableInt(
     'rpc-server-keepalive', 5,
@@ -74,7 +78,8 @@ class RPCServer(asyncore.dispatcher):
 
     def task(self, task):
         timeout = rpc_server_polltime.getValue() * 0.001
-        asyncore.loop(timeout=timeout, count=1)
+        count = rpc_server_polliters.getValue()
+        asyncore.loop(timeout=timeout, count=count)
         return task.cont
 
     def handle_accept(self):
