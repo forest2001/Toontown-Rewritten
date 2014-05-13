@@ -1,6 +1,9 @@
 import pymongo
 # For naming constants:
 from toontown.uberdog.ClientServicesManagerUD import *
+# For renaming Toons with rejected names:
+from toontown.toon.ToonDNA import ToonDNA
+from toontown.toonbase import TTLocalizer
 
 class ToontownRPCHandler:
     def __init__(self, air):
@@ -97,5 +100,40 @@ class ToontownRPCHandler:
                                           {'WishNameState': WISHNAME_PENDING,
                                            'WishName': name},
                                           callback)
+
+        return request
+
+    def rpc_rejectName(self, request, avId):
+        """Rejects the name of the specified avatar.
+        If the avatar already has a valid name, this will reset them back to
+        their default 'Color Species' name (i.e. this call will have the same
+        effect as the ~badName magic word).
+
+        On success, returns null.
+        On failure, comes back with a JSON error:
+        -100: avId invalid
+        """
+
+        def callback(dclass, fields):
+            if dclass is None or dclass.getName() != 'DistributedToon':
+                return request.error(-100, 'avId invalid')
+
+            dnaString = fields['setDNAString'][0]
+            dna = ToonDNA()
+            dna.makeFromNetString(dnaString)
+            colorstring = TTLocalizer.NumToColor[dna.headColor]
+            animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
+            name = colorstring + ' ' + animaltype
+
+            dg = dclass.aiFormatUpdate('setName', avId, avId,
+                                       self.air.ourChannel, [name])
+            self.air.send(dg)
+            dg = dclass.aiFormatUpdate('WishNameState', avId, avId,
+                                       self.air.ourChannel, WISHNAME_REJECTED)
+            self.air.send(dg)
+
+            request.result(None)
+
+        self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 
         return request
