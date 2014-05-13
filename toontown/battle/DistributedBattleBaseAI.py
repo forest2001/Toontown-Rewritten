@@ -1648,24 +1648,16 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.ignore(exitEvent)
 
         eventMsg = {}
+        suitsLog = []
         for encounter in self.suitsKilledThisBattle:
-            cog = encounter['type']
-            level = encounter['level']
-            msgName = '%s%s' % (cog, level)
+            suitLog = {}
+            suitLog['type'] = encounter['type']
+            suitLog['level'] = encounter['level']
             if encounter['isSkelecog']:
-                msgName += '+'
-            if eventMsg.has_key(msgName):
-                eventMsg[msgName] += 1
-            else:
-                eventMsg[msgName] = 1
+                suitLog['isSkelecog'] = True
+            suitsLog.append(suitLog)
 
-        msgText = ''
-        for msgName, count in eventMsg.items():
-            if msgText != '':
-                msgText += ','
-            msgText += '%s%s' % (count, msgName)
-
-        self.air.writeServerEvent('battle-cogs-defeated', battleId=self.doId, msgText=msgText, taskZoneId=self.getTaskZoneId())
+        self.air.writeServerEvent('battle-cogs-defeated', battleId=self.doId, avIds=self.toons, taskZoneId=self.getTaskZoneId(), suits=suitsLog)
 
     def exitResume(self):
         pass
