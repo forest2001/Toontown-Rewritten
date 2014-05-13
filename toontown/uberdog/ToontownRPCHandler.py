@@ -186,3 +186,43 @@ class ToontownRPCHandler:
         self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 
         return request
+
+    ### ADMIN MESSAGES AND KICKS ###
+    def rpc_kickChannel(self, request, channel, code, reason):
+        """Kicks any users whose CAs are subscribed to a particular channel.
+
+        This always returns null.
+        """
+
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.air.ourChannel, CLIENTAGENT_EJECT)
+        dg.addUint16(code)
+        dg.addString(reason)
+        self.air.send(dg)
+
+    def rpc_kickGSID(self, request, gsId, code, reason):
+        """Kicks a particular user, by GSID.
+
+        This always returns null.
+        """
+
+        channel = gsId + (1003L << 32)
+        return self.rpc_kickChannel(request, channel, code, reason)
+
+    def rpc_kickAvatar(self, request, avId, code, reason):
+        """Kicks a particular user, by avId.
+
+        This always returns null.
+        """
+
+        channel = avId + (1001L << 32)
+        return self.rpc_kickChannel(request, channel, code, reason)
+
+    def rpc_kickAll(self, request, code, reason):
+        """Kicks all clients.
+
+        This always returns null.
+        """
+
+        channel = 10 # The Astron "all clients" channel.
+        return self.rpc_kickChannel(request, channel, code, reason)
