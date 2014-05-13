@@ -26,7 +26,7 @@ class Spellbook:
         self.currentTarget = None
 
     def addWord(self, word):
-        self.words[word.name] = word
+        self.words[word.name.lower()] = word
 
     def addCategory(self, category):
         self.categories.append(category)
@@ -47,7 +47,7 @@ class Spellbook:
             self.currentTarget = None
 
     def doWord(self, wordName, args):
-        word = self.words.get(wordName)
+        word = self.words.get(wordName.lower())
         if not word:
             return ('Unknown magic word!', False)
 
