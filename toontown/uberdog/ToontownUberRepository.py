@@ -1,8 +1,10 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from direct.distributed.PyDatagram import *
+from otp.rpc.RPCServer import RPCServer
 from otp.distributed.DistributedDirectoryAI import DistributedDirectoryAI
 from otp.distributed.OtpDoGlobals import *
+from ToontownRPCHandler import *
 
 class ToontownUberRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId):
@@ -15,6 +17,9 @@ class ToontownUberRepository(ToontownInternalRepository):
             rootObj = DistributedDirectoryAI(self)
             rootObj.generateWithRequiredAndId(self.getGameDoId(), 0, 0)
         self.createGlobals()
+
+        if simbase.config.GetBool('want-rpc-server', False):
+            self.rpcserver = RPCServer(ToontownRPCHandler(self))
 
     def createGlobals(self):
         """
