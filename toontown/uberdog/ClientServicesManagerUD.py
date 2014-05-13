@@ -130,7 +130,7 @@ class LoginAccountFSM(OperationFSM):
 
     def __handleLookup(self, result):
         if not result.get('success'):
-            self.csm.air.writeServerEvent('cookie-rejected', avId=self.target, cookie=self.cookie)
+            self.csm.air.writeServerEvent('cookie-rejected', clientId=self.target, cookie=self.cookie)
             self.demand('Kill', result.get('reason', 'The accounts database rejected your cookie.'))
             return
 
@@ -145,7 +145,7 @@ class LoginAccountFSM(OperationFSM):
         if (serverType == 'dev' and not serverAccess & 4) or \
            (serverType == 'qa' and not serverAccess & 2) or \
            (serverType == 'test' and not serverAccess & 1):
-            self.csm.air.writeServerEvent('insufficient-access', avId=self.target, cookie=self.cookie)
+            self.csm.air.writeServerEvent('insufficient-access', clientId=self.target, cookie=self.cookie)
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
 
@@ -239,7 +239,7 @@ class LoginAccountFSM(OperationFSM):
              'ADMIN_ACCESS': self.adminAccess})
 
         # We're done.
-        self.csm.air.writeServerEvent('account-login', avId=self.target, accId=self.accountId, webAccId=self.databaseId, cookie=self.cookie)
+        self.csm.air.writeServerEvent('account-login', clientId=self.target, accId=self.accountId, webAccId=self.databaseId, cookie=self.cookie)
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
 
