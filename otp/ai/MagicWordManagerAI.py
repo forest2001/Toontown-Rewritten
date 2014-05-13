@@ -31,10 +31,10 @@ class MagicWordManagerAI(DistributedObjectAI):
         
         if execute:
             response = spellbook.process(invoker, target, word)
-            if response:
-                self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
+            if response[0]:
+                self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response[0]])
         else:
-            response = 'Client MW executed.'
+            response = ('Client MW executed.',)
             
         from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
         targetAccess = 0 if not isinstance(target, DistributedPlayerAI) else target.getAdminAccess()
@@ -42,4 +42,4 @@ class MagicWordManagerAI(DistributedObjectAI):
         self.air.writeServerEvent('magic-word',
                                   invokerId=invokerId, invokerAccess=invoker.getAdminAccess(),
                                   targetId=targetId, targetAccess=targetAccess,
-                                  word=word, response=response)
+                                  word=word, response=response[0])

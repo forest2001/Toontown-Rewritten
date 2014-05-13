@@ -34,11 +34,11 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         targetId = target.doId
         if target == base.localAvatar:
-            response = spellbook.process(base.localAvatar, target, magicWord)
-            if response != 'Unknown magic word!': # Hacky! Woo!
-                # The spellbook didn't tell us the magic word is invalid.
-                if response:
-                    self.sendMagicWordResponse(response)
+            response = spellbook.process(base.localAvatar, target, magicWord) # Packed as (response, foundMagicWord)
+            if response[1]:
+                # Magic word found!
+                if response[0]:
+                    self.sendMagicWordResponse(response[0])
                 self.sendUpdate('sendMagicWord', [magicWord, targetId, False])
             else:
                 # Client's spellbook has no idea about this MW. Tell the AI to execute.
