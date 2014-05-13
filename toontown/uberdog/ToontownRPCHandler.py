@@ -160,3 +160,29 @@ class ToontownRPCHandler:
         self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 
         return request
+
+    def rpc_changeName(self, request, avId, name):
+        """Changes the name of a Toon.
+        This will also clear any name-approval status.
+
+        On success, returns null.
+        On failure, comes back with a JSON error:
+        -100: avId invalid
+        """
+
+        def callback(dclass, fields):
+            if fields is None or dclass.getName() != 'DistributedToon':
+                return request.error(-100, 'avId invalid')
+
+            dg = dclass.aiFormatUpdate('setName', avId, avId,
+                                       self.air.ourChannel, [name])
+            self.air.send(dg)
+            dg = dclass.aiFormatUpdate('WishNameState', avId, avId,
+                                       self.air.ourChannel, WISHNAME_LOCKED)
+            self.air.send(dg)
+
+            return request.result(None)
+
+        self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
+
+        return request
