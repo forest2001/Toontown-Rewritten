@@ -4,6 +4,8 @@ from toontown.uberdog.ClientServicesManagerUD import *
 # For renaming Toons with rejected names:
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.toonbase import TTLocalizer
+# For system message:
+from otp.distributed import OtpDoGlobals
 
 class ToontownRPCHandler:
     def __init__(self, air):
@@ -226,3 +228,66 @@ class ToontownRPCHandler:
 
         channel = 10 # The Astron "all clients" channel.
         return self.rpc_kickChannel(request, channel, code, reason)
+
+    def rpc_messageChannel(self, request, channel, code, params):
+        """Messages any users whose CAs are subscribed to a particular channel.
+
+        'code' is the system-message code for localization.
+        'params' is an array of parameters used by that system message.
+
+        To send a raw message as-is, use code 0 and put the message as the only
+        item in the params array: (..., 0, ["Hello!"])
+
+        This always returns null.
+        """
+
+        dclass = self.air.dclassesByName['ClientServicesManagerUD']
+        dg = dclass.aiFormatUpdate('systemMessage',
+                                   OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER,
+                                   channel, self.air.ourChannel, [code, params])
+        self.air.send(dg)
+
+    def rpc_messageGSID(self, request, gsId, code, reason):
+        """Messages a particular user, by GSID.
+
+        'code' is the system-message code for localization.
+        'params' is an array of parameters used by that system message.
+
+        To send a raw message as-is, use code 0 and put the message as the only
+        item in the params array: (..., 0, ["Hello!"])
+
+        This always returns null.
+        """
+
+        channel = gsId + (1003L << 32)
+        return self.rpc_messageChannel(request, channel, code, reason)
+
+    def rpc_messageAvatar(self, request, avId, code, reason):
+        """Messages a particular user, by avId.
+
+        'code' is the system-message code for localization.
+        'params' is an array of parameters used by that system message.
+
+        To send a raw message as-is, use code 0 and put the message as the only
+        item in the params array: (..., 0, ["Hello!"])
+
+        This always returns null.
+        """
+
+        channel = avId + (1001L << 32)
+        return self.rpc_messageChannel(request, channel, code, reason)
+
+    def rpc_messageAll(self, request, code, reason):
+        """Messages all clients.
+
+        'code' is the system-message code for localization.
+        'params' is an array of parameters used by that system message.
+
+        To send a raw message as-is, use code 0 and put the message as the only
+        item in the params array: (..., 0, ["Hello!"])
+
+        This always returns null.
+        """
+
+        channel = 10 # The Astron "all clients" channel.
+        return self.rpc_messageChannel(request, channel, code, reason)
