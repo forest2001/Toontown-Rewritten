@@ -704,7 +704,6 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         avatar = self.getVar(avatarName)
         chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
-        print self.parseExtraChatArgs(line[3:])
         # Hack Alert!
         # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
         return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags)
@@ -804,14 +803,6 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             notify.error('invalid number of arguments')
         actor = self.getVar(actorName)
         return Sequence(Func(actor.setPlayRate, playRate, animName), Func(actor.loop, self.cleanString(animName, ['"', '\''])))
-
-    def cleanString(self, string, charactors):
-        cleanedString = ''
-        for char in charactors:
-            if char in string:
-                cleanedString = string.replace(char, '')
-
-        return cleanedString
 
     def parseLerpPos(self, line):
         token, nodeName, x, y, z, t = line
@@ -1101,6 +1092,14 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
         else:
             return Wait(0.0)
+
+    def cleanString(self, string, charactors):
+        cleanedString = ''
+        for char in charactors:
+            if char in string:
+                cleanedString = string.replace(char, '')
+
+        return cleanedString
 
 
 searchPath = DSearchPath()
