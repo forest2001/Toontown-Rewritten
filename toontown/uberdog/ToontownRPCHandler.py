@@ -20,3 +20,19 @@ class ToontownRPCHandler:
 
         if account and account.get('dclass') == 'Account':
             return account.get('fields',{}).get('ACCOUNT_ID')
+
+    def rpc_getAvatarsForGSID(self, request, gsId):
+        """Gets the set of avatars (Toons) that exist on a given gsId, or null if invalid."""
+
+        def callback(dclass, fields):
+            if dclass is None:
+                return request.result(None)
+
+            if dclass.getName() is None:
+                return request.result(None)
+
+            request.result(fields.get('ACCOUNT_AV_SET'))
+
+        self.air.dbInterface.queryObject(self.air.dbId, gsId, callback)
+
+        return request
