@@ -304,7 +304,9 @@ class QuestManagerAI:
                     # Well we're in the right zone!
                     if quest.getHolder() == Quests.AnyFish:
                         # Bazinga! This is a fishing quest!
-                        if self.__testPercentage(quest.getPercentageChance()):
+                        progress = toon.quests[index][4] & pow(2, 16) - 1 # This seems to be the Disney way
+                        completion = quest.testRecover(progress)
+                        if completion[0]:
                             # We got lucky, dave! We caught the item!
                             self.__incrementQuestProgress(toon.quests[index])
                             toon.b_setQuests(toon.quests)
