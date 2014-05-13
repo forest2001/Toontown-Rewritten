@@ -39,9 +39,9 @@ class Spellbook:
         try:
             return self.doWord(word, args)
         except MagicError as e:
-            return e.message
+            return (e.message, True)
         except Exception:
-            return PythonUtil.describeException(backTrace=1)
+            return (PythonUtil.describeException(backTrace=1), True)
         finally:
             self.currentInvoker = None
             self.currentTarget = None
@@ -49,7 +49,7 @@ class Spellbook:
     def doWord(self, wordName, args):
         word = self.words.get(wordName)
         if not word:
-            raise MagicError('Unknown magic word!')
+            return ('Unknown magic word!', False)
 
         ensureAccess(word.access)
         if self.getTarget() and self.getTarget() != self.getInvoker():
@@ -60,7 +60,8 @@ class Spellbook:
 
         result = word.run(args)
         if result is not None:
-            return str(result)
+            return (str(result), True)
+        return ('Returned None for result. Better fix it!', True)
 
     def getInvoker(self):
         return self.currentInvoker
