@@ -3291,6 +3291,8 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   deleteAvatar(uint32 avId) clsend;
 
   chooseAvatar(uint32 avId) clsend;
+
+  systemMessage(uint16 code, string params[]);
 };
 
 dclass RATManager : DistributedObjectGlobal {

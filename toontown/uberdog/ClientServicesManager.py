@@ -1,10 +1,14 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.distributed.PotentialAvatar import PotentialAvatar
+from otp.otpbase import OTPLocalizer, OTPGlobals
+from otp.margins.WhisperPopup import *
 from pandac.PandaModules import *
 
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
+
+    systemMessageSfx = None
 
     # --- LOGIN LOGIC ---
     def performLogin(self, doneEvent):
@@ -77,3 +81,24 @@ class ClientServicesManager(DistributedObjectGlobal):
         self.sendUpdate('chooseAvatar', [avId])
 
     # No response: instead, an OwnerView is sent or deleted.
+
+    def systemMessage(self, code, params):
+        # First, format message:
+        msg = OTPLocalizer.CRSystemMessages.get(code)
+        if not msg:
+            self.notify.warning('Got invalid system-message code: %d' % code)
+            return
+
+        try:
+            message = msg % tuple(params)
+        except TypeError:
+            self.notify.warning(
+                'Got invalid parameters for system-message %d: %r' % (code, params))
+            return
+
+        whisper = WhisperPopup(message, OTPGlobals.getInterfaceFont(), WhisperPopup.WTSystem)
+        whisper.manage(base.marginManager)
+        if not self.systemMessageSfx:
+            self.systemMessageSfx = base.loadSfx('phase_3/audio/sfx/clock03.ogg')
+        if self.systemMessageSfx:
+            base.playSfx(self.systemMessageSfx)
