@@ -463,7 +463,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         bossDamage *= 2
         bossDamage = min(self.getBossDamage() + bossDamage, self.bossMaxDamage)
         if simbase.config.GetBool('bossbot-boss-cheat', False):
-            bossDamage = 250
+            bossDamage = bossDamage + 250
         self.b_setBossDamage(bossDamage, 0, 0)
         if self.bossDamage >= self.bossMaxDamage:
             self.b_setState('Victory')
