@@ -681,7 +681,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
                 quitButton = int(arg)
             elif type(arg) == type(''):
                 if len(arg) > 2 and arg[:2] == 'CF':
-                    extraChatFlags = eval(arg)
+                    extraChatFlags = getattr(arg)
                 else:
                     dialogueList.append(self.getVar(arg))
             else:
@@ -755,7 +755,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         toAvatarKey = line[2]
         toAvatar = self.getVar(toAvatarKey)
         localizerAvatarName = toAvatar.getName().capitalize()
-        toAvatarName = eval('TTLocalizer.' + localizerAvatarName)
+        toAvatarName = getattr(TTLocalizer, localizerAvatarName)
         if self.toon.getStyle().gender == 'm':
             chatString = getattr(TTLocalizer, line[3][1:-1] % 'Mickey')
         else:
