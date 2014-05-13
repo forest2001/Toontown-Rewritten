@@ -65,3 +65,37 @@ class ToontownRPCHandler:
             result.append(obj)
 
         return result
+
+    def rpc_approveName(self, request, avId, name):
+        """Approves the name of the specified avatar.
+        For security, the name must be submitted again.
+
+        On success, returns null.
+        On failure, comes back with a JSON error. The failure codes are:
+        -100: avId invalid
+        -101: avId not in the "pending name approval" state
+        -102: name does not match
+        """
+
+        def callback(fields):
+            if fields is None:
+                request.result(None)
+            elif fields == {}:
+                request.error(-100, 'avId invalid')
+            elif fields.get('WishNameState') != WISHNAME_PENDING:
+                request.error(-101, 'avId not in the "pending name approval" state')
+            elif fields.get('WishName') != name:
+                request.error(-102, 'name does not match')
+            else:
+                request.error(-1, 'Unexpected database failure')
+
+        dclass = self.air.dclassesByName['DistributedPlayerAI']
+
+        self.air.dbInterface.updateObject(self.air.dbId, avId, dclass,
+                                          {'WishNameState': WISHNAME_APPROVED,
+                                           'WishName': name},
+                                          {'WishNameState': WISHNAME_PENDING,
+                                           'WishName': name},
+                                          callback)
+
+        return request
