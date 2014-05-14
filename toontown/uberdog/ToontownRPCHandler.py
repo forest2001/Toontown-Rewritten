@@ -220,6 +220,19 @@ class ToontownRPCHandler:
         channel = avId + (1001L << 32)
         return self.rpc_kickChannel(request, channel, code, reason)
 
+    def rpc_kickShard(self, request, shardId, code, reason):
+        """Kicks all clients in a particular shard.
+
+        This always returns null.
+        """
+
+        # Get doId of the district object:
+        districtId = shardId + 1
+        # Get channel of the uberzone:
+        channel = districtId << 32 | 2
+
+        return self.rpc_kickChannel(request, channel, code, reason)
+
     def rpc_kickAll(self, request, code, reason):
         """Kicks all clients.
 
@@ -275,6 +288,25 @@ class ToontownRPCHandler:
         """
 
         channel = avId + (1001L << 32)
+        return self.rpc_messageChannel(request, channel, code, params)
+
+    def rpc_messageShard(self, request, shardId, code, params):
+        """Messages all clients in a particular shard.
+
+        'code' is the system-message code for localization.
+        'params' is an array of parameters used by that system message.
+
+        To send a raw message as-is, use code 0 and put the message as the only
+        item in the params array: (..., 0, ["Hello!"])
+
+        This always returns null.
+        """
+
+        # Get doId of the district object:
+        districtId = shardId + 1
+        # Get channel of the uberzone:
+        channel = districtId << 32 | 2
+
         return self.rpc_messageChannel(request, channel, code, params)
 
     def rpc_messageAll(self, request, code, params):
