@@ -4430,7 +4430,7 @@ def setCE(CEValue, CEHood=0, CEExpire=0):
         return 'Invalid zoneId specified.'
     spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
 
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int], targetClasses=[DistributedToonAI], aliases=['hp', 'toonHp', 'currHp'])
 def setHp(hpVal):
     """Set target's current laff"""
     if not -1 <= hpVal <= 137:
