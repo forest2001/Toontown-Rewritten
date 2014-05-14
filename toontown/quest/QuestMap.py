@@ -223,10 +223,7 @@ class QuestMap(DirectFrame):
                 self.marker.setPos(relX, 0, relY)
                 self.marker.setHpr(0, 0, -180 - self.av.getH())
             self.marker['geom_scale'] = 1.4 * task.time % 0.5 * 10 + 1
-            self.marker['geom_color'] = (1,
-             1,
-             1,
-             0.8 - 1.4 * task.time % 0.5 * 2 / 0.8 + 0.2)
+            self.marker['geom_color'] = (1, 1, 1, 0.8 - 1.4 * task.time % 0.5 * 2 / 0.8 + 0.2)
         if task.time < 1:
             return Task.cont
         else:
