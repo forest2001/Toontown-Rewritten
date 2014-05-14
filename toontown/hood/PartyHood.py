@@ -62,7 +62,7 @@ class PartyHood(Hood.Hood):
             msg = TTLocalizer.PartyOverWarningNoName
             if hasattr(base, 'distributedParty') and base.distributedParty:
                 name = base.distributedParty.hostName
-                msg = TTLocalizer.PartyOverWarningWithName % TTLocalizer.GetPossesive(name)
+                msg = TTLocalizer.PartyOverWarningWithName % TTLocalizer.GetPossesive(name, 'party')
             self.__popupKickoutMessage(msg)
             base.localAvatar.setTeleportAvailable(0)
         if retCode == 1:
