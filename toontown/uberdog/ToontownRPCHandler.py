@@ -247,7 +247,7 @@ class ToontownRPCHandler:
                                    channel, self.air.ourChannel, [code, params])
         self.air.send(dg)
 
-    def rpc_messageGSID(self, request, gsId, code, reason):
+    def rpc_messageGSID(self, request, gsId, code, params):
         """Messages a particular user, by GSID.
 
         'code' is the system-message code for localization.
@@ -260,9 +260,9 @@ class ToontownRPCHandler:
         """
 
         channel = gsId + (1003L << 32)
-        return self.rpc_messageChannel(request, channel, code, reason)
+        return self.rpc_messageChannel(request, channel, code, params)
 
-    def rpc_messageAvatar(self, request, avId, code, reason):
+    def rpc_messageAvatar(self, request, avId, code, params):
         """Messages a particular user, by avId.
 
         'code' is the system-message code for localization.
@@ -275,9 +275,9 @@ class ToontownRPCHandler:
         """
 
         channel = avId + (1001L << 32)
-        return self.rpc_messageChannel(request, channel, code, reason)
+        return self.rpc_messageChannel(request, channel, code, params)
 
-    def rpc_messageAll(self, request, code, reason):
+    def rpc_messageAll(self, request, code, params):
         """Messages all clients.
 
         'code' is the system-message code for localization.
@@ -290,4 +290,4 @@ class ToontownRPCHandler:
         """
 
         channel = 10 # The Astron "all clients" channel.
-        return self.rpc_messageChannel(request, channel, code, reason)
+        return self.rpc_messageChannel(request, channel, code, params)
