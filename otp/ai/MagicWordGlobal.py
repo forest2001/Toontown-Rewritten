@@ -20,6 +20,7 @@ class Spellbook:
 
     def __init__(self):
         self.words = {}
+        self.alias2word = {}
         self.categories = []
 
         self.currentInvoker = None
@@ -27,6 +28,8 @@ class Spellbook:
 
     def addWord(self, word):
         self.words[word.name.lower()] = word
+        for alias in word.aliases:
+            self.alias2word[alias.lower()] = word
 
     def addCategory(self, category):
         self.categories.append(category)
@@ -47,7 +50,7 @@ class Spellbook:
             self.currentTarget = None
 
     def doWord(self, wordName, args):
-        word = self.words.get(wordName.lower())
+        word = self.words.get(wordName.lower()) or self.alias2word.get(wordName.lower())
         if not word:
             return ('Unknown magic word!', False)
 
@@ -133,7 +136,7 @@ CATEGORY_CAMERA = MagicWordCategory('Camera controls', defaultAccess=300,
 
 
 class MagicWord:
-    def __init__(self, name, func, types, access, doc, category, targetClasses):
+    def __init__(self, name, func, types, access, doc, category, targetClasses, aliases):
         self.name = name
         self.func = func
         self.types = types
@@ -141,6 +144,7 @@ class MagicWord:
         self.doc = doc
         self.category = category
         self.targetClasses = targetClasses
+        self.aliases = aliases
 
         category.addWord(self)
 
@@ -190,7 +194,7 @@ class MagicWordDecorator:
     object process the Magic Word's construction.
     """
 
-    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN, targetClasses=[]):
+    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN, targetClasses=[], aliases=[]):
         self.name = name
         self.types = types
         self.category = category
@@ -199,6 +203,7 @@ class MagicWordDecorator:
         else:
             self.access = self.category.defaultAccess
         self.targetClasses = targetClasses
+        self.aliases = aliases
 
     def __call__(self, mw):
         # This is the actual decoration routine. We add the function 'mw' as a
@@ -209,7 +214,7 @@ class MagicWordDecorator:
         if name is None:
             name = mw.func_name
 
-        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category, self.targetClasses)
+        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category, self.targetClasses, self.aliases)
         spellbook.addWord(word)
 
         return mw
