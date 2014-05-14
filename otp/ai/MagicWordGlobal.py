@@ -1,7 +1,7 @@
 from direct.showbase import PythonUtil
 
 MINIMUM_MAGICWORD_ACCESS = 300
-MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS = 500 # Lol this is long.
+MINIMUM_AI_OBJ_MW_ACCESS = 500 # Lol this is long.
 
 class MagicError(Exception): pass
 
@@ -52,16 +52,25 @@ class Spellbook:
             return ('Unknown magic word!', False)
 
         ensureAccess(word.access)
+            
         if self.getTarget() and self.getTarget() != self.getInvoker():
-            from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
-            targetAccess = MINIMUM_MAGICWORD_AI_OBJECT_CONTROL_ACCESS if not isinstance(self.getTarget(), DistributedPlayerAI) else self.target.getAdminAccess()
+            # Check if the target is the correct class.
+            if word.targetClasses:
+                if not isinstance(self.getTarget(), tuple(word.targetClasses)):
+                    raise MagicError('Target is an invalid class! Expected: %s, Got: %s' % (str([x.__name__ for x in word.targetClasses]), self.getTarget().__class__.__name__))
+                    
+            if hasattr(self.getTarget(), 'getAdminAccess'):
+                targetAccess = self.getTarget().getAdminAccess()
+            else:
+                # Set it to the minimum access required to manipulate AI objects.
+                targetAccess = MINIMUM_AI_OBJ_MW_ACCESS - 1
             if self.getInvokerAccess() <= targetAccess:
                 raise MagicError('Target must have lower access')
-
+        
         result = word.run(args)
         if result is not None:
             return (str(result), True)
-        return ('Returned None for result. Better fix it!', True)
+        return ('Magic word executed successfully!', True)
 
     def getInvoker(self):
         return self.currentInvoker
@@ -124,13 +133,14 @@ CATEGORY_CAMERA = MagicWordCategory('Camera controls', defaultAccess=300,
 
 
 class MagicWord:
-    def __init__(self, name, func, types, access, doc, category):
+    def __init__(self, name, func, types, access, doc, category, targetClasses):
         self.name = name
         self.func = func
         self.types = types
         self.access = access
         self.doc = doc
         self.category = category
+        self.targetClasses = targetClasses
 
         category.addWord(self)
 
@@ -180,7 +190,7 @@ class MagicWordDecorator:
     object process the Magic Word's construction.
     """
 
-    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN):
+    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN, targetClasses=[]):
         self.name = name
         self.types = types
         self.category = category
@@ -188,6 +198,7 @@ class MagicWordDecorator:
             self.access = access
         else:
             self.access = self.category.defaultAccess
+        self.targetClasses = targetClasses
 
     def __call__(self, mw):
         # This is the actual decoration routine. We add the function 'mw' as a
@@ -198,7 +209,7 @@ class MagicWordDecorator:
         if name is None:
             name = mw.func_name
 
-        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category)
+        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category, self.targetClasses)
         spellbook.addWord(word)
 
         return mw
