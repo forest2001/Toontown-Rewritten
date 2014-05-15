@@ -628,7 +628,7 @@ def boss(cmd, val, val2=''):
                 # Yes it is! We can run commands on it.
                 if cmd == 'state':
                     object.b_setState(val)
-                    return "Set state of the current boss battle to %s." % state
+                    return "Set state of the current boss battle to %s." % val
                 elif cmd in ['add', 'remove']:
                     avId = 100000000 + int(val2)
                     toon = simbase.air.doId2do.get(avId)
