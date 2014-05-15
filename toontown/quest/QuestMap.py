@@ -153,10 +153,9 @@ class QuestMap(DirectFrame):
                 branchId = ZoneUtil.getCanonicalBranchZone(npcZone)
                 if self.hoodId == hoodId and self.zoneId == branchId:
                     for blockId, block in dnaData.getBlocks():
-                        zone = dnaData.getBlock(blockId).zone
+                        zone = block.zone
                         branchZone = zone - zone % 100
                         finalZone = branchZone + 500 + blockId
-                        buildingType = dnaData.getBlock(blockId).buildingType
                         if npcZone == finalZone:
                             door = None # Find the door
                             doorPos = door.getPos()
