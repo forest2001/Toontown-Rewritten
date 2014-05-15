@@ -10,7 +10,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('GlobalPartyManagerUD')
 
     # This uberdog MUST be up before the AIs, as AIs talk to this UD
-    
+
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
         self.notify.debug("GPMUD generated")
@@ -30,6 +30,9 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         # Setup tasks
         self.runAtNextInterval()
 
+        # Listen out for any events of avatars that logged in.
+        self.air.netMessenger.accept('avatarOnline', self, self.avatarJoined)
+
     # GPMUD -> PartyManagerAI messaging
     def _makeAIMsg(self, field, values, recipient):
         return self.air.dclassesByName['DistributedPartyManagerUD'].getFieldByName(field).aiFormatUpdate(recipient, recipient, simbase.air.ourChannel, values)
@@ -39,7 +42,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             sender = self.air.getAvatarIdFromSender()
         dg = self._makeAIMsg(field, values, self.senders2Mgrs.get(sender, sender + 8))
         self.air.send(dg)
-        
+
     # GPMUD -> toon messaging
     def _makeAvMsg(self, field, values, recipient):
         return self.air.dclassesByName['DistributedToonUD'].getFieldByName(field).aiFormatUpdate(recipient, recipient, simbase.air.ourChannel, values)
@@ -47,7 +50,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def sendToAv(self, avId, field, values):
         dg = self._makeAvMsg(field, values, avId)
         self.air.send(dg)
-        
+
     # Task stuff
     def runAtNextInterval(self):
         now = datetime.now()
@@ -107,7 +110,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
                 partyDict.get('status', PartyStatus.Pending)]
 
     # Avatar joined the game, invoked by the CSMUD
-    def avatarJoined(self, avId):
+    def avatarJoined(self, avId, friendsList): # CSMUD also passes friendsList for TTRFMUD.
 #        self.host2PartyId[avId] = (1337 << 32) + 10000
         partyId = self.host2PartyId.get(avId, None)
         if partyId:
@@ -166,15 +169,15 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.__updatePartyCount(partyId)
 
     def partyManagerAIHello(self, channel):
-        # Upon AI boot, DistributedPartyManagerAIs are supposed to say hello. 
+        # Upon AI boot, DistributedPartyManagerAIs are supposed to say hello.
         # They send along the DPMAI's doId as well, so that I can talk to them later.
         print 'AI with base channel %s, will send replies to DPM %s' % (simbase.air.getAvatarIdFromSender(), channel)
         self.senders2Mgrs[simbase.air.getAvatarIdFromSender()] = channel
         self.sendToAI('partyManagerUdStartingUp', [])
-        
+
         # In addition, set up a postRemove where we inform this AI that the UD has died
         self.air.addPostRemove(self._makeAIMsg('partyManagerUdLost', [], channel))
-        
+
     def addParty(self, avId, partyId, start, end, isPrivate, inviteTheme, activities, decorations, inviteeIds):
         PARTY_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         print 'start time: %s' % start
@@ -191,7 +194,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
             taskMgr.remove('GlobalPartyManager_checkStarts')
             taskMgr.doMethodLater(15, self.__checkPartyStarts, 'GlobalPartyManager_checkStarts')
         return
-        
+
     def queryParty(self, hostId):
         # An AI is wondering if the host has a party. We'll tell em!
         if hostId in self.host2PartyId:
@@ -220,10 +223,10 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         self.__updatePartyCount(partyId)
         # note that they might not show up
         self.tempSlots[avId] = partyId
-        
+
         #give the client a minute to connect before freeing their slot
         taskMgr.doMethodLater(60, self._removeTempSlot, 'partyManagerTempSlot%d' % avId, extraArgs=[avId])
-        
+
         # now format the pubPartyInfo
         actIds = []
         for activity in self.id2Party[partyId]['activities']:
@@ -236,7 +239,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
         sender = simbase.air.getAvatarIdFromSender() # try to pretend the AI sent it. ily2 cfsworks
         dg = self.air.dclassesByName['DistributedPartyGateAI'].getFieldByName('setParty').aiFormatUpdate(gateId, recipient, sender, [info, hostId])
         self.air.send(dg)
-        
+
     def _removeTempSlot(self, avId):
         partyId = self.tempSlots.get(avId)
         if partyId:

@@ -707,42 +707,19 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addChannel(self.csm.GetAccountConnectionChannel(self.target)) # Set ownership channel to the connection's account channel.
         self.csm.air.send(dg)
 
-        # Tell TTRFriendsManager somebody is logging in:
-        # Construst a list of all friends.
-        friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
-        friendsList = []
-        for friendId, tf in self.avatar['setFriendsList'][0]:
-            friendsList.append(friendId)
-        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
-        if self.csm.air.friendsManager:
-            self.csm.air.friendsManager.comingOnline(self.avId, friendsList)
-        else:
-            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-                'comingOnline', friendsManagerDoId, friendsManagerDoId,
-                self.csm.air.ourChannel, [self.avId, friendsList]
-            )
-            self.csm.air.send(dg)
-
-        # Setup a post remove in case the client disconnects randomly.
-        dgcleanup = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-            'goingOffline', friendsManagerDoId, friendsManagerDoId,
-            self.csm.air.ourChannel, [self.avId]
-        )
-        dg = PyDatagram()
-        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
-        dg.addString(dgcleanup.getMessage())
-        self.csm.air.send(dg)
-
+        # Tell everything that an avatar is coming online!
+        friendsList = [x for x, y in self.avatar['setFriendsList'][0]]
+        self.csm.air.netMessenger.send('avatarOnline', [self.avId, friendsList])
 
         # Tell the GlobalPartyManager as well
-        if self.csm.air.globalPartyMgr:
-            self.csm.air.globalPartyMgr.avatarJoined(self.avId)
-        else:
-            dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
-                'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER,
-                OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
-            )
-            self.csm.air.send(dg)
+        #if self.csm.air.globalPartyMgr:
+        #    self.csm.air.globalPartyMgr.avatarJoined(self.avId)
+        #else:
+        #    dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
+        #        'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER,
+        #        OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
+        #    )
+        #    self.csm.air.send(dg)
 
         self.csm.air.writeServerEvent('avatar-chosen', avId=self.avId, accId=self.target)
         self.demand('Off')
@@ -759,23 +736,8 @@ class UnloadAvatarFSM(OperationFSM):
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
 
-        # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
-        # Tell TTRFriendsManager somebody is logging off:
-        if self.csm.air.friendsManager:
-            self.csm.air.friendsManager.goingOffline(self.avId)
-        else:
-            friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
-            dg = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
-                'goingOffline', friendsManagerDoId, friendsManagerDoId,
-                self.csm.air.ourChannel, [self.avId]
-            )
-            self.csm.air.send(dg)
-
-
-        # Clear off POSTREMOVE:
-        dg = PyDatagram()
-        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLEAR_POST_REMOVES)
-        self.csm.air.send(dg)
+        # Fire off the avatarOffline message.
+        self.csm.air.netMessenger.send('avatarOffline', [self.avId])
 
         # Remove avatar channel:
         dg = PyDatagram()
