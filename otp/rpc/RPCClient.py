@@ -148,8 +148,8 @@ class RPCClient:
     def _setHeaders(self, channel):
         channel.clearExtraHeaders()
         channel.sendExtraHeader('Connection', 'Keep-Alive')
-        channel.sendExtraHeader('Accept', 'text/json')
-        channel.sendExtraHeader('Content-Type', 'text/json')
+        channel.sendExtraHeader('Accept', 'application/json')
+        channel.sendExtraHeader('Content-Type', 'application/json')
         channel.sendExtraHeader('User-Agent', 'OTP RPC client')
 
     def _enqueueCall(self, call):

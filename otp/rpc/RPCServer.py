@@ -282,7 +282,7 @@ class RPCConnection(asynchat.async_chat, FSM):
     def sendJSON(self, data):
         body = json.dumps(data) + '\n'
 
-        self.sendResponse(body, 'text/json', 200)
+        self.sendResponse(body, 'application/json', 200)
 
     # Error handlers:
     def enterHTTPError(self, code):
