@@ -28,6 +28,7 @@ default-model-extension .bam
 
 # Server settings
 eventlog-host 127.0.0.1
+want-parties #f
 
 
 # DC Files

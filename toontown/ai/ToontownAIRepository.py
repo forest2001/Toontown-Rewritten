@@ -25,8 +25,9 @@ from otp.friends.FriendManagerAI import FriendManagerAI
 from toontown.estate.EstateManagerAI import EstateManagerAI
 
 # Par-tay!
-from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
-from otp.distributed.OtpDoGlobals import *
+if simbase.config.GetBool('want-parties', True):
+    from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+    from otp.distributed.OtpDoGlobals import *
 
 # Fireworks!
 from direct.task import Task
@@ -166,11 +167,12 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
 
-        self.partyManager = DistributedPartyManagerAI(self)
-        self.partyManager.generateWithRequired(2)
+        if simbase.config.GetBool('want-parties', True):
+            self.partyManager = DistributedPartyManagerAI(self)
+            self.partyManager.generateWithRequired(2)
 
-        # setup our view of the global party manager ud
-        self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+            # setup our view of the global party manager ud
+            self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
 
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
