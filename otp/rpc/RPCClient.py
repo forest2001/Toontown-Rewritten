@@ -113,6 +113,7 @@ class RPCClient:
         self.defaultTries = rpc_client_retry.getValue()
 
         self.client = HTTPClient()
+        self.client.setVerifySsl(0)
 
         self.channels = []
         self._callQueue = []
