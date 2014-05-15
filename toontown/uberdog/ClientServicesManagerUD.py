@@ -711,6 +711,13 @@ class LoadAvatarFSM(AvatarOperationFSM):
         friendsList = [x for x, y in self.avatar['setFriendsList'][0]]
         self.csm.air.netMessenger.send('avatarOnline', [self.avId, friendsList])
 
+        # Post-remove for an avatar that disconnects unexpectedly.
+        dgcleanup = self.csm.air.netMessenger.prepare('avatarOffline', [self.avId])
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
+        self.csm.air.send(dg)
+
         self.csm.air.writeServerEvent('avatar-chosen', avId=self.avId, accId=self.target)
         self.demand('Off')
 
@@ -728,6 +735,11 @@ class UnloadAvatarFSM(OperationFSM):
 
         # Fire off the avatarOffline message.
         self.csm.air.netMessenger.send('avatarOffline', [self.avId])
+
+        # Get lost, POST_REMOVES!:
+        dg = PyDatagram()
+        dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_CLEAR_POST_REMOVES)
+        self.csm.air.send(dg)
 
         # Remove avatar channel:
         dg = PyDatagram()
@@ -788,7 +800,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             if dclass != self.air.dclassesByName['AccountUD']:
                 return
             webId = fields.get('ACCOUNT_ID')
-            self.csm.air.rpc.call('avatarExit', webAccId=webId)
+            self.air.rpc.call('avatarExit', webAccId=webId)
         self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
