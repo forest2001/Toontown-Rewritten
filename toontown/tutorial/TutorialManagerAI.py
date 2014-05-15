@@ -7,6 +7,7 @@ from toontown.building import DistributedDoorAI
 from toontown.building.DistributedBuildingAI import DistributedBuildingAI
 from toontown.suit.DistributedTutorialSuitAI import DistributedTutorialSuitAI
 from toontown.toonbase import ToontownBattleGlobals
+from toontown.building.HQBuildingAI import HQBuildingAI
 import types
 
 class TZoneStruct:
@@ -26,7 +27,7 @@ class TutorialManagerAI(DistributedObjectAI):
         avId = self.air.getAvatarIdFromSender()
         zones = TZoneStruct()
 
-        zones.branch = 20000
+        zones.branch = self.air.allocateZone()
         zones.street = self.air.allocateZone()
         zones.shop = self.air.allocateZone()
         zones.hq = self.air.allocateZone()
@@ -48,20 +49,23 @@ class TutorialManagerAI(DistributedObjectAI):
         door0.sendUpdate('setDoorIndex', [door0.getDoorIndex()])
         insideDoor0.generateWithRequired(zones.shop)
         insideDoor0.sendUpdate('setDoorIndex', [insideDoor0.getDoorIndex()])
-
-        def getExteriorAndInteriorZoneId(self):
-            return (self.zoneId, 0)
-
-        bldg = DistributedBuildingAI(self.air, 2, zones.street, self.air.trophyMgr)
-        #hack alert
-        bldg.getExteriorAndInteriorZoneId = types.MethodType(getExteriorAndInteriorZoneId, bldg)
-        bldg.generateWithRequired(zones.street)
-        bldg.setState('toon')
+        
+        hq = HQBuildingAI(self.air, zones.street, zones.hq, 1)
+        
         
         suit = DistributedTutorialSuitAI(self.air)
         suit.generateWithRequired(zones.street)
 
-        self.d_enterTutorial(avId, zones.branch, zones.street, zones.shop, zones.hq)
+        # Toontorial TODO list:
+        #  spawn HQ Harry
+        #  prevent access to zones early      
+        #  Spawn Flippy after battle
+        #  cleanup zones and objects
+        #  visual fixes
+        #  assign initial quest in QMAI rather than presenting choice
+        
+        self.d_enterTutorial(avId, zones.street, zones.street, zones.shop, zones.hq) #hackfix lololol        
+
 
     def rejectTutorial(self):
         pass
