@@ -711,16 +711,6 @@ class LoadAvatarFSM(AvatarOperationFSM):
         friendsList = [x for x, y in self.avatar['setFriendsList'][0]]
         self.csm.air.netMessenger.send('avatarOnline', [self.avId, friendsList])
 
-        # Tell the GlobalPartyManager as well
-        #if self.csm.air.globalPartyMgr:
-        #    self.csm.air.globalPartyMgr.avatarJoined(self.avId)
-        #else:
-        #    dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
-        #        'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER,
-        #        OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
-        #    )
-        #    self.csm.air.send(dg)
-
         self.csm.air.writeServerEvent('avatar-chosen', avId=self.avId, accId=self.target)
         self.demand('Off')
 
