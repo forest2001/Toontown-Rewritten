@@ -15,10 +15,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)
-        self.quests = {0: None,
-         1: None,
-         2: None,
-         3: None}
+        self.quests = {0: None, 1: None, 2: None, 3: None}
         self.textRolloverColor = Vec4(1, 1, 0, 1)
         self.textDownColor = Vec4(0.5, 0.9, 1, 1)
         self.textDisabledColor = Vec4(0.4, 0.8, 0.4, 1)
@@ -28,25 +25,11 @@ class QuestPage(ShtikerPage.ShtikerPage):
 
     def load(self):
         self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.QuestPageToonTasks, text_scale=0.12, textMayChange=0, pos=(0, 0, 0.6))
-        questFramePlaceList = ((-0.45,
-          0,
-          0.25,
-          0,
-          0,
-          0),
-         (-0.45,
-          0,
-          -0.35,
-          0,
-          0,
-          0),
-         (0.45, 0, 0.25, 0, 0, 0),
-         (0.45,
-          0,
-          -0.35,
-          0,
-          0,
-          0))
+        questFramePlaceList = (
+            (-0.45, 0, 0.25, 0, 0, 0), 
+            (-0.45, 0, -0.35, 0, 0, 0), 
+            (0.45, 0, 0.25, 0, 0, 0), 
+            (0.45, 0, -0.35, 0, 0, 0))
         self.questFrames = []
         for i in range(ToontownGlobals.MaxQuestCarryLimit):
             frame = QuestBookPoster.QuestBookPoster(reverse=i > 1, mapIndex=i + 1)
@@ -56,6 +39,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
             self.questFrames.append(frame)
 
         self.accept('questsChanged', self.updatePage)
+        self.updatePage()
         return
 
     def acceptOnscreenHooks(self):

@@ -55,7 +55,7 @@ class InviteVisual(DirectFrame):
 
     def updateInvitation(self, hostsName, partyInfo):
         self.partyInfo = partyInfo
-        hostsName = TTLocalizer.GetPossesive(hostsName)
+        hostsName = TTLocalizer.GetPossesive(hostsName, 'party')
         self.whosePartyLabel['text'] = TTLocalizer.PartyPlannerInvitationWhoseSentence % hostsName
         if self.partyInfo.isPrivate:
             publicPrivateText = TTLocalizer.PartyPlannerPrivate.lower()

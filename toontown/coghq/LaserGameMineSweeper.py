@@ -31,10 +31,8 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
         LaserGameBase.LaserGameBase.startGrid(self)
         self.hiddenData = []
         for i in range(0, self.gridNumX):
-            self.hiddenData.append([
-                0] * self.gridNumY)
-        
-        numBombs = int(self.gridNumX * self.gridNumY / 8)
+            self.hiddenData.append([0]*self.gridNumY)
+        numBombs = int(self.gridNumX*self.gridNumY/8)
         numBombs += 1
         bomb = 0
         sanity = 1000
@@ -46,21 +44,19 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
                 if self.hiddenData[column][row] != 12 and self.neighborSum(column, row) < 2 and self.rowSum(row) < numBombs / 3:
                     self.hiddenData[column][row] = 12
                     bomb += 1
-                    continue
-        
         for column in range(0, self.gridNumX):
             for row in range(0, self.gridNumY):
                 if self.hiddenData[column][row] == 12:
                     self.gridData[column][row] = 11
-                    continue
-                self.gridData[column][row] = 10
+                else:
+                    self.gridData[column][row] = 10
             
         
 
     
     def hit(self, hitX, hitY, oldx = -1, oldy = -1):
         if self.finshed:
-            return None
+            return
         
         if self.hiddenData[hitX][hitY] == 12:
             self.gridData[hitX][hitY] = 12
@@ -82,7 +78,7 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
             self.gridData[hitX][hitY] = 12
         
         if self.gridData[hitX][hitY] != 10:
-            return None
+            return
         
         self.gridData[hitX][hitY] = self.neighborSum(hitX, hitY)
         if self.neighborSum(hitX, hitY) == 0:
@@ -118,8 +114,6 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
         for i in range(0, self.gridNumX - 1):
             if self.hiddenData[i][y] == 12:
                 sum += 1
-                continue
-        
         return sum
 
     

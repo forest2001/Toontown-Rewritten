@@ -104,7 +104,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
 
         if avId in self.slots:
-            self.air.writeServerEvent('suspicious', avId, 'Toon requested to board a trolley twice!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon requested to board a trolley twice!')
             self.sendUpdateToAvatarId(avId, 'rejectBoard', [avId])
             return
 
@@ -126,7 +126,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
 
         if avId not in self.slots:
-            self.air.writeServerEvent('suspicious', avId, 'Toon requested to exit a trolley they are not on!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon requested to exit a trolley they are not on!')
             return
 
         if not self.boardable:

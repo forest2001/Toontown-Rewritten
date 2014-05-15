@@ -79,7 +79,7 @@ class DistributedNPCClerkAI(DistributedNPCToonBaseAI):
         avId = self.air.getAvatarIdFromSender()
         if self.busy != avId:
             if self.busy != 0:
-                self.air.writeServerEvent('suspicious', avId, 'DistributedNPCClerkAI.setInventory busy with %s' % self.busy)
+                self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCClerkAI.setInventory busy with %s' % self.busy)
                 self.notify.warning('setInventory from unknown avId: %s busy: %s' % (avId, self.busy))
             return
         if self.air.doId2do.has_key(avId):
@@ -92,7 +92,7 @@ class DistributedNPCClerkAI(DistributedNPCToonBaseAI):
                     av.d_setInventory(av.inventory.makeNetString())
                     av.d_setMoney(newMoney)
             else:
-                self.air.writeServerEvent('suspicious', avId, 'DistributedNPCClerkAI.setInventory invalid purchase')
+                self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCClerkAI.setInventory invalid purchase')
                 self.notify.warning('Avatar ' + str(avId) + ' attempted an invalid purchase.')
                 av.d_setInventory(av.inventory.makeNetString())
                 av.d_setMoney(av.getMoney())

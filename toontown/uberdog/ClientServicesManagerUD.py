@@ -107,7 +107,7 @@ class LoginAccountFSM(OperationFSM):
 
     def __handleLookup(self, result):
         if not result.get('success'):
-            self.csm.air.writeServerEvent('cookieRejected', self.target, self.cookie)
+            self.csm.air.writeServerEvent('cookie-rejected', clientId=self.target, cookie=self.cookie)
             self.demand('Kill', result.get('reason', 'The accounts database rejected your cookie.'))
             return
 
@@ -122,7 +122,7 @@ class LoginAccountFSM(OperationFSM):
         if (serverType == 'dev' and not serverAccess & 4) or \
            (serverType == 'qa' and not serverAccess & 2) or \
            (serverType == 'test' and not serverAccess & 1):
-            self.csm.air.writeServerEvent('insufficient-access', self.target, self.cookie)
+            self.csm.air.writeServerEvent('insufficient-access', clientId=self.target, cookie=self.cookie)
             self.demand('Kill', result.get('reason', 'You have insufficient access to login.'))
             return
 
@@ -174,7 +174,7 @@ class LoginAccountFSM(OperationFSM):
             self.demand('Kill', 'Your account object could not be created in the game database.')
             return
 
-        self.csm.air.writeServerEvent('accountCreated', accountId)
+        self.csm.air.writeServerEvent('account-created', accId=accountId)
 
         self.accountId = accountId
         self.demand('SetAccount')
@@ -216,7 +216,7 @@ class LoginAccountFSM(OperationFSM):
              'ADMIN_ACCESS': self.adminAccess})
 
         # We're done.
-        self.csm.air.writeServerEvent('accountLogin', self.target, self.accountId, self.databaseId)
+        self.csm.air.writeServerEvent('account-login', clientId=self.target, accId=self.accountId, webAccId=self.databaseId, cookie=self.cookie)
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [])
         self.demand('Off')
 
@@ -313,7 +313,7 @@ class CreateAvatarFSM(OperationFSM):
             return
 
         # Otherwise, we're done!
-        self.csm.air.writeServerEvent('avatarCreated', self.avId, self.target, self.dna.encode('hex'), self.index)
+        self.csm.air.writeServerEvent('avatar-created', avId=self.avId, accId=self.target, dna=self.dna.encode('hex'), slot=self.index)
         self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
         self.demand('Off')
 
@@ -464,7 +464,7 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
             return
-        self.csm.air.writeServerEvent('avatarDeleted', self.avId, self.target)
+        self.csm.air.writeServerEvent('avatar-deleted', avId=self.avId, accId=self.target)
         self.demand('QueryAvatars')
 
 class SetNameTypedFSM(AvatarOperationFSM):
@@ -521,7 +521,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
                  'WishNameTimestamp': int(time.time())})
 
         if self.avId:
-            self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
+            self.csm.air.writeServerEvent('avatar-wishname', avId=self.avId, name=self.name)
 
             # Fire off the information to the webserver:
             self.csm.air.rpc.call('submitAvatarName', avId=self.avId, name=self.name,
@@ -581,7 +581,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
              'WishName': '',
              'setName': (name,)})
 
-        self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
+        self.csm.air.writeServerEvent('avatar-named', avId=self.avId, name=name)
         self.csm.sendUpdateToAccountId(self.target, 'setNamePatternResp', [self.avId, 1])
         self.demand('Off')
 
@@ -736,7 +736,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
             )
             self.csm.air.send(dg)
 
-        self.csm.air.writeServerEvent('avatarChosen', self.avId, self.target)
+        self.csm.air.writeServerEvent('avatar-chosen', avId=self.avId, accId=self.target)
         self.demand('Off')
 
 class UnloadAvatarFSM(OperationFSM):
@@ -788,7 +788,7 @@ class UnloadAvatarFSM(OperationFSM):
         self.csm.air.send(dg)
 
         # Done!
-        self.csm.air.writeServerEvent('avatarUnload', self.avId)
+        self.csm.air.writeServerEvent('avatar-unload', avId=self.avId)
         self.demand('Off')
 
 # --- ACTUAL CSMUD ---

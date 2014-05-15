@@ -1,6 +1,7 @@
 from direct.showbase import PythonUtil
 
 MINIMUM_MAGICWORD_ACCESS = 300
+MINIMUM_AI_OBJ_MW_ACCESS = 500 # Lol this is long.
 
 class MagicError(Exception): pass
 
@@ -19,13 +20,16 @@ class Spellbook:
 
     def __init__(self):
         self.words = {}
+        self.alias2word = {}
         self.categories = []
 
         self.currentInvoker = None
         self.currentTarget = None
 
     def addWord(self, word):
-        self.words[word.name] = word
+        self.words[word.name.lower()] = word
+        for alias in word.aliases:
+            self.alias2word[alias.lower()] = word
 
     def addCategory(self, category):
         self.categories.append(category)
@@ -38,26 +42,38 @@ class Spellbook:
         try:
             return self.doWord(word, args)
         except MagicError as e:
-            return e.message
+            return (e.message, True)
         except Exception:
-            return PythonUtil.describeException(backTrace=1)
+            return (PythonUtil.describeException(backTrace=1), True)
         finally:
             self.currentInvoker = None
             self.currentTarget = None
 
     def doWord(self, wordName, args):
-        word = self.words.get(wordName)
+        word = self.words.get(wordName.lower()) or self.alias2word.get(wordName.lower())
         if not word:
-            return
+            return ('Unknown magic word!', False)
 
         ensureAccess(word.access)
+            
         if self.getTarget() and self.getTarget() != self.getInvoker():
-            if self.getInvokerAccess() <= self.getTarget().getAdminAccess():
+            # Check if the target is the correct class.
+            if word.targetClasses:
+                if not isinstance(self.getTarget(), tuple(word.targetClasses)):
+                    raise MagicError('Target is an invalid class! Expected: %s, Got: %s' % (str([x.__name__ for x in word.targetClasses]), self.getTarget().__class__.__name__))
+                    
+            if hasattr(self.getTarget(), 'getAdminAccess'):
+                targetAccess = self.getTarget().getAdminAccess()
+            else:
+                # Set it to the minimum access required to manipulate AI objects.
+                targetAccess = MINIMUM_AI_OBJ_MW_ACCESS - 1
+            if self.getInvokerAccess() <= targetAccess:
                 raise MagicError('Target must have lower access')
-
+        
         result = word.run(args)
         if result is not None:
-            return str(result)
+            return (str(result), True)
+        return ('Magic word executed successfully!', True)
 
     def getInvoker(self):
         return self.currentInvoker
@@ -120,13 +136,15 @@ CATEGORY_CAMERA = MagicWordCategory('Camera controls', defaultAccess=300,
 
 
 class MagicWord:
-    def __init__(self, name, func, types, access, doc, category):
+    def __init__(self, name, func, types, access, doc, category, targetClasses, aliases):
         self.name = name
         self.func = func
         self.types = types
         self.access = access
         self.doc = doc
         self.category = category
+        self.targetClasses = targetClasses
+        self.aliases = aliases
 
         category.addWord(self)
 
@@ -176,7 +194,7 @@ class MagicWordDecorator:
     object process the Magic Word's construction.
     """
 
-    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN):
+    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN, targetClasses=[], aliases=[]):
         self.name = name
         self.types = types
         self.category = category
@@ -184,6 +202,8 @@ class MagicWordDecorator:
             self.access = access
         else:
             self.access = self.category.defaultAccess
+        self.targetClasses = targetClasses
+        self.aliases = aliases
 
     def __call__(self, mw):
         # This is the actual decoration routine. We add the function 'mw' as a
@@ -194,7 +214,7 @@ class MagicWordDecorator:
         if name is None:
             name = mw.func_name
 
-        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category)
+        word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category, self.targetClasses, self.aliases)
         spellbook.addWord(word)
 
         return mw

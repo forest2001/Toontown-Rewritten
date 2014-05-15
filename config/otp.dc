@@ -255,7 +255,7 @@ dclass DistributedPlayer : DistributedAvatar {
 };
 
 dclass MagicWordManager : DistributedObject {
-  sendMagicWord(string word, uint32 targetId) airecv clsend;
+  sendMagicWord(string word, uint32 targetId, bool execute) airecv clsend;
   sendMagicWordResponse(string response);
 };
 

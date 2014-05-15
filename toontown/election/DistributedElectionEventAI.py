@@ -63,7 +63,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious', avId, 'Someone tried to talk to Flippy while they aren\'t on the district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Someone tried to talk to Flippy while they aren\'t on the district!')
             return
         self.sendUpdate('flippySpeech', [avId, phraseId])
 
@@ -71,7 +71,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious', avId, 'Got a request for pies from a toon that isn\'t on the district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Got a request for pies from a toon that isn\'t on the district!')
             return
         if av.hp > 0:
             av.b_setPieType(self.pieTypeAmount[0])
@@ -87,7 +87,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious', avId, 'Got a request for Slappy\'s Cheesy Effect from a toon that isn\'t on the district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Got a request for Slappy\'s Cheesy Effect from a toon that isn\'t on the district!')
             return
         av.b_setCheesyEffect(15, 0, 0)
 
@@ -235,7 +235,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 @magicWord(category=CATEGORY_MODERATION, types=[str])
 def election(state):
     if not simbase.config.GetBool('want-doomsday', False):
-        simbase.air.writeServerEvent('aboose', spellbook.getInvoker().doId, 'Attempted to change the election state while doomsday is disabled.')
+        simbase.air.writeServerEvent('warning', avId=spellbook.getInvoker().doId, issue='Attempted to change the election state while doomsday is disabled.')
         return 'ABOOSE! The election is currently disabled. Your request has been logged.'
         
     event = simbase.air.doFind('ElectionEvent')

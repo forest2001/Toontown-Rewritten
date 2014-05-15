@@ -41,13 +41,13 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
     def toonExitDemand(self):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.toonsPlaying:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to exit a party game they\'re not using!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to exit a party game they\'re not using!')
             return
         catches = self.player2catches[avId]
         del self.player2catches[avId]
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to award beans while not in district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to award beans while not in district!')
             return
         if catches > PartyGlobals.CatchMaxTotalReward:
             catches = PartyGlobals.CatchMaxTotalReward
@@ -80,7 +80,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
     def claimCatch(self, generation, objNum, objType):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.toonsPlaying:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to catch while not playing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to catch while not playing!')
             return
         if PartyGlobals.DOTypeId2Name[objType] != 'anvil':
             self.player2catches[avId] += 1

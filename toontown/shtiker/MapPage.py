@@ -179,7 +179,7 @@ class MapPage(ShtikerPage.ShtikerPage):
                 avatar = base.cr.identifyAvatar(base.cr.playGame.hood.loader.estateOwnerId)
                 if avatar:
                     avName = avatar.getName()
-                    self.hoodLabel['text'] = TTLocalizer.MapPageYouAreAtSomeonesHome % TTLocalizer.GetPossesive(avName)
+                    self.hoodLabel['text'] = TTLocalizer.MapPageYouAreAtSomeonesHome % TTLocalizer.GetPossesive(avName, 'book')
                     self.hoodLabel.show()
         elif zone:
             hoodName = ToontownGlobals.hoodNameMap.get(ZoneUtil.getCanonicalHoodId(zone), ('',))[-1]

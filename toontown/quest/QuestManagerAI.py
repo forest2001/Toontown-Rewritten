@@ -62,7 +62,9 @@ class QuestManagerAI:
                             or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
                             or (quest.getHolderType() == 'level' and quest.getHolder() == suit['level']):
-                                if self.__testPercentage(quest.getPercentChance()): # FIXME this is the wrong behavior. The RecoverItemQuest has an implementation that takes into account previous attempts to recover the item. We should use it instead
+                                progress = toon.quests[index][4] & pow(2, 16) - 1 # This seems to be the Disne
+                                completion = quest.testRecover(progress)
+                                if completion[0]:
                                     # We win! We got the item from the cogs. :)
                                     recovered.append(quest.getItem())
                                     self.__incrementQuestProgress(toon.quests[index])
@@ -275,7 +277,7 @@ class QuestManagerAI:
             # Better stop hackers, or our own stupidity.
             self.notify.warning("toonId %s attempted to select trackId %d, which is a default track!" % (toonId, trackId))
             # Yes this is suspicious, because it should be impossible.
-            self.air.writeServerEvent('suspicious', toonId, 'Attempted to train trackId %d, which is a default track!' % trackId)
+            self.air.writeServerEvent('suspicious', avId=toonId, issue='QMAI.avatarChoseTrack Attempted to train trackId %d, which is a default track!' % trackId)
             return
         rewardId = 401 + trackId
         npc.completeQuest(toonId, questId, rewardId)
@@ -302,7 +304,9 @@ class QuestManagerAI:
                     # Well we're in the right zone!
                     if quest.getHolder() == Quests.AnyFish:
                         # Bazinga! This is a fishing quest!
-                        if self.__testPercentage(quest.getPercentageChance()):
+                        progress = toon.quests[index][4] & pow(2, 16) - 1 # This seems to be the Disney way
+                        completion = quest.testRecover(progress)
+                        if completion[0]:
                             # We got lucky, dave! We caught the item!
                             self.__incrementQuestProgress(toon.quests[index])
                             toon.b_setQuests(toon.quests)

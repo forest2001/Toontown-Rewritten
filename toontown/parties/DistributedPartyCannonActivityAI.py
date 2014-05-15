@@ -17,10 +17,10 @@ class DistributedPartyCannonActivityAI(DistributedPartyActivityAI):
     def setLanded(self, toonId):
         avId = self.air.getAvatarIdFromSender()
         if avId != toonId:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to land someone else!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to land someone else!')
             return
         if not avId in self.toonsPlaying:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to land while not playing the cannon activity!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to land while not playing the cannon activity!')
             return
         self.toonsPlaying.remove(avId)
         reward = self.cloudsHit[avId] * PartyGlobals.CannonJellyBeanReward
@@ -28,7 +28,7 @@ class DistributedPartyCannonActivityAI(DistributedPartyActivityAI):
             reward = PartyGlobals.CannonMaxTotalReward
         av = self.air.doId2do.get(avId, None)
         if not av:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to award beans while not in district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to award beans while not in district!')
             return
         # TODO: Pass a msgId(?) to the client so the client can use whatever localizer it chooses.
         # Ideally, we shouldn't even be passing strings that *should* be localized.
@@ -49,7 +49,7 @@ class DistributedPartyCannonActivityAI(DistributedPartyActivityAI):
     def requestCloudHit(self, cloudId, r, g, b):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.toonsPlaying:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to hit cloud in cannon activity they\'re not using!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to hit cloud in cannon activity they\'re not using!')
             return
         self.cloudColors[cloudId] = [cloudId, r, g, b]
         self.sendUpdate('setCloudHit', [cloudId, r, g, b])

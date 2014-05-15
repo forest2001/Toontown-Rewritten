@@ -221,7 +221,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def recordVictorResponse(self, avId):
         index = self.findVictorIndex(avId)
         if index == None:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedBuildingAI.setVictorReady from toon not in %s.' % self.victorList)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedBuildingAI.setVictorReady from toon not in %s.' % self.victorList)
             return
         self.victorResponses[index] = avId
         return
@@ -235,7 +235,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def setVictorReady(self):
         avId = self.air.getAvatarIdFromSender()
         if self.victorResponses == None:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedBuildingAI.setVictorReady in state %s.' % self.fsm.getCurrentState().getName())
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedBuildingAI.setVictorReady in state %s.' % self.fsm.getCurrentState().getName())
             return
         self.recordVictorResponse(avId)
         event = self.air.getAvatarExitEvent(avId)
@@ -288,10 +288,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
             toon = None
             if t:
                 toon = self.getToon(t)
-                self.air.writeServerEvent('buildingDefeated', t, '%s|%s|%s|%s' % (self.track,
-                 self.numFloors,
-                 self.zoneId,
-                 victorList))
+                self.air.writeServerEvent('building-defeated', avId=t, track=self.track, numFloors=self.numFloors, zoneId=self.zoneId, victorList='%s' % victorList)
             if toon != None:
                 self.air.questManager.toonKilledBuilding(toon, self.track, self.difficulty, self.numFloors, self.zoneId, activeToons)
 
@@ -333,10 +330,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
             toon = None
             if t:
                 toon = self.getToon(t)
-                self.air.writeServerEvent('buildingDefeated', t, '%s|%s|%s|%s' % (self.track,
-                 self.numFloors,
-                 self.zoneId,
-                 victorList))
+                self.air.writeServerEvent('building-defeated', avId=t, track=self.track, numFloors=self.numFloors, zoneId=self.zoneId, victorList='%s' % victorList)
             if toon != None:
                 self.air.questManager.toonKilledCogdo(toon, self.difficulty, self.numFloors, self.zoneId, activeToons)
 
@@ -409,7 +403,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         self.becameSuitTime = 0
         self.knockKnock = DistributedKnockKnockDoorAI.DistributedKnockKnockDoorAI(self.air, self.block)
         self.knockKnock.generateWithRequired(exteriorZoneId)
-        self.air.writeServerEvent('building-toon', self.doId, '%s|%s' % (self.zoneId, self.block))
+        self.air.writeServerEvent('building-toon', buildingId=self.doId, zoneId=self.zoneId, block=self.block)
 
     def createExteriorDoor(self):
         result = DistributedDoorAI.DistributedDoorAI(self.air, self.block, DoorTypes.EXT_STANDARD)
@@ -465,10 +459,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         exteriorZoneId, interiorZoneId = self.getExteriorAndInteriorZoneId()
         self.elevator = DistributedElevatorExtAI.DistributedElevatorExtAI(self.air, self)
         self.elevator.generateWithRequired(exteriorZoneId)
-        self.air.writeServerEvent('building-cog', self.doId, '%s|%s|%s|%s' % (self.zoneId,
-         self.block,
-         self.track,
-         self.numFloors))
+        self.air.writeServerEvent('building-cog', buildingId=self.doId, zoneId=self.zoneId, block=self.block, track=self.track, numFloors=self.numFloors)
 
     def exitSuit(self):
         del self.planner
@@ -524,7 +515,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         exteriorZoneId, interiorZoneId = self.getExteriorAndInteriorZoneId()
         self.elevator = DistributedCogdoElevatorExtAI(self.air, self)
         self.elevator.generateWithRequired(exteriorZoneId)
-        self.air.writeServerEvent('building-cogdo', self.doId, '%s|%s|%s' % (self.zoneId, self.block, self.numFloors))
+        self.air.writeServerEvent('building-cogdo', buildingId=self.doId, zoneId=self.zoneId, block=self.block, numFloors=self.numFloors)
 
     def exitCogdo(self):
         del self.planner

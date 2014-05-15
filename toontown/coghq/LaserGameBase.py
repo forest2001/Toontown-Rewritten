@@ -54,7 +54,7 @@ class LaserGameBase:
     
     def hit(self, hitX, hitY, oldx = -1, oldy = -1):
         if self.finshed:
-            return None
+            return
         
         if self.checkForWin():
             self.win()
