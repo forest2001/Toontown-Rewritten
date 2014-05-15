@@ -31,6 +31,9 @@ class ToontownInternalRepository(AstronInternalRepository):
 
         self.rpc = RPCClient()
 
+    def handleConnected(self):
+        self.netMessenger.register(0, 'shardStatus')
+
     def getAvatarIdFromSender(self):
         return self.getMsgSender() & 0xFFFFFFFF
 

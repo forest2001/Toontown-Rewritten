@@ -12,6 +12,7 @@ class ToontownUberRepository(ToontownInternalRepository):
         self.wantUD = simbase.config.GetBool('want-ud', True)
 
     def handleConnected(self):
+        ToontownInternalRepository.handleConnected(self)
         if simbase.config.GetBool('want-ClientServicesManagerUD', self.wantUD):
             # Only generate the root object once, with the CSMUD.
             rootObj = DistributedDirectoryAI(self)

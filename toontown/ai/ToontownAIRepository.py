@@ -1,6 +1,7 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
+from toontown.distributed.ShardStatus import ShardStatusSender
 from otp.ai.TimeManagerAI import TimeManagerAI
 from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
@@ -81,6 +82,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
 
+        self.statusSender = ShardStatusSender(self)
+
         self.dnaStoreMap = {}
 
         self.buildingManagers = {}
@@ -91,6 +94,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         
 
     def handleConnected(self):
+        ToontownInternalRepository.handleConnected(self)
         self.districtId = self.allocateChannel()
         self.distributedDistrict = ToontownDistrictAI(self)
         self.distributedDistrict.setName(self.districtName)
@@ -107,6 +111,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.createZones()
 
         self.distributedDistrict.b_setAvailable(1)
+
+        self.statusSender.start()
 
     def incrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)

@@ -1,4 +1,6 @@
 import pymongo
+# For listShards:
+from toontown.distributed.ShardStatus import ShardStatusReceiver
 # For naming constants:
 from toontown.uberdog.ClientServicesManagerUD import *
 # For renaming Toons with rejected names:
@@ -11,9 +13,15 @@ class ToontownRPCHandler:
     def __init__(self, air):
         self.air = air
 
+        self.shardStatus = ShardStatusReceiver(self.air)
+
     def rpc_ping(self, request, data):
         """For testing purposes: This just echos back the provided data."""
         return data
+
+    ### SHARD STATUS ###
+    def rpc_listShards(self, request):
+        return self.shardStatus.getShards()
 
     ### GENERAL INFORMATION ###
     def rpc_getGSIDByAccount(self, request, accountId):
