@@ -7,6 +7,8 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.quest import Quests
 from toontown.suit import SuitPlannerBase
+from toontown.dna.DNAStorage import DNAStorage
+from toontown.dna import DNAUtil
 import QuestMapGlobals
 
 class QuestMap(DirectFrame):
@@ -128,6 +130,7 @@ class QuestMap(DirectFrame):
 
         self.buildingMarkers = []
         dnaStore = base.cr.playGame.dnaStore
+        dnaData = base.cr.playGame.dnaData
         for questIndex in self.av.questPage.quests.keys():
             questDesc = self.av.questPage.quests.get(questIndex)
             if questDesc is None:
@@ -150,14 +153,16 @@ class QuestMap(DirectFrame):
                 hoodId = ZoneUtil.getCanonicalHoodId(npcZone)
                 branchId = ZoneUtil.getCanonicalBranchZone(npcZone)
                 if self.hoodId == hoodId and self.zoneId == branchId:
-                    for blockIndex in range(dnaStore.getNumBlockTitles()):
-                        blockNumber = dnaStore.getTitleBlockAt(blockIndex)
-                        zone = dnaStore.getZoneFromBlockNumber(blockNumber)
+                    for blockId, block in dnaData.getBlocks():
+                        zone = dnaData.getBlock(blockId).zone
                         branchZone = zone - zone % 100
-                        finalZone = branchZone + 500 + blockNumber
-                        buildingType = dnaStore.getBlockBuildingType(blockNumber)
+                        finalZone = branchZone + 500 + blockId
+                        buildingType = dnaData.getBlock(blockId).buildingType
                         if npcZone == finalZone:
-                            self.putBuildingMarker(dnaStore.getDoorPosHprFromBlockNumber(blockNumber).getPos(), dnaStore.getDoorPosHprFromBlockNumber(blockNumber).getHpr(), mapIndex=mapIndex)
+                            door = None # Find the door
+                            doorPos = door.getPos()
+                            doorHpr = door.getHpr()
+                            self.putBuildingMarker(doorPos, doorHpr, mapIndex=mapIndex)
 
         return
 
