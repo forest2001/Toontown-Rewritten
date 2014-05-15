@@ -113,7 +113,7 @@ class LoginAccountFSM(OperationFSM):
 
         self.databaseId = result.get('databaseId', 0)
         self.adminAccess = result.get('adminAccess', 0)
-        
+
         # Binary bitmask in base10 form, added to the adminAccess.
         # To find out what they have access to, convert the serverAccess to 3-bit binary.
         # 2^2 = dev, 2^1 = qa, 2^0 = test
@@ -214,6 +214,14 @@ class LoginAccountFSM(OperationFSM):
             {'LAST_LOGIN': time.ctime(),
              'ACCOUNT_ID': self.databaseId,
              'ADMIN_ACCESS': self.adminAccess})
+
+        # Add a POST_REMOVE to the connection channel to execute the NetMessenger
+        # message when the account connection goes RIP on the Client Agent.
+        dgcleanup = self.csm.air.netMessenger.prepare('accountDisconnected', [self.accountId])
+        dg = PyDatagram()
+        dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        dg.addString(dgcleanup.getMessage())
+        self.csm.air.send(dg)
 
         # We're done.
         self.csm.air.writeServerEvent('account-login', clientId=self.target, accId=self.accountId, webAccId=self.databaseId, cookie=self.cookie)
@@ -427,9 +435,9 @@ class DeleteAvatarFSM(GetAvatarsFSM):
 
         avsDeleted = list(self.account.get('ACCOUNT_AV_SET_DEL', []))
         avsDeleted.append([self.avId, int(time.time())])
-        
+
         estateId = self.account.get('ESTATE_ID', 0)
-        
+
         if estateId != 0:
             # This assumes that the house already exists, but it shouldn't
             # be a problem if it doesn't.
@@ -439,7 +447,7 @@ class DeleteAvatarFSM(GetAvatarsFSM):
                 self.csm.air.dclassesByName['DistributedEstateAI'],
                 { 'setSlot%dToonId' % index : [0], 'setSlot%dItems' % index : [[]] }
             )
-        
+
         if self.csm.air.friendsManager:
             self.csm.air.friendsManager.clearList(self.avId)
         else:
@@ -458,8 +466,8 @@ class DeleteAvatarFSM(GetAvatarsFSM):
              'ACCOUNT_AV_SET_DEL': avsDeleted},
             {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
              'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
-            self.__handleDelete)      
-            
+            self.__handleDelete)
+
     def __handleDelete(self, fields):
         if fields:
             self.demand('Kill', 'Database failed to mark the avatar deleted!')
@@ -698,7 +706,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addServerHeader(self.avId, self.csm.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
         dg.addChannel(self.csm.GetAccountConnectionChannel(self.target)) # Set ownership channel to the connection's account channel.
         self.csm.air.send(dg)
-        
+
         # Tell TTRFriendsManager somebody is logging in:
         # Construst a list of all friends.
         friendsManagerDoId = OtpDoGlobals.OTP_DO_ID_TTR_FRIENDS_MANAGER
@@ -714,7 +722,7 @@ class LoadAvatarFSM(AvatarOperationFSM):
                 self.csm.air.ourChannel, [self.avId, friendsList]
             )
             self.csm.air.send(dg)
-            
+
         # Setup a post remove in case the client disconnects randomly.
         dgcleanup = self.csm.air.dclassesByName['TTRFriendsManagerUD'].aiFormatUpdate(
             'goingOffline', friendsManagerDoId, friendsManagerDoId,
@@ -724,14 +732,14 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
         dg.addString(dgcleanup.getMessage())
         self.csm.air.send(dg)
-        
+
 
         # Tell the GlobalPartyManager as well
         if self.csm.air.globalPartyMgr:
             self.csm.air.globalPartyMgr.avatarJoined(self.avId)
         else:
             dg = self.csm.air.dclassesByName['GlobalPartyManagerUD'].aiFormatUpdate(
-                'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, 
+                'avatarJoined', OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER,
                 OtpDoGlobals.OTP_DO_ID_GLOBAL_PARTY_MANAGER, self.csm.air.ourChannel, [self.avId]
             )
             self.csm.air.send(dg)
@@ -750,7 +758,7 @@ class UnloadAvatarFSM(OperationFSM):
 
     def enterUnloadAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
-        
+
         # TODO: [post-server-overhaul] Fix NetMessenger and use NetMessenger rather than an if/else statement.
         # Tell TTRFriendsManager somebody is logging off:
         if self.csm.air.friendsManager:
@@ -816,9 +824,20 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.accountDB = RemoteAccountDB(self)
         else:
             self.notify.error('Invalid account DB type configured: %s' % dbtype)
-            
+
+        # Listen out for any accounts that disconnect.
+        self.air.netMessenger.accept('accountDisconnected', self, self.__accountDisconnected)
+
         # Attribute to test if doomsday is over...
         self.closed = False
+
+    def __accountDisconnected(self, accountId):
+        def callback(dclass, fields):
+            if dclass != self.air.dclassesByName['AccountUD']:
+                return
+            webId = fields.get('ACCOUNT_ID')
+            self.csm.air.rpc.call('avatarExit', webAccId=webId)
+        self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
         dg = PyDatagram()
@@ -856,7 +875,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         self.account2fsm[sender] = fsmtype(self, sender)
         self.account2fsm[sender].request('Start', *args)
-        
+
     def setClosed(self, closed):
         self.notify.warning('AI %s has told us to start rejecting logins!' % str(self.air.getMsgSender()))
         self.closed = closed
@@ -865,7 +884,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
-        
+
         if self.closed:
             # Doomsday is over... no more logging in until beta!
             dg = PyDatagram()
