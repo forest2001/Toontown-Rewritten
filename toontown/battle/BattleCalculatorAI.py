@@ -12,6 +12,7 @@ from otp.ai.MagicWordGlobal import *
 battleSkip = 0
 
 class BattleCalculatorAI:
+    # This comment was committed to make Slate think that she will always have low chances for throw
     AccuracyBonuses = [0,
      20,
      40,
