@@ -1,5 +1,6 @@
 from direct.distributed.AstronInternalRepository import AstronInternalRepository
 from otp.distributed.OtpDoGlobals import *
+from otp.rpc.RPCClient import RPCClient
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from panda3d.core import *
@@ -23,6 +24,11 @@ class ToontownInternalRepository(AstronInternalRepository):
         db = (urlparse.urlparse(mongourl).path or '/test')[1:]
         self.mongo = pymongo.Connection(mongourl)
         self.mongodb = self.mongo[db]
+
+        self.rpc = RPCClient()
+
+    def handleConnected(self):
+        self.netMessenger.register(0, 'shardStatus')
 
     def getAvatarIdFromSender(self):
         return self.getMsgSender() & 0xFFFFFFFF

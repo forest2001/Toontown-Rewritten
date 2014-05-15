@@ -12,11 +12,6 @@ import hmac
 import hashlib
 import json
 
-def judgeName(name):
-    # Judge a typed name for approval-queue candidacy.
-    # For now we reject only "Rejectnow" for debugging.
-    return name != 'Rejectnow'
-
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
     def __init__(self, csm):
@@ -41,51 +36,33 @@ class RemoteAccountDB:
     def __init__(self, csm):
         self.csm = csm
 
-        self.http = HTTPClient()
-        self.http.setVerifySsl(0) # Whatever OS certs my laptop trusts with panda doesn't include ours. whatever
-
     def lookup(self, cookie, callback):
-        response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if not response:
-            callback({'success': False,
-                      'reason': 'Account server failed to respond properly.'})
-        elif (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
-            callback({'success': False,
-                      'reason': response.get('banner', 'Failed for unknown reason')})
-        else:
-            gsUserId = response.get('gs_user_id', -1)
-            if (gsUserId == -1):
-                gsUserId = 0
-            callback({'success': True,
-                      'databaseId': response['user_id'],
-                      'accountId': gsUserId,
-                      'adminAccess': response['adminAccess']})
-    def storeAccountID(self, databaseId, accountId, callback):
-        response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
-        if not response:
-            self.csm.notify.warning("Unable to set accountId with account server. No response!")
-            callback(False)
-        elif (not response.get('success')):
-            self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response.get('banner', '[NON-PRESENT]'))
-            callback(False)
-        else:
-            callback(True)
+        def rpcCallback(result=None):
+            if result is None:
+                # This is an errback:
+                callback({'success': False,
+                          'reason': 'Could not contact the account server'})
+                return
 
-    def __executeHttpRequest(self, url, message):
-        channel = self.http.makeChannel(False)
-        spec = DocumentSpec(simbase.config.GetString("account-server-endpoint", "https://www.toontownrewritten.com/api/gameserver/") + url)
-        rf = Ramfile()
-        digest = hmac.new(simbase.config.GetString('account-server-secret', 'dev'), message, hashlib.sha256)
-        expiration = str((int(time.time()) * 1000) + 60000)
-        digest.update(expiration)
-        channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
-        channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
-        channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
-        # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
-        if channel.getDocument(spec) and channel.downloadToRam(rf):
-            return json.loads(rf.getData())
-        else:
-            return False
+            if type(result) != dict:
+                callback({'success': False,
+                          'reason': 'Account server responded with an unknown'
+                                    ' object type.'})
+                return
+
+            if result.get('success'):
+                if 'databaseId' not in result:
+                    callback({'success': False,
+                              'reason': 'Account server did not provide a'
+                                        ' databaseId.'})
+                    return
+            else:
+                result.setdefault('reason', 'Unspecified reason.')
+
+            callback(result)
+
+        self.csm.air.rpc.call('redeemCookie', cookie=cookie,
+                              _callback=rpcCallback, _errback=rpcCallback)
 
 # Constants used by the naming FSM:
 WISHNAME_LOCKED = 0
@@ -503,7 +480,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             return
 
         # Hmm, self.avId was 0. Okay, let's just cut to the judging:
-        self.demand('JudgeName')
+        self.demand('CheckName')
 
     def enterRetrieveAvatar(self):
         if self.avId and self.avId not in self.avList:
@@ -522,11 +499,17 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('Kill', 'Avatar is not in a namable state!')
             return
 
-        self.demand('JudgeName')
+        self.demand('CheckName')
 
-    def enterJudgeName(self):
-        # Let's see if the name is valid:
-        status = judgeName(self.name)
+    def enterCheckName(self):
+        def callback(result=False):
+            self.demand('JudgeName', result)
+
+        self.csm.air.rpc.call('checkBlacklistedName', name=self.name,
+                              _callback=callback, _errback=callback, _retry=True)
+
+    def enterJudgeName(self, blacklisted):
+        status = not blacklisted
 
         if self.avId and status:
             self.csm.air.dbInterface.updateObject(
@@ -539,6 +522,10 @@ class SetNameTypedFSM(AvatarOperationFSM):
 
         if self.avId:
             self.csm.air.writeServerEvent('avatar-wishname', avId=self.avId, name=self.name)
+
+            # Fire off the information to the webserver:
+            self.csm.air.rpc.call('submitAvatarName', avId=self.avId, name=self.name,
+                                  _retry=True)
 
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
@@ -626,11 +613,11 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
         name = fields['setName'][0]
 
         if wns == WISHNAME_APPROVED:
-            wns = ''
+            wns = WISHNAME_LOCKED
             name = wn
             wn = ''
         elif wns == WISHNAME_REJECTED:
-            wns = 'OPEN'
+            wns = WISHNAME_OPEN
             wn = ''
         else:
             self.demand('Kill', "Tried to acknowledge name on an avatar in %s state!" % wns)
