@@ -129,7 +129,6 @@ class QuestMap(DirectFrame):
             marker.destroy()
 
         self.buildingMarkers = []
-        dnaStore = base.cr.playGame.dnaStore
         dnaData = base.cr.playGame.dnaData
         for questIndex in self.av.questPage.quests.keys():
             questDesc = self.av.questPage.quests.get(questIndex)
