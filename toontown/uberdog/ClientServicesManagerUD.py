@@ -36,51 +36,33 @@ class RemoteAccountDB:
     def __init__(self, csm):
         self.csm = csm
 
-        self.http = HTTPClient()
-        self.http.setVerifySsl(0) # Whatever OS certs my laptop trusts with panda doesn't include ours. whatever
-
     def lookup(self, cookie, callback):
-        response = self.__executeHttpRequest("verify/%s" % cookie, cookie)
-        if not response:
-            callback({'success': False,
-                      'reason': 'Account server failed to respond properly.'})
-        elif (not response.get('status') or not response.get('valid')): # status will be false if there's an hmac error, for example
-            callback({'success': False,
-                      'reason': response.get('banner', 'Failed for unknown reason')})
-        else:
-            gsUserId = response.get('gs_user_id', -1)
-            if (gsUserId == -1):
-                gsUserId = 0
-            callback({'success': True,
-                      'databaseId': response['user_id'],
-                      'accountId': gsUserId,
-                      'adminAccess': response['adminAccess']})
-    def storeAccountID(self, databaseId, accountId, callback):
-        response = self.__executeHttpRequest("associate_user/%s/with/%s" % (databaseId, accountId), str(databaseId) + str(accountId))
-        if not response:
-            self.csm.notify.warning("Unable to set accountId with account server. No response!")
-            callback(False)
-        elif (not response.get('success')):
-            self.csm.notify.warning("Unable to set accountId with account server! Message: %s" % response.get('banner', '[NON-PRESENT]'))
-            callback(False)
-        else:
-            callback(True)
+        def rpcCallback(result=None):
+            if result is None:
+                # This is an errback:
+                callback({'success': False,
+                          'reason': 'Could not contact the account server'})
+                return
 
-    def __executeHttpRequest(self, url, message):
-        channel = self.http.makeChannel(False)
-        spec = DocumentSpec(simbase.config.GetString("account-server-endpoint", "https://www.toontownrewritten.com/api/gameserver/") + url)
-        rf = Ramfile()
-        digest = hmac.new(simbase.config.GetString('account-server-secret', 'dev'), message, hashlib.sha256)
-        expiration = str((int(time.time()) * 1000) + 60000)
-        digest.update(expiration)
-        channel.sendExtraHeader('User-Agent', 'TTR CSM bot')
-        channel.sendExtraHeader('X-Gameserver-Signature', digest.hexdigest())
-        channel.sendExtraHeader('X-Gameserver-Request-Expiration', expiration)
-        # FIXME i don't believe I have to clean up my channel or whatever, but could be wrong
-        if channel.getDocument(spec) and channel.downloadToRam(rf):
-            return json.loads(rf.getData())
-        else:
-            return False
+            if type(result) != dict:
+                callback({'success': False,
+                          'reason': 'Account server responded with an unknown'
+                                    ' object type.'})
+                return
+
+            if result.get('success'):
+                if 'databaseId' not in result:
+                    callback({'success': False,
+                              'reason': 'Account server did not provide a'
+                                        ' databaseId.'})
+                    return
+            else:
+                result.setdefault('reason', 'Unspecified reason.')
+
+            callback(result)
+
+        self.csm.air.rpc.call('redeemCookie', cookie=cookie,
+                              _callback=rpcCallback, _errback=rpcCallback)
 
 # Constants used by the naming FSM:
 WISHNAME_LOCKED = 0
