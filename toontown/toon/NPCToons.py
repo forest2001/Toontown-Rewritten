@@ -210,7 +210,9 @@ def isZoneProtected(zoneId):
 
 
 lnames = TTLocalizer.NPCToonNames
-NPCToonDict = {20000: (-1,
+NPCToonDict = {
+ # Tutorial Tom, the toontorial host
+ 20000: (-1,
          lnames[20000],
          ('dls',
           'ms',
@@ -241,6 +243,7 @@ NPCToonDict = {20000: (-1,
         'm',
         1,
         NPC_HQ),
+ # Flippy, the tutorial version
  20001: (-1,
          lnames[20001],
          ('dss',

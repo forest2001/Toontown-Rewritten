@@ -337,8 +337,7 @@ class Movie(DirectObject.DirectObject):
 
     def playTutorialReward_3(self, value):
         self.tutRewardDialog_2.cleanup()
-        from toontown.toon import Toon
-        from toontown.toon import ToonDNA
+        from toontown.toon import NPCToons
 
         def doneChat1(page, elapsed = 0):
             self.track2.start()
@@ -350,12 +349,7 @@ class Movie(DirectObject.DirectObject):
         def uniqueName(hook):
             return 'TutorialTom-' + hook
 
-        self.tutorialTom = Toon.Toon()
-        dna = ToonDNA.ToonDNA()
-        dnaList = ('dll', 'ms', 'm', 'm', 7, 0, 7, 7, 2, 6, 2, 6, 2, 16)
-        dna.newToonFromProperties(*dnaList)
-        self.tutorialTom.setDNA(dna)
-        self.tutorialTom.setName(TTLocalizer.NPCToonNames[20000])
+        self.tutorialTom = NPCToons.createLocalNPC(20000)
         self.tutorialTom.uniqueName = uniqueName
         if base.config.GetString('language', 'english') == 'japanese':
             self.tomDialogue03 = base.loadSfx('phase_3.5/audio/dial/CC_tom_movie_tutorial_reward01.ogg')
