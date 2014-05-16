@@ -6,7 +6,7 @@ MINIMUM_AI_OBJ_MW_ACCESS = 500 # Lol this is long.
 class MagicError(Exception): pass
 
 def ensureAccess(access, msg='Insufficient access'):
-    if spellbook.getInvokerAccess() < access:
+    if spellbook.getInvokerAccess() - spellbook.getInvokerAccess() % 100 < access:
         raise MagicError(msg)
 
 class Spellbook:
@@ -67,7 +67,7 @@ class Spellbook:
             else:
                 # Set it to the minimum access required to manipulate AI objects.
                 targetAccess = MINIMUM_AI_OBJ_MW_ACCESS - 1
-            if self.getInvokerAccess() <= targetAccess:
+            if self.getInvokerAccess() - self.getInvokerAccess() % 100 <= targetAccess - targetAccess % 100:
                 raise MagicError('Target must have lower access')
 
         result = word.run(args)
