@@ -1,6 +1,13 @@
 import time
 from panda3d.core import *
 
+# If we don't have PSUTIL, don't return system statistics.
+try:
+    from psutil import cpu_percent, virtual_memory
+    HAS_PSUTIL = True
+except ImportError:
+    HAS_PSUTIL = False
+
 shard_status_interval = ConfigVariableInt(
     'shard-status-interval', 20,
     'How often to send shard status update messages.')
@@ -9,7 +16,7 @@ shard_status_timeout = ConfigVariableInt(
     'shard-status-timeout', 30,
     'The maximum time between receiving shard status update messages before'
     ' the receiver assumes the shard is no longer online.')
-                                        
+
 
 class ShardStatusSender:
     def __init__(self, air):
@@ -32,8 +39,11 @@ class ShardStatusSender:
         status = {'channel': self.air.ourChannel,
                   'districtId': self.air.distributedDistrict.doId,
                   'districtName': self.air.distributedDistrict.name,
-                  'population': self.air.districtStats.getAvatarCount()
+                  'population': self.air.districtStats.getAvatarCount(),
                  }
+        if HAS_PSUTIL:
+            status['cpu-usage'] = cpu_percent(interval=None, percpu=True)
+            status['mem-usage'] = virtual_memory().percent
 
         self.air.netMessenger.send('shardStatus', [status])
 

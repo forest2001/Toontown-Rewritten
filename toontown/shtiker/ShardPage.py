@@ -108,7 +108,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
         return (shardButtonParent, shardButtonR, shardButtonL)
 
     def getPopColor(self, pop):
-        if base.cr.productName == 'JP':
+        if config.GetBool('want-lerping-pop-colors', False):
             if pop < self.midPop:
                 color1 = POP_COLORS_NTT[0]
                 color2 = POP_COLORS_NTT[1]

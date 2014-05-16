@@ -4587,18 +4587,18 @@ def setShoes(shoesId, shoesTex=0):
         return 'Invalid shoe specified.'
     spellbook.getTarget().b_setShoes(shoesId, shoesTex, 0)
 
-@magicWord(category=CATEGORY_MODERATION, types=[bool])
-def kick(overrideSelfKick=False):
+@magicWord(category=CATEGORY_MODERATION, types=[str])
+def kick(reason):
     """Kick the player from the game server."""
-    if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
-        return "Are you sure you want to kick yourself? Use '~kick True' if you are."
-    #spellbook.getTarget().disconnect()
+    if spellbook.getTarget() == spellbook.getInvoker():
+        # Dumbass tried to kick themselves. Tut tut tut.
+        return "You cannot kick yourself, %s!" % spellbook.getInvoker().getName()
     dg = PyDatagram()
     dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
     dg.addUint16(155)
-    dg.addString('You were kicked by a moderator!')
+    dg.addString(reason)
     simbase.air.send(dg)
-    return "The player %s was kicked." % spellbook.getTarget().getName()
+    return "You kicked %s with reason '%s'." % (spellbook.getTarget().getName(), reason)
 
 @magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
@@ -5027,7 +5027,7 @@ def disguise():
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
 
-@magicWord(access=300)
+@magicWord(category=CATEGORY_OVERRIDE)
 def fanfare():
     """ Give target toon a fanfare for the lolz. """
     spellbook.getTarget().magicFanfare()

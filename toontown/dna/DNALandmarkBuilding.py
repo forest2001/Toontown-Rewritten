@@ -58,5 +58,6 @@ class DNALandmarkBuilding(DNANode):
         block.title = self.getTitle()
         block.buildingType = self.type
         block.zone = self.getVisGroup().getZone()
+        block.node = self
 
 registerElement(DNALandmarkBuilding)

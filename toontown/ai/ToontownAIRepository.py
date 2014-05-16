@@ -17,6 +17,8 @@ from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
 from direct.stdpy.file import open
+import time
+import random
 
 # Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -34,10 +36,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
 from toontown.effects import FireworkShows
-import random
 from direct.distributed.ClockDelta import *
-import time
-from otp.ai.MagicWordGlobal import *
 from toontown.parties import PartyGlobals
 
 # Tasks!
@@ -54,7 +53,9 @@ from toontown.coghq.CountryClubManagerAI import CountryClubManagerAI
 # Suits.
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
 
-import time
+# Magic Words!
+from panda3d.core import PStatClient
+from otp.ai.MagicWordGlobal import *
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -77,7 +78,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.doLiveUpdates = False
 
         self.holidayManager = HolidayManagerAI()
-        
+
         self.fishManager = FishManagerAI()
         self.questManager = QuestManagerAI(self)
         self.cogPageManager = CogPageManagerAI()
@@ -98,7 +99,7 @@ class ToontownAIRepository(ToontownInternalRepository):
 
     def getTrackClsends(self):
         return False
-        
+
 
     def handleConnected(self):
         ToontownInternalRepository.handleConnected(self)
@@ -208,19 +209,19 @@ class ToontownAIRepository(ToontownInternalRepository):
         clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
         clearQueue()
-        
+
         if simbase.config.GetBool('want-sbhq', True):
             self.hoods.append(SellbotHQAI.SellbotHQAI(self))
             clearQueue()
-        
+
         if simbase.config.GetBool('want-cbhq', True):
             self.hoods.append(CashbotHQAI.CashbotHQAI(self))
             clearQueue()
-        
+
         if simbase.config.GetBool('want-lbhq', True):
             self.hoods.append(LawbotHQAI.LawbotHQAI(self))
             clearQueue()
-        
+
         if simbase.config.GetBool('want-bbhq', True):
             self.hoods.append(BossbotHQAI.BossbotHQAI(self))
             clearQueue()
@@ -245,3 +246,33 @@ class ToontownAIRepository(ToontownInternalRepository):
             tree = DNAParser.parse(f)
 
         return tree
+
+
+@magicWord(category=CATEGORY_SYSADMIN, types=[str, int])
+def pstats(host='localhost', port=5185):
+    """ Tell the AI to connect a PStatsClient to the server specified. """
+    conn = PStatClient.connect(host, port)
+    if conn:
+        return "%s has successfully opened a PStat connection to %s:%d" % (simbase.air.distributedDistrict.getName(), host, port)
+    return "%s was unable to open a PStat connection to %s:%d." % (simbase.air.distributedDistrict.getName(), host, port)
+
+@magicWord(category=CATEGORY_SYSADMIN, types=[str], aliases=['cpu-usage'])
+def cpu(percpu=''):
+    """ Return the current CPU usage of the AI server as a percentage.
+    This will return a list if percpu is enabled. (~cpu percpu)
+    """
+    try:
+        from psutil import cpu_percent
+        percpu = percpu == 'percpu'
+        return "Current CPU usage for %s: %s%%" % (simbase.air.distributedDistrict.getName(), str(cpu_percent(interval=None, percpu=percpu)))
+    except ImportError:
+        return "psutil is not installed on %s! Unable to fetch CPU usage." % simbase.air.distributedDistrict.getName()
+
+@magicWord(category=CATEGORY_SYSADMIN, aliases=['memory', 'mem-usage'])
+def mem():
+    """ Return the current memory usage of the AI server as a percentage. """
+    try:
+        from psutil import virtual_memory
+        return "Current memory usage for %s: %s%%" % (simbase.air.distributedDistrict.getName(), str(virtual_memory().percent))
+    except ImportError:
+        return "psutil is not installed on %s! Unable to fetch memory usage." % simbase.air.distributedDistrict.getName()
