@@ -30,7 +30,8 @@ class LocalAccountDB:
 
         callback({'success': True,
                   'databaseId': databaseId,
-                  'adminAccess': 507})
+                  'adminAccess': 507,
+                  'betaKeyQuest': 1})
 
 class RemoteAccountDB:
     def __init__(self, csm):

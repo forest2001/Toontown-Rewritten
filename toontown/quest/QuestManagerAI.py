@@ -262,13 +262,13 @@ class QuestManagerAI:
             # If they take out the quest, we need to tell the web server that they took it
             # out and also tell the CSMUD not to issue any other toons with the quest for
             # the current session (via the Account object's BETA_KEY_QUEST field).
-            av.b_setWantBetaKeyQuest(0)
+            toon.b_setWantBetaKeyQuest(0)
             dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate(
-                'BETA_KEY_QUEST', av.DISLid, av.DISLid,
+                'BETA_KEY_QUEST', toon.DISLid, toon.DISLid,
                 self.air.ourChannel, 0
             )
             self.air.send(dg)
-            self.air.rpc.call('lockBetaKey', webAccId=av.getWebAccountId())
+            self.air.rpc.call('lockBetaKey', webAccId=toon.getWebAccountId())
         self.npcGiveQuest(npc, toon, questId, rewardId, toNpcId, storeReward=True)
 
     def avatarChoseTrack(self, toonId, npc, questId, trackId):
