@@ -994,7 +994,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         toonHeadFrame = self.toonHeads.get(toonId)
         if not toonHeadFrame:
             toonHeadFrame = ToonHeadFrame.ToonHeadFrame(toon)
-            toonHeadFrame.tag1Node.setActive(1)
+            # TODO - fix this next line
+            #toonHeadFrame.tag1Node.setActive(1)
             toonHeadFrame.hide()
             self.toonHeads[toonId] = toonHeadFrame
             self.setVar('%sToonHead' % toonName, toonHeadFrame)

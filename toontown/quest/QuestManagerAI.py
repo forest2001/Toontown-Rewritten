@@ -178,6 +178,9 @@ class QuestManagerAI:
             if isComplete != Quests.COMPLETE:
                 # This quest isn't complete, skip.
                 continue
+            # If we're in the Toontorial, move to the next step.
+            if toonId in self.air.tutorialManager.avId2fsm.keys():
+                self.air.tutorialManager.avId2fsm[toonId].demand('Tunnel')
             # Check if the ToonTask has more quests to complete.
             nextQuest = Quests.getNextQuest(questId, npc, toon)
             if nextQuest == (Quests.NA, Quests.NA):

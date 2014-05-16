@@ -55,8 +55,10 @@ class TutorialFSM(FSM):
         self.tom = NPCToons.createNPC(self.air, 20000, npcDesc, self.zones.shop, 0)
         self.tom.setTutorial(1)
         
-        self.flippy = None
-        
+        npcDesc = NPCToons.NPCToonDict.get(20002)
+        self.harry = NPCToons.createNPC(self.air, 20002, npcDesc, self.zones.hq, 0)
+        self.harry.setTutorial(1)
+                
         self.building = ToontorialBuildingAI(self.air, zones.street, zones.shop, self.tom.getDoId())
         self.hq = HQBuildingAI(self.air, zones.street, zones.hq, 1)
         
@@ -73,6 +75,10 @@ class TutorialFSM(FSM):
         self.suit.generateWithRequired(self.zones.street)
         self.building.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_TOM)
         self.hq.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
+        
+    def exitBattle(self):
+        if self.suit:
+            self.suit.requestDelete()
                 
     def enterHQ(self):
         self.building.door0.setDoorLock(FADoorCodes.TALK_TO_HQ_TOM)
@@ -88,20 +94,19 @@ class TutorialFSM(FSM):
         self.hq.door1.setDoorLock(FADoorCodes.GO_TO_PLAYGROUND)
         self.hq.insideDoor0.setDoorLock(FADoorCodes.WRONG_DOOR_HQ)
         
+    def exitTunnel(self):
+        self.flippy.requestDelete()
+        
     def enterCleanUp(self):
-    
         #deallocate all the zones
-        
-        if self.flippy:
-            self.flippy.requestDelete()
-        
         self.building.cleanup()
         self.hq.cleanup()
         self.tom.requestDelete()
-        self.air.deallocateZone(zones.branch)
-        self.air.deallocateZone(zones.street)
-        self.air.deallocateZone(zones.shop)
-        self.air.deallocateZone(zones.hq)
+        self.harry.requestDelete()
+        self.air.deallocateZone(self.zones.branch)
+        self.air.deallocateZone(self.zones.street)
+        self.air.deallocateZone(self.zones.shop)
+        self.air.deallocateZone(self.zones.hq)
         del self.air.tutorialManager.avId2fsm[self.avId]
 
 class TutorialManagerAI(DistributedObjectAI):
@@ -123,16 +128,18 @@ class TutorialManagerAI(DistributedObjectAI):
         self.avId2fsm[avId] = TutorialFSM(self.air, zones, avId)
         
         # Toontorial TODO list:
-        #  spawn HQ Harry
         #  visual fixes
-        #  return control to player after battle
-        #  actually set the state to tunnel after talking to Harry
-        # account for unexpected exit
-        # check to make sure toon is eligible for toontorial before sending them to toontorial
-        # reset track progress on enter
+        #  check to make sure toon is eligible for toontorial before sending them to toontorial
+        #  reset track progress on enter
+        
+        self.acceptOnce(self.air.getAvatarExitEvent(avId), self.unexpectedExit, extraArgs=[avId])
         
         self.d_enterTutorial(avId, zones.street, zones.street, zones.shop, zones.hq) #hackfix lololol        
 
+    def unexpectedExit(self, avId):
+        fsm = self.avId2fsm.get(avId)
+        if fsm:
+            fsm.demand('CleanUp')
 
     def rejectTutorial(self):
         pass
@@ -147,7 +154,13 @@ class TutorialManagerAI(DistributedObjectAI):
         self.sendUpdateToAvatarId(avId, 'enterTutorial', [branchZone, streetZone, shopZone, hqZone])
 
     def allDone(self):
-        pass
+        avId = self.air.getAvatarIdFromSender()
+        self.ingore(self.air.getAvatarExitEvent(avId))
+        fsm = self.avId2fsm.get(avId)
+        if fsm:
+            fsm.demand('CleanUp')
+        else:
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Attempted to exit a non-existent tutorial.')
 
     def toonArrived(self):
         avId = self.air.getAvatarIdFromSender()

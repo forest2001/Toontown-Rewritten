@@ -7,11 +7,11 @@ import SuitDNA
 class FakeBattleManager:
     def __init__(self, avId):
         self.avId = avId
+
     def destroy(self, battle):
-        print 'Tutorial battle avId = %d finished' % self.avId
         if battle.suitsKilledThisBattle:
-            print 'Requesting HQ!'
             simbase.air.tutorialManager.avId2fsm[self.avId].demand('HQ')
+        battle.requestDelete()
 
 class DistributedTutorialSuitAI(DistributedSuitBaseAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTutorialSuitAI")
