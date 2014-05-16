@@ -4569,6 +4569,9 @@ def setShoes(shoesId, shoesTex=0):
 @magicWord(category=CATEGORY_MODERATION, types=[str])
 def kick(reason):
     """Kick the player from the game server."""
+    if spellbook.getTarget() == spellbook.getInvoker():
+        # Dumbass tried to kick themselves. Tut tut tut.
+        return "You cannot kick yourself, %s!" % spellbook.getInvoker().getName()
     dg = PyDatagram()
     dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
     dg.addUint16(155)
