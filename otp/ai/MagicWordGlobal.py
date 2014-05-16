@@ -105,7 +105,7 @@ class MagicWordCategory:
 
     def getDefinedAccess(self):
         try:
-            return simbase.config.GetInt(self.name.replace(' ', '-').lower(), 0)
+            return simbase.config.GetInt('mw-' + self.name.replace(' ', '-').lower(), 0)
         except:
             return 0
 
