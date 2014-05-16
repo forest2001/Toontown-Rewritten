@@ -18580,19 +18580,15 @@ class CogSuitPartReward(Reward):
     def getPosterString(self):
         return TTLocalizer.QuestsCogSuitPartRewardPoster % {'cogTrack': self.getCogTrackName(),
          'part': self.getCogPartName()}
-         
+
 class BetaKeyReward(Reward):
     def sendRewardAI(self, av):
-        # TODO: Tell CSMUD that X completed a beta key task and
-        # needs the reward. From there, the CSMUD needs to contact
-        # the web server to say this toon's account needs another
-        # beta key. Alternatively, we can have an RPCManager tell
-        # the website that they completed this quest.
-        pass
-        
+        # Tell the web server that we completed the quest successfully!
+        simbase.air.rpc.call('gibBetaKey', webAccId=av.getWebAccountId())
+
     def getString(self):
         return TTLocalizer.QuestsBetaKeyReward
-       
+
     def getPosterString(self):
         return TTLocalizer.QuestsBetaKeyRewardPoster
 
