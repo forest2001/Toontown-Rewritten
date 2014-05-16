@@ -806,7 +806,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             if dclass != self.air.dclassesByName['AccountUD']:
                 return
             webId = fields.get('ACCOUNT_ID')
-            self.air.rpc.call('avatarExit', webAccId=webId)
+            if fields.get('BETA_KEY_QUEST') == 1:
+                self.air.rpc.call('avatarExit', webAccId=webId)
         self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
