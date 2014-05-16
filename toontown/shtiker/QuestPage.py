@@ -39,7 +39,6 @@ class QuestPage(ShtikerPage.ShtikerPage):
             self.questFrames.append(frame)
 
         self.accept('questsChanged', self.updatePage)
-        self.updatePage()
         return
 
     def acceptOnscreenHooks(self):
