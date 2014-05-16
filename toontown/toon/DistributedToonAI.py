@@ -5006,7 +5006,7 @@ def disguise():
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
 
-@magicWord(access=300)
+@magicWord(category=CATEGORY_OVERRIDE)
 def fanfare():
     """ Give target toon a fanfare for the lolz. """
     spellbook.getTarget().magicFanfare()
