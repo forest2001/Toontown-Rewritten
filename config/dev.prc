@@ -10,13 +10,27 @@ want-dev #f
 
 
 # Resource settings
-model-path resources
+vfs-mount resources/phase_3 /phase_3
+vfs-mount resources/phase_3.5 /phase_3.5
+vfs-mount resources/phase_4 /phase_4
+vfs-mount resources/phase_5 /phase_5
+vfs-mount resources/phase_5.5 /phase_5.5
+vfs-mount resources/phase_6 /phase_6
+vfs-mount resources/phase_7 /phase_7
+vfs-mount resources/phase_8 /phase_8
+vfs-mount resources/phase_9 /phase_9
+vfs-mount resources/phase_10 /phase_10
+vfs-mount resources/phase_11 /phase_11
+vfs-mount resources/phase_12 /phase_12
+vfs-mount resources/phase_13 /phase_13
+model-path /
 default-model-extension .bam
 
 # Server settings
+want-rpc-server #f
+rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
-accountdb-local-file databases/csm-cookies.db
-account-server-endpoint https://www.toontownrewritten.com/api/gameserver/
+want-parties #f
 
 
 # DC Files
@@ -40,6 +54,7 @@ smooth-lag 0.4
 estate-day-night #t
 want-instant-parties #t
 show-total-population #f
+want-whitelist #f
 
 
 # Holidays and Events

@@ -30,7 +30,7 @@ class RubberBand:
         targetNode = CollisionNode('thing')
         targetNode.addSolid(target)
         targetNodePath = self.baseNode.attachNewNode(targetNode)
-        self.slingModel = loader.loadModel('phase_4/models/minigames/slingshot_game_sling.bam')
+        self.slingModel = loader.loadModel('phase_4/models/minigames/slingshot_game_sling')
         self.slingModel.reparentTo(self.baseNode)
         self.slingModel.setScale(1.0)
         self.slingModel.setZ(-1.0)

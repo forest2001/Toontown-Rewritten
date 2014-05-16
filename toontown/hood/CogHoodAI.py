@@ -2,7 +2,9 @@ from toontown.toonbase import ToontownGlobals
 from HoodAI import HoodAI
 from toontown.suit.DistributedSuitPlannerAI import DistributedSuitPlannerAI
 from toontown.coghq.DistributedCogHQDoorAI import DistributedCogHQDoorAI
+from toontown.coghq import DistributedCogKartAI
 from toontown.coghq.LobbyManagerAI import LobbyManagerAI
+from toontown.building import DistributedBoardingPartyAI
 
 class CogHoodAI(HoodAI):
     """
@@ -20,7 +22,6 @@ class CogHoodAI(HoodAI):
         self.elevators = []
         self.suitPlanners = []
         self.lobbyMgr = None
-        # TODO: Boarding groups.
     
     def createElevator(self, dclass, mgr, extZone, intZone, index=0, minLaff=0, boss=False):
         if boss:
@@ -29,11 +30,17 @@ class CogHoodAI(HoodAI):
             elevator = dclass(self.air, mgr, intZone, index, antiShuffle=self.air.config.GetInt('want-anti-shuffle', 0), minLaff=minLaff)
         elevator.generateWithRequired(extZone)
         self.elevators.append(elevator)
+        return elevator
         
     def createDoor(self):
         # Overridable by sub-class.
         pass
         
+    def createBoardingGroup(self, air, elevators, zone, maxSize=4):
+        if simbase.config.GetBool('want-boarding-groups', True):
+            boardingGroup = DistributedBoardingPartyAI.DistributedBoardingPartyAI(air, elevators, maxSize)
+            boardingGroup.generateWithRequired(zone)
+
     def createSuitPlanner(self, zone):
         sp = DistributedSuitPlannerAI(self.air, zone)
         sp.generateWithRequired(zone)

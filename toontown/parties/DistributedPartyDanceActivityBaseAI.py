@@ -18,7 +18,7 @@ class DistributedPartyDanceActivityBaseAI(DistributedPartyActivityAI):
     def updateDancingToon(self, state, anim):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.toons:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to update their state while not dancing!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to update their state while not dancing!')
             return
         self.sendUpdate('setDancingToonState', [avId, state, anim])
 
@@ -26,11 +26,11 @@ class DistributedPartyDanceActivityBaseAI(DistributedPartyActivityAI):
     def toonJoinRequest(self):
         avId = self.air.getAvatarIdFromSender()
         if avId in self.toons:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to enter dance activity twice!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to enter dance activity twice!')
             return
         av = self.air.doId2do.get(avId)
         if not av:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to interact with a party activity from a different district!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to interact with a party activity from a different district!')
             return
         self.toons.append(avId)
         self.headings.append(av.getH())
@@ -39,7 +39,7 @@ class DistributedPartyDanceActivityBaseAI(DistributedPartyActivityAI):
     def toonExitRequest(self):
         avId = self.air.getAvatarIdFromSender()
         if not avId in self.toons:
-            self.air.writeServerEvent('suspicious',avId,'Toon tried to exit a dance floor they\'re not on!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to exit a dance floor they\'re not on!')
             return
         index = self.toons.index(avId)
         self.toons.remove(avId)

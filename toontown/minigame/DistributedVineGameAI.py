@@ -77,16 +77,17 @@ class DistributedVineGameAI(DistributedMinigameAI):
             timeLeftList.append(self.finishedTimeLeft[avId])
 
         totalBats = len(VineGameGlobals.BatInfo[self.getSafezoneId()])
-        self.air.writeServerEvent('minigame_vine', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.VineGameId,
-         self.getSafezoneId(),
-         self.avIdList,
-         scoreList,
-         self.vineSections,
-         finishedList,
-         timeLeftList,
-         vineReached,
-         self.totalSpiders,
-         totalBats))
+        #self.air.writeServerEvent('minigame_vine', self.doId, '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % (ToontownGlobals.VineGameId,
+        # self.getSafezoneId(),
+        # self.avIdList,
+        # scoreList,
+        # self.vineSections,
+        # finishedList,
+        # timeLeftList,
+        # vineReached,
+        # self.totalSpiders,
+        # totalBats))
+        # jjkoletar: i don't want minigame data
         self.gameFSM.request('cleanup')
         DistributedMinigameAI.gameOver(self)
 
@@ -169,7 +170,7 @@ class DistributedVineGameAI(DistributedMinigameAI):
         if not self._playing():
             return
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'VineGameAI.setNewVine: invalid avId')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='VineGameAI.setNewVine: invalid avId')
             return
         oldVineIndex = self.toonInfo[avId][0]
         debugStr = 'setNewVine doId=%s avId=%d vineIndex=%s oldVineIndex=%s' % (self.doId,

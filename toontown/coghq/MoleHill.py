@@ -69,11 +69,9 @@ class MoleHill(NodePath):
             self.moleHead = loader.loadModel('phase_12/models/bossbotHQ/mole_norm')
             self.moleColNodePath.setScale(3.0)
             self.moleHead.setH(0)
-            self.mole.setBillboardAxis(localAvatar, 0)
         if type == MoleFieldBase.HILL_BOMB or type == MoleFieldBase.HILL_COGWHACKED:
             self.moleHead = loader.loadModel('phase_12/models/bossbotHQ/mole_cog')
             self.moleColNodePath.setScale(1.0)
-            self.mole.setBillboardAxis(localAvatar, 0)
             if type == MoleFieldBase.HILL_COGWHACKED:
                 self.doMoleDown()
                 BattleParticles.loadParticles()

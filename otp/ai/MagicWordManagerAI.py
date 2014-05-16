@@ -7,7 +7,7 @@ from direct.distributed.MsgTypes import *
 class MagicWordManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("MagicWordManagerAI")
 
-    def sendMagicWord(self, word, targetId):
+    def sendMagicWord(self, word, targetId, execute):
         invokerId = self.air.getAvatarIdFromSender()
 
         invoker = self.air.doId2do.get(invokerId)
@@ -16,7 +16,7 @@ class MagicWordManagerAI(DistributedObjectAI):
             return
 
         if invoker.getAdminAccess() < MINIMUM_MAGICWORD_ACCESS:
-            self.air.writeServerEvent('suspicious', invokerId, 'Attempted to issue magic word: %s' % word)
+            self.air.writeServerEvent('suspicious', avId=invokerId, issue='Attempted to issue magic word: %s' % word)
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(invokerId), self.air.ourChannel, CLIENTAGENT_EJECT)
             dg.addUint16(126)
@@ -28,12 +28,18 @@ class MagicWordManagerAI(DistributedObjectAI):
         if not target:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing target'])
             return
-
-        response = spellbook.process(invoker, target, word)
-        if response:
-            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response])
+        
+        if execute:
+            response = spellbook.process(invoker, target, word)
+            if response[0]:
+                self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', [response[0]])
+        else:
+            response = ('Client MW executed.',)
+            
+        from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
+        targetAccess = 0 if not isinstance(target, DistributedPlayerAI) else target.getAdminAccess()
 
         self.air.writeServerEvent('magic-word',
-                                  invokerId, invoker.getAdminAccess(),
-                                  targetId, target.getAdminAccess(),
-                                  word, response)
+                                  invokerId=invokerId, invokerAccess=invoker.getAdminAccess(),
+                                  targetId=targetId, targetAccess=targetAccess,
+                                  word=word, response=response[0])

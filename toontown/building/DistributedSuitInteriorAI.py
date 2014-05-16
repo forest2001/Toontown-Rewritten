@@ -184,7 +184,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
     def setAvatarJoined(self):
         avId = self.air.getAvatarIdFromSender()
         if self.toons.count(avId) == 0:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedSuitInteriorAI.setAvatarJoined from toon not in %s.' % self.toons)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedSuitInteriorAI.setAvatarJoined from toon not in %s.' % self.toons)
             self.notify.warning('setAvatarJoined() - av: %d not in list' % avId)
             return
         avatar = self.air.doId2do.get(avId)

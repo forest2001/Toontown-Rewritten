@@ -23,7 +23,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         DistributedNode.DistributedNode.__init__(self, cr)
         self.cr = cr
         self.reparentTo(render)
-        self.boardNode = loader.loadModel('phase_6/models/golf/regular_checker_game.bam')
+        self.boardNode = loader.loadModel('phase_6/models/golf/regular_checker_game')
         self.boardNode.reparentTo(self)
         self.board = CheckersBoard()
         self.exitButton = None
@@ -101,9 +101,9 @@ class DistributedCheckers(DistributedNode.DistributedNode):
             tempList[x].node().addSolid(CollisionSphere(0, 0, 0, 0.39))
 
         for z in self.locatorList:
-            y = loader.loadModel('phase_6/models/golf/regular_checker_piecewhite.bam')
+            y = loader.loadModel('phase_6/models/golf/regular_checker_piecewhite')
             y.find('**/checker_k*').hide()
-            zz = loader.loadModel('phase_6/models/golf/regular_checker_pieceblack.bam')
+            zz = loader.loadModel('phase_6/models/golf/regular_checker_pieceblack')
             zz.find('**/checker_k*').hide()
             y.reparentTo(z)
             y.hide()
@@ -677,9 +677,9 @@ class DistributedCheckers(DistributedNode.DistributedNode):
     def animatePeice(self, tableState, moveList, type, playerColor):
         messenger.send('wakeup')
         if playerColor == 'white':
-            gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/regular_checker_piecewhite.bam')
+            gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/regular_checker_piecewhite')
         else:
-            gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/regular_checker_pieceblack.bam')
+            gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/regular_checker_pieceblack')
         if type == 'king':
             gamePeiceForAnimation.find('**/checker_k*').show()
         else:

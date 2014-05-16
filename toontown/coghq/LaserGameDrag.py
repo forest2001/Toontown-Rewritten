@@ -35,11 +35,8 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
             for row in range(0, self.gridNumY):
                 tile = 0
                 self.gridData[column][row] = tile
-            
-        
         for column in range(0, self.gridNumX):
             self.gridData[column][self.gridNumY - 1] = 12
-        
         for symbol in self.symbolList:
             finished = 0
             while finished == 0:
@@ -54,38 +51,30 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
                         if self.gridData[column][row] == 0:
                             self.gridData[column][row] = symbol
                             tris += 1
-                            continue
-                
                 if self.checkFor3(symbol):
                     self.clearIndex(symbol)
                     finished = 0
-                    continue
-                finished = 1
-        
+                else:
+                    finished = 1
 
     
     def hit(self, hitX, hitY, oldx = -1, oldy = -1):
         if self.finshed:
-            return None
-        
+            return
         if oldx >= 0 and oldy >= 0:
             if self.gridData[hitX][hitY] == 0:
                 if self.gridData[oldx][oldy] in self.symbolList:
                     self.gridData[hitX][hitY] = self.gridData[oldx][oldy]
                     self.gridData[oldx][oldy] = 0
-                
-            
-        
+                else:
+                    pass
         for index in self.symbolList:
             if self.checkFor3(index):
                 self.clearIndex(index)
-                continue
-        
         if self.checkForWin():
             self.win()
         else:
             self.funcSendGrid()
-
     
     def checkFor3(self, index):
         numInARow = 0
@@ -95,12 +84,10 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
                     numInARow += 1
                     if numInARow >= 3:
                         return 1
-                    
-                numInARow >= 3
-                numInARow = 0
-            
+                else:
+                    numInARow = 0
             numInARow = 0
-        
+            
         numInARow = 0
         for posY in range(0, self.gridNumY):
             for posX in range(0, self.gridNumX):
@@ -108,21 +95,17 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
                     numInARow += 1
                     if numInARow >= 3:
                         return 1
-                    
-                numInARow >= 3
-                numInARow = 0
-            
+                else:
+                    numInARow = 0
             numInARow = 0
         
         return 0
-
     
     def clearIndex(self, index):
         for posX in range(0, self.gridNumX):
             for posY in range(0, self.gridNumY):
                 if self.gridData[posX][posY] == index:
                     self.gridData[posX][posY] = 0
-                    continue
             
         
 
@@ -132,7 +115,6 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
             for posY in range(0, self.gridNumY):
                 if self.gridData[posX][posY] == index:
                     return 0
-                    continue
             
         
         return 1
@@ -142,7 +124,7 @@ class LaserGameDrag(LaserGameBase.LaserGameBase):
         for symbol in self.symbolList:
             if not self.checkForClear(symbol):
                 return 0
-                continue
+
         
         return 1
 

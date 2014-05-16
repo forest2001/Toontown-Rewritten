@@ -12,6 +12,7 @@ from toontown.toontowngui import TTDialog
 from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 from direct.interval.IntervalGlobal import *
+from otp.margins.WhisperPopup import *
 import BoardingGroupShow
 
 class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPartyBase.BoardingPartyBase):

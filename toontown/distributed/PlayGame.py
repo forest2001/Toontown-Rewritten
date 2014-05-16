@@ -198,7 +198,8 @@ class PlayGame(StateData.StateData):
         if how in ['tunnelIn',
          'teleportIn',
          'doorIn',
-         'elevatorIn']:
+         'elevatorIn',
+         'walk']:
             self.fsm.request('quietZone', [doneStatus])
         else:
             self.notify.error('Exited hood with unexpected mode %s' % how)
@@ -239,6 +240,7 @@ class PlayGame(StateData.StateData):
         toHoodPhrase = ToontownGlobals.hoodNameMap[canonicalHoodId][0]
         hoodName = ToontownGlobals.hoodNameMap[canonicalHoodId][-1]
         zoneId = requestStatus['zoneId']
+        requestStatus['loader'] = 'cogHQLoader' if ZoneUtil.isCogHQZone(hoodId) else requestStatus['loader']
         loaderName = requestStatus['loader']
         avId = requestStatus.get('avId', -1)
         ownerId = requestStatus.get('ownerId', avId)

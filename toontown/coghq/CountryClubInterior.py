@@ -13,6 +13,7 @@ from toontown.toontowngui import TTDialog
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.coghq import DistributedCountryClub
 from toontown.building import Elevator
+from otp.nametag import NametagGlobals
 import random
 
 class CountryClubInterior(BattlePlace.BattlePlace):

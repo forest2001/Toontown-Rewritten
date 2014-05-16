@@ -1,6 +1,7 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
+from toontown.distributed.ShardStatus import ShardStatusSender
 from otp.ai.TimeManagerAI import TimeManagerAI
 from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
@@ -9,12 +10,13 @@ from toontown.ai.FishManagerAI import FishManagerAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from toontown.toon import NPCToons
 from toontown.hood import TTHoodAI, DDHoodAI, DGHoodAI, BRHoodAI, MMHoodAI, DLHoodAI, OZHoodAI, GSHoodAI, GZHoodAI, ZoneUtil
-from toontown.hood import SellbotHQAI
+from toontown.hood import SellbotHQAI, CashbotHQAI, LawbotHQAI, BossbotHQAI
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
+from direct.stdpy.file import open
 
 # Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -23,8 +25,9 @@ from otp.friends.FriendManagerAI import FriendManagerAI
 from toontown.estate.EstateManagerAI import EstateManagerAI
 
 # Par-tay!
-from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
-from otp.distributed.OtpDoGlobals import *
+if simbase.config.GetBool('want-parties', True):
+    from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+    from otp.distributed.OtpDoGlobals import *
 
 # Fireworks!
 from direct.task import Task
@@ -42,8 +45,11 @@ from toontown.quest.QuestManagerAI import QuestManagerAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
 from toontown.shtiker.CogPageManagerAI import CogPageManagerAI
 from toontown.coghq.FactoryManagerAI import FactoryManagerAI
+from toontown.coghq.MintManagerAI import MintManagerAI
+from toontown.coghq.LawOfficeManagerAI import LawOfficeManagerAI
 from toontown.coghq.PromotionManagerAI import PromotionManagerAI
 from toontown.coghq.CogSuitManagerAI import CogSuitManagerAI
+from toontown.coghq.CountryClubManagerAI import CountryClubManagerAI
 
 # Suits.
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
@@ -73,12 +79,17 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.holidayManager = HolidayManagerAI()
         
         self.fishManager = FishManagerAI()
-        self.questManager = QuestManagerAI()
+        self.questManager = QuestManagerAI(self)
         self.cogPageManager = CogPageManagerAI()
         self.factoryMgr = FactoryManagerAI(self)
+        self.mintMgr = MintManagerAI(self)
+        self.lawOfficeMgr = LawOfficeManagerAI(self)
+        self.countryClubMgr = CountryClubManagerAI(self)
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
+
+        self.statusSender = ShardStatusSender(self)
 
         self.dnaStoreMap = {}
 
@@ -90,6 +101,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         
 
     def handleConnected(self):
+        ToontownInternalRepository.handleConnected(self)
         self.districtId = self.allocateChannel()
         self.distributedDistrict = ToontownDistrictAI(self)
         self.distributedDistrict.setName(self.districtName)
@@ -107,11 +119,15 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.distributedDistrict.b_setAvailable(1)
 
+        self.statusSender.start()
+
     def incrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)
+        self.statusSender.sendStatus()
 
     def decrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
+        self.statusSender.sendStatus()
 
     def allocateZone(self, owner=None):
         zoneId = self.zoneAllocator.allocate()
@@ -151,11 +167,12 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
 
-        self.partyManager = DistributedPartyManagerAI(self)
-        self.partyManager.generateWithRequired(2)
+        if simbase.config.GetBool('want-parties', True):
+            self.partyManager = DistributedPartyManagerAI(self)
+            self.partyManager.generateWithRequired(2)
 
-        # setup our view of the global party manager ud
-        self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+            # setup our view of the global party manager ud
+            self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
 
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
@@ -191,8 +208,22 @@ class ToontownAIRepository(ToontownInternalRepository):
         clearQueue()
         self.hoods.append(GZHoodAI.GZHoodAI(self))
         clearQueue()
-        self.hoods.append(SellbotHQAI.SellbotHQAI(self))
-        clearQueue()
+        
+        if simbase.config.GetBool('want-sbhq', True):
+            self.hoods.append(SellbotHQAI.SellbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-cbhq', True):
+            self.hoods.append(CashbotHQAI.CashbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-lbhq', True):
+            self.hoods.append(LawbotHQAI.LawbotHQAI(self))
+            clearQueue()
+        
+        if simbase.config.GetBool('want-bbhq', True):
+            self.hoods.append(BossbotHQAI.BossbotHQAI(self))
+            clearQueue()
 
         for sp in self.suitPlanners.values():
             sp.assignInitialSuitBuildings()
@@ -210,7 +241,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         return 'phase_%s/dna/%s_%s.xml' % (phase, hood, zoneId)
 
     def loadDNA(self, filename):
-        with open('resources/' + filename) as f:
+        with open('/' + filename) as f:
             tree = DNAParser.parse(f)
 
         return tree

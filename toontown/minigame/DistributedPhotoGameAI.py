@@ -103,10 +103,10 @@ class DistributedPhotoGameAI(DistributedMinigameAI, PhotoGameBase.PhotoGameBase)
     def filmOut(self):
         avId = self.air.getAvatarIdFromSender()
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'PhotoGameAI.filmOut: unknown avatar')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='PhotoGameAI.filmOut: unknown avatar')
             return
         if self.gameFSM.getCurrentState() is None or self.gameFSM.getCurrentState().getName() != 'play':
-            self.air.writeServerEvent('suspicious', avId, 'PhotoGameAI.filmOut: game not in play state')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='PhotoGameAI.filmOut: game not in play state')
             return
         playerIndex = self.avIdList.index(avId)
         self.filmCountList[playerIndex] = self.data['FILMCOUNT']
@@ -120,12 +120,12 @@ class DistributedPhotoGameAI(DistributedMinigameAI, PhotoGameBase.PhotoGameBase)
                 gameState = None
             else:
                 gameState = self.gameFSM.getCurrentState().getName()
-            self.air.writeServerEvent('suspicious', avId, 'PhotoGameAI.newClientPhotoScore: game not in play state %s' % gameState)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='PhotoGameAI.newClientPhotoScore: game not in play state %s' % gameState)
             return
         if score > PhotoGameGlobals.NUMSTARS:
             score = 0.0
         if avId not in self.avIdList:
-            self.air.writeServerEvent('suspicious', avId, 'PhotoGameAI.newClientPhotoScore: non-player avatar')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='PhotoGameAI.newClientPhotoScore: non-player avatar')
             return
         playerIndex = self.avIdList.index(avId)
         self.filmCountList[playerIndex] += 1

@@ -1498,7 +1498,7 @@ DinerBattleBPosHpr = (-20,
  0)
 BossbotBossMaxDamage = 500
 BossbotMaxSpeedDamage = 90
-BossbotSpeedRecoverRate = 20
+BossbotSpeedRecoverRate = 2 # This was 20 - far too high - but we need to test and find a good value for this.
 BossbotBossDifficultySettings = [(8,
   4,
   11,

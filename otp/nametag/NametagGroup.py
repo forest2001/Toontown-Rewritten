@@ -238,11 +238,6 @@ class NametagGroup:
         tag.avatar = self.avatar
         tag.icon = self.icon
 
-        if self.active or self.hasButton():
-            tag.setClickRegionEvent(self.getUniqueId())
-        else:
-            tag.setClickRegionEvent(None)
-
         tag.update()
 
     def __testVisible3D(self):
@@ -265,6 +260,10 @@ class NametagGroup:
     def __tickTask(self, task):
         for nametag in self.nametags:
             nametag.tick()
+            if (NametagGlobals.masterNametagsActive and self.active) or self.hasButton():
+                nametag.setClickRegionEvent(self.getUniqueId())
+            else:
+                nametag.setClickRegionEvent(None)
 
         if NametagGlobals.onscreenChatForced and self.chatFlags & CFSpeech:
             # Because we're *forcing* chat onscreen, we skip the visible3d test

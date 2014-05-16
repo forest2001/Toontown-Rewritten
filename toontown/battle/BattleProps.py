@@ -288,7 +288,7 @@ class PropPool:
         self.propStrings[propName] = (self.getPath(5, 'kapow-mod'), self.getPath(5, 'kapow-chan'))
         self.propTypes[propName] = 'actor'
         propName = 'ship'
-        self.propStrings[propName] = ('phase_5/models/props/ship.bam',)
+        self.propStrings[propName] = ('phase_5/models/props/ship',)
         self.propTypes[propName] = 'model'
         propName = 'trolley'
         self.propStrings[propName] = ('phase_4/models/modules/trolley_station_TT',)

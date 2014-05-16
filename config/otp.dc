@@ -40,18 +40,13 @@ struct AvatarPendingDel {
 };
 
 dclass Account {
-  string DcObjectType db;
-  uint32 ACCOUNT_AV_SET[] required db;
-  uint32 pirateAvatars[] required db;
+  uint32 ACCOUNT_AV_SET[6] required db;
   uint32 ESTATE_ID db;
   AvatarPendingDel ACCOUNT_AV_SET_DEL[] db;
-  string PLAYED_MINUTES db;
-  string PLAYED_MINUTES_PERIOD db;
   string CREATED db;
   string LAST_LOGIN db;
-  string ACCOUNT_ID db;
+  uint32 ACCOUNT_ID db;
   uint16 ADMIN_ACCESS db;
-  uint8 BETA_KEY_QUEST db;
 };
 
 struct BarrierData {
@@ -61,7 +56,7 @@ struct BarrierData {
 };
 
 dclass DistributedObject {
-  setBarrierData(BarrierData []) broadcast ram;
+  setBarrierData(BarrierData data[]) broadcast ram;
   setBarrierReady(uint16 barrierContext) airecv clsend;
   execCommand(string command, DoId magicWordMgr,
               DoId avatar, uint32 zoneId);
@@ -70,15 +65,15 @@ dclass DistributedObject {
 
 dclass DistributedTestObject : DistributedObject {
   uint32 AutoInterest[];
-  setParentingRules(string, string) broadcast ram;
-  setRequiredField(uint32) required broadcast ram;
-  setB(uint32) broadcast;
-  setBA(uint32) broadcast airecv;
-  setBO(uint32) broadcast ownsend;
-  setBR(uint32) broadcast ram;
-  setBRA(uint32) broadcast ram airecv;
-  setBRO(uint32) broadcast ram ownsend;
-  setBROA(uint32) broadcast ram ownsend airecv;
+  setParentingRules(string todo0, string todo1) broadcast ram;
+  setRequiredField(uint32 r) required broadcast ram;
+  setB(uint32 B) broadcast;
+  setBA(uint32 BA) broadcast airecv;
+  setBO(uint32 BO) broadcast ownsend;
+  setBR(uint32 BR) broadcast ram;
+  setBRA(uint32 BRA) broadcast ram airecv;
+  setBRO(uint32 BRO) broadcast ram ownsend;
+  setBROA(uint32 BROA) broadcast ram ownsend airecv;
 };
 
 struct OSInfo {
@@ -96,8 +91,8 @@ struct CPUSpeed {
 dclass TimeManager : DistributedObject {
   requestServerTime(uint8 context) airecv clsend;
   serverTime(uint8 context, int32 timestap, uint32 timeOfDay);
-  setDisconnectReason(uint8) airecv clsend;
-  setExceptionInfo(string(0-1024)) airecv clsend;
+  setDisconnectReason(uint8 disconnectCode) airecv clsend;
+  setExceptionInfo(string(0-1024) info) airecv clsend;
   setSignature(string(0-1024) signature, char prcHash[16],
                char pycHash[16]) airecv clsend;
   setFrameRate(uint16/10 fps, uint16/1000 deviation, uint16 numAvatars,
@@ -105,40 +100,40 @@ dclass TimeManager : DistributedObject {
                uint32/10 timeInGame, string(0-256) gameOptionsCode,
                uint16 vendorId, uint16 deviceId, uint32/10 processMemory,
                uint32/10 pageFileUsage, uint32/10 physicalMemory,
-               uint32 pageFaultCount, OSInfo, CPUSpeed, uint16 cpuCores,
+               uint32 pageFaultCount, OSInfo osInfo, CPUSpeed cpuSpeed, uint16 cpuCores,
                uint16 logicalCPUs, string(0-256) apiName) airecv clsend;
   setCpuInfo(string(0-1024) infoStr, string cacheStatus) airecv clsend;
-  checkForGarbageLeaks(bool) airecv clsend;
-  setNumAIGarbageLeaks(uint32);
-  setClientGarbageLeak(uint32, string(0-1024)) airecv clsend;
+  checkForGarbageLeaks(bool wantReply) airecv clsend;
+  setNumAIGarbageLeaks(uint32 numLeaks);
+  setClientGarbageLeak(uint32 num, string(0-1024) description) airecv clsend;
   checkAvOnDistrict(uint32 context, DoId avatar) clsend airecv;
   checkAvOnDistrictResult(uint32 context, DoId av, bool isOnDistrict);
 };
 
 dclass ObjectServer {
-  setName(string) airecv ram required;
-  setDcHash(uint32) ram required;
-  setDateCreated(uint32) airecv;
+  setName(string name) airecv ram required;
+  setDcHash(uint32 hash) ram required;
+  setDateCreated(uint32 date) airecv;
 };
 
 dclass DistributedDirectory : DistributedObject {
-  setParentingRules(string, string) broadcast ram;
+  setParentingRules(string todo0, string todo1) broadcast ram;
 };
 
 dclass DistributedDistrict : DistributedObject {
-  setName(string) required broadcast ram;
-  setAvailable(uint8) required broadcast ram;
+  setName(string name) required broadcast ram;
+  setAvailable(uint8 available) required broadcast ram;
 };
 
 dclass DistributedNode : DistributedObject {
-  setParentStr(blob) broadcast ram ownsend airecv;
-  setParent(uint32) broadcast ram ownsend airecv;
-  setX(int16/10) broadcast ram ownsend airecv;
-  setY(int16/10) broadcast ram ownsend airecv;
-  setZ(int16/10) broadcast ram ownsend airecv;
-  setH(int16%360/10) broadcast ram ownsend airecv;
-  setP(int16%360/10) broadcast ram ownsend airecv;
-  setR(int16%360/10) broadcast ram ownsend airecv;
+  setParentStr(blob parentTokenStr) broadcast ram ownsend airecv;
+  setParent(uint32 parentToken) broadcast ram ownsend airecv;
+  setX(int16/10 x) broadcast ram ownsend airecv;
+  setY(int16/10 y) broadcast ram ownsend airecv;
+  setZ(int16/10 z) broadcast ram ownsend airecv;
+  setH(int16%360/10 h) broadcast ram ownsend airecv;
+  setP(int16%360/10 p) broadcast ram ownsend airecv;
+  setR(int16%360/10 r) broadcast ram ownsend airecv;
   setPos : setX, setY, setZ;
   setHpr : setH, setP, setR;
   setPosHpr : setX, setY, setZ, setH, setP, setR;
@@ -149,14 +144,14 @@ dclass DistributedNode : DistributedObject {
 };
 
 dclass DistributedSmoothNode : DistributedNode {
-  setComponentL(uint64) broadcast ram ownsend airecv;
-  setComponentX(int16/10) broadcast ram ownsend airecv;
-  setComponentY(int16/10) broadcast ram ownsend airecv;
-  setComponentZ(int16/10) broadcast ram ownsend airecv;
-  setComponentH(int16%360/10) broadcast ram ownsend airecv;
-  setComponentP(int16%360/10) broadcast ram ownsend airecv;
-  setComponentR(int16%360/10) broadcast ram ownsend airecv;
-  setComponentT(int16) broadcast ram ownsend airecv;
+  setComponentL(uint64 l) broadcast ram ownsend airecv;
+  setComponentX(int16/10 x) broadcast ram ownsend airecv;
+  setComponentY(int16/10 y) broadcast ram ownsend airecv;
+  setComponentZ(int16/10 z) broadcast ram ownsend airecv;
+  setComponentH(int16%360/10 h) broadcast ram ownsend airecv;
+  setComponentP(int16%360/10 p) broadcast ram ownsend airecv;
+  setComponentR(int16%360/10 r) broadcast ram ownsend airecv;
+  setComponentT(int16 timestamp) broadcast ram ownsend airecv;
   setSmStop : setComponentT;
   setSmH : setComponentH, setComponentT;
   setSmZ : setComponentZ, setComponentT;
@@ -168,14 +163,14 @@ dclass DistributedSmoothNode : DistributedNode {
   setSmXYZH : setComponentX, setComponentY, setComponentZ, setComponentH, setComponentT;
   setSmPosHpr : setComponentX, setComponentY, setComponentZ, setComponentH, setComponentP, setComponentR, setComponentT;
   setSmPosHprL : setComponentL, setComponentX, setComponentY, setComponentZ, setComponentH, setComponentP, setComponentR, setComponentT;
-  clearSmoothing(int8) broadcast ownsend;
-  suggestResync(uint32, int16, int16, int32, uint16, uint16/100) ownrecv clsend;
-  returnResync(uint32, int16, int32, uint16, uint16/100) ownrecv clsend;
+  clearSmoothing(int8 bogus) broadcast ownsend;
+  suggestResync(uint32 avId, int16 timestampA, int16 timestampB, int32 serverTimeSec, uint16 serverTimeUSec, uint16/100 uncertainty) ownrecv clsend;
+  returnResync(uint32 avId, int16 timestampB, int32 serverTimeSec, uint16 serverTimeUSec, uint16/100 uncertainty) ownrecv clsend;
 };
 
 dclass DistributedCartesianGrid : DistributedNode {
-  setCellWidth(uint32) required broadcast ram;
-  setParentingRules(string, string) broadcast ram;
+  setCellWidth(uint32 width) required broadcast ram;
+  setParentingRules(string style, string rule) broadcast ram;
 };
 
 struct Fixture {
@@ -189,8 +184,8 @@ struct Fixture {
 };
 
 dclass DistributedCamera : DistributedNode {
-  setCamParent(uint32) required broadcast ram ownsend airecv;
-  setFixtures(Fixture []) required broadcast ram ownsend airecv;
+  setCamParent(uint32 doId) required broadcast ram ownsend airecv;
+  setFixtures(Fixture fixtures[]) required broadcast ram ownsend airecv;
 };
 
 struct TalkModification {
@@ -222,10 +217,9 @@ dclass AvatarHandle : TalkPath_whisper {
 };
 
 dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
-  string DcObjectType db;
-  setName(string = "[Name not set]") required broadcast db airecv;
+  setName(string name = "[Name not set]") required broadcast db airecv;
   friendsNotify(DoId avId, int8 status) ownrecv airecv;
-  checkAvOnShard(DoId) clsend airecv;
+  checkAvOnShard(DoId avId) clsend airecv;
   confirmAvOnShard(DoId avId, int8 isOnShard);
   setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
           string(0-400) chat, TalkModification [], uint8 flags) broadcast;
@@ -243,67 +237,68 @@ dclass DistributedPlayer : DistributedAvatar {
   setWhisperSCCustomFrom(DoId fromAv, uint16 msgIndex) ownrecv clsend;
   setWhisperSCEmoteFrom(DoId fromAv, uint16 emoteId) ownrecv clsend;
   setSystemMessage(DoId aboutId, string(0-256) chatString) ownrecv;
-  setCommonChatFlags(uint8) broadcast ownrecv ram airecv;
-  setWhitelistChatFlags(uint8) broadcast ownrecv ram airecv;
+  setCommonChatFlags(uint8 commonChatFlags) broadcast ownrecv ram airecv;
+  setWhitelistChatFlags(uint8 whitelistChatFlags) broadcast ownrecv ram airecv;
   setSC(uint16 msgIndex) broadcast ownsend airecv;
   setSCCustom(uint16 msgIndex) broadcast ownsend airecv;
-  setFriendsList(FriendEntry[] = []) ownrecv required db airecv;
-  setDISLname(string) broadcast ownrecv ram;
-  setDISLid(uint32 = 0) broadcast ownrecv ram db airecv required;
+  setFriendsList(FriendEntry friendsList[] = []) ownrecv required db airecv;
+  setDISLname(string name) broadcast ownrecv ram;
+  setDISLid(uint32 id = 0) broadcast ownrecv ram db airecv required;
   OwningAccount(DoId);
-  WishName(string = "") db ram;
-  WishNameState(string = "OPEN") db ram;
+  string WishName = "" db ram;
+  uint8 WishNameState = 1 db ram; // 1 is the "open" state
+  uint32 WishNameTimestamp db ram;
   setPreviousAccess(uint8 = 0) required db airecv;
   setAccess(uint8 = 2) broadcast ownrecv required ram airecv;
-  setAdminAccess(uint16 = 0) ownrecv required airecv;
-  setAsGM(bool = 0) required ram broadcast ownrecv airecv;
+  setAdminAccess(uint16 access = 0) ownrecv required airecv;
+  setAsGM(bool state = 0) required ram broadcast ownrecv airecv;
 };
 
 dclass MagicWordManager : DistributedObject {
-  sendMagicWord(string, uint32) airecv clsend;
-  sendMagicWordResponse(string);
+  sendMagicWord(string word, uint32 targetId, bool execute) airecv clsend;
+  sendMagicWordResponse(string response);
 };
 
 dclass OtpAvatarManager : DistributedObject {
   online();
-  requestAvatarList(uint32) airecv clsend;
-  rejectAvatarList(uint32);
-  avatarListResponse(blob);
-  requestAvatarSlot(uint32, uint32, uint8) clsend airecv;
-  rejectAvatarSlot(uint32, uint32, uint8);
-  avatarSlotResponse(uint32, uint8);
-  requestPlayAvatar(uint32, uint32, uint32) clsend airecv;
-  rejectPlayAvatar(uint32, uint32);
-  playAvatarResponse(uint32, uint32, uint8, uint8);
-  rejectCreateAvatar(uint32);
-  createAvatarResponse(uint32, uint32, uint8, uint8);
-  requestRemoveAvatar(uint32, uint32, uint32, string(0-256)) airecv clsend;
-  rejectRemoveAvatar(uint32);
-  removeAvatarResponse(uint32, uint32);
-  requestShareAvatar(uint32, uint32, uint32, uint8) airecv clsend;
-  rejectShareAvatar(uint32);
-  shareAvatarResponse(uint32, uint32, uint8);
+  requestAvatarList(uint32 todo0) airecv clsend;
+  rejectAvatarList(uint32 result);
+  avatarListResponse(blob pickleData);
+  requestAvatarSlot(uint32 todo0, uint32 todo1, uint8 todo2) clsend airecv;
+  rejectAvatarSlot(uint32 reasonId, uint32 subId, uint8 slot);
+  avatarSlotResponse(uint32 subId, uint8 slot);
+  requestPlayAvatar(uint32 todo0, uint32 todo1, uint32 todo2) clsend airecv;
+  rejectPlayAvatar(uint32 reasonId, uint32 avatarId);
+  playAvatarResponse(uint32 avatarId, uint32 subId, uint8 access, uint8 founder);
+  rejectCreateAvatar(uint32 result);
+  createAvatarResponse(uint32 avatarId, uint32 subId, uint8 access, uint8 founder);
+  requestRemoveAvatar(uint32 todo0, uint32 todo1, uint32 todo2, string(0-256) todo3) airecv clsend;
+  rejectRemoveAvatar(uint32 reasonId);
+  removeAvatarResponse(uint32 avatarId, uint32 subId);
+  requestShareAvatar(uint32 todo0, uint32 todo1, uint32 todo2, uint8 todo3) airecv clsend;
+  rejectShareAvatar(uint32 reasonId);
+  shareAvatarResponse(uint32 avatarId, uint32 subId, uint8 shared);
 };
 
 dclass ChatAgent : DistributedObject {
-  adminChat(uint32, string);
-  chatMessage(string(0-256)) clsend;
+  adminChat(uint32 aboutId, string message);
+  chatMessage(string(0-256) message) clsend;
 };
 
 dclass FriendManager : DistributedObject {
-  friendQuery(int32) airecv clsend;
-  cancelFriendQuery(int32) airecv clsend;
-  inviteeFriendConsidering(int8, int32) airecv clsend;
-  inviteeFriendResponse(int8, int32) airecv clsend;
-  inviteeAcknowledgeCancel(int32) airecv clsend;
-  friendConsidering(int8, int32);
-  friendResponse(int8, int32);
-  inviteeFriendQuery(int32, string, blob, int32);
-  inviteeCancelFriendQuery(int32);
+  friendQuery(int32 requested) airecv clsend;
+  cancelFriendQuery(int32 context) airecv clsend;
+  inviteeFriendConsidering(int8 yesNo, int32 context) airecv clsend;
+  inviteeFriendResponse(int8 response, int32 context) airecv clsend;
+  inviteeAcknowledgeCancel(int32 context) airecv clsend;
+  friendConsidering(int8 yesNoAlready, int32 context);
+  friendResponse(int8 yesNoMaybe, int32 context);
+  inviteeFriendQuery(int32 inviterId, string inviterName, blob inviterDna, int32 context);
+  inviteeCancelFriendQuery(int32 context);
   requestSecret() airecv clsend;
-  requestSecretResponse(int8, string);
-  submitSecret(string(0-256)) airecv clsend;
-  submitSecretResponse(int8, int32);
+  requestSecretResponse(int8 result, string secret);
+  submitSecret(string(0-256) secret) airecv clsend;
+  submitSecretResponse(int8 result, int32 avId);
 };
 
 struct FriendInfo {
@@ -368,131 +363,131 @@ dclass LeaderBoard : LeaderBoardReceiver {
 
 dclass GuildManager : DistributedObject, LeaderBoardReceiver, TalkPath_group {
   online();
-  guildRejectInvite(uint32, uint32);
-  invitationFrom(uint32, string, uint32, string);
-  requestInvite(uint32) airecv clsend;
+  guildRejectInvite(uint32 avatarId, uint32 reason);
+  invitationFrom(uint32 avatarId, string avatarName, uint32 guildId, string guildName);
+  requestInvite(uint32 todo0) airecv clsend;
   memberList() airecv clsend;
   createGuild() airecv clsend;
   acceptInvite() airecv clsend;
   declineInvite() airecv clsend;
-  setWantName(string(0-256)) airecv clsend;
-  removeMember(uint32) airecv clsend;
-  changeRank(uint32, uint8) airecv clsend;
-  changeRankAvocate(uint32) airecv clsend;
+  setWantName(string(0-256) newName) airecv clsend;
+  removeMember(uint32 avatarId) airecv clsend;
+  changeRank(uint32 avatarId, uint8 rank) airecv clsend;
+  changeRankAvocate(uint32 avatarId) airecv clsend;
   statusRequest() airecv clsend;
   requestLeaderboardTopTen() airecv clsend;
-  guildStatusUpdate(uint32, string(0-256), uint8);
-  guildNameReject(uint32);
-  guildNameChange(string, uint8);
-  receiveMember(MemberInfo);
+  guildStatusUpdate(uint32 guildId, string(0-256) guildName, uint8 guildRank);
+  guildNameReject(uint32 guildId);
+  guildNameChange(string guildName, uint8 changeStatus);
+  receiveMember(MemberInfo member);
   receiveMembersDone();
-  guildAcceptInvite(uint32);
-  guildDeclineInvite(uint32);
-  updateRep(uint32, uint32);
-  leaderboardTopTen(leaderBoardRecord []);
-  recvAvatarOnline(uint32, string, uint32, uint32);
-  recvAvatarOffline(uint32, string);
-  sendChat(string(0-256), uint8, uint32) airecv clsend;
-  sendWLChat(string(0-256), uint8, uint32) airecv clsend;
-  sendSC(uint16) airecv clsend;
-  sendSCQuest(uint16, uint16, uint16) airecv clsend;
-  recvChat(uint32, string, uint8, uint32);
-  recvWLChat(uint32, string, uint8, uint32);
-  recvSC(uint32, uint16);
-  recvSCQuest(uint32, uint16, uint16, uint16);
+  guildAcceptInvite(uint32 avatarId);
+  guildDeclineInvite(uint32 todo0);
+  updateRep(uint32 todo0, uint32 todo1);
+  leaderboardTopTen(leaderBoardRecord stuff[]);
+  recvAvatarOnline(uint32 avatarId, string avatarName, uint32 bandManagerId, uint32 bandId);
+  recvAvatarOffline(uint32 avatarId, string avatarName);
+  sendChat(string(0-256) todo0, uint8 todo1, uint32 todo2) airecv clsend;
+  sendWLChat(string(0-256) todo0, uint8 todo1, uint32 todo2) airecv clsend;
+  sendSC(uint16 msgIndex) airecv clsend;
+  sendSCQuest(uint16 questInt, uint16 msgType, uint16 taskNum) airecv clsend;
+  recvChat(uint32 todo0, string todo1, uint8 todo2, uint32 todo3);
+  recvWLChat(uint32 todo0, string todo1, uint8 todo2, uint32 todo3);
+  recvSC(uint32 senderId, uint16 msgIndex);
+  recvSCQuest(uint32 senderId, uint16 questInt, uint16 msgType, uint16 taskNum);
   sendTokenRequest() airecv clsend;
-  recvTokenGenerated(string);
-  recvTokenInviteValue(string, int8);
-  sendTokenForJoinRequest(string(0-256), string(0-256)) airecv clsend;
-  recvTokenRedeemMessage(string);
-  recvTokenRedeemedByPlayerMessage(string);
-  sendTokenRValue(string(0-256), int8) airecv clsend;
+  recvTokenGenerated(string todo0);
+  recvTokenInviteValue(string tokenValue, int8 preExistPerm);
+  sendTokenForJoinRequest(string(0-256) token, string(0-256) name) airecv clsend;
+  recvTokenRedeemMessage(string guildName);
+  recvTokenRedeemedByPlayerMessage(string redeemerName);
+  sendTokenRValue(string(0-256) todo0, int8 todo1) airecv clsend;
   sendPermToken() airecv clsend;
   sendNonPermTokenCount() airecv clsend;
-  recvPermToken(string);
-  recvNonPermTokenCount(uint8);
-  sendClearTokens(uint8) airecv clsend;
-  sendAvatarBandId(uint32, uint32, uint32);
-  recvMemberAdded(MemberInfo, uint32, string);
+  recvPermToken(string token);
+  recvNonPermTokenCount(uint8 tCount);
+  sendClearTokens(uint8 todo0) airecv clsend;
+  sendAvatarBandId(uint32 todo0, uint32 todo1, uint32 todo2);
+  recvMemberAdded(MemberInfo memberInfo, uint32 inviterId, string inviterName);
   notifyGuildKicksMaxed();
-  recvMemberRemoved(uint32, uint32, string, string);
-  recvMemberUpdateName(uint32, string);
-  recvMemberUpdateRank(uint32, uint32, string, string, uint8, bool);
-  recvMemberUpdateBandId(uint32, uint32, uint32);
-  avatarOnline(uint32, uint16);
-  avatarOffline(uint32);
-  reflectTeleportQuery(uint32, uint32, uint32, uint32, uint32) clsend airecv;
-  teleportQuery(uint32, uint32, uint32, uint32, uint32);
-  reflectTeleportResponse(uint32, int8, uint32, uint32, uint32) clsend airecv;
-  teleportResponse(uint32, int8, uint32, uint32, uint32);
-  requestGuildMatesList(uint32, uint32, uint32);
-  updateAvatarName(uint32, string);
-  avatarDeleted(uint32);
+  recvMemberRemoved(uint32 avatarId, uint32 senderId, string avatarName, string senderName);
+  recvMemberUpdateName(uint32 todo0, string todo1);
+  recvMemberUpdateRank(uint32 avatarId, uint32 senderId, string avatarName, string senderName, uint8 rank, bool promote);
+  recvMemberUpdateBandId(uint32 avatarId, uint32 bandManagerId, uint32 bandId);
+  avatarOnline(uint32 todo0, uint16 todo1);
+  avatarOffline(uint32 todo0);
+  reflectTeleportQuery(uint32 todo0, uint32 todo1, uint32 todo2, uint32 todo3, uint32 todo4) clsend airecv;
+  teleportQuery(uint32 requesterId, uint32 requesterBandMgrId, uint32 requesterBandId, uint32 requesterGuildId, uint32 requesterShardId);
+  reflectTeleportResponse(uint32 todo0, int8 todo1, uint32 todo2, uint32 todo3, uint32 todo4) clsend airecv;
+  teleportResponse(uint32 responderId, int8 available, uint32 shardId, uint32 instanceDoId, uint32 areaDoId);
+  requestGuildMatesList(uint32 todo0, uint32 todo1, uint32 todo2);
+  updateAvatarName(uint32 todo0, string todo1);
+  avatarDeleted(uint32 todo0);
 };
 
 dclass AvatarFriendsManager : DistributedObject {
   online();
-  requestInvite(uint32) airecv clsend;
-  friendConsidering(uint32) airecv clsend;
-  invitationFrom(uint32, string);
-  retractInvite(uint32);
-  rejectInvite(uint32, uint32);
-  requestRemove(uint32) airecv clsend;
-  rejectRemove(uint32, uint32);
-  updateAvatarFriend(uint32, AvatarFriendInfo);
-  removeAvatarFriend(uint32);
-  updateAvatarName(uint32, string);
-  avatarOnline(uint32, uint32, string, bool, bool, string, string);
-  avatarOffline(uint32);
+  requestInvite(uint32 avId) airecv clsend;
+  friendConsidering(uint32 avId) airecv clsend;
+  invitationFrom(uint32 avId, string avatarName);
+  retractInvite(uint32 avId);
+  rejectInvite(uint32 avId, uint32 reason);
+  requestRemove(uint32 avId) airecv clsend;
+  rejectRemove(uint32 avId, uint32 reason);
+  updateAvatarFriend(uint32 avId, AvatarFriendInfo info);
+  removeAvatarFriend(uint32 avId);
+  updateAvatarName(uint32 todo0, string todo1);
+  avatarOnline(uint32 todo0, uint32 todo1, string todo2, bool todo3, bool todo4, string todo5, string todo6);
+  avatarOffline(uint32 avId);
 };
 
 dclass PlayerFriendsManager : DistributedObject, TalkPath_account {
-  requestInvite(uint32, uint32, uint8) airecv clsend;
-  invitationFrom(uint32, string);
-  retractInvite(uint32);
-  invitationResponse(uint32, uint16, uint32);
-  requestDecline(uint32, uint32) airecv clsend;
-  requestDeclineWithReason(uint32, uint32, uint32) airecv clsend;
-  requestRemove(uint32, uint32) airecv clsend;
-  secretResponse(string);
-  rejectSecret(string);
-  rejectUseSecret(string);
-  updatePlayerFriend(uint32, FriendInfo, uint8);
-  removePlayerFriend(uint32);
+  requestInvite(uint32 todo0, uint32 todo1, uint8 todo2) airecv clsend;
+  invitationFrom(uint32 playerId, string avatarName);
+  retractInvite(uint32 playerId);
+  invitationResponse(uint32 playerId, uint16 respCode, uint32 context);
+  requestDecline(uint32 todo0, uint32 todo1) airecv clsend;
+  requestDeclineWithReason(uint32 todo0, uint32 todo1, uint32 todo2) airecv clsend;
+  requestRemove(uint32 todo0, uint32 todo1) airecv clsend;
+  secretResponse(string secret);
+  rejectSecret(string reason);
+  rejectUseSecret(string reason);
+  updatePlayerFriend(uint32 id, FriendInfo info, uint8 isNewFriend);
+  removePlayerFriend(uint32 id);
 };
 
 dclass SnapshotDispatcher : DistributedObject {
   online();
-  requestRender(uint32);
-  avatarDeleted(uint32);
-  requestNewWork(uint32);
-  errorFetchingAvatar(uint32, uint32);
-  errorRenderingAvatar(uint32, uint32);
-  renderSuccessful(uint32, uint32);
+  requestRender(uint32 todo0);
+  avatarDeleted(uint32 todo0);
+  requestNewWork(uint32 todo0);
+  errorFetchingAvatar(uint32 todo0, uint32 todo1);
+  errorRenderingAvatar(uint32 todo0, uint32 todo1);
+  renderSuccessful(uint32 todo0, uint32 todo1);
 };
 
 dclass SnapshotRenderer : DistributedObject {
   online();
-  requestRender(uint32, uint32, string);
+  requestRender(uint32 todo0, uint32 todo1, string todo2);
 };
 
 dclass SpeedchatRelay : DistributedObject, TalkPath_account {
-  forwardSpeedchat(uint32, uint8, uint32 [], uint32, string(0-256), uint8) clsend;
+  forwardSpeedchat(uint32 todo0, uint8 todo1, uint32 todo2[], uint32 todo3, string(0-256) todo4, uint8 todo5) clsend;
 };
 
 dclass CentralLogger : DistributedObject {
-  sendMessage(string(0-256), string(0-1024), uint32, uint32) clsend;
+  sendMessage(string(0-256) category, string(0-1024) event, uint32 targetDISLId, uint32 targetAvId) clsend;
   logAIGarbage() airecv;
 };
 
 dclass SettingsMgr : DistributedObject {
   requestAllChangedSettings() airecv clsend;
-  settingChange(string, string) airecv;
+  settingChange(string settingName, string valueStr) airecv;
 };
 
 dclass StatusDatabase : DistributedObject {
-  requestOfflineAvatarStatus(uint32 []) airecv clsend;
-  recvOfflineAvatarStatus(uint32, uint32);
+  requestOfflineAvatarStatus(uint32 avIds[]) airecv clsend;
+  recvOfflineAvatarStatus(uint32 avId, uint32 lastOnline);
 };
 
 dclass CallbackObject {

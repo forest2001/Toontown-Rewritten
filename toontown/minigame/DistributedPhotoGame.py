@@ -1481,7 +1481,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
     def constructDG(self):
         self.photoRoot = render.attachNewNode('DG PhotoRoot')
         self.photoRoot.setPos(1.39, 92.91, 2.0)
-        self.bigFlower = loader.loadModel('phase_8/models/props/DG_flower-mod.bam')
+        self.bigFlower = loader.loadModel('phase_8/models/props/DG_flower-mod')
         self.bigFlower.reparentTo(self.photoRoot)
         self.bigFlower.setScale(2.5)
         self.sky = loader.loadModel('phase_3.5/models/props/TT_sky')

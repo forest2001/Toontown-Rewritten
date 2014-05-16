@@ -88,17 +88,17 @@ class DistributedCatchGameAI(DistributedMinigameAI):
     def claimCatch(self, objNum, DropObjTypeId):
         if self.gameFSM.getCurrentState().getName() != 'play':
             return
+        avId = self.air.getAvatarIdFromSender()
         if DropObjTypeId < 0 or DropObjTypeId >= len(CatchGameGlobals.DOTypeId2Name):
-            self.air.writeServerEvent('warning', DropObjTypeId, 'CatchGameAI.claimCatch DropObjTypeId out of range')
+            self.air.writeServerEvent('warning', avId=avId, issue='CatchGameAI.claimCatch DropObjTypeId out of range, was %s' % DropObjTypeId)
             return
         if objNum < 0 or objNum > 5000 or objNum >= 2 * len(self.caughtList):
-            self.air.writeServerEvent('warning', objNum, 'CatchGameAI.claimCatch objNum is too high or negative')
+            self.air.writeServerEvent('warning', avId=avId, issue='CatchGameAI.claimCatch objNum is too high or negative, was %s' % objNum)
             return
         if objNum >= len(self.caughtList):
             self.caughtList += [0] * len(self.caughtList)
         if not self.caughtList[objNum]:
             self.caughtList[objNum] = 1
-            avId = self.air.getAvatarIdFromSender()
             self.sendUpdate('setObjectCaught', [avId, objNum])
             objName = CatchGameGlobals.DOTypeId2Name[DropObjTypeId]
             self.notify.debug('avatar %s caught object %s: %s' % (avId, objNum, objName))

@@ -741,7 +741,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
             goldNode = render.find('**/gold_0' + str(player + 1))
             goldBadge.reparentTo(goldNode)
             for floor in range(numFloors):
-                silverBadge = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_crg_silverTrophy.bam')
+                silverBadge = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_crg_silverTrophy')
                 silverBadge.setScale(1.2)
                 silverNode = render.find('**/silver_0' + str(floor * 4 + (player + 1)))
                 silverBadge.reparentTo(silverNode)

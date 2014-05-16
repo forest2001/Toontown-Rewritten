@@ -197,6 +197,27 @@ CRBootedReasons = {1: 'An unexpected problem has occurred.  Your connection has 
  288: 'Sorry, you have used up all of your available minutes this month.',
  349: 'Sorry, you have used up all of your available minutes this month.'}
 CRBootedReasonUnknownCode = 'An unexpected problem has occurred (error code %s).  Your connection has been lost, but you should be able to connect again and go right back into the game.'
+CRSystemMessages = {
+    # General, generic messages:
+    0: '%s',
+    1: 'ADMIN: %s',
+    2: 'SYSTEM: %s',
+    3: 'Toon HQ: %s',
+    4: 'Toon Council: %s',
+
+    # Maintenance notifications:
+    50: 'SYSTEM: Toontown Rewritten will be closing for an update soon.',
+    51: 'SYSTEM: Toontown Rewritten will be closing for an update in %s minute(s).',
+    52: 'SYSTEM: Toontown Rewritten will be closing for an update in %s second(s).',
+
+    60: 'SYSTEM: The district that you are on will be reset for maintenance soon.',
+    61: 'SYSTEM: The district that you are on will be reset for maintenance in %s minute(s).',
+    62: 'SYSTEM: The district that you are on will be reset for maintenance in %s second(s).',
+
+    # Announcements.
+    100: 'Toon Council: Congratulations! Your Toon name has been approved.',
+    101: 'Toon Council: Sorry, the name you submitted has been rejected.',
+}
 CRTryConnectAgain = '\n\nTry to connect again?'
 CRToontownUnavailable = 'The server appears to be temporarily unavailable, still trying...'
 CRToontownUnavailableCancel = lCancel

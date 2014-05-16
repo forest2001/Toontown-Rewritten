@@ -64,10 +64,10 @@ class DistributedGolfCourseAI(DistributedObjectAI):
     def setAvatarJoined(self):
         avId = self.air.getAvatarIdFromSender()
         if avId not in self.avatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to join a golf game they\'re not in!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to join a golf game they\'re not in!')
             return
         if avId in self.joinedAvatars:
-            self.air.writeServerEvent('suspicious', avId, 'Toon tried to join a golf course twice!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to join a golf course twice!')
             return
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self.forceExit)
         self.joinedAvatars.append(avId)

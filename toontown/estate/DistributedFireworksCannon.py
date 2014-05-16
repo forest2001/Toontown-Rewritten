@@ -55,7 +55,7 @@ class DistributedFireworksCannon(DistributedFireworkShow.DistributedFireworkShow
         DistributedFireworkShow.DistributedFireworkShow.delete(self)
 
     def load(self):
-        self.geom = loader.loadModel('phase_5/models/props/trashcan_TT.bam')
+        self.geom = loader.loadModel('phase_5/models/props/trashcan_TT')
         self.geom.reparentTo(base.cr.playGame.hood.loader.geom)
         self.geom.setScale(0.5)
 

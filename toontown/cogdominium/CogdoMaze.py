@@ -258,10 +258,7 @@ class CogdoMazeFactory:
             for x in range(self.width):
                 ax = (x - halfWidth) * size
                 ay = (y - halfHeight) * size
-                extension = ''
-                if hasattr(getBase(), 'air'):
-                    extension = '.bam'
-                filepath = self.quadrantData[i][0] + extension
+                filepath = self.quadrantData[i][0]
                 angle = self.quadrantData[i][2]
                 m = self._createQuadrant(filepath, i, angle, quadrantUnitSize)
                 m.setPos(ax, ay, 0)
