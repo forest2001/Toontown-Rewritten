@@ -2664,8 +2664,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 from DistributedNPCPartyPersonAI import DistributedNPCPartyPersonAI
                 if isinstance(zoneOwner, (DistributedRacePadAI, DistributedGolfKartAI, DistributedNPCPartyPersonAI)):
                     return True
-                elif zoneOwner in [self.air.partyManager, self.air.estateManager, 'MinigameCreatorAI']:
+                elif zoneOwner in [self.air.estateManager, 'MinigameCreatorAI']:
                     return True
+                elif config.GetBool('want-parties'):
+                    if zoneOwner in [self.air.partyManager]:
+                        return True
                 else:
                     return False
         # Incase for whatever reason we even get to this stage...
