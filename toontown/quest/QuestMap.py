@@ -104,6 +104,7 @@ class QuestMap(DirectFrame):
         DirectFrame.destroy(self)
 
     def putBuildingMarker(self, pos, hpr = (0, 0, 0), mapIndex = None):
+        print pos
         marker = DirectLabel(parent=self.container, text='', text_pos=(-0.05, -0.15), text_fg=(1, 1, 1, 1), relief=None)
         gui = loader.loadModel('phase_4/models/parties/schtickerbookHostingGUI')
         icon = gui.find('**/startPartyButton_inactive')
@@ -122,13 +123,14 @@ class QuestMap(DirectFrame):
         self.buildingMarkers.append(marker)
         iconNP.removeNode()
         gui.removeNode()
-        return
+        # return
 
     def updateQuestInfo(self):
         for marker in self.buildingMarkers:
             marker.destroy()
 
         self.buildingMarkers = []
+        dnaStore = base.cr.playGame.dnaStore
         dnaData = base.cr.playGame.dnaData
         for questIndex in self.av.questPage.quests.keys():
             questDesc = self.av.questPage.quests.get(questIndex)
@@ -157,12 +159,11 @@ class QuestMap(DirectFrame):
                         branchZone = zone - zone % 100
                         finalZone = branchZone + 500 + blockId
                         if npcZone == finalZone:
-                            door = None # Find the door
-                            doorPos = door.getPos()
-                            doorHpr = door.getHpr()
-                            self.putBuildingMarker(doorPos, doorHpr, mapIndex=mapIndex)
+                            building = block.node
+                            # self.putBuildingMarker(building.getPos(), building.getHpr(), mapIndex=mapIndex)
+                            self.putBuildingMarker((-2.3, -4.5, 0), mapIndex=mapIndex)
 
-        return
+        # return
 
     def transformAvPos(self, pos):
         if self.cornerPosInfo is None:
