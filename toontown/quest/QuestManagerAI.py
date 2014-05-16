@@ -26,6 +26,15 @@ class QuestManagerAI:
     def __toonQuestsList2Quests(self, quests):
         return [Quests.getQuest(x[0]) for x in quests]
 
+    def removeBetaQuest(self, toon, rpcmethod):
+        toon.b_setWantBetaKeyQuest(0)
+        dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate(
+            'BETA_KEY_QUEST', toon.DISLid, toon.DISLid,
+            self.air.ourChannel, 0
+        )
+        self.air.send(dg)
+        self.air.rpc.call(rpcmethod, webAccId=toon.getWebAccountId())
+
     def toonKilledCogs(self, toon, suitsKilled, zoneId, activeToons):
         """
         Called in battleExperience to alert the quest system that a toon has
@@ -262,13 +271,7 @@ class QuestManagerAI:
             # If they take out the quest, we need to tell the web server that they took it
             # out and also tell the CSMUD not to issue any other toons with the quest for
             # the current session (via the Account object's BETA_KEY_QUEST field).
-            toon.b_setWantBetaKeyQuest(0)
-            dg = self.air.dclassesByName['AccountAI'].aiFormatUpdate(
-                'BETA_KEY_QUEST', toon.DISLid, toon.DISLid,
-                self.air.ourChannel, 0
-            )
-            self.air.send(dg)
-            self.air.rpc.call('lockBetaKey', webAccId=toon.getWebAccountId())
+            self.removeBetaQuest(toon, 'lockBetaKey')
         self.npcGiveQuest(npc, toon, questId, rewardId, toNpcId, storeReward=True)
 
     def avatarChoseTrack(self, toonId, npc, questId, trackId):
