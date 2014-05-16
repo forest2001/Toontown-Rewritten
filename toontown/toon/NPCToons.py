@@ -110,7 +110,7 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
             return
         npc = DistributedNPCPartyPersonAI.DistributedNPCPartyPersonAI(air, npcId)
     elif type == NPC_SPECIALQUESTGIVER:
-        return False 
+        return False
         npc = DistributedNPCSpecialQuestGiverAI.DistributedNPCSpecialQuestGiverAI(air, npcId)
     elif type == NPC_FLIPPYTOONHALL:
         npc = DistributedNPCFlippyInToonHallAI.DistributedNPCFlippyInToonHallAI(air, npcId)
@@ -231,6 +231,25 @@ NPCToonDict = {
          'm',
          1,
          NPC_REGULAR),
+ 20001: (-1,
+        TTLocalizer.TutorialHQOfficerName,
+        ('dls',
+         'ms',
+         'm',
+         'm',
+         6,
+         0,
+         6,
+         6,
+         0,
+         10,
+         0,
+         10,
+         0,
+         9),
+         'm',
+         1,
+         NPC_HQ),
  999: (-1,
        lnames[999],
        'r',
@@ -701,7 +720,7 @@ NPCToonDict = {
          14),
         'm',
         0,
-        NPC_REGULAR),        
+        NPC_REGULAR),
  2101: (2601,
         lnames[2101],
         ('rll',
