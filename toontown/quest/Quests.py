@@ -18618,7 +18618,7 @@ def getNextRewards(numChoices, tier, av):
     optRewards = list(getOptionalRewardsInTier(tier))
     if av.getGameAccess() == OTPGlobals.AccessFull and tier == TT_TIER + 3:
         optRewards = []
-    if av.getWantBetaKeyQuest():
+    if av.getWantBetaKeyQuest() and tier >= DG_TIER:
         # We want to return the Beta Key quest to them, as an optional task!
         # This can occur during the final task in TTC (getting the 16th anim
         # for the Toon-Up/Sound gag track), because we want to be nice. :)
