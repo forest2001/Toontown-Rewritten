@@ -231,7 +231,7 @@ NPCToonDict = {
          'm',
          1,
          NPC_REGULAR),
- 20001: (-1,
+ 20002: (-1,
         TTLocalizer.TutorialHQOfficerName,
         ('dls',
          'ms',
