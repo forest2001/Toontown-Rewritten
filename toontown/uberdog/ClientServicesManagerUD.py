@@ -691,7 +691,8 @@ class LoadAvatarFSM(AvatarOperationFSM):
         self.csm.air.sendActivate(self.avId, 0, 0,
                                   self.csm.air.dclassesByName['DistributedToonUD'],
                                   {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)],
-                                   'setWantBetaKeyQuest': [self.account.get('BETA_KEY_QUEST', 0)]})
+                                   'setWantBetaKeyQuest': [self.account.get('BETA_KEY_QUEST', 0)],
+                                   'setWebAccountId': [self.account.get('ACCOUNT_ID', 0)]})
 
         # Next, add them to the avatar channel:
         dg = PyDatagram()
