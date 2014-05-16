@@ -9,19 +9,107 @@ from toontown.suit.DistributedTutorialSuitAI import DistributedTutorialSuitAI
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.building.HQBuildingAI import HQBuildingAI
 import types
+from toontown.building import FADoorCodes
+from direct.fsm.FSM import FSM
 
 class TZoneStruct:
     branch = 0
     street = 0
     shop = 0
     hq = 0
+    
+    
+class ToontorialBuildingAI:
+    def __init__(self, air, street, interior, npcId):
+    
+        self.air = air
+        
+        self.interior = DistributedTutorialInteriorAI(self.air, interior, npcId)
+        
+        self.interior.generateWithRequired(interior)
+        self.door0 = DistributedDoorAI.DistributedDoorAI(self.air, 2, DoorTypes.EXT_STANDARD, doorIndex=0)
+        self.insideDoor0 = DistributedDoorAI.DistributedDoorAI(self.air, 0, DoorTypes.INT_STANDARD, doorIndex=0)
+        self.door0.setOtherDoor(self.insideDoor0)
+        self.insideDoor0.setOtherDoor(self.door0)
+        self.door0.zoneId = street
+        self.insideDoor0.zoneId = interior
+        self.door0.generateWithRequired(street)
+        self.door0.sendUpdate('setDoorIndex', [self.door0.getDoorIndex()])
+        self.insideDoor0.generateWithRequired(interior)
+        self.insideDoor0.sendUpdate('setDoorIndex', [self.insideDoor0.getDoorIndex()])
+        
+    def cleanup(self):
+        self.door0.requestDelete()
+        self.insideDoor0.requestDelete()
+        self.interior.requestDelete()
+
+    
+class TutorialFSM(FSM):
+    def __init__(self, air, zones, avId):
+        FSM.__init__(self, 'TutorialFSM')
+        self.avId = avId
+        self.zones = zones
+        self.air = air
+        
+        npcDesc = NPCToons.NPCToonDict.get(20000)
+        self.tom = NPCToons.createNPC(self.air, 20000, npcDesc, self.zones.shop, 0)
+        self.tom.setTutorial(1)
+        
+        self.flippy = None
+        
+        self.building = ToontorialBuildingAI(self.air, zones.street, zones.shop, self.tom.getDoId())
+        self.hq = HQBuildingAI(self.air, zones.street, zones.hq, 1)
+        
+        self.forceTransition('Introduction')
+        
+    def enterIntroduction(self):        
+        self.building.insideDoor0.setDoorLock(FADoorCodes.TALK_TO_TOM)
+        
+    def exitIntroduction(self):
+        self.building.insideDoor0.setDoorLock(FADoorCodes.UNLOCKED)
+        
+    def enterBattle(self):
+        self.suit = DistributedTutorialSuitAI(self.air)
+        self.suit.generateWithRequired(self.zones.street)
+        self.building.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_TOM)
+        self.hq.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
+                
+    def enterHQ(self):
+        self.building.door0.setDoorLock(FADoorCodes.TALK_TO_HQ_TOM)
+        self.hq.door0.setDoorLock(FADoorCodes.UNLOCKED)
+        self.hq.insideDoor0.setDoorLock(FADoorCodes.TALK_TO_HQ)
+        self.hq.insideDoor1.setDoorLock(FADoorCodes.TALK_TO_HQ)
+        
+    def enterTunnel(self):
+        npcDesc = NPCToons.NPCToonDict.get(20001)
+        self.flippy = NPCToons.createNPC(self.air, 20001, npcDesc, self.zones.street, 0)
+        
+        self.hq.insideDoor1.setDoorLock(FADoorCodes.UNLOCKED)
+        self.hq.door1.setDoorLock(FADoorCodes.GO_TO_PLAYGROUND)
+        self.hq.insideDoor0.setDoorLock(FADoorCodes.WRONG_DOOR_HQ)
+        
+    def enterCleanUp(self):
+    
+        #deallocate all the zones
+        
+        if self.flippy:
+            self.flippy.requestDelete()
+        
+        self.building.cleanup()
+        self.hq.cleanup()
+        self.tom.requestDelete()
+        self.air.deallocateZone(zones.branch)
+        self.air.deallocateZone(zones.street)
+        self.air.deallocateZone(zones.shop)
+        self.air.deallocateZone(zones.hq)
+        del self.air.tutorialManager.avId2fsm[self.avId]
 
 class TutorialManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("TutorialManagerAI")
 
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
-        self.avId2Zones = {}
+        self.avId2fsm = {}
 
     def requestTutorial(self):
         avId = self.air.getAvatarIdFromSender()
@@ -32,37 +120,16 @@ class TutorialManagerAI(DistributedObjectAI):
         zones.shop = self.air.allocateZone()
         zones.hq = self.air.allocateZone()
         
-        npcDesc = NPCToons.NPCToonDict.get(20000)
-        npc = NPCToons.createNPC(self.air, 20000, npcDesc, zones.shop, 0)
-        npc.setTutorial(1)
+        self.avId2fsm[avId] = TutorialFSM(self.air, zones, avId)
         
-        int = DistributedTutorialInteriorAI(self.air, zones.shop, npc.getDoId())
-        int.generateWithRequired(zones.shop)
-        
-        door0 = DistributedDoorAI.DistributedDoorAI(self.air, 2, DoorTypes.EXT_STANDARD, doorIndex=0)
-        insideDoor0 = DistributedDoorAI.DistributedDoorAI(self.air, 0, DoorTypes.INT_STANDARD, doorIndex=0)
-        door0.setOtherDoor(insideDoor0)
-        insideDoor0.setOtherDoor(door0)
-        door0.zoneId = zones.street
-        insideDoor0.zoneId = zones.shop
-        door0.generateWithRequired(zones.street)
-        door0.sendUpdate('setDoorIndex', [door0.getDoorIndex()])
-        insideDoor0.generateWithRequired(zones.shop)
-        insideDoor0.sendUpdate('setDoorIndex', [insideDoor0.getDoorIndex()])
-        
-        hq = HQBuildingAI(self.air, zones.street, zones.hq, 1)
-        
-        
-        suit = DistributedTutorialSuitAI(self.air)
-        suit.generateWithRequired(zones.street)
-
         # Toontorial TODO list:
         #  spawn HQ Harry
-        #  prevent access to zones early      
-        #  Spawn Flippy after battle
-        #  cleanup zones and objects
         #  visual fixes
-        #  assign initial quest in QMAI rather than presenting choice
+        #  return control to player after battle
+        #  actually set the state to tunnel after talking to Harry
+        # account for unexpected exit
+        # check to make sure toon is eligible for toontorial before sending them to toontorial
+        # reset track progress on enter
         
         self.d_enterTutorial(avId, zones.street, zones.street, zones.shop, zones.hq) #hackfix lololol        
 

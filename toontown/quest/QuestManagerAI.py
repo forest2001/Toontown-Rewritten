@@ -212,6 +212,14 @@ class QuestManagerAI:
             npc.rejectAvatar(toonId)
             return
             
+        # Are we in the Toontorial?
+        if toonId in self.air.tutorialManager.avId2fsm.keys():
+            # Are we speaking to Tom?
+            if toon.getRewardHistory()[0] == 0:
+                self.npcGiveQuest(npc, toon, 101, Quests.findFinalRewardId(101)[0], Quests.getQuestToNpcId(101)) # FIXME please, i have no idea if this is correct
+                self.air.tutorialManager.avId2fsm[toonId].demand('Battle')
+                return
+            
         # Are they eligible for a tier upgrade?
         tier = toon.getRewardHistory()[0]
         if Quests.avatarHasAllRequiredRewards(toon, tier):
