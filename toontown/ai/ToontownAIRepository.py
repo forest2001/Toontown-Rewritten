@@ -1,6 +1,7 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 from toontown.distributed.ToontownDistrictStatsAI import ToontownDistrictStatsAI
+from toontown.distributed.ShardStatus import ShardStatusSender
 from otp.ai.TimeManagerAI import TimeManagerAI
 from otp.ai.MagicWordManagerAI import MagicWordManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
@@ -15,6 +16,7 @@ from direct.distributed.PyDatagram import *
 from otp.ai.AIZoneData import *
 from toontown.dna import DNAParser
 from toontown.dna.DNASpawnerAI import DNASpawnerAI
+from direct.stdpy.file import open
 
 # Friends!
 from otp.friends.FriendManagerAI import FriendManagerAI
@@ -23,8 +25,9 @@ from otp.friends.FriendManagerAI import FriendManagerAI
 from toontown.estate.EstateManagerAI import EstateManagerAI
 
 # Par-tay!
-from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
-from otp.distributed.OtpDoGlobals import *
+if simbase.config.GetBool('want-parties', True):
+    from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+    from otp.distributed.OtpDoGlobals import *
 
 # Fireworks!
 from direct.task import Task
@@ -79,7 +82,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.holidayManager = HolidayManagerAI()
         
         self.fishManager = FishManagerAI()
-        self.questManager = QuestManagerAI()
+        self.questManager = QuestManagerAI(self)
         self.cogPageManager = CogPageManagerAI()
         self.factoryMgr = FactoryManagerAI(self)
         self.mintMgr = MintManagerAI(self)
@@ -88,6 +91,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.promotionMgr = PromotionManagerAI(self)
         self.cogSuitMgr = CogSuitManagerAI(self)
         self.suitInvasionManager = SuitInvasionManagerAI(self)
+
+        self.statusSender = ShardStatusSender(self)
 
         self.dnaStoreMap = {}
 
@@ -99,6 +104,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         
 
     def handleConnected(self):
+        ToontownInternalRepository.handleConnected(self)
         self.districtId = self.allocateChannel()
         self.distributedDistrict = ToontownDistrictAI(self)
         self.distributedDistrict.setName(self.districtName)
@@ -116,11 +122,15 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.distributedDistrict.b_setAvailable(1)
 
+        self.statusSender.start()
+
     def incrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)
+        self.statusSender.sendStatus()
 
     def decrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() - 1)
+        self.statusSender.sendStatus()
 
     def allocateZone(self, owner=None):
         zoneId = self.zoneAllocator.allocate()
@@ -160,11 +170,12 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
 
-        self.partyManager = DistributedPartyManagerAI(self)
-        self.partyManager.generateWithRequired(2)
+        if simbase.config.GetBool('want-parties', True):
+            self.partyManager = DistributedPartyManagerAI(self)
+            self.partyManager.generateWithRequired(2)
 
-        # setup our view of the global party manager ud
-        self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+            # setup our view of the global party manager ud
+            self.globalPartyMgr = self.generateGlobalObject(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
 
         self.estateManager = EstateManagerAI(self)
         self.estateManager.generateWithRequired(2)
@@ -236,7 +247,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         return 'phase_%s/dna/%s_%s.xml' % (phase, hood, zoneId)
 
     def loadDNA(self, filename):
-        with open('resources/' + filename) as f:
+        with open('/' + filename) as f:
             tree = DNAParser.parse(f)
 
         return tree

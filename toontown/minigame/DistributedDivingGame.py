@@ -72,7 +72,7 @@ class DistributedDivingGame(DistributedMinigame):
         loadBase = 'phase_4/models/minigames/'
         loadBaseShip = 'phase_5/models/props/'
         self.sndAmbience = base.loadSfx('phase_4/audio/sfx/AV_ambient_water.ogg')
-        self.environModel = loader.loadModel(loadBase + 'diving_game.bam')
+        self.environModel = loader.loadModel(loadBase + 'diving_game')
         self.boatModel = self.environModel.find('**/boat')
         self.skyModel = self.environModel.find('**/sky')
         self.waterModel = self.environModel.find('**/seawater')
@@ -91,7 +91,7 @@ class DistributedDivingGame(DistributedMinigame):
         bubbleModel.setY(1.0)
         bubbleModel = self.environModel.find('**/bubbles5')
         bubbleModel.setY(1.0)
-        self.mapModel = loader.loadModel(loadBase + 'diving_game.bam')
+        self.mapModel = loader.loadModel(loadBase + 'diving_game')
         boatMap = self.mapModel.find('**/boat')
         skyMap = self.mapModel.find('**/sky')
         frontMap = self.mapModel.find('**/sea_front')
@@ -400,7 +400,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.TIME = pattern[2]
         loadBase = 'phase_4/models/char/'
         for i in range(self.NUMCRABS):
-            self.crabs.append(Actor.Actor(loadBase + 'kingCrab-zero.bam', {'anim': loadBase + 'kingCrab-swimLOOP.bam'}))
+            self.crabs.append(Actor.Actor(loadBase + 'kingCrab-zero', {'anim': loadBase + 'kingCrab-swimLOOP'}))
 
         for i in range(len(self.crabs)):
             crab = self.crabs[i]
@@ -436,7 +436,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.treasures = []
         self.chestIcons = {}
         for i in range(self.NUMTREASURES):
-            self.chestIcons[i] = loader.loadModel(loadBase + 'treasure_chest.bam')
+            self.chestIcons[i] = loader.loadModel(loadBase + 'treasure_chest')
             self.chestIcons[i].reparentTo(self.mapModel)
             self.chestIcons[i].setScale(1.5)
             treasure = DivingTreasure.DivingTreasure(i)

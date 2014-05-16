@@ -265,7 +265,7 @@ class DistributedInvasionSuitAI(DistributedSuitBaseAI, InvasionSuitBase, FSM):
         avId = self.air.getAvatarIdFromSender()
         toon = self.air.doId2do.get(avId)
         if not toon:
-            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedInvasionSuitAI.takeShakerDamage Nonexistent Toon tried to get hit!')
             return
         if toon.getHp() > 0:
             toon.takeDamage(damage)

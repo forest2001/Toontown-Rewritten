@@ -284,7 +284,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         toon = self.air.doId2do.get(avId)
         if not toon:
-            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to get hit!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Nonexistent Toon tried to get hit!')
             return
         # If the cog's attack is higher than the amount of laff they have, we'll only take away what they have.
         # If the attack is 5 and the toon has 3 laff, we'll only take away 3 laff. This mostly prevents toons going under 0 Laff.
@@ -301,11 +301,11 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         toon = self.air.doId2do.get(doId)
         if not toon:
-            self.air.writeServerEvent('suspicious', avId, 'Hit a nonexistent Toon with a pie!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Hit a nonexistent Toon with a pie!')
             return
         from toontown.toon.DistributedToonAI import DistributedToonAI
         if not isinstance(toon, DistributedToonAI):
-            self.air.writeServerEvent('suspicious', avId, 'Hit a non-Toon with a pie through healToon()!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Hit a non-Toon with a pie through healToon()!')
             return
         # Just to be safe, let's check if the Toon has less than 0 laff.
         # Sometimes this happens from multiple cog hits at once.
@@ -368,7 +368,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
         avId = self.air.getAvatarIdFromSender()
         toon = self.air.doId2do.get(avId)
         if not toon:
-            self.air.writeServerEvent('suspicious', avId, 'Nonexistent Toon tried to throw a pie!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Nonexistent Toon tried to throw a pie!')
             return
 
         suit = self.air.doId2do.get(doId)
@@ -408,7 +408,7 @@ class DistributedSafezoneInvasionAI(DistributedObjectAI, FSM):
 @magicWord(category=CATEGORY_DEBUG, types=[str, str])
 def szInvasion(cmd, arg=''):
     if not simbase.config.GetBool('want-doomsday', False):
-        simbase.air.writeServerEvent('aboose', spellbook.getInvoker().doId, 'Attempted to initiate doomsday while it is disabled.')
+        simbase.air.writeServerEvent('warning', avId=spellbook.getInvoker().doId, issue='Attempted to initiate doomsday while it is disabled.')
         return 'ABOOSE! Doomsday is currently disabled. Your request has been logged.'
         
     invasion = simbase.air.doFind('SafezoneInvasion')

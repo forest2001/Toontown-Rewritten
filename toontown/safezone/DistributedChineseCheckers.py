@@ -24,7 +24,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         DistributedNode.DistributedNode.__init__(self, cr)
         self.cr = cr
         self.reparentTo(render)
-        self.boardNode = loader.loadModel('phase_6/models/golf/checker_game.bam')
+        self.boardNode = loader.loadModel('phase_6/models/golf/checker_game')
         self.boardNode.reparentTo(self)
         self.board = ChineseCheckersBoard()
         self.playerTags = render.attachNewNode('playerTags')
@@ -149,7 +149,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             tempList[x].node().addSolid(CollisionSphere(0, 0, 0, 0.115))
 
         for z in self.locatorList:
-            y = loader.loadModel('phase_6/models/golf/checker_marble.bam')
+            y = loader.loadModel('phase_6/models/golf/checker_marble')
             z.setColor(0, 0, 0, 0)
             y.reparentTo(z)
 
@@ -301,7 +301,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.playerSeats = playerPos
         for x in range(6):
             pos = self.table.seats[x].getPos(render)
-            renderedPeice = loader.loadModel('phase_6/models/golf/checker_marble.bam')
+            renderedPeice = loader.loadModel('phase_6/models/golf/checker_marble')
             renderedPeice.reparentTo(self.playerTags)
             renderedPeice.setPos(pos)
             renderedPeice.setScale(1.5)
@@ -667,7 +667,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
 
     def animatePeice(self, tableState, moveList):
         messenger.send('wakeup')
-        gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/checker_marble.bam')
+        gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/checker_marble')
         gamePeiceForAnimation.setColor(self.locatorList[moveList[0]].getColor())
         gamePeiceForAnimation.reparentTo(self.boardNode)
         gamePeiceForAnimation.setPos(self.locatorList[moveList[0]].getPos())

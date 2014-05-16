@@ -205,7 +205,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             return
         avId = self.air.getAvatarIdFromSender()
         self.notify.debug('BASE: setAvatarJoined: avatar id joined: ' + str(avId))
-        self.air.writeServerEvent('minigame_joined', avId, '%s|%s' % (self.minigameId, self.trolleyZone))
+        self.air.writeServerEvent('minigame-joined', avId=avId, minigameId=self.minigameId, trolleyZone=self.trolleyZone)
         self.stateDict[avId] = JOINED
         self.notify.debug('BASE: setAvatarJoined: new states: ' + str(self.stateDict))
         self.__barrier.clear(avId)
@@ -317,7 +317,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
                 score = 0
                 logEvent = True
             if logEvent:
-                self.air.writeServerEvent('suspicious', avId, 'got %s jellybeans playing minigame %s in zone %s' % (score, self.minigameId, self.getSafezoneId()))
+                self.air.writeServerEvent('suspicious', avId=avId, issue='got %s jellybeans playing minigame %s in zone %s' % (score, self.minigameId, self.getSafezoneId()))
             scoreList.append(score)
 
         self.requestDelete()
@@ -423,7 +423,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
         return MinigameGlobals.getSafezoneId(self.trolleyZone)
 
     def logPerfectGame(self, avId):
-        self.air.writeServerEvent('perfectMinigame', avId, '%s|%s|%s' % (self.minigameId, self.trolleyZone, self.avIdList))
+        self.air.writeServerEvent('perfect-minigame', avId=avId, minigameId=self.minigameId, trolleyZone=self.trolleyZone, avIdList=self.avIdList)
 
     def logAllPerfect(self):
         for avId in self.avIdList:

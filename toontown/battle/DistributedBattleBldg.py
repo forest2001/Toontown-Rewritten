@@ -158,7 +158,7 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
         self.clearInterval(self.faceOffName)
         self._removeMembersKeep()
         camera.wrtReparentTo(self)
-        base.camLens.setFov(self.camFov)
+        base.camLens.setMinFov(self.camFov/(4./3.))
         return None
 
     def __playReward(self, ts, callback):

@@ -48,7 +48,7 @@ class DistributedGolfKart(DistributedObject.DistributedObject):
          0,
          0,
          0]
-        self.kartModelPath = 'phase_6/models/golf/golf_cart3.bam'
+        self.kartModelPath = 'phase_6/models/golf/golf_cart3'
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)

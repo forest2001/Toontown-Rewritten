@@ -1,8 +1,10 @@
 import toontown.minigame.MinigameCreatorAI
 from toontown.distributed.ToontownInternalRepository import ToontownInternalRepository
 from direct.distributed.PyDatagram import *
+from otp.rpc.RPCServer import RPCServer
 from otp.distributed.DistributedDirectoryAI import DistributedDirectoryAI
 from otp.distributed.OtpDoGlobals import *
+from ToontownRPCHandler import *
 
 class ToontownUberRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId):
@@ -10,11 +12,15 @@ class ToontownUberRepository(ToontownInternalRepository):
         self.wantUD = simbase.config.GetBool('want-ud', True)
 
     def handleConnected(self):
+        ToontownInternalRepository.handleConnected(self)
         if simbase.config.GetBool('want-ClientServicesManagerUD', self.wantUD):
             # Only generate the root object once, with the CSMUD.
             rootObj = DistributedDirectoryAI(self)
             rootObj.generateWithRequiredAndId(self.getGameDoId(), 0, 0)
         self.createGlobals()
+
+        if simbase.config.GetBool('want-rpc-server', False):
+            self.rpcserver = RPCServer(ToontownRPCHandler(self))
 
     def createGlobals(self):
         """
@@ -23,7 +29,11 @@ class ToontownUberRepository(ToontownInternalRepository):
         self.csm = self.generateGlobalIfWanted(OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
         self.chatAgent = self.generateGlobalIfWanted(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         self.friendsManager = self.generateGlobalIfWanted(OTP_DO_ID_TTR_FRIENDS_MANAGER, 'TTRFriendsManager')
-        self.globalPartyMgr = self.generateGlobalIfWanted(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+        if simbase.config.GetBool('want-parties', True):
+            # want-parties overrides config for want-GlobalPartyManagerUD
+            self.globalPartyMgr = self.generateGlobalIfWanted(OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+        else:
+            self.globalPartyMgr = None
             
     def generateGlobalIfWanted(self, doId, name):
         """

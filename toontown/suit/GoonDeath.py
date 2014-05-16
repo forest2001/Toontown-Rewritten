@@ -4,7 +4,7 @@ from direct.particles import ParticleEffect
 from toontown.battle import BattleParticles
 
 def createExplosionTrack(parent, deathNode, scale):
-    explosion = loader.loadModel('phase_3.5/models/props/explosion.bam')
+    explosion = loader.loadModel('phase_3.5/models/props/explosion')
     explosion.getChild(0).setScale(scale)
     explosion.reparentTo(deathNode)
     explosion.setBillboardPointEye()

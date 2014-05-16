@@ -41,9 +41,8 @@ class DistributedStageAI(DistributedObjectAI.DistributedObjectAI):
         self.placeElevatorsOnMarkers()
         if __dev__:
             simbase.stage = self
-        description = '%s|%s|%s' % (self.stageId, self.floorNum, self.avIds)
         for avId in self.avIds:
-            self.air.writeServerEvent('stageEntered', avId, description)
+            self.air.writeServerEvent('stageEntered', avId=avId, stageId=self.stageId, floorNum=self.floorNum, avIds=self.avIds)
 
         return
 

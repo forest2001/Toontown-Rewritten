@@ -187,19 +187,19 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         senderId = self.air.getAvatarIdFromSender()
 
         if self.ownerId != senderId:
-            self.air.writeServerEvent('suspicious', senderId,
-                                      'Tried to move furniture, but not the house owner!')
+            self.air.writeServerEvent('suspicious', avId=senderId,
+                                      issue='Tried to move furniture, but not the house owner!')
             return
 
         if senderId != directorId and directorId != 0:
-            self.air.writeServerEvent('suspicious', senderId,
-                                      'Tried to make someone else (%d) move their furniture!' % directorId)
+            self.air.writeServerEvent('suspicious', avId=senderId,
+                                      issue='Tried to make someone else (%d) move their furniture!' % directorId)
             return
 
         director = self.air.doId2do.get(directorId)
         if directorId and not director:
-            self.air.writeServerEvent('suspicious', directorId,
-                                      'Tried to move furniture without being on the shard!')
+            self.air.writeServerEvent('suspicious', avId=directorId,
+                                      issue='Tried to move furniture without being on the shard!')
             return
 
         if self.director:
@@ -278,8 +278,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         if slot > 5:
             # This is not a valid slot! HACKER!!!
-            self.air.writeServerEvent('suspicious', self.air.getAvatarIdFromSender(),
-                                      'Tried to move window to invalid slot %d!' % slot)
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(),
+                                      issue='Tried to move window to invalid slot %d!' % slot)
             return ToontownGlobals.FM_HouseFull
 
         if self.getWindow(slot):
@@ -304,8 +304,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         if toSlot > 5:
             # This is not a valid slot! HACKER!!!
-            self.air.writeServerEvent('suspicious', self.air.getAvatarIdFromSender(),
-                                      'Tried to move window to invalid slot %d!' % toSlot)
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(),
+                                      issue='DistributedfTried to move window to invalid slot %d!' % toSlot)
             return ToontownGlobals.FM_HouseFull
 
         if self.getWindow(toSlot):
@@ -331,8 +331,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         senderId = self.air.getAvatarIdFromSender()
         if not self.director or senderId != self.director.doId:
-            self.air.writeServerEvent('suspicious', senderId,
-                                      'Sent furniture management request without'
+            self.air.writeServerEvent('suspicious', avId=senderId,
+                                      issue='Sent furniture management request without'
                                       ' being the director.')
             retval = ToontownGlobals.FM_NotDirector
         else:

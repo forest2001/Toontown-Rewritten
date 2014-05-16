@@ -132,7 +132,7 @@ def doEffect(textId, speakingToon, nearbyToons):
         fadeColor = VBase4(1, 0.5, 1, 1)
     elif menuIndex == RESISTANCE_MONEY:
         effect = BattleParticles.loadParticleFile('resistanceEffectBean.ptf')
-        bean = loader.loadModel('phase_4/models/props/jellybean4.bam')
+        bean = loader.loadModel('phase_4/models/props/jellybean4')
         bean = bean.find('**/jellybean')
         colors = {'particles-1': (1, 1, 0, 1),
          'particles-2': (1, 0, 0, 1),

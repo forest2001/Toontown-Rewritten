@@ -65,7 +65,7 @@ class TownLoader(StateData.StateData):
             self.npc.reparentTo(base.localAvatar)
             self.npc.setZ(30)
             self.npc.hide()
-            self.piano = loader.loadModel('phase_5/models/props/piano-mod.bam')
+            self.piano = loader.loadModel('phase_5/models/props/piano-mod')
             self.piano.setZ(250)
             self.piano.setHpr(0, 90, 0)
             self.piano.reparentTo(base.localAvatar)

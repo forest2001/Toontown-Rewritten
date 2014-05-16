@@ -1,5 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
-from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath
+from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath, TexturePool
 import OTPRender
 import time
 import math
@@ -303,3 +303,13 @@ def placer():
 @magicWord(category=CATEGORY_GUI)
 def explorer():
     base.render.explore()
+    
+@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex'])
+def reloadTextures():
+    """ Artfart command to reload all of the textures. """
+    # TODO: A panel that says "Reloading textures... Please wait!"
+    # ...though it's not important since it's a staff command and
+    # only staff will see it.
+    for texture in TexturePool.findAllTextures():
+        texture.reload()
+    return "Reloaded all of the textures!"

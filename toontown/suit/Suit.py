@@ -35,6 +35,7 @@ AllSuitsBattle = (('drop-react', 'anvil-drop'),
  ('reach', 'walknreach'),
  ('rake-react', 'rake'),
  ('hypnotized', 'hypnotize'),
+ ('lured', 'lured'),
  ('soak', 'soak'))
 SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-in', 'sit-eat-in'),
@@ -196,7 +197,7 @@ def loadSuitModelsAndAnims(level, flag = 0):
         if flag:
             if base.config.GetBool('want-new-cogs', 0):
                 filepath = 'phase_3.5' + model + 'zero'
-                if cogExists(model + 'zero.bam'):
+                if cogExists(model + 'zero'):
                     loader.loadModelNode(filepath)
             else:
                 loader.loadModelNode('phase_3.5' + model + 'mod')
@@ -204,7 +205,7 @@ def loadSuitModelsAndAnims(level, flag = 0):
         else:
             if base.config.GetBool('want-new-cogs', 0):
                 filepath = 'phase_3.5' + model + 'zero'
-                if cogExists(model + 'zero.bam'):
+                if cogExists(model + 'zero'):
                     loader.unloadModel(filepath)
             else:
                 loader.unloadModel('phase_3.5' + model + 'mod')
@@ -253,7 +254,7 @@ def loadDialog(level):
         return
     else:
         loadPath = 'phase_3.5/audio/dial/'
-        SuitDialogFiles = ['COG_VO_grunt',
+        SuitDialogFiles = ['COG_VO_statement',
          'COG_VO_murmur',
          'COG_VO_statement',
          'COG_VO_question']
@@ -624,7 +625,7 @@ class Suit(Avatar.Avatar):
         animDict = self.generateAnimDict()
         filePrefix, bodyPhase = ModelDict[self.style.body]
         if base.config.GetBool('want-new-cogs', 0):
-            if cogExists(filePrefix + 'zero.bam'):
+            if cogExists(filePrefix + 'zero'):
                 self.loadModel('phase_3.5' + filePrefix + 'zero')
             else:
                 self.loadModel('phase_3.5' + filePrefix + 'mod')

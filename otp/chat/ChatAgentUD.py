@@ -14,8 +14,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
     def chatMessage(self, message):
         sender = self.air.getAvatarIdFromSender()
         if sender == 0:
-            self.air.writeServerEvent('suspicious', self.air.getAccountIdFromSender(),
-                                         'Account sent chat without an avatar', message)
+            self.air.writeServerEvent('suspicious', accId=self.air.getAccountIdFromSender(),
+                                         issue='Account sent chat without an avatar', message=message)
             return
 
         modifications = []
@@ -31,7 +31,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         for modStart, modStop in modifications:
             cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
 
-        self.air.writeServerEvent('chat-said', sender, message, cleanMessage)
+        self.air.writeServerEvent('chat-said', avId=sender, msg=message, cleanMsg=cleanMessage)
 
         # TODO: The above is probably a little too ugly for my taste... Maybe AIR
         # should be given an API for sending updates for unknown objects?

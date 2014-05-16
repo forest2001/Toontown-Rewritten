@@ -73,6 +73,6 @@ class PromotionManagerAI:
                     av.b_setCogMerits(merits)
 
             if reduce(lambda x, y: x + y, actualCounted):
-                self.air.writeServerEvent('merits', avId, '%s|%s|%s|%s' % tuple(actualCounted))
+                self.air.writeServerEvent('merits', avId=avId, bossbot=actualCounted[0], lawbot=actualCounted[1], cashbot=actualCounted[2], sellbot=actualCounted[3])
                 self.notify.debug('recoverMerits: av %s recovered merits %s' % (avId, actualCounted))
         return meritsRecovered

@@ -167,7 +167,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         if self.name == '':
             return
         else:
-            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name)
+            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name, 'house')
         nameText.setText(houseName)
         self.nameText = nameText
         textHeight = nameText.getHeight() - 2
@@ -207,7 +207,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         if self.name == '':
             return
         else:
-            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name)
+            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name, 'house')
         matText.setText(houseName)
         self.matText = matText
         textHeight = matText.getHeight() - 2
@@ -230,7 +230,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         if self.name == '':
             houseName = ''
         else:
-            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name)
+            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name, 'house')
         self.nametag = NametagGroup()
         self.nametag.setFont(ToontownGlobals.getBuildingNametagFont())
         if TTLocalizer.BuildingNametagShadow:
@@ -357,7 +357,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         if self.name == '':
             return
         else:
-            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name)
+            houseName = TTLocalizer.AvatarsHouse % TTLocalizer.GetPossesive(self.name, 'house')
         nameText.setText(houseName)
         self.nameText = nameText
         textHeight = nameText.getHeight() - 2

@@ -33,9 +33,8 @@ class DistributedMintAI(DistributedObjectAI.DistributedObjectAI):
         self.sendUpdate('setRoomDoIds', [roomDoIds])
         if __dev__:
             simbase.mint = self
-        description = '%s|%s|%s' % (self.mintId, self.floorNum, self.avIds)
         for avId in self.avIds:
-            self.air.writeServerEvent('mintEntered', avId, description)
+            self.air.writeServerEvent('mintEntered', avId=avId, mintId=self.mintId, floorNum=self.floorNum, avIds=self.avIds)
 
     def requestDelete(self):
         self.notify.info('requestDelete: %s' % self.doId)

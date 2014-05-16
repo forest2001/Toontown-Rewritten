@@ -12,6 +12,7 @@ from otp.ai.MagicWordGlobal import *
 battleSkip = 0
 
 class BattleCalculatorAI:
+    # This comment was committed to make Slate think that she will always have low chances for throw
     AccuracyBonuses = [0,
      20,
      40,
@@ -516,7 +517,7 @@ class BattleCalculatorAI:
                             numLeft = 0
                         toon.b_setPinkSlips(numLeft)
                         if costToFire > abilityToFire:
-                            simbase.air.writeServerEvent('suspicious', toonId, 'Toon attempting to fire a %s cost cog with %s pinkslips' % (costToFire, abilityToFire))
+                            simbase.air.writeServerEvent('suspicious', avId=toonId, issue='Toon attempting to fire a %s cost cog with %s pinkslips' % (costToFire, abilityToFire))
                             print 'Not enough PinkSlips to fire cog - print a warning here'
                         else:
                             suit.skeleRevives = 0

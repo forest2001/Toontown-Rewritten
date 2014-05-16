@@ -129,12 +129,12 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         avId = self.air.getAvatarIdFromSender()
         if avId != self.customerId:
             if self.customerId:
-                self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA customer is %s' % self.customerId)
+                self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA customer is %s' % self.customerId)
                 self.notify.warning('customerId: %s, but got setDNA for: %s' % (self.customerId, avId))
             return
         testDNA = ToonDNA.ToonDNA()
         if not testDNA.isValidNetString(blob):
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA: invalid dna: %s' % blob)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA: invalid dna: %s' % blob)
             return
         if self.air.doId2do.has_key(avId):
             av = self.air.doId2do[avId]
@@ -151,12 +151,12 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
                             av.b_setClothesBottomsList(av.getClothesBottomsList())
                         else:
                             self.notify.warning('NPCTailor: setDNA() - unable to save old bottoms - we exceeded the bottoms list length')
-                    self.air.writeServerEvent('boughtTailorClothes', avId, '%s|%s|%s' % (self.doId, which, self.customerDNA.asTuple()))
+                    self.air.writeServerEvent('boughtTailorClothes', avId=avId, tailorId=self.doId, item=which, dna=self.customerDNA.asTuple())
                 elif self.useJellybeans:
-                    self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA tried to purchase with insufficient jellybeans')
+                    self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA tried to purchase with insufficient jellybeans')
                     self.notify.warning('NPCTailor: setDNA() - client tried to purchase with insufficient jellybeans!')
                 else:
-                    self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA bogus clothing ticket')
+                    self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA bogus clothing ticket')
                     self.notify.warning('NPCTailor: setDNA() - client tried to purchase with bogus clothing ticket!')
                     if self.customerDNA:
                         av.b_setDNAString(self.customerDNA.makeNetString())
@@ -173,7 +173,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
             taskMgr.remove(self.uniqueName('clearMovie'))
             self.completePurchase(avId)
         elif self.busy:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA busy with %s' % self.busy)
+            self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA busy with %s' % self.busy)
             self.notify.warning('setDNA from unknown avId: %s busy: %s' % (avId, self.busy))
 
     def __handleUnexpectedExit(self, avId):

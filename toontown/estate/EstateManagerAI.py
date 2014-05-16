@@ -250,7 +250,7 @@ class EstateManagerAI(DistributedObjectAI):
 
         toon = self.air.doId2do.get(senderId)
         if not toon:
-            self.air.writeServerEvent('suspicious', senderId, 'Sent getEstateZone() but not on district!')
+            self.air.writeServerEvent('suspicious', avId=senderId, issue='Sent getEstateZone() but not on district!')
             return
 
         # If there's an avId included, then the Toon is interested in visiting a
@@ -319,7 +319,7 @@ class EstateManagerAI(DistributedObjectAI):
         toon = self.air.doId2do.get(senderId)
 
         if not toon:
-            self.air.writeServerEvent('suspicious', senderId, 'Sent exitEstate() but not on district!')
+            self.air.writeServerEvent('suspicious', avId=senderId, issue='Sent exitEstate() but not on district!')
             return
 
         self._unmapFromEstate(toon)
