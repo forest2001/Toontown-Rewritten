@@ -684,8 +684,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             if type(arg) == type(0) or type(arg) == type(1.0):
                 quitButton = int(arg)
             elif type(arg) == type(''):
-                if len(arg) > 2 and arg[:2] == 'CF':
-                    extraChatFlags = getattr(arg)
+                if len(arg) > 4 and arg[1:3] == 'CF':
+                    extraChatFlags = globals()[arg[1:-1]]
                 else:
                     dialogueList.append(self.getVar(arg))
             else:
@@ -722,7 +722,11 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             dialogue = dialogueList[0]
         else:
             dialogue = None
-        return Func(avatar.setChatAbsolute, chatString, CFSpeech, dialogue)
+        if extraChatFlags:
+            flags = CFSpeech | extraChatFlags
+        else:
+            flags = CFSpeech
+        return Func(avatar.setChatAbsolute, chatString, flags, dialogue)
 
     def parseLocalChatToConfirm(self, line):
         lineLength = len(line)
