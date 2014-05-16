@@ -224,7 +224,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.modulelist = ModuleListAI.ModuleList()
         self._dbCheckDoLater = None
         self.teleportOverride = 0
+        self.wantBetaKeyQuest = 0
         self.magicWordTeleportRequests = []
+        self.webAccountId = 0
         return
 
     def generate(self):
@@ -4406,6 +4408,19 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
 
+    def setWantBetaKeyQuest(self, wantQuest):
+        self.wantBetaKeyQuest = wantQuest
+
+    def d_setWantBetaKeyQuest(self, wantQuest):
+        self.sendUpdate('setWantBetaKeyQuest', [wantQuest])
+
+    def b_setWantBetaKeyQuest(self, wantQuest):
+        self.setWantBetaKeyQuest(wantQuest)
+        self.d_setWantBetaKeyQuest(wantQuest)
+
+    def getWantBetaKeyQuest(self):
+        return self.wantBetaKeyQuest
+
     def magicFanfare(self):
         self.sendUpdate('magicFanfare', [])
 
@@ -4419,6 +4434,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             return
         self.magicWordTeleportRequests.remove(targetId)
         self.sendUpdate('magicTeleportInitiate', [hoodId, zoneId])
+
+    def setWebAccountId(self, webId):
+        self.webAccountId = webId
+
+    def getWebAccountId(self):
+        return self.webAccountId
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

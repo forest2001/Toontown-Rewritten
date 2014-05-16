@@ -18581,6 +18581,17 @@ class CogSuitPartReward(Reward):
         return TTLocalizer.QuestsCogSuitPartRewardPoster % {'cogTrack': self.getCogTrackName(),
          'part': self.getCogPartName()}
 
+class BetaKeyReward(Reward):
+    def sendRewardAI(self, av):
+        # Tell the web server that we completed the quest successfully!
+        simbase.air.rpc.call('gibBetaKey', webAccId=av.getWebAccountId())
+
+    def getString(self):
+        return TTLocalizer.QuestsBetaKeyReward
+
+    def getPosterString(self):
+        return TTLocalizer.QuestsBetaKeyRewardPoster
+
 
 def getRewardClass(id):
     reward = RewardDict.get(id)
@@ -18607,6 +18618,13 @@ def getNextRewards(numChoices, tier, av):
     optRewards = list(getOptionalRewardsInTier(tier))
     if av.getGameAccess() == OTPGlobals.AccessFull and tier == TT_TIER + 3:
         optRewards = []
+    if av.getWantBetaKeyQuest():
+        if tier >= DG_TIER:
+            # Offer them the beta key quest.
+            optRewards = [5000]
+        else:
+            # They aren't eligible for the quest. Bye bye!
+            simbase.air.questManager.removeBetaQuest(av, 'avatarExit')
     if isLoopingFinalTier(tier):
         rewardHistory = map(lambda questDesc: questDesc[3], av.quests)
         if notify.getDebug():
@@ -19210,7 +19228,8 @@ RewardDict = {100: (MaxHpReward, 1),
  4213: (CogSuitPartReward, 'c', CogDisguiseGlobals.leftArmHand),
  4214: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmUpper),
  4215: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmLower),
- 4216: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmHand)}
+ 4216: (CogSuitPartReward, 'c', CogDisguiseGlobals.rightArmHand),
+ 5000: (BetaKeyReward, None)}
 
 def getNumTiers():
     return len(RequiredRewardTrackDict) - 1

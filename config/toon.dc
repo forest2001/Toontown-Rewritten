@@ -440,6 +440,8 @@ dclass DistributedAnimatedProp : DistributedObject {
 typedef int16 pair16[2];
 
 dclass DistributedToon : DistributedPlayer {
+  setWantBetaKeyQuest(uint8 = 0) required db airecv;
+  setWebAccountId(uint32 webId = 0) required airecv;
   setDNAString(blob dnaString) required broadcast ownrecv db;
   setGM(uint8 type = 0) required broadcast ownrecv db;
   setMaxBankMoney(int16 maxMoney = 1200) required broadcast ownrecv db;
@@ -782,7 +784,7 @@ dclass DistributedInvasionSuit : DistributedSuitBase {
 
   sayFaceoffTaunt(bool custom, string phrase) broadcast;
   makeSkelecog() broadcast ram;
-  
+
   takeShakerDamage(uint8 damage) clsend airecv;
   setInvasionFinale(bool finale) required broadcast ram;
 };
@@ -998,7 +1000,7 @@ dclass DistributedElectionEvent : DistributedObject {
 dclass DistributedElectionCamera : DistributedNode
 {
   setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
-  
+
 };
 
 dclass DistributedElectionCameraManager : DistributedObject
@@ -3271,7 +3273,7 @@ struct PotentialToon {
 dclass ClientServicesManager : DistributedObjectGlobal {
   login(string cookie) clsend;
   acceptLogin();
-  
+
   setClosed(bool closed);
 
   requestAvatars() clsend;
@@ -3353,35 +3355,35 @@ dclass TTRFriendsManager : DistributedObjectGlobal {
   clearList(uint32 avId);
   removeFriend(uint32 avId) clsend;
   requestAvatarInfo(uint32 avIds[]) clsend;
-  
+
   requestFriendsList() clsend;
-  
+
   friendInfo(Friend resp);
   friendList(Friend resp[]);
-  
+
   friendOnline(uint32 id, uint8 commonChatFlags, uint8 whitelistChatFlags);
   friendOffline(uint32 id);
-  
+
   comingOnline(uint32 avId, uint32 friendIds[]);
   goingOffline(uint32 avId);
-  
+
   getAvatarDetails(uint32 friendId) clsend;
   friendDetails(uint32 friendId, blob details);
-  
+
   routeTeleportQuery(uint32 toId) clsend;
   teleportQuery(uint32 fromId);
   routeTeleportResponse(uint32 fromId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId) clsend;
   teleportResponse(uint32 toId, uint8 tpAvailable, uint32 defaultShard, uint32 hoodId, uint32 zoneId);
-  
+
   whisperSCTo(uint32 toId, uint16 msgIndex) clsend;
   setWhisperSCFrom(uint32 fromId, uint16 msgIndex);
-  
+
   whisperSCCustomTo(uint32 toId, uint16 msgIndex) clsend;
   setWhisperSCCustomFrom(uint32 fromId, uint16 msgIndex);
-  
+
   whisperSCEmoteTo(uint32 toId, uint16 emoteId) clsend;
   setWhisperSCEmoteFrom(uint32 fromId, uint16 emoteId);
-  
+
   sendTalkWhisper(uint32 toId, string msg) clsend;
   receiveTalkWhisper(uint32 fromId, string msg);
 };
