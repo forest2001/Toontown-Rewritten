@@ -33,10 +33,10 @@ class NewsManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.population = 0
         self.invading = 0
-        
+
         forcedHolidayDecorations = base.config.GetString('force-holiday-decorations', '')
         self.decorationHolidayIds = []
-        
+
         if forcedHolidayDecorations != '':
             forcedHolidayDecorations = forcedHolidayDecorations.split(',')
             for HID in forcedHolidayDecorations:
@@ -44,11 +44,12 @@ class NewsManager(DistributedObject.DistributedObject):
                     self.decorationHolidayIds.append(decorationHolidays[int(HID)])
                 except:
                     print 'holidayId value error: "%s"... skipping' %HID
-                    
+
         self.holidayDecorator = None
         self.holidayIdList = []
         base.cr.newsManager = self
-        base.localAvatar.inventory.setInvasionCreditMultiplier(1)
+        if hasattr(base, 'localAvatar') and base.localAvatar is not None:
+            base.localAvatar.inventory.setInvasionCreditMultiplier(1)
         self.weeklyCalendarHolidays = []
         return
 
