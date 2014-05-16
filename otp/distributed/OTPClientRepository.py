@@ -870,7 +870,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.stopHeartbeat()
         self.stopReaderPollTask()
         if self.bootedIndex != None and OTPLocalizer.CRBootedReasons.has_key(self.bootedIndex):
-            message = OTPLocalizer.CRBootedReasons[self.bootedIndex] % {'name': '???'}
+            message = OTPLocalizer.CRBootedReasons[self.bootedIndex] % {'name': '???', 'dc_reason': self.bootedText}
         elif self.bootedText != None:
             message = OTPLocalizer.CRBootedReasonUnknownCode % self.bootedIndex
         else:
