@@ -1,10 +1,7 @@
 from direct.showbase import PythonUtil
 
 MINIMUM_MAGICWORD_ACCESS = 300
-try:
-    MINIMUM_AI_OBJ_MW_ACCESS = simbase.config.GetInt('mw-minimum-ai-manipulation-access', 500)
-except:
-    MINIMUM_AI_OBJ_MW_ACCESS = base.config.GetInt('mw-minimum-ai-manipulation-access', 500)
+MINIMUM_AI_OBJ_MW_ACCESS = config.GetInt('mw-minimum-ai-manipulation-access', 500)
 
 class MagicError(Exception): pass
 
