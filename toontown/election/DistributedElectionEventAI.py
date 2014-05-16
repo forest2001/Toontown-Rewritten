@@ -27,7 +27,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.pieTypeAmount = [4, 20, 1]
         self.balloon = None
         self.cogDead = False
-        
+
         # For the DistributedInvasionSuitAI
         self.master = InvasionMasterAI(self)
         self.toons = []
@@ -57,7 +57,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
                 camMgr.spawnManager()
         else:
             self.balloon.b_setState('Waiting')
-    
+
     def phraseSaidToFlippy(self, phraseId):
         # Someone said something (relavent) to Flippy!
         avId = self.air.getAvatarIdFromSender()
@@ -82,7 +82,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
     def setPieTypeAmount(self, type, num):
         # This is more for the invasion than the pre-invasion elections.
         self.pieTypeAmount = [type, num]
-        
+
     def slappyAvatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do.get(avId, None)
@@ -166,7 +166,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
         self.invasionSequence = Sequence(
             Wait(15),
             Func(self.spawnInvasion),
-            Func(self.surleePhraseLoop.loop)                        
+            Func(self.surleePhraseLoop.loop)
         )
         self.invasionSequence.start()
 
@@ -198,7 +198,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
                 invasion.setFinaleSuitStunned(hp, kill)
         else:
             if not self.cogDead:
-                self.cogDead = True    
+                self.cogDead = True
                 self.suit = DistributedInvasionSuitAI(self.air, self)
                 self.suit.dna.newSuit('ym')
                 self.suit.setSpawnPoint(99)
@@ -237,7 +237,7 @@ def election(state):
     if not simbase.config.GetBool('want-doomsday', False):
         simbase.air.writeServerEvent('warning', avId=spellbook.getInvoker().doId, issue='Attempted to change the election state while doomsday is disabled.')
         return 'ABOOSE! The election is currently disabled. Your request has been logged.'
-        
+
     event = simbase.air.doFind('ElectionEvent')
     if event is None:
         event = DistributedElectionEventAI(simbase.air)
@@ -249,14 +249,3 @@ def election(state):
     event.b_setState(state)
 
     return 'Election event now in %r state' % state
-    
-@magicWord()
-def nologin():
-    """
-    Disable the CSM's login and reject all future connections.
-    This is only a randomly placed MW for doomsday... run along people.
-    """
-    csm = OTP_DO_ID_CLIENT_SERVICES_MANAGER
-    dg = simbase.air.dclassesByName['ClientServicesManager'].getFieldByName('setClosed').aiFormatUpdate(csm, csm, simbase.air.ourChannel, [True])
-    simbase.air.send(dg)
-    return "The CSMUD will reject all logins from now on."
