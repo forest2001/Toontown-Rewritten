@@ -127,9 +127,6 @@ class TutorialManagerAI(DistributedObjectAI):
         
         self.avId2fsm[avId] = TutorialFSM(self.air, zones, avId)
         
-        # Toontorial TODO list:
-        #  reset track progress on enter
-        
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self.unexpectedExit, extraArgs=[avId])
         
         self.d_enterTutorial(avId, zones.street, zones.street, zones.shop, zones.hq) #hackfix lololol        
@@ -178,12 +175,18 @@ class TutorialManagerAI(DistributedObjectAI):
             self.avId2fsm[avId].demand('CleanUp')
             self.air.writeServerEvent('suspicious', avId=avId, issue='Attempted to request Toontorial when it would be impossible to do so')
             return
+
+        # Reset Toon to be appropriate for the tutorial:
         av.b_setQuests([])
         av.b_setQuestHistory([])
         av.b_setRewardHistory(0, [])
-        av.setHp(15)
+        av.b_setHp(15)
+
         if av.inventory.numItem(ToontownBattleGlobals.THROW_TRACK, 0) == 0:
             av.inventory.addItem(ToontownBattleGlobals.THROW_TRACK, 0)
         if av.inventory.numItem(ToontownBattleGlobals.SQUIRT_TRACK, 0) == 0:
             av.inventory.addItem(ToontownBattleGlobals.SQUIRT_TRACK, 0)
         av.d_setInventory(av.inventory.makeNetString())
+
+        av.experience.zeroOutExp()
+        av.d_setExperience(av.experience.makeNetString())
