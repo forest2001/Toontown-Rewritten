@@ -135,11 +135,12 @@ class QuestManagerAI:
     def toonDefeatedStage(self, toon, stageId, activeToonVictors):
         pass
 
-    def toonPlayedMinigame(self, toon, toons):
-        pass
-
     def toonRodeTrolleyFirstTime(self, toon):
-        pass
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            if isinstance(quest, Quests.TrolleyQuest):
+                self.__incrementQuestProgress(toon.quests[index])
+                
+        toon.b_setQuests(toon.quests)
 
     def completeQuest(self, toon, questId):
         """
@@ -170,7 +171,8 @@ class QuestManagerAI:
         # If non-zero, this indicates this is the first quest in the whole ToonTask.
         # This means we want to store the reward in the toons setRewardHistory.
         finalReward = rewardId if storeReward else 0
-        toon.addQuest((questId, npc.getDoId(), toNpcId, rewardId, 0), finalReward)
+        progress = 1 if questId == Quests.PHONE_QUEST_ID else 0 # hacky fix to cattlelog quest...
+        toon.addQuest((questId, npc.getDoId(), toNpcId, rewardId, progress), finalReward)
         # Tell the NPC that we assigned this quest to the given toon.
         npc.assignQuest(toon.getDoId(), questId, rewardId, toNpcId)
 
@@ -187,6 +189,9 @@ class QuestManagerAI:
             if isComplete != Quests.COMPLETE:
                 # This quest isn't complete, skip.
                 continue
+            # If we're in the Toontorial, move to the next step.
+            if toonId in self.air.tutorialManager.avId2fsm.keys():
+                self.air.tutorialManager.avId2fsm[toonId].demand('Tunnel')
             # Check if the ToonTask has more quests to complete.
             nextQuest = Quests.getNextQuest(questId, npc, toon)
             if nextQuest == (Quests.NA, Quests.NA):
@@ -220,6 +225,14 @@ class QuestManagerAI:
             self.notify.debug("Rejecting toonId %d because their quest inventory is full." % toonId)
             npc.rejectAvatar(toonId)
             return
+
+        # Are we in the Toontorial?
+        if toonId in self.air.tutorialManager.avId2fsm.keys():
+            # Are we speaking to Tom?
+            if toon.getRewardHistory()[0] == 0:
+                self.npcGiveQuest(npc, toon, 101, Quests.findFinalRewardId(101)[0], Quests.getQuestToNpcId(101), storeReward=True) # FIXME please, i have no idea if this is correct
+                self.air.tutorialManager.avId2fsm[toonId].demand('Battle')
+                return
 
         # Are they eligible for a tier upgrade?
         tier = toon.getRewardHistory()[0]
@@ -299,7 +312,10 @@ class QuestManagerAI:
         self.giveReward(toon, rewardId)
 
     def toonMadeFriend(self, toon, otherToon):
-        pass
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            if isinstance(quest, Quests.FriendQuest):
+                self.__incrementQuestProgress(toon.quests[index])
+        toon.b_setQuests(toon.quests)
 
     def toonFished(self, toon, zoneId):
         """

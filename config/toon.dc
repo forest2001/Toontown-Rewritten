@@ -468,7 +468,7 @@ dclass DistributedToon : DistributedPlayer {
   setHoodsVisited(uint32 hoods[] = [ 2000 ]) required ownrecv db;
   setInterface(blob str = []) required ownrecv db;
   setLastHood(uint32 lastHood = 0) required ownrecv broadcast db;
-  setTutorialAck(uint8 tutorialAck = 1) required ownrecv db;
+  setTutorialAck(uint8 tutorialAck = 0) required ownrecv db;
   setMaxClothes(uint32 max = 10) required ownrecv db;
   setClothesTopsList(uint8 clothesList[] = []) required ownrecv db;
   setClothesBottomsList(uint8 clothesList[] = []) required ownrecv db;

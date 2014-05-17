@@ -535,8 +535,10 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def __requestSkipTutorial(self, hoodId, zoneId, avId):
         self.notify.debug('requesting skip tutorial')
+        # This is so that the AI can see us on the shard in order to modify us:
+        base.localAvatar.b_setLocation(base.localAvatar.defaultShard, OTPGlobals.QuietZone)
         self.acceptOnce('skipTutorialAnswered', self.__handleSkipTutorialAnswered, [hoodId, zoneId, avId])
-        messenger.send('requestSkipTutorial')
+        taskMgr.doMethodLater(0.1, messenger.send, 'requestSkipTutorial', extraArgs=['requestSkipTutorial'])
         self.waitForDatabaseTimeout(requestName='RequestSkipTutorial')
 
     def __handleSkipTutorialAnswered(self, hoodId, zoneId, avId, allOk):

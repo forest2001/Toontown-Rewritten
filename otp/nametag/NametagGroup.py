@@ -107,10 +107,10 @@ class NametagGroup:
         if self.getNumChatPages() < 2:
             # Either only one page or no pages displayed. This means no button,
             # unless the game code specifically requests one.
-            if self.chatFlags & CFPageButton:
-                return NametagGlobals.pageButtons
-            elif self.chatFlags & CFQuitButton:
+            if self.chatFlags & CFQuitButton:
                 return NametagGlobals.quitButtons
+            elif self.chatFlags & CFPageButton:
+                return NametagGlobals.pageButtons
             else:
                 return None
         elif self.chatPage == self.getNumChatPages()-1:

@@ -9,6 +9,7 @@ class BlinkingArrows:
         self.arrowTrack = None
         self.parent = parent
         self.otherNode = otherNode
+        self.on = False
         return
 
     def delete(self):
@@ -33,11 +34,19 @@ class BlinkingArrows:
         self.onTime = onTime
         self.offTime = offTime
         self.startArrowsFlashing()
+        self.on = True
 
     def arrowsOff(self):
         self.stopArrowsFlashing()
         self.arrow1.reparentTo(hidden)
         self.arrow2.reparentTo(hidden)
+        self.on = False
+
+    def reparentTo(self, parent):
+        self.parent = parent
+        if self.on:
+            self.arrow1.reparentTo(self.parent)
+            self.arrow2.reparentTo(self.parent)
 
     def startArrowsFlashing(self):
         onColor = Vec4(1, 1, 1, 1)

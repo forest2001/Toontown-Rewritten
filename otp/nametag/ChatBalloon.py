@@ -47,18 +47,18 @@ class ChatBalloon:
         t.setX(t, self.TEXT_SHIFT_PROP*width)
         t.setZ(t, height)
 
+        if reversed:
+            # The nametag code wants the text on the left side of the axis,
+            # rather than on the right side. Therefore, we move the text to the
+            # opposite side:
+            t.setX(self.TEXT_SHIFT_REVERSED - self.TEXT_SHIFT_PROP*width - width)
+
         # Give the chat bubble a button, if one is requested:
         if button:
             np = button.copyTo(root)
             np.setPos(t, width, 0, -height)
             np.setPos(np, self.BUTTON_SHIFT)
             np.setScale(self.BUTTON_SCALE)
-
-        if reversed:
-            # The nametag code wants the text on the left side of the axis,
-            # rather than on the right side. Therefore, we move the text to the
-            # opposite side:
-            t.setX(self.TEXT_SHIFT_REVERSED - self.TEXT_SHIFT_PROP*width - width)
 
         # Set a minimum width and height for short or empty messages
         if width < self.MIN_WIDTH:

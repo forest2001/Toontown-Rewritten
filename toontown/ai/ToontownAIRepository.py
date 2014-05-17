@@ -53,6 +53,9 @@ from toontown.coghq.CountryClubManagerAI import CountryClubManagerAI
 # Suits.
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
 
+# Toontorial
+from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
+
 # Magic Words!
 from panda3d.core import PStatClient
 from otp.ai.MagicWordGlobal import *
@@ -180,6 +183,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.trophyMgr = DistributedTrophyMgrAI(self)
         self.trophyMgr.generateWithRequired(2)
+
+        self.tutorialManager = TutorialManagerAI(self)
+        self.tutorialManager.generateWithRequired(2)
 
     def createZones(self):
         """

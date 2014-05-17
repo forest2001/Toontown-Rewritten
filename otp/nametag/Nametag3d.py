@@ -32,6 +32,8 @@ class Nametag3d(Nametag):
                 self.bbOffset,
                 NodePath(), # Empty; look at scene camera
                 Point3(0,0,0)))
+        else:
+            self.bbOffset = 0.0
 
     def setBillboardOffset(self, bbOffset):
         self.bbOffset = bbOffset
@@ -39,20 +41,21 @@ class Nametag3d(Nametag):
 
     def tick(self):
         if not self.WANT_DYNAMIC_SCALING:
-            self.innerNP.setScale(self.SCALING_FACTOR)
-            return
+            scale = self.SCALING_FACTOR
+        else:
+            # Attempt to maintain the same on-screen size.
+            distance = self.innerNP.getPos(NametagGlobals.camera).length()
+            distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
 
-        # Attempt to maintain the same on-screen size.
-        distance = self.innerNP.getPos(NametagGlobals.camera).length()
-        distance = max(min(distance, self.SCALING_MAXDIST), self.SCALING_MINDIST)
+            scale = math.sqrt(distance)*self.SCALING_FACTOR
 
-        scale = math.sqrt(distance)*self.SCALING_FACTOR
         self.innerNP.setScale(scale)
 
         # As 3D nametags can move around on their own, we need to update the
         # click frame constantly:
         path = NodePath.anyPath(self)
-        if path.isHidden() or path.getTop() != NametagGlobals.camera.getTop():
+        if path.isHidden() or (path.getTop() != NametagGlobals.camera.getTop() and
+                               path.getTop() != render2d):
             self.stashClickRegion()
         else:
             left, right, bottom, top = self.frame

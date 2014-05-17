@@ -66,6 +66,10 @@ class FriendManagerAI(DistributedObjectAI):
             requested = self.air.doId2do[self.requests[context][0][1]]
             requester = self.air.doId2do[self.requests[context][0][0]]
             
+            #lol making this TT specific...
+            self.air.questManager.toonMadeFriend(requested, requester)
+            self.air.questManager.toonMadeFriend(requester, requested)
+            
             requested.extendFriendsList(requester.getDoId(), 0)
             requester.extendFriendsList(requested.getDoId(), 0)
             
