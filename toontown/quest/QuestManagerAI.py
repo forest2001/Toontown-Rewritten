@@ -70,7 +70,7 @@ class QuestManagerAI:
                             if (quest.getHolder() == Quests.Any) \
                             or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
                             or (quest.getHolderType() == 'track' and quest.getHolder() == suit['track']) \
-                            or (quest.getHolderType() == 'level' and quest.getHolder() == suit['level']):
+                            or (quest.getHolderType() == 'level' and quest.getHolder() <= suit['level']):
                                 progress = toon.quests[index][4] & pow(2, 16) - 1 # This seems to be the Disne
                                 completion = quest.testRecover(progress)
                                 if completion[0]:
