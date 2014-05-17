@@ -681,15 +681,13 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         extraChatFlags = None
         dialogueList = []
         for arg in args:
-            if type(arg) == type(0) or type(arg) == type(1.0):
+            if type(arg) in (int, float) or arg.isdigit():
                 quitButton = int(arg)
-            elif type(arg) == type(''):
+            elif arg[0] == '"' and arg[-1] == '"':
                 if len(arg) > 4 and arg[1:3] == 'CF':
                     extraChatFlags = globals()[arg[1:-1]]
-                else:
-                    dialogueList.append(self.getVar(arg))
             else:
-                notify.error('invalid argument type')
+                dialogueList.append(self.getVar(arg))
 
         return (quitButton, extraChatFlags, dialogueList)
 
@@ -708,9 +706,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         avatar = self.getVar(avatarName)
         chatString = getattr(TTLocalizer, line[2])
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
-        # Hack Alert!
-        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
-        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags)
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
     def parseLocalChatPersist(self, line):
         lineLength = len(line)
@@ -739,9 +735,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         chatString = getattr(TTLocalizer, line[3])
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
-        # Hack Alert!
-        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
-        return Func(avatar.setLocalPageChat, chatString, 0)
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
     def parseCCChatConfirm(self, line):
         lineLength = len(line)
@@ -752,9 +746,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             chatString = getattr(TTLocalizer, line[2][1:-1] % 'Minnie')
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[3:])
-        # Hack Alert!
-        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
-        return Func(avatar.setLocalPageChat, chatString, 0)
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
     def parseCCChatToConfirm(self, line):
         lineLength = len(line)
@@ -770,9 +762,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             chatString = getattr(TTLocalizer, line[3][1:-1] % 'Minnie')
         chatString = chatString.replace('%s', toAvatarName)
         quitButton, extraChatFlags, dialogueList = self.parseExtraChatArgs(line[4:])
-        # Hack Alert!
-        # return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
-        return Func(avatar.setLocalPageChat, chatString, 0)
+        return Func(avatar.setLocalPageChat, chatString, quitButton, extraChatFlags, dialogueList)
 
     def parsePlaySfx(self, line):
         if len(line) == 2:
