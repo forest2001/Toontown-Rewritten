@@ -1480,7 +1480,6 @@ class OTPClientRepository(ClientRepositoryBase):
             self.gameFSM.request('playGame', [hoodId, zoneId, avId])
         elif base.config.GetBool('force-tutorial', 1):
             if hasattr(self, 'skipTutorialRequest') and self.skipTutorialRequest:
-                self.gameFSM.request('playGame', [hoodId, zoneId, avId])
                 self.gameFSM.request('skipTutorialRequest', [hoodId, zoneId, avId])
             else:
                 self.gameFSM.request('tutorialQuestion', [hoodId, zoneId, avId])
