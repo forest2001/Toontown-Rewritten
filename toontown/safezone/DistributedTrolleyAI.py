@@ -62,15 +62,15 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # If all players disconnected while the trolley was departing, the
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
-            
-            for avId in players:
-                noTravel = doesntWantTrolleyTracks.get(avId)
-                aiNoTravel = doesntWantTrolleyTracks.get('everyone')
-                
-            if len(players) > 1 and not noTravel and not aiNoTravel:
-                mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
-            else:
-                mg = createMinigame(self.air, players, self.zoneId)
+
+            #for avId in players:
+            #    noTravel = doesntWantTrolleyTracks.get(avId)
+            #    aiNoTravel = doesntWantTrolleyTracks.get('everyone')
+
+            #if len(players) > 1 and not noTravel and not aiNoTravel:
+            #    mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
+            #else:
+            mg = createMinigame(self.air, players, self.zoneId)
             for player in players:
                 self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
                 self.removeFromTrolley(player)
@@ -155,7 +155,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
         if self.state == 'WaitCountdown' and self.slots.count(None) == 4:
             self.b_setState('WaitEmpty')
-    
+
 @magicWord(category=CATEGORY_OVERRIDE, types=[str])
 def travel(target='self'):
     if target=='everyone':
