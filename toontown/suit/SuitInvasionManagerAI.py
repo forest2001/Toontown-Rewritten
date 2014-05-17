@@ -109,6 +109,7 @@ class SuitInvasionManagerAI:
             # We're already invading Toontown, go away!
             return False
         self.invading = True
+        self.spawnedSuits = 0
         self.suitName = suitName
         self.numSuits = numSuits
         self.skelecog = skelecog
