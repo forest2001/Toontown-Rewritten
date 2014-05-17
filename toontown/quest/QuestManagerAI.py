@@ -301,7 +301,10 @@ class QuestManagerAI:
         self.giveReward(toon, rewardId)
         
     def toonMadeFriend(self, toon, otherToon):
-        pass
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            if isinstance(quest, Quests.FriendQuest):
+                self.__incrementQuestProgress(toon.quests[index])
+        toon.b_setQuests(toon.quests)
         
     def toonFished(self, toon, zoneId):
         """
