@@ -4702,7 +4702,7 @@ def badName():
     colorstring = TTLocalizer.NumToColor[dna.headColor]
     animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
     spellbook.getTarget().b_setName(colorstring + ' ' + animaltype)
-    spellbook.getTarget().sendUpdate('WishNameState', ['REJECTED'])
+    spellbook.getTarget().sendUpdate('WishNameState', 4) # 4 = WISHNAME_REJECTED
     return "Revoked %s's name successfully. They have been renamed to %s." % (oldname, spellbook.getTarget().getName())
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
