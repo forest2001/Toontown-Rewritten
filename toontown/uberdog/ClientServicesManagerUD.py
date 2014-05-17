@@ -688,10 +688,14 @@ class LoadAvatarFSM(AvatarOperationFSM):
         dg.addString(dgcleanup.getMessage())
         self.csm.air.send(dg)
 
+        # Get the avatar's "true" access. (without "server" bit)
+        adminAccess = self.account.get('ADMIN_ACCESS', 0)
+        adminAccess = adminAccess - adminAccess % 100
+
         # Activate the avatar on the DBSS:
         self.csm.air.sendActivate(self.avId, 0, 0,
                                   self.csm.air.dclassesByName['DistributedToonUD'],
-                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)],
+                                  {'setAdminAccess': [adminAccess],
                                    'setWantBetaKeyQuest': [self.account.get('BETA_KEY_QUEST', 0)],
                                    'setWebAccountId': [self.account.get('ACCOUNT_ID', 0)]})
 
