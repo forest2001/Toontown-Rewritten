@@ -104,10 +104,7 @@ class MagicWordCategory:
         self.words.append(word)
 
     def getDefinedAccess(self):
-        try:
-            return simbase.config.GetInt('mw-' + self.name.replace(' ', '-').lower(), 0)
-        except:
-            return 0
+        return config.GetInt('mw-' + self.name.replace(' ', '-').lower(), 0)
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300,
