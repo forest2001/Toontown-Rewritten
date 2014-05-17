@@ -180,43 +180,45 @@ CRMissingGameRootObject = 'Missing some root game objects.  (May be a failed net
 CRNoDistrictsTryAgain = 'No Districts are available. Try again?'
 CRRejectRemoveAvatar = 'The avatar was not able to be deleted, try again another time.'
 CRLostConnection = 'Your internet connection to the servers has been unexpectedly broken.'
-CRBootedReasons = {1: 'An unexpected problem has occurred.  Your connection has been lost, but you should be able to connect again and go right back into the game.',
+CRBootedReasons = {1: 'Yikes - An unexpected problem occured.  Your connection has been lost, but you should be able to connect again and go right back into Toontown.',
  100: 'You have been disconnected because someone else just logged in using your account on another computer.',
  120: 'You have been disconnected because of a problem with your authorization to use keyboard chat.',
- 122: 'There has been an unexpected problem logging you in.  Please contact customer support.',
- 124: 'Your installed files are out of date.  Please launch the game from the official launcher so that it can install updates.  If you continue to get this error, contact support.',
- 125: 'Your installed files appear to be invalid.  Please use the Play button on the official website to run.',
- 126: 'You are not authorized to use administrator privileges.',
- 127: 'A problem has occurred with your Toon.  Please contact Member Services via phone or email and reference Error Code 127.  Thank you.',
- 151: 'You have been logged out by an administrator working on the servers.',
- 152: "There has been a reported violation of our Terms of Use connected to '%(name)s'. For more details, please review the message sent to the e-mail address associated with '%(name)s'.",
- 153: 'The district you were playing on has been reset.  Everyone who was playing on that district has been disconnected.  However, you should be able to connect again and go right back into the game.',
- 154: 'The game is temporarily closing for maintenance.  Everyone has been logged out.',
- 155: 'You were kicked by a Moderator.\n\nReason: %(dc_reason)s',
+ 122: 'There was an issue getting you into Toontown.  If the problem persists, please contact Toontown Rewritten Support.',
+ 124: 'Your installed files are out of date!  Use the official launcher to download the newest version, or contact Toontown Rewritten Support of the problem persists.',
+ 125: 'Your installed files appear to be invalid.  Use the official launcher to download the newest version, or contact Toontown Rewritten Support of the problem persists.',
+ 126: 'You aren\'t authorized to use administrator privileges. The request has been noted.',
+ 127: 'There appears to be a problem with your Toon.  Don\'t worry - we\'ll get it straightened out. Please contact Toontown Rewritten Support and referece Error Code 127.',
+ 151: 'You were kicked out by one of the developers working on the servers.',
+ 152: "You have been banned from the game for a reported violation of our Terms of Use connected to '%(name)s'. For more details, please check the Toontown Rewritten website.",
+ 153: 'The district you were playing on has been reset.  Everyone who was playing on that district has also been disconnected, however, you should be able to connect again and go right back into Toontown.',
+ 154: 'Toontown Rewritten is going down for an update!  Stay Tooned on our website for details, or try logging in again later.',
+ 155: 'You\'ve been warned for %(dc_reason)s. Try to behave next time!',
  156: 'Toontown Rewritten will be closing tomorrow to move into beta. From every hour from now to 2:00PM TTT tomorrow, you can enter Toontown and relive the excitement of the elections. Check our website for updates, and thank you for Alpha Testing with us!',
  288: 'Sorry, you have used up all of your available minutes this month.',
  349: 'Sorry, you have used up all of your available minutes this month.'}
-CRBootedReasonUnknownCode = 'An unexpected problem has occurred (error code %s).  Your connection has been lost, but you should be able to connect again and go right back into the game.'
+CRBootedReasonUnknownCode = 'Yikes - An unexpected problem occured. (Error code %s)  Your connection has been lost, but you should be able to connect again and go right back into Toontown.'
 CRSystemMessages = {
     # General, generic messages:
     0: '%s',
     1: 'ADMIN: %s',
-    2: 'SYSTEM: %s',
-    3: 'Toon HQ: %s',
+    2: 'Toon HQ: %s',
+    3: 'Loony Labs: %s',
     4: 'Toon Council: %s',
 
     # Maintenance notifications:
-    50: 'SYSTEM: Toontown Rewritten will be closing for an update soon.',
-    51: 'SYSTEM: Toontown Rewritten will be closing for an update in %s minute(s).',
-    52: 'SYSTEM: Toontown Rewritten will be closing for an update in %s second(s).',
+    50: 'Toontown Rewritten will be closing for an update soon. Start wrapping things up!',
+    51: 'Toontown Rewritten will be closing for an update in %s minutes.',
+    52: 'Toontown Rewritten will be closing for an update in %s seconds.',
+    53: 'Toontown Rewritten will be closing for an update in just a moment. Hang tight!',
 
-    60: 'SYSTEM: The district that you are on will be reset for maintenance soon.',
-    61: 'SYSTEM: The district that you are on will be reset for maintenance in %s minute(s).',
-    62: 'SYSTEM: The district that you are on will be reset for maintenance in %s second(s).',
+    60: 'The district that you\'re playing in will be closed off for maintenance soon. Try to move if you can.',
+    61: 'The district that you\'re on will be closed off for maintenance in %s minutes.',
+    62: 'The district that you\'re on will be closed off for maintenance in %s seconds.',
 
     # Announcements.
     100: 'Toon Council: Congratulations! Your Toon name has been approved.',
-    101: 'Toon Council: Sorry, the name you submitted has been rejected.',
+    101: 'Toon Council: Sorry, the name you submitted was rejected. You can submit a new name on the main screen.',
+    102: '%s just became the first Toon in Toon History to reach 137 Laff Points!'
 }
 CRTryConnectAgain = '\n\nTry to connect again?'
 CRToontownUnavailable = 'The server appears to be temporarily unavailable, still trying...'
