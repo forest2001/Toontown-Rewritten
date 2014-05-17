@@ -109,6 +109,7 @@ class DNABlock:
     title = None
     buildingType = None
     zone = None
+    node = None
 
     def __init__(self, index):
         self.index = index

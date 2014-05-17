@@ -1,5 +1,5 @@
 import math
-from pandac.PandaModules import CardMaker, TextNode
+from pandac.PandaModules import CardMaker, TextNode, Point3
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
 from direct.task import Task
 from toontown.toon import NPCToons
@@ -7,8 +7,6 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.quest import Quests
 from toontown.suit import SuitPlannerBase
-from toontown.dna.DNAStorage import DNAStorage
-from toontown.dna import DNAUtil
 import QuestMapGlobals
 
 class QuestMap(DirectFrame):
@@ -83,7 +81,6 @@ class QuestMap(DirectFrame):
         self.sInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=sIcon, geom_pos=(-0.2, 0, 0), geom_scale=0.8, relief=None)
         self.sInfo.setPos(0.8, 0, -0.5)
         icons.removeNode()
-        return
 
     def updateCogInfo(self):
         currPercentage = self.suitPercentage.get(self.zoneId)
@@ -93,7 +90,6 @@ class QuestMap(DirectFrame):
         self.lInfo['text'] = '%s%%' % currPercentage[1]
         self.mInfo['text'] = '%s%%' % currPercentage[2]
         self.sInfo['text'] = '%s%%' % currPercentage[3]
-        return
 
     def destroy(self):
         self.ignore('questPageUpdated')
@@ -122,7 +118,6 @@ class QuestMap(DirectFrame):
         self.buildingMarkers.append(marker)
         iconNP.removeNode()
         gui.removeNode()
-        return
 
     def updateQuestInfo(self):
         for marker in self.buildingMarkers:
@@ -157,12 +152,8 @@ class QuestMap(DirectFrame):
                         branchZone = zone - zone % 100
                         finalZone = branchZone + 500 + blockId
                         if npcZone == finalZone:
-                            door = None # Find the door
-                            doorPos = door.getPos()
-                            doorHpr = door.getHpr()
-                            self.putBuildingMarker(doorPos, doorHpr, mapIndex=mapIndex)
-
-        return
+                            building = block.node
+                            self.putBuildingMarker(Point3(building.getPos()), building.getHpr(), mapIndex=mapIndex)
 
     def transformAvPos(self, pos):
         if self.cornerPosInfo is None:
@@ -268,7 +259,6 @@ class QuestMap(DirectFrame):
         self.obscureButton()
         self.ignore('questPageUpdated')
         taskMgr.remove('questMapUpdate')
-        return
 
     def handleMarker(self):
         if hasattr(base.cr.playGame.getPlace(), 'isInterior') and base.cr.playGame.getPlace().isInterior:

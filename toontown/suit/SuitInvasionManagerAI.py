@@ -16,9 +16,9 @@ class SuitInvasionManagerAI:
     This class doesn't need to do much, besides telling the suit planners
     when an invasion starts and stops.
     """
-    
+
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitInvasionManagerAI')
-    
+
     def __init__(self, air):
         self.air = air
         self.invading = 0
@@ -28,7 +28,7 @@ class SuitInvasionManagerAI:
         self.spawnedSuits = 0
         self.randomInvasionProbability = 0.5
         taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
-        
+
     def __randomInvasionTick(self, task=None):
         """
         Each hour, have a tick to check if we want to start an invasion in
@@ -36,7 +36,7 @@ class SuitInvasionManagerAI:
         probability, and each tick it will generate a random float between
         0 and 1, and then if it's less than or equal to the probablity, it
         will spawn the invasion.
-        
+
         An invasion will not be started if there is an invasion already
         on-going.
         """
@@ -53,11 +53,11 @@ class SuitInvasionManagerAI:
             numSuits = randint(500, 2000)
             self.startInvasion(suitName, numSuits, False)
         return task.again
-    
+
     def getInvading(self):
         """ Tell the caller if an invasion is currently running. """
         return self.invading
-    
+
     def stopInvasion(self, task=None):
         """
         Stop an invasion on the current AI. This is called either by
@@ -82,23 +82,23 @@ class SuitInvasionManagerAI:
         self.invading = 0
         self.suitName = None
         self.__spAllCogsSupaFly()
-    
+
     def __checkInvasionOver(self):
         """ Test if the current invasion has created all the suits. """
         if self.spawnedSuits >= self.numSuits:
             self.stopInvasion()
-        
+
     def getInvadingCog(self):
         """ Tell the caller the current cog type invading and if they are a skelecog. """
         self.spawnedSuits += 1
         self.__checkInvasionOver()
         return (self.suitName, self.skelecog)
-        
+
     def __spAllCogsSupaFly(self):
         """ Tell all SuitPlanners to get rid of the current cogs. """
         for sp in self.air.suitPlanners.values():
             sp.flySuits()
-        
+
     def startInvasion(self, suitName='f', numSuits=1000, skelecog=False):
         """
         Start an invasion on the current AI. This can be invoked by anything, such
@@ -109,6 +109,7 @@ class SuitInvasionManagerAI:
             # We're already invading Toontown, go away!
             return False
         self.invading = True
+        self.spawnedSuits = 0
         self.suitName = suitName
         self.numSuits = numSuits
         self.skelecog = skelecog
@@ -123,8 +124,8 @@ class SuitInvasionManagerAI:
         taskMgr.doMethodLater(1.2 * numSuits, self.stopInvasion, 'invasion-timeout')
         self.__spAllCogsSupaFly()
         return True
-        
-@magicWord(types=[str, str, int, int])
+
+@magicWord(types=[str, str, int, int], category=CATEGORY_OVERRIDE)
 def invasion(cmd, name='f', num=1000, skelecog=0):
     """ Spawn an invasion on the current AI if one doesn't exist. """
     invMgr = simbase.air.suitInvasionManager

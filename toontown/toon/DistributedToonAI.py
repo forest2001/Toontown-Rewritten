@@ -224,7 +224,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.modulelist = ModuleListAI.ModuleList()
         self._dbCheckDoLater = None
         self.teleportOverride = 0
+        self.wantBetaKeyQuest = 0
         self.magicWordTeleportRequests = []
+        self.webAccountId = 0
         return
 
     def generate(self):
@@ -269,7 +271,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             # Do we want to start the playground toonup tick?
             self.considerToonUp(zoneId)
-            
+
             # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
@@ -281,7 +283,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
-                
+
                 if zoneId == ToontownGlobals.GoofySpeedway:
                     tpAccess = self.getTeleportAccess()
                     if not ToontownGlobals.GoofySpeedway in tpAccess:
@@ -355,7 +357,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def ban(self, comment):
         #simbase.air.banManager.ban(self.doId, self.DISLid, comment)
         pass
-        
+
     def disconnect(self):
         self.requestDelete()
 
@@ -532,13 +534,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 allowedColors = ToonDNA.defaultBoyColorList
             else:
                 allowedColors = ToonDNA.defaultGirlColorList
-            
+
             # No idea why this wasn't done by disney, but add sanity checks for black (and now white) toons.
             if self.dna.getAnimal() == 'bear':
                 allowedColors = allowedColors + [0]
             if self.dna.getAnimal() == 'cat':
                 allowedColors = allowedColors + [26]
-                
+
             if self.dna.legColor not in allowedColors:
                 self.dna.legColor = allowedColors[0]
                 changed = True
@@ -1155,7 +1157,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedPlayerAI.DistributedPlayerAI.setHp(self, hp)
         if hp <= 0:
             messenger.send(self.getGoneSadMessage())
-            
+
     def b_setMaxHp(self, maxHp):
         if maxHp > ToontownGlobals.MaxHpLimit:
             self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to go over 137 laff.')
@@ -1997,7 +1999,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if simbase.config.GetBool('want-ban-teleport', False):
                 commentStr = 'Toon %s teleporting to a zone %s they do not have access to' % (self.doId, zoneId)
                 #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
-                
+
     def setTeleportOverride(self, flag):
         self.teleportOverride = flag
         self.b_setHoodsVisited([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,13000])
@@ -2448,7 +2450,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setImmortalMode(self, flag):
         self.immortalMode = flag
-        
+
     def setUnlimitedGags(self, flag):
         self.unlimitedGags = flag
 
@@ -2623,10 +2625,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def b_setPieThrowType(self, pieThrowType):
         self.setPieThrowType(pieThrowType)
         self.d_setPieThrowType(pieThrowType)
- 
+
     def d_setPieThrowType(self, pieThrowType):
         self.sendUpdate('setPieThrowType', [pieThrowType])
- 
+
     def setPieThrowType(self, pieThrowType):
         self.pieThrowType = pieThrowType
 
@@ -2646,7 +2648,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def stopToonUp(self):
         taskMgr.remove(self.uniqueName('safeZoneToonUp'))
         self.ignore(self.air.getAvatarExitEvent(self.getDoId()))
-        
+
     def shouldToonUp(self, zoneId):
         if zoneId == OTPGlobals.QuietZone:
             return None
@@ -2662,13 +2664,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 from DistributedNPCPartyPersonAI import DistributedNPCPartyPersonAI
                 if isinstance(zoneOwner, (DistributedRacePadAI, DistributedGolfKartAI, DistributedNPCPartyPersonAI)):
                     return True
-                elif zoneOwner in [self.air.partyManager, self.air.estateManager, 'MinigameCreatorAI']:
+                elif zoneOwner in [self.air.estateManager, 'MinigameCreatorAI']:
                     return True
+                elif config.GetBool('want-parties'):
+                    if zoneOwner in [self.air.partyManager]:
+                        return True
                 else:
                     return False
         # Incase for whatever reason we even get to this stage...
         return False
-        
+
     def considerToonUp(self, zoneId):
         if zoneId == OTPGlobals.QuietZone:
             # Don't consider anything, we're in the QuietZone. Shh!
@@ -4405,20 +4410,39 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             for coconspirator in coconspirators:
                 coconspirator.ban('collision and position hacking')
                 coconspirator.disconnect()
-                
+
+    def setWantBetaKeyQuest(self, wantQuest):
+        self.wantBetaKeyQuest = wantQuest
+
+    def d_setWantBetaKeyQuest(self, wantQuest):
+        self.sendUpdate('setWantBetaKeyQuest', [wantQuest])
+
+    def b_setWantBetaKeyQuest(self, wantQuest):
+        self.setWantBetaKeyQuest(wantQuest)
+        self.d_setWantBetaKeyQuest(wantQuest)
+
+    def getWantBetaKeyQuest(self):
+        return self.wantBetaKeyQuest
+
     def magicFanfare(self):
         self.sendUpdate('magicFanfare', [])
-        
+
     def magicTeleportResponse(self, requesterId, hoodId):
         toon = self.air.doId2do.get(requesterId)
         if toon:
             toon.magicTeleportInitiate(self.getDoId(), hoodId, self.getLocation()[1])
-            
+
     def magicTeleportInitiate(self, targetId, hoodId, zoneId):
         if targetId not in self.magicWordTeleportRequests:
             return
         self.magicWordTeleportRequests.remove(targetId)
         self.sendUpdate('magicTeleportInitiate', [hoodId, zoneId])
+
+    def setWebAccountId(self, webId):
+        self.webAccountId = webId
+
+    def getWebAccountId(self):
+        return self.webAccountId
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -4445,34 +4469,34 @@ def setMaxHp(hpVal):
     spellbook.getTarget().b_setMaxHp(hpVal)
     spellbook.getTarget().toonUp(hpVal)
 
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])   
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])
 def setTrackAccess(toonup, trap, lure, sound, throw, squirt, drop):
     """Set target's gag track access."""
     spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
 def maxToon(hasConfirmed='UNCONFIRMED'):
     """Max out the toons stats, for end-level gameplay. Should only be (and is restricted to) casting on Administrators only."""
     toon = spellbook.getInvoker()
-    
+
     if hasConfirmed != 'CONFIRM':
         return 'Are you sure you want to max out %s? This process is irreversible. Use "~maxToon CONFIRM" to confirm.' % toon.getName()
-    
+
     # Max out gag tracks (all 7 tracks)
     toon.b_setTrackAccess([1] * 7)
     toon.b_setMaxCarry(MaxCarryLimit + 15) # Compensate for the extra gag track.
     toon.experience.maxOutExp() # Completely max out the toons experience.
     toon.b_setExperience(toon.experience.makeNetString())
-    
+
     # Restock all gags.
     toon.inventory.zeroInv()
     toon.inventory.maxOutInv(filterUberGags=0, filterPaidGags=0)
     toon.b_setInventory(toon.inventory.makeNetString())
-    
+
     # Max out laff
     toon.b_setMaxHp(ToontownGlobals.MaxHpLimit)
     toon.toonUp(toon.getMaxHp() - toon.getHp())
-    
+
     # Max out cog suits (ORDER: Bossbot, Lawbot, Cashbot, Sellbot)
     toon.b_setCogParts([
         CogDisguiseGlobals.PartsPerSuitBitmasks[0], # Bossbot
@@ -4482,21 +4506,21 @@ def maxToon(hasConfirmed='UNCONFIRMED'):
     ])
     toon.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 4)
     toon.b_setCogTypes([SuitDNA.suitsPerDept-1] * 4)
-    
+
     # High racing tickets
     toon.b_setTickets(99999)
-    
+
     # Teleport access everywhere (Including CogHQ, excluding Funny Farm.)
     toon.b_setHoodsVisited(ToontownGlobals.Hoods)
     toon.b_setTeleportAccess(ToontownGlobals.HoodsForTeleportAll)
-    
+
     # General end game settings
     toon.b_setQuestCarryLimit(ToontownGlobals.MaxQuestCarryLimit)
     toon.b_setRewardHistory(Quests.ELDER_TIER, [])
     toon.b_setMaxMoney(250)
     toon.b_setMoney(toon.getMaxMoney())
     toon.b_setBankMoney(ToontownGlobals.DefaultMaxBankMoney)
-    
+
     return 'By the power invested in me, I, McQuack, max your toon.'
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
@@ -4508,14 +4532,14 @@ def setMaxMoney(moneyVal):
     spellbook.getTarget().b_setMoney(moneyVal)
     return 'maxMoney set to %s' % moneyVal
 
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setFishingRod(rodVal):
     """Set target's fishing rod value."""
     if not 0 <= rodVal <= 4:
         return 'Rod value must be between 0 and 4.'
     spellbook.getTarget().b_setFishingRod(rodVal)
     return 'Rod changed to ' + str(rodVal)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setMaxFishTank(tankVal):
     """Set target's max fish tank value."""
@@ -4523,13 +4547,13 @@ def setMaxFishTank(tankVal):
         return 'Max fish tank value must be between 20 and 99'
     spellbook.getTarget().b_setMaxFishTank(tankVal)
     return 'Max size of fish tank changed to ' + str(tankVal)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
 def setName(nameStr):
     """Set target's name."""
     spellbook.getTarget().b_setName(nameStr)
     return "Changed avId %s's name to %s" % (spellbook.getTarget().doId, nameStr)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setHat(hatId, hatTex=0):
     """Set hat of target toon."""
@@ -4538,7 +4562,7 @@ def setHat(hatId, hatTex=0):
     if not 0 <= hatTex <= 20:
         return 'Invalid hat texture specified.'
     spellbook.getTarget().b_setHat(hatId, hatTex, 0)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setGlasses(glassesId, glassesTex=0):
     """Set glasses of target toon."""
@@ -4547,7 +4571,7 @@ def setGlasses(glassesId, glassesTex=0):
     if not 0 <= glassesTex <= 4:
         return 'Invalid glasses texture specified.'
     spellbook.getTarget().b_setGlasses(glassesId, glassesTex, 0)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setBackpack(bpId, bpTex=0):
     """Set backpack of target toon."""
@@ -4556,7 +4580,7 @@ def setBackpack(bpId, bpTex=0):
     if not 0 <= bpTex <= 6:
         return 'Invalid backpack texture specified.'
     spellbook.getTarget().b_setBackpack(bpId, bpTex, 0)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int])
 def setShoes(shoesId, shoesTex=0):
     """Set shoes of target toon."""
@@ -4565,19 +4589,19 @@ def setShoes(shoesId, shoesTex=0):
     if not 0 <= shoesTex <= 48:
         return 'Invalid shoe specified.'
     spellbook.getTarget().b_setShoes(shoesId, shoesTex, 0)
-    
-@magicWord(category=CATEGORY_MODERATION, types=[bool])
-def kick(overrideSelfKick=False):
+
+@magicWord(category=CATEGORY_MODERATION, types=[str])
+def kick(reason):
     """Kick the player from the game server."""
-    if not overrideSelfKick and spellbook.getTarget() == spellbook.getInvoker():
-        return "Are you sure you want to kick yourself? Use '~kick True' if you are."
-    #spellbook.getTarget().disconnect()
+    if spellbook.getTarget() == spellbook.getInvoker():
+        # Dumbass tried to kick themselves. Tut tut tut.
+        return "You cannot kick yourself, %s!" % spellbook.getInvoker().getName()
     dg = PyDatagram()
     dg.addServerHeader(spellbook.getTarget().GetPuppetConnectionChannel(spellbook.getTarget().doId), simbase.air.ourChannel, CLIENTAGENT_EJECT)
     dg.addUint16(155)
-    dg.addString('You were kicked by a moderator!')
+    dg.addString(reason)
     simbase.air.send(dg)
-    return "The player %s was kicked." % spellbook.getTarget().getName()
+    return "You kicked %s with reason '%s'." % (spellbook.getTarget().getName(), reason)
 
 @magicWord(category=CATEGORY_MODERATION, types=[str, bool, bool], access=400) # Set to 400 for now...
 def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
@@ -4594,7 +4618,7 @@ def ban(reason="Unknown reason.", confirmed=False, overrideSelfBan=False):
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def ut(doField, doData=None):
     """Update a toons field in the db."""
-    
+
     methodExists = hasattr(spellbook.getTarget(), doField)
     b_methodExists = hasattr(spellbook.getTarget(), 'b_'+doField)
     access = spellbook.getInvokerAccess()
@@ -4643,10 +4667,10 @@ def ut(doField, doData=None):
             spellbook.getTarget().sendUpdate(doField)
         #else:
             #return "Unable to send to Astron. Access 500 required."
-           
+
     return "Method " + doField + " was called on " + spellbook.getTarget().name + " successfully."
 '''
-            
+
 @magicWord(category=CATEGORY_MODERATION)
 def togGM():
     """Toggle GM Icon for toon."""
@@ -4660,7 +4684,7 @@ def togGM():
         elif access>=200:
             spellbook.getInvoker().b_setGM(3)
         return 'You have enabled your GM icon.'
-            
+
 @magicWord(category=CATEGORY_MODERATION)
 def ghost():
     """Set toon to invisible."""
@@ -4669,7 +4693,7 @@ def ghost():
         return 'Time to ninja!'
     else:
         spellbook.getInvoker().b_setGhostMode(0)
-        
+
 @magicWord(category=CATEGORY_MODERATION)
 def badName():
     """Set target's name to the 'REJECTED' state and rename them to their <COLOR SPECIES> name."""
@@ -4678,7 +4702,7 @@ def badName():
     colorstring = TTLocalizer.NumToColor[dna.headColor]
     animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
     spellbook.getTarget().b_setName(colorstring + ' ' + animaltype)
-    spellbook.getTarget().sendUpdate('WishNameState', ['REJECTED'])
+    spellbook.getTarget().sendUpdate('WishNameState', 4) # 4 = WISHNAME_REJECTED
     return "Revoked %s's name successfully. They have been renamed to %s." % (oldname, spellbook.getTarget().getName())
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
@@ -4692,7 +4716,7 @@ def setGM(gmId):
         spellbook.getTarget().b_setGM(0)
     spellbook.getTarget().b_setGM(gmId)
     return 'You have set %s to GM type %s' % (spellbook.getTarget().getName(), gmId)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def setTickets(tixVal):
     """Set the target's racing ticket's value."""
@@ -4700,24 +4724,24 @@ def setTickets(tixVal):
         return 'Ticket value out of range (0-99999)'
     spellbook.getTarget().b_setTickets(tixVal)
     return "%s's tickets were set to %s." % (spellbook.getTarget().getName(), tixVal)
-    
+
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def setCogIndex(indexVal):
     """Transform into a cog/suit. THIS SHOULD ONLY BE USED WHERE NEEDED, E.G. ELECTIONS"""
     if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def dna(part, value):
     # This is where the fun begins, woo!
     """Set a specific part of DNA for the target toon. Be careful, you don't want to break anyone!"""
-    
+
     av = spellbook.getTarget()
-    
+
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(av.getDNAString())
-    
+
     def isValidColor(colorIndex):
         if not 0 <= colorIndex <= 26: # This could actually be selected from ToonDNA, but I prefer this :D
             return False
@@ -4726,7 +4750,7 @@ def dna(part, value):
         if colorIndex == 26 and dna.getAnimal() != 'cat':
             return False
         return True
-    
+
     # Body Part Colors
     if part=='headColor':
         value = int(value)
@@ -4759,7 +4783,7 @@ def dna(part, value):
         if not 0 <= value <= 26:
             return "DNA: Color index out of range."
         dna.gloveColor = value
-        
+
     # Body Sizes, Species & Gender (y u want to change gender pls)
     elif part=='gender':
         if value=='male':
@@ -4802,12 +4826,12 @@ def dna(part, value):
         if not 0 <= value <= 2:
             return "DNA: Legs index out of range."
         dna.legs = ToonDNA.toonLegTypes[value]
-    
+
     # Allow Admins to back up a toons current DNA before making changes.
     elif part=='save':
         av.mwDNABackup[spellbook.getInvoker().doId] = av.getDNAString()
         return "Saved DNA to toon's DToonAI. Note: If the toon logs out, the save will be lost!"
-        
+
     # Restore from a previous back up of DNA.
     elif part=='restore':
         if spellbook.getInvoker().doId in av.mwDNABackup:
@@ -4816,14 +4840,14 @@ def dna(part, value):
             return "Restored %s's DNA to last save." % av.getName()
         else:
             return "DNA: There are no backups available."
-    
+
     # Don't allow them to submit any changes if they don't enter a valid DNA part.
     else:
         return "DNA: Invalid part specified."
-    
+
     av.b_setDNAString(dna.makeNetString())
     return "Completed DNA change successfully."
-    
+
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def setTrophyScore(value):
     """Set the trophy score of target"""
@@ -4854,7 +4878,7 @@ def setQP(questId=0, progress=0):
     Get current questId in progress via ~setQP.
     Set questId progress via ~setQP questId value.
     """
-    
+
     av = spellbook.getTarget()
     questIds = ""
     for index in range(len(av.quests)):
@@ -4875,26 +4899,26 @@ def locate(avIdShort=0, returnType=''):
     av = simbase.air.doId2do.get(avIdFull, None)
     if not av:
         return "Could not find the avatar on the current AI."
-    
+
     # Get the avatar's location.
     zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
     trueZoneId = zoneId
     interior = False
-    
+
     if returnType == 'zone':
         # The avatar that called the MagicWord wants a zoneId... Provide them with the untouched zoneId.
         return "%s is in zoneId %d." % (av.getName(), trueZoneId)
-        
+
     if returnType == 'playground':
         # The avatar that called the MagicWord wants the playground name that the avatar is currently in.
         zoneId = ZoneUtil.getCanonicalHoodId(zoneId)
-    
+
     if ZoneUtil.isInterior(zoneId):
         # If we're in an interior, we want to fetch the street/playground zone, since there isn't
         # any mapping for interiorId -> shop name (afaik).
         zoneId -= 500
         interior = True
-    
+
     if ZoneUtil.isPlayground(zoneId):
         # If it's a playground, TTG contains a map of all hoodIds -> playground names.
         where = ToontownGlobals.hoodNameMap.get(zoneId, None)
@@ -4905,18 +4929,18 @@ def locate(avIdShort=0, returnType=''):
 
     if not where:
         return "Failed to map the zoneId %d [trueZoneId: %d] to a location..." % (zoneId, trueZoneId)
-    
+
     if interior:
         return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
-    
-@magicWord(category=CATEGORY_OVERRIDE, types=[int])    
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def online(doId):
     """ Check if a toon is online. """
     av = spellbook.getTarget()
     doId = 100000000 + doId
     simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
-    
+
 @magicWord(category=CATEGORY_OVERRIDE)
 def unlimitedGags():
     """ Restock avatar's gags at the start of each round. """
@@ -4924,7 +4948,7 @@ def unlimitedGags():
     av.setUnlimitedGags(not av.unlimitedGags)
     return 'Toggled unlimited gags %s for %s' % ('ON' if av.unlimitedGags else 'OFF', av.getName())
 
-@magicWord(category=CATEGORY_OVERRIDE)    
+@magicWord(category=CATEGORY_OVERRIDE)
 def immortal():
     """ Make target (if 500+) or self (if 499-) immortal. """
     av = spellbook.getTarget() if spellbook.getInvokerAccess() >= 500 else spellbook.getInvoker()
@@ -4935,14 +4959,14 @@ def immortal():
 def sostoons():
     """Restock all *good* VP SOS toons."""
     spellbook.getTarget().restockAllNPCFriends(99)
-    return 'Restocked all NPC SOS toons successfully!'   
-    
+    return 'Restocked all NPC SOS toons successfully!'
+
 @magicWord(category=CATEGORY_CHARACTERSTATS)
 def unites():
     """Restock all CFO phrases."""
     spellbook.getTarget().restockAllResistanceMessages(99)
     return 'Restocked all unites successfully!'
-    
+
 @magicWord(category=CATEGORY_OVERRIDE)
 def summons():
     """ Restock all CJ summons. """
@@ -4957,13 +4981,13 @@ def summons():
     av.b_setCogStatus([CogPageGlobals.COG_COMPLETE2] * 32)
     av.restockAllCogSummons()
     return 'Restocked all cog summons successfully!'
-    
+
 @magicWord(category=CATEGORY_OVERRIDE)
 def pinkslips():
     """ Restock (to 99) CEO pink slips. """
     spellbook.getTarget().b_setPinkSlips(99)
     return 'Restocked 99 pink slips successfully!'
-    
+
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def questTier(tier):
     """
@@ -4977,14 +5001,14 @@ def questTier(tier):
     av.b_setQuests([])
     av.b_setRewardHistory(tier, [])
     return "Set %s's quest tier to %d." % (av.getName(), tier)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int, int, int, int, int])
 def tracks(toonup, trap, lure, sound, throw, squirt, drop):
     """ Set access for each of the 7 gag tracks. """
     spellbook.getTarget().b_setTrackAccess([toonup, trap, lure, sound, throw, squirt, drop])
     return "Set track access accordingly."
 
-@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, int])    
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, int])
 def exp(track, amt):
     """ Set your experience to the amount specified for a single track. """
     trackIndex = TTLocalizer.BattleGlobalTracks.index(track)
@@ -4992,7 +5016,7 @@ def exp(track, amt):
     av.experience.setExp(trackIndex, amt)
     av.b_setExperience(av.experience.makeNetString())
     return "Set %s exp to %d successfully." % (track, amt)
-    
+
 @magicWord(category=CATEGORY_CHARACTERSTATS)
 def disguise():
     """ Set disguise type and level.  CURRENTLY MAX TOONS SUITS!!!"""
@@ -5006,7 +5030,7 @@ def disguise():
     toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
     toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
 
-@magicWord(access=300)
+@magicWord(category=CATEGORY_OVERRIDE)
 def fanfare():
     """ Give target toon a fanfare for the lolz. """
     spellbook.getTarget().magicFanfare()
@@ -5017,7 +5041,7 @@ def pouch(amt):
     """ Set the target's max gag limit. """
     spellbook.getTarget().b_setMaxCarry(amt)
     return "Set %s's pouch size to %d" % (spellbook.getTarget().getName(), amt)
-    
+
 @magicWord(category=CATEGORY_MODERATION, types=[int])
 def goto(avIdShort):
     """ Teleport to the avId specified. """

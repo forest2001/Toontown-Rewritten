@@ -1,12 +1,12 @@
 from direct.showbase import PythonUtil
 
 MINIMUM_MAGICWORD_ACCESS = 300
-MINIMUM_AI_OBJ_MW_ACCESS = 500 # Lol this is long.
+MINIMUM_AI_OBJ_MW_ACCESS = config.GetInt('mw-minimum-ai-manipulation-access', 500)
 
 class MagicError(Exception): pass
 
 def ensureAccess(access, msg='Insufficient access'):
-    if spellbook.getInvokerAccess() < access:
+    if spellbook.getInvokerAccess() - spellbook.getInvokerAccess() % 100 < access:
         raise MagicError(msg)
 
 class Spellbook:
@@ -55,21 +55,21 @@ class Spellbook:
             return ('Unknown magic word!', False)
 
         ensureAccess(word.access)
-            
+
         if self.getTarget() and self.getTarget() != self.getInvoker():
             # Check if the target is the correct class.
             if word.targetClasses:
                 if not isinstance(self.getTarget(), tuple(word.targetClasses)):
                     raise MagicError('Target is an invalid class! Expected: %s, Got: %s' % (str([x.__name__ for x in word.targetClasses]), self.getTarget().__class__.__name__))
-                    
+
             if hasattr(self.getTarget(), 'getAdminAccess'):
                 targetAccess = self.getTarget().getAdminAccess()
             else:
                 # Set it to the minimum access required to manipulate AI objects.
                 targetAccess = MINIMUM_AI_OBJ_MW_ACCESS - 1
-            if self.getInvokerAccess() <= targetAccess:
+            if self.getInvokerAccess() - self.getInvokerAccess() % 100 <= targetAccess - targetAccess % 100:
                 raise MagicError('Target must have lower access')
-        
+
         result = word.run(args)
         if result is not None:
             return (str(result), True)
@@ -102,10 +102,10 @@ class MagicWordCategory:
 
     def addWord(self, word):
         self.words.append(word)
-        
+
     def getDefinedAccess(self):
         try:
-            return simbase.config.GetInt(self.name.replace(' ', '-').lower(), 0)
+            return simbase.config.GetInt('mw-' + self.name.replace(' ', '-').lower(), 0)
         except:
             return 0
 
@@ -133,6 +133,10 @@ CATEGORY_MODERATION = MagicWordCategory('Moderation commands', defaultAccess=300
 CATEGORY_CAMERA = MagicWordCategory('Camera controls', defaultAccess=300,
     doc='These Magic Words manually control the camera system, originally implemented '
         'with Doomsday.')
+CATEGORY_SYSADMIN = MagicWordCategory('Sysadmin commands', defaultAccess=500,
+    doc='These Magic Words are useful for executing/viewing system information.'
+        ' Note that these Magic Words may have an impact on the server\'s'
+        ' stability and speed, and should be used with caution.')
 
 
 class MagicWord:

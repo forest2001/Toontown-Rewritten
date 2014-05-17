@@ -94,11 +94,15 @@ class Nametag(ClickablePopup):
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else self.chatBg
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
+
+        reversed = (self.IS_3D and (self.chatFlags&CFReversed))
+
         balloon, frame = balloon.generate(text, self.font, textColor=self.chatFg,
                                           balloonColor=color,
                                           wordWrap=self.chatWordWrap or \
                                             self.DEFAULT_CHAT_WORDWRAP,
-                                          button=self.getButton())
+                                          button=self.getButton(),
+                                          reversed=reversed)
         balloon.reparentTo(self.innerNP)
         self.frame = frame
 

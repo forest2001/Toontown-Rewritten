@@ -30,7 +30,8 @@ class LocalAccountDB:
 
         callback({'success': True,
                   'databaseId': databaseId,
-                  'adminAccess': 507})
+                  'adminAccess': 507,
+                  'betaKeyQuest': 1})
 
 class RemoteAccountDB:
     def __init__(self, csm):
@@ -113,6 +114,7 @@ class LoginAccountFSM(OperationFSM):
 
         self.databaseId = result.get('databaseId', 0)
         self.adminAccess = result.get('adminAccess', 0)
+        self.betaKeyQuest = result.get('betaKeyQuest', 0)
 
         # Binary bitmask in base10 form, added to the adminAccess.
         # To find out what they have access to, convert the serverAccess to 3-bit binary.
@@ -155,6 +157,7 @@ class LoginAccountFSM(OperationFSM):
                         'ACCOUNT_AV_SET_DEL': [],
                         'CREATED': time.ctime(),
                         'LAST_LOGIN': time.ctime(),
+                        'BETA_KEY_QUEST': self.betaKeyQuest,
                         'ACCOUNT_ID': self.databaseId,
                         'ADMIN_ACCESS': self.adminAccess}
 
@@ -213,7 +216,8 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.dclassesByName['AccountUD'],
             {'LAST_LOGIN': time.ctime(),
              'ACCOUNT_ID': self.databaseId,
-             'ADMIN_ACCESS': self.adminAccess})
+             'ADMIN_ACCESS': self.adminAccess,
+             'BETA_KEY_QUEST': self.betaKeyQuest})
 
         # Add a POST_REMOVE to the connection channel to execute the NetMessenger
         # message when the account connection goes RIP on the Client Agent.
@@ -687,7 +691,9 @@ class LoadAvatarFSM(AvatarOperationFSM):
         # Activate the avatar on the DBSS:
         self.csm.air.sendActivate(self.avId, 0, 0,
                                   self.csm.air.dclassesByName['DistributedToonUD'],
-                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)]})
+                                  {'setAdminAccess': [self.account.get('ADMIN_ACCESS', 0)],
+                                   'setWantBetaKeyQuest': [self.account.get('BETA_KEY_QUEST', 0)],
+                                   'setWebAccountId': [self.account.get('ACCOUNT_ID', 0)]})
 
         # Next, add them to the avatar channel:
         dg = PyDatagram()
@@ -800,7 +806,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             if dclass != self.air.dclassesByName['AccountUD']:
                 return
             webId = fields.get('ACCOUNT_ID')
-            self.air.rpc.call('avatarExit', webAccId=webId)
+            if fields.get('BETA_KEY_QUEST') == 1:
+                self.air.rpc.call('avatarExit', webAccId=webId)
         self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
