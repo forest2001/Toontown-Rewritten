@@ -155,7 +155,7 @@ class TutorialManagerAI(DistributedObjectAI):
 
     def allDone(self):
         avId = self.air.getAvatarIdFromSender()
-        self.ingore(self.air.getAvatarExitEvent(avId))
+        self.ignore(self.air.getAvatarExitEvent(avId))
         fsm = self.avId2fsm.get(avId)
         if fsm:
             fsm.demand('CleanUp')
