@@ -211,9 +211,15 @@ CRSystemMessages = {
     52: 'Toontown Rewritten will be closing for an update in %s seconds.',
     53: 'Toontown Rewritten will be closing for an update in just a moment. Hang tight!',
 
+    55: 'Toontown Rewritten will be closing for maintenance soon. Start wrapping things up!',
+    56: 'Toontown Rewritten will be closing for maintenance in %s minutes.',
+    57: 'Toontown Rewritten will be closing for maintenance in %s seconds.',
+    58: 'Toontown Rewritten will be closing for maintanance in just a moment.',
+
+
     60: 'The district that you\'re playing in will be closed off for maintenance soon. Try to move if you can.',
-    61: 'The district that you\'re on will be closed off for maintenance in %s minutes.',
-    62: 'The district that you\'re on will be closed off for maintenance in %s seconds.',
+    61: 'The district that you\'re on will be closed for maintenance in %s minutes.',
+    62: 'The district that you\'re on will be closed for maintenance in %s seconds.',
 
     # Announcements.
     100: 'Toon Council: Congratulations, Your Toon name has been approved! You\'ll need to log out and back in to recieve your name certificate.',
