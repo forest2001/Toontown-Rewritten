@@ -878,7 +878,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
     def parseWaitEvent(self, line):
         token, eventName = line
-        return eventName
+        return eventName[1:-1]
 
     def parseSendEvent(self, line):
         token, eventName = line
@@ -900,12 +900,12 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         newMaxHp = maxHpDelta + self.toon.getMaxHp()
         newHp = newMaxHp
         laffMeter = self.getVar('laffMeter')
-        return Func(laffMeter.adjustFace, newHp, newMaxHp)
+        return Func(laffMeter.adjustFace, int(newHp), int(newMaxHp))
 
     def parseLaffMeter(self, line):
         token, newHp, newMaxHp = line
         laffMeter = self.getVar('laffMeter')
-        return Func(laffMeter.adjustFace, newHp, newMaxHp)
+        return Func(laffMeter.adjustFace, int(newHp), int(newMaxHp))
 
     def parseObscureLaffMeter(self, line):
         token, val = line
