@@ -161,7 +161,7 @@ class TutorialManagerAI(DistributedObjectAI):
 
     def allDone(self):
         avId = self.air.getAvatarIdFromSender()
-        av = self.doId2do.get(avId)
+        av = self.air.doId2do.get(avId)
         if av:
             av.b_setTutorialAck(1)
         self.ignore(self.air.getAvatarExitEvent(avId))
