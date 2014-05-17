@@ -127,7 +127,11 @@ class QuestManagerAI:
         pass
         
     def toonPlayedMinigame(self, toon, toons):
-        pass
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            if isinstance(quest, Quests.TrolleyQuest):
+                self.__incrementQuestProgress(toon.quests[index])
+                
+        toon.b_setQuests(toon.quests)
         
     def toonRodeTrolleyFirstTime(self, toon):
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
@@ -224,7 +228,7 @@ class QuestManagerAI:
         if toonId in self.air.tutorialManager.avId2fsm.keys():
             # Are we speaking to Tom?
             if toon.getRewardHistory()[0] == 0:
-                self.npcGiveQuest(npc, toon, 101, Quests.findFinalRewardId(101)[0], Quests.getQuestToNpcId(101)) # FIXME please, i have no idea if this is correct
+                self.npcGiveQuest(npc, toon, 101, Quests.findFinalRewardId(101)[0], Quests.getQuestToNpcId(101), storeReward=True) # FIXME please, i have no idea if this is correct
                 self.air.tutorialManager.avId2fsm[toonId].demand('Battle')
                 return
             
