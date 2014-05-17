@@ -799,7 +799,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             notify.error('invalid number of arguments')
         actor = self.getVar(actorName)
-        return Sequence(Func(actor.setPlayRate, playRate, animName), Func(actor.play, self.cleanString(animName, ['"', '\''])))
+        animName = animName[1:-1]
+        return Sequence(Func(actor.setPlayRate, playRate, animName), Func(actor.play, animName))
 
     def parseLoopAnim(self, line):
         if len(line) == 3:
@@ -810,7 +811,8 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             notify.error('invalid number of arguments')
         actor = self.getVar(actorName)
-        return Sequence(Func(actor.setPlayRate, playRate, animName), Func(actor.loop, self.cleanString(animName, ['"', '\''])))
+        animName = animName[1:-1]
+        return Sequence(Func(actor.setPlayRate, playRate, animName), Func(actor.loop, animName))
 
     def parseLerpPos(self, line):
         token, nodeName, x, y, z, t = line
