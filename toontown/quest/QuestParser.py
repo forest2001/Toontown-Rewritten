@@ -871,7 +871,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             token, nodeName, binName, sortOrder = line
         node = self.getVar(nodeName)
-        return Sequence(Func(node.setBin, binName, sortOrder))
+        return Sequence(Func(node.setBin, binName[1:-1], sortOrder))
 
     def parseClearBin(self, line):
         token, nodeName = line
@@ -884,7 +884,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
     def parseSendEvent(self, line):
         token, eventName = line
-        return Func(messenger.send, eventName)
+        return Func(messenger.send, eventName[1:-1])
 
     def parseFunction(self, line):
         token, objectName, functionName = line
