@@ -4,6 +4,7 @@ from direct.fsm.FSM import FSM
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from TrolleyConstants import *
 from toontown.minigame.MinigameCreatorAI import *
+from toontown.quest import Quests
 from otp.ai.MagicWordGlobal import *
 
 doesntWantTrolleyTracks = {}
@@ -55,6 +56,14 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
     def enterLeaving(self):
         self.leavingTask = taskMgr.doMethodLater(TROLLEY_EXIT_TIME, self.__activateMinigame, 'trolleyLeaveTask')
 
+    def isNewbie(self, avId):
+        # Does avId have the "ride the Trolley" quest?
+        toon = self.air.doId2do.get(avId)
+        if not toon:
+            return False
+
+        return Quests.avatarHasTrolleyQuest(toon)
+
     def __activateMinigame(self, task):
         players = [player for player in self.slots if player is not None]
 
@@ -63,14 +72,19 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
             # players array would be empty. Therefore, we should only attempt
             # to create a minigame if there are still players.
             
+            newbieIds = []
+
             for avId in players:
                 noTravel = doesntWantTrolleyTracks.get(avId)
                 aiNoTravel = doesntWantTrolleyTracks.get('everyone')
+
+                if self.isNewbie(avId):
+                    newbieIds.append(avId)
                 
             if len(players) > 1 and not noTravel and not aiNoTravel:
                 mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
             else:
-                mg = createMinigame(self.air, players, self.zoneId)
+                mg = createMinigame(self.air, players, self.zoneId, newbieIds=newbieIds)
             for player in players:
                 self.sendUpdateToAvatarId(player, 'setMinigameZone', [mg['minigameZone'], mg['minigameId']])
                 self.removeFromTrolley(player)

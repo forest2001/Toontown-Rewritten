@@ -135,13 +135,6 @@ class QuestManagerAI:
     def toonDefeatedStage(self, toon, stageId, activeToonVictors):
         pass
 
-    def toonPlayedMinigame(self, toon, toons):
-        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
-            if isinstance(quest, Quests.TrolleyQuest):
-                self.__incrementQuestProgress(toon.quests[index])
-                
-        toon.b_setQuests(toon.quests)
-
     def toonRodeTrolleyFirstTime(self, toon):
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.TrolleyQuest):
