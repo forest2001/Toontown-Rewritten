@@ -8,7 +8,7 @@ from toontown.building.DistributedBuildingAI import DistributedBuildingAI
 from toontown.suit.DistributedTutorialSuitAI import DistributedTutorialSuitAI
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.building.HQBuildingAI import HQBuildingAI
-import types
+from toontown.quest import Quests
 from toontown.building import FADoorCodes
 from direct.fsm.FSM import FSM
 
@@ -128,8 +128,6 @@ class TutorialManagerAI(DistributedObjectAI):
         self.avId2fsm[avId] = TutorialFSM(self.air, zones, avId)
         
         # Toontorial TODO list:
-        #  visual fixes
-        #  check to make sure toon is eligible for toontorial before sending them to toontorial
         #  reset track progress on enter
         
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self.unexpectedExit, extraArgs=[avId])
@@ -141,11 +139,19 @@ class TutorialManagerAI(DistributedObjectAI):
         if fsm:
             fsm.demand('CleanUp')
 
-    def rejectTutorial(self):
+    def rejectTutorial(self): # ... never used by the client.
         pass
 
     def requestSkipTutorial(self):
-        pass
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId)
+        if av:
+            av.b_setTutorialAck(1)
+            av.b_setQuestHistory([110, 100])
+            av.addQuest((110, Quests.getQuestFromNpcId(110), Quests.getQuestToNpcId(110), Quests.getQuestReward(110, av), 0), 0)
+            self.d_skipTutorialResponse(avId, 1)
+        else:
+            self.d_skipTutorialResponse(avId, 0)
 
     def d_skipTutorialResponse(self, avId, allOk):
         self.sendUpdateToAvatarId(avId, 'skipTutorialResponse', [allOk])
@@ -155,6 +161,9 @@ class TutorialManagerAI(DistributedObjectAI):
 
     def allDone(self):
         avId = self.air.getAvatarIdFromSender()
+        av = self.doId2do.get(avId)
+        if av:
+            av.b_setTutorialAck(1)
         self.ignore(self.air.getAvatarExitEvent(avId))
         fsm = self.avId2fsm.get(avId)
         if fsm:
@@ -165,6 +174,10 @@ class TutorialManagerAI(DistributedObjectAI):
     def toonArrived(self):
         avId = self.air.getAvatarIdFromSender()
         av = self.air.doId2do[avId]
+        if av.getTutorialAck():
+            self.avId2fsm[avId].demand('CleanUp')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Attempted to request Toontorial when it would be impossible to do so')
+            return
         av.b_setQuests([])
         av.b_setQuestHistory([])
         av.b_setRewardHistory(0, [])
