@@ -44,7 +44,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         messenger.send('leaderboardFlush')
         if avId in self.air.doId2do:
             self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
-            
+
     def sort(self):
         scoreList = []
         for avId, data in self.scores.items():
