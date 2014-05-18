@@ -204,6 +204,7 @@ CRSystemMessages = {
     2: 'Toon HQ: %s',
     3: 'Loony Labs: %s',
     4: 'Toon Council: %s',
+    5: 'SYSTEM: %s',
 
     # Maintenance notifications:
     50: 'Toontown Rewritten will be closing for an update soon. Start wrapping things up!',
