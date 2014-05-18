@@ -195,7 +195,7 @@ class QuestManagerAI:
             # Take away gags if it's a DeliverGagQuest.
             if isinstance(quest, DeliverGagQuest):
                 toon.inventory[quest.getGagType()[0]][quest.getGagType()[1]] -= quest.getNumGags()
-                toon.b_setInventory(toon.inventory)
+                toon.b_setInventory(toon.inventory.makeNetString())
             # Check if the ToonTask has more quests to complete.
             nextQuest = Quests.getNextQuest(questId, npc, toon)
             if nextQuest == (Quests.NA, Quests.NA):
