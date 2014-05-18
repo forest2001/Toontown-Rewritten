@@ -49,7 +49,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         scoreList = []
         for avId, data in self.scores.items():
             scoreList.append((avId, data[0], data[1]))
-        sorted(scoreList, key=itemgetter(2), reverse=True)
+        scoreList.sort(key=itemgetter(2), reverse=True)
         avIds = []
         names = []
         scores = []
