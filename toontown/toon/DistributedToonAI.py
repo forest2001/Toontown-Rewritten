@@ -227,6 +227,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.wantBetaKeyQuest = 0
         self.magicWordTeleportRequests = []
         self.webAccountId = 0
+        self.hasQuests = False
         return
 
     def generate(self):
@@ -1655,6 +1656,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             questList.append(flattenedQuests[i:i + questLen])
 
         self.quests = questList
+        self.hasQuests = True
+
+    def updateQuests(self):
+        if self.hasQuests:
+            self.d_setQuests(self.getQuests())
 
     def getQuests(self):
         flattenedQuests = []
