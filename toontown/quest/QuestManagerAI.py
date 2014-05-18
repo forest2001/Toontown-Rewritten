@@ -95,7 +95,7 @@ class QuestManagerAI:
                 if quest.isLocationMatch(zoneId) and quest.doesBuildingCount(toon.getDoId(), activeToons):
                     # We defeated the building in the correct zone, and the building counts!
                     if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
-                        if quest.getNumFloors() >= floors:
+                        if quest.getNumFloors() <= floors:
                             # This building had enough floors.
                             self.__incrementQuestProgress(toon.quests[index])
         toon.updateQuests()
