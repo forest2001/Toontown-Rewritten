@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from operator import itemgetter
 
 class DistributedTrophyMgrAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedTrophyMgrAI")
@@ -7,6 +8,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.scores = {}
+        self.scoreLists = ([], [], [])
 
     def requestTrophyScore(self):
         avId = self.air.getAvatarIdFromSender()
@@ -22,6 +24,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         if self.scores[avId][1] < 0:
             self.notify.warning("avId %d has a negative scorevalue?~?~?!"%avId)
             self.scores[avId][1] = 0
+        self.sort()
         messenger.send('leaderboardChanged')
         messenger.send('leaderboardFlush')
         if avId in self.air.doId2do:
@@ -36,17 +39,27 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
             av = self.air.doId2do[avId]
             self.scores[avId][0] = av.getName()
         self.scores[avId][1] += numFloors
+        self.sort()
         messenger.send('leaderboardChanged')
         messenger.send('leaderboardFlush')
         if avId in self.air.doId2do:
             self.air.doId2do[avId].sendUpdate('setTrophyScore', [self.scores[avId][1]])
-
-    def getLeaderInfo(self):
+            
+    def sort(self):
+        scoreList = []
+        for avId, data in self.scores.items():
+            scoreList.append(avId, data[0], data[1])
+        sorted(scoreList, key=itemgetter(2), reverse=True)
         avIds = []
         names = []
         scores = []
-        for avId, data in self.scores.items():
+        for avId, name, score in scoreList:
             avIds.append(avId)
-            names.append(data[0])
-            scores.append(data[1])
-        return (avIds, names, scores)
+            names.append(name)
+            scores.append(score)
+            if len(scores) == 10:
+                break # We're done!
+        self.scoreLists = (avIds, names, scores)
+
+    def getLeaderInfo(self):
+        return self.scoreLists
