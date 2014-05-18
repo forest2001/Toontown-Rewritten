@@ -193,7 +193,7 @@ class QuestManagerAI:
             if toonId in self.air.tutorialManager.avId2fsm.keys():
                 self.air.tutorialManager.avId2fsm[toonId].demand('Tunnel')
             # Take away gags if it's a DeliverGagQuest.
-            if isinstance(quest, DeliverGagQuest):
+            if isinstance(quest, Quests.DeliverGagQuest):
                 toon.inventory[quest.getGagType()[0]][quest.getGagType()[1]] -= quest.getNumGags()
                 toon.b_setInventory(toon.inventory.makeNetString())
             # Check if the ToonTask has more quests to complete.
