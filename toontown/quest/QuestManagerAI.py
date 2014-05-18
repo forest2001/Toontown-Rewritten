@@ -47,7 +47,7 @@ class QuestManagerAI:
                     if quest.doesCogCount(toon.getDoId(), suit, zoneId, activeToons):
                         # The cog we killed counts!
                         self.__incrementQuestProgress(toon.quests[index])
-        toon.resendQuests()
+        toon.updateQuests()
 
     def recoverItems(self, toon, suitsKilled, zoneId):
         """
@@ -80,7 +80,7 @@ class QuestManagerAI:
                                 else:
                                     # Tough luck, maybe next time.
                                     notRecovered.append(quest.getItem())
-        toon.resendQuests()
+        toon.updateQuests()
         return (recovered, notRecovered)
 
     def toonKilledBuilding(self, toon, track, difficulty, floors, zoneId, activeToons):
@@ -98,7 +98,7 @@ class QuestManagerAI:
                         if quest.getNumFloors() >= floors:
                             # This building had enough floors.
                             self.__incrementQuestProgress(toon.quests[index])
-        toon.resendQuests()
+        toon.updateQuests()
 
     def toonKilledCogdo(self, toon, difficulty, floors, zoneId, activeToons):
         pass
@@ -117,7 +117,7 @@ class QuestManagerAI:
                 if quest.doesFactoryCount(toon.getDoId(), factoryId, activeToonVictors):
                     # Woo, this counts towards our quest progress!
                     self.__incrementQuestProgress(toon.quests[index])
-        toon.resendQuests()
+        toon.updateQuests()
 
     def toonDefeatedMint(self, toon, mintId, activeToonVictors):
         """
@@ -130,7 +130,7 @@ class QuestManagerAI:
                 if quest.doesMintCount(toon.getDoId(), mintId, activeToonVictors):
                     # Nom nom nom nom, progress!
                     self.__incrementQuestProgress(toon.quests[index])
-        toon.resendQuests()
+        toon.updateQuests()
 
     def toonDefeatedStage(self, toon, stageId, activeToonVictors):
         pass
@@ -140,7 +140,7 @@ class QuestManagerAI:
             if isinstance(quest, Quests.TrolleyQuest):
                 self.__incrementQuestProgress(toon.quests[index])
                 
-        toon.resendQuests()
+        toon.updateQuests()
 
     def completeQuest(self, toon, questId):
         """
@@ -315,7 +315,7 @@ class QuestManagerAI:
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.FriendQuest):
                 self.__incrementQuestProgress(toon.quests[index])
-        toon.resendQuests()
+        toon.updateQuests()
 
     def toonFished(self, toon, zoneId):
         """
@@ -339,7 +339,7 @@ class QuestManagerAI:
                         if completion[0]:
                             # We got lucky, dave! We caught the item!
                             self.__incrementQuestProgress(toon.quests[index])
-                            toon.resendQuests()
+                            toon.updateQuests()
                             # Since we caught an item already, there's no
                             # point in checking the other quests as we can
                             # only catch one item at a time via fishing.
