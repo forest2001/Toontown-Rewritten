@@ -190,5 +190,5 @@ class TutorialManagerAI(DistributedObjectAI):
             av.inventory.addItem(ToontownBattleGlobals.SQUIRT_TRACK, 0)
         av.d_setInventory(av.inventory.makeNetString())
 
-        #av.experience.zeroOutExp()
-        #av.d_setExperience(av.experience.makeNetString())
+        av.experience.zeroOutExp()
+        av.d_setExperience(av.experience.makeNetString())
