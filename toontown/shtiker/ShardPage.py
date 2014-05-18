@@ -38,10 +38,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
         shardPop_ycoord = helpText_ycoord - 0.523
         totalPop_ycoord = shardPop_ycoord - 0.26
         self.totalPopulationText = DirectLabel(parent=self, relief=None, text=TTLocalizer.ShardPagePopulationTotal % 1, text_scale=main_text_scale, text_wordwrap=8, textMayChange=1, text_align=TextNode.ACenter, pos=(0.38, 0, totalPop_ycoord))
-        if self.showPop:
-            self.totalPopulationText.show()
-        else:
-            self.totalPopulationText.hide()
+        self.totalPopulationText.show()
         self.gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
         self.listXorigin = -0.02
         self.listFrameSizeX = 0.67
