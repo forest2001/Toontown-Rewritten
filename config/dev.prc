@@ -1,4 +1,4 @@
-# This is the PRC configuration file for developer servers and clients. 
+# This is the PRC configuration file for developer servers and clients.
 # If making a change here, please remember to add it to public_client.prc
 # as well as deployment/server.prc if necessary.
 
@@ -31,6 +31,7 @@ want-rpc-server #f
 rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
 want-parties #f
+want-cheesy-expirations #t
 
 
 # DC Files
