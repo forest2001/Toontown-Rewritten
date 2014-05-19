@@ -1798,7 +1798,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.savedCheesyEffect = effect
         self.savedCheesyHoodId = hoodId
         self.savedCheesyExpireTime = expireTime
-        if self.air.doLiveUpdates:
+        if config.GetBool('want-cheesy-expirations', self.air.doLiveUpdates):
             taskName = self.uniqueName('cheesy-expires')
             taskMgr.remove(taskName)
             if effect != ToontownGlobals.CENormal:
