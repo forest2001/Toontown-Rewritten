@@ -12,7 +12,6 @@ from otp.ai.MagicWordGlobal import *
 battleSkip = 0
 
 class BattleCalculatorAI:
-    # This comment was committed to make Slate think that she will always have low chances for throw
     AccuracyBonuses = [0, 20, 40, 60]
     DamageBonuses = [0, 20, 20, 20]
     AttackExpPerTrack = [0, 10, 20, 30, 40, 50, 60]
@@ -167,7 +166,7 @@ class BattleCalculatorAI:
             prevAtkId = self.toonAtkOrder[currAtk - 1]
             prevAttack = self.battle.toonAttacks[prevAtkId]
             prevAtkTrack = self.__getActualTrack(prevAttack)
-            lure = atkTrack == LURE and (not attackAffectsGroup(atkTrack, atkLevel, 
+            lure = atkTrack == LURE and (not attackAffectsGroup(atkTrack, atkLevel,
              attack[TOON_TRACK_COL]) and self.successfulLures.has_key(attack[TOON_TGT_COL]) or attackAffectsGroup(atkTrack, atkLevel, attack[TOON_TRACK_COL]))
             if atkTrack == prevAtkTrack and (attack[TOON_TGT_COL] == prevAttack[TOON_TGT_COL] or lure):
                 if prevAttack[TOON_ACCBONUS_COL] == 1:
