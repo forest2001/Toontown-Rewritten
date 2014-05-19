@@ -1802,7 +1802,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             taskName = self.uniqueName('cheesy-expires')
             taskMgr.remove(taskName)
             if effect != ToontownGlobals.CENormal:
-                duration = expireTime * 60 - time.time()
+                duration = expireTime - time.time()
                 if duration > 0:
                     taskMgr.doMethodLater(duration, self.__undoCheesyEffect, taskName)
                 else:
@@ -4458,7 +4458,7 @@ def setCE(CEValue, CEHood=0, CEExpire=0):
         return 'Invalid value %s specified for Cheesy Effect.' % CEValue
     if CEHood != 0 and not 100 < CEHood < ToontownGlobals.DynamicZonesBegin:
         return 'Invalid zoneId specified.'
-    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, CEExpire)
+    spellbook.getTarget().b_setCheesyEffect(CEValue, CEHood, time.time()+CEExpire)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int], targetClasses=[DistributedToonAI], aliases=['hp', 'toonHp', 'currHp'])
 def setHp(hpVal):
