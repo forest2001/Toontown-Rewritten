@@ -605,6 +605,7 @@ NPCToonDict = {
         'm',
         1,
         NPC_SCIENTIST),
+ # Doctor Surlee, Loony Labs scientist
  2019: (2513,
         lnames[2018],
         ('pls',
@@ -624,7 +625,7 @@ NPCToonDict = {
         'm',
         1,
         NPC_SCIENTIST),
- # A smaller version of doctor Surlee, to be scaled up and fit Prepostera's animations
+ # A smaller version of Doctor Surlee, to be scaled up and fit Prepostera's animations
  20191: (2513,
         lnames[2018],
         ('pls',
@@ -644,6 +645,7 @@ NPCToonDict = {
         'm',
         1,
         NPC_SCIENTIST),
+ # Professor Prepostera, Loony Labs scientist
  2020: (2513,
         lnames[2020],
         ('hss',
@@ -683,7 +685,8 @@ NPCToonDict = {
         'm',
         1,
         NPC_SCIENTIST),
- 2021: (2601,
+ # Slappy, Flippy's competitor during the election
+ 2021: (-1,
         lnames[2021],
         ('fls',
          'ms',
@@ -702,7 +705,8 @@ NPCToonDict = {
         'm',
         0,
         NPC_REGULAR),
- 2022: (2601,
+ # Alec Tinn, an Eccentric Elector for the election and other votes
+ 2022: (-1,
         lnames[2022],
         ('cll',
          'ls',
