@@ -61,6 +61,10 @@ class QuestManagerAI:
         recovered, notRecovered = ([] for i in xrange(2))
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.RecoverItemQuest):
+                isComplete = quest.getCompletionStatus(toon, toon.quests[index])
+                if isComplete == Quests.COMPLETE:
+                    # This quest is complete, skip.
+                    continue
                 # It's a quest where we need to recover an item!
                 if quest.isLocationMatch(zoneId):
                     # We're in the correct area to recover the item, woo!
