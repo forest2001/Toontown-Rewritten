@@ -18584,6 +18584,7 @@ class CogSuitPartReward(Reward):
 class BetaKeyReward(Reward):
     def sendRewardAI(self, av):
         # Tell the web server that we completed the quest successfully!
+        simbase.air.writeServerEvent('bkq-complete', avId=av.getDoId(), message='Avatar successfully completed beta key quest!')
         simbase.air.rpc.call('gibBetaKey', webAccId=av.getWebAccountId())
 
     def getString(self):
