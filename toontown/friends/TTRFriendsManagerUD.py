@@ -1,5 +1,5 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
-from direct.distributed.PyDatagram import PyDatagram
+from direct.distributed.PyDatagram import *
 from direct.task import Task
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.FSM import FSM
@@ -228,6 +228,13 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         # This is sent from the CSMUD, so no sanity checks needed here.
         # This is sent when the avatar is set.
         for friendId in friends:
+            # Declare object to the client.
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+            dg.addUint32(avId)
+            dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
+            self.air.send(dg)
+            # Tell the client their friend is online.
             self.sendUpdateToAvatarId(friendId, 'friendOnline', [avId, 0, 0])
 
     def goingOffline(self, avId):
@@ -243,6 +250,13 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Something went wrong... abort.
             return
         for friendId, tf in fields['setFriendsList'][0]:
+            # Undeclare!
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
+            dg.addUint32(requesterId)
+            self.air.send(dg)
+            
+            # Tell them they're offline!
             self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
 
     def clearList(self, avId):
@@ -452,50 +466,3 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             ['setDNAString' , fields['setDNAString'][0]],
         ]
         self.sendUpdateToAvatarId(requesterId, 'friendDetails', [fields['ID'], cPickle.dumps(details)])
-
-    def routeTeleportQuery(self, toId):
-        fromId = self.air.getAvatarIdFromSender()
-        self.tpRequests[fromId] = toId
-        self.sendUpdateToAvatarId(toId, 'teleportQuery', [fromId])
-        taskMgr.doMethodLater(5, self.giveUpTeleportQuery, 'tp-query-timeout-%d' % fromId, extraArgs=[fromId, toId])
-
-    def giveUpTeleportQuery(self, fromId, toId):
-        # The client didn't respond to the query within the set time,
-        # So we will tell the query sender that the toon is unavailable.
-        if fromId in self.tpRequests:
-            del self.tpRequests[fromId]
-            self.sendUpdateToAvatarId(fromId, 'teleportResponse', [toId, 0, 0, 0, 0])
-            self.notify.warning('Teleport request that was sent by %d to %d timed out.' % (fromId, toId))
-
-    def routeTeleportResponse(self, toId, available, shardId, hoodId, zoneId):
-        # Here is where the toId and fromId swap (because we are now sending it back)
-        fromId = self.air.getAvatarIdFromSender()
-
-        # We got the query response, so no need to give up!
-        if taskMgr.hasTaskNamed('tp-query-timeout-%d' % toId):
-            taskMgr.remove('tp-query-timeout-%d' % toId)
-
-        if toId not in self.tpRequests:
-            return
-        if self.tpRequests.get(toId) != fromId:
-            self.air.writeServerEvent('suspicious', avId=fromId, issue='toon tried to send teleportResponse for a query that isn\'t theirs!')
-            return
-        self.sendUpdateToAvatarId(toId, 'teleportResponse', [fromId, available, shardId, hoodId, zoneId])
-        del self.tpRequests[toId]
-
-    def whisperSCTo(self, toId, msgIndex):
-        fromId = self.air.getAvatarIdFromSender()
-        self.sendUpdateToAvatarId(toId, 'setWhisperSCFrom', [fromId, msgIndex])
-
-    def whisperSCCustomTo(self, toId, msgIndex):
-        fromId = self.air.getAvatarIdFromSender()
-        self.sendUpdateToAvatarId(toId, 'setWhisperSCCustomFrom', [fromId, msgIndex])
-
-    def whisperSCEmoteTo(self, toId, msgIndex):
-        fromId = self.air.getAvatarIdFromSender()
-        self.sendUpdateToAvatarId(toId, 'setWhisperSCEmoteFrom', [fromId, msgIndex])
-
-    def sendTalkWhisper(self, toId, message):
-        fromId = self.air.getAvatarIdFromSender()
-        self.sendUpdateToAvatarId(toId, 'receiveTalkWhisper', [fromId, message])
-        self.air.writeServerEvent('whisper-said', fromId=fromId, toId=toId, message=message)

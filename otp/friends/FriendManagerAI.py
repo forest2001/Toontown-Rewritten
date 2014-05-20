@@ -1,5 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from direct.distributed.PyDatagram import *
 from otp.ai.MagicWordGlobal import *
 
 class FriendManagerAI(DistributedObjectAI):
@@ -69,11 +70,21 @@ class FriendManagerAI(DistributedObjectAI):
             if not (requested and requester):
                 # Likely they logged off just before a response was sent. RIP.
                 return
-
-            #lol making this TT specific...
-            self.air.questManager.toonMadeFriend(requested, requester)
-            self.air.questManager.toonMadeFriend(requester, requested)
-
+            
+            
+            # Allow both toons to teleport to each other.
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(requested.getDoId()), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+            dg.addUint32(requester.getDoId())
+            dg.addUint16(self.air.dclassesByName['DistributedToonAI'].getNumber())
+            self.air.send(dg)
+            
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(requester.getDoId()), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+            dg.addUint32(requested.getDoId())
+            dg.addUint16(self.air.dclassesByName['DistributedToonAI'].getNumber())
+            self.air.send(dg)
+            
             requested.extendFriendsList(requester.getDoId(), 0)
             requester.extendFriendsList(requested.getDoId(), 0)
 

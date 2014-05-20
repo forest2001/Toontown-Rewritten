@@ -143,9 +143,6 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
     def whisperSCTo(self, msgIndex, sendToId, toPlayer):
         if toPlayer:
             base.cr.playerFriendsManager.sendSCWhisper(sendToId, msgIndex)
-        elif sendToId not in base.cr.doId2do:
-            messenger.send('wakeup')
-            base.cr.ttrFriendsManager.d_whisperSCTo(sendToId, msgIndex)
         else:
             messenger.send('wakeup')
             self.sendUpdate('setWhisperSCFrom', [self.doId, msgIndex], sendToId)
@@ -169,10 +166,6 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
     def whisperSCCustomTo(self, msgIndex, sendToId, toPlayer):
         if toPlayer:
             base.cr.playerFriendsManager.sendSCCustomWhisper(sendToId, msgIndex)
-            return
-        if sendToId not in base.cr.doId2do:
-            messenger.send('wakeup')
-            base.cr.ttrFriendsManager.d_whisperSCCustomTo(sendToId, msgIndex)
             return
         messenger.send('wakeup')
         self.sendUpdate('setWhisperSCCustomFrom', [self.doId, msgIndex], sendToId)
@@ -203,10 +196,6 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         print 'whisperSCEmoteTo %s %s %s' % (emoteId, sendToId, toPlayer)
         if toPlayer:
             base.cr.playerFriendsManager.sendSCEmoteWhisper(sendToId, emoteId)
-            return
-        if sendToId not in base.cr.doId2do:
-            messenger.send('wakeup')
-            base.cr.ttrFriendsManager.d_whisperSCEmoteTo(sendToId, emoteId)
             return
         messenger.send('wakeup')
         self.sendUpdate('setWhisperSCEmoteFrom', [self.doId, emoteId], sendToId)
@@ -337,12 +326,8 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         return
 
     def d_teleportQuery(self, requesterId, sendToId = None):
-        if sendToId in base.cr.doId2do:
-            teleportNotify.debug('sending teleportQuery%s' % ((requesterId, sendToId),))
-            self.sendUpdate('teleportQuery', [requesterId], sendToId)
-        else:
-            teleportNotify.debug('sending TTRFM teleportQuery%s' % ((requesterId, sendToId),))
-            base.cr.ttrFriendsManager.d_teleportQuery(sendToId)
+        teleportNotify.debug('sending teleportQuery%s' % ((requesterId, sendToId),))
+        self.sendUpdate('teleportQuery', [requesterId], sendToId)
 
     def teleportQuery(self, requesterId):
         teleportNotify.debug('receieved teleportQuery(%s)' % requesterId)
