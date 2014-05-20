@@ -228,12 +228,20 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         # This is sent from the CSMUD, so no sanity checks needed here.
         # This is sent when the avatar is set.
         for friendId in friends:
-            # Declare object to the client.
+            # Declare the avatar to the friend.
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
             dg.addUint32(avId)
             dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
             self.air.send(dg)
+            
+            # Declare the friend to the avatar.
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(avId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+            dg.addUint32(friendId)
+            dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
+            self.air.send(dg)
+            
             # Tell the client their friend is online.
             self.sendUpdateToAvatarId(friendId, 'friendOnline', [avId, 0, 0])
 
@@ -250,10 +258,16 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Something went wrong... abort.
             return
         for friendId, tf in fields['setFriendsList'][0]:
-            # Undeclare!
+            # Undeclare to the friend!
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
             dg.addUint32(requesterId)
+            self.air.send(dg)
+            
+            # Undeclare to our now-offline avId (they may still be around, about to log into a new toon!)
+            dg = PyDatagram()
+            dg.addServerHeader(self.GetPuppetConnectionChannel(requesterId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
+            dg.addUint32(friendId)
             self.air.send(dg)
             
             # Tell them they're offline!
