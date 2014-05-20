@@ -50,7 +50,7 @@ class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.Fa
         self.d_setSuits()
         scenario = 0
         for avId in self.avIdList:
-            self.air.writeServerEvent('factory-entered', avId=avId, factoryId=self.factoryId, entranceId=self.entranceId, scenario=scenario, avIds=avIdList)
+            self.air.writeServerEvent('factory-entered', avId=avId, factoryId=self.factoryId, entranceId=self.entranceId, scenario=scenario, avIds=self.avIdList)
 
         self.notify.info('finish factory %s %s creation' % (self.factoryId, self.doId))
 
