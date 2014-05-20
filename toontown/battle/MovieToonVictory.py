@@ -32,12 +32,10 @@ class ToonVictorySkipper(DirectObject):
         return
 
     def getSetupFunc(self, index):
-        if base.config.GetBool('want-skip-button', 0):
-            return Func(self._setupSkipListen, index)
+        return Func(self._setupSkipListen, index)
 
     def getTeardownFunc(self, index):
-        if base.config.GetBool('want-skip-button', 0):
-            return Func(self._teardownSkipListen, index)
+        return Func(self._teardownSkipListen, index)
 
     def setBattle(self, battle):
         self._battle = battle
