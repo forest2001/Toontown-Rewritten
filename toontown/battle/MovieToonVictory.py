@@ -50,7 +50,7 @@ class ToonVictorySkipper(DirectObject):
         self._ivals = ivals
 
     def _setupSkipListen(self, index):
-        if (not self._noSkip) and and base.config.GetBool('want-skip-button', 0):
+        if (not self._noSkip) and base.config.GetBool('want-skip-button', 0):
             func = Functor(self._skipToon, index)
             self.accept('escape', func)
             self.accept(RewardPanel.SkipBattleMovieEvent, func)
