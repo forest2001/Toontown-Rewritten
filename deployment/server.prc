@@ -8,7 +8,7 @@ want-cheesy-expirations #t
 
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
-want-sbhq #f
+want-sbhq #t
 want-cbhq #f
 want-lbhq #f
 want-bbhq #f
