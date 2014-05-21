@@ -228,22 +228,29 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         # This is sent from the CSMUD, so no sanity checks needed here.
         # This is sent when the avatar is set.
         for friendId in friends:
-            # Declare the avatar to the friend.
-            dg = PyDatagram()
-            dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
-            dg.addUint32(avId)
-            dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
-            self.air.send(dg)
+            # Is our friend online?
+            self.air.getActivated(friendId, functools.partial(self.__comingOnlineFriendOnline, otherId=avId))
             
-            # Declare the friend to the avatar.
-            dg = PyDatagram()
-            dg.addServerHeader(self.GetPuppetConnectionChannel(avId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
-            dg.addUint32(friendId)
-            dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
-            self.air.send(dg)
-            
-            # Tell the client their friend is online.
-            self.sendUpdateToAvatarId(friendId, 'friendOnline', [avId, 0, 0])
+    def __comingOnlineFriendOnline(self, avId, activated, otherId=None):
+        if not (otherId and activated):
+            #??!?!?
+            return
+        # Declare our avatar to their friend.
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(avId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+        dg.addUint32(otherId)
+        dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
+        self.air.send(dg)
+        
+        # Declare the friend to the avatar.
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(otherId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
+        dg.addUint32(avId)
+        dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
+        self.air.send(dg)
+        
+        # Tell the client their friend is online.
+        self.sendUpdateToAvatarId(avId, 'friendOnline', [otherId, 0, 0])
 
     def goingOffline(self, avId):
         # This is sent from the MD, so no sanity checks needed here.
@@ -258,20 +265,25 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Something went wrong... abort.
             return
         for friendId, tf in fields['setFriendsList'][0]:
-            # Undeclare to the friend!
-            dg = PyDatagram()
-            dg.addServerHeader(self.GetPuppetConnectionChannel(friendId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
-            dg.addUint32(requesterId)
-            self.air.send(dg)
+            self.air.getActivated(friendId, functools.partial(self.__offlineToonOnline, otherId=requesterId, accId=fields['setDISLid'][0]))
             
-            # Undeclare to our now-offline avId (they may still be around, about to log into a new toon!)
-            dg = PyDatagram()
-            dg.addServerHeader(self.GetAccountConnectionChannel(fields['setDISLid'][0]), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
-            dg.addUint32(friendId)
-            self.air.send(dg)
-            
-            # Tell them they're offline!
-            self.sendUpdateToAvatarId(friendId, 'friendOffline', [requesterId])
+    def __offlineToonOnline(self, avId, activated, otherId=None, accId=None):
+        if not (otherId and activated and accId):
+            return
+        # Undeclare to the friend!
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(avId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
+        dg.addUint32(otherId)
+        self.air.send(dg)
+        
+        # Undeclare to our now-offline avId (they may still be around, about to log into a new toon!)
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetAccountConnectionChannel(accId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
+        dg.addUint32(avId)
+        self.air.send(dg)
+        
+        # Tell them they're offline!
+        self.sendUpdateToAvatarId(avId, 'friendOffline', [otherId])
 
     def clearList(self, avId):
         # This is sent from the CSMUD when a toon is deleted.
