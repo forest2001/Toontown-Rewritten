@@ -266,7 +266,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             
             # Undeclare to our now-offline avId (they may still be around, about to log into a new toon!)
             dg = PyDatagram()
-            dg.addServerHeader(self.GetPuppetConnectionChannel(requesterId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
+            dg.addServerHeader(self.AccountConnectionChannel(fields['setDISLid'][0]), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
             dg.addUint32(friendId)
             self.air.send(dg)
             
