@@ -179,10 +179,7 @@ else:
     LegDict = {'s': '/models/char/tt_a_chr_dgs_shorts_legs_',
      'm': '/models/char/tt_a_chr_dgm_shorts_legs_',
      'l': '/models/char/tt_a_chr_dgl_shorts_legs_'}
-    TorsoDict = {'s': '/models/char/dogSS_Naked-torso-',
-     'm': '/models/char/dogMM_Naked-torso-',
-     'l': '/models/char/dogLL_Naked-torso-',
-     'ss': '/models/char/tt_a_chr_dgs_shorts_torso_',
+    TorsoDict = {'ss': '/models/char/tt_a_chr_dgs_shorts_torso_',
      'ms': '/models/char/tt_a_chr_dgm_shorts_torso_',
      'ls': '/models/char/tt_a_chr_dgl_shorts_torso_',
      'sd': '/models/char/tt_a_chr_dgs_skirt_torso_',
@@ -195,7 +192,7 @@ def loadModels():
     if preloadAvatars:
 
         def loadTex(path):
-            tex = loader.loadTexture(path)
+            tex = loader.loadTexture('/' + path)
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             Preloaded.append(tex)
@@ -214,30 +211,30 @@ def loadModels():
 
         for key in LegDict.keys():
             fileRoot = LegDict[key]
-            model = loader.loadModelNode('phase_3' + fileRoot + '1000')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '1000')
             Preloaded.append(model)
-            model = loader.loadModelNode('phase_3' + fileRoot + '500')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '500')
             Preloaded.append(model)
-            model = loader.loadModelNode('phase_3' + fileRoot + '250')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '250')
             Preloaded.append(model)
 
         for key in TorsoDict.keys():
             fileRoot = TorsoDict[key]
-            model = loader.loadModelNode('phase_3' + fileRoot + '1000')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '1000')
             Preloaded.append(model)
             if len(key) > 1:
-                model = loader.loadModelNode('phase_3' + fileRoot + '500')
+                model = loader.loadModelNode('/phase_3' + fileRoot + '500')
                 Preloaded.append(model)
-                model = loader.loadModelNode('phase_3' + fileRoot + '250')
+                model = loader.loadModelNode('/phase_3' + fileRoot + '250')
                 Preloaded.append(model)
 
         for key in HeadDict.keys():
             fileRoot = HeadDict[key]
-            model = loader.loadModelNode('phase_3' + fileRoot + '1000')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '1000')
             Preloaded.append(model)
-            model = loader.loadModelNode('phase_3' + fileRoot + '500')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '500')
             Preloaded.append(model)
-            model = loader.loadModelNode('phase_3' + fileRoot + '250')
+            model = loader.loadModelNode('/phase_3' + fileRoot + '250')
             Preloaded.append(model)
 
 
