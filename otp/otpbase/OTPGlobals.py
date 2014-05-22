@@ -15,12 +15,7 @@ DefaultCameraFar = 400.0
 DefaultCameraNear = 1.0
 AICollisionPriority = 10
 AICollMovePriority = 8
-
-# As of right now, 200 friends is pretty insane, especially with the current CONSTANT db querying.
-# But since we told people that we are allowing "unlimited" friends, we instead can give them a
-# high amount.
-MaxFriends = 200
-
+MaxFriends = 100
 MaxPlayerFriends = 300
 MaxBackCatalog = 48
 FriendChat = 1
