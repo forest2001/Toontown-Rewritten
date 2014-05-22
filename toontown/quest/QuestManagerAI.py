@@ -70,6 +70,10 @@ class QuestManagerAI:
                     # We're in the correct area to recover the item, woo!
                     if quest.getHolder() == Quests.Any or quest.getHolderType() in ['type', 'track', 'level']:
                         for suit in suitsKilled:
+                            if quest.getCompletionStatus(toon, toon.quests[index]) == Quests.COMPLETE:
+                                # Test if the task has already been completed.
+                                # If it has, we don't need to iterate through the cogs anymore.
+                                break
                             # Here comes the long IF statement...
                             if (quest.getHolder() == Quests.Any) \
                             or (quest.getHolderType() == 'type' and quest.getHolder() == suit['type']) \
