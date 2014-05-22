@@ -1,11 +1,16 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.estate.DistributedFurnitureItemAI import DistributedFurnitureItemAI
+import PhoneGlobals
 
 class DistributedPhoneAI(DistributedFurnitureItemAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPhoneAI")
+    
 
     def setInitialScale(self, todo0, todo1, todo2):
         pass
+        
+    def getInitialScale(self):
+        return (1, 1, 1)
 
     def setNewScale(self, todo0, todo1, todo2):
         pass

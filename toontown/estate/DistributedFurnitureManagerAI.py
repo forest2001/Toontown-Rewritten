@@ -2,9 +2,12 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
-from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem
+from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, BankToMoney, ClosetToClothes
 from toontown.toonbase import ToontownGlobals
 from DistributedFurnitureItemAI import DistributedFurnitureItemAI
+from DistributedBankAI import DistributedBankAI
+from DistributedPhoneAI import DistributedPhoneAI
+from DistributedClosetAI import DistributedClosetAI
 
 class FurnitureError(Exception):
     def __init__(self, code):
@@ -85,7 +88,14 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.items = []
 
         for item in items:
-            do = DistributedFurnitureItemAI(self.air, self, item)
+            if item.furnitureType in ClosetToClothes.keys():
+                do = DistributedClosetAI(self.air, self, item)
+            elif item.furnitureType in BankToMoney.keys():
+                do = DistributedBankAI(self.air, self, item)
+            #elif item.furnitureType == 1399:
+            #    do = DistributedPhoneAI(self.air, self, item)
+            else:
+                do = DistributedFurnitureItemAI(self.air, self, item)
             if self.isGenerated():
                 do.generateWithRequired(self.zoneId)
             self.items.append(do)
