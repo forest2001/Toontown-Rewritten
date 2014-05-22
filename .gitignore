@@ -3,4 +3,5 @@
 *.pyo
 *.dll
 *.jpg
+databases
 settings.json
