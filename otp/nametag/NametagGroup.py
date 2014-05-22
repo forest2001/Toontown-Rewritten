@@ -269,7 +269,7 @@ class NametagGroup:
             # Because we're *forcing* chat onscreen, we skip the visible3d test
             # and go ahead and display it anyway.
             visible3d = False
-        elif not NametagGlobals.masterArrowsOn:
+        elif not NametagGlobals.masterArrowsOn and not self.chatFlags:
             # We're forcing margins offscreen; therefore, we should pretend
             # that the 3D nametag is always visible.
             visible3d = True
