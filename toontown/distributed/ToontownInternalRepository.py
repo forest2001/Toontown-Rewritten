@@ -9,6 +9,7 @@ import pymongo, urlparse
 mongodb_url = ConfigVariableString('mongodb-url', 'mongodb://localhost',
                                    'Specifies the URL of the MongoDB server that'
                                    'stores all gameserver data.')
+mongodb_replicaset = ConfigVariableString('mongodb-replicaset', '', 'Specifies the replica set of the gameserver data DB.')
 
 class ToontownInternalRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
@@ -21,8 +22,12 @@ class ToontownInternalRepository(AstronInternalRepository):
         self._callbacks = {}
 
         mongourl = mongodb_url.getValue()
+        replicaset = mongodb_replicaset.getValue()
         db = (urlparse.urlparse(mongourl).path or '/test')[1:]
-        self.mongo = pymongo.Connection(mongourl)
+        if replicaset:
+            self.mongo = pymongo.MongoClient(mongourl, replicaset=replicaset)
+        else:
+            self.mongo = pymongo.MongoClient(mongourl)
         self.mongodb = self.mongo[db]
 
         self.rpc = RPCClient()
