@@ -12,6 +12,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import ZoneUtil
 import time
 import random
+from pymongo.errors import AutoReconnect
 
 class DistributedBuildingMgrAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBuildingMgrAI')
@@ -238,11 +239,13 @@ class DistributedBuildingMgrAI:
             buildings.append(i.getPickleData())
 
         street = {'ai': self.shard, 'branch': self.branchID}
-
-        self.air.mongodb.toontown.streets.update(street,
-                                                 {'$setOnInsert': street,
-                                                  '$set': {'buildings': buildings}},
-                                                 upsert=True)
+        try:
+            self.air.mongodb.toontown.streets.update(street,
+                                                     {'$setOnInsert': street,
+                                                      '$set': {'buildings': buildings}},
+                                                     upsert=True)
+        except AutoReconnect: # Something happened to our DB, but we can reconnect and retry.
+            taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.save, 'retrySave', extraArgs=[])
 
     def load(self):
         blocks = {}
@@ -254,8 +257,11 @@ class DistributedBuildingMgrAI:
                                                         ('branch', 1)])
 
         street = {'ai': self.shard, 'branch': self.branchID}
-        doc = self.air.mongodb.toontown.streets.find_one(street)
-
+        try:
+            doc = self.air.mongodb.toontown.streets.find_one(street)
+        except AutoReconnect: # We're failing over - normally we'd wait to retry, but this is on AI startup so we might want to retry (or refactor the bldgMgr so we can sanely retry).
+            return blocks
+            
         if not doc:
             return blocks
 

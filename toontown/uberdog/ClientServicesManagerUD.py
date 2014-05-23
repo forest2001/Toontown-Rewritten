@@ -7,6 +7,7 @@ from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toonbase import TTLocalizer
 from otp.distributed import OtpDoGlobals
 from sys import platform
+from pymongo.errors import AutoReconnect
 import time
 import hmac
 import hashlib
@@ -130,15 +131,32 @@ class LoginAccountFSM(OperationFSM):
 
         # Try to figure out the accountId using the databaseId.
         # To do this, query the MongoDB backend and ask it for the account:
-        self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
-        account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
+        try:
+            self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
+            account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
+        except AutoReconnect:
+            taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
+            return
 
         if account:
             self.accountId = account['_id']
             self.demand('RetrieveAccount')
         else:
             self.demand('CreateAccount')
-
+            
+    def __retryLookup(self):
+        try:
+            self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
+            account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
+        except AutoReconnect:
+            taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
+            return
+            
+        if account:
+            self.accountId = account['_id']
+            self.demand('RetrieveAccount')
+        else:
+            self.demand('CreateAccount')
     def enterRetrieveAccount(self):
         self.csm.air.dbInterface.queryObject(self.csm.air.dbId, self.accountId,
                                              self.__handleRetrieve)
