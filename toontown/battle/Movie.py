@@ -810,7 +810,11 @@ class Movie(DirectObject.DirectObject):
                 suitId = suits[suitIndex]
                 suit = self.battle.findSuit(suitId)
                 if suit == None:
-                    self.notify.error('suit: %d not in battle!' % suitId)
+                    # TODO: Realistically fix this. This issue was becoming a pain in the butthole
+                    # whenever anyone entered SBHQ. This is a 'hackfix' and should be removed/fixed
+                    # asap.
+                    return
+                    #self.notify.error('suit: %d not in battle!' % suitId)
                 adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
                 adict['suit'] = suit
                 adict['battle'] = self.battle
