@@ -15,6 +15,11 @@ for mount in mounts:
     mountfile, mountpoint = (mount.split(' ', 2) + [None, None, None])[:2]
     vfs.mount(Filename(mountfile), Filename(mountpoint), 0)
 
+if not __debug__: # Load multifiles from content/
+    import glob
+    extraContentFiles = glob.glob('content/*.mf')
+    for file in extraContentFiles:
+        vfs.mount(Filename(file), Filename('/'), 0)
 
 class game:
     name = 'toontown'
