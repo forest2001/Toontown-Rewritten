@@ -16,7 +16,7 @@ for mount in mounts:
     vfs.mount(Filename(mountfile), Filename(mountpoint), 0)
 
 import glob
-for file in glob.glob('content/*.mf'):
+for file in glob.glob('resources/*.mf'):
     vfs.mount(Filename(file), Filename('/'), 0)
 
 class game:
