@@ -92,8 +92,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
                 do = DistributedClosetAI(self.air, self, item)
             elif item.furnitureType in BankToMoney.keys():
                 do = DistributedBankAI(self.air, self, item)
-            #elif item.furnitureType == 1399:
-            #    do = DistributedPhoneAI(self.air, self, item)
+            elif item.furnitureType == 1399:
+                do = DistributedPhoneAI(self.air, self, item)
             else:
                 do = DistributedFurnitureItemAI(self.air, self, item)
             if self.isGenerated():

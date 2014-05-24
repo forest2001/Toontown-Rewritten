@@ -4,16 +4,8 @@ from DistributedFurnitureManagerAI import *
 from toontown.catalog.CatalogWindowItem import CatalogWindowItem
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
 from DNAFurnitureReaderAI import DNAFurnitureReaderAI
-
-# The house interior DNA files for each
-houseInteriors = [
-    'phase_5.5/dna/house_interior3.xml',
-    'phase_5.5/dna/house_interior4.xml',
-    'phase_5.5/dna/house_interior5.xml',
-    'phase_5.5/dna/house_interior7.xml',
-    'phase_5.5/dna/house_interior8.xml',
-    'phase_5.5/dna/house_interior10.xml',
-]
+import HouseGlobals
+import random
 
 defaultWindows = [
     CatalogWindowItem(20, placement=0),
@@ -49,13 +41,17 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
 
     def initialize(self):
         # Get DNA file appropriate to this house...
-        dnaFile = houseInteriors[self.houseIndex]
+        interior = random.choice(HouseGlobals.interiors)
+        
+        dnaFile = interior[0]
+        
+        phonePos = interior[2]
 
         # Load DNA...
         dnaData = self.air.loadDNA(dnaFile)
 
         # Read it into furniture...
-        furnitureReader = DNAFurnitureReaderAI(dnaData)
+        furnitureReader = DNAFurnitureReaderAI(dnaData, phonePos)
 
         # Set furniture:
         self.furnitureManager.setItems(furnitureReader.getBlob())

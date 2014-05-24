@@ -14,10 +14,7 @@ class DistributedBankAI(DistributedFurnitureItemAI):
     def avatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         if not self.avId:
-            if avId == self.avId:
-                self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to use bank while already using it!')
-                return
-            elif not self.furnitureMgr.ownerId:
+            if not self.furnitureMgr.ownerId:
                 self.b_setMovie(BankGlobals.BANK_MOVIE_NO_OWNER, avId, globalClockDelta.getRealNetworkTime())
                 return
             elif self.furnitureMgr.ownerId != avId:
@@ -28,7 +25,9 @@ class DistributedBankAI(DistributedFurnitureItemAI):
                 self.b_setMovie(BankGlobals.BANK_MOVIE_GUI, avId, globalClockDelta.getRealNetworkTime())
                 return
         else:
-            self.b_setMovie(BankGlobals.BANK_MOVIE_NO_OP, avId, globalClockDelta.getRealNetworkTime())
+            if avId == self.avId:
+                self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to use bank while already using it!')
+            self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
 
     def freeAvatar(self):
         pass

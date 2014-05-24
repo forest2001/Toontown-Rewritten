@@ -39,8 +39,9 @@ class DNAFurnitureReaderAI:
     # house to the default furniture arrangement.
     notify = DirectNotifyGlobal.directNotify.newCategory("DNAFurnitureReaderAI")
 
-    def __init__(self, dnaData):
+    def __init__(self, dnaData, phonePos):
         self.dnaData = dnaData
+        self.phonePos = phonePos
         self.itemList = None
 
     def buildList(self):
@@ -71,6 +72,7 @@ class DNAFurnitureReaderAI:
             h, p, r = child.getHpr()
             self.itemList.append(CatalogFurnitureItem(itemId,
                                                       posHpr=(x, y, z, h, p, r)))
+        self.itemList.append(CatalogFurnitureItem(1399, posHpr=self.phonePos))
 
     def getList(self):
         if not self.itemList:
