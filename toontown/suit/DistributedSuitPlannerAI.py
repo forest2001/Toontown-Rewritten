@@ -698,9 +698,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         for point in self.streetPointList:
             points = self.dnaData.suitGraph.getAdjacentPoints(point)
             for p in points:
-                # DNAData needs getSuitEdgeZone!
-                zoneName = self.dnaData.getSuitEdgeZone(point.getIndex(), p.getIndex())
-                zoneId = int(self.extractGroupName(zoneName))
+                zoneId = self.dnaData.suitGraph.getEdgeZone(self.dnaData.suitGraph.getConnectingEdge(point, p))
                 if self.zoneIdToPointMap.has_key(zoneId):
                     self.zoneIdToPointMap[zoneId].append(point)
                 else:
@@ -887,20 +885,15 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def pathCollision(self, path, elapsedTime):
-        #temphack
-        return 0
-        pathLength = path.getNumPoints()
-        i = 0
-        pi = path.getPointIndex(i)
-        point = self.pointIndexes[pi]
-        adjacentPoint = self.pointIndexes[path.getPointIndex(i + 1)]
-        while point.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT or point.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
-            i += 1
-            lastPi = pi
-            pi = path.getPointIndex(i)
-            adjacentPoint = point
-            point = self.pointIndexes[pi]
-            elapsedTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
+        # TODO - determine whether or not I horrible broke this
+        point = path[0]
+        adjacentPoint = path[1]
+        for p in path:
+            if not (p.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT or p.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT):
+                break
+            adjacentPoint = path[path.index(p) + 1]
+            point = p
+            elapsedTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(p, adjacentPoint, self.suitWalkSpeed)
 
         result = self.pointCollision(point, adjacentPoint, elapsedTime)
         return result
@@ -922,8 +915,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def battleCollision(self, point, adjacentPoint):
-        zoneName = self.dnaData.suitGraph.getConnectingEdge(point, adjacentPoint).parent.zone
-        zoneId = int(self.extractGroupName(zoneName))
+        zoneId = self.dnaData.suitGraph.getEdgeZone(self.dnaData.suitGraph.getConnectingEdge(point, adjacentPoint))
         return self.battleMgr.cellHasBattle(zoneId)
 
     def removeSuit(self, suit):
