@@ -280,8 +280,9 @@ class ChatManager(DirectObject.DirectObject):
         if hasManager:
             if base.cr.playerFriendsManager.askAvatarOnline(avatarId):
                 online = 1
-        avatarUnderstandable = 0
-        playerUnderstandable = 0
+        
+        avatarUnderstandable = base.cr.config.GetBool('force-avatar-understandable', False)
+        playerUnderstandable = base.cr.config.GetBool('force-player-understandable', False)
         av = None
         if avatarId:
             av = self.cr.identifyAvatar(avatarId)
