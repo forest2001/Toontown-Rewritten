@@ -249,7 +249,10 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         return
 
     def setTalkWhisper(self, fromAV, fromAC, avatarName, chat, mods, flags):
-        avatarName = base.cr.identifyAvatar(fromAV).getName()
+        handle = base.cr.identifyAvatar(fromAV)
+        if handle == None:
+            return
+        avatarName = handle.getName()
         newText, scrubbed = self.scrubTalk(chat, mods)
         self.displayTalkWhisper(fromAV, avatarName, chat, mods)
         base.talkAssistant.receiveWhisperTalk(fromAV, avatarName, fromAC, None, self.doId, self.getName(), newText, scrubbed)
