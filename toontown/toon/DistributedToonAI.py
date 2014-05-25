@@ -5057,11 +5057,3 @@ def goto(avIdShort):
         return "Unable to teleport to target, they are not currently on this district."
     spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
-
-@magicWord()
-def clone():
-    """ gen random DToonAI... """
-    import copy
-    toon = copy.deepcopy(spellbook.getInvoker())
-    toon.doId = simbase.air.allocateChannel()
-    toon.generateWithRequired(2000)
