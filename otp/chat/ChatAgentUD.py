@@ -40,7 +40,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         cleanMessage, modifications = self.cleanMessage(message)
 
         # Maybe a better "cleaner" way of doing this, but it works
-        self.air.writeServerEvent('whisper-said', avId=sender, msg=message, cleanMsg=cleanMessage)
+        self.air.writeServerEvent('whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
         dg = DistributedAvatar.aiFormatUpdate('setTalkWhisper', receiverAvId, receiverAvId, self.air.ourChannel, 
                                             [sender, sender, '', cleanMessage, modifications, 0])
