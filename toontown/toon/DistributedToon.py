@@ -510,7 +510,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return base.cr.isFriend(avId) or base.cr.playerFriendsManager.isAvatarOwnerPlayerFriend(avId)
 
     def setTalkWhisper(self, fromAV, fromAC, avatarName, chat, mods, flags):
-        avatarName = base.cr.identifyAvatar(fromAV).getName()
+        handle = base.cr.identifyAvatar(fromAV)
+        if not handle:
+            return
+        avatarName = handle.getName()
         if not localAvatar.acceptingNonFriendWhispers:
             if not self.isAvFriend(fromAV):
                 return
