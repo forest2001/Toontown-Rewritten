@@ -70,16 +70,22 @@ class NewsManager(DistributedObject.DistributedObject):
     def sendSystemMessage(self, message, style):
         base.localAvatar.setSystemMessage(style, message)
 
-    def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton):
-        self.notify.info('setInvasionStatus: msgType: %s cogType: %s, numRemaining: %s, skeleton: %s' % (msgType,
+    def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton, vTwo):
+        self.notify.info('setInvasionStatus: msgType: %s cogType: %s, numRemaining: %s, skeleton: %s, vTwo: %s' % (msgType,
          cogType,
          numRemaining,
-         skeleton))
+         skeleton,
+         vTwo))
         cogName = SuitBattleGlobals.SuitAttributes[cogType]['name']
         cogNameP = SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
+        # If they are a Skelecog or v2.0 cog, we need to change the Cog Name.
         if skeleton:
             cogName = TTLocalizer.Skeleton
             cogNameP = TTLocalizer.SkeletonP
+        elif vTwo:
+            cogName = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['name']
+            cogNameP = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
+        # Figure out the message type to send
         if msgType == ToontownGlobals.SuitInvasionBegin:
             msg1 = TTLocalizer.SuitInvasionBegin1
             msg2 = TTLocalizer.SuitInvasionBegin2 % cogNameP

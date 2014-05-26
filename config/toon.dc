@@ -1519,7 +1519,7 @@ dclass NewsManager : DistributedObject {
   setTrolleyWeekendEnd() broadcast;
   setRoamingTrialerWeekendStart() broadcast;
   setRoamingTrialerWeekendEnd() broadcast;
-  setInvasionStatus(uint8 msgType, string cogType, uint32 numRemaining, uint8 skeleton) broadcast;
+  setInvasionStatus(uint8 msgType, string cogType, uint32 numRemaining, uint8 skeleton, uint8 vTwo) broadcast;
   setHolidayIdList(uint32 holidayIdList[]) broadcast ram;
   holidayNotify() broadcast;
   setWeeklyCalendarHolidays(weeklyCalendarHoliday weeklyCalendarHolidays[]) required broadcast ram;
