@@ -70,21 +70,22 @@ class NewsManager(DistributedObject.DistributedObject):
     def sendSystemMessage(self, message, style):
         base.localAvatar.setSystemMessage(style, message)
 
-    def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton, vTwo):
-        self.notify.info('setInvasionStatus: msgType: %s cogType: %s, numRemaining: %s, skeleton: %s, vTwo: %s' % (msgType,
+    def setInvasionStatus(self, msgType, cogType, numRemaining, specialSuit):
+        self.notify.info('setInvasionStatus: msgType: %s cogType: %s, numRemaining: %s, specialSuit: %s' % (msgType,
          cogType,
          numRemaining,
-         skeleton,
-         vTwo))
-        cogName = SuitBattleGlobals.SuitAttributes[cogType]['name']
-        cogNameP = SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
-        # If they are a Skelecog or v2.0 cog, we need to change the Cog Name.
-        if skeleton:
+         specialSuit))
+        # Determine if we are spawning a special type of suit. 1 is Skelecog, 2 is v2.0.
+        # If they are a Skelecog or v2.0 cog, we need to change the Cog name.
+        if specialSuit == 1:
             cogName = TTLocalizer.Skeleton
             cogNameP = TTLocalizer.SkeletonP
-        elif vTwo:
+        elif specialSuit == 2:
             cogName = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['name']
             cogNameP = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
+        else:
+            cogName = SuitBattleGlobals.SuitAttributes[cogType]['name']
+            cogNameP = SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
         # Figure out the message type to send
         if msgType == ToontownGlobals.SuitInvasionBegin:
             msg1 = TTLocalizer.SuitInvasionBegin1

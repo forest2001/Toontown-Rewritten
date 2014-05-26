@@ -723,7 +723,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         return pointList
 
-    def createNewSuit(self, blockNumbers, streetPoints, toonBlockTakeover = None, cogdoTakeover = None, minPathLen = None, maxPathLen = None, buildingHeight = None, suitLevel = None, suitType = None, suitTrack = None, suitName = None, skelecog = None, revives = None):
+    def createNewSuit(self, blockNumbers, streetPoints, toonBlockTakeover = None, cogdoTakeover = None, minPathLen = None, maxPathLen = None, buildingHeight = None, suitLevel = None, suitType = None, suitTrack = None, suitName = None, specialSuit = 0):
         startPoint = None
         blockNumber = None
         if self.notify.getDebug():
@@ -771,7 +771,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     del self.pendingBuildingHeights[0]
                     self.pendingBuildingHeights.append(buildingHeight)
         if suitName == None:
-            suitName, skelecog, revives = self.air.suitInvasionManager.getInvadingCog()
+            suitName, specialSuit = self.air.suitInvasionManager.getInvadingCog()
             if suitName == None:
                 suitName = self.defaultSuitName
         if suitType == None and suitName != None:
@@ -790,10 +790,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return
         newSuit.initializePath()
         self.zoneChange(newSuit, None, newSuit.zoneId)
-        if skelecog:
-            newSuit.setSkelecog(skelecog)
-        elif revives:
-            newSuit.setSkeleRevives(revives)
+        # Determine if we are spawning a special type of suit. 1 is Skelecog, 2 is v2.0.
+        if specialSuit == 1:
+            newSuit.setSkelecog(1)
+        elif specialSuit == 2:
+            newSuit.setSkeleRevives(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         newSuit.moveToNextLeg(None)
         self.suitList.append(newSuit)
@@ -1434,12 +1435,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return (level, type, track)
 
 @magicWord(types=[str, int, int, int], category=CATEGORY_OVERRIDE)
-def spawn(name, level, skelecog=0, revives=0):
-    if skelecog and revives:
-        return "You can't summon v2.0 Skelecogs!"
+def spawn(name, level, specialSuit = 0):
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives)
+    sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, specialSuit = 0)
     return "Spawned %s in current zone." % name

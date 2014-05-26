@@ -22,8 +22,7 @@ class SuitInvasionManagerAI:
     def __init__(self, air):
         self.air = air
         self.invading = 0
-        self.skelecog = 0
-        self.vTwo = 0
+        self.specialSuit = 0
         self.suitName = None
         self.numSuits = 0
         self.spawnedSuits = 0
@@ -70,15 +69,14 @@ class SuitInvasionManagerAI:
         # TODO: Fix once we have NewsManagerAI working.
         self.air.newsManager.sendUpdate('setInvasionStatus', [
             ToontownGlobals.SuitInvasionEnd, self.suitName,
-            self.numSuits, self.skelecog, self.vTwo
+            self.numSuits, self.specialSuit
         ])
         # Remove the invasion timeout.
         if task is not None:
             task.remove()
         else:
             taskMgr.remove('invasion-timeout')
-        self.skelecog = 0
-        self.vTwo = 0
+        self.specialSuit = 0
         self.numSuits = 0
         self.spawnedSuits = 0
         self.invading = 0
@@ -94,14 +92,14 @@ class SuitInvasionManagerAI:
         """ Tell the caller the current cog type invading and if they are a skelecog or v2.0 """
         self.spawnedSuits += 1
         self.__checkInvasionOver()
-        return (self.suitName, self.skelecog, self.vTwo)
+        return (self.suitName, self.specialSuit)
 
     def __spAllCogsSupaFly(self):
         """ Tell all SuitPlanners to get rid of the current cogs. """
         for sp in self.air.suitPlanners.values():
             sp.flySuits()
 
-    def startInvasion(self, suitName='f', numSuits=1000, skelecog=False, vTwo=False):
+    def startInvasion(self, suitName='f', numSuits=1000, specialSuit=0):
         """
         Start an invasion on the current AI. This can be invoked by anything, such
         as a toon summoning an invasion, or an admin manually starting an
@@ -114,16 +112,11 @@ class SuitInvasionManagerAI:
         self.spawnedSuits = 0
         self.suitName = suitName
         self.numSuits = numSuits
-        self.skelecog = skelecog
-        # If the invasion is a Skelecog one, we don't want v2.0 cogs.
-        if self.skelecog:
-            self.vTwo = False
-        else:
-            self.vTwo = vTwo
+        self.specialSuit = specialSuit
         # Tell all the client's that an invasion has started via the NewsManager.
         self.air.newsManager.sendUpdate('setInvasionStatus', [
             ToontownGlobals.SuitInvasionBegin, self.suitName,
-            self.numSuits, self.skelecog, self.vTwo
+            self.numSuits, self.specialSuit
         ])
         # If the cogs aren't defeated in a set amount of time, the invasion will
         # simply timeout. This was calculated by judging that 1000 cogs should
@@ -133,7 +126,7 @@ class SuitInvasionManagerAI:
         return True
 
 @magicWord(types=[str, str, int, int, int], category=CATEGORY_OVERRIDE)
-def invasion(cmd, name='f', num=1000, skelecog=0, vTwo=0):
+def invasion(cmd, name='f', num=1000, specialSuit = 0):
     """ Spawn an invasion on the current AI if one doesn't exist. """
     invMgr = simbase.air.suitInvasionManager
     if cmd == 'start':
@@ -141,9 +134,7 @@ def invasion(cmd, name='f', num=1000, skelecog=0, vTwo=0):
             return "There is already an invasion on the current AI!"
         if not name in SuitDNA.suitHeadTypes:
             return "This cog does not exist!"
-        if skelecog and vTwo:
-            return "You can't summon v2.0 Skelecogs!"
-        invMgr.startInvasion(name, num, skelecog, vTwo)
+        invMgr.startInvasion(name, num, specialSuit)
     elif cmd == 'stop':
         if not invMgr.getInvading():
             return "There is no invasion on the current AI!"
