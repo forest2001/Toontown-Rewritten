@@ -81,7 +81,10 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         if self.avId != avId:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to cast from a pier they\'re not on!')
             return
-        av = self.air.doId2do[avId]
+        av = self.air.doId2do.get(avId)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to cast while not on district!')
+            return
         money = av.getMoney()
         cost = FishGlobals.getCastCost(av.getFishingRod())
         if money < cost:
@@ -105,7 +108,10 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             return
         if self.air.doId2do[pondDoId].getArea() != ToontownGlobals.MyEstate:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to sell fish at a pier not in their estate!')
-        av = self.air.doId2do[avId]
+        av = self.air.doId2do.get(avId)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to sell fish while not on district!')
+            return
         result = self.air.fishManager.creditFishTank(av)
         totalFish = len(av.fishCollection)
         self.sendUpdateToAvatarId(avId, 'sellFishComplete', [result, totalFish])
@@ -137,11 +143,11 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId=self.avId, issue='Toon tried to fish without casting!')
             return
         av = self.air.doId2do[self.avId]
-        
+
         catch = self.air.fishManager.generateCatch(av, self.air.doId2do[self.pondDoId].getArea())
-        
+
         self.lastFish = catch
-        
+
         self.d_setMovie(FishGlobals.PullInMovie, catch[0], catch[1], catch[2], catch[3], 0, 0)
         self.cast = False
 
