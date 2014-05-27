@@ -58,8 +58,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
         cleanMessage = self.cleanBlacklist(message)
 
-        # Only staff uses this for now, so lets not log it :)
-        # self.air.writeServerEvent('sf-whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
+        self.air.writeServerEvent('sf-whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
         dg = DistributedAvatar.aiFormatUpdate('setTalkWhisper', receiverAvId, receiverAvId, self.air.ourChannel, 
                                             [sender, sender, '', cleanMessage, [], 0])
