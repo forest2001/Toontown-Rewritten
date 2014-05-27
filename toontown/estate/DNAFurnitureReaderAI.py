@@ -56,6 +56,7 @@ class DNAFurnitureReaderAI:
         else:
             self.notify.error('Could not find "interior" in DNA!')
 
+        self.itemList.append(CatalogFurnitureItem(1399, posHpr=self.phonePos))
         # Every child in the interior node is a prop, thus:
         for child in interior.children:
             code = child.getCode()
@@ -72,7 +73,6 @@ class DNAFurnitureReaderAI:
             h, p, r = child.getHpr()
             self.itemList.append(CatalogFurnitureItem(itemId,
                                                       posHpr=(x, y, z, h, p, r)))
-        self.itemList.append(CatalogFurnitureItem(1399, posHpr=self.phonePos))
 
     def getList(self):
         if not self.itemList:

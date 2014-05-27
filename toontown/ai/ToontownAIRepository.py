@@ -56,6 +56,9 @@ from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
 # Toontorial
 from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
 
+# Catalogs.
+from toontown.catalog.CatalogManagerAI import CatalogManagerAI
+
 # Magic Words!
 from panda3d.core import PStatClient
 from otp.ai.MagicWordGlobal import *
@@ -186,6 +189,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.tutorialManager = TutorialManagerAI(self)
         self.tutorialManager.generateWithRequired(2)
+        
+        self.catalogManager = CatalogManagerAI(self)
+        self.catalogManager.generateWithRequired(2)
 
     def createZones(self):
         """

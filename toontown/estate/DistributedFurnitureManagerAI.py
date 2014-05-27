@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
-from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, BankToMoney, ClosetToClothes
+from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLCloset, FLBank, FLPhone
 from toontown.toonbase import ToontownGlobals
 from DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from DistributedBankAI import DistributedBankAI
@@ -88,11 +88,11 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.items = []
 
         for item in items:
-            if item.furnitureType in ClosetToClothes.keys():
+            if item.getFlags() & FLCloset:
                 do = DistributedClosetAI(self.air, self, item)
-            elif item.furnitureType in BankToMoney.keys():
+            elif item.getFlags() & FLBank:
                 do = DistributedBankAI(self.air, self, item)
-            elif item.furnitureType == 1399:
+            elif item.getFlags() & FLPhone:
                 do = DistributedPhoneAI(self.air, self, item)
             else:
                 do = DistributedFurnitureItemAI(self.air, self, item)

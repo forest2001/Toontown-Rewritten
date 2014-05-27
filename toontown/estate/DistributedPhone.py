@@ -116,7 +116,9 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
     def setupCamera(self, mode):
         camera.wrtReparentTo(render)
         if mode == PhoneGlobals.PHONE_MOVIE_PICKUP:
-            camera.lerpPosHpr(4, -4, base.localAvatar.getHeight() - 0.5, 35, -8, 0, 1, other=base.localAvatar, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+            quat = Quat()
+            quat.setHpr((35, -8, 0))
+            LerpPosQuatInterval(camera, 1, (4, -4, base.localAvatar.getHeight() - 0.5), quat, blendType='easeOut', other=base.localAvatar).start()
 
     def setupCord(self):
         if self.cord:
@@ -173,7 +175,8 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
             return
         if self.hasLocalAvatar:
             self.freeAvatar()
-        base.localAvatar.lookupPetDNA()
+        if base.config.GetBool('want-pets', 1):
+            base.localAvatar.lookupPetDNA()
         self.notify.debug('Entering Phone Sphere....')
         taskMgr.remove(self.uniqueName('ringDoLater'))
         self.ignore(self.phoneSphereEnterEvent)

@@ -5063,6 +5063,10 @@ def fanfare():
     """ Give target toon a fanfare for the lolz. """
     spellbook.getTarget().magicFanfare()
     return "Jason: Because the trumpets they go...~"
+    
+@magicWord(category=CATEGORY_OVERRIDE)
+def catalog():
+    simbase.air.catalogManager.deliverCatalogFor(spellbook.getTarget())
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def pouch(amt):

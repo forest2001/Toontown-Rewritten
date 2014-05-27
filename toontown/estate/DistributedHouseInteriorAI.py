@@ -45,7 +45,7 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         
         dnaFile = interior[0]
         
-        phonePos = interior[2]
+        phonePos = interior[1]
 
         # Load DNA...
         dnaData = self.air.loadDNA(dnaFile)
