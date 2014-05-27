@@ -22,7 +22,7 @@ print 'from ' + _languageModule + ' import *'
 from otp.otpbase.OTPLocalizerEnglish import *
 if language == 'french':
     from otp.otpbase.OTPLocalizer_French import *
-else:
+elif language == 'polish':
     from otp.otpbase.OTPLocalizer_Polish import *
 if checkLanguage:
     l = {}
