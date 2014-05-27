@@ -22,7 +22,7 @@ print 'from ' + _languageModule + ' import *'
 from toontown.toonbase.TTLocalizerEnglish import *
 if language == 'french':
     from toontown.toonbase.TTLocalizer_French import *
-else:
+elif language == 'polish':
     from toontown.toonbase.TTLocalizer_Polish import *
 if checkLanguage:
     l = {}
