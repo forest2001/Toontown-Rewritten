@@ -25,6 +25,9 @@ class ShardStatusSender:
         self.interval = None
 
     def start(self):
+        # Set the average frame rate interval to match shard status interval.
+        globalClock.setAverageFrameRateInterval(shard_status_interval.getValue())
+
         # Prepare an "offline status" to register as a postremove:
         offlineStatus = {'channel': self.air.ourChannel,
                          'offline': True
@@ -40,6 +43,7 @@ class ShardStatusSender:
                   'districtId': self.air.distributedDistrict.doId,
                   'districtName': self.air.distributedDistrict.name,
                   'population': self.air.districtStats.getAvatarCount(),
+                  'avg-frame-rate': round(globalClock.getAverageFrameRate(), 5),
                  }
         if HAS_PSUTIL:
             status['cpu-usage'] = cpu_percent(interval=None, percpu=True)
