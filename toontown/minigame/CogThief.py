@@ -1,12 +1,13 @@
 import math
 from pandac.PandaModules import CollisionSphere, CollisionNode, Point3, CollisionTube, Vec3, rad2Deg
+from direct.interval.IntervalGlobal import *
 from direct.showbase.DirectObject import DirectObject
 from direct.distributed.ClockDelta import globalClockDelta
-from direct.interval.IntervalGlobal import Parallel, SoundInterval, Sequence, Func, LerpScaleInterval
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from toontown.minigame import CogThiefGameGlobals
+from toontown.battle import BattleParticles
 from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
 CTGG = CogThiefGameGlobals
@@ -319,6 +320,7 @@ class CogThief(DirectObject):
             self.showSplat()
             startPos = CTGG.CogStartingPositions[self.cogIndex]
             oldPos = self.suit.getPos()
+            self.createExplosionTrack()            
             self.suit.setPos(startPos)
             self.suit.hide()
             if self.netTimeSentToStartByHit < timestamp:
@@ -326,6 +328,55 @@ class CogThief(DirectObject):
         else:
             self.notify.debug('localStamp = %s, lastLocalTimeStampFromAI=%s, ignoring respondToPieHit' % (localStamp, self.lastLocalTimeStampFromAI))
             self.notify.debug('respondToPieHit self.netTimeSentToStartByHit = %s' % self.netTimeSentToStartByHit)
+
+    def createExplosionTrack(self):
+        # Our real actor is going to head back and get ready for the next time he is needed,
+        # so we need to spawn a "LoseActor" in his place.
+        loseActor = self.suit.getLoseActor()
+        loseActor.reparentTo(render)
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+        deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+
+        # Now for our main interval and soundtrack
+        explosionInterval = ActorInterval(loseActor, 'lose', startFrame=0, endFrame=150)
+        deathSoundTrack = Sequence(Wait(0.6), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=loseActor), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=loseActor), SoundInterval(deathSound, volume=0.32, node=loseActor))
+
+        # Next, load the particle effects
+        BattleParticles.loadParticles()
+        smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+        singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+        smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+        bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+        gearPoint = Point3(loseActor.getX(), loseActor.getY(), loseActor.getZ())
+        smallGears.setDepthWrite(False)
+        singleGear.setDepthWrite(False)
+        smallGearExplosion.setDepthWrite(False)
+        bigGearExplosion.setDepthWrite(False)
+        cleanupTrack = Track((6.5, Func(self.suit.cleanupLoseActor)))
+
+        # Now for the big KAPOW
+        def createKapowExplosionTrack(parent):
+            explosionTrack = Sequence()
+            explosion = loader.loadModel('phase_3.5/models/props/explosion')
+            explosion.setBillboardPointEye()
+            explosion.setDepthWrite(False)
+            explosionPoint = Point3(0, 0, 4.1)
+            explosionTrack.append(Func(explosion.reparentTo, parent))
+            explosionTrack.append(Func(explosion.setPos, explosionPoint))
+            explosionTrack.append(Func(explosion.setScale, 0.4))
+            explosionTrack.append(Wait(0.6))
+            explosionTrack.append(Func(explosion.removeNode))
+            return explosionTrack
+        explosionTrack = Sequence()
+        explosionTrack.append(Wait(5.4))
+        explosionTrack.append(createKapowExplosionTrack(loseActor))
+
+        gears1Track = Sequence(Wait(2.0), ParticleInterval(smallGears, loseActor, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+        gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+
+        # Let's tie it all together.
+        explodeTrack = Sequence(Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack, cleanupTrack))
+        explodeTrack.start()
 
     def cleanup(self):
         self.clearGoal()
