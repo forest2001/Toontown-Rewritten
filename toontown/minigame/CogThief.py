@@ -83,6 +83,7 @@ class CogThief(DirectObject):
         self.gameStartTime = gameStartTime
         self.initCollisions()
         self.startWalkAnim()
+        self.suit.hide()
 
     def gameEnd(self):
         self.moveIval.pause()
@@ -185,6 +186,7 @@ class CogThief(DirectObject):
                 self.acceleration = Vec3(0, 0, 0)
             else:
                 self.commonMove()
+                self.suit.show()
             newPos = self.suit.getPos()
             self.adjustPlayRate(newPos, myPos, diffTime)
         self.lastThinkTime = globalClock.getFrameTime()
@@ -202,6 +204,7 @@ class CogThief(DirectObject):
             startPos = CTGG.CogStartingPositions[self.cogIndex]
             oldPos = self.suit.getPos()
             self.suit.setPos(startPos)
+            self.suit.hide()
             if self.netTimeSentToStartByHit < timestamp:
                 self.netTimeSentToStartByHit = timestamp
         else:
@@ -229,6 +232,7 @@ class CogThief(DirectObject):
             myPos = self.lastPosFromAI
             self.notify.debug('thinkAboutGettingBarrel not doneAdjust setting position to %s' % myPos)
             self.suit.setPos(myPos)
+            self.suit.show()
             self.doneAdjust = True
         displacement = barrelPos - myPos
         distanceToToon = displacement.length()
@@ -262,6 +266,7 @@ class CogThief(DirectObject):
         if not self.doneAdjust:
             myPos = self.lastPosFromAI
             self.suit.setPos(myPos)
+            self.suit.show()
             self.doneAdjust = True
         displacement = returnPos - myPos
         distanceToToon = displacement.length()
@@ -315,6 +320,7 @@ class CogThief(DirectObject):
             startPos = CTGG.CogStartingPositions[self.cogIndex]
             oldPos = self.suit.getPos()
             self.suit.setPos(startPos)
+            self.suit.hide()
             if self.netTimeSentToStartByHit < timestamp:
                 self.netTimeSentToStartByHit = timestamp
         else:
