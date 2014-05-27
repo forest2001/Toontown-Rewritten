@@ -17,3 +17,6 @@ class ToontownDistrictAI(DistributedDistrictAI):
 
     def getAllowAHNNLog(self):
         return self.ahnnLog
+
+    def rpcSetAvailable(self, available):
+        self.b_setAvailable(available)

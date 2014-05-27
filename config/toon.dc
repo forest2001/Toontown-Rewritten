@@ -412,6 +412,7 @@ struct datetime {
 dclass ToontownDistrict : DistributedDistrict {
   setParentingRules(string, string) broadcast ram;
   allowAHNNLog(bool allow) broadcast required ram;
+  rpcSetAvailable(bool available) airecv;
 };
 
 dclass ToontownDistrictStats : DistributedObject {
