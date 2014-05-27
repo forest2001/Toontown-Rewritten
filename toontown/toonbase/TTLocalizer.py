@@ -17,9 +17,13 @@ if language == 'english':
     _languageModule = 'toontown.toonbase.TTLocalizer' + language.capitalize()
 else:
     checkLanguage = 1
-    _languageModule = 'toontown.toonbase.TTLocalizer_' + language
+    _languageModule = 'toontown.toonbase.TTLocalizer_' + language.capitalize()
 print 'from ' + _languageModule + ' import *'
 from toontown.toonbase.TTLocalizerEnglish import *
+if language == 'french':
+    from toontown.toonbase.TTLocalizer_French import *
+else:
+    from toontown.toonbase.TTLocalizer_Polish import *
 if checkLanguage:
     l = {}
     g = {}
