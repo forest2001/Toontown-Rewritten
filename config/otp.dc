@@ -287,6 +287,7 @@ dclass ChatAgent : DistributedObject {
   adminChat(uint32 aboutId, string message);
   chatMessage(string(0-256) message) clsend;
   whisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
+  sfWhisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
 };
 
 dclass FriendManager : DistributedObject {

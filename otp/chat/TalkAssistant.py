@@ -624,18 +624,17 @@ class TalkAssistant(DirectObject.DirectObject):
         return error
 
     def sendWhisperTalk(self, message, receiverAvId):
+        # Check if we are a true friend
+        if (receiverAvId, True) in base.localAvatar.friendsList:
+            base.cr.chatAgent.sendSFWhisperMessage(receiverAvId, message)
+            return None
+
         base.cr.chatAgent.sendWhisperMessage(receiverAvId, message)
         return None
 
     def sendAccountTalk(self, message, receiverAccount):
-        error = None
-        base.cr.playerFriendsManager.sendUpdate('setTalkAccount', [receiverAccount,
-         0,
-         '',
-         message,
-         [],
-         0])
-        return error
+        base.cr.playerFriendsManager.sendUpdate('setTalkAccount', [receiverAccount, 0, '', message, [], 0])
+        return None
 
     def sendGuildTalk(self, message):
         error = None

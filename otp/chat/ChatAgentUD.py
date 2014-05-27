@@ -11,6 +11,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
         self.whiteList = TTWhiteList()
 
+    # Open chat
     def chatMessage(self, message):
         sender = self.air.getAvatarIdFromSender()
         if sender == 0:
@@ -18,7 +19,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          issue='Account sent chat without an avatar', message=message)
             return
 
-        cleanMessage, modifications = self.cleanMessage(message)
+        cleanMessage, modifications = self.cleanWhitelist(message)
 
         self.air.writeServerEvent('chat-said', avId=sender, msg=message, cleanMsg=cleanMessage)
 
@@ -30,6 +31,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                               [0, 0, '', cleanMessage, modifications, 0])
         self.air.send(dg)
 
+    # Regular filtered chat
     def whisperMessage(self, receiverAvId, message):
         sender = self.air.getAvatarIdFromSender()
         if sender == 0:
@@ -37,7 +39,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          issue='Account sent chat without an avatar', message=message)
             return
 
-        cleanMessage, modifications = self.cleanMessage(message)
+        cleanMessage, modifications = self.cleanWhitelist(message)
 
         # Maybe a better "cleaner" way of doing this, but it works
         self.air.writeServerEvent('whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
@@ -46,7 +48,25 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                             [sender, sender, '', cleanMessage, modifications, 0])
         self.air.send(dg)
 
-    def cleanMessage(self, message):
+    # True friend unfiltered chat
+    def sfWhisperMessage(self, receiverAvId, message):
+        sender = self.air.getAvatarIdFromSender()
+        if sender == 0:
+            self.air.writeServerEvent('suspicious', accId=self.air.getAccountIdFromSender(),
+                                         issue='Account sent chat without an avatar', message=message)
+            return
+
+        cleanMessage = self.cleanBlacklist(message)
+
+        # Only staff uses this for now, so lets not log it :)
+        # self.air.writeServerEvent('sf-whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
+        DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
+        dg = DistributedAvatar.aiFormatUpdate('setTalkWhisper', receiverAvId, receiverAvId, self.air.ourChannel, 
+                                            [sender, sender, '', cleanMessage, [], 0])
+        self.air.send(dg)
+
+    # Filter the chat message
+    def cleanWhitelist(self, message):
         modifications = []
         words = message.split(' ')
         offset = 0
@@ -61,3 +81,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
 
         return (cleanMessage, modifications)
+
+    # Check the black list for black-listed words
+    def cleanBlacklist(self, message):
+        # We don't have a black list so we just return the full message
+        return message
