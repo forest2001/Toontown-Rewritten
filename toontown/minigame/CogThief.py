@@ -58,6 +58,7 @@ class CogThief(DirectObject):
         self.kaboom.setBillboardPointEye()
         self.kaboom.hide()
         self.kaboomTrack = None
+        self.explodeTrack = None
         splatName = 'splat-creampie'
         self.splat = globalPropPool.getProp(splatName)
         self.splat.setBillboardPointEye()
@@ -330,6 +331,8 @@ class CogThief(DirectObject):
             self.notify.debug('respondToPieHit self.netTimeSentToStartByHit = %s' % self.netTimeSentToStartByHit)
 
     def createExplosionTrack(self):
+        if self.explodeTrack and self.explodeTrack.isPlaying():
+            self.explodeTrack.finish()
         # Our real actor is going to head back and get ready for the next time he is needed,
         # so we need to spawn a "LoseActor" in his place.
         loseActor = self.suit.getLoseActor()
@@ -375,8 +378,8 @@ class CogThief(DirectObject):
         gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, loseActor, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, loseActor, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, loseActor, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
 
         # Let's tie it all together.
-        explodeTrack = Sequence(Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack, cleanupTrack))
-        explodeTrack.start()
+        self.explodeTrack = Sequence(Parallel(explosionInterval, deathSoundTrack, gears1Track, gears2MTrack, cleanupTrack))
+        self.explodeTrack.start()
 
     def cleanup(self):
         self.clearGoal()
