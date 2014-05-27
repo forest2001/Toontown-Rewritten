@@ -27,7 +27,8 @@ class SuitInvasionManagerAI:
         self.numSuits = 0
         self.spawnedSuits = 0
         self.randomInvasionProbability = 0.5
-        taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
+        if config.GetBool('want-random-invasions', True):
+            taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
         """
