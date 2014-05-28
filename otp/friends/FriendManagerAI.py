@@ -17,10 +17,14 @@ class FriendManagerAI(DistributedObjectAI):
         if not requested in self.air.doId2do:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Player tried to friend a player that does not exist!')
             return
+        av = self.air.doId2do.get(avId)
+        if not av:
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Player tried to send friendQuery while not on district!')
+            return
         context = self.currentContext
         self.requests[context] = [ [ avId, requested ], 'friendQuery']
         self.currentContext += 1
-        self.sendUpdateToAvatarId(requested, 'inviteeFriendQuery', [avId, self.air.doId2do[avId].getName(), self.air.doId2do[avId].getDNAString(), context])
+        self.sendUpdateToAvatarId(requested, 'inviteeFriendQuery', [avId, av.getName(), av.getDNAString(), context])
 
     def cancelFriendQuery(self, context):
         avId = self.air.getAvatarIdFromSender()
@@ -70,21 +74,21 @@ class FriendManagerAI(DistributedObjectAI):
             if not (requested and requester):
                 # Likely they logged off just before a response was sent. RIP.
                 return
-            
-            
+
+
             # Allow both toons to teleport to each other.
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(requested.getDoId()), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
             dg.addUint32(requester.getDoId())
             dg.addUint16(self.air.dclassesByName['DistributedToonAI'].getNumber())
             self.air.send(dg)
-            
+
             dg = PyDatagram()
             dg.addServerHeader(self.GetPuppetConnectionChannel(requester.getDoId()), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
             dg.addUint32(requested.getDoId())
             dg.addUint16(self.air.dclassesByName['DistributedToonAI'].getNumber())
             self.air.send(dg)
-            
+
             requested.extendFriendsList(requester.getDoId(), 0)
             requester.extendFriendsList(requested.getDoId(), 0)
 
