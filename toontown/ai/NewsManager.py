@@ -81,8 +81,8 @@ class NewsManager(DistributedObject.DistributedObject):
             cogName = TTLocalizer.Skeleton
             cogNameP = TTLocalizer.SkeletonP
         elif specialSuit == 2:
-            cogName = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['name']
-            cogNameP = TTLocalizer.SkeleRevivePreFix + SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
+            cogName = TTLocalizer.SkeleReviveCogName % {'cog_name':SuitBattleGlobals.SuitAttributes[cogType]['name']}
+            cogNameP = TTLocalizer.SkeleReviveCogName % {'cog_name':SuitBattleGlobals.SuitAttributes[cogType]['pluralname']}
         else:
             cogName = SuitBattleGlobals.SuitAttributes[cogType]['name']
             cogNameP = SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
