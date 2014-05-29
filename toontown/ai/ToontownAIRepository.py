@@ -81,7 +81,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.zoneDataStore = AIZoneDataStore()
 
         self.useAllMinigames = self.config.GetBool('want-all-minigames', False)
-        self.doLiveUpdates = False
+        self.doLiveUpdates = self.config.GetBool('want-live-updates', True)
 
         self.holidayManager = HolidayManagerAI()
 
