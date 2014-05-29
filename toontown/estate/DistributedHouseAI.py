@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
+from toontown.estate.DistributedMailboxAI import DistributedMailboxAI
 from toontown.building import DoorTypes
 from toontown.catalog.CatalogItemList import CatalogItemList
 from otp.ai.MagicWordGlobal import *
@@ -48,6 +49,9 @@ class DistributedHouseAI(DistributedObjectAI):
         self.interior.setHouseIndex(self.housePos)
         self.interior.setHouseId(self.getDoId())
         self.interior.generateWithRequired(self.interiorZone)
+        
+        self.mailbox = DistributedMailboxAI(self.air, self)
+        self.mailbox.generateWithRequired(self.zoneId)
 
         if not self.isInteriorInitialized:
             self.notify.info('Initializing interior...')
@@ -61,6 +65,7 @@ class DistributedHouseAI(DistributedObjectAI):
         self.door.requestDelete()
         self.interiorDoor.requestDelete()
         self.interior.requestDelete()
+        self.mailbox.requestDelete()
         self.air.deallocateZone(self.interiorZone)
         DistributedObjectAI.delete(self)
 

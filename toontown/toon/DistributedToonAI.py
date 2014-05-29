@@ -2452,7 +2452,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.checkMailboxFullIndicator()
 
     def checkMailboxFullIndicator(self):
-        return # TODO - spawn the mailbox
         if self.houseId and hasattr(self, 'air'):
             if self.air:
                 house = self.air.doId2do.get(self.houseId)
