@@ -2392,7 +2392,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         now = int(time.time() / 60 + 0.5)
         delivered, remaining = self.onOrder.extractDeliveryItems(now)
         deliveredGifts, remainingGifts = self.onGiftOrder.extractDeliveryItems(now)
-        simbase.air.deliveryManager.sendDeliverGifts(self.getDoId(), now)
+        #simbase.air.deliveryManager.sendDeliverGifts(self.getDoId(), now) TODO DeliveryManager
         giftItem = CatalogItemList.CatalogItemList(deliveredGifts, store=CatalogItem.Customization | CatalogItem.DeliveryDate)
         if len(giftItem) > 0:
             self.air.writeServerEvent('Getting Gift', avId=self.doId, msg='sender %s receiver %s gift %s' % (giftItem[0].giftTag, self.doId, giftItem[0].getName()))
@@ -2452,6 +2452,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.checkMailboxFullIndicator()
 
     def checkMailboxFullIndicator(self):
+        return # TODO - spawn the mailbox
         if self.houseId and hasattr(self, 'air'):
             if self.air:
                 house = self.air.doId2do.get(self.houseId)
