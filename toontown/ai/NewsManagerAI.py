@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.toonbase import ToontownGlobals
+from otp.ai.MagicWordGlobal import *
 
 class NewsManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("NewsManagerAI")
@@ -94,3 +95,10 @@ class NewsManagerAI(DistributedObjectAI):
     def sendSystemMessage(self, todo0, todo1):
         pass
 
+@magicWord(category=CATEGORY_DEBUG)
+def invasionstatus():
+    """ Returns the number of cogs available in an invasion in a pretty way. """
+    simbase.air.newsManager.sendUpdateToAvatarId(spellbook.getInvoker().getDoId(), 'setInvasionStatus', [
+        ToontownGlobals.SuitInvasionUpdate, simbase.air.suitInvasionManager.suitName,
+        simbase.air.suitInvasionManager.numSuits, simbase.air.suitInvasionManager.specialSuit
+    ])
