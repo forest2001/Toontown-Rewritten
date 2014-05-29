@@ -22,7 +22,7 @@ class CatalogManagerAI(DistributedObjectAI):
         weeklyCatalog = self.catalogGenerator.generateWeeklyCatalog(av, av.catalogScheduleCurrentWeek, monthlyCatalog)
         backCatalog = self.catalogGenerator.generateBackCatalog(av, av.catalogScheduleCurrentWeek, av.catalogScheduleCurrentWeek - 1, monthlyCatalog)
         av.b_setCatalog(monthlyCatalog, weeklyCatalog, backCatalog)
-        av.b_setCatalogSchedule(av.catalogScheduleCurrentWeek + 1, time.time() + 604800)
+        av.b_setCatalogSchedule((av.catalogScheduleCurrentWeek + 1) % ToontownGlobals.CatalogNumWeeks, time.time() + 604800)
         av.b_setCatalogNotify(ToontownGlobals.NewItems, av.mailboxNotify)
     
     def isItemReleased(self, accessory):
