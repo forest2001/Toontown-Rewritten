@@ -69,6 +69,9 @@ class DistributedEstateAI(DistributedObjectAI):
         spot.setPosHpr(46.8254, -113.682, 0.46015, 135, 0, 0)
         spot.generateWithRequired(self.zoneId)
         self.spots.append(spot)
+        
+    def rentItem(self, type, duration):
+        pass # TODO - implement this
 
 
     def destroy(self):
