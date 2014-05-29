@@ -1434,7 +1434,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.notify.debug('pickLevelTypeAndTrack: %d %d %s' % (level, type, track))
         return (level, type, track)
 
-@magicWord(types=[str, int, int, int], category=CATEGORY_OVERRIDE)
+@magicWord(types=[str, int, int], category=CATEGORY_OVERRIDE)
 def spawn(name, level, specialSuit = 0):
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
