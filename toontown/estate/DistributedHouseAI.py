@@ -3,6 +3,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
 from toontown.building import DoorTypes
+from toontown.catalog.CatalogItemList import CatalogItemList
 from otp.ai.MagicWordGlobal import *
 
 class DistributedHouseAI(DistributedObjectAI):
@@ -19,7 +20,7 @@ class DistributedHouseAI(DistributedObjectAI):
         self.housePos = 0
         self.isInteriorInitialized = 1 # Only fresh DB houses are not inited.
 
-        self.atticItems = ''
+        self.atticItems = '' # TODO - make these CatalogItemLists to work with the Disney code
         self.interiorItems = ''
         self.atticItems = ''
         self.interiorWallpaper = ''
