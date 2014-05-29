@@ -1,8 +1,20 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.toonbase import ToontownGlobals
 
 class NewsManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("NewsManagerAI")
+
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        self.accept('avatarEntered', self.__announceIfInvasion)
+
+    def __announceIfInvasion(self, avatar):
+        if self.air.suitInvasionManager.getInvading():
+            self.sendUpdateToAvatarId(avatar.getDoId(), 'setInvasionStatus', [
+                ToontownGlobals.SuitInvasionBulletin, self.air.suitInvasionManager.suitName,
+                self.air.suitInvasionManager.numSuits, self.air.suitInvasionManager.specialSuit
+            ])
 
     def setPopulation(self, todo0):
         pass
