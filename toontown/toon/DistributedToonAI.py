@@ -1639,6 +1639,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def b_setQuests(self, questList):
         flattenedQuests = []
+        if len(questList) > self.getQuestCarryLimit():
+            self.air.writeServerEvent('suspicious', avId=self.getDoId(), issue='Attempted to set %d quests on toon when limit is %d!' % (len(questList), self.getQuestCarryLimit()))
+            return
         for quest in questList:
             flattenedQuests.extend(quest)
 
