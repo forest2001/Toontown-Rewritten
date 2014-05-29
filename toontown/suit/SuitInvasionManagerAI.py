@@ -126,7 +126,7 @@ class SuitInvasionManagerAI:
         self.__spAllCogsSupaFly()
         return True
 
-@magicWord(types=[str, str, int, int, int], category=CATEGORY_OVERRIDE)
+@magicWord(types=[str, str, int, int], category=CATEGORY_OVERRIDE)
 def invasion(cmd, name='f', num=1000, specialSuit = 0):
     """ Spawn an invasion on the current AI if one doesn't exist. """
     invMgr = simbase.air.suitInvasionManager
