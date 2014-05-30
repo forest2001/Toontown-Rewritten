@@ -5056,3 +5056,40 @@ def goto(avIdShort):
         return "Unable to teleport to target, they are not currently on this district."
     spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
+
+@magicWord(category=CATEGORY_SYSADMIN)
+def dump_doId2do():
+    """
+    Please note that this MW should NOT be used more than it needs to be on a live
+    cluster. This is very hacked together and is purely so we can get a dump of doId2do
+    to get an idea of where the huge memory usage is coming from.
+
+    This should be removed once we are complete.
+    """
+    import sys, operator, tempfile
+    objSizes = {}
+    for object in simbase.air.doId2do.itervalues():
+        # Iterate through each object in doId2do.
+        name = object.__class__.__name__
+        objCurrSizes = objSizes.get(name)
+        if not objCurrSizes:
+            # We haven't yet come across this class. Store first size value.
+            objSizes[name] = sys.getsizeof(object)
+        else:
+            # Increment the stored value by the size of the object we just
+            # iterated through.
+            objSizes[name] += sys.getsizeof(object)
+    # Sort the dict by the size of the objects.
+    # N.B.: This spits out a list of tuples, e.g: [('obj1', 1000), ('obj2', 1001)]
+    sorted_objSizes = sorted(objSizes.iteritems(), key=operator.itemgetter(1))
+    # Create a temporary file that we can store to. This returns a tuple of a file
+    # handler and an absolute file location. (handler, location)
+    temp_file = tempfile.mkstemp(prefix='doId2do-dump_', suffix='.txt', text=True)
+    # Screw the documents, the first value in temp_file is a useless pile of dog shit.
+    # I hax and do like this. <3
+    with open(temp_file[1], 'w+') as file:
+        # Write each class to the file, containing the name and the total size of
+        # all instances of that class.
+        for name, size in sorted_objSizes:
+            file.write('OBJ: %s | SIZE: %d\n' % (name, size))
+    return "Dumped doId2do sizes (grouped by class) to '%s'." % temp_file[1]
