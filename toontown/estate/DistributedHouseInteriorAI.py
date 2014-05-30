@@ -1,14 +1,15 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from DistributedFurnitureManagerAI import *
+from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogWindowItem import CatalogWindowItem
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
 from DNAFurnitureReaderAI import DNAFurnitureReaderAI
 import HouseGlobals
 import random
-
+# 2?
 defaultWindows = [
-    CatalogWindowItem(20, placement=0),
+    CatalogWindowItem(20, placement=2), CatalogWindowItem(20, placement=4)
 ]
 
 defaultWallpaper = [
@@ -57,9 +58,9 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         self.furnitureManager.setItems(furnitureReader.getBlob())
 
         # Set default windows and wallpaper:
-        #del self.furnitureManager.windows[:]
-        #self.furnitureManager.windows.extend(defaultWindows)
-        #self.furnitureManager.applyWindows()
+        del self.furnitureManager.windows[:]
+        self.furnitureManager.windows.extend(defaultWindows)
+        self.furnitureManager.applyWindows()
         del self.furnitureManager.wallpaper[:]
         self.furnitureManager.wallpaper.extend(defaultWallpaper)
         self.furnitureManager.applyWallpaper()
