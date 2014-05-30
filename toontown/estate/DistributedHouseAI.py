@@ -28,7 +28,7 @@ class DistributedHouseAI(DistributedObjectAI):
         self.interiorWallpaper = CatalogItemList()
         self.atticWallpaper = CatalogItemList()
         self.interiorWindows = CatalogItemList()
-        self.atticWindows = CatalogItemList()
+        self.atticWindows = CatalogItemList(store=Customization)
         self.deletedItems = CatalogItemList()
         
     def announceGenerate(self):
@@ -266,7 +266,13 @@ class DistributedHouseAI(DistributedObjectAI):
         self.atticItems.append(item)
         self.d_setAtticItems(self.atticItems.getBlob())
         self.interior.furnitureManager.loadFromHouse()
-        
+    
+    
+    def addWindow(self, item):
+        self.interior.furnitureManager.saveToHouse()
+        self.atticWindows.append(item)
+        self.d_setAtticWindows(self.atticWindows.getBlob())
+        self.interior.furnitureManager.loadFromHouse()
         
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])
 def houseType(type=0):
