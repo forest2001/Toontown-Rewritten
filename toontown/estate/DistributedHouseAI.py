@@ -6,7 +6,7 @@ from toontown.estate.DistributedMailboxAI import DistributedMailboxAI
 from toontown.building import DoorTypes
 from toontown.catalog.CatalogItemList import CatalogItemList
 from otp.ai.MagicWordGlobal import *
-from toontown.catalog.CatalogItem import Customization
+from toontown.catalog.CatalogItem import Customization, WindowPlacement, Location
 
 class DistributedHouseAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedHouseAI")
@@ -162,7 +162,7 @@ class DistributedHouseAI(DistributedObjectAI):
         return self.atticItems.getBlob()
 
     def setInteriorItems(self, interiorItems):
-        self.interiorItems = CatalogItemList(interiorItems, store=Customization)
+        self.interiorItems = CatalogItemList(interiorItems, store=Customization | Location)
 
     def d_setInteriorItems(self, interiorItems):
         self.sendUpdate('setInteriorItems', [interiorItems])
@@ -214,7 +214,7 @@ class DistributedHouseAI(DistributedObjectAI):
         return self.atticWindows.getBlob()
         
     def setInteriorWindows(self, interiorWindows):
-        self.interiorWindows = CatalogItemList(interiorWindows, store=Customization)
+        self.interiorWindows = CatalogItemList(interiorWindows, store=Customization | WindowPlacement)
 
     def d_setInteriorWindows(self, interiorWindows):
         self.sendUpdate('setInteriorWindows', [interiorWindows])
