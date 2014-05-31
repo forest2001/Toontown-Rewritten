@@ -267,11 +267,16 @@ class DistributedHouseAI(DistributedObjectAI):
         self.d_setAtticItems(self.atticItems.getBlob())
         self.interior.furnitureManager.loadFromHouse()
     
-    
     def addWindow(self, item):
         self.interior.furnitureManager.saveToHouse()
         self.atticWindows.append(item)
         self.d_setAtticWindows(self.atticWindows.getBlob())
+        self.interior.furnitureManager.loadFromHouse()
+
+    def addWallpaper(self, item):
+        self.interior.furnitureManager.saveToHouse()
+        self.atticWallpaper.append(item)
+        self.d_setAtticWallpaper(self.atticWallpaper.getBlob())
         self.interior.furnitureManager.loadFromHouse()
         
 @magicWord(category=CATEGORY_OVERRIDE, types=[int])

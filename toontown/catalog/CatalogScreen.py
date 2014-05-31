@@ -1031,8 +1031,20 @@ class CatalogScreen(DirectFrame):
         self.scrollList.refresh()
 
     def makeFamilyButton(self, familyId, familyName, colorCode):
-        fg = NametagGlobals.getNameFg(colorCode, PGButton.SInactive)
-        return DirectButton(relief=None, text=familyName, text_scale=0.04, text_align=TextNode.ALeft, text_fg=fg, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=0, command=self.__chooseFriend, extraArgs=[familyId, familyName])
+        # fg = NametagGlobals.getNameFg(colorCode, PGButton.SInactive)
+        return DirectButton(
+            relief=None, 
+            text=familyName, 
+            text_scale=0.04, 
+            text_align=TextNode.ALeft, 
+            # text_fg=fg, 
+            text1_bg=self.textDownColor, 
+            text2_bg=self.textRolloverColor, 
+            text3_fg=self.textDisabledColor, 
+            textMayChange=0, 
+            command=self.__chooseFriend, 
+            extraArgs=[familyId, familyName]
+            )
 
     def __chooseFriend(self, friendId, friendName):
         messenger.send('wakeup')

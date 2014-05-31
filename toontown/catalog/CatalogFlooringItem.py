@@ -115,7 +115,7 @@ class CatalogFlooringItem(CatalogSurfaceItem):
         if versionNumber < 4 or store & CatalogItem.Customization:
             self.colorIndex = di.getUint8()
         else:
-            self.colorIndex = None
+            self.colorIndex = 0
         wtype = FlooringTypes[self.patternIndex]
         return
 
