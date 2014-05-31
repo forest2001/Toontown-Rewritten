@@ -2,7 +2,6 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from CatalogGenerator import CatalogGenerator
 from toontown.toonbase import ToontownGlobals
-import datetime
 import time
 
 class CatalogManagerAI(DistributedObjectAI):
@@ -20,10 +19,11 @@ class CatalogManagerAI(DistributedObjectAI):
     
     def deliverCatalogFor(self, av):
         monthlyCatalog = self.catalogGenerator.generateMonthlyCatalog(av, time.time() / 60)
-        weeklyCatalog = self.catalogGenerator.generateWeeklyCatalog(av, av.catalogScheduleCurrentWeek, monthlyCatalog)
-        backCatalog = self.catalogGenerator.generateBackCatalog(av, av.catalogScheduleCurrentWeek, av.catalogScheduleCurrentWeek - 1, monthlyCatalog)
+        newWeek = (av.catalogScheduleCurrentWeek + 1) % ToontownGlobals.CatalogNumWeeks
+        weeklyCatalog = self.catalogGenerator.generateWeeklyCatalog(av, newWeek, monthlyCatalog)
+        backCatalog = self.catalogGenerator.generateBackCatalog(av, newWeek, av.catalogScheduleCurrentWeek, monthlyCatalog)
         av.b_setCatalog(monthlyCatalog, weeklyCatalog, backCatalog)
-        av.b_setCatalogSchedule((av.catalogScheduleCurrentWeek + 1) % ToontownGlobals.CatalogNumWeeks, time.time() + 604800)
+        av.b_setCatalogSchedule(newWeek, int((time.time() + 604800)/60))
         av.b_setCatalogNotify(ToontownGlobals.NewItems, av.mailboxNotify)
     
     def isItemReleased(self, accessory):

@@ -19,6 +19,7 @@ class CatalogAccessoryItem(CatalogItem.CatalogItem):
         return 1
 
     def notOfferedTo(self, avatar):
+        return 1 # We're not offering accessories at the moment.
         article = AccessoryTypes[self.accessoryType][ATArticle]
         if article in [AHat,
          AGlasses,
