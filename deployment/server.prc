@@ -15,3 +15,4 @@ want-bbhq #f
 want-pets #f
 want-old-fireworks #t
 want-parties #f
+want-accessories #f

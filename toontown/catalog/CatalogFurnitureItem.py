@@ -1168,15 +1168,18 @@ def getAllClosets():
 
 
 def get50ItemTrunk(avatar, duplicateItems):
-    if avatar.getStyle().getGender() == 'm':
-        index = 0
-    else:
-        index = 1
-    trunkId = MaxTrunkIds[index]
-    item = CatalogFurnitureItem(trunkId)
-    if item in avatar.onOrder or item in avatar.mailboxContents:
-        return None
-    return item
+    if simbase.config.GetBool('want-accessories', 1):
+        if avatar.getStyle().getGender() == 'm':
+            index = 0
+        else:
+            index = 1
+        trunkId = MaxTrunkIds[index]
+        item = CatalogFurnitureItem(trunkId)
+        if item in avatar.onOrder or item in avatar.mailboxContents:
+            return None
+        return item
+    # If we get here, we probably don't want accessories yet.
+    return None
 
 
 def getMaxTrunks():

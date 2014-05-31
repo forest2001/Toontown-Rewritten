@@ -5,12 +5,13 @@
 # Client settings
 window-title Toontown Rewritten [BETA]
 server-version SERVER_VERSION_HERE
+language LANGUAGE_HERE
 audio-library-name p3openal_audio
 sync-video #f
 want-dev #f
 preload-avatars #t
-language LANGUAGE_HERE
-
+# This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
+smooth-lag 0.4
 
 # Resources settings
 model-path /
@@ -42,8 +43,7 @@ want-pets #f
 want-news-tab #f
 want-news-page #f
 want-old-fireworks #t
-# This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
-smooth-lag 0.4
+want-accessories #f
 
 
 # Holidays and Events
