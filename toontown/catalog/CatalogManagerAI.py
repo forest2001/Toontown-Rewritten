@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from CatalogGenerator import CatalogGenerator
 from toontown.toonbase import ToontownGlobals
+import datetime
 import time
 
 class CatalogManagerAI(DistributedObjectAI):
@@ -18,7 +19,7 @@ class CatalogManagerAI(DistributedObjectAI):
             self.deliverCatalogFor(av)    
     
     def deliverCatalogFor(self, av):
-        monthlyCatalog = self.catalogGenerator.generateMonthlyCatalog(av, av.catalogScheduleCurrentWeek)
+        monthlyCatalog = self.catalogGenerator.generateMonthlyCatalog(av, time.time() / 60)
         weeklyCatalog = self.catalogGenerator.generateWeeklyCatalog(av, av.catalogScheduleCurrentWeek, monthlyCatalog)
         backCatalog = self.catalogGenerator.generateBackCatalog(av, av.catalogScheduleCurrentWeek, av.catalogScheduleCurrentWeek - 1, monthlyCatalog)
         av.b_setCatalog(monthlyCatalog, weeklyCatalog, backCatalog)
