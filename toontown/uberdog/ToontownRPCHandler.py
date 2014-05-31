@@ -19,9 +19,16 @@ class ToontownRPCHandler:
         """For testing purposes: This just echos back the provided data."""
         return data
 
-    ### SHARD STATUS ###
+    ### SHARD MANAGEMENT ###
     def rpc_listShards(self, request):
         return self.shardStatus.getShards()
+
+    def rpc_closeDistrict(self, request, districtId):
+        """Sets a district to unavailable, by districtId."""
+        dclass = self.air.dclassesByName['ToontownDistrictAI']
+        dg = dclass.aiFormatUpdate('rpcSetAvailable', districtId, districtId,
+                                    self.air.ourChannel, [0])
+        self.air.send(dg)
 
     ### GENERAL INFORMATION ###
     def rpc_getGSIDByAccount(self, request, accountId):

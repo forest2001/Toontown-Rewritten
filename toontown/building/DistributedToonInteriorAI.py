@@ -22,7 +22,8 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
     def delete(self):
         self.ignoreAll()
         for npc in self.npcs:
-            npc.requestDelete()
+            if npc:
+                npc.requestDelete()
 
         del self.npcs
         del self.fsm

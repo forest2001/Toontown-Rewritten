@@ -383,7 +383,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.cogIndex != -1 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId):
             if simbase.config.GetBool('cogsuit-hack-prevent', False):
                 self.b_setCogIndex(-1)
-            if not simbase.air.cogSuitMessageSent:
+            '''if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s handleLogicalZoneChange as a suit: %s' % (self.doId, self.cogIndex))
                 self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon wearing a cog suit with index: %s in a zone they are not allowed to in. Zone: %s' % (self.cogIndex, newZoneId))
                 simbase.air.cogSuitMessageSent = True
@@ -1526,14 +1526,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.d_setCogIndex(index)
 
     def setCogIndex(self, index):
-        if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
+        '''if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
             if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s setCogIndex invalid: %s' % (self.doId, index))
                 if simbase.config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s trying to set cog index to %s in Zone: %s' % (self.doId, index, self.zoneId)
                     #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
-        else:
-            self.cogIndex = index
+        else:'''
+        self.cogIndex = index
 
     def d_setCogIndex(self, index):
         self.sendUpdate('setCogIndex', [index])
@@ -1661,6 +1661,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def b_setQuests(self, questList):
         flattenedQuests = []
+        if len(questList) > self.getQuestCarryLimit():
+            self.air.writeServerEvent('suspicious', avId=self.getDoId(), issue='Attempted to set %d quests on toon when limit is %d!' % (len(questList), self.getQuestCarryLimit()))
+            return
         for quest in questList:
             flattenedQuests.extend(quest)
 
@@ -3357,18 +3360,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not self.air.suitPlanners.has_key(streetId):
             return ['badlocation', suitIndex, 0]
         sp = self.air.suitPlanners[streetId]
-        map = sp.streetPointList
-        suit = sp.createNewSuit([], map, suitName=suitName)
-        if suit:
-            return ['success', suitIndex, 0]
-        # TODO: Get DSuitPlanner AI's getZoneIdToPointMap method working.
-        '''zones = [self.zoneId, self.zoneId - 1, self.zoneId + 1]
+        map = sp.getZoneIdToPointMap()
+        zones = [self.zoneId, self.zoneId - 1, self.zoneId + 1]
         for zoneId in zones:
             if map.has_key(zoneId):
                 points = map[zoneId][:]
                 suit = sp.createNewSuit([], points, suitName=suitName)
                 if suit:
-                    return ['success', suitIndex, 0]'''
+                    return ['success', suitIndex, 0]
         return ['badlocation', suitIndex, 0]
 
     def doBuildingTakeover(self, suitIndex):
@@ -4476,7 +4475,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 def setCE(CEValue, CEHood=0, CEExpire=0):
     """Set Cheesy Effect of the target."""
     CEHood = CEHood * 1000 #So the invoker only has to use '1' for DonaldsDock, '2' for TTC etc.
-    if not 0 <= CEValue <= 16:
+    if not 0 <= CEValue <= 18:
         return 'Invalid value %s specified for Cheesy Effect.' % CEValue
     if CEHood != 0 and not 100 < CEHood < ToontownGlobals.DynamicZonesBegin:
         return 'Invalid zoneId specified.'
@@ -5083,3 +5082,40 @@ def goto(avIdShort):
         return "Unable to teleport to target, they are not currently on this district."
     spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
+
+@magicWord(category=CATEGORY_SYSADMIN)
+def dump_doId2do():
+    """
+    Please note that this MW should NOT be used more than it needs to be on a live
+    cluster. This is very hacked together and is purely so we can get a dump of doId2do
+    to get an idea of where the huge memory usage is coming from.
+
+    This should be removed once we are complete.
+    """
+    import sys, operator, tempfile
+    objSizes = {}
+    for object in simbase.air.doId2do.itervalues():
+        # Iterate through each object in doId2do.
+        name = object.__class__.__name__
+        objCurrSizes = objSizes.get(name)
+        if not objCurrSizes:
+            # We haven't yet come across this class. Store first size value.
+            objSizes[name] = sys.getsizeof(object)
+        else:
+            # Increment the stored value by the size of the object we just
+            # iterated through.
+            objSizes[name] += sys.getsizeof(object)
+    # Sort the dict by the size of the objects.
+    # N.B.: This spits out a list of tuples, e.g: [('obj1', 1000), ('obj2', 1001)]
+    sorted_objSizes = sorted(objSizes.iteritems(), key=operator.itemgetter(1))
+    # Create a temporary file that we can store to. This returns a tuple of a file
+    # handler and an absolute file location. (handler, location)
+    temp_file = tempfile.mkstemp(prefix='doId2do-dump_', suffix='.txt', text=True)
+    # Screw the documents, the first value in temp_file is a useless pile of dog shit.
+    # I hax and do like this. <3
+    with open(temp_file[1], 'w+') as file:
+        # Write each class to the file, containing the name and the total size of
+        # all instances of that class.
+        for name, size in sorted_objSizes:
+            file.write('OBJ: %s | SIZE: %d\n' % (name, size))
+    return "Dumped doId2do sizes (grouped by class) to '%s'." % temp_file[1]

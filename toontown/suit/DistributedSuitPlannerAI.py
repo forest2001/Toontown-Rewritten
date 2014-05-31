@@ -698,9 +698,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         for point in self.streetPointList:
             points = self.dnaData.suitGraph.getAdjacentPoints(point)
             for p in points:
-                # DNAData needs getSuitEdgeZone!
-                zoneName = self.dnaData.getSuitEdgeZone(point.getIndex(), p.getIndex())
-                zoneId = int(self.extractGroupName(zoneName))
+                zoneId = self.dnaData.suitGraph.getEdgeZone(self.dnaData.suitGraph.getConnectingEdge(point, p))
                 if self.zoneIdToPointMap.has_key(zoneId):
                     self.zoneIdToPointMap[zoneId].append(point)
                 else:
@@ -725,7 +723,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         return pointList
 
-    def createNewSuit(self, blockNumbers, streetPoints, toonBlockTakeover = None, cogdoTakeover = None, minPathLen = None, maxPathLen = None, buildingHeight = None, suitLevel = None, suitType = None, suitTrack = None, suitName = None, skelecog = None, revives = None):
+    def createNewSuit(self, blockNumbers, streetPoints, toonBlockTakeover = None, cogdoTakeover = None, minPathLen = None, maxPathLen = None, buildingHeight = None, suitLevel = None, suitType = None, suitTrack = None, suitName = None, specialSuit = 0):
         startPoint = None
         blockNumber = None
         if self.notify.getDebug():
@@ -773,7 +771,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     del self.pendingBuildingHeights[0]
                     self.pendingBuildingHeights.append(buildingHeight)
         if suitName == None:
-            suitName, skelecog = self.air.suitInvasionManager.getInvadingCog()
+            suitName, specialSuit = self.air.suitInvasionManager.getInvadingCog()
             if suitName == None:
                 suitName = self.defaultSuitName
         if suitType == None and suitName != None:
@@ -792,10 +790,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return
         newSuit.initializePath()
         self.zoneChange(newSuit, None, newSuit.zoneId)
-        if skelecog:
-            newSuit.setSkelecog(skelecog)
-        if revives:
-            newSuit.setSkeleRevives(revives)
+        # Determine if we are spawning a special type of suit. 1 is Skelecog, 2 is v2.0.
+        if specialSuit == 1:
+            newSuit.setSkelecog(1)
+        elif specialSuit == 2:
+            newSuit.setSkeleRevives(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         newSuit.moveToNextLeg(None)
         self.suitList.append(newSuit)
@@ -887,20 +886,15 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def pathCollision(self, path, elapsedTime):
-        #temphack
-        return 0
-        pathLength = path.getNumPoints()
-        i = 0
-        pi = path.getPointIndex(i)
-        point = self.pointIndexes[pi]
-        adjacentPoint = self.pointIndexes[path.getPointIndex(i + 1)]
-        while point.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT or point.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT:
-            i += 1
-            lastPi = pi
-            pi = path.getPointIndex(i)
-            adjacentPoint = point
-            point = self.pointIndexes[pi]
-            elapsedTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(lastPi, pi, self.suitWalkSpeed)
+        # TODO - determine whether or not I horrible broke this
+        point = path[0]
+        adjacentPoint = path[1]
+        for p in path:
+            if not (p.getPointType() == DNAStoreSuitPoint.FRONTDOORPOINT or p.getPointType() == DNAStoreSuitPoint.SIDEDOORPOINT):
+                break
+            adjacentPoint = path[path.index(p) + 1]
+            point = p
+            elapsedTime += self.dnaData.suitGraph.getSuitEdgeTravelTime(p, adjacentPoint, self.suitWalkSpeed)
 
         result = self.pointCollision(point, adjacentPoint, elapsedTime)
         return result
@@ -922,8 +916,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return 0
 
     def battleCollision(self, point, adjacentPoint):
-        zoneName = self.dnaData.suitGraph.getConnectingEdge(point, adjacentPoint).parent.zone
-        zoneId = int(self.extractGroupName(zoneName))
+        zoneId = self.dnaData.suitGraph.getEdgeZone(self.dnaData.suitGraph.getConnectingEdge(point, adjacentPoint))
         return self.battleMgr.cellHasBattle(zoneId)
 
     def removeSuit(self, suit):
@@ -1441,11 +1434,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.notify.debug('pickLevelTypeAndTrack: %d %d %s' % (level, type, track))
         return (level, type, track)
 
-@magicWord(types=[str, int, int, int], category=CATEGORY_OVERRIDE)
-def spawn(name, level, skelecog=0, revives=0):
+@magicWord(types=[str, int, int], category=CATEGORY_OVERRIDE)
+def spawn(name, level, specialSuit = 0):
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives)
+    sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, specialSuit = 0)
     return "Spawned %s in current zone." % name

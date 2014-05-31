@@ -18,3 +18,9 @@ class ChatAgent(DistributedObjectGlobal):
 
     def sendChatMessage(self, message):
         self.sendUpdate('chatMessage', [message])
+
+    def sendWhisperMessage(self, receiverAvId, message):
+        self.sendUpdate('whisperMessage', [receiverAvId, message])
+
+    def sendSFWhisperMessage(self, receiverAvId, message):
+        self.sendUpdate('sfWhisperMessage', [receiverAvId, message])

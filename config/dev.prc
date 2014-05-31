@@ -56,7 +56,12 @@ smooth-lag 0.4
 estate-day-night #t
 want-instant-parties #t
 show-total-population #f
+
+
+# Chat stuff
 want-whitelist #f
+force-avatar-understandable #t
+force-player-understandable #t
 
 
 # Holidays and Events

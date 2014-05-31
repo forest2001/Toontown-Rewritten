@@ -48,3 +48,7 @@ smooth-lag 0.4
 
 # Holidays and Events
 force-holiday-decorations 6
+
+# Chat
+force-avatar-understandable #t
+force-player-understandable #t

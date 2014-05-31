@@ -1,5 +1,7 @@
 import time
 from panda3d.core import *
+from toontown.toonbase import TTLocalizer
+from toontown.battle import SuitBattleGlobals
 
 # If we don't have PSUTIL, don't return system statistics.
 try:
@@ -25,6 +27,9 @@ class ShardStatusSender:
         self.interval = None
 
     def start(self):
+        # Set the average frame rate interval to match shard status interval.
+        globalClock.setAverageFrameRateInterval(shard_status_interval.getValue())
+
         # Prepare an "offline status" to register as a postremove:
         offlineStatus = {'channel': self.air.ourChannel,
                          'offline': True
@@ -36,10 +41,27 @@ class ShardStatusSender:
         self.sendStatus()
 
     def sendStatus(self):
+        # Construct the invasion part of the status...
+        invasion = None
+        if self.air.suitInvasionManager.getInvading():
+            # There is an invasion running on this AI.
+            cogType = self.air.suitInvasionManager.suitName
+            cogName = SuitBattleGlobals.SuitAttributes[cogType]['name']
+            if self.air.suitInvasionManager.specialSuit == 1:
+                # Invasion is a Skelecog invasion, append (Skelecog).
+                cogName += ' (' + TTLocalizer.Skeleton + ')'
+            elif self.air.suitInvasionManager.specialSuit == 2:
+                # Invasion is a v2.0 invasion, use 2.0 name.
+                cogName = TTLocalizer.SkeleReviveCogName % {'cog_name':cogName}
+            # Return tuple of (name, cogsDefeated / totalCogs)
+            invasion = (cogName, '%d/%d' % (self.air.suitInvasionManager.spawnedSuits, self.air.suitInvasionManager.numSuits))
+
         status = {'channel': self.air.ourChannel,
                   'districtId': self.air.distributedDistrict.doId,
                   'districtName': self.air.distributedDistrict.name,
                   'population': self.air.districtStats.getAvatarCount(),
+                  'avg-frame-rate': round(globalClock.getAverageFrameRate(), 5),
+                  'invasion': invasion
                  }
         if HAS_PSUTIL:
             status['cpu-usage'] = cpu_percent(interval=None, percpu=True)

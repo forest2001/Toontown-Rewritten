@@ -17,9 +17,13 @@ if language == 'english':
     _languageModule = 'otp.otpbase.OTPLocalizer' + language.capitalize()
 else:
     checkLanguage = 1
-    _languageModule = 'otp.otpbase.OTPLocalizer_' + language
+    _languageModule = 'otp.otpbase.OTPLocalizer_' + language.capitalize()
 print 'from ' + _languageModule + ' import *'
 from otp.otpbase.OTPLocalizerEnglish import *
+if language == 'french':
+    from otp.otpbase.OTPLocalizer_French import *
+elif language == 'polish':
+    from otp.otpbase.OTPLocalizer_Polish import *
 if checkLanguage:
     l = {}
     g = {}

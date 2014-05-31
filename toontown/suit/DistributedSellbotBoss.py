@@ -399,6 +399,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         if instruct == 1:
             self.cagedToon.nametag3d.setScale(2)
         elif instruct == 2:
+            if cageIndex >= len(TTLocalizer.CagedToonDrop):
+                cageIndex = -1
             self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonDrop[cageIndex], CFSpeech)
         elif instruct == 3:
             self.cagedToon.nametag3d.setScale(1)

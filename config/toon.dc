@@ -412,6 +412,7 @@ struct datetime {
 dclass ToontownDistrict : DistributedDistrict {
   setParentingRules(string, string) broadcast ram;
   allowAHNNLog(bool allow) broadcast required ram;
+  rpcSetAvailable(bool available) airecv;
 };
 
 dclass ToontownDistrictStats : DistributedObject {
@@ -1519,7 +1520,7 @@ dclass NewsManager : DistributedObject {
   setTrolleyWeekendEnd() broadcast;
   setRoamingTrialerWeekendStart() broadcast;
   setRoamingTrialerWeekendEnd() broadcast;
-  setInvasionStatus(uint8 msgType, string cogType, uint32 numRemaining, uint8 skeleton) broadcast;
+  setInvasionStatus(uint8 msgType, string cogType, uint32 numRemaining, uint8 specialSuit) broadcast;
   setHolidayIdList(uint32 holidayIdList[]) broadcast ram;
   holidayNotify() broadcast;
   setWeeklyCalendarHolidays(weeklyCalendarHoliday weeklyCalendarHolidays[]) required broadcast ram;

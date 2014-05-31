@@ -60,7 +60,7 @@ class ClientBuilder(object):
     def __init__(self, directory, version=None, language='english'):
         self.directory = directory
         self.version = version or determineVersion(self.directory)
-        self.language = language
+        self.language = language.lower()
 
         self.dcfiles = [os.path.join(directory, 'config/otp.dc'),
                         os.path.join(directory, 'config/toon.dc')]
@@ -175,11 +175,11 @@ class ClientBuilder(object):
         self.mf.import_hook(self.MAINMODULE)
         for module in EXTRA_MODULES:
             self.mf.import_hook(module)
-        if self.language != "english":
-            self.mf.import_hook('otp.otpbase.OTPLocalizer_%s' % self.language)
-            self.mf.import_hook('otp.otpbase.OTPLocalizer_%sProperty' % self.language)
-            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language)
-            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language)
+        if self.language.lower() != "english":
+            self.mf.import_hook('otp.otpbase.OTPLocalizer_%s' % self.language.capitalize())
+            self.mf.import_hook('otp.otpbase.OTPLocalizer_%sProperty' % self.language.capitalize())
+            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language.capitalize())
+            self.mf.import_hook('toontown.toonbase.TTLocalizer_%s' % self.language.capitalize())
         self.modules['__main__'] = (False, compile('import %s' % self.MAINMODULE,
                                                    '__main__', 'exec'))
 
@@ -214,6 +214,7 @@ if __name__ == '__main__':
                         'zip -- a zip file of pyos\n'
                         'list -- a plaintext list of included modules')
     parser.add_argument('--version', help='Override the version string packed into the built blob.')
+    parser.add_argument('--language', default='english', help='The language to make the blob with.')
     parser.add_argument('output', help='The filename of the built file to output.')
 
     args = parser.parse_args()
@@ -222,7 +223,7 @@ if __name__ == '__main__':
         p3d_path = os.path.join(args.mirai_path, 'panda3d-1.8.1')
         sys.path.insert(0, p3d_path)
 
-    cb = ClientBuilder(root, args.version)
+    cb = ClientBuilder(root, args.version, args.language)
 
     if args.mirai_path:
         cb.mf.import_hook('direct').__path__ = [os.path.join(p3d_path, 'direct/src')]

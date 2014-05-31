@@ -201,7 +201,7 @@ class SuitLeg:
         return pos
 
     def getZone(self):
-        return self.suitGraph.getPointZone(self.pointB)
+        return self.suitGraph.getEdgeZone(self.suitGraph.getConnectingEdge(self.pointA, self.pointB))
 
     def getBlockNumber(self):
         block = self.pointB.getLandmarkBuildingIndex()
