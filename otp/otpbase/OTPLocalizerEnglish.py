@@ -196,7 +196,7 @@ CRBootedReasons = {1: 'Yikes - An unexpected problem occured.  Your connection h
  156: 'Toontown Rewritten will be closing tomorrow to move into beta. From every hour from now to 2:00PM TTT tomorrow, you can enter Toontown and relive the excitement of the elections. Check our website for updates, and thank you for Alpha Testing with us!',
  288: 'Sorry, you have used up all of your available minutes this month.',
  349: 'Sorry, you have used up all of your available minutes this month.',
- 350: 'Sorry, your play time is up for today! Thanks for playing Toontown Rewritten!',}
+ 350: 'Sorry, your play time is up for today! You\'re welcome to hop on the queue or schedule a new session at any time. Thanks for testing with us, and come back soon!',}
 CRBootedReasonUnknownCode = 'Yikes - An unexpected problem occured. (Error code %s)  Your connection has been lost, but you should be able to connect again and go right back into Toontown.'
 CRSystemMessages = {
     # General, generic messages:
