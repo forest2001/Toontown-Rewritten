@@ -22,10 +22,12 @@ class SuitBase:
         self.maxHP = 10
         self.currHP = 10
         self.isSkelecog = 0
+        self.legList = None
         return
 
     def delete(self):
-        pass
+        if self.legList is not None:
+            del self.legList
 
     def getStyleName(self):
         if hasattr(self, 'dna') and self.dna:
