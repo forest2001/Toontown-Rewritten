@@ -143,7 +143,7 @@ class LoginAccountFSM(OperationFSM):
             self.demand('RetrieveAccount')
         else:
             self.demand('CreateAccount')
-            
+
     def __retryLookup(self):
         try:
             self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
@@ -151,7 +151,7 @@ class LoginAccountFSM(OperationFSM):
         except AutoReconnect:
             taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
             return
-            
+
         if account:
             self.accountId = account['_id']
             self.demand('RetrieveAccount')
@@ -828,8 +828,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             if dclass != self.air.dclassesByName['AccountUD']:
                 return
             webId = fields.get('ACCOUNT_ID')
-            if fields.get('BETA_KEY_QUEST') == 1:
-                self.air.rpc.call('avatarExit', webAccId=webId)
+            self.air.rpc.call('avatarExit', webAccId=webId)
         self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
