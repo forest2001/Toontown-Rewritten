@@ -11752,7 +11752,7 @@ FOnpcFriends = {
 }
 
 npcFriends = dict(HQnpcFriends)
-# npcFriends.update(FOnpcFriends)
+npcFriends.update(FOnpcFriends)
 
 def getNPCName(npcId):
     if NPCToonDict.has_key(npcId):
