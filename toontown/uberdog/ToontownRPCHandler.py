@@ -30,6 +30,15 @@ class ToontownRPCHandler:
                                     self.air.ourChannel, [0])
         self.air.send(dg)
 
+    ### UBERDOG MANAGEMENT ###
+    def rpc_setEnableLogins(self, request, enable):
+        """
+        Tells the ClientServicesManagerUD to enable/disable all logins.
+        Also tells the CSMUD what "disconnect" message to display (only has effect
+        if logins are disabled).
+        """
+        self.air.netMessenger.send('enableLogins', [enable])
+
     ### GENERAL INFORMATION ###
     def rpc_getGSIDByAccount(self, request, accountId):
         """Gets the GSID for a given webserver account ID, or null if invalid."""

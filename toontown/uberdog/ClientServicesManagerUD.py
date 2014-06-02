@@ -820,8 +820,10 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         # Listen out for any accounts that disconnect.
         self.air.netMessenger.accept('accountDisconnected', self, self.__accountDisconnected)
 
-        # Attribute to test if doomsday is over...
-        self.closed = False
+        # This attribute determines if we want to disable logins.
+        self.loginsEnabled = True
+        # Listen out for any messages that tell us to disable logins.
+        self.air.netMessenger.accept('enableLogins', self, self.setLoginEnabled)
 
     def __accountDisconnected(self, accountId):
         def callback(dclass, fields):
@@ -868,25 +870,26 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.account2fsm[sender] = fsmtype(self, sender)
         self.account2fsm[sender].request('Start', *args)
 
-    def setClosed(self, closed):
-        self.notify.warning('AI %s has told us to start rejecting logins!' % str(self.air.getMsgSender()))
-        self.closed = closed
+    def setLoginEnabled(self, enable):
+        if not enable:
+            self.notify.warning('The CSMUD has been told to reject logins! All future logins will now be rejected.')
+        self.loginsEnabled = enable
 
     def login(self, cookie):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
 
-        if self.closed:
-            # Doomsday is over... no more logging in until beta!
+        if not self.loginsEnabled:
+            # Logins are currently disabled... RIP!
             dg = PyDatagram()
             dg.addServerHeader(sender, self.air.ourChannel, CLIENTAGENT_EJECT)
-            dg.addUint16(156)
-            dg.addString('Toontown Rewritten is now closed until Beta. Learn more and check out the updates on our website, toontownrewritten.com. Thanks for Alpha Testing with us!')
+            dg.addUint16(200)
+            dg.addString('Logins are currently disabled. Please try again later.')
             self.air.send(dg)
 
         if sender>>32:
-            # Oops, they have an account ID on their conneciton already!
+            # Oops, they have an account ID on their connection already!
             self.killConnection(sender, 'Client is already logged in.')
             return
 
