@@ -9,6 +9,7 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.distributed import ToontownDistrictStats
 from toontown.toontowngui import TTDialog
+from otp.ai.MagicWordGlobal import *
 POP_COLORS_NTT = (Vec4(0.0, 1.0, 0.0, 1.0), Vec4(1.0, 1.0, 0.0, 1.0), Vec4(1.0, 0.0, 0.0, 1.0))
 POP_COLORS = (Vec4(0.4, 0.4, 1.0, 1.0), Vec4(0.4, 1.0, 0.4, 1.0), Vec4(1.0, 0.4, 0.4, 1.0))
 
@@ -27,6 +28,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
         self.lowPop, self.midPop, self.highPop = base.getShardPopLimits()
         self.showPop = config.GetBool('show-total-population', 0)
         self.noTeleport = config.GetBool('shard-page-disable', 0)
+        self.adminForceReload = 0
         return
 
     def load(self):
@@ -200,7 +202,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
             totalWVPop += WVPop
             currentMap[shardId] = 1
             buttonTuple = self.shardButtonMap.get(shardId)
-            if buttonTuple == None:
+            if buttonTuple == None or self.adminForceReload:
                 buttonTuple = self.makeShardButton(shardId, name, pop)
                 self.shardButtonMap[shardId] = buttonTuple
                 anyChanges = 1
@@ -236,7 +238,8 @@ class ShardPage(ShtikerPage.ShtikerPage):
                     buttonTuple[1]['text'] = self.getPopText(totalWVPop)
                     buttonTuple[1]['command'] = self.getPopChoiceHandler(totalWVPop)
                     buttonTuple[2]['command'] = self.getPopChoiceHandler(totalWVPop)
-        if anyChanges:
+
+        if anyChanges or self.adminForceReload:
             self.regenerateScrollList()
         self.totalPopulationText['text'] = TTLocalizer.ShardPagePopulationTotal % totalPop
         helpText = TTLocalizer.ShardPageHelpIntro
@@ -248,6 +251,8 @@ class ShardPage(ShtikerPage.ShtikerPage):
         if not self.book.safeMode:
             helpText += TTLocalizer.ShardPageHelpMove
         self.helpText['text'] = helpText
+        if self.adminForceReload:
+            self.adminForceReload = 0
         return
 
     def enter(self):
@@ -301,3 +306,17 @@ class ShardPage(ShtikerPage.ShtikerPage):
                     place = base.cr.playGame.hood.place
 
             place.requestTeleport(canonicalHoodId, canonicalHoodId, shardId, -1)
+
+@magicWord(category=CATEGORY_MODERATION)
+def togpop():
+    """
+    Moderation command to toggle shard population. If toggled off, moderators can teleport in
+    to full districts, regardless of their population.
+
+    This command should NOT be abused for normal game play, as districts have a "full" status
+    for a reason, and cramming more toons in to a district can cause stability issues.
+    """
+    base.localAvatar.shardPage.showPop = not base.localAvatar.shardPage.showPop
+    base.localAvatar.shardPage.adminForceReload = 1
+    base.localAvatar.shardPage.updateScrollList()
+    return "District population has been %s." % ("enabled" if base.localAvatar.shardPage.showPop else "disabled")
