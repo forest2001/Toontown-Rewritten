@@ -285,7 +285,7 @@ dclass OtpAvatarManager : DistributedObject {
 
 dclass ChatAgent : DistributedObject {
   adminChat(uint32 aboutId, string message);
-  chatMessage(string(0-256) message) clsend;
+  chatMessage(string(0-256) message, uint8 chatMode) clsend;
   whisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
   sfWhisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
 };
