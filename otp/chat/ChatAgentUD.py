@@ -37,7 +37,11 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         # should be given an API for sending updates for unknown objects?
         if chatMode != 0:
             # Staff messages do not need to be cleaned. [TODO: Blacklist this?]
-            cleanMessage = self.chatMode2prefix.get(chatMode, "") + message
+            if message.startswith('.'):
+                # This is a thought bubble, move the point to the start.
+                cleanMessage = '.' + self.chatMode2prefix.get(chatMode, "") + message[1:]
+            else:
+                cleanMessage = self.chatMode2prefix.get(chatMode, "") + message
             modifications = []
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
         dg = DistributedAvatar.aiFormatUpdate('setTalk', sender, self.chatMode2channel.get(chatMode, sender),
