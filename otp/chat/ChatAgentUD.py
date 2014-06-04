@@ -38,6 +38,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         if chatMode != 0:
             # Staff messages do not need to be cleaned. [TODO: Blacklist this?]
             cleanMessage = self.chatMode2prefix.get(chatMode, "") + message
+            modifications = []
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
         dg = DistributedAvatar.aiFormatUpdate('setTalk', sender, self.chatMode2channel.get(chatMode, sender),
                                               self.air.ourChannel,
