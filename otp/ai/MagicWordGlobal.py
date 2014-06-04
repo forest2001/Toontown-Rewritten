@@ -104,7 +104,7 @@ class MagicWordCategory:
         self.words.append(word)
 
     def getDefinedAccess(self):
-        return config.GetInt('mw-' + self.name.replace(' ', '-').lower(), 0)
+        return config.GetInt('mw-category-' + self.name.replace(' ', '-').lower(), 0)
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_GRAPHICAL = MagicWordCategory('Graphical debugging', defaultAccess=300,
@@ -214,6 +214,10 @@ class MagicWordDecorator:
         name = self.name
         if name is None:
             name = mw.func_name
+
+        config_access = config.GetInt('mw-word-' + name.lower(), 0)
+        if config_access:
+            self.access = config_access
 
         word = MagicWord(name, mw, self.types, self.access, mw.__doc__, self.category, self.targetClasses, self.aliases)
         spellbook.addWord(word)
