@@ -5079,6 +5079,9 @@ def disguise(corp, type, level=0):
 
     # Find out if they need laff boosts or laff points removed.
     for levelBoost in [14, 19, 29, 39, 49]:
+        if toon.getMaxHp() >= 137 or toon.getMaxHp() <= 15:
+            # Don't go out of bounds matey.
+            break
         if level <= levelBoost and not levelBoost > toon.getCogLevels()[corpIndex]:
             toon.b_setMaxHp(toon.getMaxHp()-1)
         elif level > levelBoost and not levelBoost <= toon.getCogLevels()[corpIndex]:
