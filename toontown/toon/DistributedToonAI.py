@@ -5022,18 +5022,96 @@ def exp(track, amt):
     av.b_setExperience(av.experience.makeNetString())
     return "Set %s exp to %d successfully." % (track, amt)
 
-@magicWord(category=CATEGORY_CHARACTERSTATS)
-def disguise():
-    """ Set disguise type and level.  CURRENTLY MAX TOONS SUITS!!!"""
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str, int])
+def disguise(corp, type, level=0):
+    """ Set disguise type and level. """
+    # Idk if this is defined anywhere, but laziness got the best of me.
+    corps = ['bossbot', 'lawbot', 'cashbot', 'sellbot']
+    if corp not in corps:
+        return "Invalid cog corp. specified."
+    corpIndex = corps.index(corp)
     toon = spellbook.getTarget()
-    toon.b_setCogParts([
-        0, # Bossbot
-        0, # Lawbot
-        0, # Cashbot
-        CogDisguiseGlobals.PartsPerSuitBitmasks[3]  # Sellbot
-    ])
-    toon.b_setCogLevels([0, 0, 0, ToontownGlobals.MaxCogSuitLevel])
-    toon.b_setCogTypes([0, 0, 0, SuitDNA.suitsPerDept-1])
+
+    if type == "nosuit":
+        # They want to reset their suit entirely.
+        parts = toon.getCogParts()
+        parts[corpIndex] = 0
+        toon.b_setCogParts(parts)
+        types = toon.getCogTypes()
+        types[corpIndex] = 0
+        toon.b_setCogTypes(types)
+        levels = toon.getCogLevels()
+        levels[corpIndex] = 0
+        toon.b_setCogLevels(levels)
+        merits = toon.getCogMerits()
+        merits[corpIndex] = 0
+        toon.b_setCogMerits(merits)
+        return "Reset %s disguise and removed all earned parts." % corp.capitalize()
+
+    if level == 0:
+        return "You must specify a level!"
+
+    # Get the cog type from the specified short-hand value.
+    types = SuitDNA.suitHeadTypes[8*corpIndex:(8*corpIndex)+8]
+    if type not in types:
+        return "Invalid cog type specified. Note that this uses the short-hand, such as 'rb' or 'tbc'."
+    typeIndex = types.index(type)
+
+    # Make sure they gave a level that is in range.
+    if typeIndex == 7:
+        # The final suit can go up to Level 50.
+        levelRange = range(8, 51) # Last digit is exclusive.
+    else:
+        levelRange = range((typeIndex+1), (typeIndex+6))
+    if level not in levelRange:
+        return "Invalid level specified for %s disguise %s." % (corp.capitalize(), SuitBattleGlobals.SuitAttributes[type]['name'])
+
+    # Reset their merits to 0.
+    merits = toon.getCogMerits()
+    merits[corpIndex] = 0
+    toon.b_setCogMerits(merits)
+
+    # Ensure they have all the parts.
+    # TODO: Allow them to set the parts they have. This will probably be another MW: ~parts leftleg 1
+    parts = toon.getCogParts()
+    parts[corpIndex] = CogDisguiseGlobals.PartsPerSuitBitmasks[corpIndex]
+    toon.b_setCogParts(parts)
+
+    # Find out if they need laff boosts or laff points removed.
+    for levelBoost in [14, 19, 29, 39, 49]:
+        if level <= levelBoost and not levelBoost > toon.getCogLevels()[corpIndex]:
+            toon.b_setMaxHp(toon.getMaxHp()-1)
+        elif level > levelBoost and not levelBoost <= toon.getCogLevels()[corpIndex]:
+            toon.b_setMaxHp(toon.getMaxHp()+1)
+    # Lets be nice and give them a toonup or make them suffer.
+    if toon.getHp() > toon.getMaxHp():
+        toon.takeDamage(toon.getHp() - toon.getMaxHp())
+    else:
+        toon.toonUp(toon.getMaxHp() - toon.getHp())
+
+    # Set their type and level that they specified.
+    types = toon.getCogTypes()
+    types[corpIndex] = typeIndex
+    toon.b_setCogTypes(types)
+    levels = toon.getCogLevels()
+    levels[corpIndex] = level-1 # -1 because it starts at 0
+    toon.b_setCogLevels(levels)
+
+    return "Set %s disguise to %s Level %d." % (corp.capitalize(), SuitBattleGlobals.SuitAttributes[type]['name'], level)
+
+@magicWord(category=CATEGORY_OVERRIDE, types=[str, int])
+def merits(corp, amount):
+    """ Set the target's merits to the value specified. """
+    corps = ['bossbot', 'lawbot', 'cashbot', 'sellbot']
+    if corp not in corps:
+        return "Invalid cog corp. specified."
+    corpIndex = corps.index(corp)
+    toon = spellbook.getTarget()
+
+    # Correct me if I'm wrong, but I don't think we need a sanity check for the amount.
+    merits = toon.getCogMerits()
+    merits[corpIndex] = amount
+    toon.b_setCogMerits(merits)
 
 @magicWord(category=CATEGORY_OVERRIDE)
 def fanfare():
