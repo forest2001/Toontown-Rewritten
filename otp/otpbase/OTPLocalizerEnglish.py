@@ -224,7 +224,7 @@ CRSystemMessages = {
     62: 'The district that you\'re on will be closed for maintenance in %s seconds.',
 
     # Announcements.
-    100: 'Toon Council: Congratulations, Your Toon name has been approved! You\'ll need to log out and back in to recieve your name certificate.',
+    100: 'Toon Council: Congrats, Your Toon name has been approved! You\'ll need to log out to receive your name certificate.',
     101: 'Toon Council: Sorry, the name you submitted was rejected. You can log out and submit a new name on the main screen.',
     102: '%s just became the first Toon in Toon History to reach 137 Laff Points!'
 }
