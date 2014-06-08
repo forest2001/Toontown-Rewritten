@@ -300,7 +300,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Wtf, we got the wrong toon's data!
             return
         friendIds = fields['setFriendsList'][0][:]
-        friendIds.append(requesterId)
+        friendIds.append((requesterId, 1))
         if friendIds[0][0] == requesterId:
             # This toon has no friends, no point doing database operations.
             return
