@@ -108,8 +108,7 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
             self.currentHole.requestDelete()
             self.currentHole = None
         self.ignoreAll()
-        from toontown.golf import GolfManagerAI
-        GolfManagerAI.GolfManagerAI().removeCourse(self)
+        self.air.deallocateZone(self.zoneId)
         if self.__barrier:
             self.__barrier.cleanup()
             self.__barrier = None
