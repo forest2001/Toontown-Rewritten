@@ -2853,7 +2853,7 @@ dclass DistributedGolfCourse : DistributedObject {
   setCurHoleIndex(int8 holeIndex) broadcast ram required;
   setCurHoleDoId(uint32 holeDoId) broadcast ram required;
   setDoneReward() airecv clsend;
-  setReward(uint8 trophiesList[] [4], int8 rankingsList[], uint8 holeBestList[] [4], uint8 courseBestList[] [4], uint8 cupList[] [4], uint32 tieBreakWinner, uint32/100 aim0, uint32/100 aim1, uint32/100 aim2, uint32/100 aim3) broadcast;
+  setReward(uint8[] [], int8[], uint8[] [], uint8[] [], uint8[] [], uint32, uint32/100, uint32/100, uint32/100, uint32/100) broadcast;
   setCourseReady(int8 numHoles, int16 holeIds[], int8 coursePar) broadcast;
   setHoleStart(int16 UNKNOWN) broadcast;
   setCourseExit() broadcast;
