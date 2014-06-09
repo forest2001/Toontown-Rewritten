@@ -9,10 +9,12 @@ from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame import MinigameCreatorAI
 from toontown.quest import Quests
-from toontown.minigame import TrolleyHolidayMgrAI
-from toontown.golf import GolfManagerAI
 from toontown.golf import GolfGlobals
+from toontown.golf.DistributedGolfCourseAI import DistributedGolfCourseAI
 import random
+
+from toontown.dna.DNASpawnerAI import *
+from toontown.dna.DNANode import DNANode
 
 class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGolfKartAI')
@@ -138,7 +140,7 @@ class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
 
     def clearFullNow(self, seatIndex):
         avId = self.seats[seatIndex]
-        if avId == 0:
+        if avId == 0 or avId == None:
             self.notify.warning('Clearing an empty seat index: ' + str(seatIndex) + ' ... Strange...')
         else:
             self.seats[seatIndex] = None
@@ -284,10 +286,13 @@ class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
         if numPlayers > 0:
             for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
-                avIdList.append(avId)
+                if avId != None and avId != 0:
+                    avIdList.append(avId)
                 self.clearFullNow(seatIndex)
 
-            golfZone = GolfManagerAI.GolfManagerAI().readyGolfCourse(avIdList, self.golfCourse)
+            golfZone = self.air.allocateZone()
+            course = DistributedGolfCourseAI(golfZone, avIdList, self.golfCourse)
+            course.generateWithRequired(golfZone)
             for avId in avIdList:
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setGolfZone', [golfZone, 0])
@@ -315,3 +320,14 @@ class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
 
     def getColor(self):
         return self.color
+        
+@dnaSpawn(DNANode, 'golf_kart_([0-9]+)_([0-9]+)')
+def spawn(air, zone, element, match):
+    index = int(match.group(1))
+    dest = int(match.group(2))
+    for child in element.children:
+        x, y, z = child.getPos()
+        h, p, r = child.getHpr()
+        kart = DistributedGolfKartAI(air, index, x, y, z, h, p, r)
+        kart.generateWithRequired(zone)
+        kart.start()
