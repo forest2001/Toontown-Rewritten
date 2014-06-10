@@ -469,7 +469,9 @@ class ToonHead(Actor.Actor):
         else:
             searchRoot = self.find('**/' + str(lodName))
         pumpkin = searchRoot.find('**/__Actor_head/pumpkin*')
-        pumpkin.stash()
+        # TODO this is a hackfix
+        if not pumpkin.isEmpty():
+            pumpkin.stash()
         return
 
     def enablePumpkins(self, enable):
