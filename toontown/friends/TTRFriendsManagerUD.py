@@ -349,7 +349,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not friendIds:
             # We can now stop, since we have no friends left to clear.
             return
-        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
 
