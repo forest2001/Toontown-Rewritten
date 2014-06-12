@@ -335,7 +335,8 @@ def __doWaterGlass(squirt, delay, fShowStun):
     tContact = tSpray + dSprayScale
     tSuitDodges = max(tSpray - 0.5, 0.0)
     tracks = Parallel()
-    tracks.append(ActorInterval(toon, 'spit'))
+    toonTrack = Sequence(ActorInterval(toon, 'spit'), Func(toon.loop, 'neutral'))
+    tracks.append(toonTrack)
     soundTrack = __getSoundTrack(level, hitSuit, 1.7, toon)
     tracks.append(soundTrack)
     glass = globalPropPool.getProp('glass')

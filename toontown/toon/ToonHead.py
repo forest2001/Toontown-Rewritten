@@ -469,7 +469,9 @@ class ToonHead(Actor.Actor):
         else:
             searchRoot = self.find('**/' + str(lodName))
         pumpkin = searchRoot.find('**/__Actor_head/pumpkin*')
-        pumpkin.stash()
+        # TODO this is a hackfix
+        if not pumpkin.isEmpty():
+            pumpkin.stash()
         return
 
     def enablePumpkins(self, enable):
@@ -762,8 +764,16 @@ class ToonHead(Actor.Actor):
             else:
                 openString = 'open-short'
                 closedString = 'closed-short'
-            self.__eyelashOpen = model.find('**/' + openString).copyTo(head)
-            self.__eyelashClosed = model.find('**/' + closedString).copyTo(head)
+            eyeOpen = model.find('**/' + openString)
+            eyeClosed = model.find('**/' + closedString)
+            if style.getAnimal() == 'dog':
+                # Fix eyelash positioning on dog toons
+                eyeOpen.setPos(0, -0.025, 0.025)
+                eyeClosed.setPos(0, -0.025, 0.025)
+            self.__eyelashOpen = eyeOpen.copyTo(head)
+            self.__eyelashClosed = eyeClosed.copyTo(head)
+            eyeOpen.removeNode()
+            eyeClosed.removeNode()
             model.removeNode()
         return
 

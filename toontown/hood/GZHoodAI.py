@@ -11,5 +11,12 @@ class GZHoodAI(HoodAI):
         
         self.golfKarts = []
         
+        self.createZone()
+        
     def createZone(self):
         self.spawnObjects()
+
+    def spawnObjects(self):
+        HoodAI.spawnObjects(self)
+        filename = self.air.genDNAFileName(self.HOOD)
+        self.air.dnaSpawner.spawnObjects(filename, self.HOOD)
