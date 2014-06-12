@@ -130,7 +130,6 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.sceneData = sceneTree.generateData()
         self.scene = hidden.attachNewNode(node)
         self.construct()
-        purchaseModels = loader.loadModel('phase_4/models/gui/purchase_gui')
         self.filmImage = loader.loadModel('phase_4/models/minigames/photogame_filmroll')
         self.filmImage.reparentTo(hidden)
         self.tripodModel = loader.loadModel('phase_4/models/minigames/toon_cannon')
@@ -149,6 +148,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.viewfinderNode.setDepthWrite(1)
         self.viewfinderNode.setDepthTest(1)
         self.viewfinderNode.setY(-1.0)
+        self.viewfinderNode.hide()
         self.screenSizeMult = 0.5
         self.screenSizeX = (base.a2dRight - base.a2dLeft) * self.screenSizeMult
         self.screenSizeZ = (base.a2dTop - base.a2dBottom) * self.screenSizeMult
@@ -252,6 +252,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.notify.debug('Onstage')
         DistributedMinigame.onstage(self)
         self.__createTripod()
+        self.viewfinderNode.show()
         self.tripod.reparentTo(render)
         self.tripod.hide()
         self.__loadToonInTripod(self.localAvId)
