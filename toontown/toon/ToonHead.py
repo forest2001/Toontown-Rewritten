@@ -764,8 +764,16 @@ class ToonHead(Actor.Actor):
             else:
                 openString = 'open-short'
                 closedString = 'closed-short'
-            self.__eyelashOpen = model.find('**/' + openString).copyTo(head)
-            self.__eyelashClosed = model.find('**/' + closedString).copyTo(head)
+            eyeOpen = model.find('**/' + openString)
+            eyeClosed = model.find('**/' + closedString)
+            if style.getAnimal() == 'dog':
+                # Fix eyelash positioning on dog toons
+                eyeOpen.setPos(0, -0.025, 0.025)
+                eyeClosed.setPos(0, -0.025, 0.025)
+            self.__eyelashOpen = eyeOpen.copyTo(head)
+            self.__eyelashClosed = eyeClosed.copyTo(head)
+            eyeOpen.removeNode()
+            eyeClosed.removeNode()
             model.removeNode()
         return
 
