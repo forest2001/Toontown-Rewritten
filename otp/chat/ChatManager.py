@@ -340,6 +340,8 @@ class ChatManager(DirectObject.DirectObject):
 
     def changeFrameText(self, newText):
         self.whisperFrame['text'] = newText
+        if len(newText) > 24:
+            self.whisperFrame['text_pos'] = (0.18, 0.042)
 
     def exitWhisper(self):
         self.whisperFrame.hide()
