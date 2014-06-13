@@ -320,14 +320,15 @@ class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
 
     def getColor(self):
         return self.color
-        
+
 @dnaSpawn(DNANode, 'golf_kart_([0-9]+)_([0-9]+)')
 def spawn(air, zone, element, match):
-    index = int(match.group(1))
-    dest = int(match.group(2))
-    for child in element.children:
-        x, y, z = child.getPos()
-        h, p, r = child.getHpr()
-        kart = DistributedGolfKartAI(air, index, x, y, z, h, p, r)
-        kart.generateWithRequired(zone)
-        kart.start()
+    if config.GetBool('want-golf', True):
+        index = int(match.group(1))
+        dest = int(match.group(2))
+        for child in element.children:
+            x, y, z = child.getPos()
+            h, p, r = child.getHpr()
+            kart = DistributedGolfKartAI(air, index, x, y, z, h, p, r)
+            kart.generateWithRequired(zone)
+            kart.start()
