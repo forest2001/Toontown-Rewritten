@@ -10,7 +10,8 @@ class FakeBattleManager:
 
     def destroy(self, battle):
         if battle.suitsKilledThisBattle:
-            simbase.air.tutorialManager.avId2fsm[self.avId].demand('HQ')
+            if self.avId in simbase.air.tutorialManager.avId2fsm.keys():
+                simbase.air.tutorialManager.avId2fsm[self.avId].demand('HQ')
         battle.requestDelete()
 
 class DistributedTutorialSuitAI(DistributedSuitBaseAI):
