@@ -489,6 +489,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         if not base.cr.playGame.getPlace().getState() == 'elevator':
             self.confirmKickOutDialog = TTDialog.TTDialog(style=TTDialog.YesNo, text=TTLocalizer.BoardingKickOutConfirm % self.avName, command=self.__confirmKickOutCallback)
             self.confirmKickOutDialog.show()
+            localAvatar.disableAvatarControls()
 
     def __confirmKickOutCallback(self, value):
         if self.confirmKickOutDialog:
@@ -498,6 +499,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
             if self.groupButton:
                 self.groupButton['state'] = DGG.DISABLED
             localAvatar.boardingParty.requestKick(self.avId)
+        localAvatar.enableAvatarControls()
         return
 
     def __checkGroupStatus(self):

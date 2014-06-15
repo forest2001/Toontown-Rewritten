@@ -84,6 +84,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         self.requestDelete()
 
     def delete(self):
+        self.cleanup()
         taskMgr.remove(self.taskName('suitbldg-time-out'))
         taskMgr.remove(self.taskName(str(self.block) + '_becomingToon-timer'))
         taskMgr.remove(self.taskName(str(self.block) + '_becomingSuit-timer'))

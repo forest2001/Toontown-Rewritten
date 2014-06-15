@@ -15,6 +15,9 @@ class DistributedKnockKnockDoorAI(DistributedAnimatedPropAI.DistributedAnimatedP
         self.doLaterTask = None
         return
 
+    def delete(self):
+        DistributedAnimatedPropAI.DistributedAnimatedPropAI.delete(self)
+
     def enterOff(self):
         DistributedAnimatedPropAI.DistributedAnimatedPropAI.enterOff(self)
 
