@@ -6,6 +6,9 @@
 want-dev #f
 want-cheesy-expirations #t
 
+# ODE isn't ready yet :(
+want-golf #f
+
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
 want-sbhq #t

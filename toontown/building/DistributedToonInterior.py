@@ -16,6 +16,7 @@ from toontown.hood import ZoneUtil
 from toontown.toon import ToonDNA
 from toontown.toon import ToonHead
 from otp.speedchat import SpeedChatGlobals
+from toontown.ai.DistributedBlackCatMgr import DistributedBlackCatMgr
 
 SIGN_LEFT = -4
 SIGN_RIGHT = 4
@@ -137,7 +138,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         del self.dnaStore
         del self.randomGenerator
         self.interior.flattenMedium()
-        
+
         '''snowmanHeadInteriors = [
             2740, # TTC, Loopy Lane, Used Firecrackers
             4652, # MML, Alto Avenue, Full Stop Shop
@@ -161,6 +162,12 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
                 if phraseId == phraseNeeded:
                     self.sendUpdate('nextSnowmanHeadPart', [])
             self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)'''
+
+        if self.zoneId == 2513:
+            def phraseSaid(phraseId):
+                if phraseId == 5700: # Toontastic!
+                    messenger.send(DistributedBlackCatMgr.ActivateEvent)
+            self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
     def setZoneIdAndBlock(self, zoneId, block):
         self.zoneId = zoneId

@@ -11,7 +11,6 @@ want-dev #f
 preload-avatars #t
 language LANGUAGE_HERE
 
-
 # Resources settings
 model-path /
 model-cache-models #f
@@ -31,6 +30,8 @@ vfs-mount phase_12.mf /
 vfs-mount phase_13.mf /
 default-model-extension .bam
 
+# Now that we've loaded the phase files, tell panda to trust the TTRCA
+ssl-certificates phase_3/etc/TTRCA.crt
 
 # DC files are NOT configured.
 # They're wrapped up into the code automatically.
