@@ -16,7 +16,6 @@ class DistributedKnockKnockDoorAI(DistributedAnimatedPropAI.DistributedAnimatedP
         return
 
     def delete(self):
-        del self.fsm
         DistributedAnimatedPropAI.DistributedAnimatedPropAI.delete(self)
 
     def enterOff(self):
