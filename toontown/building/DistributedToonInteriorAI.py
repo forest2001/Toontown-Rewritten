@@ -28,6 +28,7 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
         del self.npcs
         del self.fsm
         del self.building
+        del self.block
         DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def getZoneIdAndBlock(self):
