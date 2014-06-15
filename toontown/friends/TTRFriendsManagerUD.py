@@ -24,7 +24,11 @@ class GetToonDataFSM(FSM):
         self.demand('QueryDB')
 
     def enterQueryDB(self):
-        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        # TODO: Propper fix. This is just temporary
+        try:
+            self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        except:
+            pass
 
     def __queryResponse(self, dclass, fields):
         if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
