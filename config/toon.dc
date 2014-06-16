@@ -3272,7 +3272,7 @@ struct PotentialToon {
 };
 
 dclass ClientServicesManager : DistributedObjectGlobal {
-  login(string cookie, blob sig) clsend;
+  login(string cookie, string sig) clsend;
   acceptLogin();
 
   requestAvatars() clsend;
