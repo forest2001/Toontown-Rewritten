@@ -918,7 +918,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         # Test the signature
         key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set') + FIXED_KEY
         computedSig = hmac.new(key, cookie, hashlib.sha256).digest()
-        if not hmac.compare_digest(sig, computedSig):
+        if sig != computedSig:
             self.killConnection(sender, 'The accounts database rejected your cookie')
             return
 
