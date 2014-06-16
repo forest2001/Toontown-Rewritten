@@ -12,6 +12,7 @@ import time
 import hmac
 import hashlib
 import json
+from ClientServicesManager import FIXED_KEY
 
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
@@ -915,10 +916,10 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             return
 
         # Test the signature
-        key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set')
-        computedSig = hmac.new(key, cookie, hashlib.sha256).hexdigest()
+        key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        computedSig = hmac.new(key, cookie, hashlib.sha256).digest()
         if not hmac.compare_digest(sig, computedSig):
-            self.killConnection(sender, 'Invalid cookie signature')
+            self.killConnection(sender, 'The accounts database rejected your cookie')
             return
 
         if sender in self.connection2fsm:

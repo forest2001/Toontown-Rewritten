@@ -7,6 +7,8 @@ from pandac.PandaModules import *
 import hashlib
 import hmac
 
+FIXED_KEY = "wedidntbuildttrinaday,thinkaboutwhatyouredoing"
+
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
 
@@ -19,8 +21,8 @@ class ClientServicesManager(DistributedObjectGlobal):
         cookie = self.cr.playToken or 'dev'
 
         # Sign the login cookie
-        key = base.config.GetString('csmud-secret', 'streetlamps') + base.config.GetString('server-version', 'no_version_set')
-        sig = hmac.new(key, cookie, hashlib.sha256).hexdigest()
+        key = base.config.GetString('csmud-secret', 'streetlamps') + base.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        sig = hmac.new(key, cookie, hashlib.sha256).digest()
 
         self.notify.debug('Sending login cookie: ' + cookie)
         self.sendUpdate('login', [cookie, sig])
