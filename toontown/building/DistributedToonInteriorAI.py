@@ -7,7 +7,6 @@ from direct.fsm import ClassicFSM, State
 from direct.distributed import DistributedObjectAI
 from direct.fsm import State
 from toontown.toon import NPCToons
-#from toontown.ai.DistributedBlackCatMgrAI import DistributedBlackCatMgrAI # For want-toonhall-cats
 
 class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
@@ -20,8 +19,9 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
         self.fsm = ClassicFSM.ClassicFSM('DistributedToonInteriorAI', [State.State('toon', self.enterToon, self.exitToon, ['beingTakenOver']), State.State('beingTakenOver', self.enterBeingTakenOver, self.exitBeingTakenOver, []), State.State('off', self.enterOff, self.exitOff, [])], 'toon', 'off')
         self.fsm.enterInitialState()
 
-        if air.config.GetBool('want-toonhall-cats', 0):
+        if air.config.GetBool('want-toonhall-cats', False):
             if self.zoneId == 2513:
+                from toontown.ai.DistributedBlackCatMgrAI import DistributedBlackCatMgrAI
                 self.blackCatMgr = DistributedBlackCatMgrAI(air)
                 self.blackCatMgr.generateWithRequired(self.zoneId)
 
