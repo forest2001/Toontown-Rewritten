@@ -162,7 +162,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
                     self.sendUpdate('nextSnowmanHeadPart', [])
             self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)'''
 
-        if base.config.GetBool('want-toonhall-cats', False):
+        if config.GetBool('want-toonhall-cats', False):
             if self.zoneId == 2513:
                 # Pfft... all this is needed for is the ActivateEvent...
                 from toontown.ai.DistributedBlackCatMgr import DistributedBlackCatMgr
