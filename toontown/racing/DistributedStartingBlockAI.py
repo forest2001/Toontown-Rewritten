@@ -37,6 +37,7 @@ class DistributedStartingBlockAI(DistributedObjectAI):
         av = self.air.doId2do.get(avId)
         if not av:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to board a starting block, but is not on the district!')
+            return
         if not av.hasKart():
             self.sendUpdateToAvatarId(avId, 'rejectEnter', [KartGlobals.ERROR_CODE.eNoKart])
             return
