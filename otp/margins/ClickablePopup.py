@@ -26,7 +26,6 @@ class ClickablePopup(PandaNode, DirectObject):
         self.__clickState = 0
 
         self.__clickEvent = ''
-        self.__clickArgs = []
 
         self.accept(self.__getEvent(self.__mwn.getEnterPattern()), self.__mouseEnter)
         self.accept(self.__getEvent(self.__mwn.getLeavePattern()), self.__mouseLeave)
@@ -37,7 +36,7 @@ class ClickablePopup(PandaNode, DirectObject):
         self.__mwn.removeRegion(self.__region)
         self.ignoreAll()
 
-    def setClickRegionEvent(self, event, clickArgs=[]):
+    def setClickRegionEvent(self, event):
         if event is None:
             # The caller is disabling us, so instead:
             self.__disabled = True
@@ -45,7 +44,6 @@ class ClickablePopup(PandaNode, DirectObject):
             self.__updateClickState()
         else:
             self.__clickEvent = event
-            self.__clickArgs = clickArgs
             self.__disabled = False
             self.__region.setActive(True)
             self.__updateClickState()
@@ -99,7 +97,7 @@ class ClickablePopup(PandaNode, DirectObject):
             base.playSfx(NametagGlobals.clickSound)
         elif oldState == self.CS_CLICK and state == self.CS_HOVER:
             # Fire click event:
-            messenger.send(self.__clickEvent, self.__clickArgs)
+            messenger.send(self.__clickEvent)
 
         self.clickStateChanged()
 
