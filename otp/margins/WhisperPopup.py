@@ -45,12 +45,8 @@ class WhisperPopup(MarginPopup, ClickablePopup):
         else:
             cc = WTSystem
 
-        # This line makes me sick to the bone
-        clickState = 0
-        if self.active:
-            clickState = self.getClickState()
-
-        fgColor, bgColor = WHISPER_COLORS[cc][clickState]
+        fgColor, bgColor = WHISPER_COLORS[cc][self.getClickState()]
+        self.innerNP.node().removeAllChildren()
 
         balloon, frame = NametagGlobals.speechBalloon2d.generate(
             self.text, self.font, textColor=fgColor, balloonColor=bgColor,
@@ -82,6 +78,8 @@ class WhisperPopup(MarginPopup, ClickablePopup):
     def __updateClickRegion(self):
         if self.isDisplayed() and self.active:
             self.updateClickRegion(self.left, self.right, self.bottom, self.top)
+        else:
+            self.stashClickRegion()
 
     def clickStateChanged(self):
         self.updateContents()
