@@ -318,7 +318,7 @@ class ToonBase(OTPBase.OTPBase):
         self.marginManager = MarginManager()
         self.margins = self.aspect2d.attachNewNode(self.marginManager, DirectGuiGlobals.MIDGROUND_SORT_INDEX + 1)
         mm = self.marginManager
-        # TODO: Dynamicaly add more cells
+        # TODO: Dynamicaly add more and reposition cells
         padding = 0.0225
         self.leftCells = [
             mm.addGridCell(0.2 + padding, -0.45, base.a2dTopLeft), 
@@ -343,8 +343,8 @@ class ToonBase(OTPBase.OTPBase):
             # mm.addGridCell(4.5, 0, base.a2dLeft, base.a2dRight, base.a2dBottom, base.a2dTop)
         ]
         self.rightCells = [
-            mm.addGridCell(-0.2, -1.0 + padding, base.a2dTopRight),
-            mm.addGridCell(-0.2, -1.4 + padding, base.a2dTopRight)
+            mm.addGridCell(-0.2 - padding, -0.9, base.a2dTopRight), 
+            mm.addGridCell(-0.2 - padding, -1.35, base.a2dTopRight)
 
             # mm.addGridCell(5, 1.8, base.a2dLeft, base.a2dRight, base.a2dBottom, base.a2dTop), 
             # mm.addGridCell(5, 0.9, base.a2dLeft, base.a2dRight, base.a2dBottom, base.a2dTop)
