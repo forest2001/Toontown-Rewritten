@@ -12,6 +12,7 @@ import time
 import hmac
 import hashlib
 import json
+from ClientServicesManager import FIXED_KEY
 
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
@@ -896,7 +897,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.notify.warning('The CSMUD has been told to reject logins! All future logins will now be rejected.')
         self.loginsEnabled = enable
 
-    def login(self, cookie):
+    def login(self, cookie, sig):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
@@ -912,6 +913,13 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         if sender>>32:
             # Oops, they have an account ID on their connection already!
             self.killConnection(sender, 'Client is already logged in.')
+            return
+
+        # Test the signature
+        key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        computedSig = hmac.new(key, cookie, hashlib.sha256).digest()
+        if sig != computedSig:
+            self.killConnection(sender, 'The accounts database rejected your cookie')
             return
 
         if sender in self.connection2fsm:

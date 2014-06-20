@@ -63,7 +63,7 @@ class ToontownRPCHandler:
             if dclass.getName() is None:
                 return request.result(None)
 
-            return request.result(self.rpc_getAccountByGSID(request, fields.get('setDISLid',0)[0]))
+            return request.result(self.rpc_getAccountByGSID(request, fields.get('setDISLid',[-1,])[0]))
 
         self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 

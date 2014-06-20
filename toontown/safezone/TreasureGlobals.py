@@ -99,7 +99,7 @@ SafeZoneTreasureSpawns = {
             (41.4197, 4.35384, -12.308),
         ],
         10, # Rate
-        2 # Maximum
+        3 # Maximum
     ),
     ToontownGlobals.DaisyGardens: (
         TreasureDG, 10, # DGTreasure heals 10 each...
@@ -126,7 +126,7 @@ SafeZoneTreasureSpawns = {
             (-102, 101, 0.0),
         ],
         7, # Rate
-        2 # Maximum
+        4 # Maximum
     ),
     ToontownGlobals.TheBrrrgh: (
         TreasureBR, 12, # +12 laff
@@ -151,7 +151,7 @@ SafeZoneTreasureSpawns = {
             (35, -98, 6.2),
         ],
         10, # Rate
-        2 # Maximum
+        3 # Maximum
     ),
     ToontownGlobals.MinniesMelodyland: (
         TreasureMM, 10, # +10 laff
@@ -177,7 +177,7 @@ SafeZoneTreasureSpawns = {
             (-24, -75, -14.5),
         ],
         10, # Rate
-        2 # Maximum
+        4 # Maximum
     ),
     ToontownGlobals.DonaldsDreamland: (
         TreasureDL, 12, # +12 laff
@@ -201,7 +201,7 @@ SafeZoneTreasureSpawns = {
             (-34, -88, 0.0),
         ],
         10, # Rate
-        2 #Maximum
+        3 #Maximum
     ),
     ToontownGlobals.OutdoorZone: (
         TreasureOZ, 3, # +3 laff
