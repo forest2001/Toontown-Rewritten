@@ -151,7 +151,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
                             av.b_setClothesBottomsList(av.getClothesBottomsList())
                         else:
                             self.notify.warning('NPCTailor: setDNA() - unable to save old bottoms - we exceeded the bottoms list length')
-                    self.air.writeServerEvent('boughtTailorClothes', avId=avId, tailorId=self.doId, item=which, dna=self.customerDNA.asTuple())
+                    self.air.writeServerEvent('boughtTailorClothes', avId=avId, tailorId=self.doId, item=which, dna=self.customerDNA.makeNetString())
                 elif self.useJellybeans:
                     self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA tried to purchase with insufficient jellybeans')
                     self.notify.warning('NPCTailor: setDNA() - client tried to purchase with insufficient jellybeans!')
