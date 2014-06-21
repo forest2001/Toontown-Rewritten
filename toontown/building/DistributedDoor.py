@@ -168,18 +168,6 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                     doorTrigger.setY(doorTrigger.getY() - TRIGGER_SHIFT_Y)
                 doorTrigger.setZ(doorTrigger.getZ() + TRIGGER_SHIFT_Z)
 
-        # Just from broke triggers on DDL HQ doors
-        if self.doorType == DoorTypes.EXT_HQ:
-            doorTrigger = self.building.find('**/door_%d/**/door_trigger_*' % self.doorIndex)
-            if not doorTrigger.isEmpty():
-                if "_hqDL_" in self.building.getName():
-                    # Some dipshit put the triggers inside of the building O_o
-                    if self.getTriggerName() is "door_trigger_5_0":
-                        doorTrigger.setY(1.0)
-                    elif self.getTriggerName() is "door_trigger_5_1":
-                        doorTrigger.setY(-1.0)
-                doorTrigger.setZ(1.0)
-
     def setTriggerName_wip(self):
         building = self.getBuilding()
         doorTrigger = building.find('**/door_%d/**/door_trigger_%d' % (self.doorIndex, self.block))
