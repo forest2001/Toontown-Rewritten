@@ -38,7 +38,8 @@ class MarginPopup:
         pass # Fired externally when the result of isDisplayed changes. For subclasses.
 
     def manage(self, manager):
-        self.unmanage(self.__manager)
+        if self.__manager:
+            self.unmanage(self.__manager)
         self.__manager = manager
 
         if self.__visible:
