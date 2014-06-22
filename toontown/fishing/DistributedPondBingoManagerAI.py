@@ -111,25 +111,25 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
 
     def sendStateUpdate(self):
         self.lastUpdate = globalClockDelta.getRealNetworkTime()
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             if not spot.avId:
                 continue
             self.sendUpdateToAvatarId(spot.avId, 'setState', [self.state, self.lastUpdate])
 
     def sendCardStateUpdate(self):
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             if not spot.avId:
                 continue
             self.sendUpdateToAvatarId(spot.avId, 'setCardState', [self.cardId, self.typeId, self.tileSeed, self.bingoCard.getGameState()])
 
     def sendGameStateUpdate(self, cellId):
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             if not spot.avId:
                 continue
             self.sendUpdateToAvatarId(spot.avId, 'updateGameState', [self.bingoCard.getGameState(), cellId])
 
     def sendCanBingo(self):
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             if not spot.avId:
                 continue
             self.sendUpdateToAvatarId(spot.avId, 'enableBingo', [])
@@ -137,7 +137,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
     def rewardAll(self):
         self.state = 'Reward'
         self.sendStateUpdate()
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             if not spot.avId:
                 continue
             av = self.air.doId2do.get(spot.avId)
@@ -182,7 +182,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         self.tileSeed = None
         self.typeId = None
         self.cardId += 1
-        for spot in self.pond.spots:
+        for spot in self.pond.spots.itervalues():
             request = RequestCard.get(spot.avId)
             if request:
                 self.typeId, self.tileSeed = request
