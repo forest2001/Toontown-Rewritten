@@ -22,10 +22,20 @@ class SuitBase:
         self.maxHP = 10
         self.currHP = 10
         self.isSkelecog = 0
+        self.legList = None
+        self.path = None
+        self.suitGraph = None
         return
 
     def delete(self):
-        pass
+        if self.legList is not None:
+            del self.legList
+        # I have no idea if this will fix anything... but it looks like it isn't
+        # deleted, so w/e.
+        if self.path is not None:
+            del self.path
+        if self.suitGraph is not None:
+            del self.suitGraph
 
     def getStyleName(self):
         if hasattr(self, 'dna') and self.dna:

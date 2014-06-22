@@ -528,7 +528,7 @@ class DistributedDivingGame(DistributedMinigame):
         DistributedMinigame.setGameStart(self, timestamp)
         self.notify.debug('setGameStart')
         self.treasurePanel = TreasureScorePanel.TreasureScorePanel()
-        self.treasurePanel.setPos(0.145, 0, -0.27)
+        self.treasurePanel.setPos(0.145, 0, -0.5)
         self.treasurePanel.reparentTo(base.a2dTopLeft)
         self.treasurePanel.makeTransparent(0.7)
         self.introMovie.finish()
@@ -628,7 +628,7 @@ class DistributedDivingGame(DistributedMinigame):
                     self.treasures[i].treasureNode.wrtReparentTo(render)
                     self.treasures[i].grabbedId = 0
                     seq = Sequence()
-                    shrink = LerpScaleInterval(self.treasures[i].treasureNode, duration=1.0, startScale=self.treasures[i].treasureNode.getScale(), scale=Vec3(0.001, 0.001, 0.001), blendType='easeIn')
+                    shrink = LerpScaleInterval(self.treasures[i].treasureNode, duration=1.0, startScale=self.treasures[i].treasureNode.getScale(), scale=Vec3(0.0, 0.0, 0.0), blendType='easeIn')
                     shrinkIcon = LerpScaleInterval(self.chestIcons[i], duration=1.0, startScale=self.chestIcons[i].getScale(), scale=Vec3(0.001, 0.001, 0.001), blendType='easeIn')
                     jump = ProjectileInterval(self.treasures[i].treasureNode, duration=1.0, startPos=self.treasures[i].treasureNode.getPos(), endPos=Point3(0, 0, 40), gravityMult=0.7)
                     shrinkJump = Parallel(shrink, shrinkIcon, jump)
@@ -690,7 +690,7 @@ class DistributedDivingGame(DistributedMinigame):
             volume = (soundRange - distance) / soundRange
         if toonSD.status == 'normal' or toonSD.status == 'treasure':
             self.localLerp.finish()
-            self.localLerp = Sequence(Func(toonSD.fsm.request, 'freeze'), Wait(3.0), Func(toonSD.fsm.request, 'normal'))
+            self.localLerp = Sequence(Func(toonSD.fsm.request, 'freeze'), Wait(1.6), Func(toonSD.fsm.request, 'normal'))
             self.localLerp.start(ts)
             self.hitSound.play()
             self.hitSound.setVolume(volume)
@@ -708,7 +708,7 @@ class DistributedDivingGame(DistributedMinigame):
             volume = (soundRange - distance) / soundRange
         if toonSD.status == 'normal' or toonSD.status == 'treasure':
             self.localLerp.finish()
-            self.localLerp = Sequence(Func(toonSD.fsm.request, 'freeze'), Wait(3.0), Func(toonSD.fsm.request, 'normal'))
+            self.localLerp = Sequence(Func(toonSD.fsm.request, 'freeze'), Wait(1.6), Func(toonSD.fsm.request, 'normal'))
             self.localLerp.start(ts)
         if self.spawners[spawnerId].fishArray.has_key(spawnId):
             fish = self.spawners[spawnerId].fishArray[spawnId]

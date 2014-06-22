@@ -26,6 +26,14 @@ class WhisperPopup(MarginPopup, ClickablePopup):
         self.whisperType = whisperType
         self.timeout = timeout
 
+        self.active = False
+        self.fromId = 0
+
+        self.left = 0.0
+        self.right = 0.0
+        self.top = 0.0
+        self.bottom = 0.0
+
         self.updateContents()
 
         self.setPriority(2)
@@ -36,7 +44,9 @@ class WhisperPopup(MarginPopup, ClickablePopup):
             cc = self.whisperType
         else:
             cc = WTSystem
-        fgColor, bgColor = WHISPER_COLORS[cc][0]
+
+        fgColor, bgColor = WHISPER_COLORS[cc][self.getClickState()]
+        self.innerNP.node().removeAllChildren()
 
         balloon, frame = NametagGlobals.speechBalloon2d.generate(
             self.text, self.font, textColor=fgColor, balloonColor=bgColor,
@@ -46,18 +56,42 @@ class WhisperPopup(MarginPopup, ClickablePopup):
         # Calculate the center of the TextNode.
         text = balloon.find('**/+TextNode')
         t = text.node()
-        left, right, bottom, top = t.getFrameActual()
-        center = self.innerNP.getRelativePoint(text,
-                                               ((left+right)/2., 0, (bottom+top)/2.))
+        self.left, self.right, self.bottom, self.top = t.getFrameActual()
+        center = self.innerNP.getRelativePoint(text, ((self.left + self.right) / 2., 0, (self.bottom + self.top) / 2.))
 
         # Next translate the balloon along the inverse.
         balloon.setPos(balloon, -center)
 
+        if self.active and self.fromId:
+            self.setClickRegionEvent('clickedWhisper', clickArgs=[self.fromId])
+
     def setClickable(self, senderName, fromId, todo=0):
-        pass
+        self.active = True
+        self.fromId = fromId
+
+        self.updateContents()
+        self.__updateClickRegion()
+
+    def marginVisibilityChanged(self):
+        self.__updateClickRegion()
+
+    def __updateClickRegion(self):
+        if self.isDisplayed() and self.active:
+            self.updateClickRegion(self.left, self.right, self.bottom, self.top)
+        else:
+            self.stashClickRegion()
+
+    def clickStateChanged(self):
+        self.updateContents()
 
     def manage(self, manager):
         MarginPopup.manage(self, manager)
 
-        taskMgr.doMethodLater(self.timeout, self.unmanage,
-                              'whisper-timeout-%d' % id(self), [manager])
+        taskMgr.doMethodLater(self.timeout, self.unmanage, 'whisper-timeout-%d' % id(self), [manager])
+
+    # Manually Clean up
+    def unmanage(self, manager):
+        MarginPopup.unmanage(self, manager)
+
+        ClickablePopup.destroy(self)
+        self.innerNP.removeNode()

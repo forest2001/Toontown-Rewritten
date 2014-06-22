@@ -137,7 +137,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         del self.dnaStore
         del self.randomGenerator
         self.interior.flattenMedium()
-        
+
         '''snowmanHeadInteriors = [
             2740, # TTC, Loopy Lane, Used Firecrackers
             4652, # MML, Alto Avenue, Full Stop Shop
@@ -161,6 +161,15 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
                 if phraseId == phraseNeeded:
                     self.sendUpdate('nextSnowmanHeadPart', [])
             self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)'''
+
+        if config.GetBool('want-toonhall-cats', False):
+            if self.zoneId == 2513:
+                # Pfft... all this is needed for is the ActivateEvent...
+                from toontown.ai.DistributedBlackCatMgr import DistributedBlackCatMgr
+                def phraseSaid(phraseId):
+                    if phraseId == 5700: # Toontastic!
+                        messenger.send(DistributedBlackCatMgr.ActivateEvent)
+                self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
     def setZoneIdAndBlock(self, zoneId, block):
         self.zoneId = zoneId

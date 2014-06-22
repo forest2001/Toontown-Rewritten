@@ -44,9 +44,14 @@ class QuestManagerAI:
             if isinstance(quest, Quests.CogQuest):
                 # It's a cog quest!
                 for suit in suitsKilled:
-                    if quest.doesCogCount(toon.getDoId(), suit, zoneId, activeToons):
-                        # The cog we killed counts!
-                        self.__incrementQuestProgress(toon.quests[index])
+                    # N.B.: This will iterate once if True, none if False.
+                    # If it's a newbie quest, it will return an integer rather than a
+                    # boolean, and will iterate x times.
+                    for x in xrange(quest.doesCogCount(toon.getDoId(), suit, zoneId, activeToons)):
+                        # Give us credit for this cog. If this a newbie quest, it will
+                        # give us multiple credit(s), depending on how many newbies were
+                        # in the battle.
+                       self.__incrementQuestProgress(toon.quests[index])
         toon.updateQuests()
 
     def recoverItems(self, toon, suitsKilled, zoneId):
@@ -100,12 +105,16 @@ class QuestManagerAI:
             if isinstance(quest, Quests.BuildingQuest):
                 # This quest is a building quest, time to see if it counts towards
                 # our progress!
-                if quest.isLocationMatch(zoneId) and quest.doesBuildingCount(toon.getDoId(), activeToons):
+                if quest.isLocationMatch(zoneId):
                     # We defeated the building in the correct zone, and the building counts!
                     if quest.getBuildingTrack() == Quests.Any or quest.getBuildingTrack() == track:
                         if floors >= quest.getNumFloors():
                             # This building has more (or equal to) the number of floors we need.
-                            self.__incrementQuestProgress(toon.quests[index])
+                            for x in xrange(quest.doesBuildingCount(toon.getDoId(), activeToons)):
+                                # Works the same as Cog Quests. Increment by one if it's a
+                                # normal quest, or by the amount of newbies if it's a
+                                # newbie quest.
+                                self.__incrementQuestProgress(toon.quests[index])
         toon.updateQuests()
 
     def toonKilledCogdo(self, toon, difficulty, floors, zoneId, activeToons):
@@ -122,8 +131,9 @@ class QuestManagerAI:
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.FactoryQuest):
                 # Cool, it's a factory quest! Does it count?
-                if quest.doesFactoryCount(toon.getDoId(), factoryId, activeToonVictors):
+                for x in xrange(quest.doesFactoryCount(toon.getDoId(), factoryId, activeToonVictors)):
                     # Woo, this counts towards our quest progress!
+                    # Increment by the amount of credit we deserve.
                     self.__incrementQuestProgress(toon.quests[index])
         toon.updateQuests()
 
@@ -135,7 +145,7 @@ class QuestManagerAI:
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.MintQuest):
                 # Oh lookie here, a mint quest! I love me some Polos.
-                if quest.doesMintCount(toon.getDoId(), mintId, activeToonVictors):
+                for x in xrange(quest.doesMintCount(toon.getDoId(), mintId, activeToonVictors)):
                     # Nom nom nom nom, progress!
                     self.__incrementQuestProgress(toon.quests[index])
         toon.updateQuests()

@@ -225,7 +225,7 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
           string(0-400) chat, TalkModification [], uint8 flags) broadcast;
   setTalkWhisper(DoId fromAv, DoId fromAcc, string(0-256) avName,
-          string(0-400) chat, TalkModification [], uint8 flags) broadcast;
+          string(0-400) chat, TalkModification [], uint8 flags) ownrecv;
 };
 
 struct FriendEntry {
@@ -285,7 +285,7 @@ dclass OtpAvatarManager : DistributedObject {
 
 dclass ChatAgent : DistributedObject {
   adminChat(uint32 aboutId, string message);
-  chatMessage(string(0-256) message) clsend;
+  chatMessage(string(0-256) message, uint8 chatMode) clsend;
   whisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
   sfWhisperMessage(uint32 receiverAvId, string(0-256) message) clsend;
 };

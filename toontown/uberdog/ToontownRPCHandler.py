@@ -30,6 +30,15 @@ class ToontownRPCHandler:
                                     self.air.ourChannel, [0])
         self.air.send(dg)
 
+    ### UBERDOG MANAGEMENT ###
+    def rpc_setEnableLogins(self, request, enable):
+        """
+        Tells the ClientServicesManagerUD to enable/disable all logins.
+        Also tells the CSMUD what "disconnect" message to display (only has effect
+        if logins are disabled).
+        """
+        self.air.netMessenger.send('enableLogins', [enable])
+
     ### GENERAL INFORMATION ###
     def rpc_getGSIDByAccount(self, request, accountId):
         """Gets the GSID for a given webserver account ID, or null if invalid."""
@@ -45,6 +54,20 @@ class ToontownRPCHandler:
 
         if account and account.get('dclass') == 'Account':
             return account.get('fields',{}).get('ACCOUNT_ID')
+
+    def rpc_getAccountByAvatarID(self, request, avId):
+        """Gets the account ID associated to a particular avatar (account), or null if invalid."""
+        def callback(dclass, fields):
+            if dclass is None:
+                return request.result(None)
+            if dclass.getName() is None:
+                return request.result(None)
+
+            return request.result(self.rpc_getAccountByGSID(request, fields.get('setDISLid',[-1,])[0]))
+
+        self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
+
+        return request
 
     def rpc_getAvatarsForGSID(self, request, gsId):
         """Gets the set of avatars (Toons) that exist on a given gsId, or null if invalid."""

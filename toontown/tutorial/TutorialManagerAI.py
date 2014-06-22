@@ -170,7 +170,9 @@ class TutorialManagerAI(DistributedObjectAI):
 
     def toonArrived(self):
         avId = self.air.getAvatarIdFromSender()
-        av = self.air.doId2do[avId]
+        av = self.air.doId2do.get(avId)
+        if not av:
+            return
         if av.getTutorialAck():
             self.avId2fsm[avId].demand('CleanUp')
             self.air.writeServerEvent('suspicious', avId=avId, issue='Attempted to request Toontorial when it would be impossible to do so')

@@ -379,11 +379,11 @@ class TalkAssistant(DirectObject.DirectObject):
 
     def receiveWhisperTalk(self, avatarId, avatarName, accountId, accountName, toId, toName, message, scrubbed = 0):
         error = None
-        print 'receiveWhisperTalk %s %s %s %s %s' % (avatarId,
+        self.notify.debug('receiveWhisperTalk %s %s %s %s %s' % (avatarId,
          avatarName,
          accountId,
          accountName,
-         message)
+         message))
         if not avatarName and avatarId:
             avatarName = self.findAvatarName(avatarId)
         if not accountName and accountId:
@@ -641,7 +641,7 @@ class TalkAssistant(DirectObject.DirectObject):
         if self.checkGuildTypedChat():
             base.cr.guildManager.sendTalk(message)
         else:
-            print 'Guild chat error'
+            self.notify.warning('Guild chat error')
             error = ERROR_NO_GUILD_CHAT
         return error
 
@@ -709,7 +709,7 @@ class TalkAssistant(DirectObject.DirectObject):
         if self.checkGuildSpeedChat():
             base.cr.guildManager.sendSC(msgIndex)
         else:
-            print 'Guild Speedchat error'
+            self.notify.warning('Guild Speedchat error')
             error = ERROR_NO_GUILD_CHAT
         return error
 

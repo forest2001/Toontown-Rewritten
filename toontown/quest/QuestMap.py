@@ -172,8 +172,9 @@ class QuestMap(DirectFrame):
                 self.marker.setHpr(0, 0, -180 - self.av.getH())
         i = 0
         for buildingMarker in self.buildingMarkers:
-            buildingMarker.setScale((math.sin(task.time * 16.0 + i * math.pi / 3.0) + 1) * 0.005 + 0.04)
-            i = i + 1
+            if not buildingMarker.isEmpty():
+                buildingMarker.setScale((math.sin(task.time * 16.0 + i * math.pi / 3.0) + 1) * 0.005 + 0.04)
+                i = i + 1
 
         return Task.cont
 

@@ -1496,7 +1496,11 @@ class OTPClientRepository(ClientRepositoryBase):
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
             self.handleGenerateWithRequired(di, other=True)
         elif msgType == CLIENT_OBJECT_SET_FIELD:
-            self.handleUpdateField(di)
+            # TODO: HACKFIX HERE, FIX PROPERLY!!!
+            try:
+                self.handleUpdateField(di)
+            except AssertionError as e:
+                self.notify.warning('AssertionError: %s' % e.message)
         elif msgType == CLIENT_OBJECT_LEAVING:
             self.handleDelete(di)
         else:

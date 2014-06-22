@@ -184,8 +184,8 @@ CRBootedReasons = {1: 'Yikes - An unexpected problem occured.  Your connection h
  100: 'You have been disconnected because someone else just logged in using your account on another computer.',
  120: 'You have been disconnected because of a problem with your authorization to use keyboard chat.',
  122: 'There was an issue getting you into Toontown.  If the problem persists, please contact Toontown Rewritten Support.',
- 124: 'Your installed files are out of date!  Use the official launcher to download the newest version, or contact Toontown Rewritten Support of the problem persists.',
- 125: 'Your installed files appear to be invalid.  Use the official launcher to download the newest version, or contact Toontown Rewritten Support of the problem persists.',
+ 124: 'Your installed files are out of date!  Use the official launcher to download the newest version, or contact Toontown Rewritten Support if the problem persists.',
+ 125: 'Your installed files appear to be invalid.  Use the official launcher to download the newest version, or contact Toontown Rewritten Support if the problem persists.',
  126: 'You aren\'t authorized to use administrator privileges. The request has been noted.',
  127: 'There appears to be a problem with your Toon.  Don\'t worry - we\'ll get it straightened out. Please contact Toontown Rewritten Support and referece Error Code 127.',
  151: 'You were kicked out by one of the developers working on the servers.',
@@ -193,9 +193,10 @@ CRBootedReasons = {1: 'Yikes - An unexpected problem occured.  Your connection h
  153: 'The district you were playing on has been reset.  Everyone who was playing on that district has also been disconnected, however, you should be able to connect again and go right back into Toontown.',
  154: 'Toontown Rewritten is going down for an update!  Stay Tooned on our website for details, or try logging in again later.',
  155: 'You\'ve been warned for %(dc_reason)s. Try to behave next time!',
- 156: 'Toontown Rewritten will be closing tomorrow to move into beta. From every hour from now to 2:00PM TTT tomorrow, you can enter Toontown and relive the excitement of the elections. Check our website for updates, and thank you for Alpha Testing with us!',
+ 200: 'Logins are currently disabled. Please try again later.',
  288: 'Sorry, you have used up all of your available minutes this month.',
- 349: 'Sorry, you have used up all of your available minutes this month.'}
+ 349: 'Sorry, you have used up all of your available minutes this month.',
+ 350: 'Sorry, your play time is up for today! You\'re welcome to hop on the queue or schedule a new session at any time. Thanks for testing with us, and come back soon!',}
 CRBootedReasonUnknownCode = 'Yikes - An unexpected problem occured. (Error code %s)  Your connection has been lost, but you should be able to connect again and go right back into Toontown.'
 CRSystemMessages = {
     # General, generic messages:
@@ -223,7 +224,7 @@ CRSystemMessages = {
     62: 'The district that you\'re on will be closed for maintenance in %s seconds.',
 
     # Announcements.
-    100: 'Toon Council: Congratulations, Your Toon name has been approved! You\'ll need to log out and back in to recieve your name certificate.',
+    100: 'Toon Council: Congrats, Your Toon name has been approved! You\'ll need to log out to receive your name certificate.',
     101: 'Toon Council: Sorry, the name you submitted was rejected. You can log out and submit a new name on the main screen.',
     102: '%s just became the first Toon in Toon History to reach 137 Laff Points!'
 }
@@ -673,8 +674,8 @@ SuitFaceoffTaunts = {'b': ['Would you like to make a donation?',
         'I can bag this.',
         'Paper or plastic?',
         'Do you have your baggage claim?',
-        "Remember, money won't make you happy.",
-        'Careful, I have some serious baggage.',
+        "I can guarantee money won't buy your happiness.",
+        "I hope you're prepared -- there's no such thing as easy money.",
         "You're about to have money trouble.",
         'Money will make your world go around.',
         "I'm too rich for your blood.",

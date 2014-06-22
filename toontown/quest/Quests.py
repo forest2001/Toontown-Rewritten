@@ -768,7 +768,7 @@ class SkeleReviveQBase:
             return TTLocalizer.v2CogP
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return cogDict['hasRevives'] and avId in cogDict['activeToons'] and self.isLocationMatch(zoneId)
+        return cogDict.get('hasRevives', False) and avId in cogDict.get('activeToons', []) and self.isLocationMatch(zoneId)
 
 
 class SkeleReviveQuest(CogQuest, SkeleReviveQBase):

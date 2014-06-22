@@ -48,6 +48,9 @@ class DistributedDoorAI(DistributedObjectAI.DistributedObjectAI):
         taskMgr.remove(self.uniqueName('exit_door_closing-timer'))
         taskMgr.remove(self.uniqueName('exit_door_opening-timer'))
         self.ignoreAll()
+        del self.block
+        del self.swing
+        del self.doorType
         del self.fsm
         del self.exitDoorFSM
         del self.otherDoor

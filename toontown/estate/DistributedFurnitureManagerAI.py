@@ -45,6 +45,11 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         for item in self.items:
             item.generateWithRequired(self.zoneId)
 
+    def delete(self):
+        for item in self.items:
+            item.destroy()
+        DistributedObjectAI.delete(self)
+
     def loadFromHouse(self):
         self.b_setAtticItems(self.house.getAtticItems())
         self.b_setAtticWallpaper(self.house.getAtticWallpaper())

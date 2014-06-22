@@ -37,6 +37,7 @@ class ToontownInternalRepository(AstronInternalRepository):
         self.netMessenger.register(1, 'accountDisconnected')
         self.netMessenger.register(2, 'avatarOnline')
         self.netMessenger.register(3, 'avatarOffline')
+        self.netMessenger.register(4, 'enableLogins')
 
     def getAvatarIdFromSender(self):
         return self.getMsgSender() & 0xFFFFFFFF

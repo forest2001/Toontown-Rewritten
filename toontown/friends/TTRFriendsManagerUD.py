@@ -24,7 +24,11 @@ class GetToonDataFSM(FSM):
         self.demand('QueryDB')
 
     def enterQueryDB(self):
-        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        # TODO: Propper fix. This is just temporary
+        try:
+            self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
+        except:
+            pass
 
     def __queryResponse(self, dclass, fields):
         if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
@@ -230,7 +234,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         for friendId in friends:
             # Is our friend online?
             self.air.getActivated(friendId, functools.partial(self.__comingOnlineFriendOnline, otherId=avId))
-            
+
     def __comingOnlineFriendOnline(self, avId, activated, otherId=None):
         if not (otherId and activated):
             #??!?!?
@@ -241,14 +245,14 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         dg.addUint32(otherId)
         dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
         self.air.send(dg)
-        
+
         # Declare the friend to the avatar.
         dg = PyDatagram()
         dg.addServerHeader(self.GetPuppetConnectionChannel(otherId), self.air.ourChannel, CLIENTAGENT_DECLARE_OBJECT)
         dg.addUint32(avId)
         dg.addUint16(self.air.dclassesByName['DistributedToonUD'].getNumber())
         self.air.send(dg)
-        
+
         # Tell the client their friend is online.
         self.sendUpdateToAvatarId(avId, 'friendOnline', [otherId, 0, 0])
 
@@ -266,7 +270,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             return
         for friendId, tf in fields['setFriendsList'][0]:
             self.air.getActivated(friendId, functools.partial(self.__offlineToonOnline, otherId=requesterId, accId=fields['setDISLid'][0]))
-            
+
     def __offlineToonOnline(self, avId, activated, otherId=None, accId=None):
         if not (otherId and activated and accId):
             return
@@ -275,13 +279,13 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         dg.addServerHeader(self.GetPuppetConnectionChannel(avId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
         dg.addUint32(otherId)
         self.air.send(dg)
-        
+
         # Undeclare to our now-offline avId (they may still be around, about to log into a new toon!)
         dg = PyDatagram()
         dg.addServerHeader(self.GetAccountConnectionChannel(accId), self.air.ourChannel, CLIENTAGENT_UNDECLARE_OBJECT)
         dg.addUint32(avId)
         self.air.send(dg)
-        
+
         # Tell them they're offline!
         self.sendUpdateToAvatarId(avId, 'friendOffline', [otherId])
 
@@ -300,11 +304,11 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             # Wtf, we got the wrong toon's data!
             return
         friendIds = fields['setFriendsList'][0][:]
-        friendIds.append(requesterId)
-        if friendIds[0] == requesterId:
+        friendIds.append((requesterId, 1))
+        if friendIds[0][0] == requesterId:
             # This toon has no friends, no point doing database operations.
             return
-        fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, friendIds[0][0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
 
@@ -316,7 +320,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not success:
             if friendIds:
                 # Move on to the next friend.
-                fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+                fsm = GetToonDataFSM(self, requesterId, friendIds[0][0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
                 fsm.start()
                 self.fsms[requesterId] = fsm
             else:
@@ -327,12 +331,11 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if requesterId == fields['ID']:
             # Delete our friends list entirely.
             friendsIds = []
-        elif requesterId in friendsIds:
-            # Remove ourself from our friend's list.
-            friendsIds.remove(requesterId)
         else:
-            # Wtf, we aren't friends with this toon?
-            self.notify.warning('Tried to unfriend %s from %s\'s friendsList while not in friendsList!' % (requesterId, fields['ID']))
+            for friend in friendsIds:
+                if friend[0] == requesterId:
+                    # Remove ourself from our friend's list.
+                    friendsIds.remove(friend)
         fsm = UpdateToonFieldFSM(self, requesterId, fields['ID'], functools.partial(self.__clearListUpdatedToonField, avId=fields['ID'], friendIds=friendIds[1:]))
         fsm.start('setFriendsList', friendsIds)
         self.fsms[requesterId] = fsm
@@ -350,7 +353,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not friendIds:
             # We can now stop, since we have no friends left to clear.
             return
-        fsm = GetToonData(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
 

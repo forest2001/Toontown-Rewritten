@@ -19,6 +19,12 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
         self.fsm = ClassicFSM.ClassicFSM('DistributedToonInteriorAI', [State.State('toon', self.enterToon, self.exitToon, ['beingTakenOver']), State.State('beingTakenOver', self.enterBeingTakenOver, self.exitBeingTakenOver, []), State.State('off', self.enterOff, self.exitOff, [])], 'toon', 'off')
         self.fsm.enterInitialState()
 
+        if config.GetBool('want-toonhall-cats', False):
+            if self.zoneId == 2513:
+                from toontown.ai.DistributedBlackCatMgrAI import DistributedBlackCatMgrAI
+                self.blackCatMgr = DistributedBlackCatMgrAI(air)
+                self.blackCatMgr.generateWithRequired(self.zoneId)
+
     def delete(self):
         self.ignoreAll()
         for npc in self.npcs:
@@ -28,6 +34,7 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
         del self.npcs
         del self.fsm
         del self.building
+        del self.block
         DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def getZoneIdAndBlock(self):

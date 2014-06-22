@@ -12,6 +12,7 @@ import time
 import hmac
 import hashlib
 import json
+from ClientServicesManager import FIXED_KEY
 
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
@@ -143,7 +144,7 @@ class LoginAccountFSM(OperationFSM):
             self.demand('RetrieveAccount')
         else:
             self.demand('CreateAccount')
-            
+
     def __retryLookup(self):
         try:
             self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
@@ -151,7 +152,7 @@ class LoginAccountFSM(OperationFSM):
         except AutoReconnect:
             taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
             return
-            
+
         if account:
             self.accountId = account['_id']
             self.demand('RetrieveAccount')
@@ -214,6 +215,27 @@ class LoginAccountFSM(OperationFSM):
         dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
         dg.addChannel(self.csm.GetAccountConnectionChannel(self.accountId))
         self.csm.air.send(dg)
+
+        # Subscribe to any "staff" channels that the account has access to.
+        access = self.account.get('ADMIN_ACCESS', 0)
+        if access >= 200:
+            # Subscribe to the moderator channel.
+            dg = PyDatagram()
+            dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
+            dg.addChannel(OtpDoGlobals.OTP_MOD_CHANNEL)
+            self.csm.air.send(dg)
+        if access >= 400:
+            # Subscribe to the administrator channel.
+            dg = PyDatagram()
+            dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
+            dg.addChannel(OtpDoGlobals.OTP_ADMIN_CHANNEL)
+            self.csm.air.send(dg)
+        if access >= 500:
+            # Subscribe to the system administrator channel.
+            dg = PyDatagram()
+            dg.addServerHeader(self.target, self.csm.air.ourChannel, CLIENTAGENT_OPEN_CHANNEL)
+            dg.addChannel(OtpDoGlobals.OTP_SYSADMIN_CHANNEL)
+            self.csm.air.send(dg)
 
         # Now set their sender channel to represent their account affiliation:
         dg = PyDatagram()
@@ -820,16 +842,17 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         # Listen out for any accounts that disconnect.
         self.air.netMessenger.accept('accountDisconnected', self, self.__accountDisconnected)
 
-        # Attribute to test if doomsday is over...
-        self.closed = False
+        # This attribute determines if we want to disable logins.
+        self.loginsEnabled = True
+        # Listen out for any messages that tell us to disable logins.
+        self.air.netMessenger.accept('enableLogins', self, self.setLoginEnabled)
 
     def __accountDisconnected(self, accountId):
         def callback(dclass, fields):
             if dclass != self.air.dclassesByName['AccountUD']:
                 return
             webId = fields.get('ACCOUNT_ID')
-            if fields.get('BETA_KEY_QUEST') == 1:
-                self.air.rpc.call('avatarExit', webAccId=webId)
+            self.air.rpc.call('avatarExit', webAccId=webId)
         self.air.dbInterface.queryObject(self.air.dbId, accountId, callback)
 
     def killConnection(self, connId, reason):
@@ -869,26 +892,34 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.account2fsm[sender] = fsmtype(self, sender)
         self.account2fsm[sender].request('Start', *args)
 
-    def setClosed(self, closed):
-        self.notify.warning('AI %s has told us to start rejecting logins!' % str(self.air.getMsgSender()))
-        self.closed = closed
+    def setLoginEnabled(self, enable):
+        if not enable:
+            self.notify.warning('The CSMUD has been told to reject logins! All future logins will now be rejected.')
+        self.loginsEnabled = enable
 
-    def login(self, cookie):
+    def login(self, cookie, sig):
         self.notify.debug('Received login cookie %r from %d' % (cookie, self.air.getMsgSender()))
 
         sender = self.air.getMsgSender()
 
-        if self.closed:
-            # Doomsday is over... no more logging in until beta!
+        if not self.loginsEnabled:
+            # Logins are currently disabled... RIP!
             dg = PyDatagram()
             dg.addServerHeader(sender, self.air.ourChannel, CLIENTAGENT_EJECT)
-            dg.addUint16(156)
-            dg.addString('Toontown Rewritten is now closed until Beta. Learn more and check out the updates on our website, toontownrewritten.com. Thanks for Alpha Testing with us!')
+            dg.addUint16(200)
+            dg.addString('Logins are currently disabled. Please try again later.')
             self.air.send(dg)
 
         if sender>>32:
-            # Oops, they have an account ID on their conneciton already!
+            # Oops, they have an account ID on their connection already!
             self.killConnection(sender, 'Client is already logged in.')
+            return
+
+        # Test the signature
+        key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        computedSig = hmac.new(key, cookie, hashlib.sha256).digest()
+        if sig != computedSig:
+            self.killConnection(sender, 'The accounts database rejected your cookie')
             return
 
         if sender in self.connection2fsm:
