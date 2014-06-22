@@ -140,9 +140,9 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         self.state = 'Reward'
         self.sendStateUpdate()
         for spot in self.pond.spots:
-            av = self.pond.spots[spot].get(avId)
-            if not av:
+            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
                 continue
+            av = self.air.doId2do[self.pond.spots[spot].avId]
             av.addMoney(self.jackpot)
         if self.shouldStop:
             self.stopGame()
