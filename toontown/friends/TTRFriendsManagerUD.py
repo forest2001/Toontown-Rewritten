@@ -24,11 +24,7 @@ class GetToonDataFSM(FSM):
         self.demand('QueryDB')
 
     def enterQueryDB(self):
-        # TODO: Propper fix. This is just temporary
-        try:
-            self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
-        except:
-            pass
+        self.mgr.air.dbInterface.queryObject(self.mgr.air.dbId, self.avId, self.__queryResponse)
 
     def __queryResponse(self, dclass, fields):
         if dclass != self.mgr.air.dclassesByName['DistributedToonUD']:
@@ -353,7 +349,7 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
         if not friendIds:
             # We can now stop, since we have no friends left to clear.
             return
-        fsm = GetToonDataFSM(self, requesterId, friendIds[0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
+        fsm = GetToonDataFSM(self, requesterId, friendIds[0][0], functools.partial(self.__clearListGotFriendData, friendIds=friendIds[1:]))
         fsm.start()
         self.fsms[requesterId] = fsm
 
