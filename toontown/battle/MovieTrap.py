@@ -195,13 +195,12 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
         throwTrack.append(Parallel(motionTrack, hprTrack, scaleTrack, soundTrack))
     elif trapName == 'tnt':
         trapPoint, trapHpr = battle.getActorPosHpr(suit)
-        trapPoint.setY(MovieUtil.SUIT_TRAP_TNT_DISTANCE - 3.9)
+        trapPoint.setY(MovieUtil.SUIT_TRAP_TNT_DISTANCE - 5.03)
         trapPoint.setZ(trapPoint.getZ() + 0.4)
         throwingTrack = createThrowingTrack(thrownProp, trapPoint, duration=throwDuration, parent=battle)
-        hprTrack = LerpHprInterval(thrownProp, 0.9, hpr=Point3(0, 90, 0))
+        hprTrack = LerpHprInterval(thrownProp, 0.9, hpr=Point3(180, 90, 0))
         scaleTrack = LerpScaleInterval(thrownProp, 0.9, scale=MovieUtil.PNT3_ONE)
         soundTrack = getSoundTrack('TL_dynamite.ogg', delay=0.8, duration=0.7, node=suit)
-        throwTrack.append(Wait(0.2))
         throwTrack.append(Parallel(throwingTrack, hprTrack, scaleTrack, soundTrack))
     elif trapName == 'marbles':
         trapPoint, trapHpr = battle.getActorPosHpr(suit)
