@@ -525,13 +525,13 @@ def createIncomingTrainInterval(battle, suit, hp, lure, trapProp):
     materializeIval = Parallel()
     materializeIval.append(LerpColorScaleInterval(train, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 1)))
     for tunnel in tunnels:
-        materializeIval.append(LerpColorScaleInterval(tunnel, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 1)))
+        materializeIval.append(LerpColorScaleInterval(tunnel, TRAIN_MATERIALIZE_TIME - 1.5, Point4(1, 1, 1, 1)))
 
     for tunnel in tunnels:
         tunnelScaleIval = Sequence()
-        tunnelScaleIval.append(LerpScaleInterval(tunnel, TRAIN_MATERIALIZE_TIME - 1.0, Point3(1.0, 2.0, 2.5)))
-        tunnelScaleIval.append(LerpScaleInterval(tunnel, 0.5, Point3(1.0, 3.0, 1.5)))
-        tunnelScaleIval.append(LerpScaleInterval(tunnel, 0.5, Point3(1.0, 2.5, 2.0)))
+        tunnelScaleIval.append(LerpScaleInterval(tunnel, 0.75, Point3(1.0, 1.5, 1.7)))
+        tunnelScaleIval.append(LerpScaleInterval(tunnel, 0.5, Point3(1.0, 2.0, 2.1)))
+        tunnelScaleIval.append(LerpScaleInterval(tunnel, 0.5, Point3(1.0, 1.6, 1.7)))
         materializeIval.append(tunnelScaleIval)
 
     trainIval.append(materializeIval)
