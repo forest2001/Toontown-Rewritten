@@ -473,11 +473,14 @@ def createSuitReactionToTrain(battle, suit, hp, lure, trapProp):
     anim = 'flatten'
     suitReact = ActorInterval(suit, anim)
     cogGettingHit = getSoundTrack('TL_train_cog.ogg', node=toon)
-    suitTrack.append(Func(suit.loop, 'neutral'))
+    hideTrack = Sequence()
+    hideTrack.append(Wait(2.0))
+    hideTrack.append(LerpColorScaleInterval(trapProp, 1.0, Point4(1, 1, 1, 0)))
+    hideTrack.append(showDamage)
+    suitTrack.append(Func(suit.loop, 'lured'))
     suitTrack.append(Wait(timeToGetHit + TRAIN_MATERIALIZE_TIME))
     suitTrack.append(updateHealthBar)
-    suitTrack.append(Parallel(suitReact, cogGettingHit))
-    suitTrack.append(showDamage)
+    suitTrack.append(Parallel(suitReact, cogGettingHit, hideTrack))
     curDuration = suitTrack.getDuration()
     timeTillEnd = TOTAL_TRAIN_TIME - curDuration
     if timeTillEnd > 0:
@@ -537,7 +540,14 @@ def createIncomingTrainInterval(battle, suit, hp, lure, trapProp):
     trainIval.append(materializeIval)
     endingX = TRAIN_STARTING_X + TRAIN_TRAVEL_DISTANCE
     trainIval.append(LerpPosInterval(train, TRAIN_DURATION, Point3(endingX, 0, 0), other=battle))
-    trainIval.append(LerpColorScaleInterval(train, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 0)))
+
+    dematerializeIval = Parallel()
+    dematerializeIval.append(LerpColorScaleInterval(train, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 0)))
+    for tunnel in tunnels:
+        dematerializeIval.append(LerpColorScaleInterval(tunnel, TRAIN_MATERIALIZE_TIME - 2.0, Point4(1, 1, 1, 0)))
+        dematerializeIval.append(LerpScaleInterval(tunnel, TRAIN_MATERIALIZE_TIME - 1.5, Point3(1.0, 0.01, 0.01)))
+    trainIval.append(dematerializeIval)
+
     retval.append(trainIval)
     trainSoundTrack = getSoundTrack('TL_train.ogg', node=toon)
     retval.append(trainSoundTrack)
