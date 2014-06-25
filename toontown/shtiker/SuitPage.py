@@ -164,8 +164,6 @@ class SuitPage(ShtikerPage.ShtikerPage):
     def load(self):
         ShtikerPage.ShtikerPage.load(self)
         frameModel = loader.loadModel('phase_3.5/models/gui/suitpage_frame')
-        frameModel.setScale(0.03375, 0.03, 0.045)
-        frameModel.setPos(0, 20, -0.575)
         self.guiTop = NodePath('guiTop')
         self.guiTop.reparentTo(self)
         self.frameNode = NodePath('frameNode')
@@ -176,6 +174,8 @@ class SuitPage(ShtikerPage.ShtikerPage):
         self.iconNode.reparentTo(self.guiTop)
         self.enlargedPanelNode = NodePath('enlargedPanelNode')
         self.enlargedPanelNode.reparentTo(self.guiTop)
+        frameModel.setScale(0.0235, 0.03, 0.045)
+        frameModel.setPos(0, 20, -0.573)
         frame = frameModel.find('**/frame')
         frame.wrtReparentTo(self.frameNode)
         screws = frameModel.find('**/screws')
