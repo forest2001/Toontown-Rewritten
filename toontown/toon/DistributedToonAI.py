@@ -261,6 +261,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
+        # Begin ping-pong.
+        self.ping()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -331,6 +333,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(taskName)
         taskName = 'next-bothDelivery-%s' % self.doId
         taskMgr.remove(taskName)
+        taskMgr.remove(self.uniqueName('PingTimeout'))
+        taskMgr.remove(self.uniqueName('PingCooldown'))
         self.stopToonUp()
         del self.dna
         if self.inventory:
@@ -353,6 +357,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = None
         taskName = self.uniqueName('next-catalog')
         taskMgr.remove(taskName)
+        taskMgr.remove(self.uniqueName('PingTimeout'))
+        taskMgr.remove(self.uniqueName('PingCooldown'))
         return
 
     def ban(self, comment):
@@ -4448,6 +4454,30 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getWebAccountId(self):
         return self.webAccountId
+
+    def ping(self):
+        self.notify.debug("Pinging %s (%d)." % (self.getName(), self.getDoId()))
+        self.sendUpdate('ping', ["mooBseoGkcauQcM"])
+        taskMgr.doMethodLater(config.GetInt('toon-ping-timeout-delay', 30), self.__noPong, self.uniqueName('PingTimeout'), extraArgs=[])
+
+    def __noPong(self):
+        # No response from the client. Assume this avatar is a ghost.
+        self.notify.debug("Ping timeout %s (%d)." % (self.getName(), self.getDoId()))
+        self.__failedPing = True
+        self.requestDelete()
+
+    def pong(self, data):
+        if hasattr(self, "__failedPing") and self.__failedPing:
+            # Too late to respond, we already failed to respond on time.
+            self.notify.debug("Pong after timeout %s (%d)." % (self.getName(), self.getDoId()))
+            return
+        if data != "McQuackGoesBoom":
+            self.air.writeServerEvent("suspicious", avId=self.getDoId(), issue="Avatar failed to respond to ping with correct data.")
+            self.requestDelete()
+            return
+        self.notify.debug("Pong received from %s (%d) successfully." % (self.getName(), self.getDoId()))
+        taskMgr.remove(self.uniqueName('PingTimeout'))
+        taskMgr.doMethodLater(config.GetInt('toon-ping-cooldown', 120), self.ping, self.uniqueName('PingCooldown'), extraArgs=[])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
