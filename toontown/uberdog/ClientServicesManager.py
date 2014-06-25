@@ -13,6 +13,7 @@ class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
 
     systemMessageSfx = None
+    avIdsReportedThisSession = []
 
     # --- LOGIN LOGIC ---
     def performLogin(self, doneEvent):
@@ -110,3 +111,14 @@ class ClientServicesManager(DistributedObjectGlobal):
             self.systemMessageSfx = base.loadSfx('phase_3/audio/sfx/clock03.ogg')
         if self.systemMessageSfx:
             base.playSfx(self.systemMessageSfx)
+
+    def hasReportedPlayer(self, avId):
+        return avId in self.avIdsReportedThisSession
+
+    def d_reportPlayer(self, avId, category):
+        # Drop-in replacement for Disney's "CentralLogger" reporting object.
+        if self.hasReportedPlayer(avId):
+            # We've already reported this avId.
+            return
+        self.avIdsReportedThisSession.append(avId)
+        self.sendUpdate('reportPlayer', [avId, category])
