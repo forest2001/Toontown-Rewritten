@@ -192,6 +192,9 @@ class LoadEstateFSM(FSM):
 
     def __gotEstate(self, estate):
         self.estate = estate
+        
+        self.estate.toons = self.toonIds
+        self.estate.updateToons()
 
         # Gotcha! Now we need to load houses:
         self.demand('LoadHouses')

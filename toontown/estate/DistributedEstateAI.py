@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.toonbase import ToontownGlobals
 import HouseGlobals
+import GardenGlobals
 import time
 
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
@@ -9,6 +10,9 @@ from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTarget
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
+
+from toontown.estate.DistributedGardenBoxAI import DistributedGardenBoxAI
+from toontown.estate.DistributedGardenPlotAI import DistributedGardenPlotAI
 
 
 class DistributedEstateAI(DistributedObjectAI):
@@ -44,7 +48,20 @@ class DistributedEstateAI(DistributedObjectAI):
             target.setPondDoId(self.pond.getDoId())
             target.generateWithRequired(self.zoneId)
             self.targets.append(target)
-
+            
+        for i in xrange(6):
+            avItems = self.items[i]
+            for item in avItems:
+                type, hardPoint, waterLevel, growthLevel, optional = item
+                if type == 2: # broken for now, rip
+                    boxes = GardenGlobals.estateBoxes[i]
+                    box = DistributedGardenBoxAI(self.air)
+                    box.setPlot(i)
+                    box.setOwnerIndex(i)
+                    box.setTypeIndex(boxes[hardPoint][3])
+                    box.setPosition(boxes[hardPoint][0], boxes[hardPoint][1], 20)
+                    box.setHeading(boxes[hardPoint][2])
+                    box.generateWithRequired(self.zoneId)
 
         spot = DistributedFishingSpotAI(self.air)
         spot.setPondDoId(self.pond.getDoId())
@@ -78,12 +95,16 @@ class DistributedEstateAI(DistributedObjectAI):
         for house in self.houses:
             if house:
                 house.requestDelete()
+        del self.houses[:]
         if self.pond:
             self.pond.requestDelete()
             for spot in self.spots:
                 spot.requestDelete()
             for target in self.targets:
                 target.requestDelete()
+            del self.targets[:]
+            del self.spots[:]
+            del self.pond
         self.requestDelete()
 
     def setEstateReady(self):
@@ -373,4 +394,50 @@ class DistributedEstateAI(DistributedObjectAI):
 
     def gameTableOver(self):
         pass
+        
+    def updateToons(self):
+        self.d_setSlot0ToonId(self.toons[0])
+        self.d_setSlot1ToonId(self.toons[1])
+        self.d_setSlot2ToonId(self.toons[2])
+        self.d_setSlot3ToonId(self.toons[3])
+        self.d_setSlot4ToonId(self.toons[4])
+        self.d_setSlot5ToonId(self.toons[5])
+        self.sendUpdate('setIdList', [self.toons])
+        
+    def updateItems(self):
+        self.d_setSlot0Items(self.items[0])
+        self.d_setSlot1Items(self.items[1])
+        self.d_setSlot2Items(self.items[2])
+        self.d_setSlot3Items(self.items[3])
+        self.d_setSlot4Items(self.items[4])
+        self.d_setSlot5Items(self.items[5])
 
+    def placeStarterGarden(self, avatar):
+        items = []
+        if avatar.getGardenStarted():
+            return
+        avId = avatar.getDoId()
+        houseIndex = self.toons.index(avId)
+        plots = GardenGlobals.estatePlots[houseIndex]
+        boxes = GardenGlobals.estateBoxes[houseIndex]
+        for i in xrange(len(boxes)):
+            items.append([2, i, 0, 0, 0])
+            box = DistributedGardenBoxAI(self.air)
+            box.setPlot(i)
+            box.setOwnerIndex(houseIndex)
+            box.setTypeIndex(boxes[i][3])
+            box.setPosition(boxes[i][0], boxes[i][1], 20)
+            box.setHeading(boxes[i][2])
+            box.generateWithRequired(self.zoneId)
+        for i in xrange(len(plots)):
+            items.append([1, i, 0, 0, 0])
+            plot = DistributedGardenPlotAI(self.air)
+            plot.setPlot(i)
+            plot.setOwnerIndex(houseIndex)
+            if plots[i][3] != GardenGlobals.FLOWER_TYPE:
+                plot.setPosition(plots[i][0], plots[i][1], 20)
+                plot.setHeading(plots[i][2])
+            plot.generateWithRequired(self.zoneId)
+        self.items[houseIndex] = items
+        self.updateItems()
+        avatar.b_setGardenStarted(1)
