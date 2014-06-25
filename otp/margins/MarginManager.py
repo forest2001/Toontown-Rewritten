@@ -11,9 +11,10 @@ class MarginManager(PandaNode):
 
     def addGridCell(self, x, y, a2d):
         # Yucky!
-        a2dMarker = NodePath.anyPath(self).attachNewNode(a2d.node())
+        nodePath = NodePath.anyPath(self)
+        a2d.reparentTo(nodePath)
         cell = MarginCell(self)
-        cell.reparentTo(a2dMarker)
+        cell.reparentTo(a2d)
         cell.setScale(0.2)
         cell.setPos(x, 0, y)
         cell.setAvailable(True)
