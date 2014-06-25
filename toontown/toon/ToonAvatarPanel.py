@@ -316,6 +316,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         self.accept('updateGroupStatus', self.__checkGroupStatus)
 
         self.frame.show()
+        base.hideFriendMargins() 
         messenger.send('avPanelDone')
 
     def disableAll(self):
@@ -454,9 +455,12 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
 
     def __handleClose(self):
         self.cleanup()
+        base.showFriendMargins()
         AvatarPanelBase.currentAvatarPanel = None
         if self.friendsListShown:
             self.FriendsListPanel.showFriendsList()
+        else:
+            base.showFriendMargins()
         return
 
     def getAvId(self):
