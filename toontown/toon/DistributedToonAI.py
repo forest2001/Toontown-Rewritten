@@ -284,6 +284,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 if not hood in hoodsVisited:
                     hoodsVisited.append(hood)
                     self.b_setHoodsVisited(hoodsVisited)
+                    # TODO: REMOVE THIS AFTER ARG IS OVER.
+                    if hood == ToontownGlobals.LawbotHQ:
+                        self.air.writeServerEvent("arg-complete", avId=self.getDoId(), message="%s has unlocked LBHQ!" % self.getName())
 
                 if zoneId == ToontownGlobals.GoofySpeedway:
                     tpAccess = self.getTeleportAccess()
