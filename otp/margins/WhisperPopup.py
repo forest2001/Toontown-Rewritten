@@ -77,7 +77,9 @@ class WhisperPopup(MarginPopup, ClickablePopup):
 
     def __updateClickRegion(self):
         if self.isDisplayed() and self.active:
-            self.updateClickRegion(self.left, self.right, self.bottom, self.top)
+            self.updateClickRegion(-1, 1, self.bottom, self.top)
+        else:
+            self.stashClickRegion()
 
     def clickStateChanged(self):
         self.updateContents()
