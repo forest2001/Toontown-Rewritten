@@ -83,11 +83,11 @@ class Nametag(ClickablePopup):
         self.nameFg, self.nameBg, self.chatFg, self.chatBg = NAMETAG_COLORS[cc][self.getClickState()]
 
         self.innerNP.node().removeAllChildren()
-        if self.contents&self.CThought and self.chatFlags&CFThought:
+        if self.contents & self.CThought and self.chatFlags & CFThought:
             self.showThought()
-        elif self.contents&self.CSpeech and self.chatFlags&CFSpeech:
+        elif self.contents & self.CSpeech and self.chatFlags&CFSpeech:
             self.showSpeech()
-        elif self.contents&self.CName and self.displayName:
+        elif self.contents & self.CName and self.displayName:
             self.showName()
 
     def showBalloon(self, balloon, text):

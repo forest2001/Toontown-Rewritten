@@ -908,14 +908,15 @@ def doFillWithLead(attack):
         track = Parallel()
         for partNum in range(0, parts.getNumPaths()):
             nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+            track.append(LerpColorScaleInterval(nextPart, 0.2, Point4(0, 0, 0, 1)))
 
         return track
 
     def resetParts(parts):
-        track = Parallel()
+        track = Sequence()
         for partNum in range(0, parts.getNumPaths()):
             nextPart = parts.getPath(partNum)
+            track.append(LerpColorScaleInterval(nextPart, 0.2, Point4(1, 1, 1, 1)))
             track.append(Func(nextPart.clearColorScale))
 
         return track
@@ -932,10 +933,11 @@ def doFillWithLead(attack):
         colorTrack.append(colorParts(torsoParts))
         colorTrack.append(Wait(partIvalDelay))
         colorTrack.append(colorParts(legsParts))
-        colorTrack.append(Wait(2.5))
+        colorTrack.append(Wait(0.9))
         colorTrack.append(resetParts(headParts))
         colorTrack.append(resetParts(torsoParts))
         colorTrack.append(resetParts(legsParts))
+        colorTrack.append(Wait(partIvalDelay))
         colorTrack.append(Func(battle.movie.clearRestoreColor))
         return Parallel(suitTrack, pencilPropTrack, sharpenerPropTrack, sprayTrack, headTrack, torsoTrack, legsTrack, colorTrack, toonTrack)
     else:
@@ -986,9 +988,10 @@ def doFountainPen(attack):
             splashTrack.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
         splashTrack.append(Func(MovieUtil.removeProp, splash))
-        splashTrack.append(Wait(2.6))
+        splashTrack.append(Wait(2.1))
         for partNum in range(0, headParts.getNumPaths()):
             nextPart = headParts.getPath(partNum)
+            splashTrack.append(LerpColorScaleInterval(nextPart, 0.1, Point4(1, 1, 1, 1)))
             splashTrack.append(Func(nextPart.clearColorScale))
 
         splashTrack.append(Func(battle.movie.clearRestoreColor))

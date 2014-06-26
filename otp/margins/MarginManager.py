@@ -10,6 +10,9 @@ class MarginManager(PandaNode):
         self.visiblePopups = set()
 
     def addGridCell(self, x, y, a2d):
+        # Yucky!
+        nodePath = NodePath.anyPath(self)
+        a2d.reparentTo(nodePath)
         cell = MarginCell(self)
         cell.reparentTo(a2d)
         cell.setScale(0.2)

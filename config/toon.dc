@@ -309,6 +309,7 @@ from toontown.cogdominium import DistCogdoCrane/AI
 from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
 from toontown.cogdominium import DistCogdoCraneCog/AI
 from toontown.parties.GlobalPartyManager/AI/UD import GlobalPartyManager/AI/UD
+from toontown.uberdog.ARGManager import ARGManager
 
 struct GiftItem {
   blob Item;
@@ -629,6 +630,10 @@ dclass DistributedToon : DistributedPlayer {
   magicTeleportRequest(uint32 requesterId) ownrecv;
   magicTeleportResponse(uint32 requesterId, uint32 hoodId) ownsend airecv;
   magicTeleportInitiate(uint32 hoodId, uint32 zoneId) ownrecv;
+
+  // Temporary ping-pong fields.
+  ping(string data) ownrecv;
+  pong(string data) ownsend airecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {
@@ -3294,6 +3299,8 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   chooseAvatar(uint32 avId) clsend;
 
   systemMessage(uint16 code, string params[]);
+
+  reportPlayer(uint32 avId, uint8 category) clsend;
 };
 
 dclass RATManager : DistributedObjectGlobal {
@@ -3388,4 +3395,7 @@ dclass DistributedTrashcanZeroMgr : DistributedPhaseEventMgr {
 };
 
 dclass DistributedSillyMeterMgr : DistributedPhaseEventMgr {
+};
+
+dclass ARGManager : DistributedObjectGlobal {
 };
