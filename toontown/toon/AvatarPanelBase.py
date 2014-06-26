@@ -93,7 +93,7 @@ class AvatarPanelBase(AvatarPanel.AvatarPanel):
         self.freeLocalAvatar()
 
     def handleReport(self):
-        if base.cr.centralLogger.hasReportedPlayer(self.playerId, self.avId):
+        if base.cr.csm.hasReportedPlayer(self.avId):
             self.alreadyReported()
         else:
             self.confirmReport()
@@ -148,12 +148,7 @@ class AvatarPanelBase(AvatarPanel.AvatarPanel):
     def handleReportCategory(self, value):
         self.cleanupDialog()
         if value >= 0:
-            cat = [CentralLogger.ReportFoulLanguage,
-             CentralLogger.ReportPersonalInfo,
-             CentralLogger.ReportRudeBehavior,
-             CentralLogger.ReportBadName,
-             CentralLogger.ReportHacking]
-            self.category = cat[value]
+            self.category = value
             self.confirmReportCategory(value)
         else:
             self.requestWalk()
@@ -172,10 +167,7 @@ class AvatarPanelBase(AvatarPanel.AvatarPanel):
         removed = 0
         isPlayer = 0
         if value > 0:
-            if self.category == CentralLogger.ReportHacking:
-                base.cr.centralLogger.reportPlayer(self.category, self.playerId, self.avId)
-                self.category = CentralLogger.ReportRudeBehavior
-            base.cr.centralLogger.reportPlayer(self.category, self.playerId, self.avId)
+            base.cr.csm.d_reportPlayer(self.avId, self.category)
             if base.cr.isFriend(self.avId):
                 base.cr.removeFriend(self.avId)
                 removed = 1

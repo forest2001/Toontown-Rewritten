@@ -14,6 +14,11 @@ import hashlib
 import json
 from ClientServicesManager import FIXED_KEY
 
+REPORT_REASONS = [
+    'MODERATION_FOUL_LANGUAGE', 'MODERATION_PERSONAL_INFO',
+    'MODERATION_RUDE_BEHAVIOR', 'MODERATION_BAD_NAME', 'MODERATION_HACKING',
+]
+
 # --- ACCOUNT DATABASES ---
 class LocalAccountDB:
     def __init__(self, csm):
@@ -964,3 +969,13 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.runAccountFSM(LoadAvatarFSM, avId)
         else:
             self.runAccountFSM(UnloadAvatarFSM, currentAvId)
+
+    def reportPlayer(self, avId, category):
+        reporterId = self.air.getAvatarIdFromSender()
+        if len(REPORT_REASONS) <= category:
+            self.air.writeServerEvent("suspicious", avId=reporterId, issue="Invalid report reason index (%d) sent by avatar." % category)
+            return
+        self.air.writeServerEvent("player-reported", reporterId=reporterId, avId=avId, category=REPORT_REASONS[category])
+        # TODO: RPC call to web to say this person was reported.
+        # This will require a database query to fetch the webId associated with the reported player.
+        # Either that, or the web can make an RPC call to the server to get webId from avId.
