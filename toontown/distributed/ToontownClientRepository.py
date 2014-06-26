@@ -103,6 +103,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.deliveryManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         if config.GetBool('want-code-redemption', 1):
             self.codeRedemptionManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_CODE_REDEMPTION_MANAGER, 'TTCodeRedemptionMgr')
+        self.argManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TTR_ARG_MANAGER, 'ARGManager')
 
         self.streetSign = None
         self.furnitureManager = None
@@ -393,16 +394,16 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def __sendGetAvatarDetails(self, avId):
         #return
-        
+
         self.ttrFriendsManager.d_getAvatarDetails(avId)
-        
+
         return
         datagram = PyDatagram()
         avatar = self.__queryAvatarMap[avId].avatar
         datagram.addUint16(avatar.getRequestID())
         datagram.addUint32(avId)
         self.send(datagram)
-        
+
     def n_handleGetAvatarDetailsResp(self, avId, fields):
         self.notify.info('Query reponse for avId %d' % avId)
         try:
@@ -410,14 +411,14 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         except:
             self.notify.warning('Received unexpected or outdated details for avatar %d.' % avId)
             return
-        
+
         del self.__queryAvatarMap[avId]
         gotData = 0
-        
+
         dclassName = pad.args[0]
         dclass = self.dclassesByName[dclassName]
         #pad.avatar.updateAllRequiredFields(dclass, fields)
-        
+
         # This is a much saner way to load avatar details, and is also
         # dynamic. This means we aren't restricted in what we pass.
         # Due to Python's random ordering of dictionaries, we have to pass
@@ -427,15 +428,15 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
         for currentField in fields:
             getattr(pad.avatar, currentField[0])(currentField[1])
-            
+
         gotData = 1
-        
-        
+
+
         if isinstance(pad.func, types.StringType):
             messenger.send(pad.func, list((gotData, pad.avatar) + pad.args))
         else:
             apply(pad.func, (gotData, pad.avatar) + pad.args)
-            
+
         pad.delayDelete.destroy()
 
     def handleGetAvatarDetailsResp(self, di):
@@ -507,7 +508,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def enterCredits(self):
         self.credits.enter()
-        
+
     def killClientAlphaIsOver(self):
         # Friend error if we don't disconnect... I don't even?!
         self.disconnect()
