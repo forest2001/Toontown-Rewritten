@@ -9,22 +9,26 @@ from pandac.PandaModules import Vec3
 POSITION_TOLERANCE = 10
 Hood2Details = {
     # hood : [pos, speedchatIndex, destination]
-    ToontownGlobals.DonaldsDock: [(-23, 5, 6), 1522, 2519],
-    ToontownGlobals.ToontownCentral: [(93, 106, 3), 1603, 3509],
-    ToontownGlobals.TheBrrrgh: [(-111, -41, 9), 1003, 4612],
-    ToontownGlobals.MinniesMelodyland: [(0, -20, -16), 1209, 5502],
-    ToontownGlobals.DaisyGardens: [(1, 91, 0), 1134, 9501],
-    ToontownGlobals.DonaldsDreamland: [(48, -96, 0), 5500, 6000],
-    ToontownGlobals.CashbotHQ: [(-78, -134, -63), 1004, 13000],
+    ToontownGlobals.DonaldsDock: [(-23, 5, 6), 1522, 2714], # Bring it on!
+    ToontownGlobals.ToontownCentral: [(93, -106, 3), 1603, 3823], # I like this game!
+    ToontownGlobals.TheBrrrgh: [(-111, -41, 9), 1003, 4612], # Follow me.
+    ToontownGlobals.MinniesMelodyland: [(0, -20, -16), 1209, 5602], # I found what you need.
+    ToontownGlobals.DaisyGardens: [(1, 91, 0), 1134, 9501], # Don't wait for me.
+    ToontownGlobals.DonaldsDreamland: [(48, -96, 0), 5500, 17000], # :)
+    ToontownGlobals.OutdoorZone: [(-46, -140, 0), 1556, 11000], # Go for the weakest Cog first.
+    ToontownGlobals.SellbotHQ: [(39, -37, 10), 1555, 12000], # Let's all go for the same Cog.
+    ToontownGlobals.CashbotHQ: [(-78, -134, -63), 1558, 13000], # Save your powerful Gags.
 }
 Interior2Messages = {
-    2519: ["Welcome, Dr. Surlee! Taking you to GOOFY'S GAG SHOP", "-7"], # DD
-    3509: ["Welcome, Dr. Surlee! Taking you to CLOTHING SHOP.", "8"], # TTC
-    4612: ["Welcome, Dr. Surlee! Taking you to DR. FRET'S DENTISTRY", ","], # TB
-    5502: ["Welcome, Dr. Surlee! Taking you to TOON HQ", "-1"], # MML
-    9501: ["Welcome, Dr. Surlee! Taking you to LULLABY LIBRARY", "3"], # DG
-    6000: ["Welcome, Dr. Surlee! Taking you to CHIP 'N DALE'S ACORN ACRES", "4"], # DDL
-    13000: ["Welcome, Dr. Surlee! Taking you to UNKNOWN", "Well, it looks like they're getting more clever."], # CBHQ (unlocks LBHQ)
+    3823: ["Welcome, Doctor Surlee! You are on your way to see KOOKY CINEPLEX", "-4"], # DD to TTC
+    5602: ["Hello, Doctor Surlee! Taking you to the PRECIPITATION FOUNDATION", "6,"], # TTC to TB
+    4612: ["Hi, Doctor Surlee! Sending you to DR. FRET'S DENTISTRY", ","], # TB to MML
+    2714: ["Welcome, Dr. Surlee! You are on route to ARTIE CHOKE'S NECKTIES", "-1"], # MML to DG
+    9501: ["Good afternoon, Doctor Surlee! Setting destination to the LULLABY LIBRARY", "4"], # DG to DDL
+    17000: ["Good evening, Dr. Surlee! You are on route to CHIP 'N DALE'S MINIGOLF", "0"], # DDL to AA
+    11000: ["Greetings, Doctor Surlee. You will soon arrive at SELLBOT HQ.", "Do you think they're going too far?"],
+    12000: ["Greetings, Doctor Surlee. You are now going to CASHBOT HQ.", "Well there's certainly no stopping them now."],
+    13000: ["Greetings, Doctor Surlee. Taking you to ERROR: UNKNOWN LOCATION", "They are indeed quite clever."], # CBHQ (unlocks LBHQ)
 }
 
 class ARGManager(DistributedObjectGlobal):
@@ -77,6 +81,9 @@ class ARGManager(DistributedObjectGlobal):
             # NOTE: This is somewhat hacky. A better solution would be to fire this once the placeFSM
             # successfully loads the destination. Perhaps this can be fired off upon zone change?
             taskMgr.doMethodLater(10, base.localAvatar.setSystemMessage, self.uniqueName("arg-after-msg"), extraArgs=[0, msgAfter])
+            if destination == 13000:
+                taskMgr.doMethodLater(15, base.localAvatar.setSystemMessage, self.uniqueName("arg-after-msg"), extraArgs=[0, "Perhaps, however I don't believe they realize what they have unfolded."])
+                taskMgr.doMethodLater(20, base.localAvatar.setSystemMessage, self.uniqueName("arg-after-msg"), extraArgs=[0, "I don't think you have either."])
         self.accept(SpeedChatGlobals.SCStaticTextMsgEvent, phraseSaid)
 
     def cleanupPortableHoleEvent(self):
