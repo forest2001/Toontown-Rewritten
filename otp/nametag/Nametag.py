@@ -47,8 +47,6 @@ class Nametag(ClickablePopup):
         self.chatFlags = 0
 
     def destroy(self):
-        self.contents = 0
-        self.innerNP.removeNode()
         ClickablePopup.destroy(self)
 
     def setContents(self, contents):
