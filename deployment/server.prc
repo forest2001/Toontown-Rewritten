@@ -17,7 +17,7 @@ want-golf #f
 # Temporary modifications for unimplemented features go here.
 want-sbhq #t
 want-cbhq #t
-want-lbhq #f
+want-lbhq #t
 want-bbhq #f
 want-pets #f
 want-old-fireworks #t
