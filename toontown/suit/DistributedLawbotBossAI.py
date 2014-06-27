@@ -296,12 +296,12 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.notify.debug('enterElevatro')
         DistributedBossCogAI.DistributedBossCogAI.enterElevator(self)
         self.b_setBossDamage(ToontownGlobals.LawbotBossInitialDamage, 0, 0)
+        self.__makeChairs()
 
     def enterIntroduction(self):
         self.notify.debug('enterIntroduction')
         DistributedBossCogAI.DistributedBossCogAI.enterIntroduction(self)
         self.b_setBossDamage(ToontownGlobals.LawbotBossInitialDamage, 0, 0)
-        self.__makeChairs()
 
     def exitIntroduction(self):
         self.notify.debug('exitIntroduction')
