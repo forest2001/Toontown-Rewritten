@@ -313,6 +313,11 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.stopStrafes()
         taskName = self.uniqueName('CagedToonSaySomething')
         taskMgr.remove(taskName)
+        for toonId in self.involvedToons + self.looseToons:
+            toon = self.air.doId2do.get(toonId)
+            if not toon:
+                continue
+            toon.b_setHealthDisplay(0)
 
     def enterNearVictory(self):
         self.resetBattles()
@@ -348,11 +353,6 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def exitVictory(self):
         self.takeAwayPies()
-        for toonId in self.involvedToons + self.looseToons:
-            toon = self.air.doId2do.get(toonId)
-            if not toon:
-                continue
-            toon.b_setHealthDisplay(0)
 
     def enterFrolic(self):
         DistributedBossCogAI.DistributedBossCogAI.enterFrolic(self)

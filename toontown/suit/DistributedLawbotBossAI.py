@@ -283,6 +283,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         toon = simbase.air.doId2do.get(avId)
         if toon:
             toon.b_setNumPies(0)
+            toon.b_setHealthDisplay(0)
         DistributedBossCogAI.DistributedBossCogAI.removeToon(self, avId)
 
     def enterOff(self):
@@ -506,6 +507,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
             toon = simbase.air.doId2do.get(toonId)
             if toon:
                 toon.__touchedCage = 0
+                toon.b_setHealthDisplay(2)
 
         for aGavel in self.gavels:
             aGavel.turnOn()
@@ -623,6 +625,11 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         taskMgr.remove(taskName)
         self.__resetLawyers()
         self.__deleteBattleThreeObjects()
+
+        for toonId in self.involvedToons:
+            toon = self.air.doId2do.get(toonId)
+            if toon:
+                toon.b_setHealthDisplay(0)
 
     def enterNearVictory(self):
         self.resetBattles()
