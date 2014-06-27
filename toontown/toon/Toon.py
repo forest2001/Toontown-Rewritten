@@ -1870,8 +1870,9 @@ class Toon(Avatar.Avatar, ToonHead):
             self.getGeomNode().clearClipPlane()
         if self.nametag3d and not self.nametag3d.isEmpty():
             self.nametag3d.clearClipPlane()
-            for tag in self.nametagLods:
-                tag.removeNode()
+            if self.nametagLods:
+                for tag in self.nametagLods:
+                    tag.removeNode()
         if self.holeClipPath:
             self.holeClipPath.removeNode()
             self.holeClipPath = None
