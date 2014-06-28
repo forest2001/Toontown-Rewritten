@@ -10,6 +10,7 @@ want-dev #f
 preload-avatars #t
 framebuffer-multisample #t
 multisamples 4
+texture-anisotropic-degree 16
 
 
 # Resource settings
