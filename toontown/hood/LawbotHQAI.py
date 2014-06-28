@@ -18,7 +18,7 @@ class LawbotHQAI(CogHoodAI):
         
     def createDoor(self):
         # DA Offices
-        daInteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.EXT_COGHQ, self.HOOD, doorIndex=0)
+        daInteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.EXT_COGHQ, self.HOOD, doorIndex=0, lockValue=FADoorCodes.UNLOCKED)
         daExteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.INT_COGHQ, ToontownGlobals.LawbotOfficeExt, doorIndex=0, lockValue=FADoorCodes.UNLOCKED)
         daExteriorDoor.setOtherDoor(daInteriorDoor)
         daExteriorDoor.zoneId = self.HOOD

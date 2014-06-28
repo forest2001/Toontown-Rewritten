@@ -54,7 +54,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
             ug = self.geom.find('**/underground')
             ug.setBin('ground', -10)
             brLinkTunnel = self.geom.find('**/TunnelEntrance1')
-            brLinkTunnel.setName('d_linktunnel_br_3326_DNARoot')
+            brLinkTunnel.setName('linktunnel_br_3326_DNARoot')
         elif zoneId == ToontownGlobals.LawbotOfficeExt:
             self.geom = loader.loadModel(self.factoryExteriorModelPath)
             ug = self.geom.find('**/underground')

@@ -373,6 +373,7 @@ class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
             del self.activeIntervals[throwName]
 
     def enterStunned(self):
+        self.loop('lured', 0)
         stunSequence = MovieUtil.createSuitStunInterval(self, 0, ToontownGlobals.LawbotBossLawyerStunTime)
         seqName = stunSequence.getName()
         stunSequence.append(Func(self.fsm.request, 'neutral'))

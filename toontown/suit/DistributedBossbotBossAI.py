@@ -396,11 +396,19 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.setupBattleFourObjects()
         self.battleFourStart = globalClock.getFrameTime()
         self.waitForNextAttack(5)
+        for toonId in self.involvedToons:
+            toon = simbase.air.doId2do.get(toonId)
+            if toon:
+                toon.b_setHealthDisplay(2)
 
     def exitBattleFour(self):
         self.recordCeoInfo()
         for belt in self.foodBelts:
             belt.goInactive()
+        for toonId in self.involvedToons:
+            toon = simbase.air.doId2do.get(toonId)
+            if toon:
+                toon.b_setHealthDisplay(0)
 
     def recordCeoInfo(self):
         didTheyWin = 0
