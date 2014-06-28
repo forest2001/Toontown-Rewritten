@@ -50,9 +50,8 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
 
     def requestControl(self):
         avId = self.air.getAvatarIdFromSender()
-        accId = self.air.getAccountIdFromSender()
         if self.driverId == 0:
-            self.request('Controlled', avId, accId)
+            self.request('Controlled', avId)
 
     def requestParked(self):
         avId = self.air.getAvatarIdFromSender()
@@ -76,7 +75,7 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
     def exitParked(self):
         return None
 
-    def enterControlled(self, avId, accId):
+    def enterControlled(self, avId):
         self.driverId = avId
         fieldList = ['setComponentL',
          'setComponentX',
@@ -100,13 +99,7 @@ class DistributedVehicleAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI, FSM.
          'clearSmoothing',
          'suggestResync',
          'returnResync']
-        #self.air.setAllowClientSend(avId, self, fieldList, accId)
-        #hack until CLIENTAGENT_SET_FIELDS_SENDABLE works
-        #probably should not be kept for any longer than it needs to
-        dg = PyDatagram()
-        dg.addServerHeader(self.doId, self.air.ourChannel, STATESERVER_OBJECT_SET_OWNER)
-        dg.addUint64(accId << 32 | avId)
-        self.air.send(dg)
+        self.air.setAllowClientSend(avId, self, fieldNameList=fieldList)
         self.d_setState('C', self.driverId)
 
     def exitControlled(self):
