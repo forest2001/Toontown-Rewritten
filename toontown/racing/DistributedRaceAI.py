@@ -432,14 +432,12 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             self.requestDelete()
 
     def requestKart(self):
-        pass
         avId = self.air.getAvatarIdFromSender()
-        accId = self.air.getAccountIdFromSender()
         if not avId in self.avatars:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to request kart in race they\'re not in!')
             return
         for aK in self.avatarKarts:
             if aK[0] == avId:
-                self.air.doId2do[aK[1]].request('Controlled', avId, accId)
+                self.air.doId2do[aK[1]].request('Controlled', avId)
                 self.air.doId2do[aK[1]].sendUpdate('setInput', [0])
 
