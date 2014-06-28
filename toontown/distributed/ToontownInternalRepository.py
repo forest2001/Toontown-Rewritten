@@ -44,6 +44,20 @@ class ToontownInternalRepository(AstronInternalRepository):
 
     def getAccountIdFromSender(self):
         return (self.getMsgSender()>>32) & 0xFFFFFFFF
+        
+    def setAllowClientSend(self, avId, dObj, fieldNameList=[]):
+        dg = PyDatagram()
+        dg.addServerHeader(dObj.GetPuppetConnectionChannel(avId), self.ourChannel, CLIENTAGENT_SET_FIELDS_SENDABLE)
+        fieldIds = []
+        for fieldName in fieldNameList:
+            field = dObj.dclass.getFieldByName(fieldName)
+            if field:
+                fieldIds.append(field.getNumber())
+        dg.addUint32(dObj.getDoId())
+        dg.addUint16(len(fieldIds))
+        for fieldId in fieldIds:
+            dg.addUint16(fieldId)
+        self.send(dg)
 
     def _isValidPlayerLocation(self, parentId, zoneId):
         if zoneId < 1000 and zoneId != 1:
