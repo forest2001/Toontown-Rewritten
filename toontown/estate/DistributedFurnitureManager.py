@@ -10,6 +10,10 @@ class DistributedFurnitureManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.director = 0
         self.dfitems = []
+        self.atticItems = []
+        self.atticWallpaper = None
+        self.atticWindows = None
+        self.deletedItems = None
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)

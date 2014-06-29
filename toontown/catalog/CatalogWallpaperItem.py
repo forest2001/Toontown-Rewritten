@@ -554,11 +554,12 @@ BorderTypes = {1000: ('phase_5.5/maps/bd_grey_border1.jpg', CTFlatColorDark),
 
 class CatalogWallpaperItem(CatalogSurfaceItem):
 
-    def makeNewItem(self, patternIndex, colorIndex = None, borderIndex = 0, borderColorIndex = 0):
+    def makeNewItem(self, patternIndex, room = 0, colorIndex = None, borderIndex = 0, borderColorIndex = 0):
         self.patternIndex = patternIndex
         self.colorIndex = colorIndex
         self.borderIndex = borderIndex
         self.borderColorIndex = borderColorIndex
+        self.room = room
         CatalogSurfaceItem.makeNewItem(self)
 
     def needsCustomize(self):
@@ -682,6 +683,7 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
                 self.colorIndex = di.getUint8()
                 self.borderIndex = di.getUint16()
                 self.borderColorIndex = di.getUint8()
+        self.room = di.getUint8()
         wtype = WallpaperTypes[self.patternIndex]
         return
 
@@ -692,6 +694,7 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
             dg.addUint8(self.colorIndex)
             dg.addUint16(self.borderIndex)
             dg.addUint8(self.borderColorIndex)
+        dg.addUint8(self.room)
 
 
 def getWallpapers(*typeList):
