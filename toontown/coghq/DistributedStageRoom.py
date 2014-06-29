@@ -12,6 +12,7 @@ from otp.level import LevelSpec, LevelConstants
 from toontown.toonbase import TTLocalizer
 if __dev__:
     from otp.level import EditorGlobals
+from otp.nametag.NametagConstants import *
 
 def getStageRoomReadyPostName(doId):
     return 'stageRoomReady-%s' % doId
