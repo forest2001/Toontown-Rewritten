@@ -742,7 +742,7 @@ def avatarBehindHighShot(avatar, duration):
 
 
 def avatarBehindHighRightShot(avatar, duration):
-    return heldRelativeShot(avatar, 4, -7, 5 + avatar.getHeight(), 30, -35, 0, duration, 'avatarBehindHighShot')
+    return heldRelativeShot(avatar, 7, -3, 5 + avatar.getHeight(), 45, -30, 0, duration, 'avatarBehindHighShot')
 
 
 def avatarBehindThreeQuarterRightShot(avatar, duration):

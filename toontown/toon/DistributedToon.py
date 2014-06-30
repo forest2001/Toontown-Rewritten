@@ -423,7 +423,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             try: return types[self.animalSound]
             except: return Toon.Toon.getDialogueArray(self, *args)
         return Toon.Toon.getDialogueArray(self, *args)
-            
+
 
     def setDefaultShard(self, shard):
         self.defaultShard = shard
@@ -773,7 +773,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedSmoothNode.DistributedSmoothNode.wrtReparentTo(self, parent)
 
     def setTutorialAck(self, tutorialAck):
-        self.tutorialAck = tutorialAck
+        self.tutorialAck = 1
+        if config.GetBool('want-toontorial', 1):
+            self.tutorialAck = tutorialAck
 
     def setEarnedExperience(self, earnedExp):
         self.earnedExperience = earnedExp
@@ -1645,7 +1647,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def announceBingo(self):
         self.setChatAbsolute(TTLocalizer.FishBingoBingo, CFSpeech | CFTimeout)
-        
+
     def b_setFishBingoTutorialDone(self, bDone):
         self.d_setFishBingoTutorialDone(bDone)
         self.setFishBingoTutorialDone(bDone)
@@ -1815,7 +1817,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         def getKartingPersonalBestAll(self):
             return self.kartingPersonalBest + self.kartingPersonalBest2
-         
+
 
     if hasattr(base, 'wantPets') and base.wantPets:
 
@@ -2674,15 +2676,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setAnimalSound(self, index):
         self.animalSound = index
-        
+
     def magicFanfare(self):
         from toontown.battle import Fanfare
         fanfare = Sequence(Fanfare.makeFanfare(0, self)[0])
         fanfare.start()
-        
+
     def magicTeleportRequest(self, requesterId):
         self.sendUpdate('magicTeleportResponse', [requesterId, base.cr.playGame.getPlaceId()])
-        
+
     def magicTeleportInitiate(self, hoodId, zoneId):
         loaderId = ZoneUtil.getBranchLoaderName(zoneId)
         whereId = ZoneUtil.getToonWhereName(zoneId)
@@ -2704,7 +2706,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             'avId': -1
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
-   
+
+    def ping(self, data):
+        # Server sent a ping, better respond before we get booted!
+        self.sendUpdate("pong", [data[::-1]])
+
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
     spellbook.getInvoker().sendUpdate('setTeleportOverride', [1])
@@ -2719,7 +2725,7 @@ def sleep():
     else:
         base.localAvatar.enableSleeping()
         return "Sleeping has been activated for the current session."
-    
+
 @magicWord(category=CATEGORY_GUI)
 def gardenGame():
     base.localAvatar.game = GardenDropGame.GardenDropGame()

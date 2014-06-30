@@ -56,6 +56,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         base.localAvatar.obscureFriendsListButton(1)
         self.frame.show()
         messenger.send('avPanelDone')
+        base.hideFriendMargins()
         return
 
     def cleanup(self):
@@ -73,4 +74,5 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
     def __handleClose(self):
         self.cleanup()
         AvatarPanel.currentAvatarPanel = None
+        base.showFriendMargins()
         return

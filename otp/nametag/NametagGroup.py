@@ -311,3 +311,4 @@ class NametagGroup:
         for tag in self.nametags:
             if isinstance(tag, MarginPopup):
                 tag.unmanage(manager)
+                tag.destroy()

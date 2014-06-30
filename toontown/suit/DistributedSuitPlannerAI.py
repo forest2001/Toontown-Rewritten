@@ -622,16 +622,16 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         for p in self.frontdoorPointList:
             blockNumber = p.getLandmarkBuildingIndex()
             if blockNumber is None:
-                self.notify.warning('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
+                self.notify.debug('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
             elif self.buildingFrontDoors.has_key(blockNumber):
-                self.notify.warning('Multiple front doors for building %d in zone %d' % (blockNumber, self.zoneId))
+                self.notify.debug('Multiple front doors for building %d in zone %d' % (blockNumber, self.zoneId))
             else:
                 self.buildingFrontDoors[blockNumber] = p
 
         for p in self.sidedoorPointList:
             blockNumber = p.getLandmarkBuildingIndex()
             if blockNumber is None:
-                self.notify.warning('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
+                self.notify.debug('No landmark building for (%s) in zone %d' % (repr(p), self.zoneId))
             elif self.buildingSideDoors.has_key(blockNumber):
                 self.buildingSideDoors[blockNumber].append(p)
             else:
@@ -642,9 +642,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 continue
             blockNumber = bldg.getBlock()[0]
             if not self.buildingFrontDoors.has_key(blockNumber):
-                self.notify.warning('No front door for building %d in zone %d' % (blockNumber, self.zoneId))
+                self.notify.debug('No front door for building %d in zone %d' % (blockNumber, self.zoneId))
             if not self.buildingSideDoors.has_key(blockNumber):
-                self.notify.warning('No side door for building %d in zone %d' % (blockNumber, self.zoneId))
+                self.notify.debug('No side door for building %d in zone %d' % (blockNumber, self.zoneId))
 
     def countNumSuitsPerTrack(self, count):
         for suit in self.suitList:
@@ -785,7 +785,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         newSuit.buildingHeight = buildingHeight
         gotDestination = self.chooseDestination(newSuit, startTime, toonBlockTakeover=toonBlockTakeover, cogdoTakeover=cogdoTakeover, minPathLen=minPathLen, maxPathLen=maxPathLen)
         if not gotDestination:
-            self.notify.warning("Couldn't get a destination in %d!" % self.zoneId)
+            self.notify.debug("Couldn't get a destination in %d!" % self.zoneId)
             newSuit.doNotDeallocateChannel = None
             newSuit.delete()
             return

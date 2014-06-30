@@ -18,7 +18,7 @@ class LawbotHQAI(CogHoodAI):
         
     def createDoor(self):
         # DA Offices
-        daInteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.EXT_COGHQ, self.HOOD, doorIndex=0)
+        daInteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.EXT_COGHQ, self.HOOD, doorIndex=0, lockValue=FADoorCodes.UNLOCKED)
         daExteriorDoor = DistributedCogHQDoorAI(self.air, 0, DoorTypes.INT_COGHQ, ToontownGlobals.LawbotOfficeExt, doorIndex=0, lockValue=FADoorCodes.UNLOCKED)
         daExteriorDoor.setOtherDoor(daInteriorDoor)
         daExteriorDoor.zoneId = self.HOOD
@@ -65,10 +65,10 @@ class LawbotHQAI(CogHoodAI):
         
         # Create DA Office Elevators.
         mins = ToontownGlobals.FactoryLaffMinimums[2]
-        self.officeA = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 0, minLaff=mins[0])
-        self.officeB = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 1, minLaff=mins[1])
-        self.officeC = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 2, minLaff=mins[2])
-        self.officeD = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotOfficeInt, 3, minLaff=mins[3])
+        self.officeA = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotStageIntA, 0, minLaff=mins[0])
+        self.officeB = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotStageIntB, 1, minLaff=mins[1])
+        self.officeC = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotStageIntC, 2, minLaff=mins[2])
+        self.officeD = self.createElevator(DistributedLawOfficeElevatorExtAI, self.air.lawOfficeMgr, ToontownGlobals.LawbotOfficeExt, ToontownGlobals.LawbotStageIntD, 3, minLaff=mins[3])
 
         # Create boarding groups
         # CJ Boarding Group

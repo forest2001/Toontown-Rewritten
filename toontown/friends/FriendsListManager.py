@@ -96,6 +96,7 @@ class FriendsListManager:
         FriendsListPanel.showFriendsList()
 
     def __handleClickedNametag(self, avatar, playerId = None):
+        base.hideFriendMargins()
         self.notify.debug('__handleClickedNametag. doId = %s' % avatar.doId)
         if avatar.isPet():
             self.avatarPanel = PetAvatarPanel.PetAvatarPanel(avatar)

@@ -58,6 +58,7 @@ smooth-lag 0.4
 estate-day-night #t
 want-instant-parties #t
 show-total-population #f
+want-toontorial #f
 
 
 # Chat stuff

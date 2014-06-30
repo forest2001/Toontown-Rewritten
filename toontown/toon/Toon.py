@@ -1789,7 +1789,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
         holes = self.getHoleActors()
         hands = self.getRightHands()
-        holeTrack = Track((0.0, Func(showHoles, holes, hands)), (0.5, SoundInterval(self.getSoundTeleport(), node=self)), (1.708, Func(reparentHoles, holes, self)), (3.4, Func(cleanupHoles, holes)))
+        holeTrack = Track((0.0, Func(showHoles, holes, hands)), (0.5, SoundInterval(self.getSoundTeleport(), node=self)), (1.708, Func(reparentHoles, holes, self)), (2.9, Func(self.dropShadow.hide)), (3.4, Func(cleanupHoles, holes)))
         if hasattr(self, 'uniqueName'):
             trackName = self.uniqueName('teleportOut')
         else:
@@ -1829,6 +1829,14 @@ class Toon(Avatar.Avatar, ToonHead):
         self.holeClipPath = self.attachNewNode(holeClip)
         self.getGeomNode().setClipPlane(self.holeClipPath)
         self.nametag3d.setClipPlane(self.holeClipPath)
+        self.nametagLods = []
+        for hi in range(self.headParts.getNumPaths()):
+            head = self.headParts[hi]
+            nameNode = head.attachNewNode('nameNode')
+            self.nametagLods.append(nameNode)
+            tag = self.nametag3d.copyTo(self)
+            tag.wrtReparentTo(nameNode)
+        self.nametag3d.hide()
         self.track.start(ts)
         self.setActiveShadow(0)
 
@@ -1862,6 +1870,9 @@ class Toon(Avatar.Avatar, ToonHead):
             self.getGeomNode().clearClipPlane()
         if self.nametag3d and not self.nametag3d.isEmpty():
             self.nametag3d.clearClipPlane()
+            if self.nametagLods:
+                for tag in self.nametagLods:
+                    tag.removeNode()
         if self.holeClipPath:
             self.holeClipPath.removeNode()
             self.holeClipPath = None
@@ -2002,7 +2013,7 @@ class Toon(Avatar.Avatar, ToonHead):
             hole.clearDepthWrite()
 
         holeTrack.append(Func(restoreHole, hole))
-        toonTrack = Sequence(Wait(0.3), Func(self.getGeomNode().show), Func(self.nametag3d.show), ActorInterval(self, 'jump', startTime=0.45))
+        toonTrack = Sequence(Wait(0.3), Func(self.getGeomNode().show), Func(self.nametag3d.show), Func(self.dropShadow.show), ActorInterval(self, 'jump', startTime=0.45))
         if hasattr(self, 'uniqueName'):
             trackName = self.uniqueName('teleportIn')
         else:
@@ -2020,6 +2031,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.pose('teleport', self.getNumFrames('teleport') - 1)
         self.getGeomNode().hide()
         self.nametag3d.hide()
+        self.dropShadow.hide()
         self.track = self.getTeleportInTrack()
         if callback:
             self.track.setDoneEvent(self.track.getName())
@@ -2037,6 +2049,7 @@ class Toon(Avatar.Avatar, ToonHead):
         if not self.ghostMode and not self.isDisguised:
             self.getGeomNode().show()
             self.nametag3d.show()
+        self.dropShadow.show()
         Emote.globalEmote.releaseAll(self, 'exitTeleportIn')
         return
 

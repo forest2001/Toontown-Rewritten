@@ -17,7 +17,7 @@ RequestCard = {}
 
 class DistributedPondBingoManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPondBingoManagerAI")
-    
+
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.air = air
@@ -29,7 +29,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         self.shouldStop = False
         self.lastUpdate = globalClockDelta.getRealNetworkTime()
         self.cardId = 0
-    
+
     def setPondDoId(self, pondId):
         self.pond = self.air.doId2do[pondId]
 
@@ -72,7 +72,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
 
     def enableBingo(self):
         createGame()
-        
+
     def d_enableBingo(self):
         self.sendUpdate('enableBingo', [])
 
@@ -88,59 +88,59 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         if cardId != self.cardId:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Toon tried to call bingo with an expired cardId!')
             return
-        av = self.air.doId2do[avId]
+        av = self.air.doId2do.get(avId)
+        if not av:
+            return
         av.d_announceBingo()
         self.rewardAll()
 
     def setJackpot(self, jackpot):
         self.jackpot = jackpot
-    
+
     def d_setJackpot(self, jackpot):
         self.sendUpdate('setJackpot', [jackpot])
-    
+
     def b_setJackpot(self, jackpot):
         self.setJackpot(jackpot)
         self.d_setJackpot(jackpot)
-    
+
     def activateBingoForPlayer(self, avId):
         self.sendUpdateToAvatarId(avId, 'setCardState', [self.cardId, self.typeId, self.tileSeed, self.bingoCard.getGameState()])
         self.sendUpdateToAvatarId(avId, 'setState', [self.state, self.lastUpdate])
         self.canCall = True
-        
+
     def sendStateUpdate(self):
         self.lastUpdate = globalClockDelta.getRealNetworkTime()
-        for spot in self.pond.spots:
-            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
+        for spot in self.pond.spots.itervalues():
+            if not spot.avId:
                 continue
-            avId = self.pond.spots[spot].avId
-            self.sendUpdateToAvatarId(avId, 'setState', [self.state, self.lastUpdate])
-            
+            self.sendUpdateToAvatarId(spot.avId, 'setState', [self.state, self.lastUpdate])
+
     def sendCardStateUpdate(self):
-        for spot in self.pond.spots:
-            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
+        for spot in self.pond.spots.itervalues():
+            if not spot.avId:
                 continue
-            avId = self.pond.spots[spot].avId
-            self.sendUpdateToAvatarId(avId, 'setCardState', [self.cardId, self.typeId, self.tileSeed, self.bingoCard.getGameState()])
-            
+            self.sendUpdateToAvatarId(spot.avId, 'setCardState', [self.cardId, self.typeId, self.tileSeed, self.bingoCard.getGameState()])
+
     def sendGameStateUpdate(self, cellId):
-        for spot in self.pond.spots:
-            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
+        for spot in self.pond.spots.itervalues():
+            if not spot.avId:
                 continue
-            avId = self.pond.spots[spot].avId
-            self.sendUpdateToAvatarId(avId, 'updateGameState', [self.bingoCard.getGameState(), cellId])
-    
+            self.sendUpdateToAvatarId(spot.avId, 'updateGameState', [self.bingoCard.getGameState(), cellId])
+
     def sendCanBingo(self):
-        for spot in self.pond.spots:
-            if self.pond.spots[spot].avId == None or self.pond.spots[spot].avId == 0:
+        for spot in self.pond.spots.itervalues():
+            if not spot.avId:
                 continue
-            avId = self.pond.spots[spot].avId
-            self.sendUpdateToAvatarId(avId, 'enableBingo', [])
-            
+            self.sendUpdateToAvatarId(spot.avId, 'enableBingo', [])
+
     def rewardAll(self):
         self.state = 'Reward'
         self.sendStateUpdate()
-        for spot in self.pond.spots:
-            av = self.pond.spots[spot].get(avId)
+        for spot in self.pond.spots.itervalues():
+            if not spot.avId:
+                continue
+            av = self.air.doId2do.get(spot.avId)
             if not av:
                 continue
             av.addMoney(self.jackpot)
@@ -150,8 +150,6 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
         taskMgr.doMethodLater(5, DistributedPondBingoManagerAI.startWait, 'startWait%d' % self.getDoId(), [self])
         taskMgr.remove('finishGame%d' % self.getDoId())
 
-
-        
     def finishGame(self):
         self.state = 'GameOver'
         self.sendStateUpdate()
@@ -159,37 +157,36 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             self.stopGame()
             return
         taskMgr.doMethodLater(5, DistributedPondBingoManagerAI.startWait, 'startWait%d' % self.getDoId(), [self])
-    
+
     def stopGame(self):
         self.state = 'CloseEvent'
         self.sendStateUpdate()
         taskMgr.doMethodLater(10, DistributedPondBingoManagerAI.turnOff, 'turnOff%d' % self.getDoId(), [self])
-        
+
     def turnOff(self):
         self.state = 'Off'
         self.sendStateUpdate()
-    
+
     def startIntermission(self):
         self.state = 'Intermission'
         self.sendStateUpdate()
         taskMgr.doMethodLater(300, DistributedPondBingoManagerAI.startWait, 'startWait%d' % self.getDoId(), [self])
-        
+
     def startWait(self):
         self.state = 'WaitCountdown'
         self.sendStateUpdate()
         taskMgr.doMethodLater(15, DistributedPondBingoManagerAI.createGame, 'createGame%d' % self.getDoId(), [self])
-    
+
     def createGame(self):
         self.canCall = False
         self.tileSeed = None
         self.typeId = None
         self.cardId += 1
-        for spot in self.pond.spots:
-            avId = self.pond.spots[spot].avId
-            request = RequestCard.get(avId)
+        for spot in self.pond.spots.itervalues():
+            request = RequestCard.get(spot.avId)
             if request:
                 self.typeId, self.tileSeed = request
-                del RequestCard[avId]
+                del RequestCard[spot.avId]
         if self.cardId > 65535:
             self.cardId = 0
         if not self.tileSeed:
@@ -226,7 +223,7 @@ def startBingo():
             pond.bingoMgr.createGame()
         pond.bingoMgr.shouldStop = False
     return "Started Fish Bingo for the current district."
-        
+
 @magicWord(category=CATEGORY_OVERRIDE, types=[str, int])
 def requestBingoCard(cardName, seed = None):
     RequestCard[spellbook.getTarget().doId] = ToontownGlobals.BingoCardNames[cardName], seed
