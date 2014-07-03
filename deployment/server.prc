@@ -20,5 +20,5 @@ want-cbhq #t
 want-lbhq #t
 want-bbhq #f
 want-pets #f
-want-old-fireworks #t
+want-old-fireworks #f
 want-parties #f
