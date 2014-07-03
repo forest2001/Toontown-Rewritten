@@ -180,6 +180,18 @@ class FireworkShowMixin:
             self.fireworkShow.begin(timeStamp)
             self.fireworkShow.reparentTo(root)
             hood = self.getHood()
+            
+            # Dammit disney
+            from toontown.hood import TTHood
+            from toontown.hood import DDHood
+            from toontown.hood import MMHood
+            from toontown.hood import BRHood
+            from toontown.hood import DGHood
+            from toontown.hood import DLHood
+            from toontown.hood import GSHood
+            from toontown.hood import OZHood
+            from toontown.hood import GZHood
+
             if isinstance(hood, TTHood.TTHood):
                 self.fireworkShow.setPos(150, 0, 80)
                 self.fireworkShow.setHpr(90, 0, 0)

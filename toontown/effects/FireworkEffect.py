@@ -99,24 +99,8 @@ class FireworkEffect(NodePath):
             elif self.trailTypeId == FireworkTrailType.Polygonal:
                 r = 0.75
                 mColor = Vec4(1, 1, 1, 1)
-                vertex_list = [Vec4(r, 0.0, r, 1.0),
-                 Vec4(r, 0.0, -r, 1.0),
-                 Vec4(-r, 0.0, -r, 1.0),
-                 Vec4(-r, 0.0, r, 1.0),
-                 Vec4(r, 0.0, r, 1.0)]
-                motion_color = [mColor,
-                 mColor,
-                 mColor,
-                 mColor,
-                 mColor]
-                trailEffect = PolyTrail(None, vertex_list, motion_color, 0.5)
-                trailEffect.setUnmodifiedVertexColors(motion_color)
-                trailEffect.reparentTo(self.effectsNode)
-                trailEffect.motion_trail.geom_node_path.setTwoSided(False)
-                trailEffect.setBlendModeOn()
-                trailEffect.setLightOff()
-                self.trailEffects.append(trailEffect)
-                self.trailEffectsIval.append(Func(trailEffect.beginTrail))
+                vertex_list = [Vec4(r, 0.0, r, 1.0), Vec4(r, 0.0, -r, 1.0), Vec4(-r, 0.0, -r, 1.0), Vec4(-r, 0.0, r, 1.0), Vec4(r, 0.0, r, 1.0)]
+                motion_color = [mColor, mColor, mColor, mColor, mColor]
             elif self.trailTypeId == FireworkTrailType.Glow:
                 trailEffect = GlowTrail.getEffect()
                 if trailEffect:
