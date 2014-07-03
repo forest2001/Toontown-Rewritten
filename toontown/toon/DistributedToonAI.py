@@ -1187,8 +1187,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # First we need to check all the quests we have completed.
         for questId in self.getQuestHistory():
-            # Get all questIds from flattened quests.
-            currentQuests = self.getQuests()#[quest[0] for quest in self.getQuests()]
+            # Get all the questIds.
+            currentQuests = self.getQuests()
             if questId in currentQuests:
                 # We're still working on the quest.
                 continue
