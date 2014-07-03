@@ -261,9 +261,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
-        # Begin ping-pong.
         if self.isPlayerControlled():
+            # Begin ping-pong.
             self.ping()
+            # Ensure they have the correct laff.
+            self.__correctToonLaff()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -1174,6 +1176,73 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to go over 137 laff.')
         maxHp = min(maxHp, ToontownGlobals.MaxHpLimit)
         DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
+
+    def __correctToonLaff(self):
+        hp = 15 # The base laff to work from.
+        gained_quest = 0
+        gained_racing = 0
+        gained_fishing = 0
+        gained_suit = 0
+        gained_gardening = 0
+
+        # First we need to check all the quests we have completed.
+        for questId in self.getQuestHistory():
+            # Get all questIds from flattened quests.
+            currentQuests = self.getQuests()#[quest[0] for quest in self.getQuests()]
+            if questId in currentQuests:
+                # We're still working on the quest.
+                continue
+            rewardId = Quests.Quest2RewardDict.get(questId)
+            if not rewardId:
+                # This quest has no reward. Skip.
+                continue
+            if rewardId in range(100, 110): # [100..109]
+                hp += rewardId - 99 # Corresponds to Quest rewards.
+                gained_quest += rewardId - 99
+
+        # We have to calculate the total laff points we're supposed to have
+        # for each "side" activity.
+        hp += len(self.getFishingTrophies()) # fishing (1 boost per trophy)
+        gained_fishing += len(self.getFishingTrophies())
+
+        num_racing_trophies = 0
+        # Ripped from DistributedRaceAI, ty Hawkheart <3
+        for x in xrange(30):
+            if self.getKartingTrophies()[x] != 0:
+                num_racing_trophies += 1
+        hp += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
+        gained_racing += int(num_racing_trophies/10)
+
+        hp += 0 # TODO: golf (fuck golf: GolfGlobals.calcTrophyListFromHistory(oldHistory))
+
+        hp += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
+        gained_gardening += int(len(self.getGardenTrophies())/2)
+
+        # Finally, we calculate the total amount of boosts from boss battles.
+        for x in xrange(4): # 0 to 3
+            if self.getCogTypes()[x] != 7:
+                # We're not the last cog type, skip.
+                continue
+            levels = [15, 20, 30, 40, 50]
+            # Iterate through the above list, and check if we're above or equal to the level.
+            # If we are, we get 1 boost per level that we've passed.
+            for level in levels:
+                if self.getCogLevels()[x] >= level - 1: # 0-49, pfft.
+                    hp += 1
+                    gained_suit += 1
+
+        # If the calculated HP differs from our current maxHp, we need to bump our maxHp.
+        if hp != self.getMaxHp():
+            # Log the details.
+            self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
+                reason = "Mismatch in calculated HP %d compared to maxHp %d corrected." % (hp, self.getMaxHp()),
+                info = "Quest laff %d, Fishing laff %d, Racing laff %d, Gardening laff %d, Disguise laff %d" % (
+                    gained_quest, gained_fishing, gained_racing, gained_gardening, gained_suit)
+            )
+            if self.getHp() > hp:
+                # Bump their hp down if they have more than the calculated max.
+                self.b_setHp(hp)
+            self.b_setMaxHp(hp)
 
     def b_setTutorialAck(self, tutorialAck):
         self.d_setTutorialAck(tutorialAck)
