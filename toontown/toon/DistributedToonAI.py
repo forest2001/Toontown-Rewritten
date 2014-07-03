@@ -1206,14 +1206,18 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         gained_fishing += len(self.getFishingTrophies())
 
         num_racing_trophies = 0
-        # Ripped from DistributedRaceAI, ty Hawkheart <3
-        for x in xrange(30):
-            if self.getKartingTrophies()[x] != 0:
+        for value in self.getKartingTrophies():
+            if value:
                 num_racing_trophies += 1
         hp += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
         gained_racing += int(num_racing_trophies/10)
 
-        hp += 0 # TODO: golf (fuck golf: GolfGlobals.calcTrophyListFromHistory(oldHistory))
+        golf_trophies = GolfGlobals.calcTrophyListFromHistory(self.golfHistory)
+        num_golf_trophies = 0
+        for value in golf_trophies:
+            if value:
+                num_golf_trophies += 1
+        hp += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
 
         hp += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
         gained_gardening += int(len(self.getGardenTrophies())/2)
