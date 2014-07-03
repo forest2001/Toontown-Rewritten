@@ -1184,6 +1184,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         gained_fishing = 0
         gained_suit = 0
         gained_gardening = 0
+        gained_golf = 0
 
         # First we need to check all the quests we have completed.
         for questId in self.getQuestHistory():
@@ -1218,6 +1219,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if value:
                 num_golf_trophies += 1
         hp += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
+        gained_golf += int(num_golf_trophies/10)
 
         hp += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
         gained_gardening += int(len(self.getGardenTrophies())/2)
@@ -1240,8 +1242,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # Log the details.
             self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
                 reason = "Mismatch in calculated HP %d compared to maxHp %d corrected." % (hp, self.getMaxHp()),
-                info = "Quest laff %d, Fishing laff %d, Racing laff %d, Gardening laff %d, Disguise laff %d" % (
-                    gained_quest, gained_fishing, gained_racing, gained_gardening, gained_suit)
+                info = "Quest laff %d, Fishing laff %d, Racing laff %d, Golf laff %d, Gardening laff %d, Disguise laff %d" % (
+                    gained_quest, gained_fishing, gained_racing, gained_golf, gained_gardening, gained_suit)
             )
             if self.getHp() > hp:
                 # Bump their hp down if they have more than the calculated max.
