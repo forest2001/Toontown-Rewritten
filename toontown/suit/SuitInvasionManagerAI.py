@@ -30,9 +30,9 @@ class SuitInvasionManagerAI:
         self.megaInvasionProbability = 0.6
         self.megaInvasionCog = 'le' # Make sure to change this when holding a mega-invasion event. This is currently set to Legal Eagles from the 4th of July
         if config.GetBool('want-random-invasions', True):
-            taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
+            taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
         # Temporary hack for Mega-Invasions. Comment this out when not in use.
-        taskMgr.doMethodLater(randint(1800, 7200), self.__megaInvasionTick, 'mega-invasion-tick')
+        taskMgr.doMethodLater(randint(1800, 5400), self.__megaInvasionTick, 'mega-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
         """
@@ -46,7 +46,7 @@ class SuitInvasionManagerAI:
         on-going.
         """
         # Generate a new tick delay.
-        task.delayTime = randint(1800, 7200)
+        task.delayTime = randint(1800, 5400)
         if self.getInvading():
             # We're already running an invasion. Don't start a new one.
             self.notify.debug('Invasion tested but already running invasion!')
@@ -70,7 +70,7 @@ class SuitInvasionManagerAI:
         This is a temporary hack for mega-invasions.
         """
         # Generate a new tick delay.
-        task.delayTime = randint(1800, 7200)
+        task.delayTime = randint(1800, 5400)
         if self.getInvading():
             # We're already running an invasion. Don't start a new one.
             self.notify.debug('Mega-Invasion tested but already running invasion!')
