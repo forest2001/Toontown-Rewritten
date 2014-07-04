@@ -19,7 +19,7 @@ class DistributedFireworkShowAI(DistributedObjectAI):
         DistributedObjectAI.__init__(self, air)
         self.air = air
 
-        if self.air.config.GetBool('want-hourly-fireworks', False):
+        if config.GetBool('want-hourly-fireworks', False):
             self.__startFireworksTick()
         
     def __startFireworksTick(self):
@@ -32,23 +32,30 @@ class DistributedFireworkShowAI(DistributedObjectAI):
         # The next tick will occur in exactly an hour.
         task.delayTime = 3600
 
-        showName = self.air.config.GetBool('hourly-fireworks-type', 'summer')
+        showName = config.GetBool('hourly-fireworks-type', 'random')
 
         if showName == 'july4':
             showType = ToontownGlobals.JULY4_FIREWORKS
+
         elif showName == 'newyears':
             showType = ToontownGlobals.NEWYEARS_FIREWORKS
+
         elif showName == 'summer':
             showType = PartyGlobals.FireworkShows.Summer
+
+        elif showName == 'random':
+            shows = [ToontownGlobals.JULY4_FIREWORKS, ToontownGlobals.NEWYEARS_FIREWORKS, PartyGlobals.FireworkShows.Summer]
+            showType = random.choice(shows)
         else:
-            return # Invalid Show
+            raise Exception("Invalid firework type")
+            return
 
         numShows = len(FireworkShows.shows.get(showType, []))
         showIndex = random.randint(0, numShows - 1)
-        for hood in simbase.air.hoods:
+        for hood in self.air.hoods:
             if hood.safezone == ToontownGlobals.GolfZone:
                 continue
-            fireworksShow = DistributedFireworkShowAI(simbase.air)
+            fireworksShow = DistributedFireworkShowAI(self.air)
             fireworksShow.generateWithRequired(hood.safezone)
             fireworksShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())
         return task.again
