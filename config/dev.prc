@@ -52,7 +52,6 @@ dc-file config/otp.dc
 want-pets #f
 want-news-tab #f
 want-news-page #f
-want-old-fireworks #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 
@@ -74,4 +73,4 @@ force-player-understandable #t
 # Holidays and Events
 force-holiday-decorations 6
 want-hourly-fireworks #t
-hourly-fireworks-type random
+hourly-fireworks-type july4
