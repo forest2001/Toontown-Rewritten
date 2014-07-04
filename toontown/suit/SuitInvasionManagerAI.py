@@ -26,7 +26,7 @@ class SuitInvasionManagerAI:
         self.suitName = None
         self.numSuits = 0
         self.spawnedSuits = 0
-        self.randomInvasionProbability = 0.5
+        self.randomInvasionProbability = 0.45
         self.megaInvasionProbability = 0.6
         self.megaInvasionCog = 'le' # Make sure to change this when holding a mega-invasion event. This is currently set to Legal Eagles from the 4th of July
         if config.GetBool('want-random-invasions', True):
@@ -55,7 +55,7 @@ class SuitInvasionManagerAI:
             # We want an invasion!
             self.notify.debug('Invasion probability hit! Starting invasion.')
             suitName = choice(SuitDNA.suitHeadTypes)
-            numSuits = randint(500, 2000)
+            numSuits = randint(1000, 3000)
             self.startInvasion(suitName, numSuits, False)
         return task.again
         
