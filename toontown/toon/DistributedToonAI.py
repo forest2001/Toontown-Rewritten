@@ -269,7 +269,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 # We don't test admins, as they can modify their stats at will.
                 # N.B.: To test this, you must bump up this access! Local servers default at
                 # access 500!
-                self.__correctToonLaff()
+                self.correctToonLaff()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -1181,7 +1181,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         maxHp = min(maxHp, ToontownGlobals.MaxHpLimit)
         DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
 
-    def __correctToonLaff(self):
+    def correctToonLaff(self):
         hp = 15 # The base laff to work from.
         gained_quest = 0
         gained_racing = 0
@@ -5289,3 +5289,13 @@ def dump_doId2do():
         for name, size in sorted_objSizes:
             file.write('OBJ: %s | SIZE: %d\n' % (name, size))
     return "Dumped doId2do sizes (grouped by class) to '%s'." % temp_file[1]
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def correctlaff():
+    """
+    A magic word that attempts to correct a toons laff. This includes any external,
+    admin modifications to the toon (such as setMaxHp).
+    """
+    av = spellbook.getTarget()
+    av.correctToonLaff()
+    return "Corrected %s's laff successfully." % av.getName()
