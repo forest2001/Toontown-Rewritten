@@ -27,8 +27,12 @@ class SuitInvasionManagerAI:
         self.numSuits = 0
         self.spawnedSuits = 0
         self.randomInvasionProbability = 0.5
+        self.megaInvasionProbability = 0.6
+        self.megaInvasionCog = 'le' # Make sure to change this when holding a mega-invasion event. This is currently set to Legal Eagles from the 4th of July
         if config.GetBool('want-random-invasions', True):
             taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
+        # Temporary hack for Mega-Invasions. Comment this out when not in use.
+        taskMgr.doMethodLater(randint(1800, 7200), self.__megaInvasionTick, 'mega-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
         """
@@ -53,6 +57,30 @@ class SuitInvasionManagerAI:
             suitName = choice(SuitDNA.suitHeadTypes)
             numSuits = randint(500, 2000)
             self.startInvasion(suitName, numSuits, False)
+        return task.again
+        
+    def __megaInvasionTick(self, task=None):
+        """
+        Each hour, have a tick to check if we want to start an invasion in
+        the current district. This works by having a random invasion
+        probability, and each tick it will generate a random float between
+        0 and 1, and then if it's less than or equal to the probablity, it
+        will spawn the invasion.
+
+        This is a temporary hack for mega-invasions.
+        """
+        # Generate a new tick delay.
+        task.delayTime = randint(1800, 7200)
+        if self.getInvading():
+            # We're already running an invasion. Don't start a new one.
+            self.notify.debug('Mega-Invasion tested but already running invasion!')
+            return task.again
+        if random() <= self.megaInvasionProbability:
+            # We want an invasion!
+            self.notify.debug('Mega Invasion probability hit! Starting mega-invasion.')
+            suitName = self.megaInvasionCog
+            numSuits = randint(1500, 15000)
+            self.startInvasion(suitName, numSuits, randint(0, 2))
         return task.again
 
     def getInvading(self):
