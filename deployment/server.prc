@@ -5,6 +5,8 @@
 # Server settings
 want-dev #f
 want-cheesy-expirations #t
+want-mega-invasions #t
+mega-invasion-cog-type le
 
 # Shared secret for CSMUD
 # ##### NB! Update config/public_client.prc too! #####
@@ -20,5 +22,5 @@ want-cbhq #t
 want-lbhq #t
 want-bbhq #f
 want-pets #f
-want-old-fireworks #t
+want-old-fireworks #f
 want-parties #f

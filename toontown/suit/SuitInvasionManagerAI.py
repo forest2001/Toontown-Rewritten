@@ -26,9 +26,20 @@ class SuitInvasionManagerAI:
         self.suitName = None
         self.numSuits = 0
         self.spawnedSuits = 0
-        self.randomInvasionProbability = 0.5
-        if config.GetBool('want-random-invasions', True):
-            taskMgr.doMethodLater(randint(1800, 7200), self.__randomInvasionTick, 'random-invasion-tick')
+
+        if config.GetBool('want-mega-invasions', False):
+            # Mega invasion configuration.
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.6)
+            self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
+            if not self.megaInvasionCog:
+                raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
+            if self.megaInvasionCog not in SuitDNA.suitHeadTypes:
+                raise AttributeError("Invalid cog type specified for mega invasion!")
+
+        elif config.GetBool('want-random-invasions', True):
+            # Random invasion configuration.
+            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.45)
+            taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
         """
@@ -42,7 +53,7 @@ class SuitInvasionManagerAI:
         on-going.
         """
         # Generate a new tick delay.
-        task.delayTime = randint(1800, 7200)
+        task.delayTime = randint(1800, 5400)
         if self.getInvading():
             # We're already running an invasion. Don't start a new one.
             self.notify.debug('Invasion tested but already running invasion!')
@@ -50,8 +61,12 @@ class SuitInvasionManagerAI:
         if random() <= self.randomInvasionProbability:
             # We want an invasion!
             self.notify.debug('Invasion probability hit! Starting invasion.')
-            suitName = choice(SuitDNA.suitHeadTypes)
-            numSuits = randint(500, 2000)
+            if config.GetBool('want-mega-invasions', False):
+                suitName = self.megaInvasionCog
+                numSuits = randint(1500, 15000)
+            else:
+                suitName = choice(SuitDNA.suitHeadTypes)
+                numSuits = randint(1000, 3000)
             self.startInvasion(suitName, numSuits, False)
         return task.again
 
@@ -121,8 +136,10 @@ class SuitInvasionManagerAI:
         ])
         # If the cogs aren't defeated in a set amount of time, the invasion will
         # simply timeout. This was calculated by judging that 1000 cogs should
-        # take around 20 minutes, thus becoming 1.2 seconds per cog.
-        taskMgr.doMethodLater(1.2 * numSuits, self.stopInvasion, 'invasion-timeout')
+        # take around 20 minutes, becoming 1.2 seconds per cog.
+        # We added in a bit of a grace period, making it 1.5 seconds per cog, or 25 minutes.
+        timePerCog = config.GetFloat('invasion-time-per-cog', 1.5)
+        taskMgr.doMethodLater(timePerCog * numSuits, self.stopInvasion, 'invasion-timeout')
         self.__spAllCogsSupaFly()
         return True
 

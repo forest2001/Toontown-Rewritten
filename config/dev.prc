@@ -8,6 +8,9 @@ server-version dev
 sync-video #f
 want-dev #f
 preload-avatars #t
+framebuffer-multisample #t
+multisamples 4
+texture-anisotropic-degree 16
 
 
 # Resource settings
@@ -34,6 +37,8 @@ rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
 want-parties #f
 want-cheesy-expirations #t
+want-mega-invasions #t
+mega-invasion-cog-type le
 
 
 # DC Files
@@ -47,7 +52,6 @@ dc-file config/otp.dc
 want-pets #f
 want-news-tab #f
 want-news-page #f
-want-old-fireworks #t
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 
@@ -68,3 +72,5 @@ force-player-understandable #t
 
 # Holidays and Events
 force-holiday-decorations 6
+want-hourly-fireworks #t
+hourly-fireworks-type july4

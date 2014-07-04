@@ -9,6 +9,9 @@ audio-library-name p3openal_audio
 sync-video #f
 want-dev #f
 preload-avatars #t
+framebuffer-multisample #t
+multisamples 4
+texture-anisotropic-degree 16
 language LANGUAGE_HERE
 
 # Resources settings
@@ -46,7 +49,7 @@ csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
 want-pets #f
 want-news-tab #f
 want-news-page #f
-want-old-fireworks #t
+want-old-fireworks #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 

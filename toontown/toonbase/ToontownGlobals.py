@@ -1418,13 +1418,12 @@ ColorNoChat = (0.8,
  0.5,
  0.1,
  1)
-FactoryLaffMinimums = [(0, 31),
- (0, 66, 71),
- (0,
-  81,
-  86,
-  96),
- (0, 101, 106)]
+FactoryLaffMinimums = [
+ (0, 31),         # SBHQ Factory
+ (0, 66, 71),     # CBHQ Mint
+ (0, 81, 86, 96), # LBHQ DA
+ (0, 101, 106)    # BBHQ Golf
+]
 PICNIC_COUNTDOWN_TIME = 60
 BossbotRTIntroStartPosHpr = (0,
  -64,
