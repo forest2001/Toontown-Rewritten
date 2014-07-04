@@ -18,6 +18,40 @@ class DistributedFireworkShowAI(DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.air = air
+
+        if self.air.config.GetBool('want-hourly-fireworks', False):
+            self.__startFireworksTick()
+        
+    def __startFireworksTick(self):
+        # Check seconds until next hour.
+        ts = time.time()
+        nextHour = 3600 - (ts % 3600)
+        taskMgr.doMethodLater(nextHour, self.__fireworksTick, 'hourly-fireworks')
+        
+    def __fireworksTick(self, task):
+        # The next tick will occur in exactly an hour.
+        task.delayTime = 3600
+
+        showName = self.air.config.GetBool('hourly-fireworks-type', 'summer')
+
+        if showName == 'july4':
+            showType = ToontownGlobals.JULY4_FIREWORKS
+        elif showName == 'newyears':
+            showType = ToontownGlobals.NEWYEARS_FIREWORKS
+        elif showName == 'summer':
+            showType = PartyGlobals.FireworkShows.Summer
+        else:
+            return # Invalid Show
+
+        numShows = len(FireworkShows.shows.get(showType, []))
+        showIndex = random.randint(0, numShows - 1)
+        for hood in simbase.air.hoods:
+            if hood.safezone == ToontownGlobals.GolfZone:
+                continue
+            fireworksShow = DistributedFireworkShowAI(simbase.air)
+            fireworksShow.generateWithRequired(hood.safezone)
+            fireworksShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())
+        return task.again
     
     def startShow(self, eventId, style, timeStamp):
         taskMgr.doMethodLater(FireworkShows.getShowDuration(eventId, style), self.requestDelete, 'delete%i' % self.doId, [])

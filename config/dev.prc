@@ -73,3 +73,5 @@ force-player-understandable #t
 
 # Holidays and Events
 force-holiday-decorations 6
+want-hourly-fireworks #t
+hourly-fireworks-type july4
