@@ -37,6 +37,8 @@ rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
 want-parties #f
 want-cheesy-expirations #t
+want-mega-invasions #t
+mega-invasion-cog-type le
 
 
 # DC Files
