@@ -26,15 +26,19 @@ class SuitInvasionManagerAI:
         self.suitName = None
         self.numSuits = 0
         self.spawnedSuits = 0
-        self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.45)
+
         if config.GetBool('want-mega-invasions', False):
-            self.megaInvasionProbability = config.GetFloat('mega-invasion-probability', 0.6)
+            # Mega invasion configuration.
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.6)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
             if not self.megaInvasionCog:
                 raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
             if self.megaInvasionCog not in SuitDNA.suitHeadTypes:
                 raise AttributeError("Invalid cog type specified for mega invasion!")
+
         elif config.GetBool('want-random-invasions', True):
+            # Random invasion configuration.
+            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.45)
             taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
