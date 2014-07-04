@@ -264,8 +264,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             # Begin ping-pong.
             self.ping()
-            # Ensure they have the correct laff.
-            self.__correctToonLaff()
+            if self.getAdminAccess() < 500:
+                # Ensure they have the correct laff.
+                # We don't test admins, as they can modify their stats at will.
+                # N.B.: To test this, you must bump up this access! Local servers default at
+                # access 500!
+                self.__correctToonLaff()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
