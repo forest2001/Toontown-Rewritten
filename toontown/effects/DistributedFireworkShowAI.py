@@ -11,6 +11,7 @@ from toontown.parties import PartyGlobals
 
 import FireworkShows
 import random
+import time
 
 class DistributedFireworkShowAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFireworkShowAI")
