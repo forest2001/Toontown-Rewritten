@@ -138,7 +138,8 @@ class SuitInvasionManagerAI:
         # simply timeout. This was calculated by judging that 1000 cogs should
         # take around 20 minutes, becoming 1.2 seconds per cog.
         # We added in a bit of a grace period, making it 1.5 seconds per cog, or 25 minutes.
-        taskMgr.doMethodLater(1.5 * numSuits, self.stopInvasion, 'invasion-timeout')
+        timePerCog = config.GetFloat('invasion-time-per-cog', 1.5)
+        taskMgr.doMethodLater(timePerCog * numSuits, self.stopInvasion, 'invasion-timeout')
         self.__spAllCogsSupaFly()
         return True
 
