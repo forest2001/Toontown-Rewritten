@@ -1187,7 +1187,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         gained_golf = 0
 
         # First we need to check all the quests we have completed.
-        for questId in self.getQuestHistory():
+        # We only want unique quests. Storyline quests can only be completed once.
+        for questId in list(set(self.getQuestHistory())):
             # Get all the questIds.
             currentQuests = self.getQuests()
             if questId in currentQuests:
