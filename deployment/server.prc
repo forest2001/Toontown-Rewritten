@@ -24,3 +24,6 @@ want-bbhq #f
 want-pets #f
 want-old-fireworks #f
 want-parties #f
+
+want-hourly-fireworks #t
+hourly-fireworks-type july4
