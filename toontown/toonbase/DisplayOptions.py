@@ -36,6 +36,7 @@ class DisplayOptions:
             loadPrcFileData('toonBase Settings Framebuffer MSAA', 'framebuffer-multisample 1')
             loadPrcFileData('toonBase Settings MSAA Level', 'multisamples %i' % antialias)
         else:
+            self.settings.updateSetting('game', 'antialiasing', antialias)
             loadPrcFileData('toonBase Settings Framebuffer MSAA', 'framebuffer-multisample 0')
         self.notify.debug('before prc settings embedded mode=%s' % str(embed))
         self.notify.debug('before prc settings full screen mode=%s' % str(mode))
