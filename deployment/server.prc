@@ -27,3 +27,7 @@ want-parties #f
 
 want-hourly-fireworks #t
 hourly-fireworks-type july4
+
+# Mega invasions
+want-mega-invasions #t
+mega-invasion-cog-type le
