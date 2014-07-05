@@ -1,5 +1,6 @@
 from pandac.PandaModules import *
 import __builtin__
+import os
 
 if __debug__:
     # __debug__ is only 1 in dev builds; Mirai's builder will set it to 0
@@ -17,7 +18,14 @@ for mount in mounts:
 
 import glob
 for file in glob.glob('resources/*.mf'):
-    vfs.mount(Filename(file), Filename('/'), 0)
+    mf = Multifile()
+    mf.openReadWrite(Filename(file))
+    names = mf.getSubfileNames()
+    for name in names:
+        ext = os.path.splitext(name)[1]
+        if ext not in ['.jpg', '.jpeg', '.ogg', '.rgb']:
+            mf.removeSubfile(name)
+    vfs.mount(mf, Filename('/'), 0)
 
 class game:
     name = 'toontown'
@@ -26,7 +34,6 @@ class game:
 
 __builtin__.game = game()
 import time
-import os
 import sys
 import random
 import __builtin__
