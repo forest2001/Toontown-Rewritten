@@ -91,7 +91,7 @@ def fireworks(showName='july4'):
     numShows = len(FireworkShows.shows.get(showType, []))
     showIndex = random.randint(0, numShows - 1)
     for hood in simbase.air.hoods:
-        if hood.safezone == ToontownGlobals.GolfZone:
+        if hood.HOOD == ToontownGlobals.GolfZone:
             continue
         fireworksShow = DistributedFireworkShowAI(simbase.air)
         fireworksShow.generateWithRequired(hood.HOOD)
