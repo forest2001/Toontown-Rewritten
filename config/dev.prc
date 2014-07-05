@@ -8,8 +8,6 @@ server-version dev
 sync-video #f
 want-dev #f
 preload-avatars #t
-framebuffer-multisample #t
-multisamples 4
 texture-anisotropic-degree 16
 
 

@@ -31,6 +31,13 @@ class DisplayOptions:
         sfxVol = self.settings.getInt('game', 'sfx-vol', 100) / 100.0
         res = self.settings.getList('game', 'resolution', default=[800, 600], expectedLength=2)
         embed = self.settings.getBool('game', 'embed', False)
+        antialias = self.settings.getInt('game', 'antialiasing', 0)
+        if antialias:
+            loadPrcFileData('toonBase Settings Framebuffer MSAA', 'framebuffer-multisample 1')
+            loadPrcFileData('toonBase Settings MSAA Level', 'multisamples %i' % antialias)
+        else:
+            self.settings.updateSetting('game', 'antialiasing', antialias)
+            loadPrcFileData('toonBase Settings Framebuffer MSAA', 'framebuffer-multisample 0')
         self.notify.debug('before prc settings embedded mode=%s' % str(embed))
         self.notify.debug('before prc settings full screen mode=%s' % str(mode))
         loadPrcFileData('toonBase Settings Window Res', 'win-size %s %s' % (res[0], res[1]))
@@ -46,6 +53,7 @@ class DisplayOptions:
         self.settingsWidth = res[0]
         self.settingsHeight = res[1]
         self.settingsEmbedded = embed
+        self.antialias = antialias
         self.notify.debug('settings embedded mode=%s' % str(self.settingsEmbedded))
         self.notify.info('settingsFullScreen = %s, embedded = %s width=%d height=%d' % (self.settingsFullScreen,
          self.settingsEmbedded,
