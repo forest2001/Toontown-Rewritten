@@ -1182,7 +1182,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
 
     def correctToonLaff(self):
-        hp = 15 # The base laff to work from.
+        # Init our counters to 0.
         gained_quest = 0
         gained_racing = 0
         gained_fishing = 0
@@ -1203,31 +1203,26 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 # This quest has no reward. Skip.
                 continue
             if rewardId in range(100, 110): # [100..109]
-                hp += rewardId - 99 # Corresponds to Quest rewards.
-                gained_quest += rewardId - 99
+                gained_quest += rewardId - 99 # Corresponds to Quest rewards.
 
         # We have to calculate the total laff points we're supposed to have
         # for each "side" activity.
-        hp += len(self.getFishingTrophies()) # fishing (1 boost per trophy)
-        gained_fishing += len(self.getFishingTrophies())
+        gained_fishing += len(self.getFishingTrophies()) # fishing (1 boost per trophy)
 
         num_racing_trophies = 0
         for value in self.getKartingTrophies():
             if value:
                 num_racing_trophies += 1
-        hp += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
-        gained_racing += int(num_racing_trophies/10)
+        gained_racing += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
 
         golf_trophies = GolfGlobals.calcTrophyListFromHistory(self.golfHistory)
         num_golf_trophies = 0
         for value in golf_trophies:
             if value:
                 num_golf_trophies += 1
-        hp += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
-        gained_golf += int(num_golf_trophies/10)
+        gained_golf += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
 
-        hp += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
-        gained_gardening += int(len(self.getGardenTrophies())/2)
+        gained_gardening += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
 
         # Finally, we calculate the total amount of boosts from boss battles.
         for x in xrange(4): # 0 to 3
@@ -1239,8 +1234,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # If we are, we get 1 boost per level that we've passed.
             for level in levels:
                 if self.getCogLevels()[x] >= level - 1: # 0-49, pfft.
-                    hp += 1
                     gained_suit += 1
+
+        # Calculate the total hp from the "gained" counters.
+        hp = 15 + gained_quest + gained_fishing + gained_racing + gained_golf + gained_gardening + gained_suit
 
         # If the calculated HP differs from our current maxHp, we need to bump our maxHp.
         if hp != self.getMaxHp():
