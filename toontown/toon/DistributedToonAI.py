@@ -1243,9 +1243,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if hp != self.getMaxHp():
             # Log the details.
             self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
-                reason = "Mismatch in calculated HP %d compared to maxHp %d corrected." % (hp, self.getMaxHp()),
-                info = "Quest laff %d, Fishing laff %d, Racing laff %d, Golf laff %d, Gardening laff %d, Disguise laff %d" % (
-                    gained_quest, gained_fishing, gained_racing, gained_golf, gained_gardening, gained_suit)
+                info = "Corrected HP mismatch %d compared to old maxHp %d." % (hp, self.getMaxHp()),
+                questlaff = gained_quest,
+                fishinglaff = gained_fishing,
+                racinglaff = gained_racing,
+                golflaff = gained_golf,
+                gardenlaff = gained_gardening,
+                suitlaff = gained_suit
             )
             if self.getHp() > hp:
                 # Bump their hp down if they have more than the calculated max.
