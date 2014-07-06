@@ -261,10 +261,12 @@ class QuestManagerAI:
         tier = toon.getRewardHistory()[0]
         if Quests.avatarHasAllRequiredRewards(toon, tier):
             # They have all the rewards needed for the next tier.
-            if not Quests.avatarWorkingOnRequiredRewards(toon) and tier != Quests.ELDER_TIER:
-                # They have no ToonTasks in their current tier, and they're also
-                # not an old peasant.
-                tier += 1
+            if Quests.avatarHasAllRequiredRewards(toon, tier):
+                # Check to make sure they are not on the ELDER_TIER
+                if tier != Quests.ELDER_TIER:
+                    tier += 1
+
+                # Set the tier
                 toon.b_setRewardHistory(tier, [])
             else:
                 # They're eligible for a tier upgrade, but haven't finished all
