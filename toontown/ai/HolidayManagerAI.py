@@ -1,7 +1,6 @@
+from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.ClockDelta import *
 from direct.task import Task
-
-from otp.ai.MagicWordGlobal import *
 
 from toontown.toonbase import ToontownGlobals
 from toontown.parties import PartyGlobals
@@ -13,13 +12,18 @@ import random
 import time
 
 class HolidayManagerAI:
-    def __init__(self):
+	# notify = directNotify.newCategory('HolidayManagerAI')
+    def __init__(self, air):
+    	self.air = air
         self.currentHolidays = []
 
         # TODO: Properly create a holiday manager to run this.
         if config.GetBool('want-hourly-fireworks', False):
             self.__startFireworksTick()
 
+    """
+    Fireworks Stuff
+    """
     def __startFireworksTick(self):
         # Check seconds until next hour.
         ts = time.time()
@@ -27,7 +31,6 @@ class HolidayManagerAI:
         taskMgr.doMethodLater(nextHour, self.__fireworksTick, 'hourly-fireworks')
 
     def __fireworksTick(self, task):
-    	print('Starting show')
         # The next tick will occur in exactly an hour.
         task.delayTime = 3600
 
@@ -51,10 +54,10 @@ class HolidayManagerAI:
 
         numShows = len(FireworkShows.shows.get(showType, []))
         showIndex = random.randint(0, numShows - 1)
-        for hood in simbase.air.hoods:
+        for hood in self.air.hoods:
             if hood.HOOD == ToontownGlobals.GolfZone:
                 continue
-            fireworksShow = DistributedFireworkShowAI(simbase.air)
+            fireworksShow = DistributedFireworkShowAI(self.air)
             fireworksShow.generateWithRequired(hood.HOOD)
             fireworksShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())
         return task.again
