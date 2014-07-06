@@ -12,9 +12,9 @@ import random
 import time
 
 class HolidayManagerAI:
-	# notify = directNotify.newCategory('HolidayManagerAI')
+    # notify = directNotify.newCategory('HolidayManagerAI')
     def __init__(self, air):
-    	self.air = air
+        self.air = air
         self.currentHolidays = []
 
         # TODO: Properly create a holiday manager to run this.
@@ -61,7 +61,7 @@ class HolidayManagerAI:
             fireworksShow.generateWithRequired(hood.HOOD)
             fireworksShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())
         return task.again
-        
+
     def isHolidayRunning(self, *args):
         return True
         #TODO: this function needs to actually check holidays
