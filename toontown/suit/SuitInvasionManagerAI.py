@@ -35,10 +35,13 @@ class SuitInvasionManagerAI:
                 raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
             if self.megaInvasionCog not in SuitDNA.suitHeadTypes:
                 raise AttributeError("Invalid cog type specified for mega invasion!")
+            # Start ticking.
+            taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
         elif config.GetBool('want-random-invasions', True):
             # Random invasion configuration.
             self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.45)
+            # Start ticking.
             taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
     def __randomInvasionTick(self, task=None):
@@ -61,7 +64,12 @@ class SuitInvasionManagerAI:
         if random() <= self.randomInvasionProbability:
             # We want an invasion!
             self.notify.debug('Invasion probability hit! Starting invasion.')
-            if config.GetBool('want-mega-invasions', False):
+            # We want to test if we get a mega invasion or a normal invasion.
+            # Take the mega invasion probability and test it. If we get lucky
+            # a second time, spawn a mega invasion, otherwise spawn a normal
+            # invasion.
+            if config.GetBool('want-mega-invasions', False) and random() <= self.randomInvasionProbability:
+                # N.B.: randomInvasionProbability = mega invasion probability.
                 suitName = self.megaInvasionCog
                 numSuits = randint(1500, 15000)
             else:
