@@ -261,7 +261,7 @@ class QuestManagerAI:
         tier = toon.getRewardHistory()[0]
         if Quests.avatarHasAllRequiredRewards(toon, tier):
             # They have all the rewards needed for the next tier.
-            if Quests.avatarHasAllRequiredRewards(toon, tier):
+            if not Quests.avatarWorkingOnRequiredRewards(toon):
                 # Check to make sure they are not on the LOOPING_FINAL_TIER
                 if tier != Quests.LOOPING_FINAL_TIER:
                     tier += 1
