@@ -1241,6 +1241,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # If the calculated HP differs from our current maxHp, we need to bump our maxHp.
         if hp != self.getMaxHp():
+            log_only_mode = config.GetBool('want-hp-correction-log-only', True) # Defaults to true so we don't break prod.
             # Log the details.
             self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
                 info = "Corrected HP mismatch %d compared to old maxHp %d." % (hp, self.getMaxHp()),
@@ -1249,12 +1250,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 racinglaff = gained_racing,
                 golflaff = gained_golf,
                 gardenlaff = gained_gardening,
-                suitlaff = gained_suit
+                suitlaff = gained_suit,
+                log_only = log_only_mode
             )
-            if self.getHp() > hp:
-                # Bump their hp down if they have more than the calculated max.
-                self.b_setHp(hp)
-            self.b_setMaxHp(hp)
+
+            # If we're not in log only mode, actually modify their HP.
+            if not log_only_mode:
+                if self.getHp() > hp:
+                    # Bump their hp down if they have more than the calculated max.
+                    self.b_setHp(hp)
+                self.b_setMaxHp(hp)
 
     def b_setTutorialAck(self, tutorialAck):
         self.d_setTutorialAck(tutorialAck)
