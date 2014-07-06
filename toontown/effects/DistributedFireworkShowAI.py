@@ -33,7 +33,7 @@ class DistributedFireworkShowAI(DistributedObjectAI):
         # The next tick will occur in exactly an hour.
         task.delayTime = 3600
 
-        showName = config.GetBool('hourly-fireworks-type', 'random')
+        showName = config.GetString('hourly-fireworks-type', 'july4')
 
         if showName == 'july4':
             showType = ToontownGlobals.JULY4_FIREWORKS
