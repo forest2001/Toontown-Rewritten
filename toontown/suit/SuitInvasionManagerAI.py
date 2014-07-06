@@ -29,7 +29,7 @@ class SuitInvasionManagerAI:
 
         if config.GetBool('want-mega-invasions', False):
             # Mega invasion configuration.
-            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.6)
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.7)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
             if not self.megaInvasionCog:
                 raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
@@ -72,10 +72,12 @@ class SuitInvasionManagerAI:
                 # N.B.: randomInvasionProbability = mega invasion probability.
                 suitName = self.megaInvasionCog
                 numSuits = randint(1500, 15000)
+                specialSuit = randint(0, 2)
             else:
                 suitName = choice(SuitDNA.suitHeadTypes)
                 numSuits = randint(1000, 3000)
-            self.startInvasion(suitName, numSuits, False)
+                specialSuit = False
+            self.startInvasion(suitName, numSuits, specialSuit)
         return task.again
 
     def getInvading(self):
