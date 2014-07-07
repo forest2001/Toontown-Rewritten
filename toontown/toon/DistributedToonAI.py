@@ -261,9 +261,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
-        # Begin ping-pong.
         if self.isPlayerControlled():
+            # Begin ping-pong.
             self.ping()
+            if self.getAdminAccess() < 500:
+                # Ensure they have the correct laff.
+                # We don't test admins, as they can modify their stats at will.
+                # N.B.: To test this, you must bump up this access! Local servers default at
+                # access 500!
+                self.correctToonLaff()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -1174,6 +1180,86 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to go over 137 laff.')
         maxHp = min(maxHp, ToontownGlobals.MaxHpLimit)
         DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
+
+    def correctToonLaff(self):
+        # Init our counters to 0.
+        gained_quest = 0
+        gained_racing = 0
+        gained_fishing = 0
+        gained_suit = 0
+        gained_gardening = 0
+        gained_golf = 0
+
+        # First we need to check all the quests we have completed.
+        # We only want unique quests. Storyline quests can only be completed once.
+        for questId in list(set(self.getQuestHistory())):
+            # Get all the questIds.
+            currentQuests = self.getQuests()
+            if questId in currentQuests:
+                # We're still working on the quest.
+                continue
+            rewardId = Quests.Quest2RewardDict.get(questId)
+            if not rewardId:
+                # This quest has no reward. Skip.
+                continue
+            if rewardId in range(100, 110): # [100..109]
+                gained_quest += rewardId - 99 # Corresponds to Quest rewards.
+
+        # We have to calculate the total laff points we're supposed to have
+        # for each "side" activity.
+        gained_fishing += len(self.getFishingTrophies()) # fishing (1 boost per trophy)
+
+        num_racing_trophies = 0
+        for value in self.getKartingTrophies():
+            if value:
+                num_racing_trophies += 1
+        gained_racing += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
+
+        golf_trophies = GolfGlobals.calcTrophyListFromHistory(self.golfHistory)
+        num_golf_trophies = 0
+        for value in golf_trophies:
+            if value:
+                num_golf_trophies += 1
+        gained_golf += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
+
+        gained_gardening += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
+
+        # Finally, we calculate the total amount of boosts from boss battles.
+        for x in xrange(4): # 0 to 3
+            if self.getCogTypes()[x] != 7:
+                # We're not the last cog type, skip.
+                continue
+            levels = [15, 20, 30, 40, 50]
+            # Iterate through the above list, and check if we're above or equal to the level.
+            # If we are, we get 1 boost per level that we've passed.
+            for level in levels:
+                if self.getCogLevels()[x] >= level - 1: # 0-49, pfft.
+                    gained_suit += 1
+
+        # Calculate the total hp from the "gained" counters.
+        hp = 15 + gained_quest + gained_fishing + gained_racing + gained_golf + gained_gardening + gained_suit
+
+        # If the calculated HP differs from our current maxHp, we need to bump our maxHp.
+        if hp != self.getMaxHp():
+            log_only_mode = config.GetBool('want-hp-correction-log-only', True) # Defaults to true so we don't break prod.
+            # Log the details.
+            self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
+                info = "Corrected HP mismatch %d compared to old maxHp %d." % (hp, self.getMaxHp()),
+                questlaff = gained_quest,
+                fishinglaff = gained_fishing,
+                racinglaff = gained_racing,
+                golflaff = gained_golf,
+                gardenlaff = gained_gardening,
+                suitlaff = gained_suit,
+                log_only = log_only_mode
+            )
+
+            # If we're not in log only mode, actually modify their HP.
+            if not log_only_mode:
+                if self.getHp() > hp:
+                    # Bump their hp down if they have more than the calculated max.
+                    self.b_setHp(hp)
+                self.b_setMaxHp(hp)
 
     def b_setTutorialAck(self, tutorialAck):
         self.d_setTutorialAck(tutorialAck)
@@ -5209,3 +5295,13 @@ def dump_doId2do():
         for name, size in sorted_objSizes:
             file.write('OBJ: %s | SIZE: %d\n' % (name, size))
     return "Dumped doId2do sizes (grouped by class) to '%s'." % temp_file[1]
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def correctlaff():
+    """
+    A magic word that attempts to correct a toons laff. This includes any external,
+    admin modifications to the toon (such as setMaxHp).
+    """
+    av = spellbook.getTarget()
+    av.correctToonLaff()
+    return "Corrected %s's laff successfully." % av.getName()

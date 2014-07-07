@@ -33,10 +33,7 @@ default-model-extension .bam
 want-rpc-server #f
 rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
-want-parties #f
 want-cheesy-expirations #t
-want-mega-invasions #t
-mega-invasion-cog-type le
 
 
 # DC Files
@@ -50,6 +47,7 @@ dc-file config/otp.dc
 want-pets #f
 want-news-tab #f
 want-news-page #f
+want-parties #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 
@@ -72,3 +70,5 @@ force-player-understandable #t
 force-holiday-decorations 6
 want-hourly-fireworks #t
 hourly-fireworks-type july4
+want-mega-invasions #t
+mega-invasion-cog-type le
