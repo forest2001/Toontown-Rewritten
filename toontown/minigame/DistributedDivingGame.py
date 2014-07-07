@@ -163,9 +163,8 @@ class DistributedDivingGame(DistributedMinigame):
         avId = int(collEntry.getFromNodePath().getName())
         toonSD = self.toonSDs[avId]
         name = collEntry.getIntoNodePath().getName()
-        if len(name) >= 7:
-            if name[0:6] == 'crabby':
-                self.sendUpdate('handleCrabCollision', [avId, toonSD.status])
+        if name.startswith('crabby'):
+            self.sendUpdate('handleCrabCollision', [avId, toonSD.status])
         else:
             spawnerId = int(name[2])
             spawnId = int(name[3:len(name)])
