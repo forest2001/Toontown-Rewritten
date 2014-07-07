@@ -11,20 +11,21 @@ from toontown.parties import PartyGlobals
 
 import FireworkShows
 import random
+import time
 
 class DistributedFireworkShowAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFireworkShowAI")
-    
+
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.air = air
-    
+
     def startShow(self, eventId, style, timeStamp):
         taskMgr.doMethodLater(FireworkShows.getShowDuration(eventId, style), self.requestDelete, 'delete%i' % self.doId, [])
-        
+
     def d_startShow(self, eventId, style, timeStamp):
         self.sendUpdate('startShow', [eventId, style, random.randint(0,1), timeStamp])
-    
+
     def b_startShow(self, eventId, style, timeStamp):
         self.startShow(eventId, style, timeStamp)
         self.d_startShow(eventId, style, timeStamp)
@@ -49,9 +50,9 @@ def fireworks(showName='july4'):
     numShows = len(FireworkShows.shows.get(showType, []))
     showIndex = random.randint(0, numShows - 1)
     for hood in simbase.air.hoods:
-        if hood.safezone == ToontownGlobals.GolfZone:
+        if hood.HOOD == ToontownGlobals.GolfZone:
             continue
         fireworksShow = DistributedFireworkShowAI(simbase.air)
-        fireworksShow.generateWithRequired(hood.safezone)
+        fireworksShow.generateWithRequired(hood.HOOD)
         fireworksShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())
     return 'Started fireworks in all playgrounds!'
