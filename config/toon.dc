@@ -1189,9 +1189,9 @@ dclass DistributedCatchGame : DistributedMinigame {
 dclass DistributedDivingGame : DistributedMinigame {
   pickupTreasure(uint32 chestId) airecv clsend;
   setTreasureGrabbed(uint32 avId, uint32 chestId) broadcast;
-  handleFishCollision(uint32 avId, uint32 spawnId, uint32 spawnerId, char status[0-256]) airecv clsend;
+  handleFishCollision(uint32 spawnId, uint32 spawnerId, char status[0-256]) airecv clsend;
   performFishCollision(uint32 avId, uint32 spawnId, uint32 spawnerId, int16 timestamp) broadcast;
-  handleCrabCollision(uint32 avId, char status[0-256]) airecv clsend;
+  handleCrabCollision(char status[0-256]) airecv clsend;
   performCrabCollision(uint32 avId, int16 timestamp) broadcast;
   setTreasureDropped(uint32 avId, int16 timestamp) broadcast;
   fishSpawn(int16 timestamp, uint32 fishcode, uint32 spawnerId, uint16 offset) broadcast;

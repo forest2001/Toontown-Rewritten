@@ -161,16 +161,17 @@ class DistributedDivingGame(DistributedMinigame):
 
     def fishCollision(self, collEntry):
         avId = int(collEntry.getFromNodePath().getName())
+        if avId != self.localAvId:
+            return # This collision event doesn't involve me. ???
         toonSD = self.toonSDs[avId]
         name = collEntry.getIntoNodePath().getName()
         if name.startswith('crabby'):
-            self.sendUpdate('handleCrabCollision', [avId, toonSD.status])
+            self.sendUpdate('handleCrabCollision', [toonSD.status])
         else:
             spawnerId = int(name[2])
             spawnId = int(name[3:len(name)])
             if self.spawners[spawnerId].fishArray.has_key(spawnId):
-                self.sendUpdate('handleFishCollision', [avId,
-                 spawnId,
+                self.sendUpdate('handleFishCollision', [spawnId,
                  spawnerId,
                  toonSD.status])
 

@@ -427,7 +427,8 @@ class DistributedDivingGameAI(DistributedMinigameAI):
                  offset])
                 return
 
-    def handleCrabCollision(self, avId, status):
+    def handleCrabCollision(self, status):
+        avId = self.air.getAvatarIdFromSender()
         if avId not in self.avIdList:
             self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleCrabCollision: invalid avId')
             return
@@ -444,7 +445,8 @@ class DistributedDivingGameAI(DistributedMinigameAI):
                 else:
                     self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleCrabCollision: reported "treasure drop" without holding treasure')
 
-    def handleFishCollision(self, avId, spawnId, spawnerId, status):
+    def handleFishCollision(self, spawnId, spawnerId, status):
+        avId = self.air.getAvatarIdFromSender()
         if avId not in self.avIdList:
             self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleFishCollision: invalid avId')
             return
