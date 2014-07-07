@@ -433,17 +433,12 @@ class DistributedDivingGameAI(DistributedMinigameAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleCrabCollision: invalid avId')
             return
         timestamp = globalClockDelta.getFrameNetworkTime()
-        self.sendUpdate('setTreasureDropped', [avId, timestamp])
         self.scoreTracking[avId][1] += 1
         if status == 'normal' or status == 'treasure':
             timestamp = globalClockDelta.getFrameNetworkTime()
             self.sendUpdate('performCrabCollision', [avId, timestamp])
-            if status == 'treasure':
-                if avId in self.treasureHolders:
-                    self.treasureHolders[self.treasureHolders.index(avId)] = 0
-                    self.scoreTracking[avId][3] += 1
-                else:
-                    self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleCrabCollision: reported "treasure drop" without holding treasure')
+
+        self.dropTreasure()
 
     def handleFishCollision(self, spawnId, spawnerId, status):
         avId = self.air.getAvatarIdFromSender()
@@ -451,16 +446,18 @@ class DistributedDivingGameAI(DistributedMinigameAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleFishCollision: invalid avId')
             return
         timestamp = globalClockDelta.getFrameNetworkTime()
-        self.sendUpdate('setTreasureDropped', [avId, timestamp])
-        timestamp = globalClockDelta.getFrameNetworkTime()
         self.scoreTracking[avId][0] += 1
-        if status == 'treasure':
-            if avId in self.treasureHolders:
-                self.treasureHolders[self.treasureHolders.index(avId)] = 0
-                self.scoreTracking[avId][3] += 1
-            else:
-                self.air.writeServerEvent('suspicious', avId=avId, issue='DivingGameAI.handleFishCollision: reported "treasure drop" without holding treasure')
         self.sendUpdate('performFishCollision', [avId,
          spawnId,
          spawnerId,
          timestamp])
+
+        self.dropTreasure()
+
+    def dropTreasure(self):
+        avId = self.air.getAvatarIdFromSender()
+        timestamp = globalClockDelta.getFrameNetworkTime()
+        if avId in self.treasureHolders:
+            self.treasureHolders[self.treasureHolders.index(avId)] = 0
+            self.scoreTracking[avId][3] += 1
+            self.sendUpdate('setTreasureDropped', [avId, timestamp])

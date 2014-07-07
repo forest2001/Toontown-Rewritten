@@ -780,21 +780,32 @@ class DistributedDivingGame(DistributedMinigame):
     def setTreasureGrabbed(self, avId, chestId):
         if not self.hasLocalToon:
             return
+
         if self.grabbingTreasure == chestId:
             self.grabbingTreasure = -1
+
         toonSD = self.toonSDs.get(avId)
-        if toonSD and toonSD.status == 'normal':
-            toonSD.fsm.request('treasure')
-            self.treasures[chestId].moveLerp.pause()
-            self.treasures[chestId].moveLerp = Sequence()
-            self.treasures[chestId].chestNode.setIntoCollideMask(BitMask32.allOff())
-            self.treasures[chestId].treasureNode.reparentTo(self.getAvatar(avId))
-            headparts = self.getAvatar(avId).getHeadParts()
-            pos = headparts[2].getPos()
-            self.treasures[chestId].treasureNode.setPos(pos + Point3(0, 0.2, 3))
-            self.treasures[chestId].grabbedId = avId
-            timestamp = globalClockDelta.getFrameNetworkTime()
-            self.playSound('getGold')
+        if not toonSD:
+            return # Not an avId we know about??? Oh well.
+
+        if avId == self.localAvId and toonSD.status == 'freeze':
+            # It's great that we were given a treasure and all, but because
+            # we're currently stunned by a fish (that we hit just before touching
+            # the treasure), we can't keep it...
+            self.sendUpdate('dropTreasure', [])
+            return
+
+        toonSD.fsm.request('treasure')
+        self.treasures[chestId].moveLerp.pause()
+        self.treasures[chestId].moveLerp = Sequence()
+        self.treasures[chestId].chestNode.setIntoCollideMask(BitMask32.allOff())
+        self.treasures[chestId].treasureNode.reparentTo(self.getAvatar(avId))
+        headparts = self.getAvatar(avId).getHeadParts()
+        pos = headparts[2].getPos()
+        self.treasures[chestId].treasureNode.setPos(pos + Point3(0, 0.2, 3))
+        self.treasures[chestId].grabbedId = avId
+        timestamp = globalClockDelta.getFrameNetworkTime()
+        self.playSound('getGold')
 
     def __spawnCrabTask(self):
         taskMgr.remove(self.CRAB_TASK)

@@ -1199,6 +1199,7 @@ dclass DistributedDivingGame : DistributedMinigame {
   getCrabMoving(uint32 crabId, int16 crabX, int8 dir) airecv clsend;
   setCrabMoving(uint32 crabId, int16 timestamp, int8 rand1, int8 rand2, int16 crabX, int8 dir) broadcast;
   treasureRecovered() airecv clsend;
+  dropTreasure() airecv clsend;
   incrementScore(uint32 avId, uint32 newSpot, int16 timestamp) broadcast;
 };
 
