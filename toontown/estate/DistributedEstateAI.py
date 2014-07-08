@@ -3,12 +3,13 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.toonbase import ToontownGlobals
 import HouseGlobals
 import time
-
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
+from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
+from toontown.safezone import TreasureGlobals
 
 
 class DistributedEstateAI(DistributedObjectAI):
@@ -35,6 +36,7 @@ class DistributedEstateAI(DistributedObjectAI):
     def generate(self):
         DistributedObjectAI.generate(self)
         
+        # Gone fishin'
         self.pond = DistributedFishingPondAI(simbase.air)
         self.pond.setArea(ToontownGlobals.MyEstate)
         self.pond.generateWithRequired(self.zoneId)
@@ -70,6 +72,8 @@ class DistributedEstateAI(DistributedObjectAI):
         spot.generateWithRequired(self.zoneId)
         self.spots.append(spot)
 
+        # Let's place some popsicles
+        self.createTreasurePlanner()
 
     def destroy(self):
         for house in self.houses:
@@ -81,6 +85,9 @@ class DistributedEstateAI(DistributedObjectAI):
                 spot.requestDelete()
             for target in self.targets:
                 target.requestDelete()
+        if self.treasurePlanner:
+            self.treasurePlanner.requestDelete()
+
         self.requestDelete()
 
     def setEstateReady(self):
@@ -107,6 +114,11 @@ class DistributedEstateAI(DistributedObjectAI):
 
     def setTreasureIds(self, todo0):
         pass
+
+    def createTreasurePlanner(self):
+        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[ToontownGlobals.MyEstate]
+        self.treasurePlanner = SZTreasurePlannerAI(self.zoneId, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
+        self.treasurePlanner.start()
 
     def requestServerTime(self):
         avId = self.air.getAvatarIdFromSender()

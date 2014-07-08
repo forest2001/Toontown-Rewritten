@@ -250,6 +250,6 @@ SafeZoneTreasureSpawns = {
             (-125.6, -64.82, 0.5),
         ],
         10, # Rate
-        5 # Maximum
+        4 # Maximum
     ),
 }
