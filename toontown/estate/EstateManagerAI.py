@@ -330,7 +330,6 @@ class EstateManagerAI(DistributedObjectAI):
         if not toon:
             self.air.writeServerEvent('suspicious', avId=senderId, issue='Sent exitEstate() but not on district!')
             return
-
         self._unmapFromEstate(toon)
         self._unloadEstate(toon)
 
@@ -372,6 +371,7 @@ class EstateManagerAI(DistributedObjectAI):
             del self.estate2timeout[estate]
 
         # Destroy estate and unmap from owner:
+        estate.treasurePlanner.requestDelete()
         estate.destroy()
         estate.owner.estate = None
 
