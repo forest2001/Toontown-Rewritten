@@ -18,7 +18,3 @@ want-parties #f
 want-golf #f
 
 # Holidays and Events
-want-hourly-fireworks #t
-hourly-fireworks-type july4
-want-mega-invasions #t
-mega-invasion-cog-type le
