@@ -161,17 +161,17 @@ class DistributedDivingGame(DistributedMinigame):
 
     def fishCollision(self, collEntry):
         avId = int(collEntry.getFromNodePath().getName())
+        if avId != self.localAvId:
+            return # This collision event doesn't involve me. ???
         toonSD = self.toonSDs[avId]
         name = collEntry.getIntoNodePath().getName()
-        if len(name) >= 7:
-            if name[0:6] == 'crabby':
-                self.sendUpdate('handleCrabCollision', [avId, toonSD.status])
+        if name.startswith('crabby'):
+            self.sendUpdate('handleCrabCollision', [toonSD.status])
         else:
             spawnerId = int(name[2])
             spawnId = int(name[3:len(name)])
             if self.spawners[spawnerId].fishArray.has_key(spawnId):
-                self.sendUpdate('handleFishCollision', [avId,
-                 spawnId,
+                self.sendUpdate('handleFishCollision', [spawnId,
                  spawnerId,
                  toonSD.status])
 
@@ -780,21 +780,32 @@ class DistributedDivingGame(DistributedMinigame):
     def setTreasureGrabbed(self, avId, chestId):
         if not self.hasLocalToon:
             return
+
         if self.grabbingTreasure == chestId:
             self.grabbingTreasure = -1
+
         toonSD = self.toonSDs.get(avId)
-        if toonSD and toonSD.status == 'normal':
-            toonSD.fsm.request('treasure')
-            self.treasures[chestId].moveLerp.pause()
-            self.treasures[chestId].moveLerp = Sequence()
-            self.treasures[chestId].chestNode.setIntoCollideMask(BitMask32.allOff())
-            self.treasures[chestId].treasureNode.reparentTo(self.getAvatar(avId))
-            headparts = self.getAvatar(avId).getHeadParts()
-            pos = headparts[2].getPos()
-            self.treasures[chestId].treasureNode.setPos(pos + Point3(0, 0.2, 3))
-            self.treasures[chestId].grabbedId = avId
-            timestamp = globalClockDelta.getFrameNetworkTime()
-            self.playSound('getGold')
+        if not toonSD:
+            return # Not an avId we know about??? Oh well.
+
+        if avId == self.localAvId and toonSD.status == 'freeze':
+            # It's great that we were given a treasure and all, but because
+            # we're currently stunned by a fish (that we hit just before touching
+            # the treasure), we can't keep it...
+            self.sendUpdate('dropTreasure', [])
+            return
+
+        toonSD.fsm.request('treasure')
+        self.treasures[chestId].moveLerp.pause()
+        self.treasures[chestId].moveLerp = Sequence()
+        self.treasures[chestId].chestNode.setIntoCollideMask(BitMask32.allOff())
+        self.treasures[chestId].treasureNode.reparentTo(self.getAvatar(avId))
+        headparts = self.getAvatar(avId).getHeadParts()
+        pos = headparts[2].getPos()
+        self.treasures[chestId].treasureNode.setPos(pos + Point3(0, 0.2, 3))
+        self.treasures[chestId].grabbedId = avId
+        timestamp = globalClockDelta.getFrameNetworkTime()
+        self.playSound('getGold')
 
     def __spawnCrabTask(self):
         taskMgr.remove(self.CRAB_TASK)
@@ -844,12 +855,12 @@ class DistributedDivingGame(DistributedMinigame):
         if distance < soundRange:
             crabVolume = (soundRange - distance) / soundRange
         crabSoundInterval = SoundInterval(self.crabSound, loop=0, duration=1.6, startTime=0.0)
-        seq = Sequence(Wait(wait), LerpPosInterval(crab, duration=xTime, startPos=Point3(crabX, 0, -40), pos=Point3(goalX, 0, -40), blendType='easeIn'), Parallel(Func(self.grabCrapVolume, crab), LerpPosInterval(crab, duration=zTime, startPos=Point3(goalX, 0, -40), pos=Point3(goalX, 0, goalZ), blendType='easeOut')), LerpPosInterval(crab, duration=zTime, startPos=Point3(goalX, 0, goalZ), pos=Point3(goalX, 0, -40), blendType='easeInOut'))
+        seq = Sequence(Wait(wait), LerpPosInterval(crab, duration=xTime, startPos=Point3(crabX, 0, -40), pos=Point3(goalX, 0, -40), blendType='easeIn'), Parallel(Func(self.grabCrabVolume, crab), LerpPosInterval(crab, duration=zTime, startPos=Point3(goalX, 0, -40), pos=Point3(goalX, 0, goalZ), blendType='easeOut')), LerpPosInterval(crab, duration=zTime, startPos=Point3(goalX, 0, goalZ), pos=Point3(goalX, 0, -40), blendType='easeInOut'))
         crab.moveLerp.pause()
         crab.moveLerp = seq
         crab.moveLerp.start(ts)
 
-    def grabCrapVolume(self, crab):
+    def grabCrabVolume(self, crab):
         if crab:
             distance = base.localAvatar.getDistance(crab)
             self.crabVolume = 0
