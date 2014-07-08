@@ -1789,7 +1789,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
         holes = self.getHoleActors()
         hands = self.getRightHands()
-        holeTrack = Track((0.0, Func(showHoles, holes, hands)), (0.5, SoundInterval(self.getSoundTeleport(), node=self)), (1.708, Func(reparentHoles, holes, self)), (2.9, Func(self.dropShadow.hide)), (3.4, Func(cleanupHoles, holes)))
+        holeTrack = Track((0.0, Func(showHoles, holes, hands)), (0.5, SoundInterval(self.getSoundTeleport(), node=self)), (1.708, Func(reparentHoles, holes, self)), (2.9, Func(self.dropShadow.hide)), (3.4, Parallel(Func(self.nametag3d.hide), Func(cleanupHoles, holes))))
         if hasattr(self, 'uniqueName'):
             trackName = self.uniqueName('teleportOut')
         else:
@@ -1829,14 +1829,6 @@ class Toon(Avatar.Avatar, ToonHead):
         self.holeClipPath = self.attachNewNode(holeClip)
         self.getGeomNode().setClipPlane(self.holeClipPath)
         self.nametag3d.setClipPlane(self.holeClipPath)
-        self.nametagLods = []
-        for hi in range(self.headParts.getNumPaths()):
-            head = self.headParts[hi]
-            nameNode = head.attachNewNode('nameNode')
-            self.nametagLods.append(nameNode)
-            tag = self.nametag3d.copyTo(self)
-            tag.wrtReparentTo(nameNode)
-        self.nametag3d.hide()
         self.track.start(ts)
         self.setActiveShadow(0)
 
@@ -1870,9 +1862,6 @@ class Toon(Avatar.Avatar, ToonHead):
             self.getGeomNode().clearClipPlane()
         if self.nametag3d and not self.nametag3d.isEmpty():
             self.nametag3d.clearClipPlane()
-            if self.nametagLods:
-                for tag in self.nametagLods:
-                    tag.removeNode()
         if self.holeClipPath:
             self.holeClipPath.removeNode()
             self.holeClipPath = None
