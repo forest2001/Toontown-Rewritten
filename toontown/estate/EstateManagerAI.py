@@ -3,6 +3,9 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
 from toontown.estate.DistributedHouseAI import DistributedHouseAI
+from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
+from toontown.safezone import TreasureGlobals
+from toontown.toonbase import ToontownGlobals
 import HouseGlobals
 import functools
 
@@ -185,6 +188,7 @@ class LoadEstateFSM(FSM):
     def enterLoadEstate(self):
         # Activate the estate:
         self.mgr.air.sendActivate(self.estateId, self.mgr.air.districtId, self.zoneId)
+        self.createTreasurePlanner()
 
         # Now we wait for the estate to show up... We do this by hanging a messenger
         # hook which the DistributedEstateAI throws once it spawns.
@@ -233,6 +237,11 @@ class LoadEstateFSM(FSM):
             self.estate = None
 
         self.demand('Off')
+
+    def createTreasurePlanner(self):
+        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[ToontownGlobals.MyEstate]
+        self.treasurePlanner = SZTreasurePlannerAI(self.zoneId, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
+        self.treasurePlanner.start()
 
 class EstateManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("EstateManagerAI")
