@@ -42,7 +42,7 @@ class FireworkShowMixin:
             self.getSky().clearColorScale()
         if hasattr(base, 'localAvatar') and base.localAvatar:
             base.localAvatar.clearColorScale()
-        base.setBackgroundColor(DefaultBackgroundColor)
+        self.trySettingBackground(1)
         self.ignoreAll()
         return
 
@@ -150,7 +150,7 @@ class FireworkShowMixin:
                         LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 2.5, Vec4(0.25, 0.25, 0.35, 1)), 
                         LerpColorScaleInterval(base.localAvatar, 2.5, Vec4(0.85, 0.85, 0.85, 1)), 
                         Func(__lightDecorationOn__)), 
-                    Func(base.setBackgroundColor, Vec4(0, 0, 0, 1)), 
+                    Func(self.trySettingBackground, 0),
                     Func(self.__checkDDFog), 
                     Func(base.camLens.setFar, 1000.0), 
                     Func(base.cr.playGame.hood.sky.hide), 
@@ -169,6 +169,16 @@ class FireworkShowMixin:
                 base.camLens.setFar(SpeedwayCameraFar)
             else:
                 base.camLens.setFar(DefaultCameraFar)
+
+    def trySettingBackground(self, color):
+        if base.localAvatar.isBookOpen():
+            # Our Shtickerbook is open with a custom background already set,
+            # so we don't want to screw that up.
+            pass
+        elif color == 0:
+            base.setBackgroundColor(Vec4(0, 0, 0, 1))
+        else:
+            base.setBackgroundColor(DefaultBackgroundColor)
 
     def postShow(self, eventId):
         if eventId == JULY4_FIREWORKS:
@@ -193,7 +203,7 @@ class FireworkShowMixin:
                     ), 
                     Func(self.__restoreDDFog), 
                     Func(self.restoreCameraLens), 
-                    Func(base.setBackgroundColor, DefaultBackgroundColor), 
+                    Func(self.trySettingBackground, 1),
                     Func(self.showMusic.stop), 
                     Func(base.localAvatar.setSystemMessage, 0, endMessage)
                     )

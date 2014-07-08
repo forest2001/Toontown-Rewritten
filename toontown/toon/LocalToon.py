@@ -357,10 +357,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.suitPage = SuitPage.SuitPage()
         self.suitPage.load()
         self.book.addPage(self.suitPage, pageName=TTLocalizer.SuitPageTitle)
-        if base.config.GetBool('want-photo-album', 0):
-            self.photoAlbumPage = PhotoAlbumPage.PhotoAlbumPage()
-            self.photoAlbumPage.load()
-            self.book.addPage(self.photoAlbumPage, pageName=TTLocalizer.PhotoPageTitle)
         self.fishPage = FishPage.FishPage()
         self.fishPage.setAvatar(self)
         self.fishPage.load()
@@ -1921,6 +1917,15 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 if hasattr(self, 'newsPage'):
                     if self.book.isOnPage(self.newsPage):
                         result = True
+        return result
+
+    def isBookOpen(self):
+        result = False
+        if base.cr and base.cr.playGame and base.cr.playGame.getPlace() and hasattr(base.cr.playGame.getPlace(), 'fsm') and base.cr.playGame.getPlace().fsm:
+            fsm = base.cr.playGame.getPlace().fsm
+            curState = fsm.getCurrentState().getName()
+            if curState == 'stickerBook':
+                result = True
         return result
 
     def doTeleportResponse(self, fromAvatar, toAvatar, avId, available, shardId, hoodId, zoneId, sendToId):
