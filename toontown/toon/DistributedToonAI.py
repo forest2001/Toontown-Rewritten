@@ -2785,14 +2785,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def considerToonUp(self, zoneId):
         if zoneId == OTPGlobals.QuietZone:
             # Don't consider anything, we're in the QuietZone. Shh!
-            return
+            return None
         if self.shouldToonUp(zoneId):
             if taskMgr.hasTaskNamed(self.uniqueName('safeZoneToonUp')):
                 # Do nothing, we were already in a safezone!
-                return
+                return None
             self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+            return True
         else:
             self.stopToonUp()
+            return False
 
     def startToonUp(self, healFrequency):
         self.stopToonUp()
@@ -2803,7 +2805,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.doMethodLater(self.healFrequency, self.toonUpTask, self.uniqueName('safeZoneToonUp'))
 
     def toonUpTask(self, task):
-        self.considerToonUp(self.zoneId)
+        considered = self.considerToonUp(self.zoneId)
+        if not considered and considered is not None:
+            return Task.done
         self.toonUp(1)
         self.__waitForNextToonUp()
         return Task.done
