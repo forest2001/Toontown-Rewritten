@@ -59,6 +59,7 @@ from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
 # Magic Words!
 from panda3d.core import PStatClient
 from otp.ai.MagicWordGlobal import *
+import otp.ai.DiagnosticMagicWords
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
