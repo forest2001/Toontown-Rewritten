@@ -1150,6 +1150,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('catalogGenAccessories', [self.doId])
 
     def takeDamage(self, hpLost, quietly = 0, sendTotal = 1):
+        # Assume that if they took damage, they're not in a safe zone.
+        self.stopToonUp()
+
         if not self.immortalMode:
             if not quietly:
                 self.sendUpdate('takeDamage', [hpLost])
@@ -2800,6 +2803,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.doMethodLater(self.healFrequency, self.toonUpTask, self.uniqueName('safeZoneToonUp'))
 
     def toonUpTask(self, task):
+        self.considerToonUp(self.zoneId)
         self.toonUp(1)
         self.__waitForNextToonUp()
         return Task.done
