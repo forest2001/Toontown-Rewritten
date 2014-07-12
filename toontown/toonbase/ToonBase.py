@@ -9,6 +9,7 @@ from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
 from direct.showbase.Transitions import Transitions
 from pandac.PandaModules import *
+from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from otp.nametag.ChatBalloon import ChatBalloon
 from otp.nametag import NametagGlobals
 from otp.margins.MarginManager import MarginManager
@@ -57,6 +58,8 @@ class ToonBase(OTPBase.OTPBase):
         tpm.setProperties('candidate_inactive', candidateInactive)
         self.transitions.IrisModelName = 'phase_3/models/misc/iris'
         self.transitions.FadeModelName = 'phase_3/models/misc/fade'
+        self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
+        self.flashTrack = None
         self.exitFunc = self.userExit
         if __builtins__.has_key('launcher') and launcher:
             launcher.setPandaErrorCode(11)
@@ -243,7 +246,6 @@ class ToonBase(OTPBase.OTPBase):
         if not os.path.exists(TTLocalizer.ScreenshotPath):
             os.mkdir(TTLocalizer.ScreenshotPath)
             self.notify.info('Made new directory to save screenshots.')
-        
         namePrefix = TTLocalizer.ScreenshotPath + launcher.logPrefix + 'screenshot'
         timedif = globalClock.getRealTime() - self.lastScreenShotTime
         if self.glitchCount > 10 and self.walking:
@@ -255,6 +257,9 @@ class ToonBase(OTPBase.OTPBase):
             self.screenshot(namePrefix=namePrefix)
             self.lastScreenShotTime = globalClock.getRealTime()
             return
+        if self.flashTrack and self.flashTrack.isPlaying():
+            self.flashTrack.finish()
+        self.transitions.noFade()
         coordOnScreen = self.config.GetBool('screenshot-coords', 0)
         self.localAvatar.stopThisFrame = 1
         ctext = self.localAvatar.getAvPosStr()
@@ -270,11 +275,16 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
         self.lastScreenShotTime = globalClock.getRealTime()
-        self.transitions.fadeScreenColor(1)
         self.transitions.setFadeColor(1, 1, 1)
-        self.transitions.fadeIn(0.8)
-        self.snapshotSfx = base.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
-        base.playSfx(self.snapshotSfx)
+        self.flashTrack = Sequence(
+            Func(base.playSfx, self.snapshotSfx),
+            Func(self.transitions.fadeOut, 0.15),
+            Wait(0.2),
+            Func(self.transitions.fadeIn, 0.8),
+            Wait(1.0),
+            Func(self.transitions.setFadeColor, 0, 0, 0)
+        )
+        self.flashTrack.start()
         if coordOnScreen:
             if strTextLabel is not None:
                 strTextLabel.destroy()

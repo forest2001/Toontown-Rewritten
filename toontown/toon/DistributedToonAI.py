@@ -1150,6 +1150,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('catalogGenAccessories', [self.doId])
 
     def takeDamage(self, hpLost, quietly = 0, sendTotal = 1):
+        # Assume that if they took damage, they're not in a safe zone.
+        self.stopToonUp()
+
         if not self.immortalMode:
             if not quietly:
                 self.sendUpdate('takeDamage', [hpLost])
@@ -1198,9 +1201,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if questId in currentQuests:
                 # We're still working on the quest.
                 continue
-            rewardId = Quests.Quest2RewardDict.get(questId)
+            rewardId, remainingSteps = Quests.findFinalRewardId(questId)
             if not rewardId:
                 # This quest has no reward. Skip.
+                continue
+            if remainingSteps != 0:
+                # This isn't the end of the toontask, skip.
                 continue
             if rewardId in range(100, 110): # [100..109]
                 gained_quest += rewardId - 99 # Corresponds to Quest rewards.
@@ -2782,14 +2788,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def considerToonUp(self, zoneId):
         if zoneId == OTPGlobals.QuietZone:
             # Don't consider anything, we're in the QuietZone. Shh!
-            return
+            return None
         if self.shouldToonUp(zoneId):
             if taskMgr.hasTaskNamed(self.uniqueName('safeZoneToonUp')):
                 # Do nothing, we were already in a safezone!
-                return
+                return None
             self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+            return True
         else:
             self.stopToonUp()
+            return False
 
     def startToonUp(self, healFrequency):
         self.stopToonUp()
@@ -2800,6 +2808,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.doMethodLater(self.healFrequency, self.toonUpTask, self.uniqueName('safeZoneToonUp'))
 
     def toonUpTask(self, task):
+        considered = self.considerToonUp(self.zoneId)
+        if not considered and considered is not None:
+            return Task.done
         self.toonUp(1)
         self.__waitForNextToonUp()
         return Task.done

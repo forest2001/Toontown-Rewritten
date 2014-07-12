@@ -321,7 +321,6 @@ class EstateManagerAI(DistributedObjectAI):
         if not toon:
             self.air.writeServerEvent('suspicious', avId=senderId, issue='Sent exitEstate() but not on district!')
             return
-
         self._unmapFromEstate(toon)
         self._unloadEstate(toon)
 

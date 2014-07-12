@@ -418,6 +418,11 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         return
 
     def b_teleportGreeting(self, avId):
+        if hasattr(self, 'ghostMode') and self.ghostMode:
+            # If we're in ghost mode, we don't want to greet the person we're
+            # teleporting to. On another note, why the hell is Toontown-specific
+            # stuff in here? :S ...
+            return
         self.d_teleportGreeting(avId)
         self.teleportGreeting(avId)
 
