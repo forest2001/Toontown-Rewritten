@@ -86,7 +86,7 @@ class DistributedEstateAI(DistributedObjectAI):
             for target in self.targets:
                 target.requestDelete()
         if self.treasurePlanner:
-            self.treasurePlanner.requestDelete()
+            self.treasurePlanner.stop()
 
         self.requestDelete()
 

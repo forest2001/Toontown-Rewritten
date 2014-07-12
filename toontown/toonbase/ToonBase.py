@@ -379,7 +379,8 @@ class ToonBase(OTPBase.OTPBase):
 
     def startShow(self, cr, launcherServer = None):
         self.cr = cr
-        render.setAntialias(AntialiasAttrib.MAuto)
+        if self.display.antialias:
+            render.setAntialias(AntialiasAttrib.MAuto)
         base.graphicsEngine.renderFrame()
         self.downloadWatcher = ToontownDownloadWatcher.ToontownDownloadWatcher(TTLocalizer.LauncherPhaseNames)
         if launcher.isDownloadComplete():
