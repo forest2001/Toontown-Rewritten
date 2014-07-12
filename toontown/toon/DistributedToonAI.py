@@ -1201,9 +1201,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if questId in currentQuests:
                 # We're still working on the quest.
                 continue
-            rewardId = Quests.Quest2RewardDict.get(questId)
+            rewardId, remainingSteps = Quests.findFinalRewardId(questId)
             if not rewardId:
                 # This quest has no reward. Skip.
+                continue
+            if remainingSteps != 0:
+                # This isn't the end of the toontask, skip.
                 continue
             if rewardId in range(100, 110): # [100..109]
                 gained_quest += rewardId - 99 # Corresponds to Quest rewards.
