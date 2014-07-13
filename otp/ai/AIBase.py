@@ -164,9 +164,22 @@ class AIBase:
         self.taskMgr.add(self.__resetPrevTransform, 'resetPrevTransform', priority=-51)
         self.taskMgr.add(self.__ivalLoop, 'ivalLoop', priority=20)
         self.taskMgr.add(self.__igLoop, 'igLoop', priority=50)
+        if self.config.GetBool('garbage-collect-states', 1):
+            self.taskMgr.add(self.__garbageCollectStates, 'garbageCollectStates', priority=46)
         if self.AISleep >= 0 and (not self.AIRunningNetYield or self.AIForceSleep):
             self.taskMgr.add(self.__sleepCycleTask, 'aiSleep', priority=55)
         self.eventMgr.restart()
+
+    def __garbageCollectStates(self, state):
+        """ This task is started only when we have
+        garbage-collect-states set in the Config.prc file, in which
+        case we're responsible for taking out Panda's garbage from
+        time to time.  This is not to be confused with Python's
+        garbage collection.  """
+        
+        TransformState.garbageCollect()
+        RenderState.garbageCollect()
+        return Task.cont
 
     def getRepository(self):
         return self.air
