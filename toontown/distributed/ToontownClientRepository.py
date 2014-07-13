@@ -94,7 +94,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.whitelistMgr = None
 
         self.toontownTimeManager = ToontownTimeManager.ToontownTimeManager()
-
         self.csm = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_CLIENT_SERVICES_MANAGER, 'ClientServicesManager')
         self.avatarFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_AVATAR_FRIENDS_MANAGER, 'AvatarFriendsManager')
         self.playerFriendsManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_PLAYER_FRIENDS_MANAGER, 'TTPlayerFriendsManager')
@@ -103,7 +102,8 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.deliveryManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         if config.GetBool('want-code-redemption', 1):
             self.codeRedemptionManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_CODE_REDEMPTION_MANAGER, 'TTCodeRedemptionMgr')
-        self.argManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TTR_ARG_MANAGER, 'ARGManager')
+        if config.GetBool('want-active-arg', 0):
+            self.argManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TTR_ARG_MANAGER, 'ARGManager')
 
         self.streetSign = None
         self.furnitureManager = None
