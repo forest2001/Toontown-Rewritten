@@ -36,6 +36,7 @@ ssl-certificates phase_3/etc/TTRCA.crt
 #<dev>
 ssl-certificates phase_3/etc/TTRDev.crt
 #</dev>
+server-force-ssl #t
 
 # This is the shared secret for CSMUD login
 # ##### NB! Update deployment/server.prc too! #####
