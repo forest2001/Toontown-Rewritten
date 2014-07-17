@@ -33,6 +33,9 @@ default-model-extension .bam
 
 # Now that we've loaded the phase files, tell panda to trust the TTRCA
 ssl-certificates phase_3/etc/TTRCA.crt
+#<dev>
+ssl-certificates phase_3/etc/TTRDev.crt
+#</dev>
 
 # This is the shared secret for CSMUD login
 # ##### NB! Update deployment/server.prc too! #####
