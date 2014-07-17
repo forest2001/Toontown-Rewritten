@@ -2017,7 +2017,10 @@ class OTPClientRepository(ClientRepositoryBase):
         for dg in self.__pendingMessages[handle]:
             di = DatagramIterator(dg)
             msgType = di.getUint16()
-            self.handler(msgType, di)
+            if self.handler == None:
+                self.handleMessageType(msgType, di)
+            else:
+                self.handler(msgType, di)
 
         del self.__pendingMessages[handle]
 
