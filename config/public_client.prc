@@ -32,9 +32,9 @@ vfs-mount phase_13.mf /
 default-model-extension .bam
 
 # Now that we've loaded the phase files, tell panda to trust the TTRCA
-ssl-certificates phase_3/etc/TTRCA.crt
+ssl-certificates /phase_3/etc/TTRCA.crt
 #<dev>
-ssl-certificates phase_3/etc/TTRDev.crt
+ssl-certificates /phase_3/etc/TTRDev.crt
 #</dev>
 server-force-ssl #t
 
