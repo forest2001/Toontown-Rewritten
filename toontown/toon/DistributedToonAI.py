@@ -1201,7 +1201,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if questId in currentQuests:
                 # We're still working on the quest.
                 continue
-            rewardId, remainingSteps = Quests.findFinalRewardId(questId)
+            reward = Quests.findFinalRewardId(questId)
+            if reward == -1:
+                # Returns -1 instead of a tuple if error occurs.
+                continue
+            rewardId, remainingSteps = reward
             if not rewardId:
                 # This quest has no reward. Skip.
                 continue
