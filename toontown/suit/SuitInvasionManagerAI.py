@@ -29,7 +29,7 @@ class SuitInvasionManagerAI:
 
         if config.GetBool('want-mega-invasions', False):
             # Mega invasion configuration.
-            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.7)
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.65)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
             if not self.megaInvasionCog:
                 raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
@@ -40,7 +40,7 @@ class SuitInvasionManagerAI:
 
         elif config.GetBool('want-random-invasions', True):
             # Random invasion configuration.
-            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.45)
+            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.4)
             # Start ticking.
             taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
