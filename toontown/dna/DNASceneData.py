@@ -104,8 +104,6 @@ class DNASuitGraph(object):
         return self.getEdgeZone(edges[0])
 
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        minpl = minPathLen
-        maxpl = maxPathLen
         start = self._point2vertex[startPoint]
         end = self._point2vertex[endPoint]
 
