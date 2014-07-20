@@ -266,6 +266,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if base.config.GetBool('want-april-toons'):
             self.startAprilToonsControls()
 
+        if base.config.GetBool('keep-alive', True):
+            taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+
     def _handleClientCleanup(self):
         if self.track != None:
             DelayDelete.cleanupDelayDeletes(self.track)
@@ -2707,9 +2710,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
 
-    def ping(self, data):
-        # Server sent a ping, better respond before we get booted!
-        self.sendUpdate("pong", [data[::-1]])
+    def keepAliveCheck(self):
+        self.notify.debug("Checking to make sure the avatar is still alive")
+        self.sendUpdate('keepAlive', [])
+        taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
