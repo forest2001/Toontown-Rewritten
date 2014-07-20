@@ -1037,7 +1037,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return True
 
     def sendQuietZoneRequest(self):
-        self.sendSetZoneMsg(OTPGlobals.QuietZone)
+        self.sendSetZoneMsg(OTPGlobals.QuietZone, [])
 
     def handleQuietZoneGenerateWithRequired(self, di):
         doId = di.getUint32()
