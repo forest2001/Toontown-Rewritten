@@ -8,16 +8,19 @@ class DNASuitGraph(object):
         self.edges = edges
 
         self._pointId2point = {}
-        self._point2index = {}
         self._point2outboundEdges = {}
         self._point2inboundEdges = {}
 
         self._table = (ctypes.c_uint16*4 * len(points)*len(points))()
         ctypes.memset(self._table, 0xFF, ctypes.sizeof(self._table))
 
+        if points:
+            highestId = max(point.id for point in points)
+            self._id2index = (ctypes.c_uint16 * (highestId+1))()
+
         for i,point in enumerate(points):
             self._pointId2point[point.id] = point
-            self._point2index[point] = i
+            self._id2index[point.id] = i
 
         for edge in edges:
             try:
@@ -35,9 +38,9 @@ class DNASuitGraph(object):
                 self.addLink(neighbor, point, 1, point, False, visited)
 
     def addLink(self, point, neighbor, distance, destination, unbounded, visited):
-        pointIndex = self._point2index[point]
-        neighborIndex = self._point2index[neighbor]
-        destinationIndex = self._point2index[destination]
+        pointIndex = self._id2index[point.id]
+        neighborIndex = self._id2index[neighbor.id]
+        destinationIndex = self._id2index[destination.id]
 
         if visited[pointIndex]:
             # Loop detected! Modify the unbounded route:
@@ -87,8 +90,8 @@ class DNASuitGraph(object):
         return self.getEdgeZone(edges[0])
 
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        start = self._point2index[startPoint]
-        end = self._point2index[endPoint]
+        start = self._id2index[startPoint.id]
+        end = self._id2index[endPoint.id]
 
         at = start
         path = [startPoint]
