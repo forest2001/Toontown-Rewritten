@@ -4562,13 +4562,24 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     # Keep Alive
     def keepAlive(self):
+        # We received the Keep Alive response
         self.notify.debug("Received keep alive response %s (%d)." % (self.getName(), self.getDoId()))
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
     def __noKeepAlive(self):
+        # Log everything just so we have a record of it
         self.notify.debug("No keep alive response %s (%d)." % (self.getName(), self.getDoId()))
         self.air.writeServerEvent("keep-alive", avId=self.getDoId(), message="Avatar failed to respond to Keep Alive.")
+
+        # We failed to recieve a reponse from the client
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(self.getDoId()), self.air.ourChannel, CLIENTAGENT_EJECT)
+        dg.addUint16(100)
+        dg.addString('This account has been logged in elsewhere.')
+        self.air.send(dg)
+
+        # RIP
         self.requestDelete()
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])

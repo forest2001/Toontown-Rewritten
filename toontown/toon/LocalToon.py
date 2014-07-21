@@ -287,6 +287,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.nametag.unmanage(base.marginManager)
         self.ignoreAll()
         DistributedToon.DistributedToon.disable(self)
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         return
 
     def disableBodyCollisions(self):
