@@ -1,55 +1,6 @@
 from DNAParser import *
 import DNAStoreSuitPoint
-from collections import deque
-
-class DNASuitGraphLink(object):
-    unboundedDistance = None
-    unboundedNext = None
-    boundedDistance = None
-    boundedNext = None
-
-class DNASuitGraphVertex(object):
-    def __init__(self, point, traversable):
-        self.visitIndex = 0
-
-        self.paths = {}
-        self.neighbors = []
-
-        self.point = point
-        self.traversable = traversable
-
-    def processLink(self, neighbor, distance, destination, unbounded=False):
-        """Process a link announcement from a neighbor:
-
-        Neighbor `neighbor` is telling us that it has a `distance` cost link to
-        `destination`.
-        """
-
-        unbounded = (self.visitIndex > 0) or unbounded
-
-        self.visitIndex += 1
-
-        link = self.paths.setdefault(destination, DNASuitGraphLink())
-        existingDistance = link.unboundedDistance if unbounded else link.boundedDistance
-
-        if existingDistance is None or distance < existingDistance:
-            if unbounded:
-                link.unboundedDistance = distance
-                link.unboundedNext = neighbor
-            else:
-                link.boundedDistance = distance
-                link.boundedNext = neighbor
-
-            if self.traversable:
-                # Duplicated from announceLink to prevent deep recursion.
-                for neighbor in self.neighbors:
-                    neighbor.processLink(self, distance, destination, unbounded)
-
-        self.visitIndex -= 1
-
-    def announceLink(self, distance, destination, unbounded):
-        for neighbor in self.neighbors:
-            neighbor.processLink(self, distance, destination, unbounded)
+import ctypes
 
 class DNASuitGraph(object):
     def __init__(self, points, edges):
@@ -57,17 +8,16 @@ class DNASuitGraph(object):
         self.edges = edges
 
         self._pointId2point = {}
-        self._point2vertex = {}
+        self._point2index = {}
         self._point2outboundEdges = {}
         self._point2inboundEdges = {}
 
-        for point in points:
-            self._pointId2point[point.id] = point
+        self._table = (ctypes.c_uint16*4 * len(points)*len(points))()
+        ctypes.memset(self._table, 0xFF, ctypes.sizeof(self._table))
 
-            traversable = point.type in (DNAStoreSuitPoint.STREETPOINT,
-                                         DNAStoreSuitPoint.COGHQINPOINT,
-                                         DNAStoreSuitPoint.COGHQOUTPOINT)
-            self._point2vertex[point] = DNASuitGraphVertex(point, traversable)
+        for i,point in enumerate(points):
+            self._pointId2point[point.id] = point
+            self._point2index[point] = i
 
         for edge in edges:
             try:
@@ -79,10 +29,43 @@ class DNASuitGraph(object):
             self._point2outboundEdges.setdefault(a, []).append(edge)
             self._point2inboundEdges.setdefault(b, []).append(edge)
 
-            self._point2vertex[b].neighbors.append(self._point2vertex[a])
+        visited = (ctypes.c_uint16*len(points))()
+        for i, point in enumerate(points):
+            for neighbor in self.getOriginPoints(point):
+                self.addLink(neighbor, point, 1, point, False, visited)
 
-        for vertex in self._point2vertex.values():
-            vertex.announceLink(1, vertex, False)
+    def addLink(self, point, neighbor, distance, destination, unbounded, visited):
+        pointIndex = self._point2index[point]
+        neighborIndex = self._point2index[neighbor]
+        destinationIndex = self._point2index[destination]
+
+        if visited[pointIndex]:
+            # Loop detected! Modify the unbounded route:
+            unbounded = True
+
+        visited[pointIndex] += 1
+
+        entry = self._table[pointIndex][destinationIndex]
+
+        existingDistance = entry[3] if unbounded else entry[1]
+        if distance < existingDistance:
+            if not unbounded:
+                entry[0] = neighborIndex
+                entry[1] = distance
+            else:
+                entry[2] = neighborIndex
+                entry[3] = distance
+
+            # We've just updated our link. If we're traversable, announce the
+            # new route to all of our neighbors:
+            traversable = point.type in (DNAStoreSuitPoint.STREETPOINT,
+                                         DNAStoreSuitPoint.COGHQINPOINT,
+                                         DNAStoreSuitPoint.COGHQOUTPOINT)
+            if traversable:
+                for neighbor in self.getOriginPoints(point):
+                    self.addLink(neighbor, point, distance+1, destination, unbounded, visited)
+
+        visited[pointIndex] -= 1
 
     def getEdgeEndpoints(self, edge):
         return self._pointId2point[edge.a], self._pointId2point[edge.b]
@@ -104,27 +87,24 @@ class DNASuitGraph(object):
         return self.getEdgeZone(edges[0])
 
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        start = self._point2vertex[startPoint]
-        end = self._point2vertex[endPoint]
+        start = self._point2index[startPoint]
+        end = self._point2index[endPoint]
 
         at = start
         path = [startPoint]
 
         while at != end or minPathLen > 0:
-            link = at.paths.get(end)
+            boundedNext, boundedDistance, unboundedNext, unboundedDistance = self._table[at][end]
 
-            if link is None:
-                return None # Failure!
-
-            if link.boundedDistance is not None and minPathLen <= link.boundedDistance <= maxPathLen:
-                at = link.boundedNext
-            elif link.unboundedDistance is not None and link.unboundedDistance <= maxPathLen:
-                at = link.unboundedNext
+            if minPathLen <= boundedDistance <= maxPathLen:
+                at = boundedNext
+            elif unboundedDistance <= maxPathLen:
+                at = unboundedNext
             else:
                 # No path exists!
                 return None
 
-            path.append(at.point)
+            path.append(self.points[at])
             minPathLen -= 1
             maxPathLen -= 1
 
@@ -132,6 +112,9 @@ class DNASuitGraph(object):
 
     def getAdjacentPoints(self, point):
         return [self.getPointFromIndex(edge.b) for edge in self.getEdgesFrom(point)]
+
+    def getOriginPoints(self, point):
+        return [self.getPointFromIndex(edge.a) for edge in self.getEdgesTo(point)]
 
     def getConnectingEdge(self, pointA, pointB):
         assert isinstance(pointA, DNAStoreSuitPoint.DNAStoreSuitPoint)
