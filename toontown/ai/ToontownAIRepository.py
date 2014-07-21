@@ -121,9 +121,10 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.createGlobals()
         self.createZones()
 
-        self.distributedDistrict.b_setAvailable(1)
-
         self.statusSender.start()
+
+        self.distributedDistrict.b_setAvailable(1)
+        self.notify.info('District is now ready.')
 
     def incrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)
