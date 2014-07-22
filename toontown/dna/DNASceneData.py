@@ -1,6 +1,35 @@
 from DNAParser import *
 import DNAStoreSuitPoint
-import ctypes
+
+# Helpers for uint16 bytearray access:
+try:
+    import ctypes
+
+except ImportError:
+    # No ctypes! Use a slightly slower class based on bytearray().
+
+    class uint16array(object):
+        def __init__(self, size, initial=None):
+            if initial is None:
+                self.__array = bytearray(size * 2)
+            else:
+                self.__array = bytearray(initial for x in xrange(size * 2))
+
+        def __getitem__(self, index):
+            hi, lo = self.__array[index*2:index*2+2]
+            return hi*256 + lo
+
+        def __setitem__(self, index, value):
+            self.__array[index*2:index*2+2] = divmod(value, 256)
+
+else:
+    # ctypes! Wrap the uint16 array type in a convenience function:
+
+    def uint16array(size, initial=None):
+        array = (ctypes.c_uint16 * size)()
+        if initial is not None:
+            ctypes.memset(array, initial, ctypes.sizeof(array))
+        return array
 
 class DNASuitGraph(object):
     def __init__(self, points, edges):
@@ -11,12 +40,11 @@ class DNASuitGraph(object):
         self._point2outboundEdges = {}
         self._point2inboundEdges = {}
 
-        self._table = (ctypes.c_uint16*4 * len(points)*len(points))()
-        ctypes.memset(self._table, 0xFF, ctypes.sizeof(self._table))
+        self._table = uint16array(4 * len(points)*len(points), 0xFF)
 
         if points:
             highestId = max(point.id for point in points)
-            self._id2index = (ctypes.c_uint16 * (highestId+1))()
+            self._id2index = uint16array(highestId+1)
 
         for i,point in enumerate(points):
             self._pointId2point[point.id] = point
@@ -32,7 +60,7 @@ class DNASuitGraph(object):
             self._point2outboundEdges.setdefault(a, []).append(edge)
             self._point2inboundEdges.setdefault(b, []).append(edge)
 
-        visited = (ctypes.c_uint16*len(points))()
+        visited = bytearray(len(points))
         for i, point in enumerate(points):
             for neighbor in self.getOriginPoints(point):
                 self.addLink(neighbor, point, 1, point, False, visited)
@@ -48,16 +76,16 @@ class DNASuitGraph(object):
 
         visited[pointIndex] += 1
 
-        entry = self._table[pointIndex][destinationIndex]
+        entry = pointIndex*len(self.points) + destinationIndex
 
-        existingDistance = entry[3] if unbounded else entry[1]
+        existingDistance = self._table[entry*4 + 3] if unbounded else self._table[entry*4 + 1]
         if distance < existingDistance:
             if not unbounded:
-                entry[0] = neighborIndex
-                entry[1] = distance
+                self._table[entry*4 + 0] = neighborIndex
+                self._table[entry*4 + 1] = distance
             else:
-                entry[2] = neighborIndex
-                entry[3] = distance
+                self._table[entry*4 + 2] = neighborIndex
+                self._table[entry*4 + 3] = distance
 
             # We've just updated our link. If we're traversable, announce the
             # new route to all of our neighbors:
@@ -97,12 +125,12 @@ class DNASuitGraph(object):
         path = [startPoint]
 
         while at != end or minPathLen > 0:
-            boundedNext, boundedDistance, unboundedNext, unboundedDistance = self._table[at][end]
+            entry = at*len(self.points) + end
 
-            if minPathLen <= boundedDistance <= maxPathLen:
-                at = boundedNext
-            elif unboundedDistance <= maxPathLen:
-                at = unboundedNext
+            if minPathLen <= self._table[entry*4 + 1] <= maxPathLen:
+                at = self._table[entry*4 + 0]
+            elif self._table[entry*4 + 3] <= maxPathLen:
+                at = self._table[entry*4 + 2]
             else:
                 # No path exists!
                 return None
