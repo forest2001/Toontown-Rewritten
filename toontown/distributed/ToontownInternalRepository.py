@@ -5,11 +5,20 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from panda3d.core import *
 import pymongo, urlparse
+import signal
 
 mongodb_url = ConfigVariableString('mongodb-url', 'mongodb://localhost',
                                    'Specifies the URL of the MongoDB server that'
-                                   'stores all gameserver data.')
+                                   ' stores all gameserver data.')
 mongodb_replicaset = ConfigVariableString('mongodb-replicaset', '', 'Specifies the replica set of the gameserver data DB.')
+
+ai_watchdog = ConfigVariableInt('ai-watchdog', 15,
+                                'Specifies the maximum amount of time that a'
+                                ' frame may take before the process kills itself.')
+
+class WatchdogError(Exception): pass
+def watchdogExhausted(signum, frame):
+    raise WatchdogError('The process has stalled!')
 
 class ToontownInternalRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
@@ -38,6 +47,15 @@ class ToontownInternalRepository(AstronInternalRepository):
         self.netMessenger.register(2, 'avatarOnline')
         self.netMessenger.register(3, 'avatarOffline')
         self.netMessenger.register(4, 'enableLogins')
+
+        if hasattr(signal, 'alarm'):
+            signal.signal(signal.SIGALRM, watchdogExhausted)
+
+            self.__watchdog = taskMgr.add(self.__resetWatchdog, 'watchdog')
+
+    def __resetWatchdog(self, task):
+        signal.alarm(ai_watchdog.getValue())
+        return task.cont
 
     def getAvatarIdFromSender(self):
         return self.getMsgSender() & 0xFFFFFFFF
