@@ -1,8 +1,8 @@
 from DNAParser import *
 import DNAStoreSuitPoint
-from collections import deque
+import ctypes
 
-class DNASuitGraph:
+class DNASuitGraph(object):
     def __init__(self, points, edges):
         self.points = points
         self.edges = edges
@@ -11,8 +11,16 @@ class DNASuitGraph:
         self._point2outboundEdges = {}
         self._point2inboundEdges = {}
 
-        for point in points:
+        self._table = (ctypes.c_uint16*4 * len(points)*len(points))()
+        ctypes.memset(self._table, 0xFF, ctypes.sizeof(self._table))
+
+        if points:
+            highestId = max(point.id for point in points)
+            self._id2index = (ctypes.c_uint16 * (highestId+1))()
+
+        for i,point in enumerate(points):
             self._pointId2point[point.id] = point
+            self._id2index[point.id] = i
 
         for edge in edges:
             try:
@@ -23,6 +31,44 @@ class DNASuitGraph:
 
             self._point2outboundEdges.setdefault(a, []).append(edge)
             self._point2inboundEdges.setdefault(b, []).append(edge)
+
+        visited = (ctypes.c_uint16*len(points))()
+        for i, point in enumerate(points):
+            for neighbor in self.getOriginPoints(point):
+                self.addLink(neighbor, point, 1, point, False, visited)
+
+    def addLink(self, point, neighbor, distance, destination, unbounded, visited):
+        pointIndex = self._id2index[point.id]
+        neighborIndex = self._id2index[neighbor.id]
+        destinationIndex = self._id2index[destination.id]
+
+        if visited[pointIndex]:
+            # Loop detected! Modify the unbounded route:
+            unbounded = True
+
+        visited[pointIndex] += 1
+
+        entry = self._table[pointIndex][destinationIndex]
+
+        existingDistance = entry[3] if unbounded else entry[1]
+        if distance < existingDistance:
+            if not unbounded:
+                entry[0] = neighborIndex
+                entry[1] = distance
+            else:
+                entry[2] = neighborIndex
+                entry[3] = distance
+
+            # We've just updated our link. If we're traversable, announce the
+            # new route to all of our neighbors:
+            traversable = point.type in (DNAStoreSuitPoint.STREETPOINT,
+                                         DNAStoreSuitPoint.COGHQINPOINT,
+                                         DNAStoreSuitPoint.COGHQOUTPOINT)
+            if traversable:
+                for neighbor in self.getOriginPoints(point):
+                    self.addLink(neighbor, point, distance+1, destination, unbounded, visited)
+
+        visited[pointIndex] -= 1
 
     def getEdgeEndpoints(self, edge):
         return self._pointId2point[edge.a], self._pointId2point[edge.b]
@@ -44,50 +90,34 @@ class DNASuitGraph:
         return self.getEdgeZone(edges[0])
 
     def getSuitPath(self, startPoint, endPoint, minPathLen, maxPathLen):
-        # Performs a BFS in order to find a path from startPoint to endPoint,
-        # the minimum length will be minPathLen, and the maximum will be
-        # maxPathLen. N.B. these values indicate the length in edges, not
-        # vertices, so the returned list will be:
-        # minPathLen+1 <= len(list) <= maxPathLen+1
+        start = self._id2index[startPoint.id]
+        end = self._id2index[endPoint.id]
 
-        # The queue of paths to consider:
-        # The format is a tuple: (prevPath, depth, point)
-        pathDeque = deque()
-        pathDeque.append((None, 0, startPoint))
-        while pathDeque:
-            path = pathDeque.popleft()
-            prevPath, depth, point = path
+        at = start
+        path = [startPoint]
 
-            newDepth = depth + 1
-            if newDepth > maxPathLen:
-                # This path has grown too long, prune it.
-                continue
+        while at != end or minPathLen > 0:
+            boundedNext, boundedDistance, unboundedNext, unboundedDistance = self._table[at][end]
 
-            for adj in self.getAdjacentPoints(point):
-                if adj == endPoint and newDepth >= minPathLen:
-                    # Hey, we found the end! Let's return it:
-                    points = deque()
-                    points.appendleft(adj)
-                    while path:
-                        points.appendleft(path[-1])
-                        path, _, _ = path
-                    return list(points)
+            if minPathLen <= boundedDistance <= maxPathLen:
+                at = boundedNext
+            elif unboundedDistance <= maxPathLen:
+                at = unboundedNext
+            else:
+                # No path exists!
+                return None
 
-                # We're not at the end yet... Let's see if we can traverse this
-                # point:
-                if adj.type not in (DNAStoreSuitPoint.STREETPOINT,
-                                    DNAStoreSuitPoint.COGHQINPOINT,
-                                    DNAStoreSuitPoint.COGHQOUTPOINT):
-                    # This is some other special point that we cannot walk
-                    # across.
-                    continue
+            path.append(self.points[at])
+            minPathLen -= 1
+            maxPathLen -= 1
 
-                # Append this point to the paths we are considering:
-                pathDeque.append((path, newDepth, adj))
-
+        return path
 
     def getAdjacentPoints(self, point):
         return [self.getPointFromIndex(edge.b) for edge in self.getEdgesFrom(point)]
+
+    def getOriginPoints(self, point):
+        return [self.getPointFromIndex(edge.a) for edge in self.getEdgesTo(point)]
 
     def getConnectingEdge(self, pointA, pointB):
         assert isinstance(pointA, DNAStoreSuitPoint.DNAStoreSuitPoint)
