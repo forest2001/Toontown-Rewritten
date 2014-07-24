@@ -262,8 +262,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
         if self.isPlayerControlled():
-            # Begin ping-pong.
-            self.ping()
+            # Begin checking if clients are still alive
+            if config.GetBool('keep-alive', True):
+                taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+
             if self.getAdminAccess() < 500:
                 # Ensure they have the correct laff.
                 # We don't test admins, as they can modify their stats at will.
@@ -343,8 +345,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(taskName)
         taskName = 'next-bothDelivery-%s' % self.doId
         taskMgr.remove(taskName)
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.remove(self.uniqueName('PingCooldown'))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         self.stopToonUp()
         del self.dna
         if self.inventory:
@@ -367,8 +368,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = None
         taskName = self.uniqueName('next-catalog')
         taskMgr.remove(taskName)
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.remove(self.uniqueName('PingCooldown'))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         return
 
     def ban(self, comment):
@@ -4560,29 +4560,27 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getWebAccountId(self):
         return self.webAccountId
 
-    def ping(self):
-        self.notify.debug("Pinging %s (%d)." % (self.getName(), self.getDoId()))
-        self.sendUpdate('ping', ["mooBseoGkcauQcM"])
-        taskMgr.doMethodLater(config.GetInt('toon-ping-timeout-delay', 30), self.__noPong, self.uniqueName('PingTimeout'), extraArgs=[])
+    # Keep Alive
+    def keepAlive(self):
+        # We received the Keep Alive response
+        self.notify.debug("Received keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
-    def __noPong(self):
-        # No response from the client. Assume this avatar is a ghost.
-        self.notify.debug("Ping timeout %s (%d)." % (self.getName(), self.getDoId()))
-        self.__failedPing = True
+    def __noKeepAlive(self):
+        # Log everything just so we have a record of it
+        self.notify.debug("No keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        self.air.writeServerEvent("keep-alive", avId=self.getDoId(), message="Avatar failed to respond to Keep Alive.")
+
+        # We failed to recieve a reponse from the client
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(self.getDoId()), self.air.ourChannel, CLIENTAGENT_EJECT)
+        dg.addUint16(100)
+        dg.addString('This account has been logged in elsewhere.')
+        self.air.send(dg)
+
+        # RIP
         self.requestDelete()
-
-    def pong(self, data):
-        if hasattr(self, "__failedPing") and self.__failedPing:
-            # Too late to respond, we already failed to respond on time.
-            self.notify.debug("Pong after timeout %s (%d)." % (self.getName(), self.getDoId()))
-            return
-        if data != "McQuackGoesBoom":
-            self.air.writeServerEvent("suspicious", avId=self.getDoId(), issue="Avatar failed to respond to ping with correct data.")
-            self.requestDelete()
-            return
-        self.notify.debug("Pong received from %s (%d) successfully." % (self.getName(), self.getDoId()))
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.doMethodLater(config.GetInt('toon-ping-cooldown', 120), self.ping, self.uniqueName('PingCooldown'), extraArgs=[])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):

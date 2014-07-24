@@ -255,6 +255,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.adminAccess >= 300:
             self.seeGhosts = 1
 
+        if base.config.GetBool('keep-alive', True):
+            taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+
     def disable(self):
         self.laffMeter.destroy()
         del self.laffMeter
@@ -284,6 +287,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.nametag.unmanage(base.marginManager)
         self.ignoreAll()
         DistributedToon.DistributedToon.disable(self)
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         return
 
     def disableBodyCollisions(self):
@@ -327,6 +331,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             if self.__catalogNotifyDialog:
                 self.__catalogNotifyDialog.cleanup()
             del self.__catalogNotifyDialog
+
+            taskMgr.remove('KeepAliveTimeout')
 
         return
 
@@ -1963,3 +1969,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def _stopZombieCheck(self):
         pass
+
+    # KeepAlive stuff
+    def keepAliveCheck(self):
+        self.notify.debug("Checking to make sure the avatar is still alive")
+        self.sendUpdate('keepAlive', [])
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])

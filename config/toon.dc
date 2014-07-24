@@ -631,9 +631,7 @@ dclass DistributedToon : DistributedPlayer {
   magicTeleportResponse(uint32 requesterId, uint32 hoodId) ownsend airecv;
   magicTeleportInitiate(uint32 hoodId, uint32 zoneId) ownrecv;
 
-  // Temporary ping-pong fields.
-  ping(string data) ownrecv;
-  pong(string data) ownsend airecv;
+  keepAlive() ownsend airecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {

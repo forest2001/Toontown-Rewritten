@@ -2707,9 +2707,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
 
-    def ping(self, data):
-        # Server sent a ping, better respond before we get booted!
-        self.sendUpdate("pong", [data[::-1]])
 
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():
