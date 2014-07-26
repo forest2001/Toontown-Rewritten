@@ -54,6 +54,7 @@ smooth-lag 0.4
 
 # Holidays and Events
 force-holiday-decorations 6
+want-arg-manager #t
 
 
 # Chat

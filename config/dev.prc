@@ -68,3 +68,4 @@ force-player-understandable #t
 
 # Holidays and Events
 force-holiday-decorations 6
+want-arg-manager #t
