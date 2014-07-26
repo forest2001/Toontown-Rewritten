@@ -48,6 +48,7 @@ want-pets #f
 want-news-tab #f
 want-news-page #f
 want-parties #f
+want-gardening #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 

@@ -47,7 +47,7 @@ csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
 want-pets #f
 want-news-tab #f
 want-news-page #f
-want-old-fireworks #f
+want-gardening #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
 

@@ -3861,11 +3861,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          (102, 1)])
 
     def reqUseSpecial(self, special):
-        # Gardening is not implemented, and this is for gardening.
-        # TODO - fix this when gardening IS implemented
-        self.air.writeServerEvent('suspicious', avId=self.doId, issue='Tried to plant a special item while gardening is not implemented!')
-        self.sendUpdate('useSpecialResponse', ['badlocation'])
-        return
+        # This is for gardening.
+        if config.GetBool('want-gardening', 1)
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='Tried to plant a special item while gardening is not implemented!')
+            self.sendUpdate('useSpecialResponse', ['badlocation'])
+            return
         response = self.tryToUseSpecial(special)
         self.sendUpdate('useSpecialResponse', [response])
 
