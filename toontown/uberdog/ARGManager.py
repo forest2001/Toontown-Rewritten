@@ -17,7 +17,7 @@ Hood2Details = {
     3823: [(6, 7, 9), 103, 3823], # Howdy!
 }
 Interior2Messages = {
-    2665: ["Mary: Oh, Hello! Say, that's the keyword that Doctor Surlee told me. I take it he sent you?", "Mary: The word I'm supposed to remember is 'Sillyness'"], # DD to TTC
+    2665: ["Mary: Oh, Hello! Oh, Hello! Say, that's the keyword that Doctor Surlee told myself and other shopkeepers just like me to remember. I take it he sent you?", "Mary: The word I'm supposed to remember is 'Sillyness'"], # DD to TTC
     1832: ["Melville: Say, you don't look like Doctor Surlee. That is the trigger phrase, though...", "Melville: He told me to remember 'Lafter'"], # TTC to TB
     5502: ["HQ Officer: Oh, Surlee sent you? Keep this key safe, he said it's going to be important later on.", "HQ Officer: The word is 'Springy Partlicles' -- Whatever that means."], # TB to MML
     4612: ["Dr. Fret: Aahhh, brilliant. Surlee is up to something again, I'm sure.", "Dr. Fret: He told me to remember 'Creating Equiment'"], # MML to DG
