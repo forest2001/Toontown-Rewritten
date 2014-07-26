@@ -1209,7 +1209,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if not rewardId:
                 # This quest has no reward. Skip.
                 continue
-            if remainingSteps != 0:
+            if remainingSteps > 1:
                 # This isn't the end of the toontask, skip.
                 continue
             if rewardId in range(100, 110): # [100..109]
@@ -3861,6 +3861,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          (102, 1)])
 
     def reqUseSpecial(self, special):
+        # This is for gardening.
+        if not config.GetBool('want-gardening', True):
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='Tried to plant a special item while gardening is not implemented!')
+            self.sendUpdate('useSpecialResponse', ['badlocation'])
+            return
         response = self.tryToUseSpecial(special)
         self.sendUpdate('useSpecialResponse', [response])
 

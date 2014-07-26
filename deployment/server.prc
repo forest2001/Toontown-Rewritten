@@ -16,5 +16,6 @@ want-bbhq #f
 want-pets #f
 want-parties #f
 want-golf #f
+want-gardening #f
 
 # Holidays and Events
