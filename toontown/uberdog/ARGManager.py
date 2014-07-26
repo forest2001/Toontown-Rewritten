@@ -6,7 +6,6 @@ from toontown.hood import ZoneUtil
 from pandac.PandaModules import Vec3
 
 # Portable Hole settings
-POSITION_TOLERANCE = 30
 Hood2Details = {
     # hood : [pos, speedchatIndex, destination]
     2665: [(6, 7, 9), 103, 2665], # TTC, Howdy!
@@ -54,11 +53,6 @@ class ARGManager(DistributedObjectGlobal):
                 return
             if speedchatIndex != phraseId:
                 return
-            dummyNode = base.cr.playGame.getPlace().loader.geom.attachNewNode("arg_dummy")
-            dummyNode.setPos(*position)
-            if Vec3(base.localAvatar.getPos(dummyNode)).length() > POSITION_TOLERANCE:
-                return
-            dummyNode.removeNode()
             msgBefore, msgAfter = Interior2Messages.get(destination, [None, None])
             if not msgBefore:
                 self.notify.warning("Interior %d has no message definitions!" % destination)
