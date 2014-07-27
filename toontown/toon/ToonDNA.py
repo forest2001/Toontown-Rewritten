@@ -2706,10 +2706,20 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.sleeveTexColor = sleeveColor
             self.botTex = bottom
             self.botTexColor = bottomColor
-            color = generator.choice(defaultBoyColorList)
-            self.armColor = color
-            self.legColor = color
-            self.headColor = color
+            # We want colors to shuffle all parts of the body sometimes, but we want some solid
+            # colors thrown in there as well. We'll increase the chances of that happening.
+            if config.GetBool('want-shuffle-colors', 1) and random.random() <= 0.3:
+                colorArm = generator.choice(defaultBoyColorList)
+                colorLeg = generator.choice(defaultBoyColorList)
+                colorHead = generator.choice(defaultBoyColorList)
+                self.armColor = colorArm
+                self.legColor = colorLeg
+                self.headColor = colorHead
+            else:
+                color = generator.choice(defaultBoyColorList)
+                self.armColor = color
+                self.legColor = color
+                self.headColor = color
         else:
             self.torso = generator.choice(toonTorsoTypes[:6])
             self.topTex = top
