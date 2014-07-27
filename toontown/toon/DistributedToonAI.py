@@ -4580,8 +4580,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # We failed to recieve a reponse from the client
         dg = PyDatagram()
         dg.addServerHeader(self.GetPuppetConnectionChannel(self.getDoId()), self.air.ourChannel, CLIENTAGENT_EJECT)
-        dg.addUint16(100)
-        dg.addString('This account has been logged in elsewhere.')
+        dg.addUint16(128)
+        dg.addString('Link renegotiation timed out.')
         self.air.send(dg)
 
         # RIP
