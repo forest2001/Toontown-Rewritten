@@ -371,3 +371,19 @@ class QuestManagerAI:
                             return quest.getItem()
         # Nope, no fishing quests, or we're out of luck. Too bad.
         return 0
+
+    def hasTailorClothingTicket(self, toon, npc):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
+            if isComplete == Quests.COMPLETE:
+                return True
+
+        return False
+
+    def removeClothingTicket(self, toon, npc):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            questId, fromNpcId, toNpcId, rewardId, toonProgress = toon.quests[index]
+            isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
+            if isComplete == Quests.COMPLETE:
+                toon.removeQuest(questId)
+                return
