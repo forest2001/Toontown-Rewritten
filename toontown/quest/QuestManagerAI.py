@@ -386,4 +386,6 @@ class QuestManagerAI:
             isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
             if isComplete == Quests.COMPLETE:
                 toon.removeQuest(questId)
-                return
+                return True
+
+        return False
