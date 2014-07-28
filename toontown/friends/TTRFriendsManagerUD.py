@@ -489,5 +489,6 @@ class TTRFriendsManagerUD(DistributedObjectGlobalUD):
             ['setDefaultShard' , fields['setDefaultShard'][0]],
             ['setLastHood' , fields['setLastHood'][0]],
             ['setDNAString' , fields['setDNAString'][0]],
+            ['setLastSeen' , fields.get('setLastSeen', [0])[0]],
         ]
         self.sendUpdateToAvatarId(requesterId, 'friendDetails', [fields['ID'], cPickle.dumps(details)])

@@ -1921,6 +1921,29 @@ AvatarDetailPanelRealLife = 'Offline'
 AvatarDetailPanelOnline = 'District: %(district)s\nLocation: %(location)s'
 AvatarDetailPanelOnlinePlayer = 'District: %(district)s\nLocation: %(location)s\nPlayer: %(player)s'
 AvatarDetailPanelOffline = 'District: offline\nLocation: offline\nLast Seen: %(last_seen)s'
+
+import time
+def getLastSeenString(timestamp):
+    # use int() to round down
+    seconds_passed = int(time.time()) - int(timestamp)
+    if timestamp == 0:
+        # This is the default. It means the db never had an update for lastSeen.
+        return "Never"
+    elif seconds_passed < 60:
+        return "Less than a minute ago"
+    elif seconds_passed < 60*2: # less than 2 minutes
+        return "1 minute ago"
+    elif seconds_passed < 60*60: # less than 1 hour
+        return "%d minutes ago" % int(seconds_passed/60)
+    elif seconds_passed < 60*60*2: # less than 2 hours
+        return "1 hour ago"
+    elif seconds_passed < 60*60*24: # less than 1 day
+        return "%d hours ago" % int(seconds_passed/(60*60))
+    elif seconds_passed < 60*60*48: # less than 2 days
+        return "1 day ago"
+    else:
+        return "%d days ago" % int(seconds_passed/(60*60*24))
+
 AvatarShowPlayer = 'Show Player'
 OfflineLocation = 'Offline'
 PlayerToonName = 'Toon: %(toonname)s'
