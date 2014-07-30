@@ -96,6 +96,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         cleanMessage = message
         if self.air.config.GetBool('want-sequenceblacklist', True):
         	modifications += self.cleanSequences(cleanMessage)
+
         for modStart, modStop in modifications:
             cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
 
@@ -113,6 +114,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         words = message.split()
         for wordit in xrange(len(words)):
             word = words[wordit]
+            
             if word in self.blist:
                 seqlist = self.blist[words[wordit]]
                 for seqit in xrange(len(seqlist)):
@@ -124,4 +126,5 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                         if cmp(cmplist,splitseq) == 0:
                             modifications.append((offset, offset + len(word) + len(sequence) - 1))
             offset += len(word) + 1
+
         return modifications
