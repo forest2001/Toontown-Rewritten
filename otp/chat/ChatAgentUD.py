@@ -11,6 +11,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         DistributedObjectGlobalUD.announceGenerate(self)
 
         self.whiteList = TTWhiteList()
+        self.blist = {'fog': ['get', 'gate', 'ate'], 'duck': ['head']}   
         self.chatMode2channel = {
             1 : OtpDoGlobals.OTP_MOD_CHANNEL,
             2 : OtpDoGlobals.OTP_ADMIN_CHANNEL,
@@ -58,7 +59,6 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             return
 
         cleanMessage, modifications = self.cleanWhitelist(message)
-
         # Maybe a better "cleaner" way of doing this, but it works
         self.air.writeServerEvent('whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
@@ -94,6 +94,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             offset += len(word) + 1
 
         cleanMessage = message
+        modifications += self.cleanSequences(cleanMessage)
         for modStart, modStop in modifications:
             cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
 
@@ -103,3 +104,23 @@ class ChatAgentUD(DistributedObjectGlobalUD):
     def cleanBlacklist(self, message):
         # We don't have a black list so we just return the full message
         return message
+
+    # Check for black-listed word sequences and scrub accordingly.
+    def cleanSequences(self, message):
+        modifications = []
+        offset = 0
+        words = message.split()
+        for wordit in xrange(len(words)):
+            word = words[wordit]
+            if word in self.blist:
+                seqlist = self.blist[words[wordit]]
+                for seqit in xrange(len(seqlist)):
+                    sequence = seqlist[seqit]
+                    splitseq = sequence.split()
+                    if len(words) - (wordit + 1) >= len(splitseq):
+                        cmplist = words[wordit + 1:]
+                        del cmplist[len(splitseq):]
+                        if cmp(cmplist,splitseq) == 0:
+                            modifications.append((offset, offset + len(word) + len(sequence) - 1))
+            offset += len(word) + 1
+        return modifications
