@@ -94,7 +94,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             offset += len(word) + 1
 
         cleanMessage = message
-        modifications += self.cleanSequences(cleanMessage)
+        if self.air.config.GetBool('want-sequenceblacklist', True):
+        	modifications += self.cleanSequences(cleanMessage)
         for modStart, modStop in modifications:
             cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
 
