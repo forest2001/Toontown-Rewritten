@@ -62,7 +62,8 @@ want-toontorial #f
 
 
 # Chat stuff
-want-whitelist #f
+want-whitelist #t
+want-sequenceblacklist #t
 force-avatar-understandable #t
 force-player-understandable #t
 
