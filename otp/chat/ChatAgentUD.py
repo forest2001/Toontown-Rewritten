@@ -10,10 +10,12 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
-        if config.GetBool('want-blacklist-sequence', True):
-            self.sequenceList = TTSequenceList()
-        self.whiteList = TTWhiteList()
-
+        self.wantBlacklistSequence = config.GetBool('want-blacklist-sequence', True)
+        self.wantWhitelist = config.GetBool('want-whitelist', True)
+        if self.wantWhitelist:
+            self.whiteList = TTWhiteList()
+            if self.wantBlacklistSequence:
+                self.sequenceList = TTSequenceList()
         self.chatMode2channel = {
             1 : OtpDoGlobals.OTP_MOD_CHANNEL,
             2 : OtpDoGlobals.OTP_ADMIN_CHANNEL,
@@ -32,8 +34,10 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          issue='Account sent chat without an avatar', message=message)
             return
 
-        cleanMessage, modifications = self.cleanWhitelist(message)
-
+        if self.wantWhitelist:
+            cleanMessage, modifications = self.cleanWhitelist(message)
+        else:
+            cleanMessage, modifications = message, []
         self.air.writeServerEvent('chat-said', avId=sender, chatMode=chatMode, msg=message, cleanMsg=cleanMessage)
 
         # TODO: The above is probably a little too ugly for my taste... Maybe AIR
@@ -89,14 +93,13 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         modifications = []
         words = message.split(' ')
         offset = 0
-        WantWhitelist = config.GetBool('want-whitelist', True)
         for word in words:
-            if word and not self.whiteList.isWord(word) and WantWhitelist:
+            if word and not self.whiteList.isWord(word):
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 
         cleanMessage = message
-        if config.GetBool('want-blacklist-sequence', True):
+        if self.wantBlacklistSequence:
             modifications += self.cleanSequences(cleanMessage)
 
         for modStart, modStop in modifications:
