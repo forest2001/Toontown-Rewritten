@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 # TODO: OTP should not depend on Toontown... Hrrm.
 from toontown.chat.TTWhiteList import TTWhiteList
+from toontown.chat.TTSequenceList import TTSequenceList
 from otp.distributed import OtpDoGlobals
 
 class ChatAgentUD(DistributedObjectGlobalUD):
@@ -9,9 +10,9 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
-
+        self.sequenceList = TTSequenceList()
         self.whiteList = TTWhiteList()
-        self.blist = {'fog': ['get', 'gate', 'ate'], 'duck': ['head']}
+
         self.chatMode2channel = {
             1 : OtpDoGlobals.OTP_MOD_CHANNEL,
             2 : OtpDoGlobals.OTP_ADMIN_CHANNEL,
@@ -98,7 +99,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             modifications += self.cleanSequences(cleanMessage)
 
         for modStart, modStop in modifications:
-            cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
+            # Traverse through modification list and replace the characters of non-whitelisted words and/or blacklisted sequences with asterisks.
+            cleanMessage = cleanMessage[:modStart] + '*' * (modStop - modStart + 1) + cleanMessage[modStop + 1:]
 
         return (cleanMessage, modifications)
 
@@ -114,9 +116,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         words = message.split()
         for wordit in xrange(len(words)):
             word = words[wordit]
-
-            if word in self.blist:
-                seqlist = self.blist[words[wordit]]
+            seqlist = self.sequenceList.getList(word)
+            if len(seqlist) > 0:
                 for seqit in xrange(len(seqlist)):
                     sequence = seqlist[seqit]
                     splitseq = sequence.split()
