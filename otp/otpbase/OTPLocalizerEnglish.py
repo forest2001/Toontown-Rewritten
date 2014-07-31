@@ -188,6 +188,7 @@ CRBootedReasons = {1: 'Yikes - An unexpected problem occured.  Your connection h
  125: 'Your installed files appear to be invalid.  Use the official launcher to download the newest version, or contact Toontown Rewritten Support if the problem persists.',
  126: 'You aren\'t authorized to use administrator privileges. The request has been noted.',
  127: 'There appears to be a problem with your Toon.  Don\'t worry - we\'ll get it straightened out. Please contact Toontown Rewritten Support and referece Error Code 127.',
+ 128: 'There appears to have been a hiccup in your connection to Toontown. Don\'t worry -- we\'re working on straightening it out. You should be able to connect again and go right back into Toontown.',
  151: 'You were kicked out by one of the developers working on the servers.',
  152: "You have been banned from the game for a reported violation of our Terms of Use connected to '%(name)s'. For more details, please check the Toontown Rewritten website.",
  153: 'The district you were playing on has been reset.  Everyone who was playing on that district has also been disconnected, however, you should be able to connect again and go right back into Toontown.',

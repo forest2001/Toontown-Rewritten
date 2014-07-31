@@ -56,12 +56,10 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         
         if self.freeClothes:
             flag = NPCToons.PURCHASE_MOVIE_START
+        elif self.air.questManager.hasTailorClothingTicket(av, self):
+            flag = NPCToons.PURCHASE_MOVIE_START
         elif self.useJellybeans and self.hasEnoughJbs(av):
             flag = NPCToons.PURCHASE_MOVIE_START
-        '''elif self.air.questManager.hasTailorClothingTicket(av, self) == 1:
-            flag = NPCToons.PURCHASE_MOVIE_START
-        elif self.air.questManager.hasTailorClothingTicket(av, self) == 2:
-            flag = NPCToons.PURCHASE_MOVIE_START'''
         
         if self.housingEnabled and self.isClosetAlmostFull(av):
             flag = NPCToons.PURCHASE_MOVIE_START_NOROOM
@@ -139,7 +137,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         if self.air.doId2do.has_key(avId):
             av = self.air.doId2do[avId]
             if finished == 2 and which > 0:
-                if self.freeClothes or av.takeMoney(self.jbCost, bUseBank = True):#self.hasEnoughJbs(av): # self.air.questManager.removeClothingTicket(av, self) == 1
+                if self.freeClothes or self.air.questManager.removeClothingTicket(av, self) or av.takeMoney(self.jbCost, bUseBank = True):
                     av.b_setDNAString(blob)
                     if which & ClosetGlobals.SHIRT:
                         if av.addToClothesTopsList(self.customerDNA.topTex, self.customerDNA.topTexColor, self.customerDNA.sleeveTex, self.customerDNA.sleeveTexColor) == 1:

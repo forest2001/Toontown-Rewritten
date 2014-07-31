@@ -630,8 +630,8 @@ dclass DistributedToon : DistributedPlayer {
   magicTeleportRequest(uint32 requesterId) ownrecv;
   magicTeleportResponse(uint32 requesterId, uint32 hoodId) ownsend airecv;
   magicTeleportInitiate(uint32 hoodId, uint32 zoneId) ownrecv;
-
   keepAlive() ownsend airecv;
+  setLastSeen(uint32 timestamp = 0) required db;
 };
 
 dclass DistributedCCharBase : DistributedObject {
