@@ -1,14 +1,15 @@
 from pandac.PandaModules import *
-from direct.directnotify import DirectNotifyGlobal
-from direct.distributed import DistributedObject
-from direct.showbase import AppRunnerGlobal
 from otp.chat.SequenceList import SequenceList
-from toontown.toonbase import TTLocalizer
 
-class TTSequenceList(SequenceList, DistributedObject.DistributedObject):
+class TTSequenceList(SequenceList):
 
     def __init__(self):
-        SequenceList.__init__(self, self.downloadSequences(config.GetString('blacklist-sequence-url', '')))
+        sequenceListURL = config.GetString('blacklist-sequence-url', '')
+        if sequenceListURL == '':
+            self.notify.warning('No Sequence BL URL specified! Continuing with no blacklist.')
+            SequenceList.__init__(self, '')
+        else:
+            SequenceList.__init__(self, self.downloadSequences(sequenceListURL))
 
     def downloadSequences(self, url):
         fs = Ramfile()

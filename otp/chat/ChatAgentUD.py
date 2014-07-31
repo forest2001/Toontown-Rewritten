@@ -10,7 +10,8 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
-        self.sequenceList = TTSequenceList()
+        if config.GetBool('want-blacklist-sequence', True):
+            self.sequenceList = TTSequenceList()
         self.whiteList = TTWhiteList()
 
         self.chatMode2channel = {
@@ -88,14 +89,14 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         modifications = []
         words = message.split(' ')
         offset = 0
-        WantWhitelist = self.air.config.GetBool('want-whitelist', True)
+        WantWhitelist = config.GetBool('want-whitelist', True)
         for word in words:
             if word and not self.whiteList.isWord(word) and WantWhitelist:
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 
         cleanMessage = message
-        if self.air.config.GetBool('want-sequenceblacklist', True):
+        if config.GetBool('want-blacklist-sequence', True):
             modifications += self.cleanSequences(cleanMessage)
 
         for modStart, modStop in modifications:
