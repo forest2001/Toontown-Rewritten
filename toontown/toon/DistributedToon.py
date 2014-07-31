@@ -191,6 +191,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmNameTagColor = 'whiteGM'
         self.gmNameTagString = ''
         self._lastZombieContext = None
+        self.lastSeen = 0
         return
 
     def disable(self):
@@ -2706,6 +2707,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             'avId': -1
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
+
+    def setLastSeen(self, timestamp):
+        self.lastSeen = timestamp
+
+    def getLastSeen(self):
+        return self.lastSeen
 
 
 @magicWord(category=CATEGORY_MODERATION)

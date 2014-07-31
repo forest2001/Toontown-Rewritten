@@ -255,7 +255,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.adminAccess >= 300:
             self.seeGhosts = 1
 
-        if base.config.GetBool('keep-alive', True):
+        if base.config.GetBool('want-keep-alive', True):
             taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
     def disable(self):

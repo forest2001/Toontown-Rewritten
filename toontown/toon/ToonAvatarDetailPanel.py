@@ -179,7 +179,7 @@ class ToonAvatarDetailPanel(DirectFrame):
                 text = TTLocalizer.AvatarDetailPanelOnline % {'district': shardName,
                  'location': hoodName}
         else:
-            text = TTLocalizer.AvatarDetailPanelOffline
+            text = TTLocalizer.AvatarDetailPanelOffline % {'last_seen': TTLocalizer.getLastSeenString(self.avatar.getLastSeen())}
         self.dataText['text'] = text
         self.__updateTrackInfo()
         self.__updateTrophyInfo()

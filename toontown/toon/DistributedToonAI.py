@@ -47,6 +47,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+import time
 
 # Magic Word imports
 from otp.ai.MagicWordGlobal import *
@@ -263,7 +264,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.sendUpdate('setDefaultShard', [self.air.districtId])
         if self.isPlayerControlled():
             # Begin checking if clients are still alive
-            if config.GetBool('keep-alive', True):
+            if config.GetBool('want-keep-alive', True):
                 taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
             if self.getAdminAccess() < 500:
@@ -329,6 +330,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self._dbCheckDoLater = None
         if self.isPlayerControlled():
             messenger.send('avatarExited', [self])
+            self.d_setLastSeen(time.time())
         if simbase.wantPets:
             if self.isInEstate():
                 print 'ToonAI - Exit estate toonId:%s' % self.doId
@@ -4586,6 +4588,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         # RIP
         self.requestDelete()
+
+    def d_setLastSeen(self, timestamp):
+        self.sendUpdate('setLastSeen', [int(timestamp)])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
