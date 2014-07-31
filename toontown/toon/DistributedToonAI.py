@@ -264,7 +264,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.sendUpdate('setDefaultShard', [self.air.districtId])
         if self.isPlayerControlled():
             # Begin checking if clients are still alive
-            if config.GetBool('keep-alive', True):
+            if config.GetBool('want-keep-alive', True):
                 taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
             if self.getAdminAccess() < 500:

@@ -17,6 +17,6 @@ want-pets #f
 want-parties #f
 want-golf #f
 want-gardening #f
-keep-alive #f
+want-keep-alive #f
 
 # Holidays and Events
