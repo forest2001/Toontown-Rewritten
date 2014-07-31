@@ -1939,10 +1939,21 @@ def getLastSeenString(timestamp):
         return "1 hour ago"
     elif seconds_passed < 60*60*24: # less than 1 day
         return "%d hours ago" % int(seconds_passed/(60*60))
-    elif seconds_passed < 60*60*48: # less than 2 days
+    elif seconds_passed < 60*60*24*2: # less than 2 days
         return "1 day ago"
-    else:
+    # optional: at this stage we could do weeks, but seems pointless.
+    # we also now pretend that each month always has 30 days.
+    elif seconds_passed < 60*60*24*30: # less than a month
         return "%d days ago" % int(seconds_passed/(60*60*24))
+    elif seconds_passed < 60*60*24*30*2: # less than 2 months
+        return "1 month ago"
+    # assume 1 year = 365 days (ignoring .25 / leap years)
+    elif seconds_passed < 60*60*24*365: # less than a year
+        return "%d months ago" % int(seconds_passed/(60*60*24*30))
+    elif seconds_passed < 60*60*24*365*2: # less than 2 years
+        return "1 year ago"
+    else:
+        return "A very long time ago... :("
 
 AvatarShowPlayer = 'Show Player'
 OfflineLocation = 'Offline'
