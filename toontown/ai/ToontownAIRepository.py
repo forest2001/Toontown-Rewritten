@@ -62,6 +62,7 @@ from toontown.catalog.CatalogManagerAI import CatalogManagerAI
 # Magic Words!
 from panda3d.core import PStatClient
 from otp.ai.MagicWordGlobal import *
+import otp.ai.DiagnosticMagicWords
 
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, serverId, districtName):
@@ -83,7 +84,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.useAllMinigames = self.config.GetBool('want-all-minigames', False)
         self.doLiveUpdates = self.config.GetBool('want-live-updates', True)
 
-        self.holidayManager = HolidayManagerAI()
+        self.holidayManager = HolidayManagerAI(self)
 
         self.fishManager = FishManagerAI()
         self.questManager = QuestManagerAI(self)
@@ -124,9 +125,10 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.createGlobals()
         self.createZones()
 
-        self.distributedDistrict.b_setAvailable(1)
-
         self.statusSender.start()
+
+        self.distributedDistrict.b_setAvailable(1)
+        self.notify.info('District is now ready.')
 
     def incrementPopulation(self):
         self.districtStats.b_setAvatarCount(self.districtStats.getAvatarCount() + 1)

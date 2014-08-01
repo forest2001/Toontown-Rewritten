@@ -316,6 +316,10 @@ class PropPool:
             tie.getChild(0).setHpr(23.86, -16.03, 9.18)
         elif name == 'small-magnet':
             self.props[name].setScale(0.5)
+            tex = loader.loadTexture('phase_5/maps/battle_props_palette_4amla_2.jpg')
+            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMagfilter(Texture.FTLinear)
+            self.props[name].setTexture(tex, 1)
         elif name == 'shredder-paper':
             paper = self.props[name]
             paper.setPosHpr(2.22, -0.95, 1.16, -48.61, 26.57, -111.51)

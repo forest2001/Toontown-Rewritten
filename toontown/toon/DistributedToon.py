@@ -191,6 +191,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmNameTagColor = 'whiteGM'
         self.gmNameTagString = ''
         self._lastZombieContext = None
+        self.lastSeen = 0
         return
 
     def disable(self):
@@ -2707,9 +2708,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
 
-    def ping(self, data):
-        # Server sent a ping, better respond before we get booted!
-        self.sendUpdate("pong", [data[::-1]])
+    def setLastSeen(self, timestamp):
+        self.lastSeen = timestamp
+
+    def getLastSeen(self):
+        return self.lastSeen
+
 
 @magicWord(category=CATEGORY_MODERATION)
 def globaltp():

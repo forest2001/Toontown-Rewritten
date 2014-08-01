@@ -1,8 +1,9 @@
+from toontown.toonbase import ToontownGlobals
 from toontown.hood import HoodAI
 from toontown.building.DistributedBuildingMgrAI import DistributedBuildingMgrAI
 
 class GSHoodAI(HoodAI.HoodAI):
-    HOOD = 8000
+    HOOD = ToontownGlobals.GoofySpeedway
 
     def __init__(self, air):
         HoodAI.HoodAI.__init__(self, air)

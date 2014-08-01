@@ -6,7 +6,7 @@ from pandac.PandaModules import *
 from MakeAToonGlobals import *
 from toontown.toonbase import TTLocalizer
 import ShuffleButton
-import random
+from random import random, choice
 from direct.directnotify import DirectNotifyGlobal
 
 class ColorShop(StateData.StateData):
@@ -15,7 +15,6 @@ class ColorShop(StateData.StateData):
     def __init__(self, doneEvent):
         StateData.StateData.__init__(self, doneEvent)
         self.toon = None
-        self.colorAll = 1
         return
 
     def getGenderColorList(self, dna):
@@ -34,9 +33,9 @@ class ColorShop(StateData.StateData):
             self.armChoice = colorList.index(self.dna.armColor)
             self.legChoice = colorList.index(self.dna.legColor)
         except:
-            self.headChoice = random.choice(colorList)
-            self.armChoice = self.headChoice
-            self.legChoice = self.headChoice
+            self.headChoice = choice(colorList)
+            self.armChoice = choice(colorList)
+            self.legChoice = choice(colorList)
             self.__swapHeadColor(0)
             self.__swapArmColor(0)
             self.__swapLegColor(0)
@@ -44,7 +43,7 @@ class ColorShop(StateData.StateData):
         self.startColor = 0
         self.acceptOnce('last', self.__handleBackward)
         self.acceptOnce('next', self.__handleForward)
-        choicePool = [self.getGenderColorList(self.dna), self.getGenderColorList(self.dna), self.getGenderColorList(self.dna)]
+        choicePool = [colorList, colorList, colorList]
         self.shuffleButton.setChoicePool(choicePool)
         self.accept(self.shuffleFetchMsg, self.changeColor)
         self.acceptOnce('MAT-newToonCreated', self.shuffleButton.cleanHistory)
@@ -219,12 +218,14 @@ class ColorShop(StateData.StateData):
         oldArmColorIndex = colorList.index(self.toon.style.armColor)
         oldLegColorIndex = colorList.index(self.toon.style.legColor)
         self.__swapHeadColor(newHeadColorIndex - oldHeadColorIndex)
-        if self.colorAll:
-            self.__swapArmColor(newHeadColorIndex - oldArmColorIndex)
-            self.__swapLegColor(newHeadColorIndex - oldLegColorIndex)
-        else:
+        # We want colors to shuffle all parts of the body sometimes, but we want some solid
+        # colors thrown in there as well. We'll increase the chances of that happening.
+        if config.GetBool('want-shuffle-colors', 1) and random() <= 0.4:
             self.__swapArmColor(newArmColorIndex - oldArmColorIndex)
             self.__swapLegColor(newLegColorIndex - oldLegColorIndex)
+        else:
+            self.__swapArmColor(newHeadColorIndex - oldArmColorIndex)
+            self.__swapLegColor(newHeadColorIndex - oldLegColorIndex)
 
     def getCurrToonSetting(self):
         return [self.dna.headColor, self.dna.armColor, self.dna.legColor]

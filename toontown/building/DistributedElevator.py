@@ -116,12 +116,12 @@ class DistributedElevator(DistributedObject.DistributedObject):
                 del self.openDoors
             if hasattr(self, 'closeDoors'):
                 del self.closeDoors
+            self.offsetNP.removeNode()
         del self.fsm
         del self.openSfx
         del self.closeSfx
         self.isSetup = 0
         self.fillSlotTrack = None
-        self.offsetNP.removeNode()
         if hasattr(base.localAvatar, 'elevatorNotifier'):
             base.localAvatar.elevatorNotifier.cleanup()
         DistributedObject.DistributedObject.delete(self)

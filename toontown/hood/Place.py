@@ -543,6 +543,9 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
     def enterDoorIn(self, requestStatus):
         NametagGlobals.setMasterArrowsOn(0)
         door = base.cr.doId2do.get(requestStatus['doorDoId'])
+        if door is None:
+            # We're about to die anyway because door is None, so raise a StandardError with more information
+            raise StandardError("Place's door is None! Place: %s, requestStatus: %s" % (str(self.__class__)), str(requestStatus))
         door.readyToExit()
         base.localAvatar.obscureMoveFurnitureButton(1)
         base.localAvatar.startQuestMap()

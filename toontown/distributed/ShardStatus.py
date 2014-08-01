@@ -2,6 +2,8 @@ import time
 from panda3d.core import *
 from toontown.toonbase import TTLocalizer
 from toontown.battle import SuitBattleGlobals
+import gc
+import thread
 
 # If we don't have PSUTIL, don't return system statistics.
 try:
@@ -13,6 +15,10 @@ except ImportError:
 shard_status_interval = ConfigVariableInt(
     'shard-status-interval', 20,
     'How often to send shard status update messages.')
+
+shard_heap_interval = ConfigVariableInt(
+    'shard-status-interval', 60,
+    'How often to recount objects on the heap (and in garbage).')
 
 shard_status_timeout = ConfigVariableInt(
     'shard-status-timeout', 30,
@@ -26,6 +32,20 @@ class ShardStatusSender:
 
         self.interval = None
 
+        # This is updated from a separate thread periodically:
+        self.heap_status = {'objects': 0, 'garbage': 0}
+
+    def update_heap(self):
+        lastUpdate = 0
+        while taskMgr.running:
+            if lastUpdate < time.time() - shard_heap_interval.getValue():
+                self.heap_status = {'objects': len(gc.get_objects()),
+                                    'garbage': len(gc.garbage)}
+                lastUpdate = time.time()
+
+            # Don't consume CPU, but don't lay dormant for a long time either:
+            time.sleep(1.0)
+
     def start(self):
         # Set the average frame rate interval to match shard status interval.
         globalClock.setAverageFrameRateInterval(shard_status_interval.getValue())
@@ -36,6 +56,8 @@ class ShardStatusSender:
                         }
         dg = self.air.netMessenger.prepare('shardStatus', [offlineStatus])
         self.air.addPostRemove(dg)
+
+        thread.start_new_thread(self.update_heap, ())
 
         # Fire off the first status, which also starts the interval:
         self.sendStatus()
@@ -61,7 +83,8 @@ class ShardStatusSender:
                   'districtName': self.air.distributedDistrict.name,
                   'population': self.air.districtStats.getAvatarCount(),
                   'avg-frame-rate': round(globalClock.getAverageFrameRate(), 5),
-                  'invasion': invasion
+                  'invasion': invasion,
+                  'heap': self.heap_status
                  }
         if HAS_PSUTIL:
             status['cpu-usage'] = cpu_percent(interval=None, percpu=True)

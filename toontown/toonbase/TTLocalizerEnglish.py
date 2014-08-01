@@ -1920,7 +1920,41 @@ AvatarDetailPanelPlayerShort = '%(player)s\nWorld: %(world)s\nLocation: %(locati
 AvatarDetailPanelRealLife = 'Offline'
 AvatarDetailPanelOnline = 'District: %(district)s\nLocation: %(location)s'
 AvatarDetailPanelOnlinePlayer = 'District: %(district)s\nLocation: %(location)s\nPlayer: %(player)s'
-AvatarDetailPanelOffline = 'District: offline\nLocation: offline'
+AvatarDetailPanelOffline = 'District: offline\nLocation: offline\nLast Seen: %(last_seen)s'
+
+import time
+def getLastSeenString(timestamp):
+    # use int() to round down
+    seconds_passed = int(time.time()) - int(timestamp)
+    if timestamp == 0:
+        # This is the default. It means the db never had an update for lastSeen.
+        return "Never"
+    elif seconds_passed < 60:
+        return "Less than a minute ago"
+    elif seconds_passed < 60*2: # less than 2 minutes
+        return "1 minute ago"
+    elif seconds_passed < 60*60: # less than 1 hour
+        return "%d minutes ago" % int(seconds_passed/60)
+    elif seconds_passed < 60*60*2: # less than 2 hours
+        return "1 hour ago"
+    elif seconds_passed < 60*60*24: # less than 1 day
+        return "%d hours ago" % int(seconds_passed/(60*60))
+    elif seconds_passed < 60*60*24*2: # less than 2 days
+        return "1 day ago"
+    # optional: at this stage we could do weeks, but seems pointless.
+    # we also now pretend that each month always has 30 days.
+    elif seconds_passed < 60*60*24*30: # less than a month
+        return "%d days ago" % int(seconds_passed/(60*60*24))
+    elif seconds_passed < 60*60*24*30*2: # less than 2 months
+        return "1 month ago"
+    # assume 1 year = 365 days (ignoring .25 / leap years)
+    elif seconds_passed < 60*60*24*365: # less than a year
+        return "%d months ago" % int(seconds_passed/(60*60*24*30))
+    elif seconds_passed < 60*60*24*365*2: # less than 2 years
+        return "1 year ago"
+    else:
+        return "A very long time ago... :("
+
 AvatarShowPlayer = 'Show Player'
 OfflineLocation = 'Offline'
 PlayerToonName = 'Toon: %(toonname)s'
@@ -5601,13 +5635,13 @@ STOREOWNER_CONFIRM_LOSS = 'Your closet is full.  You will lose the clothes you w
 STOREOWNER_OK = lOK
 STOREOWNER_CANCEL = lCancel
 STOREOWNER_TROPHY = 'Wow! You collected %s of %s fish. That deserves a trophy and a Laff boost!'
-SuitInvasionBegin1 = lToonHQ + ': A Cog Invasion has begun!!!'
+SuitInvasionBegin1 = lToonHQ + ': A Cog Invasion has begun...'
 SuitInvasionBegin2 = lToonHQ + ': %s have taken over Toontown!!!'
 SuitInvasionEnd1 = lToonHQ + ': The %s Invasion has ended!!!'
 SuitInvasionEnd2 = lToonHQ + ': The Toons have saved the day once again!!!'
 SuitInvasionUpdate1 = lToonHQ + ': The Cog Invasion is now at %s Cogs!!!'
 SuitInvasionUpdate2 = lToonHQ + ': We must defeat those %s!!!'
-SuitInvasionBulletin1 = lToonHQ + ': There is a Cog Invasion in progress!!!'
+SuitInvasionBulletin1 = lToonHQ + ': There is a Cog Invasion in progress...'
 SuitInvasionBulletin2 = lToonHQ + ': %s have taken over Toontown!!!'
 LeaderboardTitle = 'Toon Platoon'
 QuestScriptTutorialMickey_1 = 'Toontown has a new citizen! Do you have some extra gags?'
@@ -8301,20 +8335,27 @@ PetTrait2descriptions = {'hungerThreshold': ('Always Hungry',
                         'Sometimes Affectionate',
                         'Often Affectionate',
                         'Always Affectionate')}
-FireworksInstructions = 'Flippy: Look up using the "Page Up" key to see, or hop in Slappy\'s Balloon for a ride over the sky!'
-startFireworksResponse = "Usage: startFireworksShow ['num']\n                                         'num' = %s - New Years\n                                         %s - Party Summer \n                                         %s - 4th of July"
-#FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
-#FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
-#FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show, sponsored by Flippy!'
-#FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
-#FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
-#FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
-FireworksJuly4Beginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
-FireworksJuly4Ending = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
-FireworksNewYearsEveBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
-FireworksNewYearsEveEnding =  'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
-FireworksComboBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
-FireworksComboEnding = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+
+# Election stuff
+# FireworksInstructions = 'Flippy: Look up using the "Page Up" key to see, or hop in Slappy\'s Balloon for a ride over the sky!'
+# startFireworksResponse = "Usage: startFireworksShow ['num']\n 'num' = %s - New Years\n %s - Party Summer \n %s - 4th of July"
+# FireworksJuly4Beginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+# FireworksJuly4Ending = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+# FireworksNewYearsEveBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+# FireworksNewYearsEveEnding =  'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+# FireworksComboBeginning = 'Flippy: Hiya, Toons! Get ready to see some fireworks to celebrate this last week of the election!'
+# FireworksComboEnding = 'Flippy: Hope you enjoyed the show. Don\'t forget to stop by Toontown Central for some pies!'
+
+# Regular fireworks stuff
+FireworksInstructions = lToonHQ + ': Hit the "Page Up" key to see better.'
+startFireworksResponse = "Usage: startFireworksShow ['num']\n 'num' = %s - New Years\n %s - Party Summer \n %s - 4th of July"
+FireworksJuly4Beginning = lToonHQ + ': Welcome to summer fireworks! Enjoy the show!'
+FireworksJuly4Ending = lToonHQ + ': Hope you enjoyed the show! Have a great summer!'
+FireworksNewYearsEveBeginning = lToonHQ + ': Happy New Year! Enjoy the fireworks show!'
+FireworksNewYearsEveEnding = lToonHQ + ': Hope you enjoyed the show! Have a Toontastic New Year!'
+FireworksComboBeginning = lToonHQ + ': Enjoy lots of Laffs with Toon fireworks!'
+FireworksComboEnding = lToonHQ + ': Thank you, Toons! Hope you enjoyed the show!'
+
 BlockerTitle = 'LOADING TOONTOWN...'
 BlockerLoadingTexts = ['Rewriting history',
  'Baking pie crusts',

@@ -261,10 +261,12 @@ class QuestManagerAI:
         tier = toon.getRewardHistory()[0]
         if Quests.avatarHasAllRequiredRewards(toon, tier):
             # They have all the rewards needed for the next tier.
-            if not Quests.avatarWorkingOnRequiredRewards(toon) and tier != Quests.ELDER_TIER:
-                # They have no ToonTasks in their current tier, and they're also
-                # not an old peasant.
-                tier += 1
+            if not Quests.avatarWorkingOnRequiredRewards(toon):
+                # Check to make sure they are not on the LOOPING_FINAL_TIER
+                if tier != Quests.LOOPING_FINAL_TIER:
+                    tier += 1
+
+                # Set the tier
                 toon.b_setRewardHistory(tier, [])
             else:
                 # They're eligible for a tier upgrade, but haven't finished all
@@ -369,3 +371,21 @@ class QuestManagerAI:
                             return quest.getItem()
         # Nope, no fishing quests, or we're out of luck. Too bad.
         return 0
+
+    def hasTailorClothingTicket(self, toon, npc):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
+            if isComplete == Quests.COMPLETE:
+                return True
+
+        return False
+
+    def removeClothingTicket(self, toon, npc):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            questId, fromNpcId, toNpcId, rewardId, toonProgress = toon.quests[index]
+            isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
+            if isComplete == Quests.COMPLETE:
+                toon.removeQuest(questId)
+                return True
+
+        return False

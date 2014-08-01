@@ -1148,7 +1148,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 self.notify.info('No more room for buildings, with %s still to assign.' % numToAssign)
                 return
             buildingHeight = random.choice(smallestHeights)
-            self.notify.info('Existing buildings are (%s, %s), choosing from (%s, %s), chose %s, %s.' % (self.formatNumSuitsPerTrack(numPerTrack),
+            self.notify.debug('Existing buildings are (%s, %s), choosing from (%s, %s), chose %s, %s.' % (self.formatNumSuitsPerTrack(numPerTrack),
              self.formatNumSuitsPerTrack(numPerHeight),
              smallestTracks,
              smallestHeights,
@@ -1195,7 +1195,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 sp.targetNumSuitBuildings += 1
                 sp.pendingBuildingTracks.append(buildingTrack)
                 sp.pendingBuildingHeights.append(buildingHeight)
-                self.notify.info('Assigning building to zone %d, pending tracks = %s, pending heights = %s' % (zoneId, sp.pendingBuildingTracks, sp.pendingBuildingHeights))
+                self.notify.debug('Assigning building to zone %d, pending tracks = %s, pending heights = %s' % (zoneId, sp.pendingBuildingTracks, sp.pendingBuildingHeights))
                 numPerTrack[buildingTrack] += 1
                 numPerHeight[buildingHeight] += 1
                 numToAssign -= 1

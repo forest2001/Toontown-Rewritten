@@ -8,6 +8,7 @@ server-version dev
 sync-video #f
 want-dev #f
 preload-avatars #t
+texture-anisotropic-degree 16
 
 
 # Resource settings
@@ -32,7 +33,6 @@ default-model-extension .bam
 want-rpc-server #f
 rpc-server-endpoint http://localhost:8080/
 eventlog-host 127.0.0.1
-want-parties #f
 want-cheesy-expirations #t
 
 
@@ -47,10 +47,12 @@ dc-file config/otp.dc
 want-pets #f
 want-news-tab #f
 want-news-page #f
-want-old-fireworks #t
 want-accessories #f
+want-parties #f
+want-gardening #t
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
+want-keep-alive #f
 
 
 # Developer Modifications
@@ -69,3 +71,4 @@ force-player-understandable #t
 
 # Holidays and Events
 force-holiday-decorations 6
+want-arg-manager #t

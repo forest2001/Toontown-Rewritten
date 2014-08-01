@@ -47,6 +47,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
 import ModuleListAI
+import time
 
 # Magic Word imports
 from otp.ai.MagicWordGlobal import *
@@ -261,9 +262,17 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
         if not isinstance(self, DistributedNPCToonBaseAI):
             self.sendUpdate('setDefaultShard', [self.air.districtId])
-        # Begin ping-pong.
         if self.isPlayerControlled():
-            self.ping()
+            # Begin checking if clients are still alive
+            if config.GetBool('want-keep-alive', True):
+                taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+
+            if self.getAdminAccess() < 500:
+                # Ensure they have the correct laff.
+                # We don't test admins, as they can modify their stats at will.
+                # N.B.: To test this, you must bump up this access! Local servers default at
+                # access 500!
+                self.correctToonLaff()
 
     def setLocation(self, parentId, zoneId):
         messenger.send('toon-left-%s' % self.zoneId, [self])
@@ -321,6 +330,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self._dbCheckDoLater = None
         if self.isPlayerControlled():
             messenger.send('avatarExited', [self])
+            self.d_setLastSeen(time.time())
         if simbase.wantPets:
             if self.isInEstate():
                 print 'ToonAI - Exit estate toonId:%s' % self.doId
@@ -337,8 +347,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(taskName)
         taskName = 'next-bothDelivery-%s' % self.doId
         taskMgr.remove(taskName)
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.remove(self.uniqueName('PingCooldown'))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         self.stopToonUp()
         del self.dna
         if self.inventory:
@@ -361,8 +370,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = None
         taskName = self.uniqueName('next-catalog')
         taskMgr.remove(taskName)
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.remove(self.uniqueName('PingCooldown'))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         return
 
     def ban(self, comment):
@@ -1166,6 +1174,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('catalogGenAccessories', [self.doId])
 
     def takeDamage(self, hpLost, quietly = 0, sendTotal = 1):
+        # Assume that if they took damage, they're not in a safe zone.
+        self.stopToonUp()
+
         if not self.immortalMode:
             if not quietly:
                 self.sendUpdate('takeDamage', [hpLost])
@@ -1196,6 +1207,93 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to go over 137 laff.')
         maxHp = min(maxHp, ToontownGlobals.MaxHpLimit)
         DistributedAvatarAI.DistributedAvatarAI.b_setMaxHp(self, maxHp)
+
+    def correctToonLaff(self):
+        # Init our counters to 0.
+        gained_quest = 0
+        gained_racing = 0
+        gained_fishing = 0
+        gained_suit = 0
+        gained_gardening = 0
+        gained_golf = 0
+
+        # First we need to check all the quests we have completed.
+        # We only want unique quests. Storyline quests can only be completed once.
+        for questId in list(set(self.getQuestHistory())):
+            # Get all the questIds.
+            currentQuests = self.getQuests()
+            if questId in currentQuests:
+                # We're still working on the quest.
+                continue
+            reward = Quests.findFinalRewardId(questId)
+            if reward == -1:
+                # Returns -1 instead of a tuple if error occurs.
+                continue
+            rewardId, remainingSteps = reward
+            if not rewardId:
+                # This quest has no reward. Skip.
+                continue
+            if remainingSteps > 1:
+                # This isn't the end of the toontask, skip.
+                continue
+            if rewardId in range(100, 110): # [100..109]
+                gained_quest += rewardId - 99 # Corresponds to Quest rewards.
+
+        # We have to calculate the total laff points we're supposed to have
+        # for each "side" activity.
+        gained_fishing += len(self.getFishingTrophies()) # fishing (1 boost per trophy)
+
+        num_racing_trophies = 0
+        for value in self.getKartingTrophies():
+            if value:
+                num_racing_trophies += 1
+        gained_racing += int(num_racing_trophies/10) # racing (1 boost every 10 trophies)
+
+        golf_trophies = GolfGlobals.calcTrophyListFromHistory(self.golfHistory)
+        num_golf_trophies = 0
+        for value in golf_trophies:
+            if value:
+                num_golf_trophies += 1
+        gained_golf += int(num_golf_trophies/10) # golf (1 boost every 10 trophies)
+
+        gained_gardening += int(len(self.getGardenTrophies())/2)  # gardening (1 boost every 2 trophies)
+
+        # Finally, we calculate the total amount of boosts from boss battles.
+        for x in xrange(4): # 0 to 3
+            if self.getCogTypes()[x] != 7:
+                # We're not the last cog type, skip.
+                continue
+            levels = [15, 20, 30, 40, 50]
+            # Iterate through the above list, and check if we're above or equal to the level.
+            # If we are, we get 1 boost per level that we've passed.
+            for level in levels:
+                if self.getCogLevels()[x] >= level - 1: # 0-49, pfft.
+                    gained_suit += 1
+
+        # Calculate the total hp from the "gained" counters.
+        hp = 15 + gained_quest + gained_fishing + gained_racing + gained_golf + gained_gardening + gained_suit
+
+        # If the calculated HP differs from our current maxHp, we need to bump our maxHp.
+        if hp != self.getMaxHp():
+            log_only_mode = config.GetBool('want-hp-correction-log-only', True) # Defaults to true so we don't break prod.
+            # Log the details.
+            self.air.writeServerEvent('corrected-toon-laff', avId=self.getDoId(),
+                info = "Corrected HP mismatch %d compared to old maxHp %d." % (hp, self.getMaxHp()),
+                questlaff = gained_quest,
+                fishinglaff = gained_fishing,
+                racinglaff = gained_racing,
+                golflaff = gained_golf,
+                gardenlaff = gained_gardening,
+                suitlaff = gained_suit,
+                log_only = log_only_mode
+            )
+
+            # If we're not in log only mode, actually modify their HP.
+            if not log_only_mode:
+                if self.getHp() > hp:
+                    # Bump their hp down if they have more than the calculated max.
+                    self.b_setHp(hp)
+                self.b_setMaxHp(hp)
 
     def b_setTutorialAck(self, tutorialAck):
         self.d_setTutorialAck(tutorialAck)
@@ -2718,14 +2816,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def considerToonUp(self, zoneId):
         if zoneId == OTPGlobals.QuietZone:
             # Don't consider anything, we're in the QuietZone. Shh!
-            return
+            return None
         if self.shouldToonUp(zoneId):
             if taskMgr.hasTaskNamed(self.uniqueName('safeZoneToonUp')):
                 # Do nothing, we were already in a safezone!
-                return
+                return None
             self.startToonUp(ToontownGlobals.SafezoneToonupFrequency)
+            return True
         else:
             self.stopToonUp()
+            return False
 
     def startToonUp(self, healFrequency):
         self.stopToonUp()
@@ -2736,6 +2836,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.doMethodLater(self.healFrequency, self.toonUpTask, self.uniqueName('safeZoneToonUp'))
 
     def toonUpTask(self, task):
+        considered = self.considerToonUp(self.zoneId)
+        if not considered and considered is not None:
+            return Task.done
         self.toonUp(1)
         self.__waitForNextToonUp()
         return Task.done
@@ -3782,6 +3885,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          (102, 1)])
 
     def reqUseSpecial(self, special):
+        # This is for gardening.
+        if not config.GetBool('want-gardening', True):
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='Tried to plant a special item while gardening is not implemented!')
+            self.sendUpdate('useSpecialResponse', ['badlocation'])
+            return
         response = self.tryToUseSpecial(special)
         self.sendUpdate('useSpecialResponse', [response])
 
@@ -4481,29 +4589,30 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getWebAccountId(self):
         return self.webAccountId
 
-    def ping(self):
-        self.notify.debug("Pinging %s (%d)." % (self.getName(), self.getDoId()))
-        self.sendUpdate('ping', ["mooBseoGkcauQcM"])
-        taskMgr.doMethodLater(config.GetInt('toon-ping-timeout-delay', 30), self.__noPong, self.uniqueName('PingTimeout'), extraArgs=[])
+    # Keep Alive
+    def keepAlive(self):
+        # We received the Keep Alive response
+        self.notify.debug("Received keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
-    def __noPong(self):
-        # No response from the client. Assume this avatar is a ghost.
-        self.notify.debug("Ping timeout %s (%d)." % (self.getName(), self.getDoId()))
-        self.__failedPing = True
+    def __noKeepAlive(self):
+        # Log everything just so we have a record of it
+        self.notify.debug("No keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        self.air.writeServerEvent("keep-alive", avId=self.getDoId(), message="Avatar failed to respond to Keep Alive.")
+
+        # We failed to recieve a reponse from the client
+        dg = PyDatagram()
+        dg.addServerHeader(self.GetPuppetConnectionChannel(self.getDoId()), self.air.ourChannel, CLIENTAGENT_EJECT)
+        dg.addUint16(128)
+        dg.addString('Link renegotiation timed out.')
+        self.air.send(dg)
+
+        # RIP
         self.requestDelete()
 
-    def pong(self, data):
-        if hasattr(self, "__failedPing") and self.__failedPing:
-            # Too late to respond, we already failed to respond on time.
-            self.notify.debug("Pong after timeout %s (%d)." % (self.getName(), self.getDoId()))
-            return
-        if data != "McQuackGoesBoom":
-            self.air.writeServerEvent("suspicious", avId=self.getDoId(), issue="Avatar failed to respond to ping with correct data.")
-            self.requestDelete()
-            return
-        self.notify.debug("Pong received from %s (%d) successfully." % (self.getName(), self.getDoId()))
-        taskMgr.remove(self.uniqueName('PingTimeout'))
-        taskMgr.doMethodLater(config.GetInt('toon-ping-cooldown', 120), self.ping, self.uniqueName('PingCooldown'), extraArgs=[])
+    def d_setLastSeen(self, timestamp):
+        self.sendUpdate('setLastSeen', [int(timestamp)])
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int, int, int])
 def setCE(CEValue, CEHood=0, CEExpire=0):
@@ -5235,3 +5344,13 @@ def dump_doId2do():
         for name, size in sorted_objSizes:
             file.write('OBJ: %s | SIZE: %d\n' % (name, size))
     return "Dumped doId2do sizes (grouped by class) to '%s'." % temp_file[1]
+
+@magicWord(category=CATEGORY_CHARACTERSTATS)
+def correctlaff():
+    """
+    A magic word that attempts to correct a toons laff. This includes any external,
+    admin modifications to the toon (such as setMaxHp).
+    """
+    av = spellbook.getTarget()
+    av.correctToonLaff()
+    return "Corrected %s's laff successfully." % av.getName()
