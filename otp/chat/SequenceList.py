@@ -5,6 +5,7 @@ class SequenceList:
         for line in wordlist.split():
             split = line.split(':')
             self.list[split[0].lower()] = [word.rstrip('\r\n').lower() for word in split[1].split(',')]
+            
     def getList(self, word):
         if word in self.list:
             return self.list[word]
