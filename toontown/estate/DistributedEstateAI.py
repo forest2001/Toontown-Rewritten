@@ -32,8 +32,8 @@ class DistributedEstateAI(DistributedObjectAI):
 
         self.pond = None
         self.spots = []
-
         self.targets = []
+        self.treasurePlanner = None
 
         self.owner = None
 
@@ -89,11 +89,11 @@ class DistributedEstateAI(DistributedObjectAI):
         spot.generateWithRequired(self.zoneId)
         self.spots.append(spot)
 
-    def rentItem(self, type, duration):
-        pass # TODO - implement this
-
         # Let's place some popsicles
         self.createTreasurePlanner()
+
+    def rentItem(self, type, duration):
+        pass # TODO - implement this
 
     def destroy(self):
         for house in self.houses:
