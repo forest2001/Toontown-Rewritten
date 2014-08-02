@@ -12,6 +12,7 @@ preload-avatars #t
 texture-anisotropic-degree 16
 language LANGUAGE_HERE
 
+
 # Resources settings
 model-path /
 model-cache-models #f
@@ -31,12 +32,15 @@ vfs-mount phase_12.mf /
 vfs-mount phase_13.mf /
 default-model-extension .bam
 
+
 # Now that we've loaded the phase files, tell panda to trust the TTRCA
 ssl-certificates phase_3/etc/TTRCA.crt
+
 
 # This is the shared secret for CSMUD login
 # ##### NB! Update deployment/server.prc too! #####
 csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
+
 
 # DC files are NOT configured.
 # They're wrapped up into the code automatically.
@@ -50,12 +54,12 @@ want-news-page #f
 want-gardening #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
-want-keep-alive #f
+want-keep-alive #t
 
 
 # Holidays and Events
 force-holiday-decorations 6
-want-arg-manager #t
+want-arg-manager #f
 
 
 # Chat
