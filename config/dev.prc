@@ -51,7 +51,7 @@ want-parties #f
 want-gardening #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
-want-keep-alive #f
+want-keep-alive #t
 
 
 # Developer Modifications
@@ -70,4 +70,4 @@ force-player-understandable #t
 
 # Holidays and Events
 force-holiday-decorations 6
-want-arg-manager #t
+want-arg-manager #f

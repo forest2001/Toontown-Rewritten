@@ -6,9 +6,11 @@
 want-dev #f
 want-cheesy-expirations #t
 
+
 # Shared secret for CSMUD
 # ##### NB! Update config/public_client.prc too! #####
 csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
+
 
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
@@ -17,6 +19,7 @@ want-pets #f
 want-parties #f
 want-golf #f
 want-gardening #f
-want-keep-alive #f
+want-keep-alive #t
+
 
 # Holidays and Events
