@@ -63,9 +63,8 @@ want-toontorial #f
 
 
 # Chat stuff
-blacklist-sequence-url http://pionuslabs.com/tsequence.dat
-want-whitelist #t
-want-blacklist-sequence #t
+want-whitelist #f
+want-blacklist-sequence #f
 force-avatar-understandable #t
 force-player-understandable #t
 
