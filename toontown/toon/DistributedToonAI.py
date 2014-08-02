@@ -229,6 +229,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.magicWordTeleportRequests = []
         self.webAccountId = 0
         self.hasQuests = False
+
+        # KeepAlive
+        self.keepAliveTask = None
         return
 
     def generate(self):
@@ -265,7 +268,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             # Begin checking if clients are still alive
             if config.GetBool('want-keep-alive', True):
-                taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+                self.keepAliveTask = taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'))
 
             if self.getAdminAccess() < 500:
                 # Ensure they have the correct laff.
@@ -347,7 +350,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(taskName)
         taskName = 'next-bothDelivery-%s' % self.doId
         taskMgr.remove(taskName)
+
+        # Cleanup KeepAlive stuff
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        if self.keepAliveTask:
+            self.keepAliveTask.remove()
+            self.keepAliveTask = None  
+
         self.stopToonUp()
         del self.dna
         if self.inventory:
@@ -370,7 +379,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = None
         taskName = self.uniqueName('next-catalog')
         taskMgr.remove(taskName)
+
+        # Cleanup KeepAlive stuff
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        if self.keepAliveTask:
+            self.keepAliveTask.remove()
+            self.keepAliveTask = None 
         return
 
     def ban(self, comment):
@@ -379,6 +393,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def disconnect(self):
         self.requestDelete()
+
+        # Cleanup KeepAlive stuff
+        taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
+        if self.keepAliveTask:
+            self.keepAliveTask.remove()
+            self.keepAliveTask = None 
 
     def patchDelete(self):
         del self.dna
@@ -4571,8 +4591,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def keepAlive(self):
         # We received the Keep Alive response
         self.notify.debug("Received keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+
+        # Kill the current running task, if we have one
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
-        taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
+        if self.keepAliveTask:
+            self.keepAliveTask.remove()
+            self.keepAliveTask = None
+
+        # Fire up the check again
+        self.keepAliveTask = taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'))
 
     def __noKeepAlive(self):
         # Log everything just so we have a record of it
@@ -4586,8 +4613,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         dg.addString('Link renegotiation timed out.')
         self.air.send(dg)
 
-        # RIP
-        self.requestDelete()
+        # Kill it, kill it with fire!
+        self.notify.debug("Killing %s (%d)." % (self.getName(), self.getDoId()))
+        self.disconnect()
 
     def d_setLastSeen(self, timestamp):
         self.sendUpdate('setLastSeen', [int(timestamp)])
