@@ -23,7 +23,7 @@ want-keep-alive #t
 
 
 # Chat stuff
-blacklist-sequence-url https://download.toontownrewritten.com/misc/tsequence.dat
+blacklist-sequence-url https://s3.amazonaws.com/cdn.toontownrewritten.com/misc/tsequence.dat
 want-whitelist #t
 want-blacklist-sequence #t
 
