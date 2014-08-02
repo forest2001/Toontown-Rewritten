@@ -431,7 +431,7 @@ class ObjectManager(NodePath, DirectObject):
         self.objectDict = {}
         for item in dfitems:
             mo = MovableObject(item, parent=self.targetNodePath)
-            self.objectDict[mo.id()] = mo
+            self.objectDict[mo.get_key()] = mo
 
     def setCamPosIndex(self, index):
         self.camPosIndex = index
@@ -469,7 +469,7 @@ class ObjectManager(NodePath, DirectObject):
 
     def loadObject(self, filename):
         mo = MovableObject(filename, parent=self.targetNodePath)
-        self.objectDict[mo.id()] = mo
+        self.objectDict[mo.get_key()] = mo
         self.selectObject(mo)
         return mo
 
@@ -528,7 +528,7 @@ class ObjectManager(NodePath, DirectObject):
         if np.isEmpty():
             return None
         else:
-            return self.objectDict.get(np.id(), None)
+            return self.objectDict.get(np.get_key(), None)
         return None
 
     def moveObjectStop(self, *args):
@@ -1155,7 +1155,7 @@ class ObjectManager(NodePath, DirectObject):
             self.notify.info('QA-REGRESSION: ESTATE:  Send Item to Attic')
         messenger.send('wakeup')
         if self.selectedObject:
-            callback = PythonUtil.Functor(self.__sendItemToAtticCallback, self.selectedObject.id())
+            callback = PythonUtil.Functor(self.__sendItemToAtticCallback, self.selectedObject.get_key())
             self.furnitureManager.moveItemToAttic(self.selectedObject.dfitem, callback)
             self.deselectObject()
 
@@ -1165,7 +1165,7 @@ class ObjectManager(NodePath, DirectObject):
             self.notify.info('Unable to send item %s to attic, reason %s.' % (item.getName(), retcode))
             return
         del self.objectDict[objectId]
-        if self.selectedObject != None and self.selectedObject.id() == objectId:
+        if self.selectedObject != None and self.selectedObject.get_key() == objectId:
             self.selectedObject.detachNode()
             self.deselectObject()
         itemIndex = len(self.atticItemPanels)
@@ -1244,7 +1244,7 @@ class ObjectManager(NodePath, DirectObject):
             self.notify.info('Unable to delete item %s from room, reason %s.' % (item.getName(), retcode))
             return
         del self.objectDict[objectId]
-        if self.selectedObject != None and self.selectedObject.id() == objectId:
+        if self.selectedObject != None and self.selectedObject.get_key() == objectId:
             self.selectedObject.detachNode()
             self.deselectObject()
         if self.inRoomPicker and itemIndex is not None:
@@ -1294,7 +1294,7 @@ class ObjectManager(NodePath, DirectObject):
             self.notify.info('Unable to bring furniture item %s into room, reason %s.' % (itemIndex, retcode))
             return
         mo = self.loadObject(dfitem)
-        objectId = mo.id()
+        objectId = mo.get_key()
         self.atticItemPanels[itemIndex].destroy()
         del self.atticItemPanels[itemIndex]
         for i in range(itemIndex, len(self.atticItemPanels)):

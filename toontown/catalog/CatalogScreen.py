@@ -298,7 +298,7 @@ class CatalogScreen(DirectFrame):
                 page = self.emblemPageList[self.pageIndex]
                 newOrBackOrLoyalty = 3
             page.show()
-            for panel in self.panelDict[page.id()]:
+            for panel in self.panelDict[page.get_key()]:
                 panel.load()
                 if panel.ival:
                     panel.ival.loop()
@@ -438,9 +438,9 @@ class CatalogScreen(DirectFrame):
                 pageList.append(page)
             item.reparentTo(page)
             item.setPos(CatalogPanelCenters[i][j])
-            itemList = self.panelDict.get(page.id(), [])
+            itemList = self.panelDict.get(page.get_key(), [])
             itemList.append(item)
-            self.panelDict[page.id()] = itemList
+            self.panelDict[page.get_key()] = itemList
             j += 1
             if j == NUM_CATALOG_COLS:
                 j = 0
@@ -1033,16 +1033,16 @@ class CatalogScreen(DirectFrame):
     def makeFamilyButton(self, familyId, familyName, colorCode):
         # fg = NametagGlobals.getNameFg(colorCode, PGButton.SInactive)
         return DirectButton(
-            relief=None, 
-            text=familyName, 
-            text_scale=0.04, 
-            text_align=TextNode.ALeft, 
-            # text_fg=fg, 
-            text1_bg=self.textDownColor, 
-            text2_bg=self.textRolloverColor, 
-            text3_fg=self.textDisabledColor, 
-            textMayChange=0, 
-            command=self.__chooseFriend, 
+            relief=None,
+            text=familyName,
+            text_scale=0.04,
+            text_align=TextNode.ALeft,
+            # text_fg=fg,
+            text1_bg=self.textDownColor,
+            text2_bg=self.textRolloverColor,
+            text3_fg=self.textDisabledColor,
+            textMayChange=0,
+            command=self.__chooseFriend,
             extraArgs=[familyId, familyName]
             )
 
