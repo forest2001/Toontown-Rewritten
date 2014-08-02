@@ -22,4 +22,10 @@ want-gardening #f
 want-keep-alive #t
 
 
+# Chat stuff
+blacklist-sequence-url https://download.toontownrewritten.com/misc/tsequence.dat
+want-whitelist #t
+want-blacklist-sequence #t
+
+
 # Holidays and Events
