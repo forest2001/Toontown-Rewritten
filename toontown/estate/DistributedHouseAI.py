@@ -6,6 +6,7 @@ from toontown.estate.DistributedMailboxAI import DistributedMailboxAI
 from toontown.building import DoorTypes
 from toontown.catalog.CatalogItemList import CatalogItemList
 from otp.ai.MagicWordGlobal import *
+from toontown.catalog.CatalogFurnitureItem import *
 from toontown.catalog.CatalogItem import Customization, WindowPlacement, Location
 
 class DistributedHouseAI(DistributedObjectAI):
@@ -263,8 +264,25 @@ class DistributedHouseAI(DistributedObjectAI):
         
     def addAtticItem(self, item):
         self.interior.furnitureManager.saveToHouse()
-        self.atticItems.append(item)
+        if item.replacesExisting() and item.hasExisting():
+            if item.getFlags() & FLCloset:
+                closets = ClosetToClothes.keys()
+                for itItem in self.interiorItems:
+                    if itItem.furnitureType in closets:
+                        posHpr = itItem.posHpr 
+                        self.interiorItems.remove(itItem)
+                        item.posHpr = posHpr
+                        self.interiorItems.append(item)
+                        break
+                for itItem in self.atticItems:
+                    if itItem.furnitureType in closets:
+                        self.atticItems.remove(itItem)
+                        self.atticItems.append(item)
+                        break
+        else:
+            self.atticItems.append(item)
         self.d_setAtticItems(self.atticItems.getBlob())
+        self.d_setInteriorItems(self.interiorItems.getBlob())
         self.interior.furnitureManager.loadFromHouse()
     
     def addWindow(self, item):
