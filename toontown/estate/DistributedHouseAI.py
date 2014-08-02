@@ -68,7 +68,8 @@ class DistributedHouseAI(DistributedObjectAI):
         self.door.requestDelete()
         self.interiorDoor.requestDelete()
         self.interior.requestDelete()
-        self.mailbox.requestDelete()
+        if self.avatarId:
+            self.mailbox.requestDelete()
         self.air.deallocateZone(self.interiorZone)
         DistributedObjectAI.delete(self)
 
