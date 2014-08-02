@@ -119,7 +119,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         offset = 0
         words = message.split()
         for wordit in xrange(len(words)):
-            word = words[wordit]
+            word = words[wordit].lower()
             seqlist = self.sequenceList.getList(word)
             if len(seqlist) > 0:
                 for seqit in xrange(len(seqlist)):
@@ -128,6 +128,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                     if len(words) - (wordit + 1) >= len(splitseq):
                         cmplist = words[wordit + 1:]
                         del cmplist[len(splitseq):]
+                        cmplist = [word.lower() for word in cmplist]
                         if cmp(cmplist, splitseq) == 0:
                             modifications.append((offset, offset + len(word) + len(sequence) - 1))
             offset += len(word) + 1
