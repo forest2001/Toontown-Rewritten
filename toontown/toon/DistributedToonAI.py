@@ -394,9 +394,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def disconnect(self):
         self.requestDelete()
 
+        self.notify.debug("Disconnecting %s (%d)." % (self.getName(), self.getDoId()))
+
         # Cleanup KeepAlive stuff
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         if self.keepAliveTask:
+            self.notify.debug("Removing keepAliveTask for %s (%d)." % (self.getName(), self.getDoId()))
             self.keepAliveTask.remove()
             self.keepAliveTask = None 
 
@@ -4601,7 +4604,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # Fire up the check again
         self.keepAliveTask = taskMgr.doMethodLater(config.GetInt('keep-alive-timeout-delay', 300), self.__noKeepAlive, self.uniqueName('KeepAliveTimeout'))
 
-    def __noKeepAlive(self):
+    def __noKeepAlive(self, task):
         # Log everything just so we have a record of it
         self.notify.debug("No keep alive response %s (%d)." % (self.getName(), self.getDoId()))
         self.air.writeServerEvent("keep-alive", avId=self.getDoId(), message="Avatar failed to respond to Keep Alive.")
