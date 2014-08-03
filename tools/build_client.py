@@ -67,6 +67,8 @@ class ClientBuilder(object):
         self.modules = {}
         self.path_overrides = {}
 
+        self.config_file = os.path.join(self.directory, 'config/public_client.prc')
+
         self.mf = ModuleFinder(sys.path+[self.directory])
         from panda3d.direct import DCFile
         self.dcf = DCFile()
@@ -114,7 +116,7 @@ class ClientBuilder(object):
 
         # Next we need config files...
         configData = []
-        with open(os.path.join(self.directory, 'config/public_client.prc')) as f:
+        with open(self.config_file) as f:
             fd = f.read()
             fd = fd.replace('SERVER_VERSION_HERE', self.version)
             fd = fd.replace('LANGUAGE_HERE', self.language)

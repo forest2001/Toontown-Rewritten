@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 # TODO: OTP should not depend on Toontown... Hrrm.
 from toontown.chat.TTWhiteList import TTWhiteList
+from toontown.chat.TTSequenceList import TTSequenceList
 from otp.distributed import OtpDoGlobals
 
 class ChatAgentUD(DistributedObjectGlobalUD):
@@ -9,8 +10,12 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
-
-        self.whiteList = TTWhiteList()
+        self.wantBlacklistSequence = config.GetBool('want-blacklist-sequence', True)
+        self.wantWhitelist = config.GetBool('want-whitelist', True)
+        if self.wantWhitelist:
+            self.whiteList = TTWhiteList()
+            if self.wantBlacklistSequence:
+                self.sequenceList = TTSequenceList()
         self.chatMode2channel = {
             1 : OtpDoGlobals.OTP_MOD_CHANNEL,
             2 : OtpDoGlobals.OTP_ADMIN_CHANNEL,
@@ -29,8 +34,10 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          issue='Account sent chat without an avatar', message=message)
             return
 
-        cleanMessage, modifications = self.cleanWhitelist(message)
-
+        if self.wantWhitelist:
+            cleanMessage, modifications = self.cleanWhitelist(message)
+        else:
+            cleanMessage, modifications = message, []
         self.air.writeServerEvent('chat-said', avId=sender, chatMode=chatMode, msg=message, cleanMsg=cleanMessage)
 
         # TODO: The above is probably a little too ugly for my taste... Maybe AIR
@@ -58,7 +65,6 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             return
 
         cleanMessage, modifications = self.cleanWhitelist(message)
-
         # Maybe a better "cleaner" way of doing this, but it works
         self.air.writeServerEvent('whisper-said', avId=sender, reciever=receiverAvId, msg=message, cleanMsg=cleanMessage)
         DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
@@ -87,15 +93,18 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         modifications = []
         words = message.split(' ')
         offset = 0
-        WantWhitelist = self.air.config.GetBool('want-whitelist', True)
         for word in words:
-            if word and not self.whiteList.isWord(word) and WantWhitelist:
+            if word and not self.whiteList.isWord(word):
                 modifications.append((offset, offset+len(word)-1))
             offset += len(word) + 1
 
         cleanMessage = message
+        if self.wantBlacklistSequence:
+            modifications += self.cleanSequences(cleanMessage)
+
         for modStart, modStop in modifications:
-            cleanMessage = cleanMessage[:modStart] + '*'*(modStop-modStart+1) + cleanMessage[modStop+1:]
+            # Traverse through modification list and replace the characters of non-whitelisted words and/or blacklisted sequences with asterisks.
+            cleanMessage = cleanMessage[:modStart] + '*' * (modStop - modStart + 1) + cleanMessage[modStop + 1:]
 
         return (cleanMessage, modifications)
 
@@ -103,3 +112,25 @@ class ChatAgentUD(DistributedObjectGlobalUD):
     def cleanBlacklist(self, message):
         # We don't have a black list so we just return the full message
         return message
+
+    # Check for black-listed word sequences and scrub accordingly.
+    def cleanSequences(self, message):
+        modifications = []
+        offset = 0
+        words = message.split()
+        for wordit in xrange(len(words)):
+            word = words[wordit].lower()
+            seqlist = self.sequenceList.getList(word)
+            if len(seqlist) > 0:
+                for seqit in xrange(len(seqlist)):
+                    sequence = seqlist[seqit]
+                    splitseq = sequence.split()
+                    if len(words) - (wordit + 1) >= len(splitseq):
+                        cmplist = words[wordit + 1:]
+                        del cmplist[len(splitseq):]
+                        cmplist = [word.lower() for word in cmplist]
+                        if cmp(cmplist, splitseq) == 0:
+                            modifications.append((offset, offset + len(word) + len(sequence) - 1))
+            offset += len(word) + 1
+
+        return modifications

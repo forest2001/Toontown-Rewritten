@@ -6,9 +6,11 @@
 want-dev #f
 want-cheesy-expirations #t
 
+
 # Shared secret for CSMUD
 # ##### NB! Update config/public_client.prc too! #####
 csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
+
 
 # Beta Modifications
 # Temporary modifications for unimplemented features go here.
@@ -18,6 +20,13 @@ want-parties #f
 want-accessories #f
 want-golf #f
 want-gardening #f
-want-keep-alive #f
+want-keep-alive #t
+
+
+# Chat stuff
+blacklist-sequence-url https://s3.amazonaws.com/cdn.toontownrewritten.com/misc/tsequence.dat
+want-whitelist #t
+want-blacklist-sequence #t
+
 
 # Holidays and Events
