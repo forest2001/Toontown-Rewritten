@@ -42,6 +42,7 @@ want-dev-certificate-trust #t
 server-force-ssl #t
 
 
+
 # This is the shared secret for CSMUD login
 # ##### NB! Update deployment/server.prc too! #####
 csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
