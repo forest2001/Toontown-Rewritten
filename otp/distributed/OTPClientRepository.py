@@ -488,6 +488,15 @@ class OTPClientRepository(ClientRepositoryBase):
         self.connectingBox.show()
         self.renderFrame()
         self.handler = self.handleConnecting
+        # TTR SSL Hack
+        # Because Panda has weird requirements that a certificate be associated with a URLSpec,
+        # we take the URLSpec in serverList and trust our certs for that URLSpec
+        if self.checkHttp():
+            for server in self.serverList:
+                self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRCA.crt'))
+                if base.config.GetBool('want-dev-certificate-trust', 0):
+                    self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRDev.crt'))
+
         self.connect(self.serverList, successCallback=self._sendHello, failureCallback=self.failedToConnect)
 
     def _sendHello(self):
