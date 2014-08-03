@@ -495,6 +495,7 @@ class OTPClientRepository(ClientRepositoryBase):
             for server in self.serverList:
                 self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRCA.crt'))
                 self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTR-RCA.crt'))
+                self.http.addPreapprovedServerCertificateName(server, "Restricted AWS Client Agents")
                 if base.config.GetBool('want-dev-certificate-trust', 0):
                     self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRDev.crt'))
 
