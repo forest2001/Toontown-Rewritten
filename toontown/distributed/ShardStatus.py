@@ -17,7 +17,7 @@ shard_status_interval = ConfigVariableInt(
     'How often to send shard status update messages.')
 
 shard_heap_interval = ConfigVariableInt(
-    'shard-status-interval', 60,
+    'shard-heap-interval', 60,
     'How often to recount objects on the heap (and in garbage).')
 
 shard_status_timeout = ConfigVariableInt(
