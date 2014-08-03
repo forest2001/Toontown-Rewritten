@@ -2,12 +2,11 @@ import os
 import datetime
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
-from direct.distributed import DistributedObject
 from direct.showbase import AppRunnerGlobal
 from otp.chat.WhiteList import WhiteList
 from toontown.toonbase import TTLocalizer
 
-class TTWhiteList(WhiteList, DistributedObject.DistributedObject):
+class TTWhiteList(WhiteList):
     RedownloadTaskName = 'RedownloadWhitelistTask'
     WhitelistBaseDir = config.GetString('whitelist-base-dir', '')
     WhitelistStageDir = config.GetString('whitelist-stage-dir', 'whitelist')

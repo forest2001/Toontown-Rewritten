@@ -25,6 +25,7 @@ vfs-mount resources/phase_10 /phase_10
 vfs-mount resources/phase_11 /phase_11
 vfs-mount resources/phase_12 /phase_12
 vfs-mount resources/phase_13 /phase_13
+vfs-mount resources/server /server
 model-path /
 default-model-extension .bam
 
@@ -51,7 +52,7 @@ want-parties #f
 want-gardening #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
-want-keep-alive #f
+want-keep-alive #t
 
 
 # Developer Modifications
@@ -64,10 +65,11 @@ want-toontorial #f
 
 # Chat stuff
 want-whitelist #f
+want-blacklist-sequence #f
 force-avatar-understandable #t
 force-player-understandable #t
 
 
 # Holidays and Events
 force-holiday-decorations 6
-want-arg-manager #t
+want-arg-manager #f

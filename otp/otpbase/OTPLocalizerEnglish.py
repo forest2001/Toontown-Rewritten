@@ -569,7 +569,7 @@ SuitBrushOffs = {'f': ["I'm late for a meeting."],
         "You're in no position to meet with me.",
         'Talk to my assistant.']}
 SuitFaceoffTaunts = {'b': ['Would you like to make a donation?',
-       "This may make you sore loser.",
+       "This may make you a sore loser.",
        "I'm going to leave you high and dry.",
        'I\'m "Positive" this will go well.',
        '"O" don\'t be so "Negative".',
