@@ -24,6 +24,8 @@ if language == 'french':
     from toontown.toonbase.TTLocalizer_French import *
 elif language == 'polish':
     from toontown.toonbase.TTLocalizer_Polish import *
+elif language == 'german':
+    from toontown.toonbase.TTLocalizer_German import *
 if checkLanguage:
     l = {}
     g = {}
