@@ -24,6 +24,8 @@ if language == 'french':
     from otp.otpbase.OTPLocalizer_French import *
 elif language == 'polish':
     from otp.otpbase.OTPLocalizer_Polish import *
+elif language == 'german':
+    from otp.otpbase.OTPLocalizer_German import *
 if checkLanguage:
     l = {}
     g = {}
