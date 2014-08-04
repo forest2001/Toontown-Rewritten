@@ -19,7 +19,7 @@ want-pets #f
 want-parties #f
 want-golf #f
 want-gardening #f
-want-keep-alive #t
+want-keep-alive #f
 
 
 # Chat stuff
