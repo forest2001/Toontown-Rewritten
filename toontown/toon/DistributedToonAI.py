@@ -4593,7 +4593,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     # Keep Alive
     def keepAlive(self):
         # We received the Keep Alive response
-        self.notify.debug("Received keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        self.notify.debug("Received keep alive response from %s (%d)." % (self.getName(), self.getDoId()))
 
         # Kill the current running task, if we have one
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
@@ -4606,18 +4606,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def __noKeepAlive(self, task):
         # Log everything just so we have a record of it
-        self.notify.debug("No keep alive response %s (%d)." % (self.getName(), self.getDoId()))
+        self.notify.warning("No keep alive response from %s (%d)." % (self.getName(), self.getDoId()))
         self.air.writeServerEvent("keep-alive", avId=self.getDoId(), message="Avatar failed to respond to Keep Alive.")
 
-        # We failed to recieve a reponse from the client
-        dg = PyDatagram()
-        dg.addServerHeader(self.GetPuppetConnectionChannel(self.getDoId()), self.air.ourChannel, CLIENTAGENT_EJECT)
-        dg.addUint16(128)
-        dg.addString('Link renegotiation timed out.')
-        self.air.send(dg)
-
         # Kill it, kill it with fire!
-        self.notify.debug("Killing %s (%d)." % (self.getName(), self.getDoId()))
+        self.notify.warning("Killing %s (%d)." % (self.getName(), self.getDoId()))
         self.disconnect()
 
     def d_setLastSeen(self, timestamp):
