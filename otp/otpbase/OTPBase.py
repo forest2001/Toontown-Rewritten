@@ -274,7 +274,7 @@ def textures():
 def fps():
     'Toggle frame rate meter on or off.'
     base.setFrameRateMeter(not base.frameRateMeter)
-    
+
 @magicWord(category=CATEGORY_GUI)
 def showAvIds():
     'Show avId in Nametags.'
@@ -284,32 +284,46 @@ def showAvIds():
 def showNames():
     'Remove avIds in Nametags.'
     messenger.send('nameTagShowName')
-    
+
 @magicWord(access=200)
 def showAccess():
     return "Access level: " + str(spellbook.getTarget().getAdminAccess())
-    
+
 @magicWord(category=CATEGORY_GUI)
 def toga2d():
     if aspect2d.isHidden():
         aspect2d.show()
     else:
         aspect2d.hide()
-        
+
 @magicWord(category=CATEGORY_GUI)
 def placer():
     base.camera.place()
-    
+
 @magicWord(category=CATEGORY_GUI)
 def explorer():
     base.render.explore()
-    
+
 @magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex'])
 def reloadTextures():
     """ Artfart command to reload all of the textures. """
     # TODO: A panel that says "Reloading textures... Please wait!"
     # ...though it's not important since it's a staff command and
     # only staff will see it.
+    import glob
+    # Stolen from ToontownStart.py
+    # Remount all phase files. This maybe might work? Idk. Lets see
+    # if Panda craps itself.
+    for file in glob.glob('resources/*.mf'):
+        mf = Multifile()
+        mf.openReadWrite(Filename(file))
+        names = mf.getSubfileNames()
+        for name in names:
+            ext = os.path.splitext(name)[1]
+            if ext not in ['.jpg', '.jpeg', '.ogg', '.rgb']:
+                mf.removeSubfile(name)
+        vfs.mount(mf, Filename('/'), 0)
+    # And finally reload everything!
     for texture in TexturePool.findAllTextures():
         texture.reload()
     return "Reloaded all of the textures!"
