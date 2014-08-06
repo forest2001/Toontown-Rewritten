@@ -43,6 +43,7 @@ class SpellbookLoader(object):
         import __builtin__
         class game:
             name = 'uberDog'
+            process = 'server'
         __builtin__.game = game
         __builtin__.simbase = base
         __builtin__.__dev__ = False
