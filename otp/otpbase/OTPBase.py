@@ -1,10 +1,14 @@
 from direct.showbase.ShowBase import ShowBase
-from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath, TexturePool
+from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath, TexturePool, Multifile
 import OTPRender
 import time
 import math
 import re
+
 from otp.ai.MagicWordGlobal import *
+import glob
+from panda3d.core import VirtualFileSystem
+import os
 
 class OTPBase(ShowBase):
 
@@ -310,10 +314,10 @@ def reloadTextures():
     # TODO: A panel that says "Reloading textures... Please wait!"
     # ...though it's not important since it's a staff command and
     # only staff will see it.
-    import glob
     # Stolen from ToontownStart.py
     # Remount all phase files. This maybe might work? Idk. Lets see
     # if Panda craps itself.
+    vfs = VirtualFileSystem.getGlobalPtr()
     for file in glob.glob('resources/*.mf'):
         mf = Multifile()
         mf.openReadWrite(Filename(file))
