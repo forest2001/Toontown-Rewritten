@@ -263,7 +263,14 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         return (ToontownGlobals.FM_MovedItem, do.doId)
 
     def deleteItemFromAttic(self, blob, index):
-        pass
+        item = self.getAtticFurniture(self.atticItems, index)
+        if item is None:
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid item at index %s' % index)
+            return ToontownGlobals.FM_InvalidIndex
+
+        # TODO: Finish implementing this        
+
+        return ToontownGlobals.FM_DeletedItem
 
     def deleteItemFromRoom(self, blob, doId):
         pass
