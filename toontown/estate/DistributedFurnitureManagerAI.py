@@ -268,7 +268,9 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid item at index %s' % index)
             return ToontownGlobals.FM_InvalidIndex
 
-        # TODO: Finish implementing this        
+        
+        self.atticItems.remove(item) 
+        self.d_setAtticItems(self.getAtticItems())     
 
         return ToontownGlobals.FM_DeletedItem
 
