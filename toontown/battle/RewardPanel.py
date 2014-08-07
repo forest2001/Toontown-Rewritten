@@ -24,7 +24,7 @@ class RewardPanel(DirectFrame):
     SkipBattleMovieEvent = 'skip-battle-movie-event'
 
     def __init__(self, name):
-        if base.config.GetBool('want-skip-button', 0):
+        if config.GetBool('want-skip-button', False):
             gscale = (TTLocalizer.RPdirectFrame[0], TTLocalizer.RPdirectFrame[1], TTLocalizer.RPdirectFrame[2] * 1.1)
             gpos = Point3(0, 0, -0.05)
         else:
@@ -455,14 +455,14 @@ class RewardPanel(DirectFrame):
     def getTrackIntervalList(self, toon, track, origSkill, earnedSkill, hasUber, guestWaste = 0):
         if hasUber < 0:
             print (toon.doId, 'Reward Panel received an invalid hasUber from an uberList')
-        tickDelay = 0.1
+        tickDelay = 1.0 / 30
         intervalList = []
         if origSkill + earnedSkill >= ToontownBattleGlobals.UnpaidMaxSkills[track] and toon.getGameAccess() != OTPGlobals.AccessFull:
             lostExp = origSkill + earnedSkill - ToontownBattleGlobals.UnpaidMaxSkills[track]
             intervalList.append(Func(self.showTrackIncLabel, track, lostExp, 1))
         else:
             intervalList.append(Func(self.showTrackIncLabel, track, earnedSkill))
-        barTime = math.log(earnedSkill + 0.5)
+        barTime = 1.0
         numTicks = int(math.ceil(barTime / tickDelay))
         for i in range(numTicks):
             t = (i + 1) / float(numTicks)
@@ -471,7 +471,7 @@ class RewardPanel(DirectFrame):
             intervalList.append(Wait(tickDelay))
 
         intervalList.append(Func(self.resetBarColor, track))
-        intervalList.append(Wait(0.3))
+        intervalList.append(Wait(0.1))
         nextExpValue = self.getNextExpValue(origSkill, track)
         finalGagFlag = 0
         while origSkill + earnedSkill >= nextExpValue and origSkill < nextExpValue and not finalGagFlag:
@@ -490,9 +490,9 @@ class RewardPanel(DirectFrame):
         uberSkill = ToontownBattleGlobals.UberSkill + ToontownBattleGlobals.Levels[track][ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1]
         if currentSkill >= uberSkill and not hasUber > 0:
             intervalList += self.getUberGagIntervalList(toon, track, ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1)
-            intervalList.append(Wait(0.3))
+            intervalList.append(Wait(0.1))
             skillDiff = currentSkill - ToontownBattleGlobals.Levels[track][ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1]
-            barTime = math.log(skillDiff + 0.5)
+            barTime = math.log(skillDiff + 1)
             numTicks = int(math.ceil(barTime / tickDelay))
             displayedSkillDiff = skillDiff
             if displayedSkillDiff > ToontownBattleGlobals.UberSkill:
@@ -502,20 +502,20 @@ class RewardPanel(DirectFrame):
                 t = (i + 1) / float(numTicks)
                 newValue = int(currentSkill - t * skillDiff + 0.5)
                 intervalList.append(Func(self.incrementExp, track, newValue, toon))
-                intervalList.append(Wait(tickDelay * 0.5))
+                intervalList.append(Wait(tickDelay * 0.7))
 
-            intervalList.append(Wait(0.3))
+            intervalList.append(Wait(0.1))
         return intervalList
 
     def getMeritIntervalList(self, toon, dept, origMerits, earnedMerits):
-        tickDelay = 0.08
+        tickDelay = 1.0 / 60
         intervalList = []
         totalMerits = CogDisguiseGlobals.getTotalMerits(toon, dept)
         neededMerits = 0
         if totalMerits and origMerits != totalMerits:
             neededMerits = totalMerits - origMerits
             intervalList.append(Func(self.showMeritIncLabel, dept, min(neededMerits, earnedMerits)))
-        barTime = math.log(earnedMerits + 1)
+        barTime = 1.0
         numTicks = int(math.ceil(barTime / tickDelay))
         for i in range(numTicks):
             t = (i + 1) / float(numTicks)
@@ -524,10 +524,10 @@ class RewardPanel(DirectFrame):
             intervalList.append(Wait(tickDelay))
 
         intervalList.append(Func(self.resetMeritBarColor, dept))
-        intervalList.append(Wait(0.3))
+        intervalList.append(Wait(0.1))
         if toon.cogLevels[dept] < ToontownGlobals.MaxCogSuitLevel:
             if neededMerits and toon.readyForPromotion(dept):
-                intervalList.append(Wait(0.3))
+                intervalList.append(Wait(0.4))
                 intervalList += self.getPromotionIntervalList(toon, dept)
         return intervalList
 
@@ -575,7 +575,7 @@ class RewardPanel(DirectFrame):
 
     def getQuestIntervalList(self, toon, deathList, toonList, origQuestsList, itemList, helpfulToonsList = []):
         avId = toon.getDoId()
-        tickDelay = 0.2
+        tickDelay = 0.5
         intervalList = []
         toonShortList = []
         for t in toonList:
@@ -664,7 +664,7 @@ class RewardPanel(DirectFrame):
                     if earned > 0:
                         earned = min(earned, quest.getNumQuestItems() - questDesc[4])
                 if earned > 0 or base.localAvatar.tutorialAck == 0 and num == 1:
-                    barTime = math.log(earned + 1)
+                    barTime = 1.0
                     numTicks = int(math.ceil(barTime / tickDelay))
                     for i in range(numTicks):
                         t = (i + 1) / float(numTicks)
@@ -726,19 +726,19 @@ class RewardPanel(DirectFrame):
             if meritList[dept]:
                 track += self.getMeritIntervalList(toon, dept, origMeritList[dept], meritList[dept])
 
-        track.append(Wait(1.0))
+        track.append(Wait(0.75))
         itemInterval = self.getItemIntervalList(toon, itemList)
         if itemInterval:
             track.append(Func(self.initItemFrame, toon))
-            track.append(Wait(1.0))
+            track.append(Wait(0.25))
             track += itemInterval
-            track.append(Wait(1.0))
+            track.append(Wait(0.5))
         missedItemInterval = self.getMissedItemIntervalList(toon, missedItemList)
         if missedItemInterval:
             track.append(Func(self.initMissedItemFrame, toon))
-            track.append(Wait(1.0))
+            track.append(Wait(0.25))
             track += missedItemInterval
-            track.append(Wait(1.0))
+            track.append(Wait(0.5))
         self.notify.debug('partList = %s' % partList)
         newPart = 0
         for part in partList:
@@ -750,9 +750,9 @@ class RewardPanel(DirectFrame):
             partList = self.getCogPartIntervalList(toon, partList)
             if partList:
                 track.append(Func(self.initCogPartFrame, toon))
-                track.append(Wait(1.0))
+                track.append(Wait(0.25))
                 track += partList
-                track.append(Wait(1.0))
+                track.append(Wait(0.5))
         questList = self.getQuestIntervalList(toon, deathList, toonList, origQuestsList, itemList, helpfulToonsList)
         if questList:
             avQuests = []
@@ -760,9 +760,9 @@ class RewardPanel(DirectFrame):
                 avQuests.append(origQuestsList[i:i + 5])
 
             track.append(Func(self.initQuestFrame, toon, copy.deepcopy(avQuests)))
-            track.append(Wait(1.0))
+            track.append(Wait(0.25))
             track += questList
-            track.append(Wait(2.0))
+            track.append(Wait(0.5))
         track.append(Wait(0.25))
         if trackEnded:
             track.append(Func(self.vanishFrames))

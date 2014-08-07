@@ -43,6 +43,7 @@ class SpellbookLoader(object):
         import __builtin__
         class game:
             name = 'uberDog'
+            process = 'server'
         __builtin__.game = game
         __builtin__.simbase = base
         __builtin__.__dev__ = False
@@ -118,14 +119,14 @@ class MediaWikiGenerator(object):
         self.output.write('\n')
 
     def magic_word(self, mw):
-        self.output.write('{{MagicWord')
+        self.output.write('{{Magic word')
 
-        self.output.write('|name=%s' % mw.name)
+        self.output.write('|word=%s' % mw.name)
 
-        self.output.write('|usage=%s' % mw.getUsage())
+        self.output.write('|args=%s' % mw.getUsage())
 
         if mw.doc:
-            self.output.write('|description=%s' % mw.doc)
+            self.output.write('|desc=%s' % mw.doc)
 
         self.output.write('|access=%s' % mw.access)
 
