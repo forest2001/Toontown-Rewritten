@@ -308,26 +308,31 @@ def placer():
 def explorer():
     base.render.explore()
 
-@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex'])
+@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex', 'rt'])
 def reloadTextures():
-    """ Artfart command to reload all of the textures. """
-    # TODO: A panel that says "Reloading textures... Please wait!"
-    # ...though it's not important since it's a staff command and
-    # only staff will see it.
-    # Stolen from ToontownStart.py
-    # Remount all phase files. This maybe might work? Idk. Lets see
-    # if Panda craps itself.
+    """
+    Artfart command to reload all of the textures.
+
+    TODO: A panel that says "Reloading textures... Please wait!"
+    ...though it's not important since it's a staff command and
+    only staff will see it.
+
+    Stolen from ToontownStart.py
+    Remount all phase files. This maybe might work? Idk. Lets see
+    if Panda craps itself.
+
+    Place raw files in /resources/non-mf/phase_*/ and they will be
+    mounted without needing to multify!
+    """
+    # Lock ...
     vfs = VirtualFileSystem.getGlobalPtr()
-    for file in glob.glob('resources/*.mf'):
-        mf = Multifile()
-        mf.openReadWrite(Filename(file))
-        names = mf.getSubfileNames()
-        for name in names:
-            ext = os.path.splitext(name)[1]
-            if ext not in ['.jpg', '.jpeg', '.ogg', '.rgb']:
-                mf.removeSubfile(name)
-        vfs.mount(mf, Filename('/'), 0)
-    # And finally reload everything!
+    for file in glob.glob('resources/non-mf/phase_*/'):
+        # Slightly hacky. We remove the trailing slash so we have a tail,
+        # and select the tail value from the returned tuple. Finally we
+        # prepend a slash for the mount point.
+        mount_point = '/' + str(os.path.split(file[:-1])[1])
+        vfs.mount(Filename(file), Filename(mount_point), 0)
+    # ... and load.
     for texture in TexturePool.findAllTextures():
         texture.reload()
     return "Reloaded all of the textures!"
