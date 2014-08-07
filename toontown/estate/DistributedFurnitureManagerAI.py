@@ -278,10 +278,32 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         pass
 
     def moveWallpaperFromAttic(self, index, room):
-        pass
+        # CatalogFlooringItem(1020, 0)
+        # CatalogWainscotingItem(1000, 3)
+        # CatalogFlooringItem(1020, 0)
+        retcode = ToontownGlobals.FM_SwappedItem
+        wallpaper = self.getAtticFurniture(self.atticWallpaper, index)
+        if wallpaper is None:
+            # rip
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Invalid wallpaper at index %s' % index)
+            return ToontownGlobals.FM_InvalidIndex
+    
+        if room > 1:
+            # This is not a valid room! 
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to apply a wallpaper in an invalid room %d!' % room)
+            return ToontownGlobals.FM_InvalidItem
+   
+        self.atticWallpaper.remove(wallpaper)
+        self.d_setAtticWallpaper(self.getAtticWallpaper())
+        self.wallpaper.append(wallpaper)
+        self.applyWallpaper()
+    
+        return retcode
 
     def deleteWallpaperFromAttic(self, blob, index):
-        pass
+        wallpaper = self.getAtticFurniture(blob, index)
+        self.atticWallpaper.remove(wallpaper)
+        self.b_setAtticWallpaper(self.getAtticWallpaper())
 
     def moveWindowToAttic(self, slot):
         window = self.getWindow(slot)
