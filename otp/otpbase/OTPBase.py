@@ -308,8 +308,8 @@ def placer():
 def explorer():
     base.render.explore()
 
-@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex', 'rt'])
-def reloadTextures():
+@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex', 'rt'], types=[str])
+def reloadTextures(textureName=''):
     """
     Artfart command to reload all of the textures.
 
@@ -324,6 +324,7 @@ def reloadTextures():
     Place raw files in /resources/non-mf/phase_*/ and they will be
     mounted without needing to multify!
     """
+
     # Lock ...
     vfs = VirtualFileSystem.getGlobalPtr()
     for file in glob.glob('resources/non-mf/phase_*/'):
@@ -332,7 +333,14 @@ def reloadTextures():
         # prepend a slash for the mount point.
         mount_point = '/' + str(os.path.split(file[:-1])[1])
         vfs.mount(Filename(file), Filename(mount_point), 0)
+
     # ... and load.
-    for texture in TexturePool.findAllTextures():
+    if textureName:
+        pool = TexturePool.findAllTextures('*'+textureName+'*')
+    else:
+        pool = TexturePool.findAllTextures()
+    for texture in pool:
         texture.reload()
+    if textureName:
+        return "Reloaded all textures matching '%s'" % textureName
     return "Reloaded all of the textures!"
