@@ -60,8 +60,8 @@ class DistributedHouseInteriorAI(DistributedObjectAI):
         del self.furnitureManager.windows[:]
         self.furnitureManager.windows.extend(defaultWindows)
         self.furnitureManager.applyWindows()
-        del self.furnitureManager.wallpapers[:]
-        self.furnitureManager.wallpapers.extend(defaultWallpaper)
+        del self.furnitureManager.wallpaper[:]
+        self.furnitureManager.wallpaper.extend(defaultWallpaper)
         self.furnitureManager.applyWallpaper()
 
         # Save:
