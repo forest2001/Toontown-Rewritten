@@ -268,7 +268,6 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid item at index %s' % index)
             return ToontownGlobals.FM_InvalidIndex
 
-        
         self.atticItems.remove(item) 
         self.d_setAtticItems(self.getAtticItems())     
 
@@ -365,7 +364,15 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         return retcode
 
     def deleteWindowFromAttic(self, blob, index):
-        pass
+        window = self.getAtticFurniture(self.atticWindows, index)
+        if window is None:
+            self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid window at index %s' % index)
+            return ToontownGlobals.FM_InvalidIndex
+        
+        self.atticWindows.remove(window) 
+        self.d_setAtticWindows(self.getAtticWindows())     
+
+        return ToontownGlobals.FM_DeletedItem
 
     def recoverDeletedItem(self, blob, index):
         pass
