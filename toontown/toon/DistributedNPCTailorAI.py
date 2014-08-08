@@ -43,7 +43,10 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         if testDNA.head != av.dna.head:
             return False
         if testDNA.torso != av.dna.torso:
-            return False
+            # TODO: Check that they aren't changing torso size, but only skirt/shorts.
+            # Male toons can never change, but girls can change between skirt and shorts.
+            if av.dna.gender == 'm':
+                return False
         if testDNA.legs != av.dna.legs:
             return False
         if testDNA.gender != av.dna.gender:
