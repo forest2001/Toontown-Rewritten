@@ -27,6 +27,16 @@ for file in glob.glob('resources/*.mf'):
             mf.removeSubfile(name)
     vfs.mount(mf, Filename('/'), 0)
 
+# For the artists. Mount everything in non-mf so they can test textures without
+# multifying. This is undocumented and shouldn't be released to the public as it
+# doesn't care of the extension type(s).
+for file in glob.glob('resources/non-mf/phase_*/'):
+    # Slightly hacky. We remove the trailing slash so we have a tail,
+    # and select the tail value from the returned tuple. Finally we
+    # prepend a slash for the mount point.
+    mount_point = '/' + str(os.path.split(file[:-1])[1])
+    vfs.mount(Filename(file), Filename(mount_point), 0)
+
 class game:
     name = 'toontown'
     process = 'client'
