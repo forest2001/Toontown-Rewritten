@@ -508,14 +508,18 @@ class ObjectManager(NodePath, DirectObject):
             self.atticRoof.hide()
 
             # We dont want to move the Closet, Phone, Bank or Trunk to the attic
-            if selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLCloset or \
-                selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLPhone or \
-                selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLBank or \
-                selectedObject.dfitem.item.getFlags() &CatalogFurnitureItem.FLTrunk:
-                self.sendToAtticButton.hide()
-                self.atticRoof.show()
-            else:
-                self.sendToAtticButton.show()
+            if config.GetBool('want-permanent-interactables', True):
+                if selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLCloset or \
+                    selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLPhone or \
+                    selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLBank or \
+                    selectedObject.dfitem.item.getFlags() &CatalogFurnitureItem.FLTrunk:
+                    self.sendToAtticButton.hide()
+                    self.atticRoof.show()
+                else:
+                    self.sendToAtticButton.show()
+                return
+                
+            self.sendToAtticButton.show()
 
     def deselectObject(self):
         self.moveObjectStop()
