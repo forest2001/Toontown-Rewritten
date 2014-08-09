@@ -490,6 +490,7 @@ class ObjectManager(NodePath, DirectObject):
         messenger.send('wakeup')
         if self.selectedObject:
             self.deselectObject()
+
         if selectedObject:
             self.selectedObject = selectedObject
             self.deselectEvent = self.selectedObject.dfitem.uniqueName('disable')
@@ -504,8 +505,17 @@ class ObjectManager(NodePath, DirectObject):
             self.lnp.create()
             self.buttonFrame.show()
             self.enableButtonFrameTask()
-            self.sendToAtticButton.show()
             self.atticRoof.hide()
+
+            # We dont want to move the Closet, Phone, Bank or Trunk to the attic
+            if selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLCloset or \
+                selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLPhone or \
+                selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLBank or \
+                selectedObject.dfitem.item.getFlags() &CatalogFurnitureItem.FLTrunk:
+                self.sendToAtticButton.hide()
+                self.atticRoof.show()
+            else:
+                self.sendToAtticButton.show()
 
     def deselectObject(self):
         self.moveObjectStop()
