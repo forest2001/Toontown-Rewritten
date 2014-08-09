@@ -254,9 +254,18 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         item.posHpr = (x, y, z, h, p, r)
 
-        do = DistributedFurnitureItemAI(self.air, self, item)
+        # TODO: Add DistributedTrunkAI when accessories are enabled
+        if item.getFlags() & FLCloset:
+            do = DistributedClosetAI(self.air, self, item)
+        elif item.getFlags() & FLBank:
+            do = DistributedBankAI(self.air, self, item)
+        elif item.getFlags() & FLPhone:
+            do = DistributedPhoneAI(self.air, self, item)
+        else:
+            do = DistributedFurnitureItemAI(self.air, self, item)
+
         do.generateWithRequired(self.zoneId)
-        self.items.append(do)
+        self.items.append(do)        
 
         return (ToontownGlobals.FM_MovedItem, do.doId)
 
