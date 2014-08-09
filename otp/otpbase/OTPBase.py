@@ -1,10 +1,14 @@
 from direct.showbase.ShowBase import ShowBase
-from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath, TexturePool
+from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath, TexturePool, Multifile
 import OTPRender
 import time
 import math
 import re
+
 from otp.ai.MagicWordGlobal import *
+import glob
+from panda3d.core import VirtualFileSystem
+import os
 
 class OTPBase(ShowBase):
 
@@ -304,26 +308,39 @@ def placer():
 def explorer():
     base.render.explore()
 
-@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex'])
-def reloadTextures():
-    """ Artfart command to reload all of the textures. """
-    # TODO: A panel that says "Reloading textures... Please wait!"
-    # ...though it's not important since it's a staff command and
-    # only staff will see it.
-    import glob
-    # Stolen from ToontownStart.py
-    # Remount all phase files. This maybe might work? Idk. Lets see
-    # if Panda craps itself.
-    for file in glob.glob('resources/*.mf'):
-        mf = Multifile()
-        mf.openReadWrite(Filename(file))
-        names = mf.getSubfileNames()
-        for name in names:
-            ext = os.path.splitext(name)[1]
-            if ext not in ['.jpg', '.jpeg', '.ogg', '.rgb']:
-                mf.removeSubfile(name)
-        vfs.mount(mf, Filename('/'), 0)
-    # And finally reload everything!
-    for texture in TexturePool.findAllTextures():
+@magicWord(category=CATEGORY_GRAPHICAL, aliases=['syncTextures', 'reloadTex', 'synctex', 'rt'], types=[str])
+def reloadTextures(textureName=''):
+    """
+    Artfart command to reload all of the textures.
+
+    TODO: A panel that says "Reloading textures... Please wait!"
+    ...though it's not important since it's a staff command and
+    only staff will see it.
+
+    Stolen from ToontownStart.py
+    Remount all phase files. This maybe might work? Idk. Lets see
+    if Panda craps itself.
+
+    Place raw files in /resources/non-mf/phase_*/ and they will be
+    mounted without needing to multify!
+    """
+
+    # Lock ...
+    vfs = VirtualFileSystem.getGlobalPtr()
+    for file in glob.glob('resources/non-mf/phase_*/'):
+        # Slightly hacky. We remove the trailing slash so we have a tail,
+        # and select the tail value from the returned tuple. Finally we
+        # prepend a slash for the mount point.
+        mount_point = '/' + str(os.path.split(file[:-1])[1])
+        vfs.mount(Filename(file), Filename(mount_point), 0)
+
+    # ... and load.
+    if textureName:
+        pool = TexturePool.findAllTextures('*'+textureName+'*')
+    else:
+        pool = TexturePool.findAllTextures()
+    for texture in pool:
         texture.reload()
+    if textureName:
+        return "Reloaded all textures matching '%s'" % textureName
     return "Reloaded all of the textures!"

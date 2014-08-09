@@ -17,10 +17,10 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         self.customerDNA = None
         self.customerId = None
         self.jbCost = 150
-        
+
         if self.freeClothes:
             self.useJellybeans = False
-        
+
         return
 
     def getTailor(self):
@@ -34,6 +34,34 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         DistributedNPCToonBaseAI.delete(self)
         return
 
+    def __verifyAvatarInMyZone(self, av):
+        return av.getLocation() == self.getLocation()
+
+    def __checkValidDNAChange(self, av, testDNA):
+        # verify they aren't trying to change anything other than their clothing.
+        # FML this took some time to write...
+        if testDNA.head != av.dna.head:
+            return False
+        if testDNA.torso != av.dna.torso:
+            # TODO: Check that they aren't changing torso size, but only skirt/shorts.
+            # Male toons can never change, but girls can change between skirt and shorts.
+            if av.dna.gender == 'm':
+                return False
+        if testDNA.legs != av.dna.legs:
+            return False
+        if testDNA.gender != av.dna.gender:
+            return False
+        if testDNA.armColor != av.dna.armColor:
+            return False
+        if testDNA.gloveColor != av.dna.gloveColor:
+            # wtf u little hackin' shit.
+            return False
+        if testDNA.legColor != av.dna.legColor:
+            return False
+        if testDNA.headColor != av.dna.headColor:
+            return False
+        return True
+
     def avatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
         if not self.air.doId2do.has_key(avId):
@@ -43,27 +71,30 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
             self.freeAvatar(avId)
             return
         av = self.air.doId2do[avId]
+        if not self.__verifyAvatarInMyZone(av):
+            self.air.writeServerEvent('suspicious', avId=av.getDoId(), issue='Tried to avatarEnter without being in same location.')
+            return
         self.customerDNA = ToonDNA.ToonDNA()
         self.customerDNA.makeFromNetString(av.getDNAString())
         self.customerId = avId
         av.b_setDNAString(self.customerDNA.makeNetString())
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self.__handleUnexpectedExit, extraArgs=[avId])
-        
+
         if self.useJellybeans:
             flag = NPCToons.PURCHASE_MOVIE_START_BROWSE_JBS
         else:
             flag = NPCToons.PURCHASE_MOVIE_START_BROWSE
-        
+
         if self.freeClothes:
             flag = NPCToons.PURCHASE_MOVIE_START
         elif self.air.questManager.hasTailorClothingTicket(av, self):
             flag = NPCToons.PURCHASE_MOVIE_START
         elif self.useJellybeans and self.hasEnoughJbs(av):
             flag = NPCToons.PURCHASE_MOVIE_START
-        
+
         if self.housingEnabled and self.isClosetAlmostFull(av):
             flag = NPCToons.PURCHASE_MOVIE_START_NOROOM
-        
+
         self.sendShoppingMovie(avId, flag)
         DistributedNPCToonBaseAI.avatarEnter(self)
 
@@ -72,7 +103,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         if numClothes >= av.maxClothes - 1:
             return 1
         return 0
-        
+
     def hasEnoughJbs(self, av):
         if av.getTotalMoney() >= self.jbCost:
             return True
@@ -130,12 +161,26 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
                 self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA customer is %s' % self.customerId)
                 self.notify.warning('customerId: %s, but got setDNA for: %s' % (self.customerId, avId))
             return
+
         testDNA = ToonDNA.ToonDNA()
         if not testDNA.isValidNetString(blob):
             self.air.writeServerEvent('suspicious', avId=avId, issue='DistributedNPCTailorAI.setDNA: invalid dna: %s' % blob)
             return
+        testDNA.makeFromNetString(blob)
+
         if self.air.doId2do.has_key(avId):
             av = self.air.doId2do[avId]
+
+            if not self.__verifyAvatarInMyZone(av):
+                self.air.writeServerEvent('suspicious', avId=av.getDoId(), issue='Tried to setDNA without being in same location.')
+                taskMgr.doMethodLater(0.1, self.sendTimeoutMovie, self.uniqueName('clearMovie'))
+                return
+
+            if not self.__checkValidDNAChange(av, testDNA):
+                self.air.writeServerEvent('suspicious', avId=av.getDoId(), issue='Avatar tried to modify parts of their DNA that isn\'t clothing!')
+                taskMgr.doMethodLater(0.1, self.sendTimeoutMovie, self.uniqueName('clearMovie'))
+                return
+
             if finished == 2 and which > 0:
                 if self.freeClothes or self.air.questManager.removeClothingTicket(av, self) or av.takeMoney(self.jbCost, bUseBank = True):
                     av.b_setDNAString(blob)
