@@ -23,14 +23,14 @@ class DistributedHouseAI(DistributedObjectAI):
         self.housePos = 0
         self.isInteriorInitialized = 1 # Only fresh DB houses are not inited.
 
-        self.atticItems = CatalogItemList() # TODO - I think I did this wrong
-        self.interiorItems = CatalogItemList()
-        self.atticItems = CatalogItemList()
-        self.interiorWallpaper = CatalogItemList()
-        self.atticWallpaper = CatalogItemList()
-        self.interiorWindows = CatalogItemList()
+        # FIXME: Now I think I did this wrong...
+        self.atticItems = CatalogItemList(store=Customization)
+        self.interiorItems = CatalogItemList(store=Customization)
+        self.interiorWallpaper = CatalogItemList(store=Customization)
+        self.atticWallpaper = CatalogItemList(store=Customization)
+        self.interiorWindows = CatalogItemList(store=Customization)
         self.atticWindows = CatalogItemList(store=Customization)
-        self.deletedItems = CatalogItemList()
+        self.deletedItems = CatalogItemList(store=Customization)
 
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
