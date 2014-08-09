@@ -77,6 +77,7 @@ class CatalogScreen(DirectFrame):
         self.accept(localAvatar.uniqueName('emblemsChange'), self.__emblemChange)
         deliveryText = 'setDeliverySchedule-%s' % base.localAvatar.doId
         self.accept(deliveryText, self.remoteUpdate)
+        base.setBackgroundColor(Vec4(0.529, 0.290, 0.286, 1))
         render.hide()
         DirectFrame.show(self)
 
@@ -105,6 +106,7 @@ class CatalogScreen(DirectFrame):
         self.ignore(localAvatar.uniqueName('emblemsChange'))
         deliveryText = 'setDeliverySchedule-%s' % base.localAvatar.doId
         self.ignore(deliveryText)
+        base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         render.show()
         DirectFrame.hide(self)
 
