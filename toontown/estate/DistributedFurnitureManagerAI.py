@@ -412,7 +412,7 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             # Brief delay; this is to give the State Server time to finish
             # processing the new furniture item appearing before we hit the
             # client with the doId:
-            taskMgr.doMethodLater(5, self.sendUpdateToAvatarId,
+            taskMgr.doMethodLater(1, self.sendUpdateToAvatarId,
                                   self.uniqueName('send-attic-response'),
                                   extraArgs=[senderId, response, [retval, doId, context]])
         else:
@@ -422,8 +422,7 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         self.handleMessage(self.moveItemToAttic, 'moveItemToAtticResponse', doId, context)
 
     def moveItemFromAtticMessage(self, index, x, y, z, h, p, r, context):
-        self.handleMessage(self.moveItemFromAttic, 'moveItemFromAtticResponse',
-                           index, x, y, z, h, p, r, context)
+        self.handleMessage(self.moveItemFromAttic, 'moveItemFromAtticResponse', index, x, y, z, h, p, r, context)
 
     def deleteItemFromAtticMessage(self, blob, index, context):
         self.handleMessage(self.deleteItemFromAttic, 'deleteItemFromAtticResponse', blob, index, context)
