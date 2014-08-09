@@ -84,14 +84,7 @@ class DistributedFurnitureManager(DistributedObject.DistributedObject):
 
     def moveItemFromAttic(self, index, posHpr, callback):
         context = self.getCallbackContext(callback, [index])
-        self.sendUpdate('moveItemFromAtticMessage', [index,
-         posHpr[0],
-         posHpr[1],
-         posHpr[2],
-         posHpr[3],
-         posHpr[4],
-         posHpr[5],
-         context])
+        self.sendUpdate('moveItemFromAtticMessage', [index, posHpr[0], posHpr[1], posHpr[2], posHpr[3], posHpr[4], posHpr[5], context])
 
     def deleteItemFromAttic(self, item, index, callback):
         context = self.getCallbackContext(callback, [item, index])
