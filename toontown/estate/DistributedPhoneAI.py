@@ -12,7 +12,6 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
     def __init__(self, air, furnitureMgr, item):
         DistributedFurnitureItemAI.__init__(self, air, furnitureMgr, item)
         self.avId = None
-        self.movie = PhoneGlobals.PHONE_MOVIE_CLEAR
         
     def setInitialScale(self, sx, sy, sz):
         pass
@@ -38,12 +37,10 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         av = self.air.doId2do.get(avId)
         if not av:
             return
-
         if len(av.monthlyCatalog) == 0 and len(av.weeklyCatalog) == 0 and len(av.backCatalog) == 0:
             self.d_setMovie(PhoneGlobals.PHONE_MOVIE_EMPTY, avId, globalClockDelta.getRealNetworkTime())
             taskMgr.doMethodLater(1, self.__resetMovie, 'resetMovie-%d' % self.getDoId(), extraArgs=[])
             return
-
         self.avId = avId
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_PICKUP, avId, globalClockDelta.getRealNetworkTime())
         self.sendUpdateToAvatarId(avId, 'setLimits', [ToontownGlobals.MaxHouseItems]) # TODO - what is the correct number here
@@ -54,7 +51,6 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         if avId != self.avId:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to exit a phone they weren\'t using!')
             return
-
         self.avId = None
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_HANGUP, avId, globalClockDelta.getRealNetworkTime())
         taskMgr.doMethodLater(1, self.__resetMovie, 'resetMovie-%d' % self.getDoId(), extraArgs=[])
@@ -65,10 +61,8 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
     def setLimits(self, todo0):
         pass
 
-    def setMovie(self, mode, avId, timestamp):
-        self.movie = mode
-        if self.movie != PhoneGlobals.PHONE_MOVIE_CLEAR:
-            taskMgr.doMethodLater(2.0, self.clearMovie, 'clear-movie-%d' % self.getDoId())
+    def setMovie(self, todo0, todo1, todo2):
+        pass
         
     def d_setMovie(self, mode, avId, time):
         self.sendUpdate('setMovie', [mode, avId, time])
