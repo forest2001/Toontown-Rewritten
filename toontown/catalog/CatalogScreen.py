@@ -808,6 +808,7 @@ class CatalogScreen(DirectFrame):
         if self.giftAvatar:
             base.cr.cancelAvatarDetailsRequest(self.giftAvatar)
         self.hide()
+        self.hangup.hide()
         self.destroy()
         del self.base
         del self.squares
