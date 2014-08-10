@@ -355,7 +355,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         if self.keepAliveTask:
             self.keepAliveTask.remove()
-            self.keepAliveTask = None  
+            self.keepAliveTask = None
 
         self.stopToonUp()
         del self.dna
@@ -384,7 +384,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskMgr.remove(self.uniqueName('KeepAliveTimeout'))
         if self.keepAliveTask:
             self.keepAliveTask.remove()
-            self.keepAliveTask = None 
+            self.keepAliveTask = None
         return
 
     def ban(self, comment):
@@ -401,7 +401,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.keepAliveTask:
             self.notify.debug("Removing keepAliveTask for %s (%d)." % (self.getName(), self.getDoId()))
             self.keepAliveTask.remove()
-            self.keepAliveTask = None 
+            self.keepAliveTask = None
 
     def patchDelete(self):
         del self.dna
@@ -421,9 +421,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedAvatarAI.DistributedAvatarAI.handleLogicalZoneChange(self, newZoneId, oldZoneId)
         if self.isPlayerControlled() and self.WantTpTrack:
             messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
-        if self.cogIndex != -1 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId):
-            if simbase.config.GetBool('cogsuit-hack-prevent', False):
-                self.b_setCogIndex(-1)
+        if simbase.config.GetBool('cogsuit-hack-prevent', False):
+            if self.cogIndex != -1 and self.getAdminAccess() < 500 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId):
+                    self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to transition while in cog suit with an index of %s to zone %s' % (str(self.cogIndex), str(newZoneId)))
+                    self.b_setCogIndex(-1)
             '''if not simbase.air.cogSuitMessageSent:
                 self.notify.warning('%s handleLogicalZoneChange as a suit: %s' % (self.doId, self.cogIndex))
                 self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon wearing a cog suit with index: %s in a zone they are not allowed to in. Zone: %s' % (self.cogIndex, newZoneId))
@@ -1629,19 +1630,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def b_setCogIndex(self, index):
         self.setCogIndex(index)
-        if simbase.config.GetBool('cogsuit-hack-prevent', False):
-            self.d_setCogIndex(self.cogIndex)
-        else:
-            self.d_setCogIndex(index)
+        self.d_setCogIndex(self.cogIndex)
 
     def setCogIndex(self, index):
-        '''if index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
-            if not simbase.air.cogSuitMessageSent:
-                self.notify.warning('%s setCogIndex invalid: %s' % (self.doId, index))
-                if simbase.config.GetBool('want-ban-wrong-suit-place', False):
-                    commentStr = 'Toon %s trying to set cog index to %s in Zone: %s' % (self.doId, index, self.zoneId)
-                    #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
-        else:'''
+        if simbase.config.GetBool('cogsuit-hack-prevent', False) and self.getAdminAccess() < 500 and index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
+                self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to set cog suit index to %s in non-HQ zone %s' % (str(index), str(self.zoneId)))
+                index = -1
         self.cogIndex = index
 
     def d_setCogIndex(self, index):
@@ -4903,6 +4897,7 @@ def setCogIndex(indexVal):
     if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
+    spellbook.getTarget().handleLogicalZoneChange(2000, spellbook.getTarget().zoneId)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def dna(part, value):

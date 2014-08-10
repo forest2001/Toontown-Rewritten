@@ -29,3 +29,5 @@ want-blacklist-sequence #t
 
 
 # Holidays and Events
+
+cogsuit-hack-prevent #t
