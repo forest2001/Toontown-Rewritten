@@ -2180,7 +2180,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self.setFont(ToontownGlobals.getNametagFont(self.getNametagStyle()))
         Avatar.Avatar.setDisplayName(self, name)
-        self.setFont(ToontownGlobals.getToonFont())
         return
 
     def removeFancyNametag(self):
