@@ -422,7 +422,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled() and self.WantTpTrack:
             messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
         if simbase.config.GetBool('cogsuit-hack-prevent', False):
-            if self.cogIndex != -1 and self.getAdminAccess() < 500 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId):
+            if self.cogIndex != -1 and not ToontownAccessAI.canWearSuit(self.doId, newZoneId) and self.getAdminAccess() < 500:
                     self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to transition while in cog suit with an index of %s to zone %s' % (str(self.cogIndex), str(newZoneId)))
                     self.b_setCogIndex(-1)
             '''if not simbase.air.cogSuitMessageSent:
@@ -1633,7 +1633,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.d_setCogIndex(self.cogIndex)
 
     def setCogIndex(self, index):
-        if simbase.config.GetBool('cogsuit-hack-prevent', False) and self.getAdminAccess() < 500 and index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId):
+        if simbase.config.GetBool('cogsuit-hack-prevent', False) and index != -1 and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId) and self.getAdminAccess() < 500:
                 self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to set cog suit index to %s in non-HQ zone %s' % (str(index), str(self.zoneId)))
                 index = -1
         self.cogIndex = index
