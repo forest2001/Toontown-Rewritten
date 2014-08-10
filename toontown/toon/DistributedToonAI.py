@@ -4897,7 +4897,6 @@ def setCogIndex(indexVal):
     if not -1 <= indexVal <= 3:
         return 'CogIndex value %s is invalid.' % str(indexVal)
     spellbook.getTarget().b_setCogIndex(indexVal)
-    spellbook.getTarget().handleLogicalZoneChange(2000, spellbook.getTarget().zoneId)
 
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[str, str])
 def dna(part, value):
