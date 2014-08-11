@@ -28,7 +28,7 @@ NametagFonts = ('phase_3/models/fonts/AnimGothic',
  'phase_3/models/fonts/Alie',
  'phase_3/models/fonts/OysterBar',
  'phase_3/models/fonts/RedDogSaloon')
-NametagFontNames = ('Member',
+NametagFontNames = ('Simple',
  'Shivering',
  'Wonky',
  'Fancy',
