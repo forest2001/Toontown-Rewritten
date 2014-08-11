@@ -1006,7 +1006,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if show:
             claraXPos += AdjustmentForNewsButton
             notifyXPos += AdjustmentForNewsButton
-        newPos = (claraXPos - 0.1, 1.0, 0.45)
+        newPos = (claraXPos - 0.1, 1.0, -0.63)
         self.__clarabelleButton.setPos(newPos)
         if self.__catalogNotifyDialog == None or self.__catalogNotifyDialog.frame == None:
             return
@@ -1049,7 +1049,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.__clarabelleButton['text'] = ['', TTLocalizer.CatalogNewCatalogButton, TTLocalizer.CatalogNewCatalogButton]
         if not self.mailboxNotify and not self.awardNotify and self.catalogNotify == ToontownGlobals.OldItems and (self.simpleMailNotify != ToontownGlobals.NoItems or self.inviteMailNotify != ToontownGlobals.NoItems):
             self.__clarabelleButton['text'] = ['', TTLocalizer.MailNewMailButton, TTLocalizer.MailNewMailButton]
-        if self.newsButtonMgr.isNewIssueButtonShown():
+        if self.newsButtonMgr.isNewIssueButtonShown() and WantNewsPage:
             self.clarabelleNewsPageCollision(True)
         self.__clarabelleButton.show()
         self.__clarabelleFlash.resume()
