@@ -38,6 +38,9 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
     
     def getOwnerId(self):
         return self.furnitureMgr.ownerId
+        
+    def __verifyAvatarInMyZone(self, av):
+        return av.getLocation() == self.getLocation()
 
     def enterAvatar(self):
         avId = self.air.getAvatarIdFromSender()
@@ -49,6 +52,9 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
         av = self.air.doId2do.get(avId)
         if not av:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Not in same shard as closet!')
+            return
+        if not self.__verifyAvatarInMyZone(av):
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Not in same zone as closet!')
             return
         self.customerDNA = av.dna
         self.avId = avId
@@ -80,6 +86,30 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Set an invalid topOrBottom value!')
             return
         
+    def __checkValidDNAChange(self, av, testDNA):
+        # verify they aren't trying to change anything other than their clothing.
+        # FML this took some time to write...
+        if testDNA.head != av.dna.head:
+            return False
+        if testDNA.torso != av.dna.torso:
+            if av.dna.gender == 'm':
+                return False
+            elif testDNA.torso[0] != av.dna.torso[0]: #first character of torso ('size') must remain the same, otherwise you are hacker scum.
+                return False
+        if testDNA.legs != av.dna.legs:
+            return False
+        if testDNA.gender != av.dna.gender:
+            return False
+        if testDNA.armColor != av.dna.armColor:
+            return False
+        if testDNA.gloveColor != av.dna.gloveColor:
+            # wtf u little hackin' shit.
+            return False
+        if testDNA.legColor != av.dna.legColor:
+            return False
+        if testDNA.headColor != av.dna.headColor:
+            return False
+        return True
 
     def setDNA(self, dnaString, finished, whichItem):
         avId = self.air.getAvatarIdFromSender()
@@ -90,12 +120,18 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
         if not av:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Interacted with a closet from another shard!')
             return
+        if not self.__verifyAvatarInMyZone(av):
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to setDNA while in another zone!')
+            return
         testDna = ToonDNA()
         if not testDna.isValidNetString(dnaString):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to set invalid DNA at a closet!')
             return
         if not finished:
-            # TODO - verify this
+            testDna.makeFromNetString(dnaString)
+            if not self.__checkValidDNAChange(av, testDna):
+                    self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to change their DNA temporarily!')
+                    return
             self.sendUpdate('setCustomerDNA', [avId, dnaString])
             return
         elif finished == 1:
@@ -126,6 +162,13 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
                 if success:
                     self.customerDNA.botTex = testDna.botTex
                     self.customerDNA.botTexColor = testDna.botTexColor
+                    if self.customerDNA.torso != testDna.torso:
+                            if self.cutomerDNA.gender == 'm':
+                                self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to change their torso size!')
+                                return
+                            elif self.customerDNA.torso[0] != testDna.torso[0]:
+                                self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to change their torso size!')
+                                return
                     self.customerDNA.torso = testDna.torso
                 else:
                     self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to set their shorts to a pair they don\'t own!')
