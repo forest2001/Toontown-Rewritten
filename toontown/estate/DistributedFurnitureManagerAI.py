@@ -94,6 +94,13 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
 
         for item in items:
             if item.getFlags() & FLCloset:
+                if self.house.gender is 0:
+                    # If they have a male closet, we need to make it a female closet.
+                    if item.furnitureType - 500 < 10:
+                        item.furnitureType += 10
+                elif item.furnitureType - 500 > 10:
+                    # If they have a female closet, we need to make it a male closet.
+                    item.furnitureType -= 10
                 do = DistributedClosetAI(self.air, self, item)
             elif item.getFlags() & FLBank:
                 do = DistributedBankAI(self.air, self, item)
@@ -265,7 +272,7 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             do = DistributedFurnitureItemAI(self.air, self, item)
 
         do.generateWithRequired(self.zoneId)
-        self.items.append(do)        
+        self.items.append(do)
 
         return (ToontownGlobals.FM_MovedItem, do.doId)
 
@@ -275,8 +282,8 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid item at index %s' % index)
             return ToontownGlobals.FM_InvalidIndex
 
-        self.atticItems.remove(item) 
-        self.d_setAtticItems(self.getAtticItems())     
+        self.atticItems.remove(item)
+        self.d_setAtticItems(self.getAtticItems())
 
         return ToontownGlobals.FM_DeletedItem
 
@@ -293,17 +300,17 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             # rip
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Invalid wallpaper at index %s' % index)
             return ToontownGlobals.FM_InvalidIndex
-    
+
         if room > 1:
-            # This is not a valid room! 
+            # This is not a valid room!
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to apply a wallpaper in an invalid room %d!' % room)
             return ToontownGlobals.FM_InvalidItem
-   
+
         self.atticWallpaper.remove(wallpaper)
         self.d_setAtticWallpaper(self.getAtticWallpaper())
         self.wallpaper.append(wallpaper)
         self.applyWallpaper()
-    
+
         return retcode
 
     def deleteWallpaperFromAttic(self, blob, index):
@@ -375,9 +382,9 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         if window is None:
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to delete an invalid window at index %s' % index)
             return ToontownGlobals.FM_InvalidIndex
-        
-        self.atticWindows.remove(window) 
-        self.d_setAtticWindows(self.getAtticWindows())     
+
+        self.atticWindows.remove(window)
+        self.d_setAtticWindows(self.getAtticWindows())
 
         return ToontownGlobals.FM_DeletedItem
 

@@ -1279,6 +1279,7 @@ dclass DistributedHouse : DistributedObject {
   setAvatarId(uint32 toonId = 0) required broadcast db;
   setName(string toonName = "") required broadcast db;
   setColor(uint8 colorIndex = 0) required broadcast db;
+  setGender(uint8 genderIndex = 1) required;
   setAtticItems(blob atticItems = "") required db;
   setInteriorItems(blob interiorItems = "") required db;
   setAtticWallpaper(blob atticWallpaper = "") required db;

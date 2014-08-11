@@ -21,6 +21,7 @@ class DistributedHouseAI(DistributedObjectAI):
         self.name = ''
         self.color = 0
         self.housePos = 0
+        self.gender = 1
         self.isInteriorInitialized = 1 # Only fresh DB houses are not inited.
 
         # FIXME: Now I think I did this wrong...
@@ -150,6 +151,12 @@ class DistributedHouseAI(DistributedObjectAI):
 
     def getColor(self):
         return self.color
+
+    def setGender(self, genderIndex):
+        self.gender = genderIndex
+
+    def getGender(self):
+        return self.gender
 
     def setAtticItems(self, atticItems):
         self.atticItems = CatalogItemList(atticItems, store=Customization)
