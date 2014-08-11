@@ -8,14 +8,14 @@ import PhoneGlobals
 
 class DistributedPhoneAI(DistributedFurnitureItemAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPhoneAI")
-    
+
     def __init__(self, air, furnitureMgr, item):
         DistributedFurnitureItemAI.__init__(self, air, furnitureMgr, item)
         self.avId = None
-        
+
     def setInitialScale(self, sx, sy, sz):
         pass
-        
+
     def getInitialScale(self):
         return (1, 1, 1)
 
@@ -68,10 +68,10 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
 
     def setMovie(self, todo0, todo1, todo2):
         pass
-        
+
     def d_setMovie(self, mode, avId, time):
         self.sendUpdate('setMovie', [mode, avId, time])
-        
+
     def __resetMovie(self):
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_CLEAR, 0, globalClockDelta.getRealNetworkTime())
 
@@ -108,7 +108,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
                 #u wot m8
                 return
             self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, item.recordPurchase(av, optional)])
-        
+
 
     def requestPurchaseResponse(self, todo0, todo1):
         pass
