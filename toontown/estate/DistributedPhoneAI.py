@@ -99,7 +99,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
                 self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.P_MailboxFull])
             if not av.takeMoney(price):
                 return
-            item.deliveryDate = int(time.time()/60) + 1#item.getDeliveryTime()
+            item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
             av.onOrder.append(item)
             av.b_setDeliverySchedule(av.onOrder)
             self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.P_ItemOnOrder])
@@ -118,4 +118,3 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
 
     def requestGiftPurchaseResponse(self, todo0, todo1):
         pass
-
