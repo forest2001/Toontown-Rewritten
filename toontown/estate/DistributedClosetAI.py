@@ -163,7 +163,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
                     self.customerDNA.botTex = testDna.botTex
                     self.customerDNA.botTexColor = testDna.botTexColor
                     if self.customerDNA.torso != testDna.torso:
-                            if self.cutomerDNA.gender == 'm':
+                            if self.customerDNA.gender == 'm':
                                 self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to change their torso size!')
                                 return
                             elif self.customerDNA.torso[0] != testDna.torso[0]:
