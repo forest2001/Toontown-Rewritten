@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogItemList import CatalogItemList
 from direct.distributed.ClockDelta import *
-import functools
 import time
 import PhoneGlobals
 
