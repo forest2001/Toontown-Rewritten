@@ -64,6 +64,9 @@ class CatalogScreen(DirectFrame):
         self.hide()
         self.clarabelleChatNP = None
         self.clarabelleChatBalloon = None
+        self.clarabelleGreetingSfx = None
+        self.clarabelleGoodbyeSfx = None
+        self.clarabelleChatterSfx = None
         self.gifting = -1
         self.createdGiftGui = None
         self.viewing = None
@@ -82,7 +85,7 @@ class CatalogScreen(DirectFrame):
         DirectFrame.show(self)
 
         def clarabelleGreeting(task):
-            self.setClarabelleChat(TTLocalizer.CatalogGreeting)
+            self.setClarabelleChat(TTLocalizer.CatalogGreeting, type='greeting')
 
         def clarabelleHelpText1(task):
             self.setClarabelleChat(TTLocalizer.CatalogHelpText1)
@@ -860,10 +863,26 @@ class CatalogScreen(DirectFrame):
         self.clarabelle.cleanup()
         del self.clarabelle
 
+        if self.clarabelleChatBalloon:
+            self.clarabelleChatBalloon.removeNode()
+            del self.clarabelleChatBalloon
+        if self.clarabelleGreetingSfx:
+            for sound in self.clarabelleGreetingSfx:
+                del sound
+            del self.clarabelleGreetingSfx
+        if self.clarabelleGoodbyeSfx:
+            for sound in self.clarabelleGoodbyeSfx:
+                del sound
+            del self.clarabelleGoodbyeSfx
+        if self.clarabelleChatterSfx:
+            for sound in self.clarabelleChatterSfx:
+                del sound
+            del self.clarabelleChatterSfx
+
     def hangUp(self):
         if hasattr(self, 'giftAvatar') and self.giftAvatar:
             self.giftAvatar.disable()
-        self.setClarabelleChat(random.choice(TTLocalizer.CatalogGoodbyeList))
+        self.setClarabelleChat(random.choice(TTLocalizer.CatalogGoodbyeList), type='goodbye')
         self.setPageIndex(-1)
         self.showPageItems()
         self.nextPageButton.hide()
@@ -934,12 +953,33 @@ class CatalogScreen(DirectFrame):
         self.responseDialog = None
         return
 
-    def setClarabelleChat(self, str, timeout = 6):
+    def setClarabelleChat(self, str, timeout = 6, type = None):
         self.clearClarabelleChat()
+
+        # Clarabelle can talk now! Let's give her some variation.
+        if type == 'greeting':
+            if not self.clarabelleGreetingSfx:
+                clarabelleGreeting1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_1.ogg')
+                clarabelleGreeting2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_2.ogg')
+                self.clarabelleGreetingSfx = [clarabelleGreeting1, clarabelleGreeting2]
+            base.playSfx(random.choice(self.clarabelleGreetingSfx))
+        elif type == 'goodbye':
+            if not self.clarabelleGoodbyeSfx:
+                clarabelleGoodbye1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_1.ogg')
+                clarabelleGoodbye2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_2.ogg')
+                self.clarabelleGoodbyeSfx = [clarabelleGoodbye1, clarabelleGoodbye2]
+            base.playSfx(random.choice(self.clarabelleGoodbyeSfx))
+        else:
+            # These are currently placeholders.
+            if not self.clarabelleChatterSfx:
+                clarabelleChatter1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_1.ogg')
+                clarabelleChatter2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_2.ogg')
+                self.clarabelleChatterSfx = [clarabelleChatter1, clarabelleChatter2]
+            base.playSfx(random.choice(self.clarabelleChatterSfx))
+
         if not self.clarabelleChatBalloon:
             self.clarabelleChatBalloon = loader.loadModel('phase_3/models/props/chatbox')
         self.clarabelleChat = ChatBalloon(self.clarabelleChatBalloon)
-        #chatNode = self.clarabelleChat.generate(str, ToontownGlobals.getInterfaceFont(), 10, Vec4(0, 0, 0, 1), Vec4(1, 1, 1, 1), 0, 0, 0, NodePath(), 0, 0, NodePath())
         chatNode = self.clarabelleChat.generate(str, ToontownGlobals.getInterfaceFont())[0]
         self.clarabelleChatNP = self.attachNewNode(chatNode.node(), 1000)
         self.clarabelleChatNP.setScale(0.08)
