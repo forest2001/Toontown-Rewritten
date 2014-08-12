@@ -935,18 +935,12 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
             else:
                 return 1
         return 0
-        
+
     def forBoysOnly(self):
-        if self.getFlags() & BoysOnly:
-            return 1
-        else:
-            return 0
+        return self.getFlags() & BoysOnly > 0
 
     def forGirlsOnly(self):
-        if self.getFlags() & GirlsOnly:
-            return 1
-        else:
-            return 0
+        return self.getFlags() & GirlsOnly > 0
 
     def isDeletable(self):
         return self.getFlags() & (FLBank | FLCloset | FLPhone | FLTrunk) == 0
