@@ -87,7 +87,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
             pos=(0.0125, 0, 0.4),
             relief=None,
             text=self.avName,
-            text_font=avatar.getFont(),
+            text_font=ToontownGlobals.getInterfaceFont(),
             text_fg=Vec4(0, 0, 0, 1),
             text_pos=(0, 0),
             text_scale=0.042,
