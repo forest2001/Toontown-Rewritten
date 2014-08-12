@@ -3,6 +3,10 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLCloset, FLBank, FLPhone
+from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
+from toontown.catalog.CatalogMouldingItem import CatalogMouldingItem
+from toontown.catalog.CatalogFlooringItem import CatalogFlooringItem
+from toontown.catalog.CatalogWainscotingItem import CatalogWainscotingItem
 from toontown.toonbase import ToontownGlobals
 from DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from DistributedBankAI import DistributedBankAI
@@ -314,10 +318,17 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             # This is not a valid room!
             self.air.writeServerEvent('suspicious', avId=self.air.getAvatarIdFromSender(), issue='Tried to apply a wallpaper in an invalid room %d!' % room)
             return ToontownGlobals.FM_InvalidItem
-
-        self.atticWallpaper.remove(wallpaper)
+        interiorIndex = room*4
+        if isinstance(wallpaper, CatalogMouldingItem):
+            interiorIndex += 1
+        elif isinstance(wallpaper, CatalogFlooringItem):
+            interiorIndex += 2
+        elif isinstance(wallpaper, CatalogWainscotingItem):
+            interiorIndex += 3
+        atticIndex = self.atticWallpaper.index(wallpaper)
+        self.atticWallpaper[atticIndex] = self.wallpaper[interiorIndex]
         self.d_setAtticWallpaper(self.getAtticWallpaper())
-        self.wallpaper.append(wallpaper)
+        self.wallpaper[interiorIndex] = wallpaper
         self.applyWallpaper()
 
         return retcode
