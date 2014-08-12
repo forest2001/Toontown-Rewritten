@@ -5128,7 +5128,7 @@ def locate(avIdShort=0, returnType=''):
         return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
 
-@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+@magicWord(category=CATEGORY_MODERATION, types=[int])
 def online(doId):
     """ Check if a toon is online. """
     av = spellbook.getTarget()
