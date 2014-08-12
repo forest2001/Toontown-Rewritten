@@ -107,7 +107,10 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             if not av.takeMoney(price):
                 #u wot m8
                 return
-            self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, item.recordPurchase(av, optional)])
+            resp = item.recordPurchase(av, optional)
+            if resp < 0: # refund if purchase unsuccessful
+                    av.addMoney(price)
+            self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, resp])
 
 
     def requestPurchaseResponse(self, todo0, todo1):
