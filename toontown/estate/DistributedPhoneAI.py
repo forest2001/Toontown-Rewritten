@@ -56,17 +56,17 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         if house:
             numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) + len (house.interiorWallpaper) + len(house.interiorWindows)
             self.sendUpdateToAvatarId(avId, 'setLimits', [numItems])
-        else:    
+        else:
             self.air.dbInterface.queryObject(self.air.dbId, av, self.__gotHouse)
         av.b_setCatalogNotify(ToontownGlobals.NoItems, av.mailboxNotify)
-    
+
     def __gotHouse(self, dclass, fields):
             if dclass != self.air.dclassesByName['DistributedHouseAI']:
                 return #rip
             # this is too long
             numItems = len(CatalogItemList(fields['setInteriorItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWindows'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setInteriorWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setInteriorWindows'][0], store=CatalogItem.Customization))
             self.sendUpdateToAvatarId(fields['setAvatarId'][0], 'setLimits', [numItems])
-            
+
 
     def avatarExit(self):
         avId = self.air.getAvatarIdFromSender()
@@ -111,7 +111,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             return
         if item.getDeliveryTime():
             if len(av.onOrder) > 3: #TODO correct number
-                self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.ToontownGlobals.P_OnOrderListFull])
+                self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.P_OnOrderListFull])
                 return
             if len(av.mailboxContents) + len(av.onOrder) >= ToontownGlobals.MaxMailboxContents:
                 self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.P_MailboxFull])
