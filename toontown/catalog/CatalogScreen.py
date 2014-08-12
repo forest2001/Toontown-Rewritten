@@ -66,6 +66,7 @@ class CatalogScreen(DirectFrame):
         self.clarabelleChatBalloon = None
         self.clarabelleGreetingSfx = None
         self.clarabelleGoodbyeSfx = None
+        self.clarabelleErrorSfx = None
         self.clarabelleChatterSfx = None
         self.gifting = -1
         self.createdGiftGui = None
@@ -889,6 +890,10 @@ class CatalogScreen(DirectFrame):
             for sound in self.clarabelleGoodbyeSfx:
                 del sound
             del self.clarabelleGoodbyeSfx
+        if self.clarabelleErrorSfx:
+            for sound in self.clarabelleGoodbyeSfx:
+                del sound
+            del self.clarabelleGoodbyeSfx
         if self.clarabelleChatterSfx:
             for sound in self.clarabelleChatterSfx:
                 del sound
@@ -980,15 +985,21 @@ class CatalogScreen(DirectFrame):
             base.playSfx(random.choice(self.clarabelleGreetingSfx))
         elif type == 'goodbye':
             if not self.clarabelleGoodbyeSfx:
-                clarabelleGoodbye1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_1.ogg')
-                clarabelleGoodbye2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_2.ogg')
-                self.clarabelleGoodbyeSfx = [clarabelleGoodbye1, clarabelleGoodbye2]
+                clarabelleGoodbye1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_2.ogg')
+                clarabelleGoodbye2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_3.ogg')
+                clarabelleGoodbye3 = base.loadSfx('phase_5.5/audio/dial/clarabelle_wa_4.ogg')
+                self.clarabelleGoodbyeSfx = [clarabelleGoodbye1, clarabelleGoodbye2, clarabelleGoodbye3]
             base.playSfx(random.choice(self.clarabelleGoodbyeSfx))
+        elif type == 'error':
+            if not self.clarabelleErrorSfx:
+                clarabelleError1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_2.ogg')
+                self.clarabelleChatterSfx = [clarabelleError1]
+            base.playSfx(random.choice(self.clarabelleErrorSfx))
         else:
             # These are currently placeholders.
             if not self.clarabelleChatterSfx:
-                clarabelleChatter1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_1.ogg')
-                clarabelleChatter2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_2.ogg')
+                clarabelleChatter1 = base.loadSfx('phase_5.5/audio/dial/clarabelle_ah_2.ogg')
+                clarabelleChatter2 = base.loadSfx('phase_5.5/audio/dial/clarabelle_gen_2.ogg')
                 self.clarabelleChatterSfx = [clarabelleChatter1, clarabelleChatter2]
             base.playSfx(random.choice(self.clarabelleChatterSfx))
 
