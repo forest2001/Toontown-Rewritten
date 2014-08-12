@@ -18,8 +18,8 @@ FLIsTable = 32
 FLPhone = 64
 FLBillboard = 128
 FLTrunk = 256
-BoysOnly = 300
-GirlsOnly = 310
+FLBoysOnly = 512
+FLGirlsOnly = 1024
 furnitureColors = [
   (0.792, 0.353, 0.29, 1.0),
   (0.176, 0.592, 0.439, 1.0),
@@ -937,10 +937,10 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
         return 0
 
     def forBoysOnly(self):
-        return self.getFlags() & BoysOnly > 0
+        return self.getFlags() & FLBoysOnly > 0
 
     def forGirlsOnly(self):
-        return self.getFlags() & GirlsOnly > 0
+        return self.getFlags() & FLGirlsOnly > 0
 
     def isDeletable(self):
         return self.getFlags() & (FLBank | FLCloset | FLPhone | FLTrunk) == 0
