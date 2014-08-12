@@ -57,7 +57,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) + len (house.interiorWallpaper) + len(house.interiorWindows)
             self.sendUpdateToAvatarId(avId, 'setLimits', [numItems])
         else:
-            self.air.dbInterface.queryObject(self.air.dbId, avId, self.__gotHouse)
+            self.air.dbInterface.queryObject(self.air.dbId, av.houseId, self.__gotHouse)
         av.b_setCatalogNotify(ToontownGlobals.NoItems, av.mailboxNotify)
 
     def __gotHouse(self, dclass, fields):
@@ -139,3 +139,4 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
 
     def requestGiftPurchaseResponse(self, todo0, todo1):
         pass
+    
