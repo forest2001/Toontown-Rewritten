@@ -4,6 +4,9 @@ from DistributedFurnitureManagerAI import *
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogWindowItem import CatalogWindowItem
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
+from toontown.catalog.CatalogMouldingItem import CatalogMouldingItem
+from toontown.catalog.CatalogFlooringItem import CatalogFlooringItem
+from toontown.catalog.CatalogWainscotingItem import CatalogWainscotingItem
 from DNAFurnitureReaderAI import DNAFurnitureReaderAI
 import HouseGlobals
 import random
@@ -13,7 +16,14 @@ defaultWindows = [
 ]
 
 defaultWallpaper = [
-    CatalogWallpaperItem(1100, 0, 1000, 0),
+    CatalogWallpaperItem(1110, 0, 1010, 0),
+    CatalogMouldingItem(1000, 2),
+    CatalogFlooringItem(1000, 4),
+    CatalogWainscotingItem(1010, 4),
+    CatalogWallpaperItem(1110, 0, 1010, 0),
+    CatalogMouldingItem(1000, 2),
+    CatalogFlooringItem(1000, 4),
+    CatalogWainscotingItem(1010, 4),
 ]
 
 class DistributedHouseInteriorAI(DistributedObjectAI):
