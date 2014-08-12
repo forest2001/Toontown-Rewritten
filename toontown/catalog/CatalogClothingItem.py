@@ -17,7 +17,8 @@ ABoysShorts = 3
 AGirlsShorts = 4
 AGirlsSkirt = 5
 AShorts = 6
-ClothingTypes = {101: (ABoysShirt, 'bss1', 40),
+ClothingTypes = {
+ 101: (ABoysShirt, 'bss1', 40),
  102: (ABoysShirt, 'bss2', 40),
  103: (ABoysShirt, 'bss3', 40),
  105: (ABoysShirt, 'bss4', 40),

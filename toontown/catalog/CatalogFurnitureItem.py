@@ -18,66 +18,39 @@ FLIsTable = 32
 FLPhone = 64
 FLBillboard = 128
 FLTrunk = 256
-furnitureColors = [(0.792,
-  0.353,
-  0.29,
-  1.0),
- (0.176,
-  0.592,
-  0.439,
-  1.0),
- (0.439,
-  0.424,
-  0.682,
-  1.0),
- (0.325,
-  0.58,
-  0.835,
-  1.0),
- (0.753,
-  0.345,
-  0.557,
-  1.0),
- (0.992,
-  0.843,
-  0.392,
-  1.0)]
-woodColors = [(0.933,
-  0.773,
-  0.569,
-  1.0),
- (0.9333,
-  0.6785,
-  0.055,
-  1.0),
- (0.545,
-  0.451,
-  0.333,
-  1.0),
- (0.541,
-  0.0,
-  0.0,
-  1.0),
- (0.5451,
-  0.2706,
-  0.0745,
-  1.0),
- (0.5451,
-  0.4118,
-  0.4118,
-  1.0)]
-BankToMoney = {1300: 12000,
- 1310: 12000,
- 1320: 12000,
- 1330: 12000,
- 1340: 12000,
- 1350: 12000}
+BoysOnly = 300
+GirlsOnly = 310
+furnitureColors = [
+  (0.792, 0.353, 0.29, 1.0),
+  (0.176, 0.592, 0.439, 1.0),
+  (0.439, 0.424, 0.682, 1.0),
+  (0.325, 0.58, 0.835, 1.0),
+  (0.753, 0.345, 0.557, 1.0),
+  (0.992, 0.843, 0.392, 1.0)
+]
+woodColors = [
+  (0.933, 0.773, 0.569, 1.0),
+  (0.9333, 0.6785, 0.055, 1.0),
+  (0.545, 0.451, 0.333, 1.0),
+  (0.541, 0.0, 0.0, 1.0),
+  (0.5451, 0.2706, 0.0745, 1.0),
+  (0.5451, 0.4118, 0.4118, 1.0)
+]
+BankToMoney = {
+ 1300: 15000,
+ 1310: 15000,
+ 1320: 15000,
+ 1330: 15000,
+ 1340: 15000,
+ 1350: 15000
+}
 MoneyToBank = {}
 for bankId, maxMoney in BankToMoney.items():
     MoneyToBank[maxMoney] = bankId
 
 MaxBankId = 1350
-ClosetToClothes = {500: 10,
+ClosetToClothes = {
+ 500: 10,
  502: 15,
  504: 20,
  506: 25,
@@ -86,7 +59,8 @@ ClosetToClothes = {500: 10,
  512: 15,
  514: 20,
  516: 25,
- 518: 50}
+ 518: 50
+}
 ClothesToCloset = {}
 for closetId, maxClothes in ClosetToClothes.items():
     if not ClothesToCloset.has_key(maxClothes):
@@ -96,10 +70,13 @@ for closetId, maxClothes in ClosetToClothes.items():
 
 MaxClosetIds = (508, 518)
 MaxTrunkIds = (4000, 4010)
-FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
-       None,
-       None,
-       80),
+FurnitureTypes = {
+ 100: ('phase_5.5/models/estate/chairA',  # Model
+       None,                              # Color
+       None,                              # Color Options
+       80),                               # Base Price
+                                          # Flags
+                                          # Scale
  105: ('phase_5.5/models/estate/chairAdesat',
        None,
        {0: (('**/cushion*', furnitureColors[0]), ('**/arm*', furnitureColors[0])),
@@ -187,7 +164,8 @@ FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
  210: ('phase_5.5/models/estate/girly_bed',
        None,
        None,
-       450),
+       450,
+       GirlsOnly),
  220: ('phase_5.5/models/estate/bathtub_bed',
        None,
        None,
@@ -231,7 +209,8 @@ FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
  410: ('phase_5.5/models/estate/FireplaceGirlee',
        None,
        None,
-       800),
+       800,
+       GirlsOnly),
  420: ('phase_5.5/models/estate/FireplaceRound',
        None,
        None,
@@ -273,7 +252,7 @@ FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
        None,
        None,
        1100,
-       None,
+       GirlsOnly,
        None,
        0.5),
  491: ('phase_5.5/models/estate/tt_m_prp_int_fireplace_bugRoom',
@@ -903,7 +882,8 @@ FurnitureTypes = {100: ('phase_5.5/models/estate/chairA',
          None,
          None,
          200,
-         FLPainting)}
+         FLPainting)
+}
 
 class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
 
@@ -944,7 +924,24 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
                 return not forBoys
             else:
                 return forBoys
-        return 0
+        if self.getFlags() & BoysOnly and self.getFlags() & GirlsOnly:
+            forBoys = (item == BoysOnly)
+            if avatar.getStyle().getGender() == 'm':
+                return not forBoys
+            else:
+                return forBoys
+        
+    def forBoysOnly(self):
+        if self.getFlags() & BoysOnly:
+            return 1
+        else:
+            return 0
+
+    def forGirlsOnly(self):
+        if self.getFlags() & GirlsOnly:
+            return 1
+        else:
+            return 0
 
     def isDeletable(self):
         return self.getFlags() & (FLBank | FLCloset | FLPhone | FLTrunk) == 0
