@@ -2,7 +2,9 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.estate.DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from toontown.toonbase import ToontownGlobals
 from toontown.catalog import CatalogItem
+from toontown.catalog.CatalogItemList import CatalogItemList
 from direct.distributed.ClockDelta import *
+import functools
 import time
 import PhoneGlobals
 
@@ -37,6 +39,10 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         av = self.air.doId2do.get(avId)
         if not av:
             return
+        if not av.houseId:
+            # Let's not deal with toons that have no houses, pls.
+            self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
+            return
 
         if len(av.monthlyCatalog) == 0 and len(av.weeklyCatalog) == 0 and len(av.backCatalog) == 0:
             self.d_setMovie(PhoneGlobals.PHONE_MOVIE_EMPTY, avId, globalClockDelta.getRealNetworkTime())
@@ -47,8 +53,20 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         self.notify.debug("Loading the catalog")
         self.avId = avId
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_PICKUP, avId, globalClockDelta.getRealNetworkTime())
-        self.sendUpdateToAvatarId(avId, 'setLimits', [ToontownGlobals.MaxHouseItems]) # TODO - what is the correct number here
+        house = self.air.doId2do.get(av.houseId)
+        if house:
+            numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) # TODO: do interior wallpapers/windows count? I hope not.
+            self.sendUpdateToAvatarId(avId, 'setLimits', [numItems])
+        else:    
+            self.air.dbInterface.queryObject(self.air.dbId, av, self.__gotHouse)
         av.b_setCatalogNotify(ToontownGlobals.NoItems, av.mailboxNotify)
+    
+    def __gotHouse(self, dclass, fields):
+            if dclass != self.air.dclassesByName['DistributedHouseAI']:
+                return #rip
+            numItems = len(CatalogItemList(fields['setInteriorItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWindows'][0], store=CatalogItem.Customization))
+            self.sendUpdateToAvatarId(fields['setAvatarId'][0], 'setLimits', [numItems])
+            
 
     def avatarExit(self):
         avId = self.air.getAvatarIdFromSender()
