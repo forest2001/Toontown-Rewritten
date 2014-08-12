@@ -54,7 +54,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_PICKUP, avId, globalClockDelta.getRealNetworkTime())
         house = self.air.doId2do.get(av.houseId)
         if house:
-            numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) # TODO: do interior wallpapers/windows count? I hope not.
+            numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) + len (house.interiorWallpaper) + len(house.interiorWindows)
             self.sendUpdateToAvatarId(avId, 'setLimits', [numItems])
         else:    
             self.air.dbInterface.queryObject(self.air.dbId, av, self.__gotHouse)
@@ -63,7 +63,8 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
     def __gotHouse(self, dclass, fields):
             if dclass != self.air.dclassesByName['DistributedHouseAI']:
                 return #rip
-            numItems = len(CatalogItemList(fields['setInteriorItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWindows'][0], store=CatalogItem.Customization))
+            # this is too long
+            numItems = len(CatalogItemList(fields['setInteriorItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticItems'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setAtticWindows'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setInteriorWallpaper'][0], store=CatalogItem.Customization)) + len(CatalogItemList(fields['setInteriorWindows'][0], store=CatalogItem.Customization))
             self.sendUpdateToAvatarId(fields['setAvatarId'][0], 'setLimits', [numItems])
             
 
