@@ -20,6 +20,7 @@ want-parties #f
 want-accessories #f
 want-golf #f
 want-gardening #f
+want-gifting #f
 want-keep-alive #f
 
 
