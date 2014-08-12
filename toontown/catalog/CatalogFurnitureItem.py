@@ -924,12 +924,17 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
                 return not forBoys
             else:
                 return forBoys
-        if self.getFlags() & BoysOnly and self.getFlags() & GirlsOnly:
-            forBoys = (item == BoysOnly)
+        if self.forBoysOnly():
             if avatar.getStyle().getGender() == 'm':
-                return not forBoys
+                return 0
             else:
-                return forBoys
+                return 1
+        elif self.forGirlsOnly():
+            if avatar.getStyle().getGender() == 'f':
+                return 0
+            else:
+                return 1
+        return 0
         
     def forBoysOnly(self):
         if self.getFlags() & BoysOnly:
