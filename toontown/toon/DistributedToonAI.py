@@ -5385,13 +5385,13 @@ def nametag(styleName):
     Set the style of the target's nametag to the specified ID.
     Examples are 100 for basic, 0 for simple.
     """
-    list = TTLocalizer.NametagFontNames[:]
-    for index, item in enumerate(list):
-        list[index] = item.lower()
+    nametag_list = list(TTLocalizer.NametagFontNames)
+    for index, item in enumerate(nametag_list):
+        nametag_list[index] = item.lower()
     styleName = styleName.lower()
 
-    if styleName in list:
-        index = list.index(styleName)
+    if styleName in nametag_list:
+        index = nametag_list.index(styleName)
     elif styleName == "basic":
         index = 100
     else:
@@ -5408,6 +5408,7 @@ def animations():
     """
 
     av = spellbook.getTarget()
+    emotes = list(av.getEmoteAccess())
 
     # Ripped directly from alpha days, cause I'm lazy.
     # Get this list out of OTPLocalizerEnglish.py
@@ -5438,16 +5439,16 @@ def phrase(phraseStringOrId):
 
     # hack check if int (fuck .isdigit())
     try:
-        scId = int(phaseStringOrId)
+        scId = int(phraseStringOrId)
         if scId in strings.iterkeys():
             id = scId
         else:
             id = None
-    except:
+    except ValueError:
         # It's a string! Search phrase by string.
         id = None
         phraseString = phraseStringOrId
-        for scId, string in strings:
+        for scId, string in strings.iteritems():
             if string.lower() == phraseString.lower():
                 id = scId
                 break
