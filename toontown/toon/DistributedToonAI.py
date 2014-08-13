@@ -5443,9 +5443,9 @@ def phrase(phraseStringOrId):
         id = None
         phraseString = phraseStringOrId
         for scId, string in strings.iteritems():
-            if string.lower() == phraseString.lower():
+            if phraseString.lower() in string.lower(): # Check if our entered text is a part of the phrase.
                 id = scId
-                break
+                break # Assume that this is the only match. Perhaps return a list if >1 matches?
 
     if id is None:
         return "Unable to match string to a custom phrase."
