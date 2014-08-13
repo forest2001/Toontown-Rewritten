@@ -5,7 +5,7 @@ import BankGlobals
 
 class DistributedBankAI(DistributedFurnitureItemAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedBankAI")
-    
+
     def __init__(self, air, furnitureMgr, item):
         DistributedFurnitureItemAI.__init__(self, air, furnitureMgr, item)
         self.avId = None
@@ -31,19 +31,19 @@ class DistributedBankAI(DistributedFurnitureItemAI):
 
     def freeAvatar(self):
         pass
-    
+
     def setMovie(self, mode, avId, time):
         self.movie = mode
         if self.movie != BankGlobals.BANK_MOVIE_CLEAR:
             taskMgr.doMethodLater(2.0, self.clearMovie, 'clear-movie-%d' % self.getDoId())
-    
+
     def clearMovie(self, task):
         self.b_setMovie(BankGlobals.BANK_MOVIE_CLEAR, 0, globalClockDelta.getRealNetworkTime())
-    
+
     def b_setMovie(self, mode, avId, time):
         self.setMovie(mode, avId, time)
         self.d_setMovie(mode, avId, time)
-    
+
     def d_setMovie(self, mode, avId, time):
         self.sendUpdate('setMovie', [mode, avId, time])
 

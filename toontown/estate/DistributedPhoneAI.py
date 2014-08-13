@@ -105,9 +105,11 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to purchase while not using the phone!')
             return
         av = self.air.doId2do.get(avId)
+
         if not av:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Used phone from other shard!')
             return
+
         item = CatalogItem.getItem(item)
         if isinstance(item, CatalogInvalidItem): # u wot m8
             self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to purchase invalid catalog item.')
@@ -121,6 +123,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             price = item.getPrice(0)
         else:
             return
+
         if item.getDeliveryTime():
             if len(av.onOrder) > 3: #TODO correct number
                 self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, ToontownGlobals.P_OnOrderListFull])
@@ -137,9 +140,11 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             if not av.takeMoney(price):
                 #u wot m8
                 return
+
             resp = item.recordPurchase(av, optional)
             if resp < 0: # refund if purchase unsuccessful
                     av.addMoney(price)
+
             self.sendUpdateToAvatarId(avId, 'requestPurchaseResponse', [context, resp])
 
 
