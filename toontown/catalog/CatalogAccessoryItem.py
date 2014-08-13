@@ -19,20 +19,23 @@ class CatalogAccessoryItem(CatalogItem.CatalogItem):
         return 1
 
     def notOfferedTo(self, avatar):
-        article = AccessoryTypes[self.accessoryType][ATArticle]
-        if article in [AHat,
-         AGlasses,
-         ABackpack,
-         AShoes]:
-            return 0
-        forBoys = article in [ABoysHat,
-         ABoysGlasses,
-         ABoysBackpack,
-         ABoysShoes]
-        if avatar.getStyle().getGender() == 'm':
-            return not forBoys
-        else:
-            return forBoys
+        if simbase.config.GetBool('want-accessories', 1):
+            article = AccessoryTypes[self.accessoryType][ATArticle]
+            if article in [AHat,
+             AGlasses,
+             ABackpack,
+             AShoes]:
+                return 0
+            forBoys = article in [ABoysHat,
+             ABoysGlasses,
+             ABoysBackpack,
+             ABoysShoes]
+            if avatar.getStyle().getGender() == 'm':
+                return not forBoys
+            else:
+                return forBoys
+        # If we get here, we probably don't want accessories yet.
+        return 1
 
     def forBoysOnly(self):
         article = AccessoryTypes[self.accessoryType][ATArticle]

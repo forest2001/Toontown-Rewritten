@@ -40,20 +40,25 @@ MetaItems = {100: getAllClothes(101, 102, 103, 104, 105, 106, 107, 108, 109, 109
  2921: getChatRange(12050, 12099),
  2930: getChatRange(13000, 13099),
  2940: getChatRange(14000, 14099),
+
  3000: getWallpapers(1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100),
  3010: getWallpapers(2200, 2300, 2400, 2500, 2600, 2700, 2800),
  3020: getWallpapers(2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600),
  3030: getWallpapers(3700, 3800, 3900),
+
  3500: getAllWainscotings(1000, 1010),
  3510: getAllWainscotings(1020),
  3520: getAllWainscotings(1030),
  3530: getAllWainscotings(1040),
+
  4000: getFloorings(1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1100),
  4010: getFloorings(1110, 1120, 1130),
  4020: getFloorings(1140, 1150, 1160, 1170, 1180, 1190),
+
  4500: getAllMouldings(1000, 1010),
  4510: getAllMouldings(1020, 1030, 1040),
  4520: getAllMouldings(1070),
+
  5000: getAllPetTricks()}
 MetaItemChatKeysSold = (2000,
  2010,
@@ -397,22 +402,34 @@ MonthlySchedule = ((7,
   1,
   9,
   30,
-  (CatalogGardenItem(135, 1),)),
+  (
+    # CatalogGardenItem(135, 1)
+    )
+  ),
  (1,
   1,
   1,
   31,
-  (CatalogGardenItem(135, 1),)),
+  (
+    # CatalogGardenItem(135, 1)
+    )
+  ),
  (4,
   1,
   4,
   30,
-  (CatalogGardenItem(135, 1),)),
+  (
+    # CatalogGardenItem(135, 1)
+    )
+  ),
  (6,
   1,
   6,
   30,
-  (CatalogGardenItem(135, 1),)),
+  (
+    # CatalogGardenItem(135, 1)
+    )
+  ),
  (6,
   26,
   7,
@@ -432,8 +449,8 @@ MonthlySchedule = ((7,
   4,
   (CatalogFurnitureItem(680),
    CatalogFurnitureItem(681),
-   CatalogGardenItem(130, 1),
-   CatalogGardenItem(131, 1),
+   # CatalogGardenItem(130, 1),
+   # CatalogGardenItem(131, 1),
    CatalogAnimatedFurnitureItem(10020),
    CatalogFurnitureItem(10030, 0))),
  (12,
@@ -507,13 +524,14 @@ MonthlySchedule = ((7,
   1,
   12,
   31,
-  (CatalogGardenItem(100, 1),
-   CatalogGardenItem(101, 1),
-   CatalogGardenItem(103, 1),
-   CatalogGardenItem(104, 1),
-   CatalogToonStatueItem(105, endPoseIndex=108),
-   CatalogRentalItem(1, 2880, 1000),
-   CatalogGardenStarterItem(),
+  (
+   # CatalogGardenItem(100, 1),
+   # CatalogGardenItem(101, 1),
+   # CatalogGardenItem(103, 1),
+   # CatalogGardenItem(104, 1),
+   # CatalogToonStatueItem(105, endPoseIndex=108),
+   # CatalogRentalItem(1, 2880, 1000),
+   # CatalogGardenStarterItem(), # We don't want Gardens yet.
    CatalogNametagItem(100),
    CatalogNametagItem(0),
    CatalogClothingItem(1608, 0, 720),
@@ -597,8 +615,8 @@ MonthlySchedule = ((7,
   ((3, 2910),
    CatalogFurnitureItem(680),
    CatalogFurnitureItem(681),
-   CatalogGardenItem(130, 1),
-   CatalogGardenItem(131, 1),
+   # CatalogGardenItem(130, 1),
+   # CatalogGardenItem(131, 1),
    CatalogAnimatedFurnitureItem(10020),
    CatalogFurnitureItem(10030, 0),
    CatalogWallpaperItem(11000),

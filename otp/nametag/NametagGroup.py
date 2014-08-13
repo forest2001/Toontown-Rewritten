@@ -26,6 +26,7 @@ class NametagGroup:
         self.chatTimeoutTask = None
 
         self.font = None
+        self.speechFont = None
         self.name = ''
         self.displayName = ''
         self.wordWrap = None
@@ -141,6 +142,10 @@ class NametagGroup:
         self.font = font
         self.updateTags()
 
+    def setSpeechFont(self, font):
+        self.speechFont = font
+        self.updateTags()
+
     def setWordwrap(self, wrap):
         self.wordWrap = wrap
         self.updateTags()
@@ -227,6 +232,7 @@ class NametagGroup:
 
     def updateNametag(self, tag):
         tag.font = self.font
+        tag.speechFont = self.speechFont
         tag.name = self.name
         tag.wordWrap = self.wordWrap or DEFAULT_WORDWRAPS[self.colorCode]
         tag.displayName = self.displayName or self.name

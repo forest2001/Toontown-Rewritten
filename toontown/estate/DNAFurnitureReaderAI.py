@@ -39,8 +39,9 @@ class DNAFurnitureReaderAI:
     # house to the default furniture arrangement.
     notify = DirectNotifyGlobal.directNotify.newCategory("DNAFurnitureReaderAI")
 
-    def __init__(self, dnaData):
+    def __init__(self, dnaData, phonePos):
         self.dnaData = dnaData
+        self.phonePos = phonePos
         self.itemList = None
 
     def buildList(self):
@@ -55,6 +56,7 @@ class DNAFurnitureReaderAI:
         else:
             self.notify.error('Could not find "interior" in DNA!')
 
+        self.itemList.append(CatalogFurnitureItem(1399, posHpr=self.phonePos))
         # Every child in the interior node is a prop, thus:
         for child in interior.children:
             code = child.getCode()

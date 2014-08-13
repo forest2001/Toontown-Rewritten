@@ -584,6 +584,28 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if self.dna.getAnimal() == 'cat':
                 allowedColors = allowedColors + [26]
 
+            if 26 in [self.dna.legColor, self.dna.armColor, self.dna.headColor]: # Disney ALSO didn't do this. Verify that a toon is fully black/white.
+                if self.dna.legColor != 26:
+                    self.dna.legColor = 26
+                    changed = True
+                if self.dna.armColor != 26:
+                    self.dna.armColor = 26
+                    changed = True
+                if self.dna.headColor != 26:
+                    self.dna.headColor = 26
+                    changed = True
+
+            elif 0 in [self.dna.legColor, self.dna.armColor, self.dna.headColor]:
+                if self.dna.legColor != 0:
+                    self.dna.legColor = 0
+                    changed = True
+                if self.dna.armColor != 0:
+                    self.dna.armColor = 0
+                    changed = True
+                if self.dna.headColor != 0:
+                    self.dna.headColor = 0
+                    changed = True
+
             if self.dna.legColor not in allowedColors:
                 self.dna.legColor = allowedColors[0]
                 changed = True
@@ -2498,7 +2520,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         now = int(time.time() / 60 + 0.5)
         delivered, remaining = self.onOrder.extractDeliveryItems(now)
         deliveredGifts, remainingGifts = self.onGiftOrder.extractDeliveryItems(now)
-        simbase.air.deliveryManager.sendDeliverGifts(self.getDoId(), now)
+        #simbase.air.deliveryManager.sendDeliverGifts(self.getDoId(), now) TODO DeliveryManager
         giftItem = CatalogItemList.CatalogItemList(deliveredGifts, store=CatalogItem.Customization | CatalogItem.DeliveryDate)
         if len(giftItem) > 0:
             self.air.writeServerEvent('Getting Gift', avId=self.doId, msg='sender %s receiver %s gift %s' % (giftItem[0].giftTag, self.doId, giftItem[0].getName()))
@@ -5100,7 +5122,7 @@ def locate(avIdShort=0, returnType=''):
         return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
 
-@magicWord(category=CATEGORY_OVERRIDE, types=[int])
+@magicWord(category=CATEGORY_MODERATION, types=[int])
 def online(doId):
     """ Check if a toon is online. """
     av = spellbook.getTarget()
@@ -5284,6 +5306,10 @@ def fanfare():
     spellbook.getTarget().magicFanfare()
     return "Jason: Because the trumpets they go...~"
 
+@magicWord(category=CATEGORY_OVERRIDE)
+def catalog():
+    simbase.air.catalogManager.deliverCatalogFor(spellbook.getTarget())
+
 @magicWord(category=CATEGORY_CHARACTERSTATS, types=[int])
 def pouch(amt):
     """ Set the target's max gag limit. """
@@ -5346,3 +5372,88 @@ def correctlaff():
     av = spellbook.getTarget()
     av.correctToonLaff()
     return "Corrected %s's laff successfully." % av.getName()
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def nametag(styleName):
+    """
+    Set the style of the target's nametag to the specified ID.
+    Examples are 100 for basic, 0 for simple.
+    """
+    nametag_list = list(TTLocalizer.NametagFontNames)
+    for index, item in enumerate(nametag_list):
+        nametag_list[index] = item.lower()
+    styleName = styleName.lower()
+
+    if styleName in nametag_list:
+        index = nametag_list.index(styleName)
+    elif styleName == "basic":
+        index = 100
+    else:
+        return "Invalid nametag name entered."
+
+    spellbook.getTarget().b_setNametagStyle(index)
+    return "Set %s's nametag style successfully." % spellbook.getTarget().getName()
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def animations():
+    """
+    Unlock all of the animations on the target toon.
+    This exclutes the "Toons of the world unite!" phrase. (because it sucks)
+    """
+
+    av = spellbook.getTarget()
+    emotes = list(av.getEmoteAccess())
+
+    # Ripped directly from alpha days, cause I'm lazy.
+    # Get this list out of OTPLocalizerEnglish.py
+    ALPHA_EMOTES = ['Wave', 'Happy', 'Sad', 'Angry', 'Sleepy',
+                    'Dance', 'Think', 'Bored', 'Applause', 'Cringe',
+                    'Confused', 'Bow', 'Delighted', 'Belly Flop', 'Banana Peel',
+                    'Shrug', 'Surprise', 'Furious',
+                    'Laugh', 'Cry']
+
+    for emote in ALPHA_EMOTES:
+        emoteId = OTPLocalizer.EmoteFuncDict.get(emote)
+        if emoteId is None: continue
+        emotes[emoteId] = 1
+
+    av.b_setEmoteAccess(emotes)
+    return "Unlocked all animations for %s." % av.getName()
+
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
+def phrase(phraseStringOrId):
+    """
+    Unlocks a new phrase and adds it to target's list of "My Phrases".
+    If the phrase list is full, the top item will be knocked off and the
+    requested one will be appended to the bottom.
+    """
+
+    strings = OTPLocalizer.CustomSCStrings
+    av = spellbook.getTarget()
+
+    # hack check if int (fuck .isdigit())
+    try:
+        scId = int(phraseStringOrId)
+        if scId in strings.iterkeys():
+            id = scId
+        else:
+            id = None
+    except ValueError:
+        # It's a string! Search phrase by string.
+        id = None
+        phraseString = phraseStringOrId
+        for scId, string in strings.iteritems():
+            if string.lower() == phraseString.lower():
+                id = scId
+                break
+
+    if id is None:
+        return "Unable to match string to a custom phrase."
+    else:
+        if av.customMessages.count(id) != 0:
+            return "%s already has this custom phrase!" % av.getName()
+        if len(av.customMessages) >= ToontownGlobals.MaxCustomMessages:
+            av.customMessages = av.customMessages[1:] # get rid of the first phrase.
+        av.customMessages.append(id)
+        av.d_setCustomMessages(av.customMessages)
+        return "Added new phrase to %s's custom phrases." % av.getName()

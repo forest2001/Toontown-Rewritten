@@ -664,11 +664,11 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
 
     def decodeDatagram(self, di, versionNumber, store):
         CatalogAtticItem.CatalogAtticItem.decodeDatagram(self, di, versionNumber, store)
-        self.colorIndex = None
+        self.colorIndex = 0
         if store & CatalogItem.Customization:
             self.borderIndex = 0
         else:
-            self.borderIndex = None
+            self.borderIndex = 0
         self.borderColorIndex = 0
         if versionNumber < 3:
             self.patternIndex = di.getUint8()

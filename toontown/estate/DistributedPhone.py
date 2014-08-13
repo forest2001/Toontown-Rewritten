@@ -116,7 +116,9 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
     def setupCamera(self, mode):
         camera.wrtReparentTo(render)
         if mode == PhoneGlobals.PHONE_MOVIE_PICKUP:
-            camera.lerpPosHpr(4, -4, base.localAvatar.getHeight() - 0.5, 35, -8, 0, 1, other=base.localAvatar, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+            quat = Quat()
+            quat.setHpr((35, -8, 0))
+            LerpPosQuatInterval(camera, 1, (4, -4, base.localAvatar.getHeight() - 0.5), quat, blendType='easeOut', other=base.localAvatar).start()
 
     def setupCord(self):
         if self.cord:
@@ -173,7 +175,8 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
             return
         if self.hasLocalAvatar:
             self.freeAvatar()
-        base.localAvatar.lookupPetDNA()
+        if base.config.GetBool('want-pets', 1):
+            base.localAvatar.lookupPetDNA()
         self.notify.debug('Entering Phone Sphere....')
         taskMgr.remove(self.uniqueName('ringDoLater'))
         self.ignore(self.phoneSphereEnterEvent)
@@ -209,22 +212,26 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
         self.ignore(self.pickupMovieDoneEvent)
         if avId != 0:
             self.lastAvId = avId
+
         self.lastTime = globalClock.getFrameTime()
         isLocalToon = avId == base.localAvatar.doId
         avatar = self.cr.doId2do.get(avId)
         self.notify.debug('setMovie: %s %s %s' % (mode, avId, isLocalToon))
+
         if mode == PhoneGlobals.PHONE_MOVIE_CLEAR:
             self.notify.debug('setMovie: clear')
             self.numHouseItems = None
             if self.phoneInUse:
                 self.clearInterval()
             self.phoneInUse = 0
+
         elif mode == PhoneGlobals.PHONE_MOVIE_EMPTY:
             self.notify.debug('setMovie: empty')
             if isLocalToon:
                 self.phoneDialog = TTDialog.TTDialog(dialogName='PhoneEmpty', style=TTDialog.Acknowledge, text=TTLocalizer.DistributedPhoneEmpty, text_wordwrap=15, fadeScreen=1, command=self.__clearDialog)
             self.numHouseItems = None
             self.phoneInUse = 0
+
         elif mode == PhoneGlobals.PHONE_MOVIE_PICKUP:
             self.notify.debug('setMovie: gui')
             if avatar:
@@ -235,6 +242,7 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
                     self.acceptOnce(self.pickupMovieDoneEvent, self.__showPhoneGui)
                 self.playInterval(interval, elapsed, avatar)
                 self.phoneInUse = 1
+
         elif mode == PhoneGlobals.PHONE_MOVIE_HANGUP:
             self.notify.debug('setMovie: gui')
             if avatar:
@@ -242,6 +250,7 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
                 self.playInterval(interval, elapsed, avatar)
             self.numHouseItems = None
             self.phoneInUse = 0
+
         else:
             self.notify.warning('unknown mode in setMovie: %s' % mode)
         return
@@ -269,10 +278,7 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
         print 'in the client phone'
         blob = item.getBlob(store=CatalogItem.Customization)
         context = self.getCallbackContext(callback, [item])
-        self.sendUpdate('requestGiftPurchaseMessage', [context,
-         targetDoID,
-         blob,
-         optional])
+        self.sendUpdate('requestGiftPurchaseMessage', [context, targetDoID, blob, optional])
 
     def requestPurchaseResponse(self, context, retcode):
         self.doCallbackContext(context, [retcode])

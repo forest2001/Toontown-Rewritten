@@ -8,7 +8,7 @@ from toontown.estate import ClosetGlobals
 class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
     freeClothes = simbase.config.GetBool('free-clothes', 0)
     housingEnabled = simbase.config.GetBool('want-housing', 1)
-    useJellybeans = simbase.config.GetBool('want-tailor-jellybeans', True)
+    useJellybeans = simbase.config.GetBool('want-tailor-jellybeans', False)
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)
@@ -43,9 +43,9 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         if testDNA.head != av.dna.head:
             return False
         if testDNA.torso != av.dna.torso:
-            # TODO: Check that they aren't changing torso size, but only skirt/shorts.
-            # Male toons can never change, but girls can change between skirt and shorts.
             if av.dna.gender == 'm':
+                return False
+            elif testDNA.torso[0] != av.dna.torso[0]: #first character of torso ('size') must remain the same, otherwise you are hacker scum.
                 return False
         if testDNA.legs != av.dna.legs:
             return False

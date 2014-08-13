@@ -1,6 +1,7 @@
 from NametagConstants import *
 import NametagGlobals
 from otp.margins.ClickablePopup import ClickablePopup
+from otp.otpbase import OTPGlobals
 from pandac.PandaModules import *
 
 class Nametag(ClickablePopup):
@@ -29,6 +30,7 @@ class Nametag(ClickablePopup):
         self.chatWordWrap = None
 
         self.font = None
+        self.speechFont = None
         self.name = ''
         self.displayName = ''
         self.qtColor = VBase4(1,1,1,1)
@@ -91,13 +93,16 @@ class Nametag(ClickablePopup):
             self.showName()
 
     def showBalloon(self, balloon, text):
+        if not self.speechFont:
+            # If no font is set, we can't display anything yet...
+            return
         color = self.qtColor if (self.chatFlags&CFQuicktalker) else self.chatBg
         if color[3] > self.CHAT_ALPHA:
             color = (color[0], color[1], color[2], self.CHAT_ALPHA)
 
         reversed = (self.IS_3D and (self.chatFlags&CFReversed))
 
-        balloon, frame = balloon.generate(text, self.font, textColor=self.chatFg,
+        balloon, frame = balloon.generate(text, self.speechFont, textColor=self.chatFg,
                                           balloonColor=color,
                                           wordWrap=self.chatWordWrap or \
                                             self.DEFAULT_CHAT_WORDWRAP,

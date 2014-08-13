@@ -17,6 +17,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
         return 1
 
     def reachedPurchaseLimit(self, avatar):
+        return 1 # until we have pets
         if self in avatar.onOrder or self in avatar.mailboxContents or self in avatar.onGiftOrder or self in avatar.awardMailboxContents or self in avatar.onAwardOrder:
             return 1
         return self.trickId in avatar.petTrickPhrases
@@ -44,9 +45,9 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
     def getPicture(self, avatar):
         from toontown.pets import PetDNA, Pet
         pet = Pet.Pet(forGui=1)
-        dna = avatar.petDNA
-        if dna == None:
-            dna = PetDNA.getRandomPetDNA()
+        #dna = avatar.petDNA
+        i#f dna == None:
+        dna = PetDNA.getRandomPetDNA() # another temphack
         pet.setDNA(dna)
         pet.setH(180)
         model, ival = self.makeFrameModel(pet, 0)
