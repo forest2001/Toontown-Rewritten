@@ -5392,7 +5392,7 @@ def nametag(styleName):
 
     if styleName in list:
         index = list.index(styleName)
-    elif styleName == "basic"
+    elif styleName == "basic":
         index = 100
     else:
         return "Invalid nametag name entered."
