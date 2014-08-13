@@ -18,7 +18,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         pass
 
     def getInitialScale(self):
-        return (1, 1, 1)
+        return (0.8, 0.8, 0.8)
 
     def setNewScale(self, sx, sy, sz):
         if sx + sy + sz < 5:
@@ -38,6 +38,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
         av = self.air.doId2do.get(avId)
         if not av:
             return
+
         if not av.houseId:
             # Let's not deal with toons that have no houses, pls.
             self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
@@ -48,18 +49,20 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             taskMgr.doMethodLater(1, self.__resetMovie, 'resetMovie-%d' % self.getDoId(), extraArgs=[])
             self.notify.debug("No Catalogs")
             return
-        
+
         self.air.questManager.toonCalledClarabelle(av)
-        
+
         self.notify.debug("Loading the catalog")
         self.avId = avId
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_PICKUP, avId, globalClockDelta.getRealNetworkTime())
+
         house = self.air.doId2do.get(av.houseId)
         if house:
             numItems = len(house.interiorItems) + len(house.atticItems) + len(house.atticWallpaper) + len(house.atticWindows) + len (house.interiorWallpaper) + len(house.interiorWindows)
             self.sendUpdateToAvatarId(avId, 'setLimits', [numItems])
         else:
             self.air.dbInterface.queryObject(self.air.dbId, av.houseId, self.__gotHouse)
+
         av.b_setCatalogNotify(ToontownGlobals.NoItems, av.mailboxNotify)
 
     def __gotHouse(self, dclass, fields):
