@@ -51,4 +51,8 @@ except SystemExit:
 except Exception:
     info = PythonUtil.describeException()
     simbase.air.writeServerEvent('ai-exception', avId=simbase.air.getAvatarIdFromSender(), accId=simbase.air.getAccountIdFromSender(), exception=info)
+    # TEMP! (due to lack of Kibana) Dump crash to the FS.
+    with open(config.GetString('ai-crash-log-name', 'ai-crash.txt'), 'w+') as file:
+        # w+ empties log and writes fresh (meaning 1 exception at a time)
+        file.write(info + "\n")
     raise
