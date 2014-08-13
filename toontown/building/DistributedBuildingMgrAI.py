@@ -16,7 +16,6 @@ from pymongo.errors import AutoReconnect
 
 class DistributedBuildingMgrAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBuildingMgrAI')
-    serverDatafolder = simbase.config.GetString('server-data-folder', '')
 
     def __init__(self, air, branchID, dnaStore, trophyMgr):
         self.branchID = branchID

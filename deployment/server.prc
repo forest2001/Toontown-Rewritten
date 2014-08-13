@@ -17,8 +17,10 @@ csmud-secret Yv1JrpTUdkX6M86h44Z9q4AUaQYdFnectDgl2I5HOQf8CBh7LUZWpzKB9FBD
 want-bbhq #f
 want-pets #f
 want-parties #f
+want-accessories #f
 want-golf #f
 want-gardening #f
+want-gifting #f
 want-keep-alive #f
 
 
@@ -29,3 +31,5 @@ want-blacklist-sequence #t
 
 
 # Holidays and Events
+
+cogsuit-hack-prevent #t

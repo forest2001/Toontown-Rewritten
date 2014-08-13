@@ -175,7 +175,8 @@ toonTorsoTypes = ['ss',
  'm',
  'l']
 toonLegTypes = ['s', 'm', 'l']
-Shirts = ['phase_3/maps/desat_shirt_1.jpg',
+Shirts = [
+ 'phase_3/maps/desat_shirt_1.jpg',
  'phase_3/maps/desat_shirt_2.jpg',
  'phase_3/maps/desat_shirt_3.jpg',
  'phase_3/maps/desat_shirt_4.jpg',
@@ -327,8 +328,10 @@ Shirts = ['phase_3/maps/desat_shirt_1.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_saveBuilding05.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_anniversary.jpg',
  'phase_4/maps/tt_t_chr_avt_shirt_sora.jpg',
- 'phase_4/maps/tt_t_chr_avt_shirt_slappy.jpg']
-BoyShirts = [(0, 0),
+ 'phase_4/maps/tt_t_chr_avt_shirt_slappy.jpg'
+]
+BoyShirts = [
+ (0, 0),
  (1, 1),
  (2, 2),
  (3, 3),
@@ -342,8 +345,10 @@ BoyShirts = [(0, 0),
  (16, 0),
  (17, 0),
  (18, 12),
- (19, 13)]
-GirlShirts = [(0, 0),
+ (19, 13)
+]
+GirlShirts = [
+ (0, 0),
  (1, 1),
  (2, 2),
  (3, 3),
@@ -357,7 +362,8 @@ GirlShirts = [(0, 0),
  (16, 0),
  (20, 0),
  (21, 0),
- (22, 0)]
+ (22, 0)
+]
 
 def isValidBoyShirt(index):
     for pair in BoyShirts:

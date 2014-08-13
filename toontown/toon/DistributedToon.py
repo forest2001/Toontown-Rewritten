@@ -2180,7 +2180,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self.setFont(ToontownGlobals.getNametagFont(self.getNametagStyle()))
         Avatar.Avatar.setDisplayName(self, name)
-        self.setFont(ToontownGlobals.getToonFont())
         return
 
     def removeFancyNametag(self):
@@ -2624,7 +2623,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self.gmToonLockStyle = False
             self.removeGMIcon()
-            self.setNametagStyle(0)
+            self.setNametagStyle(100)
 
     def setGMIcon(self, gmType = None):
         if hasattr(self, 'gmIcon') and self.gmIcon:

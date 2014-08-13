@@ -50,7 +50,7 @@ class CatalogRentalItem(CatalogItem.CatalogItem):
         self.notify.debug('rental -- record purchase')
         if avatar:
             self.notify.debug('rental -- has avater')
-            estate = simbase.air.estateMgr.estate.get(avatar.doId)
+            estate = simbase.air.estateManager.toon2estate.get(avatar)
             if estate:
                 self.notify.debug('rental -- has estate')
                 estate.rentItem(self.typeIndex, self.duration)
