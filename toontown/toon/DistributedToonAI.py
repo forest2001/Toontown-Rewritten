@@ -5425,7 +5425,7 @@ def animations():
     av.b_setEmoteAccess(emotes)
     return "Unlocked all animations for %s." % av.getName()
 
-@magicWord(category=CATEGORY_CHARACTERSTATUS, types=[str])
+@magicWord(category=CATEGORY_CHARACTERSTATS, types=[str])
 def phrase(phraseStringOrId):
     """
     Unlocks a new phrase and adds it to target's list of "My Phrases".
