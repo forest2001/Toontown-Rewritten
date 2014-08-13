@@ -531,8 +531,8 @@ dclass DistributedToon : DistributedPlayer {
   setDisguisePageFlag(int8 flag) ownrecv;
   setSosPageFlag(int8 flag) ownrecv;
   setHouseId(uint32 id = 0) required ownrecv db;
-  setQuests(uint32 flattenedQuests[] = [175, 401000019, 1000, 100, 1]) required broadcast ownrecv db;
-  setQuestHistory(uint16 questList[] = [175]) required ownrecv db;
+  setQuests(uint32 flattenedQuests[] = []) required broadcast ownrecv db;
+  setQuestHistory(uint16 questList[] = []) required ownrecv db;
   setRewardHistory(uint8 rewardTier = 0, uint16 rewardList[] = [100]) required ownrecv db;
   setQuestCarryLimit(uint8 limit = 1) required ownrecv db;
   requestDeleteQuest(uint32 questDesc[]) ownsend airecv;

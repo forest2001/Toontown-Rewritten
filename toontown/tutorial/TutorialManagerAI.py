@@ -146,6 +146,7 @@ class TutorialManagerAI(DistributedObjectAI):
             av.b_setTutorialAck(1)
             av.b_setQuestHistory([110, 100])
             av.addQuest((110, Quests.getQuestFromNpcId(110), Quests.getQuestToNpcId(110), Quests.getQuestReward(110, av), 0), 0)
+            self.air.questManager.toonRodeTrolleyFirstTime(av) #gg hacky
             self.d_skipTutorialResponse(avId, 1)
         else:
             self.d_skipTutorialResponse(avId, 0)

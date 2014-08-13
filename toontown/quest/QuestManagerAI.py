@@ -159,6 +159,12 @@ class QuestManagerAI:
                 self.__incrementQuestProgress(toon.quests[index])
 
         toon.updateQuests()
+        
+    def toonCalledClarabelle(self, toon):
+        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
+            if isinstance(quest, Quests.PhoneQuest):
+                self.__incrementQuestProgress(toon.quests[index])
+        toon.updateQuests()
 
     def completeQuest(self, toon, questId):
         """
@@ -189,7 +195,7 @@ class QuestManagerAI:
         # If non-zero, this indicates this is the first quest in the whole ToonTask.
         # This means we want to store the reward in the toons setRewardHistory.
         finalReward = rewardId if storeReward else 0
-        progress = 1 if questId == Quests.PHONE_QUEST_ID else 0 # hacky fix to cattlelog quest...
+        progress = 0
         toon.addQuest((questId, npc.getDoId(), toNpcId, rewardId, progress), finalReward)
         # Tell the NPC that we assigned this quest to the given toon.
         npc.assignQuest(toon.getDoId(), questId, rewardId, toNpcId)

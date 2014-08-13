@@ -48,7 +48,9 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             taskMgr.doMethodLater(1, self.__resetMovie, 'resetMovie-%d' % self.getDoId(), extraArgs=[])
             self.notify.debug("No Catalogs")
             return
-
+        
+        self.air.questManager.toonCalledClarabelle(av)
+        
         self.notify.debug("Loading the catalog")
         self.avId = avId
         self.d_setMovie(PhoneGlobals.PHONE_MOVIE_PICKUP, avId, globalClockDelta.getRealNetworkTime())
