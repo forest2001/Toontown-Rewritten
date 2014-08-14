@@ -419,6 +419,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def handleLogicalZoneChange(self, newZoneId, oldZoneId):
         DistributedAvatarAI.DistributedAvatarAI.handleLogicalZoneChange(self, newZoneId, oldZoneId)
+        if self.getAdminAccess() < 300: # If we don't have magic word access,
+            self.b_setGhostMode(0)      # Remove ghost.
         if self.isPlayerControlled() and self.WantTpTrack:
             messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
         if self.cogIndex != -1 and simbase.config.GetBool('cogsuit-hack-prevent', False):
