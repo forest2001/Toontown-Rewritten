@@ -113,14 +113,14 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.districtId = self.allocateChannel()
         self.distributedDistrict = ToontownDistrictAI(self)
         self.distributedDistrict.setName(self.districtName)
-        self.distributedDistrict.generateWithRequiredAndId(simbase.air.districtId,
+        self.distributedDistrict.generateWithRequiredAndId(self.districtId,
                                                            self.getGameDoId(), 2)
 
         # Claim ownership of that district...
         dg = PyDatagram()
-        dg.addServerHeader(simbase.air.districtId, simbase.air.ourChannel, STATESERVER_OBJECT_SET_AI)
-        dg.addChannel(simbase.air.ourChannel)
-        simbase.air.send(dg)
+        dg.addServerHeader(self.districtId, self.ourChannel, STATESERVER_OBJECT_SET_AI)
+        dg.addChannel(self.ourChannel)
+        self.send(dg)
 
         self.createGlobals()
         self.createZones()
@@ -191,7 +191,7 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.tutorialManager = TutorialManagerAI(self)
         self.tutorialManager.generateWithRequired(2)
-        
+
         self.catalogManager = CatalogManagerAI(self)
         self.catalogManager.generateWithRequired(2)
 
