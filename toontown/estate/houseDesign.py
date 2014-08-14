@@ -507,8 +507,8 @@ class ObjectManager(NodePath, DirectObject):
             self.enableButtonFrameTask()
             self.atticRoof.hide()
 
-            # We dont want to move the Closet, Phone, Bank or Trunk to the attic
-            if config.GetBool('want-permanent-interactables', True):
+            # In case we dont want to move the Closet, Phone, Bank or Trunk to the attic
+            if config.GetBool('want-permanent-interactables', False):
                 if selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLCloset or \
                     selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLPhone or \
                     selectedObject.dfitem.item.getFlags() & CatalogFurnitureItem.FLBank or \
