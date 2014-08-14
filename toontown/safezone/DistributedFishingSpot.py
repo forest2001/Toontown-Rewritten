@@ -593,7 +593,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.itemGui.detachNode()
 
     def __makeGui(self):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: FISHING: ZoneId: %s' % self.pond.getArea())
         if self.madeGui:
             return

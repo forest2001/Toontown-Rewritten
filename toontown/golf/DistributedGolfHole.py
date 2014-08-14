@@ -56,10 +56,10 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
      'Cleanup': ['Off']}
     id = 0
     notify = directNotify.newCategory('DistributedGolfHole')
-    unlimitedAimTime = base.config.GetBool('unlimited-aim-time', 0)
-    unlimitedTeeTime = base.config.GetBool('unlimited-tee-time', 0)
-    golfPowerSpeed = base.config.GetDouble('golf-power-speed', 3)
-    golfPowerExponent = base.config.GetDouble('golf-power-exponent', 0.75)
+    unlimitedAimTime = config.GetBool('unlimited-aim-time', 0)
+    unlimitedTeeTime = config.GetBool('unlimited-tee-time', 0)
+    golfPowerSpeed = config.GetDouble('golf-power-speed', 3)
+    golfPowerExponent = config.GetDouble('golf-power-exponent', 0.75)
     DefaultCamP = -16
     MaxCamP = -90
 
@@ -288,7 +288,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
             curNodePath = self.hardSurfaceNodePath.find('**/locator%d' % locatorNum)
 
     def loadBlockers(self):
-        loadAll = base.config.GetBool('golf-all-blockers', 0)
+        loadAll = config.GetBool('golf-all-blockers', 0)
         self.createLocatorDict()
         self.blockerNums = self.holeInfo['blockers']
         for locatorNum in self.locDict:

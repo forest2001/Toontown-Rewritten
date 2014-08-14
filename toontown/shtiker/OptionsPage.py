@@ -148,8 +148,8 @@ class OptionsTabPage(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('OptionsTabPage')
     DisplaySettingsTaskName = 'save-display-settings'
     DisplaySettingsDelay = 60
-    ChangeDisplaySettings = base.config.GetBool('change-display-settings', 1)
-    ChangeDisplayAPI = base.config.GetBool('change-display-api', 0)
+    ChangeDisplaySettings = config.GetBool('change-display-settings', 1)
+    ChangeDisplayAPI = config.GetBool('change-display-api', 0)
 
     def __init__(self, parent = aspect2d):
         self.parent = parent

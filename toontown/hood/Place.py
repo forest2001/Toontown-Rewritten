@@ -147,7 +147,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         return 1
 
     def handleTeleportQuery(self, fromAvatar, toAvatar):
-        if base.config.GetBool('want-tptrack', False):
+        if config.GetBool('want-tptrack', False):
             if toAvatar == localAvatar:
                 toAvatar.doTeleportResponse(fromAvatar, toAvatar, toAvatar.doId, 1, toAvatar.defaultShard, base.cr.playGame.getPlaceId(), self.getZoneId(), fromAvatar.doId)
             else:
@@ -635,7 +635,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
             base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
         base.localAvatar.obscureMoveFurnitureButton(1)
         return
-        
+
     def __pgdiedDone(self):
         self.fsm.request('walk')
 

@@ -119,7 +119,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             sdText = DirectGui.OnscreenText(text=TTLocalizer.SellbotSideEntrance, font=ToontownGlobals.getSuitFont(), pos=(0, -0.34), scale=0.1, mayChange=False, parent=sdSign)
             sdText.setDepthWrite(0)
         elif zoneId == ToontownGlobals.SellbotLobby:
-            if base.config.GetBool('want-qa-regression', 0):
+            if config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: COGHQ: Visit SellbotLobby')
             self.geom = loader.loadModel(self.cogHQLobbyModelPath)
             front = self.geom.find('**/frontWall')

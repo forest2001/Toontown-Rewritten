@@ -11,7 +11,7 @@ from toontown.toonbase import ToontownGlobals
 
 class TTChatInputWhiteList(ChatInputWhiteListFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('TTChatInputWhiteList')
-    TFToggleKey = base.config.GetString('true-friend-toggle-key', 'alt')
+    TFToggleKey = config.GetString('true-friend-toggle-key', 'alt')
     TFToggleKeyUp = TFToggleKey + '-up'
 
     def __init__(self, parent = None, **kw):
@@ -53,7 +53,7 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
         self.chatEntry.bind(DGG.OVERFLOW, self.chatOverflow)
         self.chatEntry.bind(DGG.TYPE, self.typeCallback)
         self.trueFriendChat = 0
-        if base.config.GetBool('whisper-to-nearby-true-friends', 1):
+        if config.GetBool('whisper-to-nearby-true-friends', 1):
             self.accept(self.TFToggleKey, self.shiftPressed)
         return
 

@@ -20,7 +20,7 @@ from otp.speedchat import SpeedChatGlobals
 
 class DistributedElectionEvent(DistributedObject, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElectionEvent")
-    
+
     def __init__(self, cr):
         DistributedObject.__init__(self, cr)
         FSM.__init__(self, 'ElectionFSM')
@@ -88,7 +88,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         wheelbarrowJoint.setPosHprScale(3.94, 0.00, 1.06, 270.00, 344.74, 0.00, 1.43, 1.12, 1.0)
         self.restockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
         self.splashSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_paint_splash.ogg')
-            
+
 
         # Find FlippyStand's collision to give people pies.
         # The new animated model doesn't have any collisions, so this needs to be replaced with a collision box. Harv did it once, just need to look back in the commit history.
@@ -96,7 +96,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.pieCollision = self.flippyStand.attachNewNode(CollisionNode('wheelbarrow_collision'))
         self.pieCollision.node().addSolid(cs)
         self.accept('enter' + self.pieCollision.node().getName(), self.handleWheelbarrowCollisionSphereEnter)
-        
+
         csSlappy = CollisionBox(Point3(-4.2, 0, 0), 9.5, 5.5, 18)
         self.goopCollision = self.slappyStand.attachNewNode(CollisionNode('goop_collision'))
         self.goopCollision.node().addSolid(csSlappy)
@@ -241,9 +241,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def delete(self):
         self.demand('Off', 0.)
-        
+
         self.ignore('entercnode')
-        
+
         # Clean up everything...
         self.showFloor.removeNode()
         self.stopInteractiveFlippy()
@@ -258,7 +258,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
        These bits are for things used before Election Day, and mostly unrelated to the Election Sequence.
     '''
     def enterIdle(self, offset):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             # We're waiting for the election to start, so Surlee comes by to keep us occupied during his studies of "sillyness".
             self.surlee.show()
             self.surlee.addActive()
@@ -274,7 +274,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
                 Wait(8),
                 Func(self.surlee.setChatAbsolute, 'When the clock strikes two we\'ll see them march through those doors and onto the stage. Are you toons ready?', CFSpeech|CFTimeout),
                 Wait(8),
-                Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout), 
+                Func(self.surlee.setChatAbsolute, 'I must say, surprisingly, the silliness around here couldn\'t be higher at this time.', CFSpeech|CFTimeout),
                 Wait(8),
                 Func(self.surlee.setChatAbsolute, 'My fellow scientists of silliness, Professor Prepostera and Doctor Dimm, are over there tracking the amount of silliness being taken in from the campaign stands.', CFSpeech|CFTimeout),
                 Wait(8),
@@ -289,9 +289,9 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
 
     def exitIdle(self):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             self.surleeIntroInterval.finish()
-    
+
     def startInteractiveFlippy(self):
         self.flippy.reparentTo(self.showFloor)
         self.flippy.setPosHpr(-40.6, -18.5, 0.01, 20, 0, 0)
@@ -317,7 +317,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
             if phraseId in phraseIdList:
                 self.sendUpdate('phraseSaidToFlippy', [phraseId])
                 break
-    
+
     def flippySpeech(self, avId, phraseId):
         av = self.cr.doId2do.get(avId)
         if not av:
@@ -1034,7 +1034,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         # Tell the credits our toon name and dna.
         NodePath(base.marginManager).hide()
         base.cr.credits.setLocalToonDetails(base.localAvatar.getName(), base.localAvatar.style)
-    
+
         # This starts here so that we can drift towards Flippy for his speech,
         # but some of it should be moved over to the real credits sequence which is called after this.
         # A safe time to cut to the real sequence would be after the portable hole nosedive, or right when the camera arrives at Flippy before "Toons of the world... UNITE!"
@@ -1047,7 +1047,7 @@ class DistributedElectionEvent(DistributedObject, FSM):
         self.logo.setScale(0.6)
         self.logo.setPos(0, 1, 0.3)
         self.logo.setColorScale(1, 1, 1, 0)
-        
+
         self.portal = loader.loadModel('phase_3.5/models/props/portal-mod')
         self.portal.reparentTo(render)
         self.portal.setPosHprScale(93.1, 0.4, 4, 4, 355, 45, 0, 0, 0)
@@ -1126,10 +1126,10 @@ class DistributedElectionEvent(DistributedObject, FSM):
 
     def saySurleePhrase(self, phrase, interrupt, broadcast):
         self.surlee.setChatAbsolute(phrase, CFSpeech|CFTimeout, interrupt = interrupt)
-        
+
         # If we want everyone to see this message, even if not near Surlee, we'll send it as a whisper.
         if broadcast and Vec3(base.localAvatar.getPos(self.surleeR)).length() >= 15:
             base.localAvatar.setSystemMessage(0, self.surleeR.getName()+ ': ' + phrase, WTEmote)
-        
+
     def setState(self, state, timestamp):
         self.request(state, globalClockDelta.localElapsedTime(timestamp))

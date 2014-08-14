@@ -364,7 +364,7 @@ class DistributedCannonGame(DistributedMinigame):
         DistributedMinigame.setGameStart(self, timestamp)
         self.__stopIntro()
         self.__putCameraBehindCannon()
-        if not base.config.GetBool('endless-cannon-game', 0):
+        if not config.GetBool('endless-cannon-game', 0):
             self.timer.show()
             self.timer.countdown(CannonGameGlobals.GameTime, self.__gameTimerExpired)
         self.rewardPanel.reparentTo(base.a2dTopRight)

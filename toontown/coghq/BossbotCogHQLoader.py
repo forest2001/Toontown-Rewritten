@@ -54,7 +54,7 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             origin = top.find('**/tunnel_origin')
             origin.setH(-33.33)
         elif zoneId == ToontownGlobals.BossbotLobby:
-            if base.config.GetBool('want-qa-regression', 0):
+            if config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: COGHQ: Visit BossbotLobby')
             self.notify.debug('cogHQLobbyModelPath = %s' % self.cogHQLobbyModelPath)
             self.geom = loader.loadModel(self.cogHQLobbyModelPath)

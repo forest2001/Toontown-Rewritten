@@ -72,7 +72,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.reflectedMainDoor = None
         self.panFlashInterval = None
         self.panDamage = ToontownGlobals.LawbotBossDefensePanDamage
-        if base.config.GetBool('lawbot-boss-cheat', 0):
+        if config.GetBool('lawbot-boss-cheat', 0):
             self.panDamage = 25
         self.evidenceHitSfx = None
         self.toonUpSfx = None
@@ -484,7 +484,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         colNode.setName('WitnessStand')
 
     def loadScale(self):
-        self.useProgrammerScale = base.config.GetBool('want-injustice-scale-debug', 0)
+        self.useProgrammerScale = config.GetBool('want-injustice-scale-debug', 0)
         if self.useProgrammerScale:
             self.loadScaleOld()
         else:

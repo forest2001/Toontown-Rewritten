@@ -369,8 +369,8 @@ class DirectNewsFrame(DirectObject.DirectObject):
                 self.redownloadNews()
 
     def getInGameNewsUrl(self):
-        result = base.config.GetString('fallback-news-url', 'http://cdn.toontown.disney.go.com/toontown/en/gamenews/')
-        override = base.config.GetString('in-game-news-url', '')
+        result = config.GetString('fallback-news-url', 'http://cdn.toontown.disney.go.com/toontown/en/gamenews/')
+        override = config.GetString('in-game-news-url', '')
         if override:
             self.notify.info('got an override url,  using %s for in game news' % override)
             result = override

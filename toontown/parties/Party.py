@@ -276,7 +276,7 @@ class Party(Place.Place):
         if self.isPartyEnding:
             teleportNotify.debug('party ending, sending teleportResponse')
             fromAvatar.d_teleportResponse(toAvatar.doId, 0, toAvatar.defaultShard, base.cr.playGame.getPlaceId(), self.getZoneId())
-        elif base.config.GetBool('want-tptrack', False):
+        elif config.GetBool('want-tptrack', False):
             if toAvatar == localAvatar:
                 localAvatar.doTeleportResponse(fromAvatar, toAvatar, toAvatar.doId, 1, toAvatar.defaultShard, base.cr.playGame.getPlaceId(), self.getZoneId(), fromAvatar.doId)
             else:

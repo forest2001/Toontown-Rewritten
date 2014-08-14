@@ -53,7 +53,7 @@ class GuildManager(DistributedObjectGlobal):
         self.id2Rank = {}
         self.id2Online = {}
         self.pendingMsgs = []
-        self.whiteListEnabled = base.config.GetBool('whitelist-chat-enabled', 1)
+        self.whiteListEnabled = config.GetBool('whitelist-chat-enabled', 1)
         self.emailNotification = 0
         self.emailNotificationAddress = None
         self.receivingNewList = False

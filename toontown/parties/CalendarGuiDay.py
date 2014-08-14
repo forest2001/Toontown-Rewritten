@@ -34,7 +34,7 @@ class CalendarGuiDay(DirectFrame):
         self.partiesInvitedToToday = []
         self.hostedPartiesToday = []
         self.yearlyHolidaysToday = []
-        self.showMarkers = base.config.GetBool('show-calendar-markers', 0)
+        self.showMarkers = config.GetBool('show-calendar-markers', 0)
         self.filter = ToontownGlobals.CalendarFilterShowAll
         self.load()
         self.createGuiObjects()
@@ -181,7 +181,7 @@ class CalendarGuiDay(DirectFrame):
                 self.addTitleAndDescToScrollList(holidayName, holidayDesc)
 
             self.scrollList.refresh()
-        if base.config.GetBool('calendar-test-items', 0):
+        if config.GetBool('calendar-test-items', 0):
             if self.myDate.date() + datetime.timedelta(days=-1) == base.cr.toontownTimeManager.getCurServerDateTime().date():
                 testItems = ('1:00 AM Party', '2:00 AM CEO', '11:15 AM Party', '5:30 PM CJ', '11:00 PM Party', 'Really Really Long String')
                 for text in testItems:

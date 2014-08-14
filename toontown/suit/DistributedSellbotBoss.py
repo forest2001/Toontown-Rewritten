@@ -1161,7 +1161,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         taskMgr.remove(self.uniqueName('PieAdvice'))
 
     def __pieSplat(self, toon, pieCode):
-        if base.config.GetBool('easy-vp', 0):
+        if config.GetBool('easy-vp', 0):
             if not self.dizzy:
                 pieCode = ToontownGlobals.PieCodeBossInsides
         if pieCode == ToontownGlobals.PieCodeBossInsides:

@@ -60,13 +60,13 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
         self.pitchNode = {}
         self.toonNode = {}
         self.rotateNode = self.attachNewNode('rotate')
-        levelIn = [base.config.GetInt('lod1-in', 30), base.config.GetInt('lod2-in', 80), base.config.GetInt('lod2-in', 200)]
-        levelOut = [base.config.GetInt('lod1-out', 0), base.config.GetInt('lod2-out', 30), base.config.GetInt('lod2-out', 80)]
+        levelIn = [config.GetInt('lod1-in', 30), config.GetInt('lod2-in', 80), config.GetInt('lod2-in', 200)]
+        levelOut = [config.GetInt('lod1-out', 0), config.GetInt('lod2-out', 30), config.GetInt('lod2-out', 80)]
         lodRequired = 3
         if forGui:
             lodRequired = 1
-            levelIn[0] = base.config.GetInt('lod1-in', 2500)
-            levelIn[1] = base.config.GetInt('lod1-out', 0)
+            levelIn[0] = config.GetInt('lod1-in', 2500)
+            levelIn[1] = config.GetInt('lod1-out', 0)
         self.toonSeat = NodePath('toonSeat')
         for level in range(lodRequired):
             self.__createLODKart(level)

@@ -34,7 +34,7 @@ class NewsManager(DistributedObject.DistributedObject):
         self.population = 0
         self.invading = 0
 
-        forcedHolidayDecorations = base.config.GetString('force-holiday-decorations', '')
+        forcedHolidayDecorations = config.GetString('force-holiday-decorations', '')
         self.decorationHolidayIds = []
 
         if forcedHolidayDecorations != '':

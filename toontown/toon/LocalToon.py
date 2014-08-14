@@ -55,7 +55,7 @@ import Toon
 import LaffMeter
 from toontown.quest import QuestMap
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
-WantNewsPage = base.config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
+WantNewsPage = config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
 from toontown.toontowngui import NewsPageButtonManager
 if WantNewsPage:
     from toontown.shtiker import NewsPage
@@ -66,8 +66,8 @@ if (__debug__):
 
 class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     neverDisable = 1
-    piePowerSpeed = base.config.GetDouble('pie-power-speed', 0.2)
-    piePowerExponent = base.config.GetDouble('pie-power-exponent', 0.75)
+    piePowerSpeed = config.GetDouble('pie-power-speed', 0.2)
+    piePowerExponent = config.GetDouble('pie-power-exponent', 0.75)
 
     def __init__(self, cr):
         try:
@@ -124,9 +124,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.tossPieStart = None
             self.__presentingPie = 0
             self.__pieSequence = 0
-            self.wantBattles = base.config.GetBool('want-battles', 1)
-            self.seeGhosts = base.config.GetBool('see-ghosts', 0)
-            wantNameTagAvIds = base.config.GetBool('want-nametag-avids', 0)
+            self.wantBattles = config.GetBool('want-battles', 1)
+            self.seeGhosts = config.GetBool('see-ghosts', 0)
+            wantNameTagAvIds = config.GetBool('want-nametag-avids', 0)
             if wantNameTagAvIds:
                 messenger.send('nameTagShowAvId', [])
                 base.idTags = 1
@@ -137,7 +137,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.ticker = 0
             self.glitchOkay = 1
             self.tempGreySpacing = 0
-            self.wantStatePrint = base.config.GetBool('want-statePrint', 0)
+            self.wantStatePrint = config.GetBool('want-statePrint', 0)
             self.__gardeningGui = None
             self.__gardeningGuiFake = None
             self.__shovelButton = None
@@ -249,13 +249,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if base.wantNametags:
             self.nametag.manage(base.marginManager)
         DistributedToon.DistributedToon.announceGenerate(self)
-        self.acceptingNewFriends = base.display.settings.getBool(str(self.getDoId()), 'accepting-new-friends', default=base.config.GetBool('accepting-new-friends-default', True))
-        self.acceptingNonFriendWhispers = base.display.settings.getBool(str(self.getDoId()), 'accepting-non-friend-whispers', default=base.config.GetBool('accepting-non-friend-whispers-default', True))
+        self.acceptingNewFriends = base.display.settings.getBool(str(self.getDoId()), 'accepting-new-friends', default=config.GetBool('accepting-new-friends-default', True))
+        self.acceptingNonFriendWhispers = base.display.settings.getBool(str(self.getDoId()), 'accepting-non-friend-whispers', default=config.GetBool('accepting-non-friend-whispers-default', True))
         from otp.friends import FriendInfo
         if self.adminAccess >= 300:
             self.seeGhosts = 1
 
-        if base.config.GetBool('want-keep-alive', True):
+        if config.GetBool('want-keep-alive', True):
             taskMgr.doMethodLater(config.GetInt('keep-alive-delay', 30), self.keepAliveCheck, self.uniqueName('KeepAliveTimeout'), extraArgs=[])
 
     def disable(self):
@@ -491,11 +491,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.notify.debug('Setting GM State: %s in LocalToon' % state)
         DistributedToon.DistributedToon.setAsGM(self, state)
         if self.gmState:
-            if base.config.GetString('gm-nametag-string', '') != '':
-                self.gmNameTagString = base.config.GetString('gm-nametag-string')
-            if base.config.GetString('gm-nametag-color', '') != '':
-                self.gmNameTagColor = base.config.GetString('gm-nametag-color')
-            if base.config.GetInt('gm-nametag-enabled', 0):
+            if config.GetString('gm-nametag-string', '') != '':
+                self.gmNameTagString = config.GetString('gm-nametag-string')
+            if config.GetString('gm-nametag-color', '') != '':
+                self.gmNameTagColor = config.GetString('gm-nametag-color')
+            if config.GetInt('gm-nametag-enabled', 0):
                 self.gmNameTagEnabled = 1
             self.d_updateGMNameTag()
 
@@ -1068,14 +1068,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.__catalogNotifyDialog:
             self.__catalogNotifyDialog.cleanup()
             self.__catalogNotifyDialog = None
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: VISITESTATE: Visit estate')
         place.goHomeNow(self.lastHood)
         return
 
     def __startMoveFurniture(self):
         self.oldPos = self.getPos()
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: ESTATE:  Furniture Placement')
         if self.cr.furnitureManager != None:
             self.cr.furnitureManager.d_suggestDirector(self.doId)
@@ -1899,7 +1899,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         return self.lastTimeReadNews
 
     def cheatCogdoMazeGame(self, kindOfCheat = 0):
-        if base.config.GetBool('allow-cogdo-maze-suit-hit-cheat'):
+        if config.GetBool('allow-cogdo-maze-suit-hit-cheat'):
             maze = base.cr.doFind('DistCogdoMazeGame')
             if maze:
                 if kindOfCheat == 0:
@@ -1938,7 +1938,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         localAvatar.d_teleportResponse(avId, available, shardId, hoodId, zoneId, sendToId)
 
     def d_teleportResponse(self, avId, available, shardId, hoodId, zoneId, sendToId = None):
-        if base.config.GetBool('want-tptrack', False):
+        if config.GetBool('want-tptrack', False):
             if available == 1:
                 self.notify.debug('sending teleportResponseToAI')
                 self.sendUpdate('teleportResponseToAI', [avId,

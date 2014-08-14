@@ -26,7 +26,7 @@ class DistributedPicnicBasket(DistributedObject.DistributedObject):
         self.localToonOnBoard = 0
         self.seed = 0
         self.random = None
-        self.picnicCountdownTime = base.config.GetFloat('picnic-countdown-time', ToontownGlobals.PICNIC_COUNTDOWN_TIME)
+        self.picnicCountdownTime = config.GetFloat('picnic-countdown-time', ToontownGlobals.PICNIC_COUNTDOWN_TIME)
         self.picnicBasketTrack = None
         self.fsm = ClassicFSM.ClassicFSM('DistributedTrolley', [State.State('off', self.enterOff, self.exitOff, ['waitEmpty', 'waitCountdown']), State.State('waitEmpty', self.enterWaitEmpty, self.exitWaitEmpty, ['waitCountdown']), State.State('waitCountdown', self.enterWaitCountdown, self.exitWaitCountdown, ['waitEmpty'])], 'off', 'off')
         self.fsm.enterInitialState()

@@ -83,7 +83,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         DistributedSmoothNode.DistributedSmoothNode.__init__(self, cr)
         FSM.FSM.__init__(self, 'DistributedVehicle')
         Kart.Kart.__init__(self)
-        if base.config.GetBool('want-racer', 0) == 1:
+        if config.GetBool('want-racer', 0) == 1:
             DistributedVehicle.proRacer = 1
             DistributedVehicle.accelerationMult = 35
             DistributedVehicle.accelerationBase = 30

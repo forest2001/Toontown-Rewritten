@@ -136,12 +136,12 @@ class Char(Avatar.Avatar):
 
     def setLODs(self):
         self.setLODNode()
-        levelOneIn = base.config.GetInt('lod1-in', 50)
-        levelOneOut = base.config.GetInt('lod1-out', 1)
-        levelTwoIn = base.config.GetInt('lod2-in', 100)
-        levelTwoOut = base.config.GetInt('lod2-out', 50)
-        levelThreeIn = base.config.GetInt('lod3-in', 280)
-        levelThreeOut = base.config.GetInt('lod3-out', 100)
+        levelOneIn = config.GetInt('lod1-in', 50)
+        levelOneOut = config.GetInt('lod1-out', 1)
+        levelTwoIn = config.GetInt('lod2-in', 100)
+        levelTwoOut = config.GetInt('lod2-out', 50)
+        levelThreeIn = config.GetInt('lod3-in', 280)
+        levelThreeOut = config.GetInt('lod3-out', 100)
         self.addLOD(LODModelDict[self.style.name][0], levelOneIn, levelOneOut)
         self.addLOD(LODModelDict[self.style.name][1], levelTwoIn, levelTwoOut)
         self.addLOD(LODModelDict[self.style.name][2], levelThreeIn, levelThreeOut)
@@ -411,7 +411,7 @@ class Char(Avatar.Avatar):
         if self.dialogueArray:
             self.notify.warning('loadDialogue() called twice.')
         self.unloadDialogue()
-        language = base.config.GetString('language', 'english')
+        language = config.GetString('language', 'english')
         if char == 'mk':
             dialogueFile = base.loadSfx('phase_3/audio/dial/mickey.ogg')
             for i in range(0, 6):

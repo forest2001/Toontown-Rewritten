@@ -154,7 +154,7 @@ bw = (('finger-wag', 'fingerwag', 5),
  ('magic1', 'magic1', 5),
  ('throw-object', 'throw-object', 5),
  ('throw-paper', 'throw-paper', 5))
-if not base.config.GetBool('want-new-cogs', 0):
+if not config.GetBool('want-new-cogs', 0):
     ModelDict = {'a': ('/models/char/suitA-', 4),
      'b': ('/models/char/suitB-', 4),
      'c': ('/models/char/suitC-', 3.5)}
@@ -190,12 +190,12 @@ def unloadSuits(level):
 def loadSuitModelsAndAnims(level, flag = 0):
     for key in ModelDict.keys():
         model, phase = ModelDict[key]
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             headModel, headPhase = HeadModelDict[key]
         else:
             headModel, headPhase = ModelDict[key]
         if flag:
-            if base.config.GetBool('want-new-cogs', 0):
+            if config.GetBool('want-new-cogs', 0):
                 filepath = 'phase_3.5' + model + 'zero'
                 if cogExists(model + 'zero'):
                     loader.loadModelNode(filepath)
@@ -203,7 +203,7 @@ def loadSuitModelsAndAnims(level, flag = 0):
                 loader.loadModelNode('phase_3.5' + model + 'mod')
             loader.loadModelNode('phase_' + str(headPhase) + headModel + 'heads')
         else:
-            if base.config.GetBool('want-new-cogs', 0):
+            if config.GetBool('want-new-cogs', 0):
                 filepath = 'phase_3.5' + model + 'zero'
                 if cogExists(model + 'zero'):
                     loader.unloadModel(filepath)
@@ -625,7 +625,7 @@ class Suit(Avatar.Avatar):
     def generateBody(self):
         animDict = self.generateAnimDict()
         filePrefix, bodyPhase = ModelDict[self.style.body]
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             if cogExists(filePrefix + 'zero'):
                 self.loadModel('phase_3.5' + filePrefix + 'zero')
             else:
@@ -651,7 +651,7 @@ class Suit(Avatar.Avatar):
         for anim in AllSuitsBattle:
             animDict[anim[0]] = 'phase_5' + filePrefix + anim[1]
 
-        if not base.config.GetBool('want-new-cogs', 0):
+        if not config.GetBool('want-new-cogs', 0):
             if self.style.body == 'a':
                 animDict['neutral'] = 'phase_4/models/char/suitA-neutral'
                 for anim in SuitsCEOBattle:
@@ -708,7 +708,7 @@ class Suit(Avatar.Avatar):
             self.shadowJoint = self.find('**/joint_shadow')
             self.nametagJoint = self.find('**/joint_nameTag')
 
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             if dept == 'c':
                 texType = 'bossbot'
             elif dept == 'm':
@@ -766,14 +766,14 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/hands').setTexture(handTex, 1)
 
     def generateHead(self, headType):
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             filePrefix, phase = HeadModelDict[self.style.body]
         else:
             filePrefix, phase = ModelDict[self.style.body]
         headModel = loader.loadModel('phase_' + str(phase) + filePrefix + 'heads')
         headReferences = headModel.findAllMatches('**/' + headType)
         for i in range(0, headReferences.getNumPaths()):
-            if base.config.GetBool('want-new-cogs', 0):
+            if config.GetBool('want-new-cogs', 0):
                 headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'to_head')
                 if not headPart:
                     headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
@@ -813,7 +813,7 @@ class Suit(Avatar.Avatar):
     def generateCorporateMedallion(self):
         icons = loader.loadModel('phase_3/models/gui/cog_icons')
         dept = self.style.dept
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             chestNull = self.find('**/def_joint_attachMeter')
             if chestNull.isEmpty():
                 chestNull = self.find('**/joint_attachMeter')
@@ -838,7 +838,7 @@ class Suit(Avatar.Avatar):
         button.setScale(3.0)
         button.setH(180.0)
         button.setColor(self.healthColors[0])
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             chestNull = self.find('**/def_joint_attachMeter')
             if chestNull.isEmpty():
                 chestNull = self.find('**/joint_attachMeter')
@@ -916,7 +916,7 @@ class Suit(Avatar.Avatar):
         return
 
     def getLoseActor(self):
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             if self.find('**/body'):
                 return self
         if self.loseActor == None:

@@ -31,7 +31,7 @@ class QuestMap(DirectFrame):
         self.buildingMarkers = []
         self.av = av
         self.wantToggle = False
-        if base.config.GetBool('want-toggle-quest-map', True):
+        if config.GetBool('want-toggle-quest-map', True):
             self.wantToggle = True
         self.updateMarker = True
         self.cornerPosInfo = None

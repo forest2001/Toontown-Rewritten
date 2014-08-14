@@ -388,7 +388,7 @@ class ToonBase(OTPBase.OTPBase):
             self.cleanupDownloadWatcher()
         else:
             self.acceptOnce('launcherAllPhasesComplete', self.cleanupDownloadWatcher)
-        gameServer = base.config.GetString('game-server', '')
+        gameServer = config.GetString('game-server', '')
         if gameServer:
             self.notify.info('Using game-server from Configrc: %s ' % gameServer)
         elif launcherServer:
@@ -396,18 +396,18 @@ class ToonBase(OTPBase.OTPBase):
             self.notify.info('Using gameServer from launcher: %s ' % gameServer)
         else:
             gameServer = 'localhost'
-        serverPort = base.config.GetInt('server-port', 7198)
+        serverPort = config.GetInt('server-port', 7198)
         serverList = []
         for name in gameServer.split(';'):
             url = URLSpec(name, 1)
-            if base.config.GetBool('server-force-ssl', False):
+            if config.GetBool('server-force-ssl', False):
                 url.setScheme('s')
             if not url.hasPort():
                 url.setPort(serverPort)
             serverList.append(url)
 
         if len(serverList) == 1:
-            failover = base.config.GetString('server-failover', '')
+            failover = config.GetString('server-failover', '')
             serverURL = serverList[0]
             for arg in failover.split():
                 try:

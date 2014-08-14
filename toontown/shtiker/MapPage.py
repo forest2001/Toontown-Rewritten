@@ -224,20 +224,20 @@ class MapPage(ShtikerPage.ShtikerPage):
         messenger.send(self.doneEvent)
 
     def goHome(self):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
             return
-            
-        if base.config.GetBool('want-qa-regression', 0):
+
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: VISITESTATE: Visit estate')
         self.doneStatus = {'mode': 'gohome',
          'hood': base.localAvatar.lastHood}
         messenger.send(self.doneEvent)
 
     def __buttonCallback(self, hood):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)

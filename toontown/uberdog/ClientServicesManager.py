@@ -22,7 +22,7 @@ class ClientServicesManager(DistributedObjectGlobal):
         cookie = self.cr.playToken or 'dev'
 
         # Sign the login cookie
-        key = base.config.GetString('csmud-secret', 'streetlamps') + base.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        key = config.GetString('csmud-secret', 'streetlamps') + config.GetString('server-version', 'no_version_set') + FIXED_KEY
         sig = hmac.new(key, cookie, hashlib.sha256).digest()
 
         self.notify.debug('Sending login cookie: ' + cookie)

@@ -92,7 +92,7 @@ class RewardPanel(DirectFrame):
              1), text='0/0', text_scale=0.18, text_fg=(0, 0, 0, 1), text_align=TextNode.ACenter, text_pos=(0, -0.05), pos=(0.4, 0, -0.09 * i)))
 
         self._battleGui = loader.loadModel('phase_3.5/models/gui/battle_gui')
-        if base.config.GetBool('want-skip-button', 0):
+        if config.GetBool('want-skip-button', 0):
             self.skipButton = DirectButton(parent=self, relief=None, image=(self._battleGui.find('**/tt_t_gui_gen_skipSectionUp'),
              self._battleGui.find('**/tt_t_gui_gen_skipSectionDown'),
              self._battleGui.find('**/tt_t_gui_gen_skipSectionRollOver'),
@@ -197,7 +197,7 @@ class RewardPanel(DirectFrame):
         self.missedItemFrame.hide()
         trackBarOffset = 0
 
-        if base.config.GetBool('want-skip-button', 0):
+        if config.GetBool('want-skip-button', 0):
             self.skipButton['state'] = choice(noSkip, DGG.DISABLED, DGG.NORMAL)
 
         for i in range(len(SuitDNA.suitDepts)):
@@ -652,7 +652,7 @@ class RewardPanel(DirectFrame):
                         else:
                             num = quest.doesCogCount(avId, cogDict, zoneId, toonShortList)
                         if num:
-                            if base.config.GetBool('battle-passing-no-credit', True):
+                            if config.GetBool('battle-passing-no-credit', True):
                                 if avId in helpfulToonsList:
                                     earned += num
                                 else:

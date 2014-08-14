@@ -1023,12 +1023,12 @@ class NameShop(StateData.StateData):
     def __openTutorialDialog(self, choice = 0):
         if choice == 1:
             self.notify.debug('enterTutorial')
-            if base.config.GetBool('want-qa-regression', 0):
+            if config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: ENTERTUTORIAL: Enter Tutorial')
             self.__createAvatar()
         else:
             self.notify.debug('skipTutorial')
-            if base.config.GetBool('want-qa-regression', 0):
+            if config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: SKIPTUTORIAL: Skip Tutorial')
             self.__handleSkipTutorial()
         self.promptTutorialDialog.destroy()

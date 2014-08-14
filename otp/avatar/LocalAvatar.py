@@ -30,13 +30,13 @@ from toontown.toonbase import ToontownGlobals
 
 class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.DistributedSmoothNode):
     notify = DirectNotifyGlobal.directNotify.newCategory('LocalAvatar')
-    wantDevCameraPositions = base.config.GetBool('want-dev-camera-positions', 0)
-    wantMouse = base.config.GetBool('want-mouse', 0)
-    sleepTimeout = base.config.GetInt('sleep-timeout', 120)
-    swimTimeout = base.config.GetInt('afk-timeout', 600)
-    __enableMarkerPlacement = base.config.GetBool('place-markers', 0)
-    acceptingNewFriends = base.config.GetBool('accepting-new-friends', 1)
-    acceptingNonFriendWhispers = base.config.GetBool('accepting-non-friend-whispers', 0)
+    wantDevCameraPositions = config.GetBool('want-dev-camera-positions', 0)
+    wantMouse = config.GetBool('want-mouse', 0)
+    sleepTimeout = config.GetInt('sleep-timeout', 120)
+    swimTimeout = config.GetInt('afk-timeout', 600)
+    __enableMarkerPlacement = config.GetBool('place-markers', 0)
+    acceptingNewFriends = config.GetBool('accepting-new-friends', 1)
+    acceptingNonFriendWhispers = config.GetBool('accepting-non-friend-whispers', 0)
 
     def __init__(self, cr, chatMgr, talkAssistant = None, passMessagesThrough = False):
         try:
@@ -1263,14 +1263,14 @@ def collisionsOn():
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.collisionsOn()
-    
+
 @magicWord(category=CATEGORY_MOBILITY)
 def enableAFGravity():
     """Turn on Estate April Fools gravity."""
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 0.75)
-    
+
 @magicWord(category=CATEGORY_MOBILITY, types=[int, bool])
 def setGravity(gravityValue, overrideWarning=False):
     """Set your gravity value!"""
@@ -1279,21 +1279,21 @@ def setGravity(gravityValue, overrideWarning=False):
     if gravityValue < 1 and not overrideWarning:
         return 'A value lower than 1 may crash your client.'
     base.localAvatar.controlManager.currentControls.setGravity(gravityValue)
-    
+
 @magicWord(category=CATEGORY_MOBILITY)
 def normalGravity():
     """Turn off Estate April Fools gravity."""
     if not base.localAvatar:
         return 'No localAvatar!'
     base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
-    
+
 @magicWord(category=CATEGORY_DEBUG)
 def getPos():
     """Get current position of your toon."""
     if not base.localAvatar:
         return 'No localAvatar!'
     return base.localAvatar.getPos()
-    
+
 @magicWord(category=CATEGORY_DEBUG, types=[float, float, float])
 def setPos(toonX, toonY, toonZ):
     """Set position of your toon."""

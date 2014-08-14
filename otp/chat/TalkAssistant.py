@@ -17,7 +17,7 @@ ThoughtPrefix = '.'
 class TalkAssistant(DirectObject.DirectObject):
     ExecNamespace = None
     notify = DirectNotifyGlobal.directNotify.newCategory('TalkAssistant')
-    execChat = base.config.GetBool('exec-chat', 0)
+    execChat = config.GetBool('exec-chat', 0)
 
     def __init__(self):
         self.logWhispers = 1
@@ -26,7 +26,7 @@ class TalkAssistant(DirectObject.DirectObject):
         self.zeroTimeDay = time.time()
         self.zeroTimeGame = globalClock.getRealTime()
         self.floodThreshold = 10.0
-        self.useWhiteListFilter = base.config.GetBool('white-list-filter-openchat', 0)
+        self.useWhiteListFilter = config.GetBool('white-list-filter-openchat', 0)
         self.lastWhisperDoId = None
         self.lastWhisperPlayerId = None
         self.lastWhisper = None

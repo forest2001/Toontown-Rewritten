@@ -8,7 +8,7 @@ from direct.interval.IntervalGlobal import *
 from direct.fsm.ClassicFSM import ClassicFSM
 from direct.fsm.State import State
 from direct.directnotify import DirectNotifyGlobal
-if not base.config.GetBool('want-new-anims', 1):
+if not config.GetBool('want-new-anims', 1):
     HeadDict = {'dls': '/models/char/dogMM_Shorts-head-',
      'dss': '/models/char/dogMM_Skirt-head-',
      'dsl': '/models/char/dogSS_Shorts-head-',
@@ -569,7 +569,7 @@ class ToonHead(Actor.Actor):
         if self.hasLOD():
             for lodName in self.getLODNames():
                 self.drawInFront('eyes*', 'head-front*', mode, lodName=lodName)
-                if base.config.GetBool('want-new-anims', 1):
+                if config.GetBool('want-new-anims', 1):
                     if not self.find('**/joint_pupil*').isEmpty():
                         self.drawInFront('joint_pupil*', 'eyes*', -1, lodName=lodName)
                     else:
@@ -584,7 +584,7 @@ class ToonHead(Actor.Actor):
                 self.__lod500Eyes = None
             else:
                 self.__lod500Eyes.setColorOff()
-                if base.config.GetBool('want-new-anims', 1):
+                if config.GetBool('want-new-anims', 1):
                     if not self.find('**/joint_pupilL*').isEmpty():
                         self.__lod500lPupil = self.__lod500Eyes.find('**/joint_pupilL*')
                         self.__lod500rPupil = self.__lod500Eyes.find('**/joint_pupilR*')
@@ -598,7 +598,7 @@ class ToonHead(Actor.Actor):
                 self.__lod250Eyes = None
             else:
                 self.__lod250Eyes.setColorOff()
-                if base.config.GetBool('want-new-anims', 1):
+                if config.GetBool('want-new-anims', 1):
                     if not self.find('**/joint_pupilL*').isEmpty():
                         self.__lod250lPupil = self.__lod250Eyes.find('**/joint_pupilL*')
                         self.__lod250rPupil = self.__lod250Eyes.find('**/joint_pupilR*')
@@ -610,7 +610,7 @@ class ToonHead(Actor.Actor):
                     self.__lod250rPupil = self.__lod250Eyes.find('**/joint_pupilR*')
         else:
             self.drawInFront('eyes*', 'head-front*', mode)
-            if base.config.GetBool('want-new-anims', 1):
+            if config.GetBool('want-new-anims', 1):
                 if not self.find('joint_pupil*').isEmpty():
                     self.drawInFront('joint_pupil*', 'eyes*', -1)
                 else:
@@ -622,7 +622,7 @@ class ToonHead(Actor.Actor):
             self.__eyes.setColorOff()
             self.__lpupil = None
             self.__rpupil = None
-            if base.config.GetBool('want-new-anims', 1):
+            if config.GetBool('want-new-anims', 1):
                 if not self.find('**/joint_pupilL*').isEmpty():
                     if self.getLOD(1000):
                         lp = self.getLOD(1000).find('**/joint_pupilL*')
@@ -1180,7 +1180,7 @@ class ToonHead(Actor.Actor):
                     if lodName == '1000' or lodName == '500':
                         filePrefix = DogMuzzleDict[style.head]
                         muzzles = loader.loadModel('phase_3' + filePrefix + lodName)
-                        if base.config.GetBool('want-new-anims', 1):
+                        if config.GetBool('want-new-anims', 1):
                             if not self.find('**/' + lodName + '/**/__Actor_head/def_head').isEmpty():
                                 muzzles.reparentTo(self.find('**/' + lodName + '/**/__Actor_head/def_head'))
                             else:
@@ -1206,7 +1206,7 @@ class ToonHead(Actor.Actor):
                 muzzle = self.find('**/muzzle*')
                 filePrefix = DogMuzzleDict[style.head]
                 muzzles = loader.loadModel('phase_3' + filePrefix + '1000')
-                if base.config.GetBool('want-new-anims', 1):
+                if config.GetBool('want-new-anims', 1):
                     if not self.find('**/def_head').isEmpty():
                         muzzles.reparentTo(self.find('**/def_head'))
                     else:

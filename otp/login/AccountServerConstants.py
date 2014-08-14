@@ -24,11 +24,11 @@ class AccountServerConstants(RemoteValueSet):
          'pricePerMonth': '9.95'}
         noquery = 1
         if cr.productName == 'DisneyOnline-US':
-            if base.config.GetBool('tt-specific-login', 0):
+            if config.GetBool('tt-specific-login', 0):
                 pass
             else:
                 noquery = 0
-        if cr.accountOldAuth or base.config.GetBool('default-server-constants', noquery):
+        if cr.accountOldAuth or config.GetBool('default-server-constants', noquery):
             self.notify.debug('setting defaults, not using account server constants')
             self.dict = {}
             for constantName in self.expectedConstants:

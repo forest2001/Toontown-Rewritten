@@ -1578,7 +1578,7 @@ class LauncherBase(DirectObject):
 
     def getIsNewInstallation(self):
         result = self.getValue(self.NewInstallationKey, 1)
-        result = base.config.GetBool('new-installation', result)
+        result = config.GetBool('new-installation', result)
         return result
 
     def setIsNotNewInstallation(self):
@@ -1855,7 +1855,7 @@ class LauncherBase(DirectObject):
             self.notify.info("Third party programs installed:")
             for hack in hacksInstalled.keys():
                 self.notify.info(hack)
-        
+
         if len(hacksRunning) > 0:
             self.notify.info("Third party programs running:")
             for hack in hacksRunning.keys():

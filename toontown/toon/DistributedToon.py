@@ -264,7 +264,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         #if hasattr(base.cr, 'aprilToonsMgr'):
             #if self.isEventActive(AprilToonsGlobals.EventGlobalGravity):
                 #self.startAprilToonsControls()
-        if base.config.GetBool('want-april-toons'):
+        if config.GetBool('want-april-toons'):
             self.startAprilToonsControls()
 
     def _handleClientCleanup(self):
@@ -499,7 +499,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if fromAV in self.ignoreList:
             self.d_setWhisperIgnored(fromAV)
             return
-        if base.config.GetBool('want-sleep-reply-on-regular-chat', 0):
+        if config.GetBool('want-sleep-reply-on-regular-chat', 0):
             if base.localAvatar.sleepFlag == 1:
                 self.sendUpdate('setSleepAutoReply', [base.localAvatar.doId], fromAV)
         newText, scrubbed = self.scrubTalk(chat, mods)
@@ -524,7 +524,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if fromAV in self.ignoreList:
             self.d_setWhisperIgnored(fromAV)
             return
-        if base.config.GetBool('ignore-whispers', 0):
+        if config.GetBool('ignore-whispers', 0):
             return
         if base.localAvatar.sleepFlag == 1:
             if not base.cr.identifyAvatar(fromAV) == base.localAvatar:
@@ -910,7 +910,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             ts = 0.0
         else:
             ts = globalClockDelta.localElapsedTime(timestamp)
-        if base.config.GetBool('check-invalid-anims', True):
+        if config.GetBool('check-invalid-anims', True):
             if animMultiplier > 1.0 and animName in ['neutral']:
                 animMultiplier = 1.0
         if self.animFSM.getStateNamed(animName):
@@ -2194,7 +2194,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setNametagStyle(self, nametagStyle):
         if hasattr(self, 'gmToonLockStyle') and self.gmToonLockStyle:
             return
-        if base.config.GetBool('want-nametag-avids', 0):
+        if config.GetBool('want-nametag-avids', 0):
             nametagStyle = 0
         self.nametagStyle = nametagStyle
         self.setDisplayName(self.getName())

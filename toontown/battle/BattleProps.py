@@ -238,7 +238,7 @@ class PropPool:
         self.propCache = []
         self.propStrings = {}
         self.propTypes = {}
-        self.maxPoolSize = base.config.GetInt('prop-pool-size', 8)
+        self.maxPoolSize = config.GetInt('prop-pool-size', 8)
         for p in Props:
             phase = p[0]
             propName = p[1]

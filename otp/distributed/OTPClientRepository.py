@@ -195,19 +195,19 @@ class OTPClientRepository(ClientRepositoryBase):
         self.loginInterface = LoginTTRAccount.LoginTTRAccount(self)
 
 
-        self.secretChatAllowed = base.config.GetBool('allow-secret-chat', 0)
-        self.openChatAllowed = base.config.GetBool('allow-open-chat', 0)
+        self.secretChatAllowed = config.GetBool('allow-secret-chat', 0)
+        self.openChatAllowed = config.GetBool('allow-open-chat', 0)
 
 
-        self.secretChatNeedsParentPassword = base.config.GetBool('secret-chat-needs-parent-password', 0)
+        self.secretChatNeedsParentPassword = config.GetBool('secret-chat-needs-parent-password', 0)
 
 
 
 
-        self.parentPasswordSet = base.config.GetBool('parent-password-set', 0)
+        self.parentPasswordSet = config.GetBool('parent-password-set', 0)
 
 
-        self.userSignature = base.config.GetString('signature', 'none')
+        self.userSignature = config.GetString('signature', 'none')
 
 
 
@@ -439,7 +439,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.shardListHandle = None
         self.uberZoneInterest = None
         self.wantSwitchboard = config.GetBool('want-switchboard', 0)
-        self.wantSwitchboardHacks = base.config.GetBool('want-switchboard-hacks', 0)
+        self.wantSwitchboardHacks = config.GetBool('want-switchboard-hacks', 0)
 
         self.__pendingGenerates = {}
         self.__pendingMessages = {}
@@ -494,7 +494,7 @@ class OTPClientRepository(ClientRepositoryBase):
         if self.checkHttp():
             for server in self.serverList:
                 self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRCA.crt'))
-                if base.config.GetBool('want-dev-certificate-trust', 0):
+                if config.GetBool('want-dev-certificate-trust', 0):
                     self.http.addPreapprovedServerCertificateFilename(server, Filename('/phase_3/etc/TTRDev.crt'))
 
         self.connect(self.serverList, successCallback=self._sendHello, failureCallback=self.failedToConnect)
@@ -733,7 +733,7 @@ class OTPClientRepository(ClientRepositoryBase):
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def waitForGetGameListResponse(self):
         if self.isGameListCorrect():
-            if base.config.GetBool('game-server-tests', 0):
+            if config.GetBool('game-server-tests', 0):
                 from otp.distributed import GameServerTestSuite
                 GameServerTestSuite.GameServerTestSuite(self)
             self.loginFSM.request('waitForShardList')
@@ -1080,7 +1080,7 @@ class OTPClientRepository(ClientRepositoryBase):
             else:
                 logFunc = self.notify.warning
                 allowExit = False
-            if base.config.GetBool('direct-gui-edit', 0):
+            if config.GetBool('direct-gui-edit', 0):
                 logFunc('There are leaks: %s tasks, %s events, %s ivals, %s garbage cycles\nLeaked Events may be due to direct gui editing' % (leakedTasks,
                  leakedEvents,
                  leakedIvals,
@@ -1487,7 +1487,7 @@ class OTPClientRepository(ClientRepositoryBase):
         avId = self.handlerArgs['avId']
         if not self.SupportTutorial or base.localAvatar.tutorialAck:
             self.gameFSM.request('playGame', [hoodId, zoneId, avId])
-        elif base.config.GetBool('force-tutorial', 1):
+        elif config.GetBool('force-tutorial', 1):
             if hasattr(self, 'skipTutorialRequest') and self.skipTutorialRequest:
                 self.gameFSM.request('skipTutorialRequest', [hoodId, zoneId, avId])
             else:
@@ -1535,9 +1535,9 @@ class OTPClientRepository(ClientRepositoryBase):
     def isFreeTimeExpired(self):
         if self.accountOldAuth:
             return 0
-        if base.config.GetBool('free-time-expired', 0):
+        if config.GetBool('free-time-expired', 0):
             return 1
-        if base.config.GetBool('unlimited-free-time', 0):
+        if config.GetBool('unlimited-free-time', 0):
             return 0
         if self.freeTimeExpiresAt == -1:
             return 0
@@ -1563,7 +1563,7 @@ class OTPClientRepository(ClientRepositoryBase):
         return self.blue != None
 
     def isPaid(self):
-        paidStatus = base.config.GetString('force-paid-status', '')
+        paidStatus = config.GetString('force-paid-status', '')
         if not paidStatus:
             return self.__isPaid
         elif paidStatus == 'paid':
@@ -1581,7 +1581,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.__isPaid = isPaid
 
     def allowFreeNames(self):
-        return base.config.GetInt('allow-free-names', 1)
+        return config.GetInt('allow-free-names', 1)
 
     def allowSecretChat(self):
         return self.secretChatAllowed or self.productName == 'Terra-DMC' and self.isBlue() and self.secretChatAllowed

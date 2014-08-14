@@ -352,7 +352,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         sinkPos1.setZ(sinkPos1.getZ() - 3.1)
         sinkPos2.setZ(sinkPos2.getZ() - 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
-        if base.config.GetBool('want-new-cogs', 0):
+        if config.GetBool('want-new-cogs', 0):
             nameTag = suit.find('**/def_nameTag')
         else:
             nameTag = suit.find('**/joint_nameTag')

@@ -33,7 +33,7 @@ class BattlePlace(Place.Place):
         pass
 
     def enterBattle(self, event):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: COGBATTLE: Enter Battle')
         self.loader.music.stop()
         base.playMusic(self.loader.battleMusic, looping=1, volume=0.9)

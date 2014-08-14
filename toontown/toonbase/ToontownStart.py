@@ -97,7 +97,7 @@ else:
     music = None
 import ToontownLoader
 from direct.gui.DirectGui import *
-serverVersion = base.config.GetString('server-version', 'no_version_set')
+serverVersion = config.GetString('server-version', 'no_version_set')
 print 'ToontownStart: serverVersion: ', serverVersion
 version = OnscreenText(serverVersion, pos=(-1.3, -0.975), scale=0.06, fg=Vec4(0, 0, 1, 0.6), align=TextNode.ALeft)
 loader.beginBulkLoad('init', TTLocalizer.LoaderLabel, 138, 0, TTLocalizer.TIP_NONE)

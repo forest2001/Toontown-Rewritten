@@ -58,7 +58,7 @@ class AvatarChooser(StateData.StateData):
         self.pickAToonBG.setBin('background', 1)
         self.pickAToonBG.reparentTo(aspect2d)
         base.setBackgroundColor(Vec4(0.145, 0.368, 0.78, 1))
-        choice = base.config.GetInt('auto-avatar-choice', -1)
+        choice = config.GetInt('auto-avatar-choice', -1)
         for panel in self.panelList:
             panel.show()
             self.accept(panel.doneEvent, self.__handlePanelDone)

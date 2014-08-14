@@ -176,7 +176,7 @@ class HydrantInteractiveProp(InteractiveAnimatedProp.InteractiveAnimatedProp):
      ToontownGlobals.MinniesMelodyland: ('tt_a_ara_mml_hydrant_fightBoost', 'tt_a_ara_mml_hydrant_fightCheer', 'tt_a_ara_mml_hydrant_fightIdle'),
      ToontownGlobals.TheBrrrgh: ('tt_a_ara_tbr_hydrant_fightBoost', 'tt_a_ara_tbr_hydrant_fightCheer', 'tt_a_ara_tbr_hydrant_fightIdle'),
      ToontownGlobals.DonaldsDreamland: ('tt_a_ara_ddl_hydrant_fightBoost', 'tt_a_ara_ddl_hydrant_fightCheer', 'tt_a_ara_ddl_hydrant_fightIdle')}
-    IdlePauseTime = base.config.GetFloat('prop-idle-pause-time', 0.0)
+    IdlePauseTime = config.GetFloat('prop-idle-pause-time', 0.0)
 
     def __init__(self, node):
         self.leftWater = None

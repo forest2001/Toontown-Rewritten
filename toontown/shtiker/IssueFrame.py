@@ -323,7 +323,7 @@ class IssueFrame(DirectFrame):
         return
 
     def gotoPage(self, section, subsection):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: INGAMENEWS: Goto Page')
         self.sectionFrames[self.curSection][self.curSubsection].hide()
         self.sectionFrames[section][subsection].show()
@@ -386,6 +386,6 @@ class IssueFrame(DirectFrame):
         pass
 
     def changeWeek(self, newIssueWeek):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: INGAMENEWS: Change Week')
         messenger.send('newsChangeWeek', [newIssueWeek])

@@ -118,7 +118,7 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
             self.setPad(self.cr.doId2do[padDoId])
         else:
             self.acceptOnce('generate-%d' % padDoId, self.setPad)
-        
+
     def setPad(self, pad):
         self.kartPad = pad
         self.kartPad.addStartingBlock(self)
@@ -494,7 +494,7 @@ class DistributedStartingBlock(DistributedObject.DistributedObject, FSM):
 
     def enterEnterMovie(self):
         self.notify.debug('%d enterEnterMovie: Entering the Enter Movie State.' % self.doId)
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             raceName = TTLocalizer.KartRace_RaceNames[self.kartPad.trackType]
             self.notify.info('QA-REGRESSION: KARTING: %s' % raceName)
         toonTrack = self.generateToonMoveTrack()
@@ -675,7 +675,7 @@ class DistributedViewingBlock(DistributedStartingBlock):
 
     def enterEnterMovie(self):
         self.notify.debug('%d enterEnterMovie: Entering the Enter Movie State.' % self.doId)
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             raceName = TTLocalizer.KartRace_RaceNames[self.kartPad.trackType]
             self.notify.info('QA-REGRESSION: KARTING: %s' % raceName)
         pos = self.nodePath.getPos(render)

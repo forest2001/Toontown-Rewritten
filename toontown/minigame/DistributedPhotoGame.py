@@ -891,7 +891,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         DistributedMinigame.setGameStart(self, timestamp)
         self.__stopIntro()
         self.__putCameraOnTripod()
-        if not base.config.GetBool('endless-cannon-game', 0):
+        if not config.GetBool('endless-cannon-game', 0):
             self.timer.show()
             self.timer.countdown(self.data['TIME'], self.__gameTimerExpired)
         self.filmPanel.reparentTo(base.a2dTopRight)

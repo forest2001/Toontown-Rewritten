@@ -162,7 +162,7 @@ Phase6AnimList = (('headdown-putt', 'headdown-putt'),
 Phase9AnimList = (('push', 'push'),)
 Phase10AnimList = (('leverReach', 'leverReach'), ('leverPull', 'leverPull'), ('leverNeutral', 'leverNeutral'))
 Phase12AnimList = ()
-if not base.config.GetBool('want-new-anims', 1):
+if not config.GetBool('want-new-anims', 1):
     LegDict = {'s': '/models/char/dogSS_Shorts-legs-',
      'm': '/models/char/dogMM_Shorts-legs-',
      'l': '/models/char/dogLL_Shorts-legs-'}
@@ -188,7 +188,7 @@ else:
 
 def loadModels():
     global Preloaded
-    preloadAvatars = base.config.GetBool('preload-avatars', 0)
+    preloadAvatars = config.GetBool('preload-avatars', 0)
     if preloadAvatars:
 
         def loadTex(path):
@@ -456,7 +456,7 @@ def unloadDialog():
 
 class Toon(Avatar.Avatar, ToonHead):
     notify = DirectNotifyGlobal.directNotify.newCategory('Toon')
-    afkTimeout = base.config.GetInt('afk-timeout', 600)
+    afkTimeout = config.GetInt('afk-timeout', 600)
 
     def __init__(self):
         try:
@@ -645,7 +645,7 @@ class Toon(Avatar.Avatar, ToonHead):
     def parentToonParts(self):
         if self.hasLOD():
             for lodName in self.getLODNames():
-                if base.config.GetBool('want-new-anims', 1):
+                if config.GetBool('want-new-anims', 1):
                     if not self.getPart('torso', lodName).find('**/def_head').isEmpty():
                         self.attach('head', 'torso', 'def_head', lodName)
                     else:
@@ -672,12 +672,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def setLODs(self):
         self.setLODNode()
-        levelOneIn = base.config.GetInt('lod1-in', 20)
-        levelOneOut = base.config.GetInt('lod1-out', 0)
-        levelTwoIn = base.config.GetInt('lod2-in', 80)
-        levelTwoOut = base.config.GetInt('lod2-out', 20)
-        levelThreeIn = base.config.GetInt('lod3-in', 280)
-        levelThreeOut = base.config.GetInt('lod3-out', 80)
+        levelOneIn = config.GetInt('lod1-in', 20)
+        levelOneOut = config.GetInt('lod1-out', 0)
+        levelTwoIn = config.GetInt('lod2-in', 80)
+        levelTwoOut = config.GetInt('lod2-out', 20)
+        levelThreeIn = config.GetInt('lod3-in', 280)
+        levelThreeOut = config.GetInt('lod3-out', 80)
         self.addLOD(1000, levelOneIn, levelOneOut)
         self.addLOD(500, levelTwoIn, levelTwoOut)
         self.addLOD(250, levelThreeIn, levelThreeOut)
@@ -702,14 +702,14 @@ class Toon(Avatar.Avatar, ToonHead):
         self.leftHand = None
         for lodName in self.getLODNames():
             hand = self.getPart('torso', lodName).find('**/joint_Rhold')
-            if base.config.GetBool('want-new-anims', 1):
+            if config.GetBool('want-new-anims', 1):
                 if not self.getPart('torso', lodName).find('**/def_joint_right_hold').isEmpty():
                     hand = self.getPart('torso', lodName).find('**/def_joint_right_hold')
             else:
                 hand = self.getPart('torso', lodName).find('**/joint_Rhold')
             self.rightHands.append(hand)
             rightHand = rightHand.instanceTo(hand)
-            if base.config.GetBool('want-new-anims', 1):
+            if config.GetBool('want-new-anims', 1):
                 if not self.getPart('torso', lodName).find('**/def_joint_left_hold').isEmpty():
                     hand = self.getPart('torso', lodName).find('**/def_joint_left_hold')
             else:

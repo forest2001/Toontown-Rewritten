@@ -54,7 +54,7 @@ class QuestChoiceGui(DirectFrame):
 
     def chooseQuest(self, questId):
         if questId != 0:
-            if base.config.GetBool('want-qa-regression', 0):
+            if config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: CREATEATASK: Create A Task.')
         base.setCellsAvailable(base.leftCells, 1)
         base.setCellsAvailable([base.bottomCells[0], base.bottomCells[1]], 1)

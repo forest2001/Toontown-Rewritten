@@ -21,7 +21,7 @@ class DistributedTrolley(DistributedObject.DistributedObject):
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.localToonOnBoard = 0
-        self.trolleyCountdownTime = base.config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
+        self.trolleyCountdownTime = config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
         self.fsm = ClassicFSM.ClassicFSM('DistributedTrolley', [State.State('off', self.enterOff, self.exitOff, ['entering',
           'waitEmpty',
           'waitCountdown',
@@ -177,13 +177,13 @@ class DistributedTrolley(DistributedObject.DistributedObject):
             place.fsm.request('walk')
 
     def handleEnterTrolleySphere(self, collEntry):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             base.localAvatar.disableAvatarControls()
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()
             self.accept('confirmDone', self.handleConfirm)
             return
-            
+
         self.notify.debug('Entering Trolley Sphere....')
         if base.localAvatar.getPos(render).getZ() < self.trolleyCar.getPos(render).getZ():
             return

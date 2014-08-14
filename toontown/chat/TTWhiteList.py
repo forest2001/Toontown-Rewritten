@@ -70,8 +70,8 @@ class TTWhiteList(WhiteList):
             self.updateWhitelist()
 
     def getWhitelistUrl(self):
-        result = base.config.GetString('fallback-whitelist-url', 'http://cdn.toontown.disney.go.com/toontown/en/')
-        override = base.config.GetString('whitelist-url', '')
+        result = config.GetString('fallback-whitelist-url', 'http://cdn.toontown.disney.go.com/toontown/en/')
+        override = config.GetString('whitelist-url', '')
         if override:
             self.notify.info('got an override url,  using %s for the whitelist' % override)
             result = override

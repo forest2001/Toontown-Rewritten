@@ -528,7 +528,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
                         self.groupButton['command'] = self.handleInvite
                         self.groupButton['image'] = self.inviteImageList
                         self.groupButton['state'] = DGG.NORMAL
-                    if base.config.GetBool('want-boarding-groups', 1):
+                    if config.GetBool('want-boarding-groups', 1):
                         base.setCellsAvailable([base.rightCells[0]], 0)
                         self.groupFrame.show()
         return

@@ -45,7 +45,7 @@ class OTPBase(ShowBase):
         return
 
     def setTaskChainNetThreaded(self):
-        if base.config.GetBool('want-threaded-network', 0):
+        if config.GetBool('want-threaded-network', 0):
             taskMgr.setupTaskChain('net', numThreads=1, frameBudget=0.001, threadPriority=TPLow)
 
     def setTaskChainNetNonthreaded(self):

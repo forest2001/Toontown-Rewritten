@@ -24,7 +24,7 @@ GlobalWebcore = None
 
 class HtmlView(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('HtmlView')
-    useHalfTexture = base.config.GetBool('news-half-texture', 0)
+    useHalfTexture = config.GetBool('news-half-texture', 0)
 
     def __init__(self, parent = aspect2d):
         global GlobalWebcore
@@ -75,8 +75,8 @@ class HtmlView(DirectObject):
         self.accept('mouse3-up', self.mouseUp, [AwWebView.RIGHTMOUSEBTN])
 
     def getInGameNewsUrl(self):
-        result = base.config.GetString('fallback-news-url', 'http://cdn.toontown.disney.go.com/toontown/en/gamenews/')
-        override = base.config.GetString('in-game-news-url', '')
+        result = config.GetString('fallback-news-url', 'http://cdn.toontown.disney.go.com/toontown/en/gamenews/')
+        override = config.GetString('in-game-news-url', '')
         if override:
             self.notify.info('got an override url,  using %s for in a game news' % override)
             result = override

@@ -326,12 +326,12 @@ class Avatar(Actor, ShadowCaster):
             sfxIndex = 5
         else:
             notify.error('unrecognized dialogue type: ', type)
-        
+
         # The standard cog phrase gets too repetitive when there are so many cogs running around.
         # Let's just choose a random one.
-        if base.config.GetBool('want-doomsday', False) and self.playerType == NametagGroup.CCSuit:
+        if config.GetBool('want-doomsday', False) and self.playerType == NametagGroup.CCSuit:
             sfxIndex = random.choice([1, 2, 2, 2, 2, 3, 3, 3]) #Duplicates are Intentional
-        
+
         if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:
             base.playSfx(dialogueArray[sfxIndex], node=self)
         return

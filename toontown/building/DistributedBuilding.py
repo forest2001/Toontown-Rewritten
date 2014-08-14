@@ -349,7 +349,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         return
 
     def loadAnimToSuitSfx(self):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: COGBUILDING: Cog Take Over')
         if self.cogDropSound == None:
             self.cogDropSound = base.loadSfx(self.TAKEOVER_SFX_PREFIX + 'cogbldg_drop.ogg')
@@ -359,7 +359,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         return
 
     def loadAnimToToonSfx(self):
-        if base.config.GetBool('want-qa-regression', 0):
+        if config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: COGBUILDING: Toon Take Over')
         if self.cogWeakenSound == None:
             self.cogWeakenSound = base.loadSfx(self.TAKEOVER_SFX_PREFIX + 'cogbldg_weaken.ogg')

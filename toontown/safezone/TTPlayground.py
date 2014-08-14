@@ -34,7 +34,7 @@ class TTPlayground(Playground.Playground):
         return Task.done
 
     def doRequestLeave(self, requestStatus):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             base.localAvatar.disableAvatarControls()
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()

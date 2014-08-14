@@ -18,7 +18,7 @@ class CalendarGuiMonth(DirectFrame):
         if self.onlyFutureDaysClickable:
             self.onlyFutureMonthsClickable = True
         DirectFrame.__init__(self, parent=parent, scale=scale, pos=pos)
-        self.showMarkers = base.config.GetBool('show-calendar-markers', 0)
+        self.showMarkers = config.GetBool('show-calendar-markers', 0)
         self.load()
         self.createGuiObjects()
         self.lastSelectedDate = None

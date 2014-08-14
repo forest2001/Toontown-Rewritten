@@ -26,7 +26,7 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
     ZoneToFightAnims = {}
     ZoneToVictoryAnims = {}
     ZoneToSadAnims = {}
-    IdlePauseTime = base.config.GetFloat('prop-idle-pause-time', 0.0)
+    IdlePauseTime = config.GetFloat('prop-idle-pause-time', 0.0)
     HpTextGenerator = TextNode('HpTextGenerator')
     BattleCheerText = '+'
 
@@ -200,13 +200,13 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
 
     def enter(self):
         GenericAnimatedProp.GenericAnimatedProp.enter(self)
-        if base.config.GetBool('props-buff-battles', True):
+        if config.GetBool('props-buff-battles', True):
             self.notify.debug('props buff battles is true')
             if base.cr.newsManager.isHolidayRunning(self.holidayId):
                 self.notify.debug('holiday is running, doing idle interval')
                 self.node.stop()
                 self.node.pose('idle0', 0)
-                if base.config.GetBool('interactive-prop-random-idles', 1):
+                if config.GetBool('interactive-prop-random-idles', 1):
                     self.requestIdleOrSad()
                 else:
                     self.idleInterval.loop()
@@ -262,7 +262,7 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
 
     def chooseIdleAnimToRun(self):
         result = self.numIdles - 1
-        if base.config.GetBool('randomize-interactive-idles', True):
+        if config.GetBool('randomize-interactive-idles', True):
             pairs = []
             for i in xrange(self.numIdles):
                 reversedChance = self.numIdles - i - 1
@@ -482,16 +482,16 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
         if self.hasSpecialIval(origAnimName):
             specialIval = self.getSpecialIval(origAnimName)
             idleAnimAndSound = Parallel(animIval, soundIval, specialIval)
-            if base.config.GetBool('interactive-prop-info', False):
+            if config.GetBool('interactive-prop-info', False):
                 idleAnimAndSound.append(printFunc)
         else:
             idleAnimAndSound = Parallel(animIval, soundIval)
-            if base.config.GetBool('interactive-prop-info', False):
+            if config.GetBool('interactive-prop-info', False):
                 idleAnimAndSound.append(printFunc)
         return idleAnimAndSound
 
     def printAnimIfClose(self, animKey):
-        if base.config.GetBool('interactive-prop-info', False):
+        if config.GetBool('interactive-prop-info', False):
             try:
                 animName = self.node.getAnimFilename(animKey)
                 baseAnimName = animName.split('/')[-1]

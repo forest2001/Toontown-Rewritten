@@ -161,7 +161,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 TRIGGER_SHIFT_Y = 0.25
                 TRIGGER_SHIFT_Z = 1.00
                 if "_gag_shop_" in building.getName():
-                    # Some dipshit put the triggers on backwards for the 
+                    # Some dipshit put the triggers on backwards for the
                     # gag shop compared to every other building.
                     doorTrigger.setY(doorTrigger.getY() + TRIGGER_SHIFT_Y)
                 else:
@@ -299,7 +299,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         return yToTest < -0.5
 
     def enterDoor(self):
-        if base.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             base.localAvatar.disableAvatarControls()
             self.confirm = TTDialog.TTGlobalDialog(doneEvent='confirmDone', message=SafezoneInvasionGlobals.LeaveToontownCentralAlert, style=TTDialog.Acknowledge)
             self.confirm.show()

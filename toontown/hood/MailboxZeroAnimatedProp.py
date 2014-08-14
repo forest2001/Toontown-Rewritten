@@ -4,7 +4,7 @@ from direct.directnotify import DirectNotifyGlobal
 
 class MailboxZeroAnimatedProp(ZeroAnimatedProp.ZeroAnimatedProp):
     notify = DirectNotifyGlobal.directNotify.newCategory('MailboxZeroAnimatedProp')
-    PauseTimeMult = base.config.GetFloat('zero-pause-mult', 1.0)
+    PauseTimeMult = config.GetFloat('zero-pause-mult', 1.0)
     PhaseInfo = {0: ('tt_a_ara_dod_mailbox_firstMoveFlagSpin1', 40 * PauseTimeMult),
      1: (('tt_a_ara_dod_mailbox_firstMoveStruggle', 'tt_a_ara_dod_mailbox_firstMoveJump'), 20 * PauseTimeMult),
      2: ('tt_a_ara_dod_mailbox_firstMoveFlagSpin2', 10 * PauseTimeMult),

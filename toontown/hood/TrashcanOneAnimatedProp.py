@@ -4,7 +4,7 @@ from direct.directnotify import DirectNotifyGlobal
 
 class TrashcanOneAnimatedProp(ZeroAnimatedProp.ZeroAnimatedProp):
     notify = DirectNotifyGlobal.directNotify.newCategory('TrashcanOneAnimatedProp')
-    PauseTimeMult = base.config.GetFloat('zero-pause-mult', 1.0)
+    PauseTimeMult = config.GetFloat('zero-pause-mult', 1.0)
     PhaseInfo = {0: ('tt_a_ara_dga_trashcan_firstMoveLidFlip1', 40 * PauseTimeMult),
      1: ('tt_a_ara_dga_trashcan_firstMoveStruggle', 20 * PauseTimeMult),
      2: ('tt_a_ara_dga_trashcan_firstMoveLidFlip2', 10 * PauseTimeMult),

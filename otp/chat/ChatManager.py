@@ -39,7 +39,7 @@ def removeThoughtPrefix(message):
 
 class ChatManager(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('ChatManager')
-    execChat = base.config.GetBool('exec-chat', 0)
+    execChat = config.GetBool('exec-chat', 0)
 
     def __init__(self, cr, localAvatar):
         self.cr = cr
@@ -280,7 +280,7 @@ class ChatManager(DirectObject.DirectObject):
         if hasManager:
             if base.cr.playerFriendsManager.askAvatarOnline(avatarId):
                 online = 1
-        
+
         avatarUnderstandable = base.cr.config.GetBool('force-avatar-understandable', False)
         playerUnderstandable = base.cr.config.GetBool('force-player-understandable', False)
         av = None

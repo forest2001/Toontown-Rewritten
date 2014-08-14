@@ -26,7 +26,7 @@ class CogdoMazeGame(DirectObject):
 
     def __init__(self, distGame):
         self.distGame = distGame
-        self._allowSuitsHitToons = base.config.GetBool('cogdomaze-suits-hit-toons', True)
+        self._allowSuitsHitToons = config.GetBool('cogdomaze-suits-hit-toons', True)
 
     def load(self, cogdoMazeFactory, numSuits, bossCode):
         self._initAudio()

@@ -46,12 +46,12 @@ class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
         wantHistory = 0
         if __dev__:
             wantHistory = 1
-        self.wantHistory = base.config.GetBool('want-chat-history', wantHistory)
+        self.wantHistory = config.GetBool('want-chat-history', wantHistory)
         self.history = ['']
-        self.historySize = base.config.GetInt('chat-history-size', 10)
+        self.historySize = config.GetInt('chat-history-size', 10)
         self.historyIndex = 0
         self.promoteWhiteList = 0
-        self.checkBeforeSend = base.config.GetBool('white-list-check-before-send', 0)
+        self.checkBeforeSend = config.GetBool('white-list-check-before-send', 0)
         self.whiteList = None
         self.active = 0
         self.autoOff = 0
@@ -193,7 +193,7 @@ class ChatInputWhiteListFrame(FSM.FSM, DirectFrame):
 
         if text:
             self.chatEntry.set('')
-            if base.config.GetBool('exec-chat', 0) and text[0] == '>':
+            if config.GetBool('exec-chat', 0) and text[0] == '>':
                 text = self.__execMessage(text[1:])
                 base.localAvatar.setChatAbsolute(text, CFSpeech | CFTimeout)
                 return

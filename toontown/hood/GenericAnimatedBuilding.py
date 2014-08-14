@@ -6,5 +6,5 @@ class GenericAnimatedBuilding(GenericAnimatedProp.GenericAnimatedProp):
         GenericAnimatedProp.GenericAnimatedProp.__init__(self, node)
 
     def enter(self):
-        if base.config.GetBool('buildings-animate', False):
+        if config.GetBool('buildings-animate', False):
             GenericAnimatedProp.GenericAnimatedProp.enter(self)

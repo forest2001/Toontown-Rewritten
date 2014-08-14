@@ -19,7 +19,7 @@ class AccountServerDate:
         if self.__grabbed and not force:
             self.notify.debug('using cached account server date')
             return
-        if base.cr.accountOldAuth or base.config.GetBool('use-local-date', 0):
+        if base.cr.accountOldAuth or config.GetBool('use-local-date', 0):
             self.__useLocalClock()
             return
         url = URLSpec(self.getServer())

@@ -26,7 +26,7 @@ WaterSprayColor = Point4(0.75, 0.75, 1.0, 0.8)
 def doSquirts(squirts):
     if len(squirts) == 0:
         return (None, None)
-    
+
     suitSquirtsDict = {}
     doneUber = 0
     skip = 0
@@ -50,7 +50,7 @@ def doSquirts(squirts):
                 suitSquirtsDict[suitId] = [squirt]
 
     suitSquirts = suitSquirtsDict.values()
-    
+
     def compFunc(a, b):
         if len(a) > len(b):
             return 1
@@ -281,12 +281,12 @@ def __doFlower(squirt, delay, fShowStun):
     lodnames = toon.getLODNames()
     toonlod0 = toon.getLOD(lodnames[0])
     toonlod1 = toon.getLOD(lodnames[1])
-    if base.config.GetBool('want-new-anims', 1):
+    if config.GetBool('want-new-anims', 1):
         if not toonlod0.find('**/def_joint_attachFlower').isEmpty():
             flower_joint0 = toonlod0.find('**/def_joint_attachFlower')
     else:
         flower_joint0 = toonlod0.find('**/joint_attachFlower')
-    if base.config.GetBool('want-new-anims', 1):
+    if config.GetBool('want-new-anims', 1):
         if not toonlod1.find('**/def_joint_attachFlower').isEmpty():
             flower_joint1 = toonlod1.find('**/def_joint_attachFlower')
     else:
@@ -350,7 +350,7 @@ def __doWaterGlass(squirt, delay, fShowStun):
     def getSprayStartPos(toon = toon):
         toon.update(0)
         lod0 = toon.getLOD(toon.getLODNames()[0])
-        if base.config.GetBool('want-new-anims', 1):
+        if config.GetBool('want-new-anims', 1):
             if not lod0.find('**/def_head').isEmpty():
                 joint = lod0.find('**/def_head')
             else:

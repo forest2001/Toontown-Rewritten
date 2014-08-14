@@ -19,7 +19,7 @@ class DistributedPartyTeamActivity(DistributedPartyActivity):
         self._maxPlayersPerTeam = 0
         self._minPlayersPerTeam = 0
         self._duration = 0
-        self._startDelay = base.config.GetFloat('party-team-activity-start-delay', startDelay)
+        self._startDelay = config.GetFloat('party-team-activity-start-delay', startDelay)
         self._willBalanceTeams = balanceTeams
         self._currentStatus = ''
         return

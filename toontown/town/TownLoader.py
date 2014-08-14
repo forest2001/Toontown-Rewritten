@@ -60,7 +60,7 @@ class TownLoader(StateData.StateData):
         self.townBattle = TownBattle.TownBattle(self.townBattleDoneEvent)
         self.townBattle.load()
 
-        if base.config.GetBool('want-april-toons', 0):
+        if config.GetBool('want-april-toons', 0):
             self.npc = NPCToons.createLocalNPC(91915)
             self.npc.reparentTo(base.localAvatar)
             self.npc.setZ(30)
@@ -125,7 +125,7 @@ class TownLoader(StateData.StateData):
         cleanupDialog('globalDialog')
         ModelPool.garbageCollect()
         TexturePool.garbageCollect()
-        if base.config.GetBool('want-april-toons', 0):
+        if config.GetBool('want-april-toons', 0):
             self.pianoDropSequence.finish()
             self.pianoDropSound.finish()
             del self.pianoDropSequence
