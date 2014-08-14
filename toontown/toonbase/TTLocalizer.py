@@ -2,8 +2,13 @@ from panda3d.core import *
 import string
 import types
 
-language = config.GetString('language', 'english')
-checkLanguage = config.GetBool('check-language', 0)
+try:
+    language = config.GetString('language', 'english')
+    checkLanguage = config.GetBool('check-language', 0)
+except NameError:
+    # __builtin__.config not defined yet.
+    language = getConfigExpress().GetString('language', 'english')
+    checkLanguage = getConfigExpress().GetBool('check-language', 0)
 
 def getLanguage():
     return language
