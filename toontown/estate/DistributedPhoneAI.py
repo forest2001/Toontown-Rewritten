@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.estate.DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from toontown.toonbase import ToontownGlobals
 from toontown.catalog import CatalogItem
+from toontown.catalog.CatalogInvalidItem import CatalogInvalidItem
 from toontown.catalog.CatalogItemList import CatalogItemList
 from direct.distributed.ClockDelta import *
 import time
@@ -108,6 +109,9 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Used phone from other shard!')
             return
         item = CatalogItem.getItem(item)
+        if isinstance(item, CatalogInvalidItem): # u wot m8
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to purchase invalid catalog item.')
+            return
         if item.loyaltyRequirement(): # These items aren't purchasable! Hacker alert!
             self.air.writeServerEvent('suspicious', avId=avId, issue'Tried to purchase an unimplemented loyalty item!')
             return
