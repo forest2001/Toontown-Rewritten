@@ -1586,7 +1586,7 @@ class CatalogGenerator:
             return itemLists
         else:
             self.__releasedItemLists.clear()
-        testDaysAhead = simbase.config.GetInt('test-server-holiday-days-ahead', 0)
+        testDaysAhead = config.GetInt('test-server-holiday-days-ahead', 0)
         nowtuple = time.localtime(weekStart * 60 + testDaysAhead * 24 * 60 * 60)
         year = nowtuple[0]
         month = nowtuple[1]
@@ -1616,7 +1616,7 @@ class CatalogGenerator:
         itemLists = self.__itemLists.get(dayNumber)
         if itemLists != None:
             return itemLists
-        testDaysAhead = simbase.config.GetInt('test-server-holiday-days-ahead', 0)
+        testDaysAhead = config.GetInt('test-server-holiday-days-ahead', 0)
         nowtuple = time.localtime(weekStart * 60 + testDaysAhead * 24 * 60 * 60)
         year = nowtuple[0]
         month = nowtuple[1]

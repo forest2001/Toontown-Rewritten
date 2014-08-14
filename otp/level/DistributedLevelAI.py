@@ -125,7 +125,7 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
         if hash(self.levelSpec) != specHash:
             self.notify.info('spec hashes do not match, sending our spec')
             spec = self.levelSpec
-            useDisk = simbase.config.GetBool('spec-by-disk', 1)
+            useDisk = config.GetBool('spec-by-disk', 1)
         else:
             self.notify.info('spec hashes match, sending null spec')
             spec = None
@@ -151,7 +151,7 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
             self.modified = 1
             self.scheduleAutosave()
 
-        AutosavePeriod = simbase.config.GetFloat('level-autosave-period-minutes', 5)
+        AutosavePeriod = config.GetFloat('level-autosave-period-minutes', 5)
 
         def scheduleAutosave(self):
             if hasattr(self, 'autosaveTask'):

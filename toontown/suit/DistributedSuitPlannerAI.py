@@ -526,7 +526,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         TOTAL_BWEIGHT_PER_HEIGHT[3] += weight * heights[3]
         TOTAL_BWEIGHT_PER_HEIGHT[4] += weight * heights[4]
 
-    defaultSuitName = simbase.config.GetString('suit-type', 'random')
+    defaultSuitName = config.GetString('suit-type', 'random')
     if defaultSuitName == 'random':
         defaultSuitName = None
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitPlannerAI')
@@ -537,7 +537,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         self.air = air
         self.zoneId = zoneId
         self.canonicalZoneId = ZoneUtil.getCanonicalZoneId(zoneId)
-        if simbase.config.GetBool('want-cogdos', False):
+        if config.GetBool('want-cogdos', False):
             if not hasattr(self.__class__, 'CogdoPopAdjusted'):
                 self.__class__.CogdoPopAdjusted = True
                 for index in xrange(len(self.SuitHoodInfo)):
@@ -582,10 +582,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 bldg.setSuitPlannerExt(self)
 
         self.initBuildingsAndPoints()
-        numSuits = simbase.config.GetInt('suit-count', -1)
+        numSuits = config.GetInt('suit-count', -1)
         if numSuits >= 0:
             self.currDesired = numSuits
-        suitHood = simbase.config.GetInt('suits-only-in-hood', -1)
+        suitHood = config.GetInt('suits-only-in-hood', -1)
         if suitHood >= 0:
             if self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_ZONE] != suitHood:
                 self.currDesired = 0
@@ -1299,7 +1299,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 toon.b_setBattleId(toonId)
         pos = self.battlePosDict[canonicalZoneId]
         interactivePropTrackBonus = -1
-        if simbase.config.GetBool('props-buff-battles', False) and self.cellToGagBonusDict.has_key(canonicalZoneId):
+        if config.GetBool('props-buff-battles', False) and self.cellToGagBonusDict.has_key(canonicalZoneId):
             tentativeBonusTrack = self.cellToGagBonusDict[canonicalZoneId]
             trackToHolidayDict = {ToontownBattleGlobals.SQUIRT_TRACK: ToontownGlobals.HYDRANTS_BUFF_BATTLES,
              ToontownBattleGlobals.THROW_TRACK: ToontownGlobals.MAILBOXES_BUFF_BATTLES,
@@ -1335,7 +1335,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if len(battle.suits) >= 4:
             return 0
         if battle:
-            if simbase.config.GetBool('suits-always-join', 0):
+            if config.GetBool('suits-always-join', 0):
                 return 1
             jChanceList = self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_JCHANCE]
             ratioIdx = len(battle.toons) - battle.numSuitsEver + 2

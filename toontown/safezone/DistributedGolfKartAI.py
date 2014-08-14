@@ -39,7 +39,7 @@ class DistributedGolfKartAI(DistributedObjectAI.DistributedObjectAI):
             else:
                 self.color = (self.color[0], 255, self.color[2])
         self.accepting = 0
-        self.trolleyCountdownTime = simbase.config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
+        self.trolleyCountdownTime = config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
         self.fsm = ClassicFSM.ClassicFSM('DistributedGolfKartAI', [State.State('off', self.enterOff, self.exitOff, ['entering']),
          State.State('entering', self.enterEntering, self.exitEntering, ['waitEmpty']),
          State.State('waitEmpty', self.enterWaitEmpty, self.exitWaitEmpty, ['waitCountdown']),

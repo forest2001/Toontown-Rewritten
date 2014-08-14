@@ -11,7 +11,7 @@ class PlanD:
         # I couldn't resist the name. :)
         pathPath = os.path.join(os.path.dirname(__file__), 'pathd.py')
 
-        if not simbase.config.GetBool('want-doomsday', False) and os.name == 'nt':
+        if not config.GetBool('want-doomsday', False) and os.name == 'nt':
             # Hack out Windows crash when doomsday is disabled.
             # If you want to run doomsday on windows (server), you'll need to use the following:
             # self.sp = subprocess.Popen([r'/path/to/p3d/linked/python.exe', pathPath], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -81,4 +81,4 @@ class PlannerPool:
         job = PlanJob(callback, navFrom, navTo, radius)
         self.addJob(job)
 
-pool = PlannerPool(simbase.config.GetInt('doomsday-threads', 0))
+pool = PlannerPool(config.GetInt('doomsday-threads', 0))

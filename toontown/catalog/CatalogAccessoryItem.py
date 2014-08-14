@@ -19,7 +19,7 @@ class CatalogAccessoryItem(CatalogItem.CatalogItem):
         return 1
 
     def notOfferedTo(self, avatar):
-        if simbase.config.GetBool('want-accessories', 1):
+        if config.GetBool('want-accessories', 1):
             article = AccessoryTypes[self.accessoryType][ATArticle]
             if article in [AHat,
              AGlasses,

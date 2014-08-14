@@ -39,7 +39,7 @@ class DistributedPartyGateAI(DistributedObjectAI):
 
 @dnaSpawn(DNAProp, 'prop_party_gate')
 def spawn(air, zone, element, match):
-    if not simbase.config.GetBool('want-parties', True):
+    if not config.GetBool('want-parties', True):
         # Parties are disabled, don't spawn the gate!
         return
     gate = DistributedPartyGateAI(air)

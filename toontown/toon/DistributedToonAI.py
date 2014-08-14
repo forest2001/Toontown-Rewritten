@@ -78,14 +78,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
      ToontownGlobals.FT_Torso: (CogDisguiseGlobals.torsoIndex,)}
     lastFlagAvTime = globalClock.getFrameTime()
     flagCounts = {}
-    WantTpTrack = simbase.config.GetBool('want-tptrack', False)
-    DbCheckPeriodPaid = simbase.config.GetInt('toon-db-check-period-paid', 10 * 60)
-    DbCheckPeriodUnpaid = simbase.config.GetInt('toon-db-check-period-unpaid', 1 * 60)
-    BanOnDbCheckFail = simbase.config.GetBool('want-ban-dbcheck', 0)
+    WantTpTrack = config.GetBool('want-tptrack', False)
+    DbCheckPeriodPaid = config.GetInt('toon-db-check-period-paid', 10 * 60)
+    DbCheckPeriodUnpaid = config.GetInt('toon-db-check-period-unpaid', 1 * 60)
+    BanOnDbCheckFail = config.GetBool('want-ban-dbcheck', 0)
     DbCheckAccountDateEnable = config.GetBool('account-blackout-enable', 1)
     DbCheckAccountDateBegin = config.GetString('account-blackout-start', '2013-08-20 12:30:00')
     DbCheckAccountDateDisconnect = config.GetBool('account-blackout-disconnect', 0)
-    WantOldGMNameBan = simbase.config.GetBool('want-old-gm-name-ban', 1)
+    WantOldGMNameBan = config.GetBool('want-old-gm-name-ban', 1)
 
     def __init__(self, air):
         DistributedPlayerAI.DistributedPlayerAI.__init__(self, air)
@@ -291,7 +291,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             # Teleportation access stuff.
             if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
-                if not simbase.config.GetBool('want-doomsday', False):
+                if not config.GetBool('want-doomsday', False):
                     self.sendUpdate('setLastHood', [hood])
                     self.b_setDefaultZone(hood)
 
@@ -423,7 +423,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.b_setGhostMode(0)      # Remove ghost.
         if self.isPlayerControlled() and self.WantTpTrack:
             messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
-        if self.cogIndex != -1 and simbase.config.GetBool('cogsuit-hack-prevent', False):
+        if self.cogIndex != -1 and config.GetBool('cogsuit-hack-prevent', False):
             if not ToontownAccessAI.canWearSuit(self.doId, newZoneId) and self.getAdminAccess() < 500:
                     self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to transition while in cog suit with an index of %s to zone %s' % (str(self.cogIndex), str(newZoneId)))
                     self.b_setCogIndex(-1)
@@ -431,7 +431,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.notify.warning('%s handleLogicalZoneChange as a suit: %s' % (self.doId, self.cogIndex))
                 self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon wearing a cog suit with index: %s in a zone they are not allowed to in. Zone: %s' % (self.cogIndex, newZoneId))
                 simbase.air.cogSuitMessageSent = True
-                if simbase.config.GetBool('want-ban-wrong-suit-place', False):
+                if config.GetBool('want-ban-wrong-suit-place', False):
                     commentStr = 'Toon %s wearing a suit in a zone they are not allowed to in. Zone: %s' % (self.doId, newZoneId)
                     dislId = self.DISLid
                     #simbase.air.banManager.ban(self.doId, dislId, commentStr)'''
@@ -475,7 +475,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                  textureIdx,
                  colorIdx))
                 return 0
-            if not simbase.config.GetBool('want-check-accessory-sanity', False):
+            if not config.GetBool('want-check-accessory-sanity', False):
                 return 1
             accessoryItem = CatalogAccessoryItem.CatalogAccessoryItem(accessoryItemId)
             result = self.air.catalogManager.isItemReleased(accessoryItem)
@@ -566,7 +566,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setDNAString(self, string):
         self.dna.makeFromNetString(string)
-        if simbase.config.GetBool('adjust-dna', True) and self.verifyDNA() == False:
+        if config.GetBool('adjust-dna', True) and self.verifyDNA() == False:
             logStr = 'AvatarHackWarning! invalid dna colors for %s old: %s new: %s' % (self.doId, str(ToonDNA.ToonDNA(string).asTuple()), str(self.dna.asTuple()))
             self.notify.warning(logStr)
             self.air.writeServerEvent('suspicious', avId=self.doId, issue=logStr)
@@ -745,7 +745,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if max & 32768:
             self.b_setSosPageFlag(1)
             max &= 32767
-        configMax = simbase.config.GetInt('max-sos-cards', 16)
+        configMax = config.GetInt('max-sos-cards', 16)
         if configMax != max:
             if self.sosPageFlag == 0:
                 self.b_setMaxNPCFriends(configMax)
@@ -1657,7 +1657,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.d_setCogIndex(self.cogIndex)
 
     def setCogIndex(self, index):
-        if index != -1 and simbase.config.GetBool('cogsuit-hack-prevent', False) and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId) and self.getAdminAccess() < 500:
+        if index != -1 and config.GetBool('cogsuit-hack-prevent', False) and not ToontownAccessAI.canWearSuit(self.doId, self.zoneId) and self.getAdminAccess() < 500:
                 self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to set cog suit index to %s in non-HQ zone %s' % (str(index), str(self.zoneId)))
                 index = -1
         self.cogIndex = index
@@ -2154,7 +2154,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def checkTeleportAccess(self, zoneId):
         if zoneId not in self.getTeleportAccess() and self.teleportOverride != 1:
             simbase.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon teleporting to zone %s they do not have access to.' % zoneId)
-            if simbase.config.GetBool('want-ban-teleport', False):
+            if config.GetBool('want-ban-teleport', False):
                 commentStr = 'Toon %s teleporting to a zone %s they do not have access to' % (self.doId, zoneId)
                 #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
 
@@ -2679,7 +2679,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             money = 0
             commentStr = 'User %s has negative money %s' % (self.doId, money)
             dislId = self.DISLid
-            if simbase.config.GetBool('want-ban-negative-money', False):
+            if config.GetBool('want-ban-negative-money', False):
                 #simbase.air.banManager.ban(self.doId, dislId, commentStr)
                 pass
         self.money = money
@@ -3963,14 +3963,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if strSearch.search(eventName, 0, 100):
             self.air.district.recordSuspiciousEventData(len(eventStr))
         self.air.writeServerEvent('suspicious', avId=self.doId, issue=eventStr)
-        if simbase.config.GetBool('want-ban-setSCSinging', True):
+        if config.GetBool('want-ban-setSCSinging', True):
             if 'invalid msgIndex in setSCSinging:' in eventName:
                 if senderId == self.doId:
                     commentStr = 'Toon %s trying to call setSCSinging' % self.doId
                     #simbase.air.banManager.ban(self.doId, self.DISLid, commentStr)
                 else:
                     self.notify.warning('logSuspiciousEvent event=%s senderId=%s != self.doId=%s' % (eventName, senderId, self.doId))
-        if simbase.config.GetBool('want-ban-setAnimState', True):
+        if config.GetBool('want-ban-setAnimState', True):
             if eventName.startswith('setAnimState: '):
                 if senderId == self.doId:
                     commentStr = 'Toon %s trying to call setAnimState' % self.doId
@@ -4082,7 +4082,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.sendUpdate('setAccess', [access])
 
     def setAccess(self, access):
-        paidStatus = simbase.config.GetString('force-paid-status', 'none')
+        paidStatus = config.GetString('force-paid-status', 'none')
         if paidStatus == 'unpaid':
             access = 1
         print 'Setting Access %s' % access
@@ -4431,7 +4431,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if module not in self.moduleWhitelist:
                 if module in self.moduleBlacklist:
                     self.air.writeServerEvent('suspicious', avId=avId, issue='Black List module %s loaded into process.' % module)
-                    if simbase.config.GetBool('want-ban-blacklist-module', False):
+                    if config.GetBool('want-ban-blacklist-module', False):
                         commentStr = 'User has blacklist module: %s attached to their game process' % module
                         dislId = self.DISLid
                         #simbase.air.banManager.ban(self.doId, dislId, commentStr)
@@ -4550,7 +4550,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                              isGm)
                             self.notify.info('av %s is consistently in an inappropriate position with %s...' % (av.doId, valStr))
                             self.air.writeServerEvent('suspicious', avId=avId, issue=' consistently in an inappropriate position with toon %s' % valStr)
-                            response = simbase.config.GetString('toon-pos-hack-response', 'nothing')
+                            response = config.GetString('toon-pos-hack-response', 'nothing')
                             av.handleHacking(response, 'collision and position hacking', [otherAv])
                         del DistributedToonAI.flagCounts[avPairKey]
         return

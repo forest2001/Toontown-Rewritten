@@ -386,7 +386,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def enterToon(self):
         self.d_setState('toon')
         exteriorZoneId, interiorZoneId = self.getExteriorAndInteriorZoneId()
-        if simbase.config.GetBool('want-new-toonhall', 0) and ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToonHall:
+        if config.GetBool('want-new-toonhall', 0) and ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToonHall:
             self.interior = DistributedToonHallInteriorAI.DistributedToonHallInteriorAI(self.block, self.air, interiorZoneId, self)
         else:
             self.interior = DistributedToonInteriorAI.DistributedToonInteriorAI(self.block, self.air, interiorZoneId, self)

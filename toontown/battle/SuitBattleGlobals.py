@@ -72,7 +72,7 @@ def pickSuitAttack(attacks, suitLevel):
             break
         index = index + 1
 
-    configAttackName = simbase.config.GetString('attack-type', 'random')
+    configAttackName = config.GetString('attack-type', 'random')
     if configAttackName == 'random':
         return attackNum
     elif configAttackName == 'sequence':

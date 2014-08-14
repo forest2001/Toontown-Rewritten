@@ -43,7 +43,7 @@ class DistributedInGameEditorAI(DistributedObjectAI.DistributedObjectAI):
         print 'requestCurrentLevelSpec'
         spec = self.level.levelSpec
         specStr = repr(spec)
-        largeBlob = DistributedLargeBlobSenderAI.DistributedLargeBlobSenderAI(self.air, self.zoneId, self.editorAvId, specStr, useDisk=simbase.config.GetBool('spec-by-disk', 1))
+        largeBlob = DistributedLargeBlobSenderAI.DistributedLargeBlobSenderAI(self.air, self.zoneId, self.editorAvId, specStr, useDisk=config.GetBool('spec-by-disk', 1))
         self.sendUpdateToAvatarId(self.editorAvId, 'setSpecSenderDoId', [largeBlob.doId])
 
     def setEdit(self, entId, attribName, valueStr, username):

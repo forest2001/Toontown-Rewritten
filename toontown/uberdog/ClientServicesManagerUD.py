@@ -126,7 +126,7 @@ class LoginAccountFSM(OperationFSM):
         # Binary bitmask in base10 form, added to the adminAccess.
         # To find out what they have access to, convert the serverAccess to 3-bit binary.
         # 2^2 = dev, 2^1 = qa, 2^0 = test
-        serverType = simbase.config.GetString('server-type', 'dev')
+        serverType = config.GetString('server-type', 'dev')
         serverAccess = self.adminAccess % 10 # Get the last digit in their access.
         if (serverType == 'dev' and not serverAccess & 4) or \
            (serverType == 'qa' and not serverAccess & 2) or \
@@ -141,7 +141,7 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
             account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
         except AutoReconnect:
-            taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
+            taskMgr.doMethodLater(config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
             return
 
         if account:
@@ -155,7 +155,7 @@ class LoginAccountFSM(OperationFSM):
             self.csm.air.mongodb.astron.objects.ensure_index('fields.ACCOUNT_ID')
             account = self.csm.air.mongodb.astron.objects.find_one({'fields.ACCOUNT_ID': self.databaseId})
         except AutoReconnect:
-            taskMgr.doMethodLater(simbase.config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
+            taskMgr.doMethodLater(config.GetInt('mongodb-retry-time', 2), self.__retryLookup, 'retryLookUp-%d' % self.databaseId, extraArgs=[])
             return
 
         if account:
@@ -836,7 +836,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.nameGenerator = NameGenerator()
 
         # Instantiate our account DB interface using config:
-        dbtype = simbase.config.GetString('accountdb-type', 'local')
+        dbtype = config.GetString('accountdb-type', 'local')
         if dbtype == 'local':
             self.accountDB = LocalAccountDB(self)
         elif dbtype == 'remote':
@@ -921,7 +921,7 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             return
 
         # Test the signature
-        key = simbase.config.GetString('csmud-secret', 'streetlamps') + simbase.config.GetString('server-version', 'no_version_set') + FIXED_KEY
+        key = config.GetString('csmud-secret', 'streetlamps') + config.GetString('server-version', 'no_version_set') + FIXED_KEY
         computedSig = hmac.new(key, cookie, hashlib.sha256).digest()
         if sig != computedSig:
             self.killConnection(sender, 'The accounts database rejected your cookie')

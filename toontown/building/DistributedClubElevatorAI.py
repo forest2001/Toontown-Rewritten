@@ -26,7 +26,7 @@ class DistributedClubElevatorAI(DistributedElevatorFSMAI.DistributedElevatorFSMA
                  'Opening'],
      'Closed': ['Opening']}
     id = 0
-    DoBlockedRoomCheck = simbase.config.GetBool('elevator-blocked-rooms-check', 1)
+    DoBlockedRoomCheck = config.GetBool('elevator-blocked-rooms-check', 1)
 
     def __init__(self, air, lawOfficeId, bldg, avIds, markerId = None, numSeats = 4, antiShuffle = 0, minLaff = 0):
         DistributedElevatorFSMAI.DistributedElevatorFSMAI.__init__(self, air, bldg, numSeats, antiShuffle=antiShuffle, minLaff=minLaff)

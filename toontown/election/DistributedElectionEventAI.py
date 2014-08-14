@@ -48,7 +48,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
             # Pump some self.air into Slappy's Balloon
             self.balloon = DistributedHotAirBalloonAI(self.air)
             self.balloon.generateWithRequired(self.zoneId)
-        if simbase.config.GetBool('want-doomsday', False):
+        if config.GetBool('want-doomsday', False):
             # It's Election day!
             self.balloon.b_setState('ElectionIdle')
             # Better spawn some cameras
@@ -234,7 +234,7 @@ class DistributedElectionEventAI(DistributedObjectAI, FSM):
 
 @magicWord(category=CATEGORY_MODERATION, types=[str])
 def election(state):
-    if not simbase.config.GetBool('want-doomsday', False):
+    if not config.GetBool('want-doomsday', False):
         simbase.air.writeServerEvent('warning', avId=spellbook.getInvoker().doId, issue='Attempted to change the election state while doomsday is disabled.')
         return 'ABOOSE! The election is currently disabled. Your request has been logged.'
 

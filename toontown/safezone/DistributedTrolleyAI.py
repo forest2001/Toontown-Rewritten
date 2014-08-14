@@ -16,7 +16,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
         DistributedObjectAI.__init__(self, air)
         FSM.__init__(self, 'DistributedTrolleyAI')
 
-        self.trolleyCountdownTime = simbase.config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
+        self.trolleyCountdownTime = config.GetFloat('trolley-countdown-time', TROLLEY_COUNTDOWN_TIME)
 
         self.slots = [None, None, None, None]
         self.boardable = False
@@ -80,7 +80,7 @@ class DistributedTrolleyAI(DistributedObjectAI, FSM):
 
                 if self.isNewbie(avId):
                     newbieIds.append(avId)
-                
+
             #if len(players) > 1 and not noTravel and not aiNoTravel:
             #    mg = createMinigame(self.air, players, self.zoneId, metagameRound=0) #TODO: use holiday manager instead of this hardcoded shit
             #else:

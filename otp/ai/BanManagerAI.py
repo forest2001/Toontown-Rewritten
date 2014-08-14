@@ -5,10 +5,10 @@ from direct.directnotify import DirectNotifyGlobal
 
 class BanManagerAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('BanManagerAI')
-    BanUrl = simbase.config.GetString('ban-base-url', 'http://vapps.disl.starwave.com:8005/dis-hold/action/event')
-    App = simbase.config.GetString('ban-app-name', 'TTWorldAI')
-    Product = simbase.config.GetString('ban-product', 'Toontown')
-    EventName = simbase.config.GetString('ban-event-name', 'tthackattempt')
+    BanUrl = config.GetString('ban-base-url', 'http://vapps.disl.starwave.com:8005/dis-hold/action/event')
+    App = config.GetString('ban-app-name', 'TTWorldAI')
+    Product = config.GetString('ban-product', 'Toontown')
+    EventName = config.GetString('ban-event-name', 'tthackattempt')
 
     def __init__(self):
         self.curBanRequestNum = 0
@@ -34,7 +34,7 @@ class BanManagerAI:
          comment,
          fullUrl))
         simbase.air.writeServerEvent('ban-request', avId=avatarId, dislid=dislid, comment=comment, fullUrl=fullUrl)
-        if simbase.config.GetBool('do-actual-ban', True):
+        if config.GetBool('do-actual-ban', True):
             newTaskName = 'ban-task-%d' % self.curBanRequestNum
             newTask = taskMgr.add(self.doBanUrlTask, newTaskName)
             newTask.banRequestNum = self.curBanRequestNum

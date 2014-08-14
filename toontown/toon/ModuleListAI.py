@@ -1,7 +1,7 @@
 import os
 
 class ModuleList:
-    serverDataFolder = simbase.config.GetString('server-data-folder', '')
+    serverDataFolder = config.GetString('server-data-folder', '')
 
     def __init__(self):
         self.moduleWhitelistFilename = self.getWhitelistFilename()

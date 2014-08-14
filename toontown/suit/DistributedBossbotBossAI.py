@@ -94,7 +94,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if battleNumber == 1:
             weakenedValue = ((1, 1), (2, 2), (2, 2), (1, 1), (1, 1, 1, 1, 1))
             listVersion = list(SuitBuildingGlobals.SuitBuildingInfo)
-            if simbase.config.GetBool('bossbot-boss-cheat', False):
+            if config.GetBool('bossbot-boss-cheat', False):
                 listVersion[14] = weakenedValue
                 SuitBuildingGlobals.SuitBuildingInfo = tuple(listVersion)
             retval = self.invokeSuitPlanner(14, 0)
@@ -328,7 +328,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def generateDinerSuits(self):
         diners = []
         for i in xrange(len(self.notDeadList)):
-            if simbase.config.GetBool('bossbot-boss-cheat', False):
+            if config.GetBool('bossbot-boss-cheat', False):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
                 info = self.notDeadList[i]
@@ -339,7 +339,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
         active = []
         for i in xrange(2):
-            if simbase.config.GetBool('bossbot-boss-cheat', False):
+            if config.GetBool('bossbot-boss-cheat', False):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
                 suitType = 8
@@ -424,7 +424,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 self.numToonsAtEnd += 1
                 toonHps.append(toon.hp)
 
-        self.air.writeServerEvent('ceoInfo', doId=self.doId, victory=didTheyWin, 
+        self.air.writeServerEvent('ceoInfo', doId=self.doId, victory=didTheyWin,
             battleTIme=self.battleFourTimeInMin,
             difficulty=self.battleDifficulty,
             numToonsAtStart=self.numToonsAtStart,
@@ -470,7 +470,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             return
         bossDamage *= 2
         bossDamage = min(self.getBossDamage() + bossDamage, self.bossMaxDamage)
-        if simbase.config.GetBool('bossbot-boss-cheat', False):
+        if config.GetBool('bossbot-boss-cheat', False):
             bossDamage = bossDamage + 250
         self.b_setBossDamage(bossDamage, 0, 0)
         if self.bossDamage >= self.bossMaxDamage:

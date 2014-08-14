@@ -10,7 +10,7 @@ class DistributedBBElevatorAI(DistributedBossElevatorAI.DistributedBossElevatorA
 
     def checkBoard(self, av):
         result = 0
-        if simbase.config.GetBool('allow-ceo-elevator', True):
+        if config.GetBool('allow-ceo-elevator', True):
             result = DistributedBossElevatorAI.DistributedBossElevatorAI.checkBoard(self, av)
         else:
             result = REJECT_NOT_YET_AVAILABLE

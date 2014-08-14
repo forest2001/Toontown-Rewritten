@@ -17,8 +17,8 @@ import random
 from SuitLegList import *
 
 class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
-    SUIT_BUILDINGS = simbase.config.GetBool('want-suit-buildings', 1)
-    DEBUG_SUIT_POSITIONS = simbase.config.GetBool('debug-suit-positions', 0)
+    SUIT_BUILDINGS = config.GetBool('want-suit-buildings', 1)
+    DEBUG_SUIT_POSITIONS = config.GetBool('debug-suit-positions', 0)
     UPDATE_TIMESTAMP_INTERVAL = 180.0
     myId = 0
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitAI')

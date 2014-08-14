@@ -15,7 +15,7 @@ class SuitPlannerInteriorAI:
         self.zoneId = zone
         self.numFloors = numFloors
         self.respectInvasions = 1
-        dbg_defaultSuitName = simbase.config.GetString('suit-type', 'random')
+        dbg_defaultSuitName = config.GetString('suit-type', 'random')
         if dbg_defaultSuitName == 'random':
             self.dbg_defaultSuitType = None
         else:

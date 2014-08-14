@@ -1706,7 +1706,7 @@ TailorCollections = {MAKE_A_TOON: [['bss1', 'bss2'],
                   ['gss13', 'gss15'],
                   ['bbs8'],
                   ['gsk7']]}
-                  
+
 BOY_SHIRTS = 0
 GIRL_SHIRTS = 1
 BOY_SHORTS = 2
@@ -2541,15 +2541,10 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             return False
         if armColor >= len(allColorsList):
             return False
-        
-        # I hate this hacky code... GG TMS.
-        try:
-            if gloveColor != 0 and not simbase.config.GetBool('want-glove-colors', False):
-                return False
-        except:
-            if gloveColor != 0 and not base.config.GetBool('want-glove-colors', False):
-                return False
-                
+
+        if gloveColor != 0 and not config.GetBool('want-glove-colors', False):
+            return False
+
         if legColor >= len(allColorsList):
             return False
         if headColor >= len(allColorsList):
@@ -2869,7 +2864,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             return allColorsList[26]
         except:
             return allColorsList[0]
-            
+
     def getWhiteColor(self):
         return allColorsList[0]
 

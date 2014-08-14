@@ -209,7 +209,7 @@ class InventoryBase(DirectObject.DirectObject):
                 if tempInv[track][level] > 0 and not self.toon.hasTrackAccess(track):
                     commentStr = "Player %s trying to purchase gag they don't have track access to. track: %s level: %s" % (self.toon.doId, track, level)
                     dislId = self.toon.DISLid
-                    if simbase.config.GetBool('want-ban-gagtrack', False):
+                    if config.GetBool('want-ban-gagtrack', False):
                         #simbase.air.banManager.ban(self.toon.doId, dislId, commentStr)
                         pass
                     return 0

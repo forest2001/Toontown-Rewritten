@@ -1164,7 +1164,7 @@ def getAllClosets():
 
 
 def get50ItemTrunk(avatar, duplicateItems):
-    if simbase.config.GetBool('want-accessories', 1):
+    if config.GetBool('want-accessories', 1):
         if avatar.getStyle().getGender() == 'm':
             index = 0
         else:

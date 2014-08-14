@@ -22,10 +22,10 @@ import DistributedTwoDGameAI
 import DistributedTravelGameAI
 import TravelGameGlobals
 from otp.ai.MagicWordGlobal import *
-ALLOW_TEMP_MINIGAMES = simbase.config.GetBool('allow-temp-minigames', False)
+ALLOW_TEMP_MINIGAMES = config.GetBool('allow-temp-minigames', False)
 if ALLOW_TEMP_MINIGAMES:
     from toontown.minigame.TempMinigameAI import *
-simbase.forcedMinigameId = simbase.config.GetInt('minigame-id', 0)
+simbase.forcedMinigameId = config.GetInt('minigame-id', 0)
 RequestMinigame = {}
 MinigameZoneRefs = {}
 
