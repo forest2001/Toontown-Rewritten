@@ -108,6 +108,9 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Used phone from other shard!')
             return
         item = CatalogItem.getItem(item)
+        if item.loyaltyRequirement(): # These items aren't purchasable! Hacker alert!
+            self.air.writeServerEvent('suspicious', avId=avId, issue'Tried to purchase an unimplemented loyalty item!')
+            return
         if item in av.backCatalog:
             price = item.getPrice(CatalogItem.CatalogTypeBackorder)
         elif item in av.weeklyCatalog or item in av.monthlyCatalog:
@@ -144,4 +147,3 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
 
     def requestGiftPurchaseResponse(self, todo0, todo1):
         pass
-    
