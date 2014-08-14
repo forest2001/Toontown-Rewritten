@@ -225,6 +225,10 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
         if directorId and not director:
             self.air.writeServerEvent('suspicious', avId=directorId, issue='Tried to move furniture without being on the shard!')
             return
+        
+        if director.zoneId != self.zoneId:
+            self.air.writeServerEvent('suspicious', avId=directorId, issue='Tried to become director from another zone!')
+            return
 
         if self.director:
             self.director.b_setGhostMode(0)
