@@ -6443,7 +6443,7 @@ FurnitureNames = {100: 'Armchair',
  1240: "Snorkeler's Table",
  1250: 'Cookie Table',
  1260: 'Bedroom Table',
- 1300: '1000 Bean Bank',
+ 1300: 'Jellybean Bank', # 1000 (original value)
  1310: '2500 Bean Bank',
  1320: '5000 Bean Bank',
  1330: '7500 Bean Bank',
