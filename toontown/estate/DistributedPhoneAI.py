@@ -113,7 +113,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to purchase invalid catalog item.')
             return
         if item.loyaltyRequirement(): # These items aren't purchasable! Hacker alert!
-            self.air.writeServerEvent('suspicious', avId=avId, issue'Tried to purchase an unimplemented loyalty item!')
+            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to purchase an unimplemented loyalty item!')
             return
         if item in av.backCatalog:
             price = item.getPrice(CatalogItem.CatalogTypeBackorder)
