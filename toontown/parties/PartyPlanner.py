@@ -21,7 +21,6 @@ from toontown.parties.InviteVisual import InviteVisual
 from toontown.parties.PartyInfo import PartyInfo
 from toontown.parties import PartyUtils
 from toontown.parties.PartyEditor import PartyEditor
-from otp.otpbase import OTPGlobals
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from otp.nametag.NametagGroup import NametagGroup
@@ -278,7 +277,8 @@ class PartyPlanner(DirectFrame, FSM):
     def __createNametag(self, parent):
         if self.nametagGroup == None:
             self.nametagGroup = NametagGroup()
-            self.nametagGroup.setFont(OTPGlobals.getInterfaceFont())
+            self.nametagGroup.setFont(ToontownGlobals.getToonFont())
+            self.nametagGroup.setSpeechFont(ToontownGlobals.getToonFont())
             self.nametagGroup.setActive(0)
             self.nametagGroup.setAvatar(self.partyPlannerHead)
             self.nametagGroup.manage(base.marginManager)
