@@ -4,7 +4,7 @@ from toontown.distributed.ShardStatus import ShardStatusReceiver
 # For naming constants:
 from toontown.uberdog.ClientServicesManagerUD import *
 # For renaming Toons with rejected names:
-from toontown.toon.ToonDNA import ToonDNA
+from toontown.toon.ToonDNA import ToonDNA, allColorsList
 from toontown.toonbase import TTLocalizer
 # For system message:
 from otp.distributed import OtpDoGlobals
@@ -82,6 +82,43 @@ class ToontownRPCHandler:
             request.result(fields.get('ACCOUNT_AV_SET'))
 
         self.air.dbInterface.queryObject(self.air.dbId, gsId, callback)
+
+        return request
+
+    def rpc_getAvatarDetails(self, request, avId):
+        """
+        Returns a few basic details about a Toon. This includes hp/maxHp, DNA and name.
+
+        On success, returns name, hp, maxHp and dna attributes.
+        On failure, returns null.
+        """
+
+        def callback(dclass, fields):
+            if dclass is None:
+                return request.result(None)
+
+            if dclass.getName() is None:
+                return request.result(None)
+
+            name = fields['setName'][0]
+            hp = fields['setHp'][0]
+            maxHp = fields['setMaxHp'][0]
+            dnaString = fields['setDNAString'][0]
+
+            dna = ToonDNA()
+            dna.makeFromNetString(dnaString)
+
+            return request.result({
+                'name': name,
+                'hp': hp,
+                'maxHp': maxHp,
+                'dna': {
+                    'headType': dna.head,
+                    'headColor': list(allColorsList[dna.headColor]),
+                }
+            })
+
+        self.air.dbInterface.queryObject(self.air.dbId, avId, callback)
 
         return request
 
