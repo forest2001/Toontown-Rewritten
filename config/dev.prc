@@ -75,3 +75,5 @@ force-player-understandable #t
 # Holidays and Events
 force-holiday-decorations 6
 want-arg-manager #f
+want-mega-invasions #t
+mega-invasion-cog-type tm

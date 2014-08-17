@@ -3,6 +3,7 @@ from otp.ai.MagicWordGlobal import *
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from random import random, randint, choice
+import datetime
 from direct.directnotify import DirectNotifyGlobal
 
 # TODO: NewsManagerAI to properly announce invasions starting, invasions
@@ -27,7 +28,7 @@ class SuitInvasionManagerAI:
         self.numSuits = 0
         self.spawnedSuits = 0
 
-        if config.GetBool('want-mega-invasions', False):
+        if config.GetBool('want-mega-invasions', False) and datetime.date.today() <= datetime.date(2014, 8, 18): # TODO - config for this
             # Mega invasion configuration.
             self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.65)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')

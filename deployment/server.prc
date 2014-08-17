@@ -5,6 +5,7 @@
 # Server settings
 want-dev #f
 want-cheesy-expirations #t
+cogsuit-hack-prevent #t
 
 
 # Shared secret for CSMUD
@@ -24,12 +25,12 @@ want-gifting #f
 want-keep-alive #f
 
 
-# Chat stuff
+# Chat Settings
 blacklist-sequence-url https://s3.amazonaws.com/cdn.toontownrewritten.com/misc/tsequence.dat
 want-whitelist #t
 want-blacklist-sequence #t
 
 
 # Holidays and Events
-
-cogsuit-hack-prevent #t
+want-mega-invasions #t
+mega-invasion-cog-type tm

@@ -9,6 +9,7 @@ audio-library-name p3openal_audio
 sync-video #f
 want-dev #f
 preload-avatars #t
+want-keep-alive #f
 texture-anisotropic-degree 16
 language LANGUAGE_HERE
 
@@ -61,14 +62,13 @@ want-gardening #f
 want-gifting #f
 # This is a temporary 'fix' for DistributedSmoothNodes... probably not the permanent solution to our problem, but it works for now.
 smooth-lag 0.4
-want-keep-alive #f
+
+
+# Chat Settings
+force-avatar-understandable #t
+force-player-understandable #t
 
 
 # Holidays and Events
 force-holiday-decorations 6
 want-arg-manager #f
-
-
-# Chat
-force-avatar-understandable #t
-force-player-understandable #t
