@@ -30,7 +30,7 @@ class SuitInvasionManagerAI:
 
         if config.GetBool('want-mega-invasions', False) and datetime.date.today() <= datetime.date(2014, 8, 18): # TODO - config for this
             # Mega invasion configuration.
-            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.65)
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.4)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
             if not self.megaInvasionCog:
                 raise AttributeError("No mega invasion cog specified, but mega invasions are on!")
@@ -41,7 +41,7 @@ class SuitInvasionManagerAI:
 
         elif config.GetBool('want-random-invasions', True):
             # Random invasion configuration.
-            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.4)
+            self.randomInvasionProbability = config.GetFloat('random-invasion-probability', 0.3)
             # Start ticking.
             taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
 
@@ -72,11 +72,11 @@ class SuitInvasionManagerAI:
             if config.GetBool('want-mega-invasions', False) and random() <= self.randomInvasionProbability:
                 # N.B.: randomInvasionProbability = mega invasion probability.
                 suitName = self.megaInvasionCog
-                numSuits = randint(1500, 15000)
-                specialSuit = randint(0, 2)
+                numSuits = randint(2000, 15000)
+                specialSuit = random.choice([0, 0, 0, 1, 2])
             else:
                 suitName = choice(SuitDNA.suitHeadTypes)
-                numSuits = randint(1000, 3000)
+                numSuits = randint(1500, 5000)
                 specialSuit = False
             self.startInvasion(suitName, numSuits, specialSuit)
         return task.again
