@@ -72,7 +72,7 @@ roles:
         max: 399999999
       backend:
         type: mongodb
-        database: Toontown
+        database: test
 
     - type: dbss
       database: 4003
