@@ -133,6 +133,7 @@ class ToontownRPCHandler:
         This list can be empty (meaning no avatars matched).
         """
 
+        self.air.mongodb.astron.objects.ensure_index('fields.setName')
         avatars = self.air.mongodb.astron.objects.find({'fields.setName':{'name':name}})
 
         result = []
