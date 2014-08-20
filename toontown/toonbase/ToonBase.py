@@ -27,6 +27,7 @@ from toontown.toontowngui import TTDialog
 from sys import platform
 from DisplayOptions import DisplayOptions
 import otp.ai.DiagnosticMagicWords
+import time
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -236,7 +237,7 @@ class ToonBase(OTPBase.OTPBase):
 
     def __walking(self, pressed):
         self.walking = pressed
-        
+
     def toggleGui(self):
         if aspect2d.isHidden():
             aspect2d.show()
@@ -353,8 +354,8 @@ class ToonBase(OTPBase.OTPBase):
         # Order: Bottom to top
         self.rightCells = [
             mm.addGridCell(-0.2 - padding, -1.35, base.a2dTopRight), # Above the street map
-            mm.addGridCell(-0.2 - padding, -0.9, base.a2dTopRight),  # Below the friends list 
-            mm.addGridCell(-0.2 - padding, -0.45, base.a2dTopRight)  # Behind the friends list 
+            mm.addGridCell(-0.2 - padding, -0.9, base.a2dTopRight),  # Below the friends list
+            mm.addGridCell(-0.2 - padding, -0.45, base.a2dTopRight)  # Behind the friends list
         ]
 
     def hideFriendMargins(self):
@@ -423,6 +424,29 @@ class ToonBase(OTPBase.OTPBase):
         cr.loginFSM.request('connect', [serverList])
         self.ttAccess = ToontownAccess.ToontownAccess()
         self.ttAccess.initModuleInfo()
+
+        # Start checking for speedhacks.
+        self.lastSpeedhackCheck = time.time()
+        taskMgr.doMethodLater(config.GetFloat('speedhack-interval', 10.0), self.__speedhackCheckTick, 'speedhack-tick')
+
+    def __speedhackCheckTick(self, task):
+        # Check if the time elapsed is less than interval-1 (1 second extra just in case)
+        elapsed = time.time() - self.lastSpeedhackCheck
+        if elapsed < config.GetFloat('speedhack-interval', 10.0) - 1:
+            # They responded too fast. This indicates that the TaskManager is running faster
+            # than normal, and possibly means they sped the process up.
+            self.__killSpeedHacker()
+            return task.done
+        # Clean! Lets wait until the next iteration...
+        self.lastSpeedhackCheck = time.time()
+        return task.again
+
+    def __killSpeedHacker(self):
+        # go fuck yo' self and yo' cheat engine, fuck'r.
+        self.cr.bootedIndex = 128
+        self.cr.bootedText = 'SERVER CONNECTION FAILURE. CLIENT HAS EXCEEDED RATE-LIMIT.'
+        self.cr.stopReaderPollTask()
+        self.cr.lostConnection()
 
     def removeGlitchMessage(self):
         self.ignore('InputState-forward')
@@ -507,9 +531,9 @@ class ToonBase(OTPBase.OTPBase):
 
     def hideGame(self):
         # Hacky, I know, but it works
-        hideCommand = """osascript -e 'tell application "System Events" 
-                                            set frontProcess to first process whose frontmost is true 
-                                            set visible of frontProcess to false 
+        hideCommand = """osascript -e 'tell application "System Events"
+                                            set frontProcess to first process whose frontmost is true
+                                            set visible of frontProcess to false
                                        end tell'"""
         os.system(hideCommand)
 
