@@ -4,7 +4,7 @@ from toontown.distributed.ShardStatus import ShardStatusReceiver
 # For naming constants:
 from toontown.uberdog.ClientServicesManagerUD import *
 # For renaming Toons with rejected names:
-from toontown.toon.ToonDNA import ToonDNA, allColorsList
+from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
 # For system message:
 from otp.distributed import OtpDoGlobals
@@ -106,7 +106,7 @@ class ToontownRPCHandler:
             dnaString = fields['setDNAString'][0]
             lastSeen = fields['setLastSeen'][0]
 
-            dna = ToonDNA()
+            dna = ToonDNA.ToonDNA()
             dna.makeFromNetString(dnaString)
 
             return request.result({
@@ -115,8 +115,9 @@ class ToontownRPCHandler:
                 'maxHp': maxHp,
                 'lastSeen': lastSeen,
                 'dna': {
+                    'species': ToonDNA.getSpeciesName(dna.head),
                     'headType': dna.head,
-                    'headColor': list(allColorsList[dna.headColor]),
+                    'headColor': list(ToonDNA.allColorsList[dna.headColor]),
                 }
             })
 
