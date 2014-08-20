@@ -125,6 +125,38 @@ class ToontownRPCHandler:
 
         return request
 
+    def rpc_getAvatarDetailsByName(self, request, name):
+        """Fetch a list of avatars that match the provided name.
+        Each element is a dict containing their hp/maxHp, lastSeen and
+        a few DNA attributes.
+
+        This list can be empty (meaning no avatars matched).
+        """
+
+        avatars = self.air.mongodb.astron.objects.find({'fields.setName':{'name':name}})
+
+        result = []
+        for avatar in avatars:
+            fields = avatar['fields']
+            dna = ToonDNA.ToonDNA()
+            dna.makeFromNetString(fields['setDNAString']['dnaString'])
+
+            # In this case, we don't need to return the name, as that was already
+            # a parameter should already be considered "known".
+            result.append({
+                'id': avatar['_id'], # Instead of a name, return the avId.
+                'hp': fields['setHp']['hp'], # WTF did we do here?? hp and hitPoints, pls?
+                'maxHp': fields['setMaxHp']['hitPoints'],
+                'lastSeen': fields['setLastSeen']['timestamp'],
+                'dna': {
+                    'species': ToonDNA.getSpeciesName(dna.head),
+                    'headType': dna.head,
+                    'headColor': list(ToonDNA.allColorsList[dna.headColor]),
+                }
+            })
+
+        return result
+
     ### NAME REVIEW ###
     def rpc_listPendingNames(self, request, count=50):
         """Returns up to 50 pending names, sorted by time spent in the queue.
