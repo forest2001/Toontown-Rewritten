@@ -104,6 +104,7 @@ class ToontownRPCHandler:
             hp = fields['setHp'][0]
             maxHp = fields['setMaxHp'][0]
             dnaString = fields['setDNAString'][0]
+            lastSeen = fields['setLastSeen'][0]
 
             dna = ToonDNA()
             dna.makeFromNetString(dnaString)
@@ -112,6 +113,7 @@ class ToontownRPCHandler:
                 'name': name,
                 'hp': hp,
                 'maxHp': maxHp,
+                'lastSeen': lastSeen,
                 'dna': {
                     'headType': dna.head,
                     'headColor': list(allColorsList[dna.headColor]),
