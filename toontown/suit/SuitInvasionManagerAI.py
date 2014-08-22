@@ -28,7 +28,7 @@ class SuitInvasionManagerAI:
         self.numSuits = 0
         self.spawnedSuits = 0
 
-        if config.GetBool('want-mega-invasions', False) and datetime.date.today() <= datetime.date(2014, 8, 18): # TODO - config for this
+        if config.GetBool('want-mega-invasions', False): # TODO - config for this
             # Mega invasion configuration.
             self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.4)
             self.megaInvasionCog = config.GetString('mega-invasion-cog-type', '')
