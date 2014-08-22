@@ -32,5 +32,5 @@ want-blacklist-sequence #t
 
 
 # Holidays and Events
-want-mega-invasions #t
+want-mega-invasions #f
 mega-invasion-cog-type tm
