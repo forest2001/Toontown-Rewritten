@@ -232,7 +232,7 @@ class ToontownRPCHandler:
                 return request.error(-100, 'avId invalid')
 
             dnaString = fields['setDNAString'][0]
-            dna = ToonDNA()
+            dna = ToonDNA.ToonDNA()
             dna.makeFromNetString(dnaString)
             colorstring = TTLocalizer.NumToColor[dna.headColor]
             animaltype = TTLocalizer.AnimalToSpecies[dna.getAnimal()]
