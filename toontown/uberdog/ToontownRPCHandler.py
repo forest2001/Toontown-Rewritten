@@ -104,7 +104,7 @@ class ToontownRPCHandler:
             hp = fields['setHp'][0]
             maxHp = fields['setMaxHp'][0]
             dnaString = fields['setDNAString'][0]
-            lastSeen = fields['setLastSeen'][0]
+            lastSeen = fields.get('setLastSeen', [0])[0]
 
             dna = ToonDNA.ToonDNA()
             dna.makeFromNetString(dnaString)
@@ -148,7 +148,7 @@ class ToontownRPCHandler:
                 'id': avatar['_id'], # Instead of a name, return the avId.
                 'hp': fields['setHp']['hp'], # WTF did we do here?? hp and hitPoints, pls?
                 'maxHp': fields['setMaxHp']['hitPoints'],
-                'lastSeen': fields['setLastSeen']['timestamp'],
+                'lastSeen': fields.get('setLastSeen',{}).get('timestamp',0),
                 'dna': {
                     'species': ToonDNA.getSpeciesName(dna.head),
                     'headType': dna.head,
