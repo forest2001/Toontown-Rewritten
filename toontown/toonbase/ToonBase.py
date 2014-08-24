@@ -425,9 +425,10 @@ class ToonBase(OTPBase.OTPBase):
         self.ttAccess = ToontownAccess.ToontownAccess()
         self.ttAccess.initModuleInfo()
 
-        # Start checking for speedhacks.
-        self.lastSpeedhackCheck = time.time()
-        taskMgr.doMethodLater(config.GetFloat('speedhack-interval', 10.0), self.__speedhackCheckTick, 'speedhack-tick')
+        if config.GetBool('want-speedhack-fix', False):
+            # Start checking for speedhacks.
+            self.lastSpeedhackCheck = time.time()
+            taskMgr.doMethodLater(config.GetFloat('speedhack-interval', 10.0), self.__speedhackCheckTick, 'speedhack-tick')
 
     def __speedhackCheckTick(self, task):
         # Check if the time elapsed is less than interval-1 (1 second extra just in case)
