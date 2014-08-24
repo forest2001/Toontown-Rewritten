@@ -28,6 +28,7 @@ from sys import platform
 from DisplayOptions import DisplayOptions
 import otp.ai.DiagnosticMagicWords
 import time
+from panda3d.core import TrueClock
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -428,19 +429,26 @@ class ToonBase(OTPBase.OTPBase):
         if config.GetBool('want-speedhack-fix', False):
             # Start checking for speedhacks.
             self.lastSpeedhackCheck = time.time()
-            taskMgr.doMethodLater(config.GetFloat('speedhack-interval', 10.0), self.__speedhackCheckTick, 'speedhack-tick')
+            self.trueClock = TrueClock.getGlobalPtr()
+            self.lastTrueClockTime = self.trueClock.getLongTime()
+            taskMgr.add(self.__speedhackCheckTick, 'speedhack-tick')
 
     def __speedhackCheckTick(self, task):
-        # Check if the time elapsed is less than interval-1 (1 second extra just in case)
+        # Compare the time elapsed for time.time() and TrueClock. If the TrueClock is more
+        # than 1 second ahead, assume that it's running faster than normal.
+        # If the system time is dragged backwards between 2 iterations, this might cause
+        # problems (as the TrueClock would then be ahead).
         elapsed = time.time() - self.lastSpeedhackCheck
-        if elapsed < config.GetFloat('speedhack-interval', 10.0) - 1:
-            # They responded too fast. This indicates that the TaskManager is running faster
+        tc_elapsed = self.trueClock.getLongTime() - self.lastTrueClockTime
+        if tc_elapsed > elapsed + 1:
+            # They responded too fast. This indicates that the TrueClock is running faster
             # than normal, and possibly means they sped the process up.
             self.__killSpeedHacker()
             return task.done
         # Clean! Lets wait until the next iteration...
         self.lastSpeedhackCheck = time.time()
-        return task.again
+        self.lastTrueClockTime = self.trueClock.getLongTime()
+        return task.cont
 
     def __killSpeedHacker(self):
         # go fuck yo' self and yo' cheat engine, fuck'r.

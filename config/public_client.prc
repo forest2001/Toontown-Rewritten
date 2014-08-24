@@ -12,6 +12,7 @@ preload-avatars #t
 want-keep-alive #f
 texture-anisotropic-degree 16
 language LANGUAGE_HERE
+want-speedhack-fix #t
 
 
 # Resources settings
