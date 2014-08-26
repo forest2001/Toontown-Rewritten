@@ -173,10 +173,18 @@ class ToontownRPCHandler:
 
         result = []
         for item in cursor:
+            dna = ToonDNA.ToonDNA()
+            dna.makeFromNetString(item['fields']['setDNAString']['dnaString'])
+
             obj = {
                 'avId': item['_id'],
                 'name': item['fields']['WishName'],
                 'time': item['fields']['WishNameTimestamp']
+                'dna': {
+                    'species': ToonDNA.getSpeciesName(dna.head),
+                    'headType': dna.head,
+                    'headColor': list(ToonDNA.allColorsList[dna.headColor]),
+                }
             }
             result.append(obj)
 
