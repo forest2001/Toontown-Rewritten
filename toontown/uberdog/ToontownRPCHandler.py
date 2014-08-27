@@ -179,7 +179,7 @@ class ToontownRPCHandler:
             obj = {
                 'avId': item['_id'],
                 'name': item['fields']['WishName'],
-                'time': item['fields']['WishNameTimestamp']
+                'time': item['fields']['WishNameTimestamp'],
                 'dna': {
                     'species': ToonDNA.getSpeciesName(dna.head),
                     'headType': dna.head,
