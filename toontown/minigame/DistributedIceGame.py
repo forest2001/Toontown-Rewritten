@@ -1049,8 +1049,6 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
                         self.tireSounds[tireIndex]['wallHit'].play()
                     elif c0 == self.obstacleCollideId:
                         self.tireSounds[tireIndex]['obstacleHit'].play()
-        else:
-            self.notify.error('Couldn\'t find any collisions!')
 
     def forceLocalToonToTire(self):
         toon = localAvatar
