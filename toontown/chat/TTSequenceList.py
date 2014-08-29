@@ -21,7 +21,7 @@ class TTSequenceList(SequenceList):
         doc = self.ch.getDocumentSpec()
         self.ch.getDocument(doc)
         self.ch.downloadToRam(fs)
-        return fs.getData()
+        return fs.getData().split('\r\n')
 
     def loadSquencesLocally(self):
         vfs = VirtualFileSystem.getGlobalPtr()
@@ -32,5 +32,5 @@ class TTSequenceList(SequenceList):
         if not found:
             self.notify.warning("Couldn't find blacklist sequence data file!")
             return
-        data = vfs.readFile(filename, 1)
-        return data
+        data = vfs.readFile(filename, True)
+        return data.split('\n')
