@@ -30,7 +30,7 @@ logErr = LogAndOutput(sys.__stderr__, log)
 sys.stdout = logOut
 sys.stderr = logErr
 
-print('\n\nStarting Toontown...')
+print('\n\nLaunching..)
 
 if 1:
     print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
